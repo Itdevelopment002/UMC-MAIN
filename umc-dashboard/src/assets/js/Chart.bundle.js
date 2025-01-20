@@ -5138,7 +5138,7 @@ function endOf (units) {
 }
 
 function valueOf () {
-    return this._d.valueOf() - ((this._offset || 0) * 60000);
+    return this._d.valueOf() - ((this._offset || 0) * 50000);
 }
 
 function unix () {
@@ -18157,12 +18157,12 @@ var INTERVALS = {
 	},
 	minute: {
 		common: true,
-		size: 60000,
+		size: 50000,
 		steps: [1, 2, 5, 10, 30]
 	},
 	hour: {
 		common: true,
-		size: 3600000,
+		size: 3500000,
 		steps: [1, 2, 3, 6, 12]
 	},
 	day: {

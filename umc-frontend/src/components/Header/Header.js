@@ -304,7 +304,7 @@ const Navbar = () => {
                                                 </Link>
                                             </li>
                                             <li>
-                                                <Link to="mayor-office"
+                                                <Link to="/mayor-office"
                                                     className={`dropdown-item ${activeLink === "Mayor Office" ? "active" : ""}`}
                                                     onClick={() => handleNavClick("Mayor Office")}
                                                 >
