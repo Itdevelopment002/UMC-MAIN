@@ -11,7 +11,8 @@ import "./assets/css/tagsinput.css";
 
 import Sidebar from "./components/Sidebar/Sidebar";
 import Header from "./components/Header/Header";
-import Spinner from "./components/Spinner/Spinner";
+// import Spinner from "./components/Spinner/Spinner";
+import loaderimage from "./assets/img/loader_trans.gif";
 import Login from "./components/Login/Login";
 import SuperAdminRoutes from "./components/SuperAdminRoutes/SuperAdminRoutes";
 import AdminRoutes from "./components/AdminRoutes/AdminRoutes";
@@ -65,8 +66,15 @@ function App() {
         </Routes>
       ) : (
         <>
-          {loading ? ( // Show spinner if loading
-            <Spinner />
+          {loading ? (
+                  <div className="loader-container d-flex items-center">
+                    <img
+                      src={loaderimage}
+                      alt="Loading..."
+                      className="gif-loader"
+                      style={{ width: "130px", height: "130px" }}
+                    />
+                  </div>
           ) : (
             <>
               <Header onLogout={handleLogout} userDepartment={department} />
