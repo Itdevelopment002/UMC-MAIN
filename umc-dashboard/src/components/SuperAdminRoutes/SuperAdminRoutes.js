@@ -80,6 +80,8 @@ import DevelopmentPlan from "../DevelopmentPlan/DevelopmentPlan";
 import AddDepartmentData from "../DepartmentData/AddDepartmentData";
 import AddYear from "../DepartmentData/AddYear";
 import api from "../api";
+import MinisterDetails from "../MinisterDetails/MinisterDetails";
+import AddMinisterDetails from "../MinisterDetails/AddMinisterDetails";
 function SuperAdminRoutes() {
   const [departments, setDepartments] = useState([]);
   const [departmentDatas, setDepartmentDatas] = useState([]);
@@ -124,6 +126,8 @@ function SuperAdminRoutes() {
         <Route path="/add-main-menu" element={<AddMainMenu />} />
         <Route path="/slider" element={<Slider />} />
         <Route path="/add-slider" element={<AddSlider />} />
+        <Route path="/minister" element={<MinisterDetails />} />
+        <Route path="/add-minister" element={<AddMinisterDetails />} />
         <Route path="/add-user" element={<AddUsers />} />
         <Route path="/user" element={<Users />} />
         <Route path="/add-privacy-policy" element={<AddPrivacyPolicy />} />
