@@ -3,8 +3,8 @@ require('dotenv').config();
 
 const db = mysql.createConnection({
     host: "127.0.0.1",
-    user: "root",
-    password: "",
+    user: "genicminds_umcdb",
+    password: "ijOQ{QK3P]fJ",
     database: "genicminds_umcdb"
 });
 
