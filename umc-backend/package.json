@@ -1,10 +1,9 @@
 {
-  "name": "kbmc-db",
+  "name": "umc-db",
   "version": "1.0.0",
   "main": "server.js",
   "scripts": {
-    
-    "start": "server.js"
+    "start": "nodemon server.js"
   },
   "keywords": [],
   "author": "",

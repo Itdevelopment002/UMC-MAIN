@@ -3,9 +3,9 @@ require('dotenv').config();
 
 const db = mysql.createConnection({
     host: "127.0.0.1",
-    user: "genicminds_kbmcDB",
-    password: "Ys47U^!_d4QK",
-    database: "genicminds_kbmcDB"
+    user: "root",
+    password: "",
+    database: "genicminds_umcdb"
 });
 
 db.connect((err) => {
