@@ -1,11 +1,14 @@
 /* Full Page Setup */
 .login-page {
   height: 100vh;
-  background-image: url("../../assets/img/bg2.jpg");
+  /* background-image: url("../../assets/img/bg2.jpg"); */
+  /* background: linear-gradient(to right, #f99f72 0%, #f77b90 100%); */
+  background: #fdf8ed;
   background-size: cover; 
   background-position: center;
   background-repeat: no-repeat;
   display: flex; 
+  font-family: 'Roboto';
 }
 
 /* Row setup for layout */
@@ -17,7 +20,7 @@
 
 /* Left Side */
 .left-side {
-  width: 50%; /* Half the screen width */
+  width: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -39,7 +42,7 @@
 
 /* Form Container */
 .form-container1 {
-  max-width: 400px;
+  max-width: 450px;
   width: 100%;
   background: #fff;
   border-radius: 30px;
@@ -82,6 +85,18 @@
   min-width: 150px;
   padding: 8px 30px;
   text-transform: uppercase;
+  background: linear-gradient(to right, #F57F42 0%, #F55570 100%);
+  color:white;
+}
+
+.btn-clicked {
+  border-radius: 50px;
+  font-size: 16px;
+  min-width: 150px;
+  padding: 8px 30px;
+  text-transform: uppercase;
+  background: linear-gradient(to right, #F57F42 0%, #F55570 100%);
+  color:white;
 }
 
 
@@ -95,6 +110,37 @@
   text-decoration: underline;
   color: #007bff;
 }
+
+/* .btn-custom-color{
+  background: linear-gradient(to right, #F57F42 0%, #F55570 100%);
+  color: rgb(255, 255, 255);
+} */
+/* .bg-transparent-info{
+  color: black;
+} */
+
+/* Custom colors */
+.btn-superadmin {
+  background: #f8f2e3;  /* Customize with your color */
+  color: black;
+  font-weight: 400;
+  padding: 5px 20px;
+}
+
+.btn-guest {
+  background-color: #FFF7E2;
+  color: black;
+}
+
+/* .btn-superadmin:hover {
+  background-color: #0056b3; 
+}
+
+.btn-guest:hover {
+  background-color: #f1f1f1;
+} */
+
+
 
 @media (max-width: 768px) {
   .login-page {

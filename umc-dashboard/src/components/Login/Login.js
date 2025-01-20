@@ -1,18 +1,21 @@
 import React, { useState, useEffect } from "react";
 import "./Login.css";
-import img from "../../assets/img/kbmc_logo.jpg";
+import img from "../../assets/img/umclogo.png";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import api from "../api";
 
 const Login = ({ onLogin }) => {
+  // Changes: Set default loginType to "superadmin"
   const [departments, setDepartments] = useState([]);
-  const [loginType, setLoginType] = useState("admin");
+  const [loginType, setLoginType] = useState("superadmin"); // Default to "superadmin"
   const [userData, setData] = useState({
     username: "",
     password: "",
-    department: "",
+    department: "Admin", 
   });
+  const [isClicked, setIsClicked] = useState(false);
+
 
   const [errors, setErrors] = useState({});
 
@@ -30,11 +33,11 @@ const Login = ({ onLogin }) => {
   }, []);
 
   const handleLoginTypeChange = (type) => {
-    setLoginType(type);
+    setLoginType(type); // Change login type
     setData({
       username: "",
       password: "",
-      department: type === "superadmin" ? "Admin" : "",
+      department: type === "superadmin" ? "Admin" : "", // Set default department for "superadmin"
     });
     setErrors({});
   };
@@ -58,6 +61,7 @@ const Login = ({ onLogin }) => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
+    setIsClicked(true);
     const validationErrors = validateForm();
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
@@ -69,7 +73,7 @@ const Login = ({ onLogin }) => {
       const response = await api.post(endpoint, userData);
       localStorage.setItem("authToken", response.data.uniqueId);
       localStorage.setItem("userData", JSON.stringify(response.data.user));
-      onLogin();
+      onLogin(); // Trigger successful login
     } catch (err) {
       Swal.fire({
         icon: "error",
@@ -82,13 +86,13 @@ const Login = ({ onLogin }) => {
   return (
     <div className="login-page">
       <div className="row row1 m-0 h-100">
-        <div className="col-md-6 d-none d-md-block left-side"></div>
+        {/* <div className="col-md-6 d-none d-md-block left-side"></div> */}
 
-        <div className="col-md-6 d-flex align-items-center justify-content-center right-side">
+        <div className="col-md-12 d-flex align-items-center justify-content-center right-side">
           <div className="form-container form-container1">
             <img src={img} alt="Logo" className="mb-4" />
             <div className="button-container mb-4 d-flex justify-content-center">
-              <button
+              {/* <button
                 className={`btn btn-sm mx-1 ${
                   loginType === "admin"
                     ? "btn-primary text-white"
@@ -97,16 +101,15 @@ const Login = ({ onLogin }) => {
                 onClick={() => handleLoginTypeChange("admin")}
               >
                 Admin
-              </button>
+              </button> */}
               <button
-                className={`btn btn-sm mx-1 ${
-                  loginType === "superadmin"
-                    ? "btn-primary text-white"
-                    : "bg-transparent-info"
-                }`}
-                onClick={() => handleLoginTypeChange("superadmin")}
+                className={`btn btn-sm mx-1 ${loginType === "superadmin"
+                  ? "btn-superadmin"
+                  : "btn-guest"
+                  }`}
+              // onClick={() => handleLoginTypeChange("superadmin")}
               >
-                Super Admin
+                Admin Login
               </button>
             </div>
             <form>
@@ -169,7 +172,10 @@ const Login = ({ onLogin }) => {
                 </Link>
               </div>
               <div className="button-container">
-                <button onClick={onSubmit} className="btn btn-primary btn1">
+                <button
+                  onClick={onSubmit}
+                  className={`btn ${isClicked ? "btn-clicked" : "btn1"}`}
+                >
                   Login
                 </button>
               </div>

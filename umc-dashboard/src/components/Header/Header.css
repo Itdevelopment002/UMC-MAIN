@@ -11,16 +11,16 @@
   }
   
   .notification-message.unread {
-    background-color: #e0f7fa; /* Light blue color for unread notifications */
-    border-left: 4px solid #0288d1; /* Blue border to indicate unread notification */
+    background-color: #e0f7fa; 
+    border-left: 4px solid #0288d1; 
   }
   
   .notification-message.unread:hover {
-    background-color: #b3e5fc; /* Slightly darker blue on hover */
+    background-color: #b3e5fc;
   }
   
   .notification-message {
-    transition: background-color 0.3s ease-in-out; /* Smooth transition for background change */
+    transition: background-color 0.3s ease-in-out; 
   }
   
 .btn-close {
@@ -31,7 +31,81 @@
   color: rgb(94, 93, 93);
 }
 
+
 .btn-close:hover {
-  color: #d00000; /* Darker red for hover state */
+  color: #d00000;
   border:none;
+} 
+ 
+/* Base Styles */
+.btn-dark-mode {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: transparent;
+  border: none;
+  padding: 10px 15px;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #fff;
+  border-radius: 50px;
+  cursor: pointer;
+  text-align: center;
+  line-height: 1;
+  margin-top: 12px;
 }
+
+.btn-dark-mode i {
+  font-size: 0.9rem;
+}
+.mode{
+  font-size: 0.9rem;
+
+}
+
+.btn-dark-mode:hover {
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2) !important;
+}
+
+.btn-dark-mode:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.btn-dark-mode.dark-active:hover {
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+
+
+
+.header-left {
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  text-decoration: none;
+}
+
+.logo-image {
+  margin-top: 10px !important;
+  width: 250px; /* Adjust to your desired size */
+  height: 55px; /* Maintain aspect ratio */
+  transition: transform 0.3s ease-in-out;
+}
+
+.logo-image:hover {
+  transform: scale(1.05); /* Slight zoom effect on hover */
+}
+
+
+
