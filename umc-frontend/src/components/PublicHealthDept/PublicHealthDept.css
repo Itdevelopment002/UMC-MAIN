@@ -1,0 +1,32 @@
+#health-css p {
+  font-size: 16px;
+  font-weight: 400;
+  text-align: justify;
+  color: #000000;
+  letter-spacing: -0.32px;
+}
+
+#health-css .table-bordered td,
+.table-bordered th {
+  vertical-align: middle;
+}
+
+#health-css .bg-orange {
+  background-color: #EDEDED !important;
+}
+
+#health-css .table-heading-styling {
+  background: #EDEDED !important;
+  color: #000000 !important;
+  font-size: 15px !important;
+  font-weight: 500 !important;
+  line-height: 16.41px !important;
+  padding: 10px 10px !important;
+}
+
+#health-css td {
+  font-weight: 500 !important;
+  font-size: 14px !important;
+  line-height: 17.41px !important;
+}
+

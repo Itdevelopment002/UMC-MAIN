@@ -1,0 +1,21 @@
+#reader-css .system-style-div {
+    display: flex;
+    background-color: #F3F3F3;
+    align-items: center;
+    padding: 10px 20px;
+}
+
+#reader-css .span-system1 {
+    font-family: 'Roboto';
+    font-weight: 500;
+    font-size: 16px;
+}
+
+#reader-css .custom-list-effect {
+    color: #666565;
+    transition: color 0.3s ease-in-out;
+}
+
+#reader-css .custom-list-effect:hover {
+    color: #068CE1;
+}

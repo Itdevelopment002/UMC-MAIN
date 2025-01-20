@@ -1,0 +1,104 @@
+#commissioner-css .commison-profile-card {
+  background-color: #FFF7E2;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 30px 20px;
+  margin-bottom: 25px;
+}
+
+#commissioner-css .commison-profile-image {
+  width: 170px;
+  height: 200px;
+  border-radius: 20px;
+  background: linear-gradient(to bottom, #BB368A, #FEBA28); 
+  border-left: 5px solid transparent;
+  border-bottom: 5px solid #FEBA28;
+  object-fit: cover;
+  box-shadow: 5px -5px 10px rgba(83, 83, 83, 0.1);
+}
+
+#commissioner-css .details-card {
+  background-color: #fff;
+  font-family: "Roboto";
+  padding-left: 20px;
+}
+
+#commissioner-css .details-card p {
+  text-align: justify;
+  line-height: 1.8;
+  margin-bottom: 15px;
+  font-weight: 500;
+  font-size: 16px;
+  color: #666565;
+  word-spacing: 0.1rem;
+}
+
+#commissioner-css .commissioner-row {
+  display: flex;
+  flex-direction: column;
+}
+
+#commissioner-css .commissioner-item {
+  display: flex;
+  align-items: center;
+  padding: 10px 0;
+  margin-bottom: 3px;
+  border-top: 1px solid rgb(210, 209, 209);
+  border-bottom: 1px solid rgb(210, 209, 209);
+}
+
+#commissioner-css .icon-box {
+  width: 28px;
+  height: 28px;
+  background: linear-gradient(to bottom, #BB368A, #FEBA28);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-top-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  margin-right: 15px;
+  flex-shrink: 0;
+}
+
+#commissioner-css .icon-image {
+  width: 16px;
+  height: 16px;
+}
+
+#commissioner-css .text-box {
+  /* display: flex; */
+  flex-direction: column;
+  font-size: 16px;
+  word-break: break-word;
+}
+
+#commissioner-css .label {
+  font-weight: 500;
+  color: #000;
+}
+
+#commissioner-css .value {
+  color: #F37F1A;
+  font-weight: 500;
+}
+
+#commissioner-css .commisioner-overview {
+  border-left: 5px solid #F37F1B;
+  color: #000000;
+  margin-top: 30px;
+  margin-bottom: 15px;
+}
+
+#commissioner-css .commisioner-overview h4 {
+  color: #000000;
+  margin-left: 15px;
+}
+
+@media (max-width: 768px) {
+  #commissioner-css .details-card {
+    background-color: #fff;
+    font-family: "Roboto";
+    padding-left: 0px;
+    margin-top: 25px;
+  }
+}

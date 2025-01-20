@@ -1,0 +1,37 @@
+.dropdown-menu.dropdown-keep-visible {
+    right: 5px;
+    left: auto;
+    position: absolute;
+  }
+
+  .notification-keep-visible{
+    right: 0;
+    left: auto;
+    position: absolute;
+  }
+  
+  .notification-message.unread {
+    background-color: #e0f7fa; /* Light blue color for unread notifications */
+    border-left: 4px solid #0288d1; /* Blue border to indicate unread notification */
+  }
+  
+  .notification-message.unread:hover {
+    background-color: #b3e5fc; /* Slightly darker blue on hover */
+  }
+  
+  .notification-message {
+    transition: background-color 0.3s ease-in-out; /* Smooth transition for background change */
+  }
+  
+.btn-close {
+  background: none;
+  border: none;
+  font-size: 1.25rem;
+  cursor: pointer;
+  color: rgb(94, 93, 93);
+}
+
+.btn-close:hover {
+  color: #d00000; /* Darker red for hover state */
+  border:none;
+}

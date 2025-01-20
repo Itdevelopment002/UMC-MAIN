@@ -1,0 +1,343 @@
+#tourism-css .card1 {
+    position: relative;
+    width: 100%;
+    border: 0;
+    overflow: hidden;
+}
+
+#tourism-css .card1 img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    background: linear-gradient(to bottom, #BB368A, #FEBA28);
+    border-right: 5px solid transparent;
+    border-bottom: 5px solid #FEBA28;
+    border-radius: 20px !important;
+}
+
+#tourism-css .card-overlay1 {
+    position: absolute;
+    bottom: 4px;
+    width: 99%;
+    background: rgba(0, 0, 0, 0.65);
+    color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 6px 0;
+    z-index: 2;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+}
+
+#tourism-css .location-btn {
+    background-color: transparent;
+    color: #ffffff;
+    border: 0;
+    font-weight: 500;
+    padding: 4px 12px;
+    font-size: 18px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+#tourism-css .location-btn:hover {
+    transform: scale(1.01);
+}
+
+#tourism-css .card2 {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    overflow: hidden;
+    position: relative;
+}
+
+#tourism-css .card2:hover img {
+    transform: scale(1.1);
+}
+
+#tourism-css .h2-styling-tourism {
+    font-family: 'Roboto';
+    font-weight: 500;
+    font-size: 26px;
+    letter-spacing: -0.02em;
+    text-align: justify;
+    color: #E3435A;
+}
+
+#tourism-css strong {
+    font-family: 'Roboto';
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 35px;
+    letter-spacing: -0.02em;
+    text-align: justify;
+}
+
+#tourism-css .span-tourism {
+    font-family: 'Roboto';
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 35px;
+    letter-spacing: -0.02em;
+    text-align: justify;
+}
+
+
+@media (min-width: 1440px) {
+    #tourism-css .card1 {
+        height: 325px;
+    }
+}
+
+@media (max-width: 1439px) and (min-width: 1200px) {
+    #tourism-css .card1 {
+        height: 300px;
+    }
+}
+
+@media (max-width: 1199px) and (min-width: 992px) {
+    #tourism-css .card1 {
+        height: 250px;
+    }
+
+    #tourism-css .h2-styling-tourism {
+        font-family: 'Roboto';
+        font-weight: 500;
+        font-size: 21px;
+        letter-spacing: -0.02em;
+        text-align: justify;
+        color: #1F94C6;
+    }
+
+    #tourism-css strong {
+        font-family: 'Roboto';
+        font-weight: 600;
+        font-size: 17px;
+        line-height: 21px;
+        letter-spacing: -0.02em;
+        text-align: justify;
+    }
+
+    #tourism-css .span-tourism {
+        font-family: 'Roboto';
+        font-weight: 400;
+        font-size: 17px;
+        line-height: 21px;
+        letter-spacing: -0.02em;
+        text-align: justify;
+    }
+
+    #tourism-css .card-overlay1 {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        background: rgba(0, 0, 0, 0.65);
+        color: #ffffff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 3px 0;
+        z-index: 2;
+    }
+
+    #tourism-css .location-btn {
+        background-color: transparent;
+        color: #ffffff;
+        border: 0;
+        font-weight: 500;
+        padding: 4px 12px;
+        font-size: 14px;
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+}
+
+@media (max-width: 991px) and (min-width: 768px) {
+    #tourism-css .card1 {
+        height: 250px;
+    }
+
+    #tourism-css .h2-styling-tourism {
+        font-family: 'Roboto';
+        font-weight: 500;
+        font-size: 22px;
+        letter-spacing: -0.02em;
+        text-align: justify;
+        color: #1F94C6;
+    }
+
+    #tourism-css strong {
+        font-family: 'Roboto';
+        font-weight: 600;
+        font-size: 18px;
+        line-height: 22px;
+        letter-spacing: -0.02em;
+        text-align: justify;
+    }
+
+    #tourism-css .span-tourism {
+        font-family: 'Roboto';
+        font-weight: 400;
+        font-size: 18px;
+        line-height: 22px;
+        letter-spacing: -0.02em;
+        text-align: justify;
+    }
+
+    #tourism-css .card-overlay1 {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        background: rgba(0, 0, 0, 0.65);
+        color: #ffffff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 4px 0;
+        z-index: 2;
+    }
+
+    #tourism-css .location-btn {
+        background-color: transparent;
+        color: #ffffff;
+        border: 0;
+        font-weight: 500;
+        padding: 4px 12px;
+        font-size: 15px;
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    #tourism-css .card2 {
+        margin-top: 10px;
+    }
+}
+
+@media (max-width: 767px) and (min-width: 576px) {
+    #tourism-css .card1 {
+        height: 195px;
+    }
+
+    #tourism-css .card1 img {
+        object-fit: cover;
+    }
+
+    #tourism-css .h2-styling-tourism {
+        margin-top: 20px;
+        font-family: 'Roboto';
+        font-weight: 500;
+        font-size: 21px;
+        letter-spacing: -0.02em;
+        text-align: justify;
+        color: #1F94C6;
+    }
+
+    #tourism-css strong {
+        font-family: 'Roboto';
+        font-weight: 600;
+        font-size: 17px;
+        line-height: 21px;
+        letter-spacing: -0.02em;
+        text-align: justify;
+    }
+
+    #tourism-css .span-tourism {
+        font-family: 'Roboto';
+        font-weight: 400;
+        font-size: 17px;
+        line-height: 21px;
+        letter-spacing: -0.02em;
+        text-align: justify;
+    }
+
+    #tourism-css .card-overlay1 {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        background: rgba(0, 0, 0, 0.65);
+        color: #ffffff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 3px 0;
+        z-index: 2;
+    }
+
+    #tourism-css .location-btn {
+        background-color: transparent;
+        color: #ffffff;
+        border: 0;
+        font-weight: 500;
+        padding: 4px 12px;
+        font-size: 14px;
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    #tourism-css .card2 {
+        margin-top: 10px;
+    }
+}
+
+@media (max-width: 575px) {
+    #tourism-css .card1 {
+        height: 180px;
+    }
+
+    #tourism-css .card1 img {
+        object-fit: cover;
+    }
+
+    #tourism-css .h2-styling-tourism {
+        margin-top: 15px;
+        font-family: 'Roboto';
+        font-weight: 500;
+        font-size: 20px;
+        letter-spacing: -0.02em;
+        text-align: justify;
+        color: #1F94C6;
+    }
+
+    #tourism-css strong {
+        font-family: 'Roboto';
+        font-weight: 600;
+        font-size: 16px;
+        line-height: 20px;
+        letter-spacing: -0.02em;
+        text-align: justify;
+    }
+
+    #tourism-css .span-tourism {
+        font-family: 'Roboto';
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 20px;
+        letter-spacing: -0.02em;
+        text-align: justify;
+    }
+
+    #tourism-css .card-overlay1 {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        background: rgba(0, 0, 0, 0.65);
+        color: #ffffff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 3px 0;
+        z-index: 2;
+    }
+
+    #tourism-css .location-btn {
+        background-color: transparent;
+        color: #ffffff;
+        border: 0;
+        font-weight: 500;
+        padding: 4px 12px;
+        font-size: 13px;
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    #tourism-css .card2 {
+        margin-top: 10px;
+    }
+}

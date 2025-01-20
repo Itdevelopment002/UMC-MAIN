@@ -1,0 +1,137 @@
+.history-header-image {
+  background-image: url(../../assets/images/inner.png);
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  width: 100%;
+  height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  margin-top: -20px;
+  z-index: -1;
+}
+
+#history-css .sidebar-image {
+  background: linear-gradient(to bottom, #BB368A, #FEBA28);
+  border-right: 6px solid transparent;
+  border-bottom: 6px solid #FEBA28;
+  border-radius: 20px;
+  margin-bottom: 30px;
+}
+
+#history-css .sidebar-image img {
+  border-radius: 10px;
+  max-width: 100%;
+  height: auto;
+  margin: 0 auto;
+}
+
+#history-css .content {
+  font-family: "Roboto";
+}
+
+#history-css .custom-content {
+  margin-top: -10px;
+}
+
+#history-css .history-title {
+  font-size: 28px;
+  font-weight: bold;
+  margin-top: 10px;
+  margin-bottom: 25px;
+}
+
+#history-css .history-title .highlight {
+  color: #333333;
+  font-weight: 700;
+  border-left: 5px solid;
+  border-image: linear-gradient(to bottom, #BA358B, #FAB02F) 1;
+  border-image-slice: 1;
+  padding-left: 13px;
+}
+
+#history-css .history-section {
+  padding: 0px 0px 0px 20px;
+}
+
+#history-css .history-section .section-title {
+  font-size: 2rem;
+  border-left: 5px solid #ffa500;
+  padding-left: 15px;
+  margin-bottom: 20px;
+}
+
+#history-css .history-section p {
+  text-align: justify;
+  line-height: 1.9;
+  margin-bottom: 15px;
+  font-weight: 500;
+  font-size: 16px;
+  color: #666565;
+  word-spacing: 0.3rem;
+}
+
+@media (max-width: 768px) {
+  #history-css .sidebar {
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #history-css .sidebar-image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 307px;
+    height: 307px;
+  }
+
+  #history-css .sidebar-image img {
+    border-radius: 10px;
+    max-width: 100%;
+    height: auto;
+    margin: 0 auto;
+  }
+
+  #history-css .history-section {
+    padding: 5px;
+    margin-top: 15px;
+  }
+}
+
+@media (max-width: 400px) {
+
+  #history-css .sidebar-image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 285px;
+    height: 285px;
+  }
+
+  #history-css .sidebar-image img {
+    border-radius: 10px;
+    max-width: 100%;
+    height: auto;
+    margin: 0 auto;
+  }
+
+  #history-css .history-section {
+    padding: 5px;
+    margin-top: 15px;
+  }
+
+}
+
+@media (max-width: 1400px) {
+  .history-header-image {
+    background-size: cover;
+    margin-top: -0px;
+    margin-bottom: 20px;
+  }
+}

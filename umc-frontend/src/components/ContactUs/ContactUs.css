@@ -1,0 +1,99 @@
+#contact-css .icon-container {
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(to right, #B9338D 0%, #FFBB27 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 20px;
+    flex-shrink: 0 !important;
+}
+
+#contact-css .icon-image {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+}
+
+#contact-css .left_section p {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+#contact-css .left_section .items-content {
+    justify-content: start;
+    align-items: center;
+    margin-bottom: 45px;
+}
+
+#contact-css .divider {
+    position: relative;
+    width: 1px;
+    background-color: transparent;
+}
+
+#contact-css .divider::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 90%;
+    width: 1px;
+    background-color: #ccc;
+}
+
+#contact-css .card-header {
+    background: linear-gradient(to right, #B9338D 0%, #FFBB27 100%) !important;
+    font-weight: bold;
+    width: 50%;
+    border-radius: 7px;
+}
+
+#contact-css .bg-gradient {
+    background: linear-gradient(to right, #B9338D 0%, #FFBB27 100%);
+}
+
+#contact-css .card {
+    border: none;
+}
+
+#contact-css .card-body {
+    position: relative;
+    padding-left: 18px;
+    text-align: justify;
+}
+
+#contact-css .left-border {
+    position: absolute;
+    top: 18px;
+    left: 0;
+    width: 4px;
+    height: 72%;
+    background: linear-gradient(to top, #FFBB27 0%, #B9338D 100%) !important
+}
+
+#contact-css a {
+    text-decoration: none;
+    color: #007bff;
+}
+
+#contact-css a:hover {
+    text-decoration: underline;
+}
+
+#contact-css h5 {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 600;
+    font-size: 18px;
+    margin-bottom: 0px !important;
+}
+
+#contact-css p {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    color: #67748E;
+    margin-bottom: 5px;
+}

@@ -1,0 +1,182 @@
+#property-css .inter-font {
+  font-family: "Inter";
+}
+
+#property-css .roboto-font {
+  font-family: "Roboto";
+}
+
+#property-css .e-services-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e7daed;
+  border-radius: 7px;
+  height: 350px;
+  overflow: hidden;
+  position: relative;
+}
+
+#property-css .e-services-container .content {
+  flex: 1;
+  z-index: 2;
+}
+
+#property-css .e-services-container .background-img {
+  width: 50%;
+  height: 100%;
+  background-image: url("../../assets/images/online-services/background.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 1;
+  border-radius: 0 32px 32px 0;
+}
+
+#property-css .custom-nav-border {
+  border-bottom: none !important;
+}
+
+#property-css .tabs-container {
+  color: white;
+  border-radius: 5px;
+}
+
+#property-css .tabs-container .nav-tabs .nav-link {
+  padding: 5px;
+  border-radius: 5px;
+  font-weight: 500;
+  color: #f5507a !important;
+  border: none !important;
+  outline: 2px solid #f5507a;
+}
+
+#property-css .tabs-container .nav-tabs .nav-link.active {
+  border-radius: 5px;
+  color: white !important;
+  border: none !important;
+  background: linear-gradient(to right, #ec7026 0%, #f5507a 100%);
+}
+
+#property-css .left-content {
+  padding: 20px;
+}
+
+#property-css .left-content .tab-item {
+  margin-bottom: 15px;
+  font-family: "Roboto", sans-serif;
+}
+
+#property-css .left-content .tab-title {
+  font-weight: bold;
+  color: #333;
+}
+
+#property-css .left-content .tab-description {
+  font-size: 14px;
+  color: #666;
+}
+
+@media (max-width: 575.98px) {
+  #property-css .e-services-container {
+    border-radius: 16px;
+    margin-top: 20px;
+    min-height: 500px;
+  }
+
+  #property-css .tabs-container {
+    margin-bottom: 4px;
+    border-radius: 16px;
+  }
+
+  #property-css .service-image {
+    width: 125px;
+    height: 125px;
+    margin-top: 10px;
+  }
+
+  #property-css .background-img {
+    display: none;
+  }
+
+  .location-title {
+    font-size: 26px;
+  }
+}
+
+@media (min-width: 576px) and (max-width: 767.98px) {
+  #property-css .e-services-container {
+    border-radius: 24px;
+    margin-top: 20px;
+    min-height: 400px;
+  }
+
+  #property-css .tabs-container {
+    margin-bottom: 5px;
+    padding: 5px;
+  }
+
+  #property-css .service-image {
+    width: 140px;
+    height: 140px;
+    margin-top: 20px;
+  }
+
+  #property-css .background-img {
+    display: none;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 991.98px) {
+  #property-css .tabs-container {
+    margin-bottom: 6px;
+    padding: 5px;
+  }
+}
+
+@media (max-width: 992px) {
+  #property-css .tabs-container {
+    margin-bottom: 6px;
+  }
+
+  #property-css .e-services-container {
+    border-radius: 10px !important;
+    max-height: 350px;
+  }
+
+}
+
+@media (max-width: 1168px) {
+  #property-css .tabs-container {
+    border-radius: 10px !important;
+  }
+
+  #property-css .tabs-container .nav-tabs .nav-link.active {
+    border-radius: 10px !important;
+    margin: 2px;
+  }
+}
+
+@media (max-width: 1106px) {
+  #property-css .tabs-container .nav-tabs .nav-link {
+    padding: 3px 5px 3px 5px !important;
+    outline: none !important;
+  }
+
+  #property-css .e-services-container {
+    border-radius: 10px !important;
+    max-height: 350px;
+  }
+}
+
+#property-css .service-image {
+  display: block;
+  margin: 0 auto;
+  width: 206px;
+  height: 206px;
+  background-position: left;
+}

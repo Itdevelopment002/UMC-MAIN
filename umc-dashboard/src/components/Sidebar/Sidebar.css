@@ -1,0 +1,115 @@
+.submenu ul {
+  transform: scaleY(0);
+  transform-origin: top;
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+}
+
+.submenu ul.open {
+  max-height: 100%;
+  transform:scaleY(1);
+  opacity: 1;
+}
+
+.menu-arrow {
+  display: inline-block;
+  transition: transform 0.4s ease;
+}
+
+.menu-arrow.rotate {
+  transform: rotate(90deg);
+}
+
+.sidebar-inner {
+  overflow-y: auto;
+  max-height: 100vh;
+}
+
+.sidebar::-webkit-scrollbar {
+  width: 4px; 
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.1); 
+  border-radius: 10px; 
+  transition: background-color 0.3s ease;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 0, 0, 0.3); 
+}
+
+.sidebar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+
+.sidebar {
+  scrollbar-width: none; 
+  scrollbar-color: rgba(0, 0, 0, 0.1) transparent; 
+}
+
+.sidebar:hover::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.3); 
+}
+
+/* .sidebar {
+  height: 100vh;
+} */
+
+.sidebar {
+  position: fixed;
+  left: -250px;
+  width: 220px; 
+  transition: left 0.3s ease-in-out; 
+  z-index: 999;
+}
+
+.sidebar.opened {
+  left: 220px; 
+}
+
+.sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5); 
+  display: none;
+  z-index: 998;
+}
+
+.sidebar-overlay.opened {
+  display: block; 
+}
+
+@media (min-width: 991px) {
+  .sidebar {
+    left: 0;  
+  }
+  
+
+  .sidebar-overlay {
+    display: none; /* No overlay on large screens */
+  }
+
+  /* Ensure the sidebar is closed by default on larger screens */
+  .sidebar.opened {
+    display: none;
+  }
+}
+
+/* Small screens: Sidebar hidden by default */
+@media (max-width: 990px) {
+  .sidebar-overlay {
+    display: block; /* Overlay visible on small screens */
+  }
+}
+
+
+
+
+

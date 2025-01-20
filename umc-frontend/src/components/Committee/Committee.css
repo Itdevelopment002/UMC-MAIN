@@ -1,0 +1,90 @@
+#committee-css .button-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+#committee-css .btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: auto;
+  min-width: 120px;
+  text-align: center;
+  padding: 8px 30px;
+  border: 2px solid transparent;
+  border-image: linear-gradient(to right, #BA358B, #FAB02F) 1;
+  color: black;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+  position: relative;
+  font-size: 16px;
+}
+
+#committee-css .btn:hover::after,
+#committee-css .btn:focus::after,
+#committee-css .btn:active::after,
+#committee-css .btn.active::after {
+  content: "";
+  position: absolute;
+  bottom: -13px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 24px;
+  height: 12px;
+  background: linear-gradient(90deg, #BA358B, #FAB02F);
+  clip-path: polygon(50% 100%, 0% 0%, 100% 0%);
+  transition: all 0.3s ease;
+}
+
+
+#committee-css .btn.active {
+  background: linear-gradient(to right, #BA358B, #FAB02F) !important;
+  color: white;
+}
+
+#committee-css .btn:hover {
+  transform: scale(1.04);
+  color: white;
+  background: linear-gradient(to right, #BA358B, #FAB02F);
+  transition: all 0.2s ease;
+}
+
+@media (max-width: 1492px) {
+  #committee-css .btn {
+    padding: 8px 20px;
+  }
+}
+
+
+@media (max-width: 768px) {
+  #committee-css .btn {
+    font-size: 14px;
+    padding: 8px 12px;
+    min-width: 100px;
+    margin-bottom: 5px;
+  }
+
+  #committee-css .button-group {
+    gap: 15px;
+  }
+}
+
+@media (max-width: 576px) {
+  #committee-css .button-group {
+    flex-direction: column;
+    gap: 17px;
+  }
+
+  #committee-css .btn {
+    width: 100%;
+    padding: 10px;
+  }
+
+  #committee-css .btn:hover {
+    transform: scale(1.02);
+    transition: all 0s ease;
+  }
+}

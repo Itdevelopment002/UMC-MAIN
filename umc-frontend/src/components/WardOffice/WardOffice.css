@@ -1,0 +1,124 @@
+#ward-css {
+    font-family: 'Roboto';
+}
+
+#ward-css .content-row {
+    margin: auto 1px;
+    padding: 20px 0px;
+}
+
+#ward-css .sidebar {
+    border-right: 1px solid #ddd;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#ward-css .sidebar .btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 90%;
+    height: 40px;
+    margin-bottom: 20px;
+    text-align: center;
+    padding: 10px;
+    border: 2px solid transparent;
+    border-image: linear-gradient(to right, #BA358B, #FAB02F) 1;
+    color: black;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+#ward-css .sidebar .btn:hover::after,
+#ward-css .sidebar .btn:focus::after,
+#ward-css .sidebar .btn:active::after,
+#ward-css .sidebar .btn.active::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: -12px;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 12px 0 12px 12px;
+    border-color: transparent transparent transparent #FAB02F;
+    transition: all 0.3s ease;
+}
+
+#ward-css .sidebar .btn.active {
+    background: linear-gradient(to right, #BA358B, #FAB02F);
+    color: white;
+
+}
+
+#ward-css .sidebar .btn:hover {
+    transform: scale(1.04);
+    color: white;
+    background: linear-gradient(to right, #BA358B, #FAB02F);
+    transition: all 0.3s ease;
+}
+
+#ward-css .ward-card {
+    padding-left: 25px !important;
+    padding-right: 25px !important;
+}
+
+#ward-css .ward-title {
+    color: #FAB02F;
+    border-bottom: 2px solid #c1c0c0;
+    padding-bottom: 5px;
+    margin-bottom: 15px;
+    font-size: 1.25rem;
+}
+
+#ward-css .ward-text {
+    margin-bottom: 5px;
+}
+
+#ward-css .table-heading-styling {
+    background: #FFF7E2 !important;
+    color: #000000;
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 16.41px;
+    padding: 10px 10px;
+}
+
+#ward-css .table-bordered td,
+.table-bordered th {
+    padding-top: 15px;
+    vertical-align: none;
+}
+
+#ward-css .areapadding {
+    padding-left: 46px;
+}
+
+
+#ward-css .ward-location-title {
+    color: #FAB02F;
+    font-size: 1.25rem;
+    margin-bottom: 15px;
+    padding-left: 10px;
+    text-align: left;
+}
+
+#ward-css .map-container {
+    text-align: center;
+}
+
+#ward-css .map-wrapper {
+    border: 4px solid #F8E5B3;
+    border-radius: 5px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 0px !important;
+    width: 100%;
+    height: 310px;
+}

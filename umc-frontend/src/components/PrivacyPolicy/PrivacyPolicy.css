@@ -1,0 +1,22 @@
+#privacy-css .privacy-h5-style {
+    font-family: 'Roboto';
+    font-weight: 600;
+    font-size: 23px;
+    line-height: 30px;
+    text-align: justify;
+}
+
+#privacy-css .privacy-p-style {
+    font-family: 'Roboto';
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 30px;
+    text-align: justify;
+    word-spacing: 0.1rem;
+}
+
+@media (max-width: 500px) {
+    #privacy-css .privacy-p-style {
+        word-spacing: 0rem;
+    }
+}

@@ -1,0 +1,26 @@
+/* Override Flatpickr styles */
+.flatpickr-calendar {
+  background: #f9f9f9; /* Light background for the calendar */
+  border: 1px solid #ccc; /* Custom border */
+  border-radius: 5px; /* Rounded corners */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.flatpickr-day {
+  color: #333; /* Default text color */
+}
+
+.flatpickr-day.selected,
+.flatpickr-day.startRange,
+.flatpickr-day.endRange {
+  background: #007bff; /* Primary color for selected dates */
+  color: #fff;
+}
+
+.flatpickr-day:hover {
+  background: #e9ecef; /* Light hover effect */
+}
+
+.flatpickr-month {
+  font-size: 16px; /* Adjust font size */
+}

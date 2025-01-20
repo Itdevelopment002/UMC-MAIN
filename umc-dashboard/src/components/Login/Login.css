@@ -1,0 +1,129 @@
+/* Full Page Setup */
+.login-page {
+  height: 100vh;
+  background-image: url("../../assets/img/bg2.jpg");
+  background-size: cover; 
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex; 
+}
+
+/* Row setup for layout */
+.row1 {
+  margin: 0;
+  height: 100%;
+  width: 100%;
+}
+
+/* Left Side */
+.left-side {
+  width: 50%; /* Half the screen width */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Right Side */
+.right-side {
+  width: 50%; /* Half the screen width */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.label1 {
+  color: #323232;
+  font-size: 14px;
+  font-weight: normal;
+}
+
+/* Form Container */
+.form-container1 {
+  max-width: 400px;
+  width: 100%;
+  background: #fff;
+  border-radius: 30px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  border: 5px solid #ccc;
+}
+
+.form-container1 img {
+  max-width: 100%;
+  height: auto; 
+  max-height: 60px; 
+  margin: 0 auto; 
+  display: block; 
+}
+
+.form-container1 h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.form-control1 {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: inherit;
+  font-size: 14px;
+  height: 40px;
+}
+
+.button-container {
+  display: flex;             
+  justify-content: center;   
+  align-items: center;  
+}
+
+.btn1 {
+  border-radius: 50px;
+  font-size: 16px;
+  min-width: 150px;
+  padding: 8px 30px;
+  text-transform: uppercase;
+}
+
+
+.a1 {
+  color: #333;
+  font-size: 14px;
+  text-decoration: none;
+}
+
+.a1:hover {
+  text-decoration: underline;
+  color: #007bff;
+}
+
+@media (max-width: 768px) {
+  .login-page {
+    flex-direction: column; 
+    background-position: right; /* Show the right side of the background image */
+  }
+
+  .left-side {
+    display: none; /* Hide left side on smaller screens */
+  }
+
+  .right-side {
+    width: 100%; /* Make the right side take full width */
+  }
+
+  .form-container {
+    padding: 20px; /* Reduce padding for smaller screens */
+  }
+}
+@media (max-width: 768px) {
+  .login-page {
+    background-size: cover; /* Adjusts the size to ensure visibility on smaller devices */
+    background-position: left; /* Focus on the right part of the image */
+  }
+}
+
+@media (max-width: 480px) {
+  .login-page {
+    background-size: cover; /* Ensure the image doesn't crop on very small devices */
+    background-position: left; /* Re-center the image */
+  }
+}

@@ -1,0 +1,14 @@
+/* #accessibility-css p {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 30px;
+    text-align: justify;
+    word-spacing: 0.1rem;
+}
+
+@media (max-width: 500px) {
+    #accessibility-css p {
+        word-spacing: 0rem;
+    }
+} */

@@ -1,0 +1,12 @@
+#pt-css .system-style-div {
+    display: flex;
+    background-color: #F3F3F3;
+    align-items: center;      
+    padding: 10px 20px;    
+}
+
+#pt-css .span-system1 {
+    font-family: 'Roboto';
+    font-weight: 500;
+    font-size: 16px;
+}

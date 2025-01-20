@@ -1,0 +1,28 @@
+.circular-wrapper {
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+@media (max-width: 992px) {
+  .circular-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .circular-wrapper::-webkit-scrollbar {
+    height: 6px;
+  }
+
+  .circular-wrapper::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+
+  .circular-wrapper::-webkit-scrollbar-thumb {
+    background: #F37F1A;
+    border-radius: 4px;
+  }
+
+  .circular-wrapper::-webkit-scrollbar-thumb:hover {
+    background: #F37F1A;
+  }
+}

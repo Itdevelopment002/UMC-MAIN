@@ -1,0 +1,40 @@
+.container-fluid {
+    padding: 0px 50px !important;
+}
+::-webkit-scrollbar {
+    width: 8px;
+}
+::-webkit-scrollbar-thumb {
+    background: #FFAF50;
+    border-radius: 5px;
+}
+
+@media only screen and (max-width: 499px) {
+    .container-fluid {
+        width: 100% !important;
+        padding: 0px 15px !important;
+    }
+}
+
+/* loader */
+.loader-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f8f9fa; /* Optional background color */
+  }
+  [data-aos] {
+    transition-property: transform, opacity !important;
+  }
+  
+  [data-aos="fade-up"] {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+  
+  [data-aos].aos-animate {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  

@@ -1,0 +1,98 @@
+.update-section {
+  margin-top: 40px;
+  padding: 10px 0;
+  overflow: hidden;
+  position: relative;
+  white-space: nowrap;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+}
+
+.marquee {
+  display: flex;
+  overflow: hidden;
+  position: relative;
+  height: 50px;
+  align-items: center;
+}
+
+.marquee {
+  display: flex;
+  height: 50px;
+  align-items: center;
+  width: 100%;
+  overflow: hidden;
+  background: #ffffff;
+  color: #191919;
+  position: relative;
+  font-weight: 400;
+  font-size: 16px;
+  font-family: "Roboto";
+  line-height: 3em;
+  border-radius: 8px;
+  box-shadow: 6px 6px 10px #d7d7d7;
+}
+
+.marquee:before {
+  content: "Current Updates";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  background: #068CE1;
+  color: #fff;
+  z-index: 1;
+  padding: 0 1.5em;
+  flex-shrink: 0;
+  clip-path: polygon(0 0, 86% 0, 100% 50%, 86% 100%, 0 100%);
+}
+
+.marquee-item {
+  padding: 0 20px;
+  font-size: 15px;
+  font-family: "Roboto";
+  line-height: 50px;
+  display: flex;
+  align-items: center;
+}
+
+.circle {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: #545454;
+  margin-right: 8px;
+}
+
+.marquee-content {
+  margin-left: 100%;
+  display: flex;
+  animation: marquee 45s linear infinite;
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+@media (max-width: 499px) {
+
+  .update-section {
+    margin-top: -60px;
+  }
+
+  .marquee {
+    font-size: 13px;
+    height: 40px;
+  }
+
+  .marquee-item {
+    padding: 0 20px;
+    font-size: 12px;
+  }
+
+}

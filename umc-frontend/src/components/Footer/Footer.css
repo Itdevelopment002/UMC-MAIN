@@ -1,0 +1,154 @@
+.footer {
+  background-color: #242323;
+  color: #ffffff;
+  padding: 40px 0;
+  font-family: "Roboto", sans-serif;
+}
+
+.footer-logo-section {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.footer-logo {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.footer-title {
+  font-family: "Rowdies", sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+}
+
+.footer-subtitle {
+  font-family: "Ramabhadra", sans-serif;
+  font-size: 16px;
+  color: #ffffff;
+  margin: 0;
+}
+
+.contact-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.contact-list li {
+  margin-bottom: 20px;
+}
+
+.contact-list .d-flex {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.contact-text {
+  line-height: 1.4;
+}
+
+.contact-title {
+  font-size: 14px;
+  font-weight: bold;
+  margin: 0;
+  color: #ffffff;
+}
+
+.contact-detail {
+  font-size: 14px;
+  margin: 0;
+  color: #a3a4a7;
+}
+
+@media (max-width: 768px) {
+  .icon-img {
+    width: 24px;
+    height: 24px;
+  }
+
+  .contact-title,
+  .contact-detail {
+    font-size: 12px;
+  }
+}
+
+.footer-heading {
+  font-family: "Poppins", serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: #FFBC13;
+  margin-bottom: 15px;
+}
+
+.footer-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-links li {
+  margin-bottom: 8px;
+}
+
+.footer-links a {
+  font-family: "Poppins", serif;
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 13px;
+  transition: color 0.3s;
+}
+
+.footer-links a:hover {
+  color: #1D9BF0;
+}
+
+.footer-divider {
+  border: 0.5px solid #ffffff;
+  margin: 0px 0px 20px 0px;
+}
+
+.footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  flex-wrap: wrap;
+  font-size: 14px;
+  color: #dcdcdc;
+  gap: 10px;
+  text-align: center;
+}
+
+.footer-bottom span {
+  flex: 1;
+}
+
+@media (min-width: 768px) {
+  .footer-sapn1 {
+    text-align: start;
+  }
+
+  .footer-sapn2 {
+    text-align: end;
+  }
+}
+
+
+@media (max-width: 768px) {
+  .footer-logo-section {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .footer-bottom {
+    flex-direction: column;
+    gap: 5px;
+  }
+}
