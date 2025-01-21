@@ -82,6 +82,10 @@ import AddYear from "../DepartmentData/AddYear";
 import api from "../api";
 import MinisterDetails from "../MinisterDetails/MinisterDetails";
 import AddMinisterDetails from "../MinisterDetails/AddMinisterDetails";
+import CitizeServices from "../CitizenServices/CitizenServices";
+import AddCitizeServices from "../CitizenServices/AddCitizenServices";
+import HomeVideo from "../HomeVideo/HomeVideo";
+import AddHomeVideo from "../HomeVideo/AddHomeVideo";
 import CurrentUpdate from "../CurrentUpdate/CurrentUpdate";
 import AddCurrentUpdate from "../CurrentUpdate/AddCurrentUpdate";
 import UMCNews from "../UMCNews/UMCNews";
@@ -137,6 +141,10 @@ function SuperAdminRoutes() {
         <Route path="/add-slider" element={<AddSlider />} />
         <Route path="/minister" element={<MinisterDetails />} />
         <Route path="/add-minister" element={<AddMinisterDetails />} />
+        <Route path="/citizen-services" element={<CitizeServices />} />
+        <Route path="/add-citizen-services" element={<AddCitizeServices />} />
+        <Route path="/home-video" element={<HomeVideo />} />
+        <Route path="/add-home-video" element={<AddHomeVideo />} />
         <Route path="/current-update" element={<CurrentUpdate />} />
         <Route path="/add-current-update" element={<AddCurrentUpdate />} />
         <Route path="/umc-news" element={<UMCNews />} />
@@ -145,6 +153,8 @@ function SuperAdminRoutes() {
         <Route path="/add-eservices" element={<AddEServices />} />
         <Route path="/initiatives" element={<Initiatives />} />
         <Route path="/add-initiatives" element={<AddInitiatives />} />
+
+
         <Route path="/add-user" element={<AddUsers />} />
         <Route path="/user" element={<Users />} />
         <Route path="/add-privacy-policy" element={<AddPrivacyPolicy />} />
