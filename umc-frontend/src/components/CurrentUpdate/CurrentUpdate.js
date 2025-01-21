@@ -1,13 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./CurrentUpdate.css";
+import api from "../api"
 
 const CurrentUpdate = () => {
   const [animationState, setAnimationState] = useState({});
-  const manualUpdates = [
-    { description: "Welcome to Ulhasnagar Municipal Corporation Web Portal" },
-    { description: "Pollution Control Helpline:18002331103" },
-    { description: "Illegal Hoarding Complaint Toll Free No. 1800-233-1107/ Noise Pollution & Temporary Tent / Stage Complaint Toll Free No. : 1800-233-1101" },
-  ];
+  const [updates, setUpdates] = useState([]);
 
   const handleMouseEnter = () => {
     const marquee = document.querySelector(".marquee-content");
@@ -38,6 +35,19 @@ const CurrentUpdate = () => {
     }));
   };
 
+  const fetchUpdates = async () => {
+    try {
+      const response = await api.get("/current-update");
+      setUpdates(response.data);
+    } catch (error) {
+      console.error("Error Fetching updates!", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchUpdates();
+  }, []);
+
   return (
     <section className="update-section" id="main-content">
       <div className="container-fluid">
@@ -55,7 +65,7 @@ const CurrentUpdate = () => {
                 : "",
             }}
           >
-            {manualUpdates.concat(manualUpdates).map((item, index) => (
+            {updates.concat(updates).map((item, index) => (
               <div className="marquee-item" key={index}>
                 <span className="circle"></span>
                 {item.description}
