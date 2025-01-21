@@ -74,6 +74,40 @@ const Sidebar = ({ isOpen, closeSidebar, userDepartment }) => {
                       Ministers
                     </Link>
                   </li>
+                  <li
+                    className={activeItem === "/citizen services" ? "active" : ""}
+                    onClick={() => handleItemClick("/citizen services")}
+                  >
+                    <Link to="/citizen-services">
+                      <i className="fa">
+                        <MdMiscellaneousServices />
+                      </i>{" "}
+                      Citizen Services
+                    </Link>
+                  </li>
+                  <li
+                    className={activeItem === "/home video" ? "active" : ""}
+                    onClick={() => handleItemClick("/home video")}
+                  >
+                    <Link to="/home-video">
+                      <i className="fa">
+                        <MdMiscellaneousServices />
+                      </i>{" "}
+                      Home Video
+                    </Link>
+                  </li>
+                  <li
+                    className={activeItem === "/bottom slider" ? "active" : ""}
+                    onClick={() => handleItemClick("/bottom slider")}
+                  >
+                    <Link to="/bottom-slider">
+                      <i className="fa">
+                        <MdMiscellaneousServices />
+                      </i>{" "}
+                      Bottom Slider
+                    </Link>
+                  </li>
+
                   {/* <li
                     className={activeItem === "/services" ? "active" : ""}
                     onClick={() => handleItemClick("/services")}

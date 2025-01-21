@@ -66,6 +66,11 @@ const notificationRoutes = require('./routes/notificationRoutes');
 const adminNotificationRoutes = require('./routes/adminNotificationRoutes');
 const notifyStatusRoutes = require('./routes/notifyStatusRoutes');
 const ministerDetailRoutes = require('./routes/ministerDetailRoutes');
+const citizenServicesRoutes = require('./routes/citizenServicesRoutes');
+const homeVideosRoutes = require('./routes/homeVideosRoutes');
+
+
+
 
 app.use('/api', sliderRoutes);
 app.use('/api', serviceRoutes);
@@ -125,6 +130,12 @@ app.use('/api', notificationRoutes);
 app.use('/api', adminNotificationRoutes);
 app.use('/api', notifyStatusRoutes);
 app.use('/api', ministerDetailRoutes);
+app.use('/api', citizenServicesRoutes);
+app.use('/api', homeVideosRoutes);
+
+
+
+
 
 const PORT = process.env.PORT || 5011;
 app.listen(PORT, () => {

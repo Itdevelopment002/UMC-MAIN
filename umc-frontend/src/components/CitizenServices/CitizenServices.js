@@ -1,19 +1,47 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "./CitizenServices.css";
 import { Link } from "react-router-dom";
-import img1 from "../../assets/images/citizen-services/service-1.png";
-import img2 from "../../assets/images/citizen-services/service-2.png";
-import img3 from "../../assets/images/citizen-services/service-3.png";
-import img4 from "../../assets/images/citizen-services/service-4.png";
-import img5 from "../../assets/images/citizen-services/service-5.png";
-import img6 from "../../assets/images/citizen-services/service-6.png";
-import img7 from "../../assets/images/citizen-services/service-7.png";
-import img8 from "../../assets/images/citizen-services/service-8.png";
 import vector from "../../assets/images/citizen-services/vector-1.png";
 import AOS from 'aos';
 import 'aos/dist/aos.css';
+import api, { baseURL } from "../api";
+
 
 const CitizenServices = () => {
+  const [citzenServices, setCitizenServices] = useState([]);
+  const [videos, setVideos] = useState([]);
+
+  useEffect(() => {
+    fetchServices();
+    fetchVideos();
+  }, []);
+
+  const fetchServices = async () => {
+    try {
+      const response = await api.get("/citizen-services");
+      setCitizenServices(response.data);
+    } catch (error) {
+      console.error("Error fetching services:", error);
+    }
+  };
+
+  const fetchVideos = async () => {
+    try {
+      const response = await api.get("/home-video");
+      setVideos(response.data);
+    } catch (error) {
+      console.error("Error fetching videos:", error);
+    }
+  };
+
+  const getYouTubeVideoId = (url) => {
+    const regExp =
+      // eslint-disable-next-line
+      /^.*(youtu.be\/|v\/|\/u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+    const match = url.match(regExp);
+    return match && match[2].length === 11 ? match[2] : null;
+  };
+
   useEffect(() => {
     AOS.init({
       duration: 450,
@@ -26,48 +54,6 @@ const CitizenServices = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
-  const services = [
-    {
-      title: "Tenders & Quotation",
-      link: "/tenders-and-quotations",
-      image: img1,
-    },
-    {
-      title: "Property Tax",
-      link: "http://www.onlineumc.org.in:8080/umc/jsp/propertydues.jsp?id=4",
-      image: img2,
-    },
-    {
-      title: "Water Tax",
-      link: "http://water.umcgov.in/ViewConsumerDetails.aspx",
-      image: img3,
-    },
-    {
-      title: "Right to Information",
-      link: "https://rtionline.gov.in/",
-      image: img4,
-    },
-    {
-      title: "E-Tenders",
-      link: "https://mahatenders.gov.in/nicgep/app",
-      image: img5,
-    },
-    {
-      title: "Marriage Registration",
-      link: "https://marriage.rtsumc.com/",
-      image: img6,
-    },
-    {
-      title: "Pandal Permission",
-      link: "https://smartumc.com/pandal_app/",
-      image: img7,
-    },
-    {
-      title: "Birth Certificate",
-      link: "https://crsorgi.gov.in/web/index.php/auth/login",
-      image: img8,
-    },
-  ];
 
   const menuItems = [
     {
@@ -114,27 +100,28 @@ const CitizenServices = () => {
             </div>
 
             <div className="row">
-              {services.map((service, index) => (
+              {citzenServices.map((service, index) => (
                 <div className="col-6 col-lg-3 col-md-4 col-sm-6 mb-4" key={index}>
                   <Link
-                    to={service.link}
+                    to={service.service_link}
                     className="text-decoration-none"
-                    target={service.link.startsWith("/") ? "_self" : "_blank"}
-                    rel={service.link.startsWith("/") ? "" : "noopener noreferrer"}
+                    target={service.service_link.startsWith("/") ? "_self" : "_blank"}
+                    rel={service.service_link.startsWith("/") ? "" : "noopener noreferrer"}
                   >
                     <div className="service-card text-center">
                       <img
-                        src={service.image}
-                        alt={service.title}
+                        src={`${baseURL}/${service.main_icon_path}`}
+                        alt={service.service_heading}
                         className="service-image mb-3"
                       />
-                      <h5 className="service-title">{service.title}</h5>
+                      <h5 className="service-title">{service.service_heading}</h5>
                     </div>
                   </Link>
                 </div>
               ))}
             </div>
           </div>
+
 
           <div className="col-lg-2 col-md-4 col-sm-5">
             <div className="citigen">
@@ -145,6 +132,46 @@ const CitizenServices = () => {
                 </h2>
               </div>
             </div>
+
+            <div id="citizen-section" className="row">
+              {videos.length > 0 ? (
+                videos.map((video, index) => (
+                  <div key={index} className="col-12 video-wrapper">
+                    <div className="video-container">
+                      <iframe
+                        src={`https://www.youtube.com/embed/${getYouTubeVideoId(
+                          video.video_url
+                        )}`}
+                         title={`YouTube video ${index + 1}`}
+                        frameBorder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        referrerPolicy="strict-origin-when-cross-origin"
+                        allowFullScreen
+                      ></iframe>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className="col-12">
+                  <p>Loading videos...</p>
+                </div>
+              )}
+            </div>
+          </div>
+
+
+
+
+          {/* <div className="col-lg-2 col-md-4 col-sm-5">
+            <div className="citigen">
+              <div className="vertical-line"></div>
+              <div className="d-flex">
+                <h2 className="section-title">
+                  Video <span className="subtitle">Gallery</span>
+                </h2>
+              </div>
+            </div>
+            
 
             <div id="citizen-section" className="row">
               <div className="col-12 video-wrapper">
@@ -172,7 +199,7 @@ const CitizenServices = () => {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
 
 
           <div className="col-lg-4 col-md-8 col-sm-7">
