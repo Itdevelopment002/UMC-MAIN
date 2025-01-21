@@ -82,6 +82,12 @@ import AddYear from "../DepartmentData/AddYear";
 import api from "../api";
 import MinisterDetails from "../MinisterDetails/MinisterDetails";
 import AddMinisterDetails from "../MinisterDetails/AddMinisterDetails";
+import CitizeServices from "../CitizenServices/CitizenServices";
+import AddCitizeServices from "../CitizenServices/AddCitizenServices";
+import HomeVideo from "../HomeVideo/HomeVideo";
+import AddHomeVideo from "../HomeVideo/AddHomeVideo";
+import BottomSlider from "../BottomSlider/BottomSlider";
+import AddBottomSlider from "../BottomSlider/AddBottomSlider";
 function SuperAdminRoutes() {
   const [departments, setDepartments] = useState([]);
   const [departmentDatas, setDepartmentDatas] = useState([]);
@@ -128,6 +134,17 @@ function SuperAdminRoutes() {
         <Route path="/add-slider" element={<AddSlider />} />
         <Route path="/minister" element={<MinisterDetails />} />
         <Route path="/add-minister" element={<AddMinisterDetails />} />
+        <Route path="/citizen-services" element={<CitizeServices />} />
+        <Route path="/add-citizen-services" element={<AddCitizeServices />} />
+        <Route path="/home-video" element={<HomeVideo />} />
+        <Route path="/add-home-video" element={<AddHomeVideo />} />
+        <Route path="/bottom-slider" element={<BottomSlider />} />
+        <Route path="/add-bottom-slider" element={<AddBottomSlider />} />
+
+
+
+
+
         <Route path="/add-user" element={<AddUsers />} />
         <Route path="/user" element={<Users />} />
         <Route path="/add-privacy-policy" element={<AddPrivacyPolicy />} />
