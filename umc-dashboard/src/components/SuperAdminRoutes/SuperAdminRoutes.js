@@ -86,8 +86,15 @@ import CitizeServices from "../CitizenServices/CitizenServices";
 import AddCitizeServices from "../CitizenServices/AddCitizenServices";
 import HomeVideo from "../HomeVideo/HomeVideo";
 import AddHomeVideo from "../HomeVideo/AddHomeVideo";
-import BottomSlider from "../BottomSlider/BottomSlider";
-import AddBottomSlider from "../BottomSlider/AddBottomSlider";
+import CurrentUpdate from "../CurrentUpdate/CurrentUpdate";
+import AddCurrentUpdate from "../CurrentUpdate/AddCurrentUpdate";
+import UMCNews from "../UMCNews/UMCNews";
+import AddUMCNews from "../UMCNews/AddUMCNews";
+import EServices from "../EServices/EServices";
+import AddEServices from "../EServices/AddEServices";
+import Initiatives from "../Initiatives/Initiatives";
+import AddInitiatives from "../Initiatives/AddInitiatives";
+
 function SuperAdminRoutes() {
   const [departments, setDepartments] = useState([]);
   const [departmentDatas, setDepartmentDatas] = useState([]);
@@ -138,11 +145,14 @@ function SuperAdminRoutes() {
         <Route path="/add-citizen-services" element={<AddCitizeServices />} />
         <Route path="/home-video" element={<HomeVideo />} />
         <Route path="/add-home-video" element={<AddHomeVideo />} />
-        <Route path="/bottom-slider" element={<BottomSlider />} />
-        <Route path="/add-bottom-slider" element={<AddBottomSlider />} />
-
-
-
+        <Route path="/current-update" element={<CurrentUpdate />} />
+        <Route path="/add-current-update" element={<AddCurrentUpdate />} />
+        <Route path="/umc-news" element={<UMCNews />} />
+        <Route path="/add-umc-news" element={<AddUMCNews />} />
+        <Route path="/eservices" element={<EServices />} />
+        <Route path="/add-eservices" element={<AddEServices />} />
+        <Route path="/initiatives" element={<Initiatives />} />
+        <Route path="/add-initiatives" element={<AddInitiatives />} />
 
 
         <Route path="/add-user" element={<AddUsers />} />

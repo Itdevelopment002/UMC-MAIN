@@ -97,17 +97,49 @@ const Sidebar = ({ isOpen, closeSidebar, userDepartment }) => {
                     </Link>
                   </li>
                   <li
-                    className={activeItem === "/bottom slider" ? "active" : ""}
-                    onClick={() => handleItemClick("/bottom slider")}
+                    className={activeItem === "/current-update" ? "active" : ""}
+                    onClick={() => handleItemClick("/current-update")}
                   >
-                    <Link to="/bottom-slider">
+                    <Link to="/current-update">
                       <i className="fa">
-                        <MdMiscellaneousServices />
+                        <BiSliderAlt />
                       </i>{" "}
-                      Bottom Slider
+                      Current Update
                     </Link>
                   </li>
-
+                  <li
+                    className={activeItem === "/umc-news" ? "active" : ""}
+                    onClick={() => handleItemClick("/umc-news")}
+                  >
+                    <Link to="/umc-news">
+                      <i className="fa">
+                        <BiSliderAlt />
+                      </i>{" "}
+                      UMC News
+                    </Link>
+                  </li>
+                  <li
+                    className={activeItem === "/eservices" ? "active" : ""}
+                    onClick={() => handleItemClick("/eservices")}
+                  >
+                    <Link to="/eservices">
+                      <i className="fa">
+                        <BiSliderAlt />
+                      </i>{" "}
+                      e-Services
+                    </Link>
+                  </li>
+                  <li
+                    className={activeItem === "/initiatives" ? "active" : ""}
+                    onClick={() => handleItemClick("/initiatives")}
+                  >
+                    <Link to="/initiatives">
+                      <i className="fa">
+                        <BiSliderAlt />
+                      </i>{" "}
+                      Initiatives-Programme
+                    </Link>
+                  </li>
                   {/* <li
                     className={activeItem === "/services" ? "active" : ""}
                     onClick={() => handleItemClick("/services")}
