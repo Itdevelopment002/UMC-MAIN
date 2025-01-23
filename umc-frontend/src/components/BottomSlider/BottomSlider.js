@@ -1,21 +1,11 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import "./BottomSlider.css";
 import { Link } from "react-router-dom";
-
-import logo1 from "../../assets/images/bottom-slider/logo1.png";
-import logo2 from "../../assets/images/bottom-slider/logo2.png";
-import logo3 from "../../assets/images/bottom-slider/logo3.png";
-import logo4 from "../../assets/images/bottom-slider/logo4.png";
-import logo5 from "../../assets/images/bottom-slider/logo5.png";
-import logo6 from "../../assets/images/bottom-slider/logo6.png";
-import logo7 from "../../assets/images/bottom-slider/logo7.png";
-import logo8 from "../../assets/images/bottom-slider/logo8.png";
-import logo9 from "../../assets/images/bottom-slider/logo9.png";
-import logo10 from "../../assets/images/bottom-slider/logo10.png";
+import api, { baseURL } from "../api";
 
 const NextArrow = (props) => {
   const { onClick } = props;
@@ -36,19 +26,21 @@ const PrevArrow = (props) => {
 };
 
 const BottomSlider = () => {
-  const logos = [
-    { src: logo1, alt: "Logo 1", link: "https://www.mygov.in/" },
-    { src: logo2, alt: "Logo 2", link: "https://pmnrf.gov.in/en/" },
-    { src: logo3, alt: "Logo 3", link: "https://www.mahapolice.gov.in/" },
-    { src: logo4, alt: "Logo 4", link: "https://trafficpolicemumbai.maharashtra.gov.in/" },
-    { src: logo5, alt: "Logo 5", link: "http://mahaprisons.gov.in/Site/Home/Index.aspx" },
-    { src: logo6, alt: "Logo 6", link: "https://igrmaharashtra.gov.in/" },
-    { src: logo7, alt: "Logo 7", link: "https://pmaymis.gov.in/" },
-    { src: logo8, alt: "Logo 8", link: "https://www.india.gov.in/" },
-    { src: logo9, alt: "Logo 9", link: "https://www.digitalindia.gov.in/" },
-    { src: logo10, alt: "Logo 10", link: "https://acbmaharashtra.gov.in/" },
+  const [sliders, setSliders] = useState([]);
 
-  ];
+
+  const fetchSliders = async ()=> {
+    try{
+      const response = await api.get("/bottom-sliders");
+      setSliders(response.data);
+    } catch(error){
+      console.error("Error fetching sliders", error)
+    }
+  }
+
+  useEffect(()=>{
+    fetchSliders();
+  },[]);
 
   const settings = {
     dots: false,
@@ -100,10 +92,10 @@ const BottomSlider = () => {
       <div className="content-box">
         <div className="inner-box">
           <Slider {...settings}>
-            {logos.map((logo, index) => (
+            {sliders.map((logo, index) => (
               <div key={index} className="logo-slide">
-                <Link to={logo.link} target="_blank" rel="noopener noreferrer">
-                  <img src={logo.src} alt={logo.alt} />
+                <Link to={logo.websitelink} target="_blank" rel="noopener noreferrer">
+                  <img src={`${baseURL}${logo.websitelogo}`} alt={logo.id} />
                 </Link>
               </div>
             ))}

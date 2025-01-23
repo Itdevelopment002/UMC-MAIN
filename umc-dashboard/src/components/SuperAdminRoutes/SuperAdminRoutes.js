@@ -94,6 +94,19 @@ import EServices from "../EServices/EServices";
 import AddEServices from "../EServices/AddEServices";
 import Initiatives from "../Initiatives/Initiatives";
 import AddInitiatives from "../Initiatives/AddInitiatives";
+import BottomSlider from "../BottomSlider/BottomSlider";
+import AddBottomSlider from "../BottomSlider/AddBottomSlider";
+import HomeServices2 from "../HomeServices2/HomeServices2";
+import AddHomeServices2 from "../HomeServices2/AddHomeServices2";
+import HomeGallery from "../HomeGallery/HomeGallery";
+import AddHomeGallery from "../HomeGallery/AddHomeGallery";
+import Footer from "../Footer/Footer";
+import AddQuickLinks from "../Footer/AddQuickLinks";
+import QuickLinks from "../Footer/QuickLinks";
+import Help from "../Footer/Help";
+import AddHelp from "../Footer/AddHelp";
+import OnlineServices from "../Footer/OnlineServices";
+import AddOnlineServices from "../Footer/AddOnlineServices";
 import Information from "../Information/Information";
 import AddInformation from "../Information/AddInformation";
 import Projects from "../Projects/Projects";
@@ -103,6 +116,7 @@ import AddHomeService1 from "../HomeService1/AddHomeService1";
 import CitizenCommunication from "../CitizenCommunication/CitizenCommunication";
 import AddPortalServices from "../CitizenCommunication/AddPortalServices";
 import AddEmergencyServices from "../CitizenCommunication/AddEmergencyServices";
+
 
 function SuperAdminRoutes() {
   const [departments, setDepartments] = useState([]);
@@ -162,6 +176,16 @@ function SuperAdminRoutes() {
         <Route path="/add-eservices" element={<AddEServices />} />
         <Route path="/initiatives" element={<Initiatives />} />
         <Route path="/add-initiatives" element={<AddInitiatives />} />
+        <Route path="/bottom-slider" element={<BottomSlider />} />
+        <Route path="/add-bottom-slider" element={<AddBottomSlider />} />
+        <Route path="/home-services2" element={<HomeServices2 />} />
+        <Route path="/add-homeservices2" element={<AddHomeServices2 />} />
+        <Route path="/home-gallery" element={<HomeGallery />} />
+        <Route path="/add-home-gallery" element={<AddHomeGallery />} />
+        <Route path="/footer" element={<Footer />} />
+        <Route path="/add-quick-links" element={<AddQuickLinks />} />
+        <Route path="/add-help" element={<AddHelp />} />
+        <Route path="/add-online-services" element={<AddOnlineServices />} />
         <Route path="/information" element={<Information />} />
         <Route path="/add-information" element={<AddInformation />} />
         <Route path="/projects" element={<Projects />} />
@@ -172,7 +196,8 @@ function SuperAdminRoutes() {
         <Route path="/add-portal-services" element={<AddPortalServices />} />
         <Route path="/add-emergency-services" element={<AddEmergencyServices />} />
 
-
+          
+          
         <Route path="/add-user" element={<AddUsers />} />
         <Route path="/user" element={<Users />} />
         <Route path="/add-privacy-policy" element={<AddPrivacyPolicy />} />

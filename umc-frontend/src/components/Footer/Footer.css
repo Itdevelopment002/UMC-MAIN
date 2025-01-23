@@ -66,6 +66,9 @@
   margin: 0;
   color: #a3a4a7;
 }
+.count-style{
+  color: white !important;
+}
 
 @media (max-width: 768px) {
   .icon-img {
