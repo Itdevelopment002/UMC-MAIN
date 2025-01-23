@@ -2,16 +2,16 @@ import React, { useEffect, useState } from "react";
 import "./Info.css";
 import { Link } from "react-router-dom";
 import Commissioner from "../../assets/images/commissioner/Commissioner.png";
-import info1 from "../../assets/images/info/vector1.png";
-import info2 from "../../assets/images/info/vector2.png";
-import info3 from "../../assets/images/info/vector3.png";
-import info4 from "../../assets/images/info/vector4.png";
-import info5 from "../../assets/images/info/vector5.png";
 import AOS from 'aos';
 import 'aos/dist/aos.css';
+import api, { baseURL } from "../api"
 
 const Info = () => {
   const [activeButton, setActiveButton] = useState(1);
+  const [services, setServices] = useState([]);
+
+  const colors = ["#42B8F9", "#F8D05C", "#5FD35F", "#F5507A", "#A57BF6"];
+
   useEffect(() => {
     AOS.init({
       duration: 400,
@@ -19,43 +19,18 @@ const Info = () => {
     });
   }, []);
 
-  const buttons = [
-    {
-      id: 1,
-      label: "e-Tender",
-      icon: info1,
-      color: "#42B8F9",
-      link: "https://mahatenders.gov.in/nicgep/app"
-    },
-    {
-      id: 2,
-      label: "Complaint Portal",
-      icon: info2,
-      color: "#F8D05C",
-      link: "https://aaplesarkar.mahaonline.gov.in/en"
-    },
-    {
-      id: 3,
-      label: "Online Payment",
-      icon: info3,
-      color: "#5FD35F",
-      link: "https://www.umconlineservices.in/Payment/"
-    },
-    {
-      id: 4,
-      label: "RTS 2015",
-      icon: info4,
-      color: "#F5507A",
-      link: "http://rtsumc.org.in/"
-    },
-    {
-      id: 5,
-      label: "Solid Waste Management",
-      icon: info5,
-      color: "#A57BF6",
-      link: "/solid-waste-management-system"
-    },
-  ];
+  const fetchServices = async () => {
+    try {
+      const response = await api.get("/home-services1");
+      setServices(response.data);
+    } catch (error) {
+      console.error("Error fetching services", error);
+    }
+  }
+
+  useEffect(() => {
+    fetchServices();
+  }, []);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -90,21 +65,21 @@ const Info = () => {
         </div>
 
         <div className="col-lg-3 col-md-12" id="info-section" data-aos="fade-top">
-          {buttons.map((button) => (
+          {services.map((service, index) => (
             <Link
-              to={button.link}
-              key={button.id}
-              className={`custom-btn ${activeButton === button.id ? "active" : ""} text-decoration-none`}
-              onClick={() => setActiveButton(button.id)}
-              {...(button.link.startsWith("http") ? { target: "_blank" } : {})}
+              to={service.link}
+              key={service.id}
+              className={`custom-btn ${activeButton === service.id ? "active" : ""} text-decoration-none`}
+              onClick={() => setActiveButton(service.id)}
+              {...(service.link.startsWith("http") ? { target: "_blank" } : {})}
             >
               <div
                 className="button-icon-section"
-                style={{ backgroundColor: button.color }}
+                style={{ backgroundColor: colors[index % colors.length] }} // Cycle through colors
               >
                 <img
-                  src={button.icon}
-                  alt={button.label}
+                  src={`${baseURL}/${service.main_icon_path}`}
+                  alt={service.heading}
                   className="btn-icon"
                 />
               </div>
@@ -112,7 +87,7 @@ const Info = () => {
               <span className="nav-divider"></span>
 
               <div className="button-label">
-                {button.label}
+                {service.heading}
               </div>
             </Link>
           ))}

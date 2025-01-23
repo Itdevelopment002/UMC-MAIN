@@ -20,6 +20,8 @@ const EServices = () => {
   const [umcnews, setUmcNews] = useState([]);
   const [services, setServices] = useState([]);
   const [initiatives, setInitiatives] = useState([]);
+  const [information, setInformation] = useState([]);
+  const [projects, setProjects] = useState([]);
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
@@ -59,10 +61,30 @@ const EServices = () => {
     }
   };
 
+  const fetchInformation = async () => {
+    try {
+      const response = await api.get("/information");
+      setInformation(response.data.reverse());
+    } catch (error) {
+      console.error("Error Fetching information!", error);
+    }
+  };
+
+  const fetchProjects = async () => {
+    try {
+      const response = await api.get("/projects");
+      setProjects(response.data.reverse());
+    } catch (error) {
+      console.error("Error Fetching projects!", error);
+    }
+  };
+
   useEffect(() => {
     fetchNews();
     fetchServices();
     fetchInitiatives();
+    fetchInformation();
+    fetchProjects();
   }, []);
 
   const tabData = [
@@ -87,67 +109,38 @@ const EServices = () => {
     },
   ];
 
-
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const projects = [
-    {
-      id: 1,
-      heading: "Ulhasnagar-04,",
-      description: "at Netaji Chowk, near Kailash Colony, Kurla Camp, construction of a cement concrete road.",
-      img: img1,
-    },
-    {
-      id: 2,
-      heading: "Ulhasnagar-05,",
-      description: "near the English High School, behind Lalchhaki Petrol Pump and Hill Line Police Station, construction of a cement concrete road.",
-      img: img2,
-    },
-    {
-      id: 3,
-      heading: "Ulhasnagar-01,",
-      description: "at A-Block, near Saibaba Temple, Delphine club and century ground, construction of a cement concrete road.",
-      img: img3,
-    },
-    {
-      id: 4,
-      heading: "Ulhasnagar-04,",
-      description: "From Sonar Chowk to Koyande, Sharda Camp, construction of a cement concrete road.",
-      img: img4,
-    },
-  ];
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const information = [
-    { description: "Action Against Illegal Construction (1st July to 31st December 2020)", link: "https://drive.google.com/file/d/18MZleh2FJBHXdJBQqPcS1HJgggkHZqhK/view?usp=drive_link" },
-    { description: "Regularization of Unauthorized Structures", link: "https://drive.google.com/file/d/1jg9u-D3BwFP0k6w26gjAt0DDq4s9ScW1/view?usp=drive_link" },
-    { description: "Pollution Control Helpline: 18002331103", link: "https://drive.google.com/file/d/18mMgTmGmafEl8YyxciRTsu1T1nwCOAGP/view?usp=drive_link" },
-    { description: "Recycle Water Provision in DCR", link: "https://drive.google.com/file/d/11wcT95cXSkFskkSJ4zmlJUymmEp_3gUk/view?usp=drive_link" },
-    { description: "Assessment Guidelines", link: "https://drive.google.com/file/d/1f5goiw1ml4vh1zHeb34wkeHLQXgW8vTD/view?usp=drive_link" },
-    { description: "List of Dangerous Buildings Notice - 27th October 2021", link: "https://drive.google.com/file/d/1jVcPAW3VKT523Mz5bnrDdbN7gJlCfADa/view?usp=drive_link" },
-    { description: "Report - Illegal Banners, Hoardings, Notice Boards", link: "https://drive.google.com/file/d/1kBGXBm2efETEBsGLCogZWi7ZhIchOaYa/view?usp=drive_link" },
-    { description: "Dangerous Building Notice", link: "https://drive.google.com/file/d/1XAffoqCHoAGdyk_lfPHYENQsvKeww9K4/view?usp=drive_link" },
-    { description: "Dangerous Building Report", link: "https://drive.google.com/file/d/1R0wfxUWhd9SrU7_CZStuuYy0gGDlnwTt/view?usp=drive_link" },
-    { description: "Action Against Illegal Construction (1st July to 31st December 2020)", link: "https://drive.google.com/file/d/1fGNHCg1NZUfM2sUGvKG8k786hMpME4Mw/view?usp=drive_link" },
-    { description: "Action Against Illegal Banners and Posters", link: "https://drive.google.com/file/d/1j7mHse3Z6w4OACKmj7V5Ge40RzkQ4P0a/view?usp=drive_link" },
-    { description: "Dangerous Building List - 2020", link: "https://drive.google.com/file/d/1YJMRioRzRUEokt4R96VaYUGAB-7EHfhW/view?usp=drive_link" },
-    { description: "List of Illegal Constructions", link: "https://drive.google.com/file/d/18yXiPsFoDn28gksxE5QWrGEcBEPoofJ_/view?usp=drive_link" },
-    { description: "UMC Disaster Management Plan - 2020", link: "https://drive.google.com/file/d/1OHrYPZ5mmc6SYpOSAowv_JZM14Z-9wL8/view?usp=drive_link" },
-    { description: "Drainage Cleaning Report", link: "https://drive.google.com/file/d/1C2VlzaEDkf3wHy39Rcp24cur7Ge2v42t/view?usp=drive_link" },
-    { description: "List of Modifications to Town Planning (TP/DP)", link: "https://drive.google.com/file/d/1V7ZswSp4VZjuDfpBiYeqjJ-Fi31RVfj2/view?usp=drive_link" },
-    { description: "Public Notice Under Section 28(4) of Development Plan (DP)", link: "https://drive.google.com/file/d/1XIaZpCF-BqewxVbToKaShprMDafpSw1n/view?usp=drive_link" },
-    { description: "Citizen Charter", link: "https://drive.google.com/file/d/1ggzzeGO1_p-Py_6vipha9izHYoP39p2X/view?usp=drive_link" },
-    { description: "Property Tax Demand & Collection Book", link: "https://drive.google.com/file/d/1BHZK6UyeIZJ8YBSCXytCAci5PE8OAjOC/view?usp=drive_link" },
-    // { description: "Action Report Against Unauthorized Posters, Banners, Hoardings, Flags, Arches, and Advertisement Boards in Ulhasnagar Municipal Corporation Area", link: "#" },
-    // { description: "Budget Estimates for the Year 2022-2023", link: "#" },
-    // { description: "Dismissal Order - 7th December 2021", link: "#" },
-    // { description: "Pandal Permission", link: "#" },
-    // { description: "List of Dangerous Buildings - 2019", link: "#" },
-    // { description: "Click Here for Illegal Construction Complaint Status", link: "#" },
-    // { description: "Revised Dismissal Order - 6th January 2022", link: "#" },
-    // { description: "Demolition Action Report (1st January 2021 to 30th June 2021)", link: "#" },
-    // { description: "Blood Donation", link: "#" },
-    // { description: "Silence Zone List", link: "#" },
-  ];
+  // const information = [
+  //   { description: "Action Against Illegal Construction (1st July to 31st December 2020)", link: "https://drive.google.com/file/d/18MZleh2FJBHXdJBQqPcS1HJgggkHZqhK/view?usp=drive_link" },
+  //   { description: "Regularization of Unauthorized Structures", link: "https://drive.google.com/file/d/1jg9u-D3BwFP0k6w26gjAt0DDq4s9ScW1/view?usp=drive_link" },
+  //   { description: "Pollution Control Helpline: 18002331103", link: "https://drive.google.com/file/d/18mMgTmGmafEl8YyxciRTsu1T1nwCOAGP/view?usp=drive_link" },
+  //   { description: "Recycle Water Provision in DCR", link: "https://drive.google.com/file/d/11wcT95cXSkFskkSJ4zmlJUymmEp_3gUk/view?usp=drive_link" },
+  //   { description: "Assessment Guidelines", link: "https://drive.google.com/file/d/1f5goiw1ml4vh1zHeb34wkeHLQXgW8vTD/view?usp=drive_link" },
+  //   { description: "List of Dangerous Buildings Notice - 27th October 2021", link: "https://drive.google.com/file/d/1jVcPAW3VKT523Mz5bnrDdbN7gJlCfADa/view?usp=drive_link" },
+  //   { description: "Report - Illegal Banners, Hoardings, Notice Boards", link: "https://drive.google.com/file/d/1kBGXBm2efETEBsGLCogZWi7ZhIchOaYa/view?usp=drive_link" },
+  //   { description: "Dangerous Building Notice", link: "https://drive.google.com/file/d/1XAffoqCHoAGdyk_lfPHYENQsvKeww9K4/view?usp=drive_link" },
+  //   { description: "Dangerous Building Report", link: "https://drive.google.com/file/d/1R0wfxUWhd9SrU7_CZStuuYy0gGDlnwTt/view?usp=drive_link" },
+  //   { description: "Action Against Illegal Construction (1st July to 31st December 2020)", link: "https://drive.google.com/file/d/1fGNHCg1NZUfM2sUGvKG8k786hMpME4Mw/view?usp=drive_link" },
+  //   { description: "Action Against Illegal Banners and Posters", link: "https://drive.google.com/file/d/1j7mHse3Z6w4OACKmj7V5Ge40RzkQ4P0a/view?usp=drive_link" },
+  //   { description: "Dangerous Building List - 2020", link: "https://drive.google.com/file/d/1YJMRioRzRUEokt4R96VaYUGAB-7EHfhW/view?usp=drive_link" },
+  //   { description: "List of Illegal Constructions", link: "https://drive.google.com/file/d/18yXiPsFoDn28gksxE5QWrGEcBEPoofJ_/view?usp=drive_link" },
+  //   { description: "UMC Disaster Management Plan - 2020", link: "https://drive.google.com/file/d/1OHrYPZ5mmc6SYpOSAowv_JZM14Z-9wL8/view?usp=drive_link" },
+  //   { description: "Drainage Cleaning Report", link: "https://drive.google.com/file/d/1C2VlzaEDkf3wHy39Rcp24cur7Ge2v42t/view?usp=drive_link" },
+  //   { description: "List of Modifications to Town Planning (TP/DP)", link: "https://drive.google.com/file/d/1V7ZswSp4VZjuDfpBiYeqjJ-Fi31RVfj2/view?usp=drive_link" },
+  //   { description: "Public Notice Under Section 28(4) of Development Plan (DP)", link: "https://drive.google.com/file/d/1XIaZpCF-BqewxVbToKaShprMDafpSw1n/view?usp=drive_link" },
+  //   { description: "Citizen Charter", link: "https://drive.google.com/file/d/1ggzzeGO1_p-Py_6vipha9izHYoP39p2X/view?usp=drive_link" },
+  //   { description: "Property Tax Demand & Collection Book", link: "https://drive.google.com/file/d/1BHZK6UyeIZJ8YBSCXytCAci5PE8OAjOC/view?usp=drive_link" },
+  //   { description: "Action Report Against Unauthorized Posters, Banners, Hoardings, Flags, Arches, and Advertisement Boards in Ulhasnagar Municipal Corporation Area", link: "#" },
+  //   { description: "Budget Estimates for the Year 2022-2023", link: "#" },
+  //   { description: "Dismissal Order - 7th December 2021", link: "#" },
+  //   { description: "Pandal Permission", link: "#" },
+  //   { description: "List of Dangerous Buildings - 2019", link: "#" },
+  //   { description: "Click Here for Illegal Construction Complaint Status", link: "#" },
+  //   { description: "Revised Dismissal Order - 6th January 2022", link: "#" },
+  //   { description: "Demolition Action Report (1st January 2021 to 30th June 2021)", link: "#" },
+  //   { description: "Blood Donation", link: "#" },
+  //   { description: "Silence Zone List", link: "#" },
+  // ];
 
   const scrollContainerRef = useRef(null);
 
@@ -274,58 +267,6 @@ const EServices = () => {
                         </Link>
                       </div>
                     ))}
-                    {/* <div className="col-md-6 mb-3">
-                      <Link to='https://sbmurban.org/' className="text-decoration-none" style={{ color: "#000000" }} target="_blank">
-                        <div className="initiative-item d-flex align-items-center border rounded">
-                          <div className="img-container img-with-border">
-                            <img
-                              src={swachhBharat}
-                              alt="Swachh Bharat Mission"
-                              className="initiative-img"
-                            />
-                          </div>
-                          <span className="initiative-text ms-3">Swachh Bharat Mission</span>
-                        </div>
-                      </Link>
-                    </div>
-                    <div className="col-md-6 mb-3">
-                      <Link to='https://www.mpcb.gov.in/air-quality/Ulhasnagar/0000000128?fdate=15-11-2021&tdate=15-12-2021' className="text-decoration-none" style={{ color: "#000000" }} target="_blank">
-                        <div className="initiative-item d-flex align-items-center border rounded">
-                          <div className="img-container img-with-border">
-                            <img
-                              src={airQuality}
-                              alt="Air Quality Data"
-                              className="initiative-img"
-                            />
-                          </div>
-                          <span className="initiative-text ms-3">Air Quality Data</span>
-                        </div>
-                      </Link>
-                    </div>
-                    <div className="col-md-6 mb-3">
-                      <Link to='https://creatorkart.com/UMC_Frontend-New/rti' className="text-decoration-none" style={{ color: "#000000" }} target="_blank">
-                        <div className="initiative-item d-flex align-items-center border rounded">
-                          <div className="img-container img-with-border">
-                            <img src={rti} alt="RTI UMC" className="initiative-img" />
-                          </div>
-                          <span className="initiative-text ms-3">RTI UMC</span>
-                        </div>
-                      </Link>
-                    </div>
-                    <div className="col-md-6 mb-3">
-                      <Link to='https://creatorkart.com/UMC_Frontend-New/employee_information' className="text-decoration-none" style={{ color: "#000000" }} target="_blank">
-                        <div className="initiative-item d-flex align-items-center border rounded">
-                          <div className="img-container img-with-border">
-                            <img
-                              src={employeeInfo}
-                              alt="Employee Information"
-                              className="initiative-img"
-                            />
-                          </div>
-                          <span className="initiative-text ms-3">Employee Information</span>
-                        </div>
-                      </Link>
-                    </div> */}
                   </div>
                 )
               ) : activeTab === "#election" ? (
@@ -381,7 +322,7 @@ const EServices = () => {
                         onClick={() => handleInfoClick(index)}
 
                       >
-                        {info.description}
+                        {info.heading}
                       </Link>
                     </li>
                   ))}
@@ -398,7 +339,7 @@ const EServices = () => {
                         onClick={() => handleInfoClick(index)}
 
                       >
-                        {info.description}
+                        {info.heading}
                       </Link>
                     </li>
                   ))}
@@ -422,13 +363,13 @@ const EServices = () => {
                   <div key={index}>
                     <div className="project-item">
                       <img
-                        src={project.img}
-                        alt="Project"
+                        src={`${baseURL}/${project.main_icon_path}`}
+                        alt={project.heading}
                         className="e-services-img me-3"
                       />
                       <div>
                         <p className="para-style">
-                          <b>{project.heading} </b>
+                          <b>{project.heading}, </b>
                           {project.description}
                         </p>
                       </div>
@@ -440,13 +381,13 @@ const EServices = () => {
                   <div key={`duplicate-${index}`}>
                     <div className="project-item">
                       <img
-                        src={project.img}
-                        alt="Project"
+                        src={`${baseURL}/${project.main_icon_path}`}
+                        alt={project.heading}
                         className="e-services-img me-3"
                       />
                       <div>
                         <p className="para-style">
-                          <b>{project.heading} </b>
+                          <b>{project.heading}, </b>
                           {project.description}
                         </p>
                       </div>

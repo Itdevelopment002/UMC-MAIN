@@ -72,6 +72,11 @@ const currentUpdateRoutes = require('./routes/currentUpdateRoutes') ;
 const umcNewsRoutes = require('./routes/umcNewsRoutes');
 const eServicesRoutes = require('./routes/eServicesRoutes');
 const initiativeRoutes = require('./routes/initiativeRoutes');
+const informationRoutes = require('./routes/informationRoutes');
+const projectRoutes = require('./routes/projectRoutes');
+const homeService1Routes = require('./routes/homeService1Routes');
+const portalServicesRoutes = require('./routes/portalServicesRoutes');
+const emergencyServicesRoutes = require('./routes/emergencyServicesRoutes');
 
 app.use('/api', sliderRoutes);
 app.use('/api', serviceRoutes);
@@ -137,6 +142,11 @@ app.use('/api', currentUpdateRoutes);
 app.use('/api', umcNewsRoutes);
 app.use('/api', eServicesRoutes);
 app.use('/api', initiativeRoutes);
+app.use('/api', informationRoutes);
+app.use('/api', projectRoutes);
+app.use('/api', homeService1Routes);
+app.use('/api', portalServicesRoutes);
+app.use('/api', emergencyServicesRoutes);
 
 const PORT = process.env.PORT || 5011;
 app.listen(PORT, () => {
