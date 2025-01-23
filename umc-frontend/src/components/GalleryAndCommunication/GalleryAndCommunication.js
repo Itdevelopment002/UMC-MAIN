@@ -47,7 +47,7 @@ const GalleryAndCommunication = () => {
     GLightbox({
       selector: ".glightbox",
     });
-  }, []);
+  }, [gallery]);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
