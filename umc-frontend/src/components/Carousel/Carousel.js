@@ -13,6 +13,7 @@ const Carousel = () => {
     });
   }, []);
 
+  const backgroundColors = ["#E0F8F2", "#EEECFF", "#FAEDED"];
   const [sliders, setSliders] = useState([]);
   const [ministers, setMinisters] = useState([]);
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -60,18 +61,17 @@ const Carousel = () => {
         <div className="col-md-12 col-lg-4 col-xl-4 col-xxl-3 col-12 custom-profile-card1">
           {ministers.map((minister, index) => (
             <div
-            key={minister.id}
-            data-aos={index % 2 === 0 ? "fade-right" : "fade-left"}
-          >
-            <ProfileCard
-              name={minister.name}
-              position={minister.designation}
-              image={`${baseURL}/${minister.image_path}`}
-              bgColor={minister.bgcolor}
-            />
+              key={minister.id}
+              data-aos={index % 2 === 0 ? "fade-right" : "fade-left"}
+            >
+              <ProfileCard
+                name={minister.name}
+                position={minister.designation}
+                image={`${baseURL}/${minister.image_path}`}
+                bgColor={backgroundColors[index % backgroundColors.length]}
+              />
             </div>
-          ))
-          }
+          ))}
         </div>
 
         <div className="col-md-12 col-lg-8 col-xl-8 col-xxl-9 col-12">
