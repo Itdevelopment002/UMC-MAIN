@@ -14,7 +14,6 @@ const MinisterDetails = () => {
   const [editData, setEditData] = useState({
     name: "",
     designation: "",
-    bgcolor: "",
     image: null,
   });
   const [imagePreview, setImagePreview] = useState(null);
@@ -76,7 +75,6 @@ const MinisterDetails = () => {
     const formData = new FormData();
     formData.append("name", editData.name);
     formData.append("designation", editData.designation);
-    formData.append("bgcolor", editData.bgcolor);
     if (editData.image) {
       formData.append("image", editData.image);
     }
@@ -98,7 +96,7 @@ const MinisterDetails = () => {
   const handleCloseDeleteModal = () => setShowDeleteModal(false);
   const handleCloseEditModal = () => {
     setShowEditModal(false);
-    setEditData({ name: "", designation: "", bgcolor: "", image: null });
+    setEditData({ name: "", designation: "", image: null });
     setImagePreview(null);
   };
 
@@ -157,7 +155,6 @@ const MinisterDetails = () => {
                           <th>Sr. No.</th>
                           <th>Minister Name</th>
                           <th>Designation</th>
-                          <th>Background Color</th>
                           <th>Image</th>
                           <th>Action</th>
                         </tr>
@@ -168,7 +165,6 @@ const MinisterDetails = () => {
                             <td>{index + 1}</td>
                             <td>{minister.name}</td>
                             <td>{minister.designation}</td>
-                            <td>{minister.bgcolor}</td>
                             <td>
                               <Link
                                 to={`${baseURL}${minister.image_path}`}
@@ -272,12 +268,12 @@ const MinisterDetails = () => {
           )}
 
           {showEditModal && (
-            <div className="modal fade show d-block" 
-            style={{
-              overflowY: "auto",
-              maxHeight: "100vh",
-              scrollbarWidth: "none",
-            }} tabIndex="-1">
+            <div className="modal fade show d-block"
+              style={{
+                overflowY: "auto",
+                maxHeight: "100vh",
+                scrollbarWidth: "none",
+              }} tabIndex="-1">
               <div className="modal-dialog modal-dialog-centered">
                 <div className="modal-content">
                   <div className="modal-header">
@@ -309,20 +305,6 @@ const MinisterDetails = () => {
                             setEditData({
                               ...editData,
                               designation: e.target.value,
-                            })
-                          }
-                        />
-                      </div>
-                      <div className="form-group">
-                        <label>Background Color</label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          value={editData.bgcolor}
-                          onChange={(e) =>
-                            setEditData({
-                              ...editData,
-                              bgcolor: e.target.value,
                             })
                           }
                         />
