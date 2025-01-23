@@ -94,6 +94,15 @@ import EServices from "../EServices/EServices";
 import AddEServices from "../EServices/AddEServices";
 import Initiatives from "../Initiatives/Initiatives";
 import AddInitiatives from "../Initiatives/AddInitiatives";
+import Information from "../Information/Information";
+import AddInformation from "../Information/AddInformation";
+import Projects from "../Projects/Projects";
+import AddProjects from "../Projects/AddProjects";
+import HomeService1 from "../HomeService1/HomeService1";
+import AddHomeService1 from "../HomeService1/AddHomeService1";
+import CitizenCommunication from "../CitizenCommunication/CitizenCommunication";
+import AddPortalServices from "../CitizenCommunication/AddPortalServices";
+import AddEmergencyServices from "../CitizenCommunication/AddEmergencyServices";
 
 function SuperAdminRoutes() {
   const [departments, setDepartments] = useState([]);
@@ -153,6 +162,15 @@ function SuperAdminRoutes() {
         <Route path="/add-eservices" element={<AddEServices />} />
         <Route path="/initiatives" element={<Initiatives />} />
         <Route path="/add-initiatives" element={<AddInitiatives />} />
+        <Route path="/information" element={<Information />} />
+        <Route path="/add-information" element={<AddInformation />} />
+        <Route path="/projects" element={<Projects />} />
+        <Route path="/add-projects" element={<AddProjects />} />
+        <Route path="/home-services1" element={<HomeService1 />} />
+        <Route path="/add-home-services1" element={<AddHomeService1 />} />
+        <Route path="/citizen-communication" element={<CitizenCommunication />} />
+        <Route path="/add-portal-services" element={<AddPortalServices />} />
+        <Route path="/add-emergency-services" element={<AddEmergencyServices />} />
 
 
         <Route path="/add-user" element={<AddUsers />} />

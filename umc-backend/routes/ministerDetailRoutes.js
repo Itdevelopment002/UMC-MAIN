@@ -17,19 +17,19 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 router.post("/minister-details", upload.single("image"), (req, res) => {
-  const { name, designation, bgcolor } = req.body;
+  const { name, designation } = req.body;
 
-  if (!name || !designation || !bgcolor) {
+  if (!name || !designation) {
     return res
       .status(400)
-      .json({ message: "Name, designation and background color are required" });
+      .json({ message: "Name and designation are required" });
   }
 
   const imagePath = req.file ? `/uploads/${req.file.filename}` : null;
 
   const sql =
-    "INSERT INTO minister (name, designation, bgcolor, image_path) VALUES (?, ?, ?, ?)";
-  db.query(sql, [name, designation, bgcolor, imagePath], (err, result) => {
+    "INSERT INTO minister (name, designation, image_path) VALUES (?, ?, ?)";
+  db.query(sql, [name, designation, imagePath], (err, result) => {
     if (err) {
       return res.status(500).json({ message: "Database error", error: err });
     }
@@ -66,7 +66,7 @@ router.get("/minister-details/:id", (req, res) => {
 
 router.put("/minister-details/:id", upload.single("image"), (req, res) => {
   const { id } = req.params;
-  const { name, designation, bgcolor } = req.body;
+  const { name, designation } = req.body;
 
   let updateSql = "UPDATE minister SET";
   const updateParams = [];
@@ -79,11 +79,6 @@ router.put("/minister-details/:id", upload.single("image"), (req, res) => {
   if (designation) {
     updateSql += updateParams.length > 0 ? ", designation = ?" : " designation = ?";
     updateParams.push(designation);
-  }
-
-  if (bgcolor) {
-    updateSql += updateParams.length > 0 ? ", bgcolor = ?" : " bgcolor = ?";
-    updateParams.push(bgcolor);
   }
 
   let imagePath;
