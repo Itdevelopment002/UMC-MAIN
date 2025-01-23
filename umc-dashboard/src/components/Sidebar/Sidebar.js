@@ -52,92 +52,149 @@ const Sidebar = ({ isOpen, closeSidebar, userDepartment }) => {
                       <i className="fa fa-dashboard"></i>Main Menu
                     </Link>
                   </li>
-                  <li
-                    className={activeItem === "/slider" ? "active" : ""}
-                    onClick={() => handleItemClick("/slider")}
-                  >
-                    <Link to="/slider">
+                  <li className="submenu">
+                    <Link to="#." onClick={() => toggleSubmenu("subservices")}>
                       <i className="fa">
-                        <BiSliderAlt />
+                        <GrServices />
                       </i>{" "}
-                      Slider
+                      <span>Home </span>{" "}
+                      <span
+                        className={`menu-arrow ${openSubmenu === "subservices" ? "rotate" : ""
+                          }`}
+                      ></span>
                     </Link>
+                    <ul className={openSubmenu === "subservices" ? "open" : ""}>
+                      <li
+                        className={activeItem === "/minister" ? "active" : ""}
+                        onClick={() => handleItemClick("/minister")}
+                      >
+                        <Link to="/minister">
+                          Ministers
+                        </Link>
+                      </li>
+                      <li
+                        className={activeItem === "/slider" ? "active" : ""}
+                        onClick={() => handleItemClick("/slider")}
+                      >
+                        <Link to="/slider">
+                          Slider
+                        </Link>
+                      </li>
+                      <li
+                        className={activeItem === "/current-update" ? "active" : ""}
+                        onClick={() => handleItemClick("/current-update")}
+                      >
+                        <Link to="/current-update">
+                          Current Update
+                        </Link>
+                      </li>
+                      <li
+                        className={activeItem === "/umc-news" ? "active" : ""}
+                        onClick={() => handleItemClick("/umc-news")}
+                      >
+                        <Link to="/umc-news">
+                          UMC News
+                        </Link>
+                      </li>
+                      <li
+                        className={activeItem === "/initiatives" ? "active" : ""}
+                        onClick={() => handleItemClick("/initiatives")}
+                      >
+                        <Link to="/initiatives">
+                          Initiatives-Programme
+                        </Link>
+                      </li>
+                      <li
+                        className={activeItem === "/eservices" ? "active" : ""}
+                        onClick={() => handleItemClick("/eservices")}
+                      >
+                        <Link to="/eservices">
+                          e-Services
+                        </Link>
+                      </li>
+                      <li
+                        className={activeItem === "/information" ? "active" : ""}
+                        onClick={() => handleItemClick("/information")}
+                      >
+                        <Link to="/information">
+                          Information
+                        </Link>
+                      </li>
+                      <li
+                        className={activeItem === "/projects" ? "active" : ""}
+                        onClick={() => handleItemClick("/projects")}
+                      >
+                        <Link to="/projects">
+                          Upcoming Projects
+                        </Link>
+                      </li>
+                      <li
+                        className={activeItem === "/citizen services" ? "active" : ""}
+                        onClick={() => handleItemClick("/citizen services")}
+                      >
+                        <Link to="/citizen-services">
+                          Citizen Services
+                        </Link>
+                      </li>
+                      <li
+                        className={activeItem === "/home-video" ? "active" : ""}
+                        onClick={() => handleItemClick("/home-video")}
+                      >
+                        <Link to="/home-video">
+                          Home Video
+                        </Link>
+                      </li>
+                      <li
+                        className={activeItem === "/home-gallery" ? "active" : ""}
+                        onClick={() => handleItemClick("/home-gallery")}
+                      >
+                        <Link to="/home-gallery">
+                          Home Gallery
+                        </Link>
+                      </li>
+                      <li
+                        className={activeItem === "/citizen-communication" ? "active" : ""}
+                        onClick={() => handleItemClick("/citizen-communication")}
+                      >
+                        <Link to="/citizen-communication">
+                          Citizen Communication
+                        </Link>
+                      </li>
+                      <li
+                        className={activeItem === "/home-services1" ? "active" : ""}
+                        onClick={() => handleItemClick("/home-services1")}
+                      >
+                        <Link to="/home-services1">
+                          Home Service 1
+                        </Link>
+                      </li>
+                      <li
+                        className={activeItem === "/home-services2" ? "active" : ""}
+                        onClick={() => handleItemClick("/home-services2")}
+                      >
+                        <Link to="/home-services2">
+                          Home Service 2
+                        </Link>
+                      </li>
+                      <li
+                        className={activeItem === "/bottom-slider" ? "active" : ""}
+                        onClick={() => handleItemClick("/bottom-slider")}
+                      >
+                        <Link to="/bottom-slider">
+                          Bottom Slider
+                        </Link>
+                      </li>
+                    </ul>
                   </li>
                   <li
-                    className={activeItem === "/minister" ? "active" : ""}
-                    onClick={() => handleItemClick("/minister")}
+                    className={activeItem === "/footer" ? "active" : ""}
+                    onClick={() => handleItemClick("/footer")}
                   >
-                    <Link to="/minister">
-                      <i className="fa">
-                        <BiSliderAlt />
-                      </i>{" "}
-                      Ministers
-                    </Link>
-                  </li>
-                  <li
-                    className={activeItem === "/citizen services" ? "active" : ""}
-                    onClick={() => handleItemClick("/citizen services")}
-                  >
-                    <Link to="/citizen-services">
+                    <Link to="/footer">
                       <i className="fa">
                         <MdMiscellaneousServices />
                       </i>{" "}
-                      Citizen Services
-                    </Link>
-                  </li>
-                  <li
-                    className={activeItem === "/home video" ? "active" : ""}
-                    onClick={() => handleItemClick("/home video")}
-                  >
-                    <Link to="/home-video">
-                      <i className="fa">
-                        <MdMiscellaneousServices />
-                      </i>{" "}
-                      Home Video
-                    </Link>
-                  </li>
-                  <li
-                    className={activeItem === "/current-update" ? "active" : ""}
-                    onClick={() => handleItemClick("/current-update")}
-                  >
-                    <Link to="/current-update">
-                      <i className="fa">
-                        <BiSliderAlt />
-                      </i>{" "}
-                      Current Update
-                    </Link>
-                  </li>
-                  <li
-                    className={activeItem === "/umc-news" ? "active" : ""}
-                    onClick={() => handleItemClick("/umc-news")}
-                  >
-                    <Link to="/umc-news">
-                      <i className="fa">
-                        <BiSliderAlt />
-                      </i>{" "}
-                      UMC News
-                    </Link>
-                  </li>
-                  <li
-                    className={activeItem === "/eservices" ? "active" : ""}
-                    onClick={() => handleItemClick("/eservices")}
-                  >
-                    <Link to="/eservices">
-                      <i className="fa">
-                        <BiSliderAlt />
-                      </i>{" "}
-                      e-Services
-                    </Link>
-                  </li>
-                  <li
-                    className={activeItem === "/initiatives" ? "active" : ""}
-                    onClick={() => handleItemClick("/initiatives")}
-                  >
-                    <Link to="/initiatives">
-                      <i className="fa">
-                        <BiSliderAlt />
-                      </i>{" "}
-                      Initiatives-Programme
+                      Footer
                     </Link>
                   </li>
                   {/* <li
