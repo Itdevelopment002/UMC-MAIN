@@ -11,11 +11,9 @@ import instagram from '../../assets/images/header-img/instagram (2).png';
 import youtube from '../../assets/images/header-img/Youtube.png';
 
 const TopHeader = () => {
-    const [selectedLanguage, setSelectedLanguage] = useState("eng");
-
+    const [selectedLanguage, setSelectedLanguage] = useState("mar"); 
 
     useEffect(() => {
-
         if (
             !document.querySelector(
                 'script[src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"]'
@@ -28,35 +26,44 @@ const TopHeader = () => {
         }
 
         window.googleTranslateElementInit = () => {
-            if (
-                !document.getElementById("google_translate_element").childNodes.length
-            ) {
-                new window.google.translate.TranslateElement(
-                    {
-                        pageLanguage: "en",
-                        includedLanguages: "en,hi,mr",
-                        layout:
-                            window.google.translate.TranslateElement.InlineLayout.HORIZONTAL,
-                    },
-                    "google_translate_element"
-                );
-            }
+            new window.google.translate.TranslateElement(
+                {
+                    pageLanguage: "en", 
+                    includedLanguages: "en,hi,mr",
+                    layout: window.google.translate.TranslateElement.InlineLayout.HORIZONTAL,
+                },
+                "google_translate_element"
+            );
+
+            setTimeout(() => {
+                const googleTranslateDropdown = document.querySelector(".goog-te-combo");
+                if (googleTranslateDropdown) {
+                    googleTranslateDropdown.value = "mr";
+                    googleTranslateDropdown.dispatchEvent(new Event("change"));
+                }
+            }, 100);
         };
     }, []);
 
     const handleLanguageChange = (language) => {
-        setSelectedLanguage(language);
+        setSelectedLanguage(language); 
         const googleTranslateDropdown = document.querySelector(".goog-te-combo");
         if (googleTranslateDropdown) {
-            googleTranslateDropdown.value =
-                language === "eng" ? "en" : language === "hin" ? "hi" : "mr";
-            googleTranslateDropdown.dispatchEvent(new Event("change"));
+            const langCode = language === "eng" ? "en" : language === "hin" ? "hi" : "mr";
+            googleTranslateDropdown.value = langCode;
+            googleTranslateDropdown.dispatchEvent(new Event("change")); 
         }
     };
 
+    const getLanguageText = () => {
+        if (selectedLanguage === "eng") return "English";
+        if (selectedLanguage === "hin") return "हिंदी";
+        return "मराठी"; 
+    };
 
-    // size of font incease and descraes functionality
-    const [defaultfontSize, setDefaultFontSize] = useState(16);//this is use for jime font-size nahi diya gaya hai external css file me 
+
+
+    const [defaultfontSize, setDefaultFontSize] = useState(16);
     const [fontSize, setFontSize] = useState({
 
         helpline: 14,
@@ -65,7 +72,6 @@ const TopHeader = () => {
         navItems: 16,
     });
 
-    // Update the font size globally for all variables
     useEffect(() => {
         document.body.style.fontSize = `${defaultfontSize}px`;
         document.documentElement.style.setProperty("--helpline-font-size", `${fontSize.helpline}px`);
@@ -74,7 +80,6 @@ const TopHeader = () => {
         document.documentElement.style.setProperty("--nav-link-font-size", `${fontSize.navItems}px`);
     }, [defaultfontSize, fontSize]);
 
-    // Increase font size for all variables
     const handleIncreaseFontSize = () => {
         setDefaultFontSize((prevSize) => Math.min(prevSize + 2, 50));
         setFontSize((prevSizes) => ({
@@ -85,7 +90,6 @@ const TopHeader = () => {
         }));
     };
 
-    // Decrease font size for all variables
     const handleDecreaseFontSize = () => {
         setDefaultFontSize((prevSize) => Math.max(prevSize - 2, 10));
         setFontSize((prevSizes) => ({
@@ -122,7 +126,7 @@ const TopHeader = () => {
                         Skip to main content
                     </span>
                     <span className="divider">|</span>
-                    <Link to="/screen-reader-access" className='text-decoration-none' style={{color: "#333"}}>
+                    <Link to="/screen-reader-access" className='text-decoration-none' style={{ color: "#333" }}>
                         <span>Screen Reader Access</span>
                     </Link>
                     <span className="divider">|</span>
@@ -131,37 +135,40 @@ const TopHeader = () => {
                     <button onClick={handleIncreaseFontSize} className="text-size-btn">A+</button>
                     <span className="divider">|</span>
                     <div className="custom-dropdown">
+                        
                         <div className="selected-language">
-                            {selectedLanguage === "eng" ? (
-                                <img src={flag1} alt="English" className="flag-icon" />
-                            ) : selectedLanguage === "hin" ? (
-                                <img src={flag2} alt="Hindi" className="flag-icon" />
-                            ) : (
-                                <img src={flag3} alt="Marathi" className="flag-icon" />
-                            )}
-                            {selectedLanguage === "eng"
-                                ? "English"
-                                : selectedLanguage === "hin"
-                                    ? "हिंदी"
-                                    : "मराठी"}
+                            <img
+                                src={
+                                    selectedLanguage === "eng"
+                                        ? flag1
+                                        : selectedLanguage === "hin"
+                                            ? flag2
+                                            : flag3
+                                }
+                                alt={getLanguageText()}
+                                className="flag-icon"
+                            />
+                            <span>{getLanguageText()}</span>
                         </div>
+
+                        
                         <div className="dropdown-options">
                             <div
-                                className="dropdown-option"
+                                className={`dropdown-option ${selectedLanguage === "eng" ? "selected" : ""}`}
                                 onClick={() => handleLanguageChange("eng")}
                             >
                                 <img src={flag1} alt="English" className="flag-icon" />
                                 English
                             </div>
                             <div
-                                className="dropdown-option"
+                                className={`dropdown-option ${selectedLanguage === "hin" ? "selected" : ""}`}
                                 onClick={() => handleLanguageChange("hin")}
                             >
                                 <img src={flag2} alt="Hindi" className="flag-icon" />
                                 हिंदी
                             </div>
                             <div
-                                className="dropdown-option"
+                                className={`dropdown-option ${selectedLanguage === "mar" ? "selected" : ""}`}
                                 onClick={() => handleLanguageChange("mar")}
                             >
                                 <img src={flag3} alt="Marathi" className="flag-icon" />
@@ -169,6 +176,8 @@ const TopHeader = () => {
                             </div>
                         </div>
                     </div>
+
+                   
                     <div id="google_translate_element" style={{ display: "none" }}></div>
 
                     <div className="social-icons top-bar-social-media d-flex">
