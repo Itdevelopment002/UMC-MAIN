@@ -11,14 +11,12 @@ const AddMinisterDetails = () => {
   const [formData, setFormData] = useState({
     name: "",
     designation: "",
-    bgcolor: "",
     image: null,
   });
 
   const [errors, setErrors] = useState({
     name: "",
     designation: "",
-    bgcolor: "",
     image: "",
   });
 
@@ -43,9 +41,6 @@ const AddMinisterDetails = () => {
     if (!formData.designation) {
       newErrors.designation = "Designation is required";
     }
-    if (!formData.bgcolor) {
-      newErrors.bgcolor = "Bgcolor is required";
-    }
     if (!formData.image) {
       newErrors.image = "Image is required";
     }
@@ -63,7 +58,6 @@ const AddMinisterDetails = () => {
     const formDataToSend = new FormData();
     formDataToSend.append("name", formData.name);
     formDataToSend.append("designation", formData.designation);
-    formDataToSend.append("bgcolor", formData.bgcolor);
     if (formData.image) {
       formDataToSend.append("image", formData.image);
     }
@@ -81,7 +75,6 @@ const AddMinisterDetails = () => {
         setFormData({
           name: "",
           designation: "",
-          bgcolor: "",
           image: null,
         });
 
@@ -160,27 +153,6 @@ const AddMinisterDetails = () => {
                         {errors.designation && (
                           <small className="text-danger">
                             {errors.designation}
-                          </small>
-                        )}
-                      </div>
-                    </div>
-                    <div className="form-group row">
-                      <label className="col-form-label col-md-3">
-                        Background Color <span className="text-danger">*</span>
-                      </label>
-                      <div className="col-md-5">
-                        <input
-                          type="text"
-                          className={`form-control  ${errors.bgcolor ? "is-invalid" : ""
-                            }`}
-                          placeholder=""
-                          name="bgcolor"
-                          value={formData.bgcolor}
-                          onChange={handleChange}
-                        />
-                        {errors.bgcolor && (
-                          <small className="text-danger">
-                            {errors.bgcolor}
                           </small>
                         )}
                       </div>
