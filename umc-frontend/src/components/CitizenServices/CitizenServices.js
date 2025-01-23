@@ -8,12 +8,14 @@ import api, { baseURL } from "../api";
 
 
 const CitizenServices = () => {
+  const [homeservices1, setHomeServices1] = useState([]);
   const [citzenServices, setCitizenServices] = useState([]);
   const [videos, setVideos] = useState([]);
 
   useEffect(() => {
     fetchServices();
     fetchVideos();
+    fetchHomeServices1();
   }, []);
 
   const fetchServices = async () => {
@@ -25,12 +27,22 @@ const CitizenServices = () => {
     }
   };
 
+
   const fetchVideos = async () => {
     try {
       const response = await api.get("/home-video");
       setVideos(response.data);
     } catch (error) {
       console.error("Error fetching videos:", error);
+    }
+  };
+
+  const fetchHomeServices1 = async () => {
+    try {
+      const response = await api.get("/home-services2");
+      setHomeServices1(response.data);
+    } catch (error) {
+      console.error("Error fetching services:", error);
     }
   };
 
@@ -55,33 +67,33 @@ const CitizenServices = () => {
   }, []);
 
 
-  const menuItems = [
-    {
-      name: "Pressnote",
-      link: "/press-note"
-    },
-    {
-      name: "General Election",
-      link: "http://www.umcelection2022.in/"
-    },
-    {
-      name: "Property Tax Department",
-      link: "/property-tax-dept"
-    },
-    {
-      name: "Quotation / Tenders",
-      link: "/tenders-and-quotations"
-    },
-    {
-      name: "Right to Information",
-      link: "/rti"
-    },
-    {
-      name: "Disaster Management",
-      link: "/disaster-management-department"
-    },
+  // const menuItems = [
+  //   {
+  //     name: "Pressnote",
+  //     link: "/press-note"
+  //   },
+  //   {
+  //     name: "General Election",
+  //     link: "http://www.umcelection2022.in/"
+  //   },
+  //   {
+  //     name: "Property Tax Department",
+  //     link: "/property-tax-dept"
+  //   },
+  //   {
+  //     name: "Quotation / Tenders",
+  //     link: "/tenders-and-quotations"
+  //   },
+  //   {
+  //     name: "Right to Information",
+  //     link: "/rti"
+  //   },
+  //   {
+  //     name: "Disaster Management",
+  //     link: "/disaster-management-department"
+  //   },
 
-  ];
+  // ];
 
   const colors = ["#1EB174", "#FA5F68", "#F8C437", "#898989", "#F37F1B", "#0C8DD4"];
 
@@ -160,51 +172,9 @@ const CitizenServices = () => {
           </div>
 
 
-
-
-          {/* <div className="col-lg-2 col-md-4 col-sm-5">
-            <div className="citigen">
-              <div className="vertical-line"></div>
-              <div className="d-flex">
-                <h2 className="section-title">
-                  Video <span className="subtitle">Gallery</span>
-                </h2>
-              </div>
-            </div>
-            
-
-            <div id="citizen-section" className="row">
-              <div className="col-12 video-wrapper">
-                <div className="video-container">
-                  <iframe
-                    src="https://www.youtube.com/embed/O6q3seFRC9I?si=i2JZaGyq8Tu3DAa0"
-                    title="YouTube video player"
-                    frameBorder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    referrerPolicy="strict-origin-when-cross-origin"
-                    allowFullScreen
-                  ></iframe>
-                </div>
-              </div>
-              <div className="col-12 video-wrapper">
-                <div className="video-container">
-                  <iframe
-                    src="https://www.youtube.com/embed/AdyXBtJbivI?si=cAODN_67EjJPi7fj"
-                    title="YouTube video player"
-                    frameBorder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    referrerPolicy="strict-origin-when-cross-origin"
-                    allowFullScreen
-                  ></iframe>
-                </div>
-              </div>
-            </div>
-          </div> */}
-
-
           <div className="col-lg-4 col-md-8 col-sm-7">
             <div className="menu-list">
-              {menuItems.map((item, index) => (
+              {homeservices1.map((item, index) => (
                 <Link to={item.link} className="text-decoration-none">
                   <div
                     key={index}
@@ -216,7 +186,7 @@ const CitizenServices = () => {
                       borderLeft: `4px solid ${colors[index % colors.length]}`,
                     }}
                   >
-                    <span className="menu-text">{item.name}</span>
+                    <span className="menu-text">{item.heading}</span>
                     <span className="menu-image">
                       <img src={vector} alt="arrow" />
                     </span>
