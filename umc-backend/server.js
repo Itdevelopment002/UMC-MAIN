@@ -90,13 +90,13 @@ const commissionerDescRoutes = require('./routes/commissionerDescRoutes');
 const historyImageRoutes = require('./routes/historyImageRoutes');
 const historyDescRoutes = require('./routes/historyDescRoutes');
 const tourismRoutes = require('./routes/tourismRoutes');
-
-
-
-
-
-
-
+const departmentPageRoutes = require('./routes/departmentPageRoutes');
+const deptBannerRoutes = require('./routes/deptBannerRoutes');
+const deptHodRoutes = require('./routes/deptHodRoutes');
+const deptPdfRoutes = require('./routes/deptPdfRoutes');
+const deptDescriptionRoutes = require('./routes/deptDescriptionRoutes');
+const administrativeRoutes = require('./routes/administrationRoutes');
+const annualfinancialRoutes = require('./routes/annualfinancialRoutes');
 
 
 app.use('/api', sliderRoutes);
@@ -181,15 +181,13 @@ app.use('/api', commissionerDescRoutes);
 app.use('/api', historyImageRoutes);
 app.use('/api', historyDescRoutes);
 app.use('/api', tourismRoutes);
-
-
-
-
-
-
-
-
-
+app.use('/api', departmentPageRoutes);
+app.use('/api', deptBannerRoutes);
+app.use('/api', deptHodRoutes);
+app.use('/api', deptPdfRoutes);
+app.use('/api', deptDescriptionRoutes);
+app.use('/api', administrativeRoutes);
+app.use('/api', annualfinancialRoutes);
 
 
 const PORT = process.env.PORT || 5011;
