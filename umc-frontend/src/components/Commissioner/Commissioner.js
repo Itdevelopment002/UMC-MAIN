@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "./Commissioner.css";
 import { Link } from "react-router-dom";
 import Commissionerimg from "../../assets/images/commissioner/Commissioner.png";
@@ -8,19 +8,37 @@ import cicon3 from "../../assets/images/commissioner/Vector (3).png";
 import cicon4 from "../../assets/images/commissioner/Vector (5).png";
 import cicon5 from "../../assets/images/commissioner/Vector (6).png";
 import cicon6 from "../../assets/images/commissioner/Vector (7).png";
+import api, { baseURL } from "../api";
+
 
 const Commissioner = () => {
 
-  // const menuItems = [
-  //   "Citizens' Charters",
-  //   "Corporators",
-  //   "Submit Tenders",
-  //   "Quotations",
-  //   "Budget",
-  //   "Department",
-  //   "Ward Offices",
-  //   "Circulars",
-  // ];
+  const [coData, setCoData] = useState([]);
+  const [descData, setDescData] = useState([]);
+
+  useEffect(() => {
+    fetchCoData();
+    fetchDescData();
+  }, []);
+
+
+  const fetchCoData = async () => {
+    try {
+      const response = await api.get("/commissioner-details");
+      setCoData(response.data);
+    } catch (error) {
+      console.error("Failed to fetch Commissioner Details data!");
+    }
+  };
+  const fetchDescData = async () => {
+    try {
+      const response = await api.get("/commissioner-desc");
+      setDescData(response.data);
+    } catch (error) {
+      console.error("Failed to fetch Commissioner description data!");
+    }
+  };
+
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -53,20 +71,11 @@ const Commissioner = () => {
             <div className="col-lg-3 col-md-4 col-sm-12 col-12">
               <div className="commison-profile-card text-center">
                 <img
-                  src={Commissionerimg}
-                  alt="Commissioner"
+                  src={`${baseURL}${coData[0]?.image_path}`}
+                  alt="Commissioner_img"
                   className="commison-profile-image"
                 />
               </div>
-              {/* <div className="col-lg-12 col-sm-12 col-12">
-                <ul className="list-group list-group-styling">
-                  {menuItems.map((item, index) => (
-                    <li className="list-group-item custom-list-item" key={index}>
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </div> */}
             </div>
 
             <div className="col-lg-9 col-md-8 col-sm-12 col-12">
@@ -79,7 +88,7 @@ const Commissioner = () => {
                       </div>
                       <div className="text-box">
                         <strong className="label">Commissioner Name :</strong>
-                        <span className="value"> Ms. Manisha Awhale</span>
+                        <span className="value"> {coData[0]?.coName}</span>
                       </div>
                     </div>
                     <div className="commissioner-item">
@@ -90,7 +99,7 @@ const Commissioner = () => {
                         <strong className="label">Designation :</strong>
                         <span className="value">
                           {" "}
-                          Commissioner of the Ulhasnagar Municipal Corporation
+                          {coData[0]?.designation}
                         </span>
                       </div>
                     </div>
@@ -104,7 +113,7 @@ const Commissioner = () => {
                         </strong>
                         <span className="value">
                           {" "}
-                          -
+                          {coData[0]?.qualification}
                         </span>
                       </div>
                     </div>
@@ -116,8 +125,7 @@ const Commissioner = () => {
                         <strong className="label">Office Address :</strong>
                         <span className="value">
                           {" "}
-                          1st Floor, Ulhasnagar Municipal Corporation, Ulhasnagar
-                          -4.
+                          {coData[0]?.address}
                         </span>
                       </div>
                     </div>
@@ -127,7 +135,7 @@ const Commissioner = () => {
                       </div>
                       <div className="text-box">
                         <strong className="label">Phone Number :</strong>
-                        <span className="value"> -</span>
+                        <span className="value"> {coData[0]?.number}</span>
                       </div>
                     </div>
                     <div className="commissioner-item">
@@ -136,7 +144,7 @@ const Commissioner = () => {
                       </div>
                       <div className="text-box">
                         <strong className="label">Email Address :</strong>
-                        <span className="value"> commissioner@umc.gov.in</span>
+                        <span className="value"> {coData[0]?.email}</span>
                       </div>
                     </div>
                   </div>
@@ -150,15 +158,15 @@ const Commissioner = () => {
               <div className="commisioner-overview">
                 <h4>Brief Overview of the Commissioner</h4>
               </div>
-              <p style={{color: "#666565"}}>
-                Ms. Manisha is an IAS topper. She had secured All India Rank of 33 in UPSC CSE in 2018.
-              </p>
-              <p style={{color: "#666565"}}>
-                Manisha Awhale is an IAS officer from the 2019 batch of the Maharashtra cadre. She faced personal challenges, including her mother's illness before her UPSC interview, but she successfully cleared the examinations. Prior to entering the IAS, she started her career in the Indian Railway Accounts Service and has diverse interests as a lawyer, writer, and sportsperson.
-              </p>
-              <p style={{color: "#666565"}}>
-                After completing her probationary period, Manisha was appointed as the Assistant Collector of Solapur. She had gained immense popularity in Solapur district in her very first posting.
-              </p>
+              {descData.length > 0 ? (
+                descData.map((item, index) => (
+                  <p key={index} style={{ color: "#666565" }}>
+                    {item.description}
+                  </p>
+                ))
+              ) : (
+                <p style={{ color: "#666565" }}>Loading data...</p>
+              )}
             </div>
           </div>
         </div>

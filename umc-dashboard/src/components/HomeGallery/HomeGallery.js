@@ -34,7 +34,7 @@ const HomeGallery = () => {
       const response = await api.get("/home-gallerys");
       setGallerys(response.data);
     } catch (error) {
-      console.error("Error fetching gallerys:", error);
+      console.error("Error fetching home gallery:", error);
     }
   };
 
@@ -59,12 +59,12 @@ const HomeGallery = () => {
     try {
       await api.delete(`/home-gallerys/${selectedGallery.id}`);
       setGallerys(gallerys.filter((gallery) => gallery.id !== selectedGallery.id));
-      toast.success("Gallery deleted successfully!");
+      toast.success("Home gallery deleted successfully!");
       setShowDeleteModal(false);
       setSelectedGallery(null);
     } catch (error) {
-      console.error("Error deleting gallery:", error);
-      toast.error("Error deleting gallery!");
+      console.error("Error deleting home gallery:", error);
+      toast.error("Error deleting home gallery!");
     }
   };
 
@@ -92,11 +92,11 @@ const HomeGallery = () => {
         },
       });
       fetchGallerys();
-      toast.success("Gallery updated successfully!");
+      toast.success("Home gallery updated successfully!");
       setShowEditModal(false);
     } catch (error) {
-      console.error("Error updating gallery:", error);
-      toast.error("Error updating gallery!");
+      console.error("Error updating home gallery:", error);
+      toast.error("Error updating home gallery!");
     }
   };
 

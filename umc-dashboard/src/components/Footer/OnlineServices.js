@@ -21,8 +21,8 @@ const OnlineServices = () => {
             const response = await api.get("/online_service");
             setOnlineServices(response.data);
         } catch (error) {
-            console.error("Error fetching services:", error);
-            toast.error("Failed to fetch services data!");
+            console.error("Error fetching online services:", error);
+            toast.error("Failed to fetch online services data!");
         }
     };
 
@@ -31,10 +31,10 @@ const OnlineServices = () => {
             await api.delete(`/online_service/${selectedServices.id}`);
             setOnlineServices(onlineservices.filter((w) => w.id !== selectedServices.id));
             setShowDeleteModal(false);
-            toast.success("Services deleted successfully!");
+            toast.success("Online services deleted successfully!");
         } catch (error) {
-            console.error("Error deleting services:", error);
-            toast.error("Failed to delete the services!");
+            console.error("Error deleting online services:", error);
+            toast.error("Failed to delete the online services!");
         }
     };
 
@@ -49,10 +49,10 @@ const OnlineServices = () => {
             );
             setOnlineServices(updatedServices);
             setShowEditModal(false);
-            toast.success("Services updated successfully!");
+            toast.success("Online services updated successfully!");
         } catch (error) {
-            console.error("Error updating services:", error);
-            toast.error("Failed to update the services!");
+            console.error("Error updating online services:", error);
+            toast.error("Failed to update the online services!");
         }
     };
 

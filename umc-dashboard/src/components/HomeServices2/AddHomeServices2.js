@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from 'react-toastify';
 import api from "../api";
 
 const AddHomeServices2 = () => {
@@ -40,7 +41,8 @@ const AddHomeServices2 = () => {
       setLink("");
       navigate("/home-service2");
     } catch (error) {
-      console.error("Error adding service:", error);
+      console.error('Error uploading file:', error);
+      toast.error('Failed to add home service. Please try again.');
     }
   };
 
@@ -76,9 +78,8 @@ const AddHomeServices2 = () => {
                       <div className="col-md-4">
                         <input
                           type="text"
-                          className={`form-control form-control-md ${
-                            errors.heading ? "is-invalid" : ""
-                          }`}
+                          className={`form-control form-control-md ${errors.heading ? "is-invalid" : ""
+                            }`}
                           placeholder="Enter Heading"
                           value={heading}
                           onChange={(e) => {
@@ -103,9 +104,8 @@ const AddHomeServices2 = () => {
                       <div className="col-md-4">
                         <input
                           type="text"
-                          className={`form-control form-control-md ${
-                            errors.link ? "is-invalid" : ""
-                          }`}
+                          className={`form-control form-control-md ${errors.link ? "is-invalid" : ""
+                            }`}
                           placeholder="Enter Link"
                           value={link}
                           onChange={(e) => {
@@ -129,6 +129,7 @@ const AddHomeServices2 = () => {
                       value="Submit"
                     />
                   </form>
+                  <ToastContainer />
                 </div>
               </div>
             </div>

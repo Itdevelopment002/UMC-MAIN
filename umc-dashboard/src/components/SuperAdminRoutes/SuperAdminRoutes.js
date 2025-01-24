@@ -116,6 +116,19 @@ import AddHomeService1 from "../HomeService1/AddHomeService1";
 import CitizenCommunication from "../CitizenCommunication/CitizenCommunication";
 import AddPortalServices from "../CitizenCommunication/AddPortalServices";
 import AddEmergencyServices from "../CitizenCommunication/AddEmergencyServices";
+import AddContactInfo from "../Footer/AddContactInfo";
+import AddDataTable1 from "../Location/AddDataTable1";
+import AddDataTable2 from "../Location/AddDataTable2";
+import AddDataTable3 from "../Location/AddDataTable3";
+import AddDataTable4 from "../Location/AddDataTable4";
+import Location from "../Location/Location";
+import Commissioner from "../Commissioner/Commissioner";
+import AddCommissionerDetails from "../Commissioner/AddCommissionerDetails";
+import AddCommissionerDesc from "../Commissioner/AddCommissionerDesc";
+import UmcHistory from "../UmcHistory/UmcHistory";
+import AddHistoryImage from "../UmcHistory/AddHistoryImage";
+import Tourism from "../Tourism/Tourism";
+import AddTourism from "../Tourism/AddTourism";
 
 
 function SuperAdminRoutes() {
@@ -195,6 +208,28 @@ function SuperAdminRoutes() {
         <Route path="/citizen-communication" element={<CitizenCommunication />} />
         <Route path="/add-portal-services" element={<AddPortalServices />} />
         <Route path="/add-emergency-services" element={<AddEmergencyServices />} />
+        <Route path="/add-contact-info" element={<AddContactInfo />} />
+        <Route path="/location" element={<Location/>} />
+        <Route path="/add-datatable1" element={<AddDataTable1 />} />
+        <Route path="/add-datatable2" element={<AddDataTable2 />} />
+        <Route path="/add-datatable3" element={<AddDataTable3 />} />
+        <Route path="/add-datatable4" element={<AddDataTable4 />} />
+        <Route path="/commissioner" element={<Commissioner />} />
+        <Route path="/add-commissioner-details" element={<AddCommissionerDetails />} />
+        <Route path="/add-commissioner-desc" element={<AddCommissionerDesc />} />
+        <Route path="/history" element={<UmcHistory />} />
+        <Route path="/add-historyImage" element={<AddHistoryImage />} />
+        <Route path="/tourism" element={<Tourism />} />
+        <Route path="/add-tourism" element={<AddTourism />} />
+
+
+
+
+
+
+
+
+
 
           
           

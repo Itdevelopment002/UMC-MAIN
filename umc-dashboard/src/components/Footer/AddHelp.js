@@ -40,7 +40,7 @@ const AddHelp = () => {
       setLink("");
       navigate("/footer");
     } catch (error) {
-      console.error("Error adding service:", error);
+      console.error("Error adding help link:", error);
     }
   };
 
