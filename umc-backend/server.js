@@ -83,6 +83,10 @@ const projectRoutes = require('./routes/projectRoutes');
 const homeService1Routes = require('./routes/homeService1Routes');
 const portalServicesRoutes = require('./routes/portalServicesRoutes');
 const emergencyServicesRoutes = require('./routes/emergencyServicesRoutes');
+const administrativeRoutes = require('./routes/administrationRoutes');
+const annualfinancialRoutes = require('./routes/annualfinancialRoutes');
+
+
 
 
 app.use('/api', sliderRoutes);
@@ -160,6 +164,10 @@ app.use('/api', projectRoutes);
 app.use('/api', homeService1Routes);
 app.use('/api', portalServicesRoutes);
 app.use('/api', emergencyServicesRoutes);
+app.use('/api', administrativeRoutes);
+app.use('/api', annualfinancialRoutes);
+
+
 
 
 const PORT = process.env.PORT || 5011;
