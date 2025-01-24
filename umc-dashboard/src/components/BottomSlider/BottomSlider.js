@@ -62,7 +62,7 @@ const BottomSlider = () => {
           setShowDeleteModal(false);
         })
         .catch((error) => {
-          console.error("Error deleting websitelink:", error);
+          console.error("Error deleting slider link:", error);
         });
     }
   };
@@ -102,7 +102,7 @@ const BottomSlider = () => {
         fetchLinks();
       })
       .catch((error) => {
-        console.error("Error updating websitelink:", error);
+        console.error("Error updating slider link:", error);
       });
   };
 

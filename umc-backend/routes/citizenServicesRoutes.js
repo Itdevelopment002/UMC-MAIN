@@ -160,7 +160,7 @@ router.post(
       res
         .status(201)
         .json({
-          message: "Service added successfully",
+          message: "Citizen Service added successfully",
           serviceId: result.insertId,
         });
     });

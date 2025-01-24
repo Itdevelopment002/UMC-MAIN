@@ -21,8 +21,8 @@ const QuickLinks = () => {
             const response = await api.get("/quick-link");
             setQuickLinks(response.data);
         } catch (error) {
-            console.error("Error fetching services:", error);
-            toast.error("Failed to fetch services data!");
+            console.error("Error fetching quick links:", error);
+            toast.error("Failed to fetch quick links!");
         }
     };
 
@@ -31,10 +31,10 @@ const QuickLinks = () => {
             await api.delete(`/quick-link/${selectedServices.id}`);
             setQuickLinks(quicklinks.filter((w) => w.id !== selectedServices.id));
             setShowDeleteModal(false);
-            toast.success("Services deleted successfully!");
+            toast.success("Quick Links deleted successfully!");
         } catch (error) {
-            console.error("Error deleting services:", error);
-            toast.error("Failed to delete the services!");
+            console.error("Error deleting quick links:", error);
+            toast.error("Failed to delete the quick links!");
         }
     };
 
@@ -49,10 +49,10 @@ const QuickLinks = () => {
             );
             setQuickLinks(updatedServices);
             setShowEditModal(false);
-            toast.success("Services updated successfully!");
+            toast.success("Quick Links updated successfully!");
         } catch (error) {
-            console.error("Error updating services:", error);
-            toast.error("Failed to update the services!");
+            console.error("Error updating quick links:", error);
+            toast.error("Failed to update the quick links!");
         }
     };
 

@@ -257,6 +257,60 @@ const Sidebar = ({ isOpen, closeSidebar, userDepartment }) => {
                       Footer
                     </Link>
                   </li>
+
+
+
+                  <li className="submenu">
+                    <Link to="#." onClick={() => toggleSubmenu("about")}>
+                      <i className="fa">
+                        <GrServices />
+                      </i>{" "}
+                      <span>About UMC </span>{" "}
+                      <span
+                        className={`menu-arrow ${openSubmenu === "about" ? "rotate" : ""
+                          }`}
+                      ></span>
+                    </Link>
+                    <ul className={openSubmenu === "about" ? "open" : ""}>
+                      <li
+                        className={activeItem === "/location" ? "active" : ""}
+                        onClick={() => handleItemClick("/location")}
+                      >
+                        <Link to="/location">
+                          Location
+                        </Link>
+                      </li>
+                      <li
+                        className={activeItem === "/commissioner" ? "active" : ""}
+                        onClick={() => handleItemClick("/commissioner")}
+                      >
+                        <Link to="/commissioner">
+                          Commissioner
+                        </Link>
+                      </li>
+                      
+                      <li
+                        className={activeItem === "/history" ? "active" : ""}
+                        onClick={() => handleItemClick("/history")}
+                      >
+                        <Link to="/history">
+                          History
+                        </Link>
+                      </li>
+                      
+                      {/* <li
+                        className={activeItem === "/tourism" ? "active" : ""}
+                        onClick={() => handleItemClick("/tourism")}
+                      >
+                        <Link to="/tourism">
+                          Tourism
+                        </Link>
+                      </li> */}
+                    </ul>
+                  </li>
+
+
+
                   {/* <li
                     className={activeItem === "/services" ? "active" : ""}
                     onClick={() => handleItemClick("/services")}
