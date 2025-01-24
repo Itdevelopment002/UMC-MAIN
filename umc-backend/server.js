@@ -83,10 +83,13 @@ const projectRoutes = require('./routes/projectRoutes');
 const homeService1Routes = require('./routes/homeService1Routes');
 const portalServicesRoutes = require('./routes/portalServicesRoutes');
 const emergencyServicesRoutes = require('./routes/emergencyServicesRoutes');
+const departmentPageRoutes = require('./routes/departmentPageRoutes');
+const deptBannerRoutes = require('./routes/deptBannerRoutes');
+const deptHodRoutes = require('./routes/deptHodRoutes');
+const deptPdfRoutes = require('./routes/deptPdfRoutes');
+const deptDescriptionRoutes = require('./routes/deptDescriptionRoutes');
 const administrativeRoutes = require('./routes/administrationRoutes');
 const annualfinancialRoutes = require('./routes/annualfinancialRoutes');
-
-
 
 
 app.use('/api', sliderRoutes);
@@ -164,10 +167,13 @@ app.use('/api', projectRoutes);
 app.use('/api', homeService1Routes);
 app.use('/api', portalServicesRoutes);
 app.use('/api', emergencyServicesRoutes);
+app.use('/api', departmentPageRoutes);
+app.use('/api', deptBannerRoutes);
+app.use('/api', deptHodRoutes);
+app.use('/api', deptPdfRoutes);
+app.use('/api', deptDescriptionRoutes);
 app.use('/api', administrativeRoutes);
 app.use('/api', annualfinancialRoutes);
-
-
 
 
 const PORT = process.env.PORT || 5011;
