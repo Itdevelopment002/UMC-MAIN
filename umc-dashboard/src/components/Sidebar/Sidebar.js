@@ -186,7 +186,7 @@ const Sidebar = ({ isOpen, closeSidebar, userDepartment }) => {
                       </li>
                     </ul>
                   </li>
-                  <li
+                {/*  <li
                     className={activeItem === "/footer" ? "active" : ""}
                     onClick={() => handleItemClick("/footer")}
                   >
@@ -197,6 +197,7 @@ const Sidebar = ({ isOpen, closeSidebar, userDepartment }) => {
                       Footer
                     </Link>
                   </li>
+                  */}
                   {/* <li
                     className={activeItem === "/services" ? "active" : ""}
                     onClick={() => handleItemClick("/services")}
