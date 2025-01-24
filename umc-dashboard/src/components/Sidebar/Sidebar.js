@@ -186,9 +186,6 @@ const Sidebar = ({ isOpen, closeSidebar, userDepartment }) => {
                       </li>
                     </ul>
                   </li>
-<<<<<<< HEAD
-                {/*  <li
-=======
                   <li className="submenu">
                     <Link to="#." onClick={() => toggleSubmenu("about")}>
                       <i className="fa">
@@ -298,7 +295,6 @@ const Sidebar = ({ isOpen, closeSidebar, userDepartment }) => {
                     </ul>
                   </li>
                   <li
->>>>>>> 295b8e124a207e607a3c402b318940a96ce2f54e
                     className={activeItem === "/footer" ? "active" : ""}
                     onClick={() => handleItemClick("/footer")}
                   >
@@ -309,13 +305,9 @@ const Sidebar = ({ isOpen, closeSidebar, userDepartment }) => {
                       Footer
                     </Link>
                   </li>
-<<<<<<< HEAD
-                  */}
-=======
 
 
 
->>>>>>> 295b8e124a207e607a3c402b318940a96ce2f54e
                   {/* <li
                     className={activeItem === "/services" ? "active" : ""}
                     onClick={() => handleItemClick("/services")}
