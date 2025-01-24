@@ -88,6 +88,8 @@ const deptBannerRoutes = require('./routes/deptBannerRoutes');
 const deptHodRoutes = require('./routes/deptHodRoutes');
 const deptPdfRoutes = require('./routes/deptPdfRoutes');
 const deptDescriptionRoutes = require('./routes/deptDescriptionRoutes');
+const administrativeRoutes = require('./routes/administrationRoutes');
+const annualfinancialRoutes = require('./routes/annualfinancialRoutes');
 
 
 app.use('/api', sliderRoutes);
@@ -170,6 +172,8 @@ app.use('/api', deptBannerRoutes);
 app.use('/api', deptHodRoutes);
 app.use('/api', deptPdfRoutes);
 app.use('/api', deptDescriptionRoutes);
+app.use('/api', administrativeRoutes);
+app.use('/api', annualfinancialRoutes);
 
 
 const PORT = process.env.PORT || 5011;

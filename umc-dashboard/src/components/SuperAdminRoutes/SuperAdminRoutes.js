@@ -123,6 +123,10 @@ import AddHodDetails from "../DepartmentInformation/AddHodDetails";
 import DepartmentInformation from "../DepartmentInformation/DepartmentInformation";
 import AddDeptPdfs from "../DepartmentInformation/AddDeptPdfs";
 import AddDeptDescription from "../DepartmentInformation/AddDeptDescription";
+import AddAdministration from "../Administration/AddAdministration";
+import Administration from "../Administration/Administration";
+import Annual from "../AnnualFinancial/AnnualFinance";
+import AddAnnual from "../AnnualFinancial/AddAnnualFinance";
 
 
 function SuperAdminRoutes() {
@@ -209,8 +213,11 @@ function SuperAdminRoutes() {
         <Route path="/add-hod-details" element={<AddHodDetails />} />
         <Route path="/add-department-pdfs" element={<AddDeptPdfs />} />
         <Route path="/add-department-description" element={<AddDeptDescription />} />
+        <Route path="/add-adminstration" element={<AddAdministration />} />
+        <Route path="/adminstration" element={<Administration />} />
+        <Route path="/annual" element={<Annual />} />
+        <Route path="/add-annual" element={<AddAnnual />} />
 
-          
           
         {/* <Route path="/add-user" element={<AddUsers />} />
         <Route path="/user" element={<Users />} />
