@@ -116,6 +116,10 @@ import AddHomeService1 from "../HomeService1/AddHomeService1";
 import CitizenCommunication from "../CitizenCommunication/CitizenCommunication";
 import AddPortalServices from "../CitizenCommunication/AddPortalServices";
 import AddEmergencyServices from "../CitizenCommunication/AddEmergencyServices";
+import AddAdministration from "../Administration/AddAdministration";
+import Administration from "../Administration/Administration";
+import Annual from "../AnnualFinancial/AnnualFinance";
+import AddAnnual from "../AnnualFinancial/AddAnnualFinance";
 
 
 function SuperAdminRoutes() {
@@ -195,8 +199,12 @@ function SuperAdminRoutes() {
         <Route path="/citizen-communication" element={<CitizenCommunication />} />
         <Route path="/add-portal-services" element={<AddPortalServices />} />
         <Route path="/add-emergency-services" element={<AddEmergencyServices />} />
+        <Route path="/add-adminstration" element={<AddAdministration />} />
+        <Route path="/adminstration" element={<Administration />} />
+        <Route path="/annual" element={<Annual />} />
+        <Route path="/add-annual" element={<AddAnnual />} />
 
-          
+
           
         <Route path="/add-user" element={<AddUsers />} />
         <Route path="/user" element={<Users />} />
