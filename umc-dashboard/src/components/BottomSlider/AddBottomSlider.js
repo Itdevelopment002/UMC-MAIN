@@ -11,10 +11,10 @@ const AddBottomSlider = () => {
   const validateForm = () => {
     const newErrors = {};
     if (!websitelink.trim()) {
-      newErrors.websitelink = "Website link is required.";
+      newErrors.websitelink = "Slider link is required.";
     }
     if (!websitelogo) {
-      newErrors.websitelogo = "Website logo is required.";
+      newErrors.websitelogo = "Slider image is required.";
     }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -27,7 +27,7 @@ const AddBottomSlider = () => {
     }
 
     if (!websitelink || !websitelogo) {
-      alert("Please provide both the website link and logo.");
+      alert("Please provide both the Slider link and logo.");
       return;
     }
 
@@ -45,14 +45,14 @@ const AddBottomSlider = () => {
       if (response.status === 201) {
         navigate("/bottom-slider", { replace: true });
       } else {
-        alert("Failed to add website link. Please try again.");
+        alert("Failed to add Slider link. Please try again.");
       }
     } catch (error) {
-      console.error("Error uploading website link:", error);
+      console.error("Error uploading Slider link:", error);
       if (error.response) {
         alert(
           `Error: ${
-            error.response.data.message || "Failed to upload the website link."
+            error.response.data.message || "Failed to upload the Slider link."
           }`
         );
       } else {
@@ -97,7 +97,7 @@ const AddBottomSlider = () => {
                           className={`form-control ${
                             errors.websitelink ? "is-invalid" : ""
                           }`}
-                          placeholder="Enter website link"
+                          placeholder="Enter Slider link"
                           value={websitelink}
                           onChange={(e) => {
                             setLink(e.target.value);

@@ -1,62 +1,28 @@
-import React, { useEffect } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom"
+import api from "../api";
 import "./Location.css";
 
 const Location = () => {
 
-  // const menuItems = [
-  //   "Citizens' Charters",
-  //   "Corporators",
-  //   "Submit Tenders",
-  //   "Quotations",
-  //   "Budget",
-  //   "Department",
-  //   "Ward Offices",
-  //   "Circulars",
-  // ];
 
-  const locationData = [
-    { label: "Continent", value: "Asia" },
-    { label: "Country", value: "India" },
-    { label: "State", value: "Maharashtra" },
-    { label: "State Capital", value: "Mumbai" },
-    { label: "Location", value: "58 km from Mumbai" },
-    { label: "Area", value: "13.50 sq. km" },
-    { label: "Time", value: "GMT +05:30" },
-    { label: "Height above sea level", value: "19 meters" },
-    { label: "Local Languages", value: "Marathi" },
-    { label: "Established", value: "January 1960" },
-  ];
+  const [tableData, setTableData] = useState([]);
 
-  const employeesData1 = [
-    { label: "Staff (UMC)", value: "-" },
-    // { label: "Education Board Employees", value: "-" },
-    // { label: "Area (Sq.Km.)", value: "-" },
-    { label: "Annual Budget (2022-2023)", value: "-" },
-    { label: "Total length of Roads", value: "-" },
-    { label: "Industries in city", value: "-" },
-    { label: "Population in slum", value: "-" },
-    { label: "Municipal Hospitals", value: "-" },
-    { label: "Municipal Dispensaries", value: "-" },
-  ];
 
-  const employeesData2 = [
-    { label: "Municipal Schools", value: "-" },
-    { label: "Private Schools", value: "-" },
-    { label: "Total Strength of Students in Municipal Schools", value: "-" },
-    { label: "Public Garden", value: "-" },
-    { label: "Present water supply to city", value: "-" },
-    { label: "Water supply per capita per day", value: "-" },
-    { label: "Sewerage treatment plant capacity", value: "-" },
-  ];
+  useEffect(() => {
+    fetchPolicy();
+  }, []);
 
-  const areaData = [
-    { label: "As per 2011 census", value: "506,098" },
-    {
-      label: "Present population approx (appr.)", value: "Current estimated population of UMC in 2025 is approximately 737,000"
-    },
-    { label: "Literate as per 2011 census", value: "87.49 %" },
-  ];
+  const fetchPolicy = async () => {
+    try {
+      const response = await api.get("/location-info");
+      setTableData(response.data);
+    } catch (error) {
+      console.error("Failed to fetch privacy policy data!");
+    }
+  };
+
+
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -81,17 +47,6 @@ const Location = () => {
             <span className="highlighted-text"> of UMC</span>
           </h2>
           <div className="row mt-4 row-styling-3">
-
-            {/* <div className="col-xl-3 col-lg-4 col-md-5 col-sm-12">
-              <ul className="list-group list-group-styling">
-                {menuItems.map((item, index) => (
-                  <li className="list-group-item custom-list-item" key={index}>
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div> */}
-
             <div className="col-xl-12 col-lg-12 col-md-12 col-sm-12 mx-auto location-styling">
               <iframe
                 title="UMC Location"
@@ -116,30 +71,40 @@ const Location = () => {
             <div className="col-xl-4 col-lg-4 col-md-4 col-sm-12">
               <table className="table table-bordered table-responsive shadow">
                 <tbody>
-                  {locationData.map((item, index) => (
-                    <tr key={index}>
-                      <td
-                        width="50%"
-                        style={{
-                          paddingLeft: "10px",
-                          paddingRight: "10px",
-                          color: "#292D32",
-                        }}
-                      >
-                        {item.label}
-                      </td>
-                      <td
-                        width="50%"
-                        style={{
-                          paddingLeft: "10px",
-                          paddingRight: "10px",
-                          color: "#9D9D9D",
-                        }}
-                      >
-                        {item.value}
+                  {tableData.filter(item => item.type === "Table 1").length > 0 ? (
+                    tableData
+                      .filter(item => item.type === "Table 1")
+                      .map((item, index) => (
+                        <tr key={index}>
+                          <td
+                            width="50%"
+                            style={{
+                              paddingLeft: "10px",
+                              paddingRight: "10px",
+                              color: "#292D32",
+                            }}
+                          >
+                            {item.heading}
+                          </td>
+                          <td
+                            width="50%"
+                            style={{
+                              paddingLeft: "10px",
+                              paddingRight: "10px",
+                              color: "#9D9D9D",
+                            }}
+                          >
+                            {item.description}
+                          </td>
+                        </tr>
+                      ))
+                  ) : (
+                    <tr>
+                      <td colSpan="4" className="text-center">
+                        No data available.
                       </td>
                     </tr>
-                  ))}
+                  )}
                 </tbody>
               </table>
             </div>
@@ -154,30 +119,40 @@ const Location = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {employeesData1.map((item, index) => (
-                    <tr key={index}>
-                      <td
-                        width="50%"
-                        style={{
-                          paddingLeft: "10px",
-                          paddingRight: "10px",
-                          color: "#292D32",
-                        }}
-                      >
-                        {item.label}
-                      </td>
-                      <td
-                        width="50%"
-                        style={{
-                          paddingLeft: "10px",
-                          paddingRight: "10px",
-                          color: "#9D9D9D",
-                        }}
-                      >
-                        {item.value}
+                  {tableData.filter(item => item.type === "Table 2").length > 0 ? (
+                    tableData
+                      .filter(item => item.type === "Table 2")
+                      .map((item, index) => (
+                        <tr key={index}>
+                          <td
+                            width="50%"
+                            style={{
+                              paddingLeft: "10px",
+                              paddingRight: "10px",
+                              color: "#292D32",
+                            }}
+                          >
+                            {item.heading}
+                          </td>
+                          <td
+                            width="50%"
+                            style={{
+                              paddingLeft: "10px",
+                              paddingRight: "10px",
+                              color: "#9D9D9D",
+                            }}
+                          >
+                            {item.description}
+                          </td>
+                        </tr>
+                      ))
+                  ) : (
+                    <tr>
+                      <td colSpan="4" className="text-center">
+                        No data available.
                       </td>
                     </tr>
-                  ))}
+                  )}
                 </tbody>
               </table>
             </div>
@@ -192,30 +167,40 @@ const Location = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {employeesData2.map((item, index) => (
-                    <tr key={index}>
-                      <td
-                        width="50%"
-                        style={{
-                          paddingLeft: "10px",
-                          paddingRight: "10px",
-                          color: "#292D32",
-                        }}
-                      >
-                        {item.label}
-                      </td>
-                      <td
-                        width="50%"
-                        style={{
-                          paddingLeft: "10px",
-                          paddingRight: "10px",
-                          color: "#9D9D9D",
-                        }}
-                      >
-                        {item.value}
+                  {tableData.filter(item => item.type === "Table 3").length > 0 ? (
+                    tableData
+                      .filter(item => item.type === "Table 3")
+                      .map((item, index) => (
+                        <tr key={index}>
+                          <td
+                            width="50%"
+                            style={{
+                              paddingLeft: "10px",
+                              paddingRight: "10px",
+                              color: "#292D32",
+                            }}
+                          >
+                            {item.heading}
+                          </td>
+                          <td
+                            width="50%"
+                            style={{
+                              paddingLeft: "10px",
+                              paddingRight: "10px",
+                              color: "#9D9D9D",
+                            }}
+                          >
+                            {item.description}
+                          </td>
+                        </tr>
+                      ))
+                  ) : (
+                    <tr>
+                      <td colSpan="4" className="text-center">
+                        No data available.
                       </td>
                     </tr>
-                  ))}
+                  )}
                 </tbody>
               </table>
             </div>
@@ -240,30 +225,40 @@ const Location = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {areaData.map((item, index) => (
-                    <tr key={index}>
-                      <td
-                        width="50%"
-                        style={{
-                          paddingLeft: "10px",
-                          paddingRight: "10px",
-                          color: "#292D32",
-                        }}
-                      >
-                        {item.label}
-                      </td>
-                      <td
-                        width="50%"
-                        style={{
-                          paddingLeft: "10px",
-                          paddingRight: "10px",
-                          color: "#9D9D9D",
-                        }}
-                      >
-                        {item.value}
+                  {tableData.filter(item => item.type === "Table 3").length > 0 ? (
+                    tableData
+                      .filter(item => item.type === "Table 3")
+                      .map((item, index) => (
+                        <tr key={index}>
+                          <td
+                            width="50%"
+                            style={{
+                              paddingLeft: "10px",
+                              paddingRight: "10px",
+                              color: "#292D32",
+                            }}
+                          >
+                            {item.heading}
+                          </td>
+                          <td
+                            width="50%"
+                            style={{
+                              paddingLeft: "10px",
+                              paddingRight: "10px",
+                              color: "#9D9D9D",
+                            }}
+                          >
+                            {item.description}
+                          </td>
+                        </tr>
+                      ))
+                  ) : (
+                    <tr>
+                      <td colSpan="4" className="text-center">
+                        No data available.
                       </td>
                     </tr>
-                  ))}
+                  )}
                 </tbody>
               </table>
             </div>

@@ -40,7 +40,7 @@ const AddQuickLinks = () => {
       setLink("");
       navigate("/footer");
     } catch (error) {
-      console.error("Error adding service:", error);
+      console.error("Error adding Quick Links:", error);
     }
   };
 

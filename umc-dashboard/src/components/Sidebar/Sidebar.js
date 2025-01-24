@@ -49,21 +49,21 @@ const Sidebar = ({ isOpen, closeSidebar, userDepartment }) => {
                     onClick={() => handleItemClick("/")}
                   >
                     <Link to="/home">
-                      <i className="fa fa-dashboard"></i>Main Menu
+                      <i className="fa fa-dashboard"></i>Header
                     </Link>
                   </li>
                   <li className="submenu">
-                    <Link to="#." onClick={() => toggleSubmenu("subservices")}>
+                    <Link to="#." onClick={() => toggleSubmenu("home")}>
                       <i className="fa">
                         <GrServices />
                       </i>{" "}
                       <span>Home </span>{" "}
                       <span
-                        className={`menu-arrow ${openSubmenu === "subservices" ? "rotate" : ""
+                        className={`menu-arrow ${openSubmenu === "home" ? "rotate" : ""
                           }`}
                       ></span>
                     </Link>
-                    <ul className={openSubmenu === "subservices" ? "open" : ""}>
+                    <ul className={openSubmenu === "home" ? "open" : ""}>
                       <li
                         className={activeItem === "/minister" ? "active" : ""}
                         onClick={() => handleItemClick("/minister")}
@@ -186,7 +186,119 @@ const Sidebar = ({ isOpen, closeSidebar, userDepartment }) => {
                       </li>
                     </ul>
                   </li>
+<<<<<<< HEAD
                 {/*  <li
+=======
+                  <li className="submenu">
+                    <Link to="#." onClick={() => toggleSubmenu("about")}>
+                      <i className="fa">
+                        <GrServices />
+                      </i>{" "}
+                      <span>About UMC </span>{" "}
+                      <span
+                        className={`menu-arrow ${openSubmenu === "about" ? "rotate" : ""
+                          }`}
+                      ></span>
+                    </Link>
+                    <ul className={openSubmenu === "about" ? "open" : ""}>
+                      <li
+                        className={activeItem === "/location" ? "active" : ""}
+                        onClick={() => handleItemClick("/location")}
+                      >
+                        <Link to="/location">
+                          Location
+                        </Link>
+                      </li>
+                      <li
+                        className={activeItem === "/commissioner" ? "active" : ""}
+                        onClick={() => handleItemClick("/commissioner")}
+                      >
+                        <Link to="/commissioner">
+                          Commissioner
+                        </Link>
+                      </li>
+
+                      <li
+                        className={activeItem === "/history" ? "active" : ""}
+                        onClick={() => handleItemClick("/history")}
+                      >
+                        <Link to="/history">
+                          History
+                        </Link>
+                      </li>
+
+                      {/* <li
+                        className={activeItem === "/tourism" ? "active" : ""}
+                        onClick={() => handleItemClick("/tourism")}
+                      >
+                        <Link to="/tourism">
+                          Tourism
+                        </Link>
+                      </li> */}
+                    </ul>
+                  </li>
+                  <li className="submenu">
+                    <Link to="#." onClick={() => toggleSubmenu("corporation")}>
+                      <i className="fa">
+                        <GrServices />
+                      </i>{" "}
+                      <span>Corporation </span>{" "}
+                      <span
+                        className={`menu-arrow ${openSubmenu === "corporation" ? "rotate" : ""
+                          }`}
+                      ></span>
+                    </Link>
+                    <ul className={openSubmenu === "corporation" ? "open" : ""}>
+                      <li
+                        className={activeItem === "/minister" ? "active" : ""}
+                        onClick={() => handleItemClick("/minister")}
+                      >
+                        <Link to="/adminstration">
+                          Administrative
+                        </Link>
+                      </li>
+                      <li
+                        className={activeItem === "/minister" ? "active" : ""}
+                        onClick={() => handleItemClick("/minister")}
+                      >
+                        <Link to="/annual">
+                          Annual Financial
+                        </Link>
+                      </li>
+                    </ul>
+                  </li>
+                  <li className="submenu">
+                    <Link to="#." onClick={() => toggleSubmenu("departments")}>
+                      <i className="fa">
+                        <GrServices />
+                      </i>{" "}
+                      <span>Departments </span>{" "}
+                      <span
+                        className={`menu-arrow ${openSubmenu === "departments" ? "rotate" : ""
+                          }`}
+                      ></span>
+                    </Link>
+                    <ul className={openSubmenu === "departments" ? "open" : ""}>
+                      <li
+                        className={activeItem === "/departments" ? "active" : ""}
+                        onClick={() => handleItemClick("/departments")}
+                      >
+                        <Link to="/departments">
+                          Departments Page
+                        </Link>
+                      </li>
+                      <li
+                        className={activeItem === "/department-information" ? "active" : ""}
+                        onClick={() => handleItemClick("/department-information")}
+                      >
+                        <Link to="/department-information">
+                          Department Information
+                        </Link>
+                      </li>
+                    </ul>
+                  </li>
+                  <li
+>>>>>>> 295b8e124a207e607a3c402b318940a96ce2f54e
                     className={activeItem === "/footer" ? "active" : ""}
                     onClick={() => handleItemClick("/footer")}
                   >
@@ -197,7 +309,13 @@ const Sidebar = ({ isOpen, closeSidebar, userDepartment }) => {
                       Footer
                     </Link>
                   </li>
+<<<<<<< HEAD
                   */}
+=======
+
+
+
+>>>>>>> 295b8e124a207e607a3c402b318940a96ce2f54e
                   {/* <li
                     className={activeItem === "/services" ? "active" : ""}
                     onClick={() => handleItemClick("/services")}

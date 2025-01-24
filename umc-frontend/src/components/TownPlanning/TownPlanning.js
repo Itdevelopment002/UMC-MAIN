@@ -3,57 +3,26 @@ import { Link } from "react-router-dom";
 import "./TownPlanning.css";
 import "../DepartmentCustomCss/DepartmentCustom.css"
 import Swal from 'sweetalert2';
-import deptimg from "../../assets/images/Departments/no-img 1.png";
 import cicon2 from "../../assets/images/Departments/Vector (1).png";
 import cicon3 from "../../assets/images/Departments/Vector (3).png";
 import cicon4 from "../../assets/images/Departments/Vector (5).png";
 import cicon5 from "../../assets/images/Departments/Vector (6).png";
 import cicon6 from "../../assets/images/Departments/Vector (7).png";
-import pdficon from '../../assets/images/Departments/document 1.png'
-import banner from '../../assets/images/Departments/planning.jpg'
-
-const employeesData1 = [
-  { title: "Buildling Permission 1964 - 1970", link: "https://drive.google.com/file/d/1PN7wVGEGrYz5Y85i_Rc_lSSArTr9HmLH/view?usp=drive_link", action: "View PDF", },
-  { title: "Building Permission 2016 - 2017", link: "https://drive.google.com/file/d/1S8uZMTHd_LPHlL_E2SAH1ssVSuy7uDK4/view?usp=drive_link", action: "View PDF", },
-  { title: "Building Permission 2015 - 2016", link: "#", action: "View PDF", },
-  { title: "Building Permission 2014 - 2015", link: "https://drive.google.com/file/d/1BjSQyQP10smf0QVDR8TUjATOwYZL-5br/view?usp=drive_link", action: "View PDF", },
-  { title: "Building Permission 2013 - 2014", link: "https://drive.google.com/file/d/1-CivIITOxMjuU0bjNxUAh0d_dSRjdblO/view?usp=drive_link", action: "View PDF", },
-  { title: "Building Permission 2011 - 2012", link: "https://drive.google.com/file/d/1MwxlguDvDqOhOgdPaKEdcitd5e2kbPHV/view?usp=drive_link", action: "View PDF", },
-  { title: "Building Permission 2010 - 2011", link: "https://drive.google.com/file/d/15gzPmQe6I-NekZ1LlDSVbIdmSj63Unxs/view?usp=drive_link", action: "View PDF", },
-  { title: "Building Permission 2009 - 2010", link: "https://drive.google.com/file/d/1uaNe4RGHm8E2-bqAPg76cs-vLM-RK5sx/view?usp=drive_link", action: "View PDF", },
-  { title: "Building Permission 2008 - 2009", link: "https://drive.google.com/file/d/1XcgjmhYM4Z38nM9U0dsrXCgK56b3FIGA/view?usp=drive_link", action: "View PDF", },
-  { title: "Building Permission 2007 - 2008", link: "https://drive.google.com/file/d/1_69L384NPYfcS0OKkXrBwxR9U_pr7TDA/view?usp=drive_link", action: "View PDF", },
-  { title: "Building Permission 2006 - 2007", link: "https://drive.google.com/file/d/1ydMUufpgT2DNi-K5UH7KlmUIHBYsFue8/view?usp=drive_link", action: "View PDF", },
-  { title: "Building Permission 2005 - 2006", link: "https://drive.google.com/file/d/11AiLLX8EHFG1EyPXwYTOGzBFJ0fk7gdI/view?usp=drive_link", action: "View PDF", },
-  { title: "Building Permission 2004 - 2005", link: "https://drive.google.com/file/d/1UaO5bz5EqDhkKV-WcY16C8jzg7KDCwag/view?usp=drive_link", action: "View PDF", },
-  { title: "Building Permission 2003 - 2004", link: "https://drive.google.com/file/d/1XZ0KywWQYVMkQ1oxua0Tjv2Lt6g_vNPp/view?usp=drive_link", action: "View PDF", },
-  { title: "Building Permission 2002 - 2003", link: "https://drive.google.com/file/d/1TkGK-uaQXGDOkfEE5g8WCTBfRitppQfF/view?usp=drive_link", action: "View PDF", },
-  { title: "Building Permission 2001 - 2002", link: "https://drive.google.com/file/d/1eQaP4SSj7lTw16PnfzaoGMlXpkF5CNsk/view?usp=drive_link", action: "View PDF", },
-  { title: "Building Permission 2000 - 2001", link: "https://drive.google.com/file/d/1QdD-WtpNM2VsO1Er2NitRRzYkS3fC2KC/view?usp=drive_link", action: "View PDF", },
-  { title: "Building Permission 1999 - 2000", link: "https://drive.google.com/file/d/1ogdh2OYVwMxWPyNuKSKpFxGLaUlCCf5C/view?usp=drive_link", action: "View PDF", },
-  { title: "Building Permission 1998 - 1999", link: "https://drive.google.com/file/d/1_Cd6xJbaKHPAztHMp3wxE-dbvxzXRzyB/view?usp=drive_link", action: "View PDF", },
-  { title: "Building Permission 1997 - 1998", link: "#", action: "View PDF", },
-  { title: "Building Permission 1996 - 1997", link: "https://drive.google.com/file/d/1SuYNSso6z1kPuvTju6pxySutD60_sBVC/view?usp=drive_link", action: "View PDF", },
-  { title: "Building Permission 1994 - 1995", link: "https://drive.google.com/file/d/1O9IUlp-3DlE9NqmffthrpDenGOQE4Av8/view?usp=drive_link", action: "View PDF", },
-  { title: "Building Permission 1993 - 1994", link: "https://drive.google.com/file/d/1xX-hjmKKjsk-0Yicc9o0rJcRY6TKslZJ/view?usp=drive_link", action: "View PDF", },
-  { title: "Building Permission 1992 - 1993", link: "https://drive.google.com/file/d/19sir90cXRwr-OU_VaI0_Vvowp80UUyHX/view?usp=drive_link", action: "View PDF", },
-  { title: "Building Permission 1991 - 1992", link: "https://drive.google.com/file/d/1EWIh1GTSOjjyU9npnSa1cuCBIwO4-HR-/view?usp=drive_link", action: "View PDF", },
-  { title: "Building Permission 1990 - 1991", link: "https://drive.google.com/file/d/1x2nSXP4JN6dEM2LPpjfFCvzxFMP7Uc0R/view?usp=drive_link", action: "View PDF", },
-  { title: "Building Permission 1988 - 1989", link: "https://drive.google.com/file/d/1HGejZs-D3SxDw8358oHK7z9oYR4ItjII/view?usp=drive_link", action: "View PDF", },
-  { title: "Building Permission 1986 - 1987", link: "https://drive.google.com/file/d/1Be4-S1MLY4eU4dbD-S5BdswOzYqxqeQt/view?usp=drive_link", action: "View PDF", },
-  { title: "Building Permission 1984 - 1985", link: "https://drive.google.com/file/d/1CbAyAfAcc1iOdwq-UvmNA_du7MJ_5sC0/view?usp=drive_link", action: "View PDF", },
-  { title: "Building Permission 1983-1984", link: "https://drive.google.com/file/d/1IviSV2ZxgzAVdNldHYeK82giFiiFvoKC/view?usp=drive_link", action: "View PDF", },
-  { title: "Building Permission 1971-1973", link: "https://drive.google.com/file/d/1j7STip7L3pozioR_GukZTwVNc_rOSCKs/view?usp=drive_link", action: "View PDF", },
-];
+import pdficon from '../../assets/images/Departments/document 1.png';
+import api, { baseURL } from "../api";
 
 const ITEMS_PER_PAGE = 10;
 
 const TownPlanning = () => {
   const [currentPage, setCurrentPage] = useState(1);
+  const [banner, setBanner] = useState([]);
+  const [description, setDescription] = useState([]);
+  const [hod, setHod] = useState([]);
+  const [pdf, setPdf] = useState([]);
 
-  const totalPages = Math.ceil(employeesData1.length / ITEMS_PER_PAGE);
+  const totalPages = Math.ceil(pdf.length / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  const currentData = employeesData1.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+  const currentData = pdf.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
   const handlePageChange = (pageNumber) => {
     if (pageNumber >= 1 && pageNumber <= totalPages) {
@@ -100,19 +69,68 @@ const TownPlanning = () => {
     return pageNumbers;
   };
 
+  const department_name = "Town Planning Department"
+
+  const fetchBanner = async () => {
+    try {
+      const response = await api.get("/department-banner");
+      const filteredData = response.data.filter((item) => item.name === department_name);
+      setBanner(filteredData);
+    } catch (error) {
+      console.error("Error fetching banner data", error);
+    }
+  };
+
+  const fetchHod = async () => {
+    try {
+      const response = await api.get("/hod-details");
+      const filteredData = response.data.filter((item) => item.designation === department_name);
+      setHod(filteredData);
+    } catch (error) {
+      console.error("Error fetching hod data", error);
+    }
+  };
+
+  const fetchDescription = async () => {
+    try {
+      const response = await api.get("/department-description");
+      const filteredData = response.data.filter((item) => item.department === department_name);
+      setDescription(filteredData);
+    } catch (error) {
+      console.error("Error fetching description data", error);
+    }
+  }
+
+  const fetchPdf = async () => {
+    try {
+      const response = await api.get("/department-pdfs");
+      const filteredData = response.data.filter((item) => item.department === department_name);
+      setPdf(filteredData);
+    } catch (error) {
+      console.error("Error fetching pdfs data", error);
+    }
+  }
+
+  useEffect(() => {
+    fetchBanner();
+    fetchHod();
+    fetchDescription();
+    fetchPdf();
+  }, []);
+
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
-
   return (
     <>
-      {/* <div className="town-header-image"></div> */}
+
+      {/* <div className="environment-header-image"></div> */}
 
       <div className="">
         <img
-          src={banner}
-          alt="dep-img"
+          src={`${baseURL}/${banner[0]?.file_path}`}
+          alt={banner[0]?.name}
           style={{
             width: '100%',
             height: 'auto',
@@ -122,25 +140,44 @@ const TownPlanning = () => {
       </div>
 
       <div id="main-content">
-        <div className="container-fluid font-location mt-4 mb-2" id="town-css">
+        <div className="container-fluid font-location mt-4 mb-2" id="environment-css">
           <nav className="breadcrumb">
             <Link to="/" className="breadcrumb-item text-decoration-none">
               Home
             </Link>
-            <Link to="#" className="breadcrumb-item text-decoration-none">
+            <Link to="/departments" className="breadcrumb-item text-decoration-none">
               Department
             </Link>
-            <span className="breadcrumb-item active1">Town Planning</span>
+            <span className="breadcrumb-item active1">Town Planning Department</span>
           </nav>
           <h2 className="location-title">
-            <span className="highlight">Town Planning</span>
-            <span className="highlighted-text"> Department</span>
+            <span className="highlight">Town</span>
+            <span className="highlighted-text"> Planning Department</span>
             <hr />
           </h2>
+
           <div className="row mt-4">
             <div className="col-12">
               <ul className="dept-custom-list">
-                <li>The duties and functions pertaining to town planning are to prepare regional plans, development plans and town planning schemes; to render assistance to the municipal authorities in the preparation of development plans and town planning schemes; to carry out surveys, prepare existing land-use-plans and development plans; to advise and prepare town development, improvement, extension and slum clearance schemes under the Municipal Acts </li>
+                {description.map((item, index) => {
+                  const subDescriptions = Array.isArray(item.subDescriptions) ? item.subDescriptions : [];
+                  return (
+                    <>
+                      <li>
+                        {item.description}
+                      </li>
+                      {subDescriptions.length > 0 && (
+                        <ol type="a">
+                          {subDescriptions.map((subItem, subIndex) => (
+                            <li key={subIndex}>
+                              {subItem}
+                            </li>
+                          ))}
+                        </ol>
+                      )}
+                    </>
+                  );
+                })}
               </ul>
             </div>
           </div>
@@ -149,11 +186,11 @@ const TownPlanning = () => {
             <div className="col-lg-3 col-md-4 col-sm-12 col-12">
               <div className="dept-profile-card text-center">
                 <img
-                  src={deptimg}
-                  alt="dept-img"
+                  src={`${baseURL}/${hod[0]?.file_path}`}
+                  alt={hod[0]?.name}
                   className="dept-profile-image"
                 />
-                <p className="dept-custom-title">-</p>
+                <p className="dept-custom-title">{hod[0]?.name}</p>
               </div>
             </div>
             <div className="col-lg-9 col-md-8 col-sm-12 col-12">
@@ -166,7 +203,7 @@ const TownPlanning = () => {
                       </div>
                       <div className="dept-text-box">
                         <strong className="dept-label">Designation :</strong>
-                        <span className="dept-value"> Head of Town Planning Department</span>
+                        <span className="dept-value"> Head of {hod[0]?.designation}</span>
                       </div>
                     </div>
                     <div className="dept-item">
@@ -177,7 +214,7 @@ const TownPlanning = () => {
                         <strong className="dept-label">
                           Education Qualification :
                         </strong>
-                        <span className="dept-value"> -</span>
+                        <span className="dept-value"> {hod[0]?.education}</span>
                       </div>
                     </div>
                     <div className="dept-item">
@@ -187,7 +224,7 @@ const TownPlanning = () => {
                       <div className="dept-text-box">
                         <strong className="dept-label">Office Address :</strong>
                         <span className="dept-value">
-                          {" "}-
+                          {" "}{hod[0]?.address}
                         </span>
                       </div>
                     </div>
@@ -196,8 +233,8 @@ const TownPlanning = () => {
                         <img src={cicon5} alt="icon" className="dept-icon-image" />
                       </div>
                       <div className="dept-text-box">
-                        <strong className="dept-label">Phone Number :</strong>
-                        <span className="dept-value"> -</span>
+                        <strong className="dept-label">Phone Number : </strong>
+                        <span className="dept-value">{hod[0]?.number}</span>
                       </div>
                     </div>
                     <div className="dept-item">
@@ -206,7 +243,7 @@ const TownPlanning = () => {
                       </div>
                       <div className="dept-text-box">
                         <strong className="dept-label">Email Address :</strong>
-                        <span className="dept-value"> -</span>
+                        <span className="dept-value"> {hod[0]?.email}</span>
                       </div>
                     </div>
                   </div>
@@ -260,7 +297,7 @@ const TownPlanning = () => {
                               color: "#292D32",
                             }}
                           >
-                            {item.title}
+                            {item.heading}
                           </td>
                           <td
                             width="10%"
@@ -288,7 +325,7 @@ const TownPlanning = () => {
                                   verticalAlign: "middle",
                                 }}
                               />
-                              {item.action}
+                              View Pdf
                             </Link>
                           </td>
                         </tr>

@@ -116,6 +116,30 @@ import AddHomeService1 from "../HomeService1/AddHomeService1";
 import CitizenCommunication from "../CitizenCommunication/CitizenCommunication";
 import AddPortalServices from "../CitizenCommunication/AddPortalServices";
 import AddEmergencyServices from "../CitizenCommunication/AddEmergencyServices";
+import AddContactInfo from "../Footer/AddContactInfo";
+import AddDataTable1 from "../Location/AddDataTable1";
+import AddDataTable2 from "../Location/AddDataTable2";
+import AddDataTable3 from "../Location/AddDataTable3";
+import AddDataTable4 from "../Location/AddDataTable4";
+import Location from "../Location/Location";
+import Commissioner from "../Commissioner/Commissioner";
+import AddCommissionerDetails from "../Commissioner/AddCommissionerDetails";
+import AddCommissionerDesc from "../Commissioner/AddCommissionerDesc";
+import UmcHistory from "../UmcHistory/UmcHistory";
+import AddHistoryImage from "../UmcHistory/AddHistoryImage";
+import Tourism from "../Tourism/Tourism";
+import AddTourism from "../Tourism/AddTourism";
+import AddDepartmentPage from "../DepartmentPage/AddDepartmentPage";
+import DepartmentPage from "../DepartmentPage/DepartmentPage";
+import AddDepartmentBanner from "../DepartmentInformation/AddDepartmentBanner";
+import AddHodDetails from "../DepartmentInformation/AddHodDetails";
+import DepartmentInformation from "../DepartmentInformation/DepartmentInformation";
+import AddDeptPdfs from "../DepartmentInformation/AddDeptPdfs";
+import AddDeptDescription from "../DepartmentInformation/AddDeptDescription";
+import AddAdministration from "../Administration/AddAdministration";
+import Administration from "../Administration/Administration";
+import Annual from "../AnnualFinancial/AnnualFinance";
+import AddAnnual from "../AnnualFinancial/AddAnnualFinance";
 
 
 function SuperAdminRoutes() {
@@ -195,10 +219,33 @@ function SuperAdminRoutes() {
         <Route path="/citizen-communication" element={<CitizenCommunication />} />
         <Route path="/add-portal-services" element={<AddPortalServices />} />
         <Route path="/add-emergency-services" element={<AddEmergencyServices />} />
+        <Route path="/add-contact-info" element={<AddContactInfo />} />
+        <Route path="/location" element={<Location/>} />
+        <Route path="/add-datatable1" element={<AddDataTable1 />} />
+        <Route path="/add-datatable2" element={<AddDataTable2 />} />
+        <Route path="/add-datatable3" element={<AddDataTable3 />} />
+        <Route path="/add-datatable4" element={<AddDataTable4 />} />
+        <Route path="/commissioner" element={<Commissioner />} />
+        <Route path="/add-commissioner-details" element={<AddCommissionerDetails />} />
+        <Route path="/add-commissioner-desc" element={<AddCommissionerDesc />} />
+        <Route path="/history" element={<UmcHistory />} />
+        <Route path="/add-historyImage" element={<AddHistoryImage />} />
+        <Route path="/tourism" element={<Tourism />} />
+        <Route path="/add-tourism" element={<AddTourism />} />
+        <Route path="/departments" element={<DepartmentPage />} />
+        <Route path="/add-departments" element={<AddDepartmentPage />} />
+        <Route path="/department-information" element={<DepartmentInformation />} />
+        <Route path="/add-department-banner" element={<AddDepartmentBanner />} />
+        <Route path="/add-hod-details" element={<AddHodDetails />} />
+        <Route path="/add-department-pdfs" element={<AddDeptPdfs />} />
+        <Route path="/add-department-description" element={<AddDeptDescription />} />
+        <Route path="/add-adminstration" element={<AddAdministration />} />
+        <Route path="/adminstration" element={<Administration />} />
+        <Route path="/annual" element={<Annual />} />
+        <Route path="/add-annual" element={<AddAnnual />} />
 
           
-          
-        <Route path="/add-user" element={<AddUsers />} />
+        {/* <Route path="/add-user" element={<AddUsers />} />
         <Route path="/user" element={<Users />} />
         <Route path="/add-privacy-policy" element={<AddPrivacyPolicy />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
@@ -344,7 +391,7 @@ function SuperAdminRoutes() {
           )
         ) : (
           <>Loding...</>
-        )}
+        )} */}
         <Route path="*" element={<Navigate to="/home" />} />
       </Routes>
   );

@@ -78,7 +78,7 @@ router.get('/home-gallerys/:id', (req, res) => {
         }
 
         if (result.length === 0) {
-            return res.status(404).json({ message: 'Gallery not found' });
+            return res.status(404).json({ message: 'Home gallery not found' });
         }
 
         const gallery = result[0];
@@ -118,7 +118,7 @@ router.delete('/home-gallerys/:id', (req, res) => {
                 }
             });
 
-            res.status(200).json({ message: 'Gallery deleted successfully' });
+            res.status(200).json({ message: 'Home gallery deleted successfully' });
         });
     });
 });
@@ -173,7 +173,7 @@ router.put('/home-gallerys/:id', upload.single('image'), (req, res) => {
                 });
             }
 
-            res.status(200).json({ message: 'gallery updated successfully' });
+            res.status(200).json({ message: 'Home gallery updated successfully' });
         });
     });
 });

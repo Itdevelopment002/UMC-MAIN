@@ -2,14 +2,12 @@ import React, { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import "./Footer.css";
 import Logo from "../../assets/images/logo 1.png";
-import Phone from "../../assets/images/Call.png";
-import Email from "../../assets/images/Message.png";
-import Location from "../../assets/images/Location.png";
-import api from "../api";
+import api, { baseURL } from "../api";
 import Cookies from "js-cookie";
 
 
 const Footer = () => {
+  const [contacts, setContacts] = useState([]);
   const [quicklinks, setQuickLinks] = useState([]);
   const [helplinks, setHelpLinks] = useState([]);
   const [onlineservices, setOnlineServices] = useState([]);
@@ -67,6 +65,7 @@ const Footer = () => {
     fetchQuickLinks();
     fetchHelpLinks();
     fetchOnlineServices();
+    fetchContacts();
 
 
   }, []);
@@ -95,6 +94,14 @@ const Footer = () => {
       console.error("Error fetching services:", error);
     }
   };
+  const fetchContacts = () => {
+    api
+      .get("/contacts-info")
+      .then((response) => setContacts(response.data))
+      .catch((error) => {
+        console.error("Error fetching contact info details!", error);
+      });
+  };
 
 
   return (
@@ -110,55 +117,23 @@ const Footer = () => {
               </div>
             </div>
             <ul className="contact-list">
-              <li>
-                <div className="d-flex align-items-start">
-                  <img
-                    src={Phone}
-                    alt="Phone Icon"
-                    className="icon-img"
-                    width="20"
-                    height="20"
-                  />
-                  <div className="contact-text">
-                    <p className="contact-title">Phone</p>
-                    <span className="contact-detail">(0251) 2720150</span>
+              {contacts.map((contact, index) => (
+                <li key={index}>
+                  <div className="d-flex align-items-start">
+                    <img
+                      src={`${baseURL}${contact.image_path}`}
+                      alt={`${contact.type} Icon`}
+                      className="icon-img"
+                      width="20"
+                      height="20"
+                    />
+                    <div className="contact-text">
+                      <p className="contact-title">{contact.heading}</p>
+                      <span className="contact-detail">{contact.description}</span>
+                    </div>
                   </div>
-                </div>
-              </li>
-              <li>
-                <div className="d-flex align-items-start">
-                  <img
-                    src={Email}
-                    alt="Email Icon"
-                    className="icon-img"
-                    width="20"
-                    height="20"
-                  />
-                  <div className="contact-text">
-                    <p className="contact-title">Email</p>
-                    <span className="contact-detail">cfcumc@gmail.com</span>
-                  </div>
-                </div>
-              </li>
-              <li>
-                <div className="d-flex align-items-start">
-                  <img
-                    src={Location}
-                    alt="Location Icon"
-                    className="icon-img"
-                    width="18"
-                    height="18"
-                  />
-                  <div className="contact-text">
-                    <p className="contact-title">Address</p>
-                    <span className="contact-detail">
-                      Ulhasnagar Municipal Corporation, Near Chopda Court,{" "}
-                      <br />
-                      Ulhasnagar-3, Maharashtra, INDIA.
-                    </span>
-                  </div>
-                </div>
-              </li>
+                </li>
+              ))}
             </ul>
           </div>
 
