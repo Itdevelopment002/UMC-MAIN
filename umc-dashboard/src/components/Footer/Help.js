@@ -21,8 +21,8 @@ const Help = () => {
             const response = await api.get("/helps");
             setHelpLinks(response.data);
         } catch (error) {
-            console.error("Error fetching services:", error);
-            toast.error("Failed to fetch services data!");
+            console.error("Error fetching help data:", error);
+            toast.error("Failed to fetch help data!");
         }
     };
 
@@ -31,10 +31,10 @@ const Help = () => {
             await api.delete(`/helps/${selectedServices.id}`);
             setHelpLinks(helplinks.filter((w) => w.id !== selectedServices.id));
             setShowDeleteModal(false);
-            toast.success("Services deleted successfully!");
+            toast.success("Help Data deleted successfully!");
         } catch (error) {
-            console.error("Error deleting services:", error);
-            toast.error("Failed to delete the services!");
+            console.error("Error deleting help data:", error);
+            toast.error("Failed to delete the help data!");
         }
     };
 
@@ -49,10 +49,10 @@ const Help = () => {
             );
             setHelpLinks(updatedServices);
             setShowEditModal(false);
-            toast.success("Services updated successfully!");
+            toast.success("Help Data updated successfully!");
         } catch (error) {
-            console.error("Error updating services:", error);
-            toast.error("Failed to update the services!");
+            console.error("Error updating help data:", error);
+            toast.error("Failed to update the help data!");
         }
     };
 

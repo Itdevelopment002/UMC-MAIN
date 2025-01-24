@@ -40,7 +40,7 @@ const AddOnlineServices = () => {
       setLink("");
       navigate("/footer");
     } catch (error) {
-      console.error("Error adding service:", error);
+      console.error("Error adding online services:", error);
     }
   };
 

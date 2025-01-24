@@ -83,6 +83,20 @@ const projectRoutes = require('./routes/projectRoutes');
 const homeService1Routes = require('./routes/homeService1Routes');
 const portalServicesRoutes = require('./routes/portalServicesRoutes');
 const emergencyServicesRoutes = require('./routes/emergencyServicesRoutes');
+const contactInfoRoutes = require('./routes/contactInfoRoutes');
+const locationRoutes = require('./routes/locationRoutes');
+const commissionerDetailsRoutes = require('./routes/commissionerDetailsRoutes');
+const commissionerDescRoutes = require('./routes/commissionerDescRoutes');
+const historyImageRoutes = require('./routes/historyImageRoutes');
+const historyDescRoutes = require('./routes/historyDescRoutes');
+const tourismRoutes = require('./routes/tourismRoutes');
+const departmentPageRoutes = require('./routes/departmentPageRoutes');
+const deptBannerRoutes = require('./routes/deptBannerRoutes');
+const deptHodRoutes = require('./routes/deptHodRoutes');
+const deptPdfRoutes = require('./routes/deptPdfRoutes');
+const deptDescriptionRoutes = require('./routes/deptDescriptionRoutes');
+const administrativeRoutes = require('./routes/administrationRoutes');
+const annualfinancialRoutes = require('./routes/annualfinancialRoutes');
 
 
 app.use('/api', sliderRoutes);
@@ -160,6 +174,20 @@ app.use('/api', projectRoutes);
 app.use('/api', homeService1Routes);
 app.use('/api', portalServicesRoutes);
 app.use('/api', emergencyServicesRoutes);
+app.use('/api', contactInfoRoutes);
+app.use('/api', locationRoutes);
+app.use('/api', commissionerDetailsRoutes);
+app.use('/api', commissionerDescRoutes);
+app.use('/api', historyImageRoutes);
+app.use('/api', historyDescRoutes);
+app.use('/api', tourismRoutes);
+app.use('/api', departmentPageRoutes);
+app.use('/api', deptBannerRoutes);
+app.use('/api', deptHodRoutes);
+app.use('/api', deptPdfRoutes);
+app.use('/api', deptDescriptionRoutes);
+app.use('/api', administrativeRoutes);
+app.use('/api', annualfinancialRoutes);
 
 
 const PORT = process.env.PORT || 5011;
