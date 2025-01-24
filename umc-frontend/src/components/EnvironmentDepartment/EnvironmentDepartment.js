@@ -3,39 +3,26 @@ import { Link } from "react-router-dom";
 import "./EnvironmentDepartment.css";
 import "../DepartmentCustomCss/DepartmentCustom.css"
 import Swal from 'sweetalert2';
-import deptimg from "../../assets/images/Departments/no-img 1.png";
 import cicon2 from "../../assets/images/Departments/Vector (1).png";
 import cicon3 from "../../assets/images/Departments/Vector (3).png";
 import cicon4 from "../../assets/images/Departments/Vector (5).png";
 import cicon5 from "../../assets/images/Departments/Vector (6).png";
 import cicon6 from "../../assets/images/Departments/Vector (7).png";
 import pdficon from '../../assets/images/Departments/document 1.png';
-import banner from '../../assets/images/Departments/paryavaranvibhag.jpg'
-
-const employeesData1 = [
-  { title: "मुर्ती विसर्जनाबाबतची मार्गदर्शक तत्वे", link: "https://drive.google.com/file/d/1QzKPvFoVTVraEJhqTxKLBDXB-9Jf5m4z/view?usp=drive_link", action: "View PDF", },
-  { title: "दिनांक ५ जुन २०२२ रोजी जागतिक पर्यावरण दिनानिमित्त उल्हासनगर महानगरपालिके मार्फत भाजी मार्केट क्र. १, भाजी मार्केट क्र. २. कृष्णा मंडळ येथील भाजी मार्केट, उल्हासनगर-४ येथे पर्यावरण जनजागृतीकरीता कापडी पिशव्यांचे वाटप", link: "https://drive.google.com/file/d/1z7lFWHE5mHgcSHvN7D3gF4kKwG4NHSpJ/view?usp=drive_link", action: "View PDF" },
-  { title: "जागतिक सायकल दिनानिमित्त उल्हासनगर महानगरपालिका आयोजित महापालिका मुख्यालयापासून गोल मैदान व शहाड स्टेशन पासुन परत महापालिका मुख्यालय या मार्गावरून पर्यावरण जनजागृतीकरीता सायकल रॅली दि. ०३.०६.२०२२", link: "#.", action: "View PDF" },
-  { title: "Utilization Certificate dated: 24.12.2021", link: "https://drive.google.com/file/d/1kp_BCAJGW3DaPmB9kb5fuzZl-6KHvgJS/view?usp=drive_link", action: "View PDF" },
-  { title: "Ulhasnagar Short term action plan/ESR report", link: "https://drive.google.com/file/d/1FIb-IVFKCj0W5o8K6jcGkQ5O89K8cg_o/view?usp=drive_link", action: "View PDF" },
-  { title: "Ulhasnagar Municipal Corporation (UMC) Action Plan Final", link: "https://drive.google.com/file/d/16Lzkj0f-su9aEKJzM9AQg_rbmwzNHSRz/view?usp=drive_link", action: "View PDF" },
-  { title: "Ulhasnagar monthly progress report dated: 06.07.2021", link: "https://drive.google.com/file/d/1kxfvr8pqkfS81VgiEyzi3Sj0_TOllEj_/view?usp=drive_link", action: "View PDF" },
-  { title: "Ulhasnagar Micro Action Plan dated: 12.08.2021", link: "#", action: "View PDF" },
-  { title: "Report for Enenrgy Audit at Ulhasnagar Municipal Corporation - JAN 2022", link: "https://drive.google.com/file/d/1kN4zm5CQ1Z8zf_gqy7yu3ToNkLsYoK4i/view?usp=drive_link", action: "View PDF" },
-  { title: "Minutes of meeting dated: 28.07.2021", link: "https://drive.google.com/file/d/1eYOnjKK6DHvsy_k64Yihym8uZY2DJiza/view?usp=drive_link", action: "View PDF" },
-  { title: "Minutes of meeting dated: 27.12.2019", link: "https://drive.google.com/file/d/13UrdejJxCaKBo3buLi-c7RHDGDOMJcK4/view?usp=drive_link", action: "View PDF" },
-  { title: "Minutes of meeting dated: 15.02.2022", link: "https://drive.google.com/file/d/1ZxNP9lai8fy5_qyqeJmZXo425yId3OI7/view?usp=drive_link", action: "View PDF" },
-  { title: "Environment Department Orders 2021", link: "https://drive.google.com/file/d/1niMlNYR195G4E6Y2OP9V2g2qbv2PGE5X/view?usp=drive_link", action: "View PDF" },
-];
+import api, { baseURL } from "../api";
 
 const ITEMS_PER_PAGE = 10;
 
 const EnvironmentDepartment = () => {
   const [currentPage, setCurrentPage] = useState(1);
+  const [banner, setBanner] = useState([]);
+  const [description, setDescription] = useState([]);
+  const [hod, setHod] = useState([]);
+  const [pdf, setPdf] = useState([]);
 
-  const totalPages = Math.ceil(employeesData1.length / ITEMS_PER_PAGE);
+  const totalPages = Math.ceil(pdf.length / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  const currentData = employeesData1.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+  const currentData = pdf.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
   const handlePageChange = (pageNumber) => {
     if (pageNumber >= 1 && pageNumber <= totalPages) {
@@ -82,6 +69,55 @@ const EnvironmentDepartment = () => {
     return pageNumbers;
   };
 
+  const department_name = "Environment Department"
+
+  const fetchBanner = async () => {
+    try {
+      const response = await api.get("/department-banner");
+      const filteredData = response.data.filter((item) => item.name === department_name);
+      setBanner(filteredData);
+    } catch (error) {
+      console.error("Error fetching banner data", error);
+    }
+  };
+
+  const fetchHod = async () => {
+    try {
+      const response = await api.get("/hod-details");
+      const filteredData = response.data.filter((item) => item.designation === department_name);
+      setHod(filteredData);
+    } catch (error) {
+      console.error("Error fetching hod data", error);
+    }
+  };
+
+  const fetchDescription = async () => {
+    try {
+      const response = await api.get("/department-description");
+      const filteredData = response.data.filter((item) => item.department === department_name);
+      setDescription(filteredData);
+    } catch (error) {
+      console.error("Error fetching description data", error);
+    }
+  }
+
+  const fetchPdf = async () => {
+    try {
+      const response = await api.get("/department-pdfs");
+      const filteredData = response.data.filter((item) => item.department === department_name);
+      setPdf(filteredData);
+    } catch (error) {
+      console.error("Error fetching pdfs data", error);
+    }
+  }
+
+  useEffect(() => {
+    fetchBanner();
+    fetchHod();
+    fetchDescription();
+    fetchPdf();
+  }, []);
+
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
@@ -93,8 +129,8 @@ const EnvironmentDepartment = () => {
 
       <div className="">
         <img
-          src={banner}
-          alt="dep-img"
+          src={`${baseURL}/${banner[0]?.file_path}`}
+          alt={banner[0]?.name}
           style={{
             width: '100%',
             height: 'auto',
@@ -109,7 +145,7 @@ const EnvironmentDepartment = () => {
             <Link to="/" className="breadcrumb-item text-decoration-none">
               Home
             </Link>
-            <Link to="#" className="breadcrumb-item text-decoration-none">
+            <Link to="/departments" className="breadcrumb-item text-decoration-none">
               Department
             </Link>
             <span className="breadcrumb-item active1">Environment Department</span>
@@ -120,28 +156,41 @@ const EnvironmentDepartment = () => {
             <hr />
           </h2>
 
-          {/* <div className="row mt-4">
+          <div className="row mt-4">
             <div className="col-12">
               <ul className="dept-custom-list">
-                <li>To receive all moneys payable to the Corporation and credit the same in the bank Account of the Corporation </li>
-                <li>To make payment on account of Municipal Fund</li>
-                <li>To estimate Income & Exp. statement for the next financial year before 31st of March</li>
-                <li>To make payment of Salary and pension of the employees </li>
-                <li>To make payment of Salary and pension of the employees </li>
-                <li>To make scrutiny of every financial proposal on behalf of Hon. commissioner</li>
+                {description.map((item, index) => {
+                  const subDescriptions = Array.isArray(item.subDescriptions) ? item.subDescriptions : [];
+                  return (
+                    <>
+                      <li>
+                        {item.description}
+                      </li>
+                      {subDescriptions.length > 0 && (
+                        <ol type="a">
+                          {subDescriptions.map((subItem, subIndex) => (
+                            <li key={subIndex}>
+                              {subItem}
+                            </li>
+                          ))}
+                        </ol>
+                      )}
+                    </>
+                  );
+                })}
               </ul>
             </div>
-          </div> */}
+          </div>
 
           <div className="row mt-4">
             <div className="col-lg-3 col-md-4 col-sm-12 col-12">
               <div className="dept-profile-card text-center">
                 <img
-                  src={deptimg}
-                  alt="dept-img"
+                  src={`${baseURL}/${hod[0]?.file_path}`}
+                  alt={hod[0]?.name}
                   className="dept-profile-image"
                 />
-                <p className="dept-custom-title">Mr. Jamir Lengarekar, Mr. Vishal Kadam, Mrs. Vishakha Sawant</p>
+                <p className="dept-custom-title">{hod[0]?.name}</p>
               </div>
             </div>
             <div className="col-lg-9 col-md-8 col-sm-12 col-12">
@@ -154,7 +203,7 @@ const EnvironmentDepartment = () => {
                       </div>
                       <div className="dept-text-box">
                         <strong className="dept-label">Designation :</strong>
-                        <span className="dept-value"> Head of Environment Department</span>
+                        <span className="dept-value"> Head of {hod[0]?.designation}</span>
                       </div>
                     </div>
                     <div className="dept-item">
@@ -165,7 +214,7 @@ const EnvironmentDepartment = () => {
                         <strong className="dept-label">
                           Education Qualification :
                         </strong>
-                        <span className="dept-value"> -</span>
+                        <span className="dept-value"> {hod[0]?.education}</span>
                       </div>
                     </div>
                     <div className="dept-item">
@@ -175,7 +224,8 @@ const EnvironmentDepartment = () => {
                       <div className="dept-text-box">
                         <strong className="dept-label">Office Address :</strong>
                         <span className="dept-value">
-                          {" "}Ground Floor, Main Administrative Building, Chopra Court Road, Ulhasnagar-421003.                      </span>
+                          {" "}{hod[0]?.address}
+                        </span>
                       </div>
                     </div>
                     <div className="dept-item">
@@ -183,8 +233,8 @@ const EnvironmentDepartment = () => {
                         <img src={cicon5} alt="icon" className="dept-icon-image" />
                       </div>
                       <div className="dept-text-box">
-                        <strong className="dept-label">Phone Number :</strong>
-                        <span className="dept-value">  251-2720104 / 9404242823</span>
+                        <strong className="dept-label">Phone Number : </strong>
+                        <span className="dept-value">{hod[0]?.number}</span>
                       </div>
                     </div>
                     <div className="dept-item">
@@ -193,7 +243,7 @@ const EnvironmentDepartment = () => {
                       </div>
                       <div className="dept-text-box">
                         <strong className="dept-label">Email Address :</strong>
-                        <span className="dept-value"> umcenvironment@gmail.com</span>
+                        <span className="dept-value"> {hod[0]?.email}</span>
                       </div>
                     </div>
                   </div>
@@ -245,10 +295,9 @@ const EnvironmentDepartment = () => {
                               paddingLeft: "10px",
                               paddingRight: "10px",
                               color: "#292D32",
-                              textWrap: "pretty",
                             }}
                           >
-                            {item.title}
+                            {item.heading}
                           </td>
                           <td
                             width="10%"
@@ -276,7 +325,7 @@ const EnvironmentDepartment = () => {
                                   verticalAlign: "middle",
                                 }}
                               />
-                              {item.action}
+                              View Pdf
                             </Link>
                           </td>
                         </tr>
