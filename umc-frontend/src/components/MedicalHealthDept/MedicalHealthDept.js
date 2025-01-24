@@ -1,32 +1,28 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "./MedicalHealthDept.css";
 import "../DepartmentCustomCss/DepartmentCustom.css"
 import Swal from 'sweetalert2';
-import deptimg from "../../assets/images/Departments/no-img 1.png";
 import cicon2 from "../../assets/images/Departments/Vector (1).png";
 import cicon3 from "../../assets/images/Departments/Vector (3).png";
 import cicon4 from "../../assets/images/Departments/Vector (5).png";
 import cicon5 from "../../assets/images/Departments/Vector (6).png";
 import cicon6 from "../../assets/images/Departments/Vector (7).png";
 import pdficon from '../../assets/images/Departments/document 1.png';
-import banner from '../../assets/images/Departments/vaidyakiya arogya vibhag.jpg'
-
-const employeesData1 = [
-  // { title: "Micro Plan Solid Waste Management System for Ward Committee / Zone No.4", link: "https://drive.google.com/file/d/14N9mVrBYz8KJ3sYk7fZPSOqsUItwFys7/view?usp=drive_link", action: "View PDF", },
-  // { title: "Micro Plan Solid Waste Management System for Ward Committee / Zone No.3", link: "https://drive.google.com/file/d/1ud9o-zZZKMnq7LimyvEHWNNSrMYK1TWJ/view?usp=drive_link", action: "View PDF", },
-  // { title: "Micro Plan Solid Waste Management System for Ward Committee / Zone No.2", link: "https://drive.google.com/file/d/1KEn9x07bNVc__tZ7Oaflxzee31Vp3lZo/view?usp=drive_link", action: "View PDF", },
-  // { title: "Micro Plan Solid Waste Management System for Ward Committee / Zone No.1", link: "https://drive.google.com/file/d/1QrRn5SZDcJOQK1VYRCx7r8zy8ONkbyBj/view?usp=drive_link", action: "View PDF", },
-  // { title: "Micro Plan Solid Waste Management System Agreement Copy", link: "#", action: "View PDF", },
-];
+import api, { baseURL } from "../api";
 
 const ITEMS_PER_PAGE = 10;
 
 const MedicalHealthDept = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const totalPages = Math.ceil(employeesData1.length / ITEMS_PER_PAGE);
+  const [banner, setBanner] = useState([]);
+  const [description, setDescription] = useState([]);
+  const [hod, setHod] = useState([]);
+  const [pdf, setPdf] = useState([]);
+
+  const totalPages = Math.ceil(pdf.length / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  const currentData = employeesData1.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+  const currentData = pdf.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
   const handlePageChange = (pageNumber) => {
     if (pageNumber >= 1 && pageNumber <= totalPages) {
@@ -73,18 +69,68 @@ const MedicalHealthDept = () => {
     return pageNumbers;
   };
 
+  const department_name = "Medical Health Department"
+
+  const fetchBanner = async () => {
+    try {
+      const response = await api.get("/department-banner");
+      const filteredData = response.data.filter((item) => item.name === department_name);
+      setBanner(filteredData);
+    } catch (error) {
+      console.error("Error fetching banner data", error);
+    }
+  };
+
+  const fetchHod = async () => {
+    try {
+      const response = await api.get("/hod-details");
+      const filteredData = response.data.filter((item) => item.designation === department_name);
+      setHod(filteredData);
+    } catch (error) {
+      console.error("Error fetching hod data", error);
+    }
+  };
+
+  const fetchDescription = async () => {
+    try {
+      const response = await api.get("/department-description");
+      const filteredData = response.data.filter((item) => item.department === department_name);
+      setDescription(filteredData);
+    } catch (error) {
+      console.error("Error fetching description data", error);
+    }
+  }
+
+  const fetchPdf = async () => {
+    try {
+      const response = await api.get("/department-pdfs");
+      const filteredData = response.data.filter((item) => item.department === department_name);
+      setPdf(filteredData);
+    } catch (error) {
+      console.error("Error fetching pdfs data", error);
+    }
+  }
+
+  useEffect(() => {
+    fetchBanner();
+    fetchHod();
+    fetchDescription();
+    fetchPdf();
+  }, []);
+
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
   return (
     <>
-      {/* <div className="medical-header-image"></div> */}
+
+      {/* <div className="environment-header-image"></div> */}
 
       <div className="">
         <img
-          src={banner}
-          alt="dep-img"
+          src={`${baseURL}/${banner[0]?.file_path}`}
+          alt={banner[0]?.name}
           style={{
             width: '100%',
             height: 'auto',
@@ -94,12 +140,12 @@ const MedicalHealthDept = () => {
       </div>
 
       <div id="main-content">
-        <div className="container-fluid font-location mt-4 mb-2" id="medical-css">
+        <div className="container-fluid font-location mt-4 mb-2" id="environment-css">
           <nav className="breadcrumb">
             <Link to="/" className="breadcrumb-item text-decoration-none">
               Home
             </Link>
-            <Link to="#" className="breadcrumb-item text-decoration-none">
+            <Link to="/departments" className="breadcrumb-item text-decoration-none">
               Department
             </Link>
             <span className="breadcrumb-item active1">Medical Health Department</span>
@@ -109,19 +155,29 @@ const MedicalHealthDept = () => {
             <span className="highlighted-text"> Health Department</span>
             <hr />
           </h2>
+
           <div className="row mt-4">
             <div className="col-12">
               <ul className="dept-custom-list">
-                <li>National Family Welfare Program</li>
-                <li>Reproductive and Child Health Program</li>
-                <li>Revised National Tuberculosis Control Program</li>
-                <li>National Leprosy Eradication Program</li>
-                <li>National Malaria Eradication Program</li>
-                <li>National Blindness Control Program</li>
-                <li>National AIDS Control Program</li>
-                <li>Epidemic Control Program</li>
-                <li>Pulse Polio Program</li>
-                <li>School Health Program</li>
+                {description.map((item, index) => {
+                  const subDescriptions = Array.isArray(item.subDescriptions) ? item.subDescriptions : [];
+                  return (
+                    <>
+                      <li>
+                        {item.description}
+                      </li>
+                      {subDescriptions.length > 0 && (
+                        <ol type="a">
+                          {subDescriptions.map((subItem, subIndex) => (
+                            <li key={subIndex}>
+                              {subItem}
+                            </li>
+                          ))}
+                        </ol>
+                      )}
+                    </>
+                  );
+                })}
               </ul>
             </div>
           </div>
@@ -130,11 +186,11 @@ const MedicalHealthDept = () => {
             <div className="col-lg-3 col-md-4 col-sm-12 col-12">
               <div className="dept-profile-card text-center">
                 <img
-                  src={deptimg}
-                  alt="dept-img"
+                  src={`${baseURL}/${hod[0]?.file_path}`}
+                  alt={hod[0]?.name}
                   className="dept-profile-image"
                 />
-                <p className="dept-custom-title">Dr. Mohini Dharma</p>
+                <p className="dept-custom-title">{hod[0]?.name}</p>
               </div>
             </div>
             <div className="col-lg-9 col-md-8 col-sm-12 col-12">
@@ -147,7 +203,7 @@ const MedicalHealthDept = () => {
                       </div>
                       <div className="dept-text-box">
                         <strong className="dept-label">Designation :</strong>
-                        <span className="dept-value"> Head of Medical Health Department</span>
+                        <span className="dept-value"> Head of {hod[0]?.designation}</span>
                       </div>
                     </div>
                     <div className="dept-item">
@@ -158,7 +214,7 @@ const MedicalHealthDept = () => {
                         <strong className="dept-label">
                           Education Qualification :
                         </strong>
-                        <span className="dept-value"> -</span>
+                        <span className="dept-value"> {hod[0]?.education}</span>
                       </div>
                     </div>
                     <div className="dept-item">
@@ -168,7 +224,7 @@ const MedicalHealthDept = () => {
                       <div className="dept-text-box">
                         <strong className="dept-label">Office Address :</strong>
                         <span className="dept-value">
-                          {" "}-
+                          {" "}{hod[0]?.address}
                         </span>
                       </div>
                     </div>
@@ -177,8 +233,8 @@ const MedicalHealthDept = () => {
                         <img src={cicon5} alt="icon" className="dept-icon-image" />
                       </div>
                       <div className="dept-text-box">
-                        <strong className="dept-label">Phone Number :</strong>
-                        <span className="dept-value"> 9421548546</span>
+                        <strong className="dept-label">Phone Number : </strong>
+                        <span className="dept-value">{hod[0]?.number}</span>
                       </div>
                     </div>
                     <div className="dept-item">
@@ -187,7 +243,7 @@ const MedicalHealthDept = () => {
                       </div>
                       <div className="dept-text-box">
                         <strong className="dept-label">Email Address :</strong>
-                        <span className="dept-value"> -</span>
+                        <span className="dept-value"> {hod[0]?.email}</span>
                       </div>
                     </div>
                   </div>
@@ -241,7 +297,7 @@ const MedicalHealthDept = () => {
                               color: "#292D32",
                             }}
                           >
-                            {item.title}
+                            {item.heading}
                           </td>
                           <td
                             width="10%"
@@ -269,7 +325,7 @@ const MedicalHealthDept = () => {
                                   verticalAlign: "middle",
                                 }}
                               />
-                              {item.action}
+                              View Pdf
                             </Link>
                           </td>
                         </tr>

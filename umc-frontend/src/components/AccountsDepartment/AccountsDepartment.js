@@ -3,47 +3,26 @@ import { Link } from "react-router-dom";
 import "./AccountsDepartment.css";
 import "../DepartmentCustomCss/DepartmentCustom.css"
 import Swal from 'sweetalert2';
-import deptimg from "../../assets/images/Departments/no-img 1.png";
 import cicon2 from "../../assets/images/Departments/Vector (1).png";
 import cicon3 from "../../assets/images/Departments/Vector (3).png";
 import cicon4 from "../../assets/images/Departments/Vector (5).png";
 import cicon5 from "../../assets/images/Departments/Vector (6).png";
 import cicon6 from "../../assets/images/Departments/Vector (7).png";
 import pdficon from '../../assets/images/Departments/document 1.png';
-import banner from '../../assets/images/Departments/lekha vibhag.jpg';
-
-const employeesData1 = [
-  { title: "अर्थसंकल्पीय अंदाज पत्रक २०२४-२५ (Budget Estimate 2024-25)", link: "https://drive.google.com/file/d/1Wi4ruD4c9LfjH641rIzgb81qC0JqTjOF/view?usp=drive_link", action: "View PDF", },
-  { title: "अर्थसंकल्पीय अंदाज पत्रक २०२३-२४ (Budget Estimate 2023-24)", link: "https://drive.google.com/file/d/1qL5_J1CJkSt9t98Ur6MxgyprGFPkhGEX/view?usp=drive_link", action: "View PDF" },
-  { title: "UMC Budget 2019-2020", link: "https://drive.google.com/file/d/1pHcAGMS0v3B-vW4nxOln0RrBjCo9MtN2/view?usp=drive_link", action: "View PDF" },
-  { title: "UMC Budget 2018-2019", link: "https://drive.google.com/file/d/1DhBmlmRRcuDg_liHA619IADNJhGhMILI/view?usp=drive_link", action: "View PDF" },
-  { title: "Financial Statement 2018-19", link: "https://drive.google.com/file/d/1JfrR9_bPKFUhkrdpEOe1xht0IRsABEQx/view?usp=drive_link", action: "View PDF" },
-  { title: "Financial Statement 2017-18", link: "https://drive.google.com/file/d/1zhITPqrwOclkA7ljKDbawEezmORjh-5z/view?usp=drive_link", action: "View PDF" },
-  { title: "Financial Statement 2016-17", link: "https://drive.google.com/file/d/19e032kXKowxFEyO3CR-0oGt2AZ3xpm99/view?usp=drive_link", action: "View PDF" },
-  { title: "Financial Statement 2015-16", link: "https://drive.google.com/file/d/1rQNxpoiKWNtKAXv-R62bKkqGxy5FbBLj/view?usp=drive_link", action: "View PDF" },
-  { title: "Expenditure-Day Book(Apr 23- Oct 2023, Apr-22 - March 2023, Dec 2021- MArhttps://drive.google.com/drive/folders/1QUIh7Nv1u5TQU8m10ZNHIIi28WXittHv2022)", link: "https://drive.google.com/file/d/1e5TfOvFIkyfCHyhi5ZlEsEi0VZx8HFsd/view?usp=drive_link", action: "View PDF" },
-  { title: "Day Book 2018-2019", link: "https://drive.google.com/file/d/1EhzmCygt1YxR6NGvd3NcGtVwLYC7w3YP/view?usp=drive_link", action: "View PDF" },
-  { title: "Day Book 2016-2017", link: "https://drive.google.com/file/d/1eNiT9YskOKrP5iaqTEdjd80tndRa5zlH/view?usp=drive_link", action: "View PDF" },
-  { title: "Day Book 1-Jun-2019 to 30-Jun-2019", link: "https://drive.google.com/file/d/1qssQmlCYThEaWlcqkzWP34wKYhLXIQk4/view?usp=drive_link", action: "View PDF" },
-  { title: "Day Book 1-Apr-2019 to 31-May-2019", link: "https://drive.google.com/file/d/1n2zAyQEds2Zs48JvE8eTk9WQMQ5VwEei/view?usp=drive_link", action: "View PDF" },
-  { title: "DAY BOOK 1-4-2020 TO 30-9-2020", link: "https://drive.google.com/file/d/1aMT6pQ1Oj_spxlR78NVB7iy3vetHk7Mf/view?usp=drive_link", action: "View PDF" },
-  { title: "DAY BOOK 1-10-2020 TO 31-3-2021", link: "https://drive.google.com/file/d/14PhtWvabGPaZppZqO6BoPyzGxnsEmBw-/view?usp=drive_link", action: "View PDF" },
-  { title: "DAY BOOK 1-08-2021 TO 30-11-2021", link: "https://drive.google.com/file/d/16cXtn5FLET20BGiQgtsPBPW7HRe9YOBE/view?usp=drive_link", action: "View PDF" },
-  { title: "DAY BOOK 1-04-2021 to 31-07-2021", link: "https://drive.google.com/file/d/1cMc7dA_POk37yC41z1SgOZ0HoNcuZzPG/view?usp=drive_link", action: "View PDF" },
-  { title: "DAY BOOK 1-01-2020 TO 31-3-2020", link: "https://drive.google.com/file/d/1fKWVrIlIh5lNftBEsG8wDIQQHwO2IqgX/view?usp=drive_link", action: "View PDF" },
-  { title: "DAY BOOK 01-07-2019 TO 31-12-2019", link: "https://drive.google.com/file/d/1lAVfx36HFyHP-fPoArsNxXkjgAxmkz93/view?usp=drive_link", action: "View PDF" },
-  { title: "Balance Sheet & Income Expenditure Statement 2018-2019", link: "https://drive.google.com/file/d/1huRyUPS1ZUgkbo9isWratx4mR4a1Qi2f/view?usp=drive_link", action: "View PDF" },
-  { title: "Balance Sheet & Income Expenditure Statement 2017-2018", link: "https://drive.google.com/file/d/1YpBmqTUvdnE1-4s094UnO-VBIvVTrVcR/view?usp=drive_link", action: "View PDF" },
-];
+import api, { baseURL } from "../api";
 
 const ITEMS_PER_PAGE = 10;
 
 const AccountsDepartment = () => {
   const [currentPage, setCurrentPage] = useState(1);
+  const [banner, setBanner] = useState([]);
+  const [description, setDescription] = useState([]);
+  const [hod, setHod] = useState([]);
+  const [pdf, setPdf] = useState([]);
 
-  const totalPages = Math.ceil(employeesData1.length / ITEMS_PER_PAGE);
+  const totalPages = Math.ceil(pdf.length / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  const currentData = employeesData1.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+  const currentData = pdf.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
   const handlePageChange = (pageNumber) => {
     if (pageNumber >= 1 && pageNumber <= totalPages) {
@@ -90,6 +69,55 @@ const AccountsDepartment = () => {
     return pageNumbers;
   };
 
+  const department_name = "Accounts Department"
+
+  const fetchBanner = async () => {
+    try {
+      const response = await api.get("/department-banner");
+      const filteredData = response.data.filter((item) => item.name === department_name);
+      setBanner(filteredData);
+    } catch (error) {
+      console.error("Error fetching banner data", error);
+    }
+  };
+
+  const fetchHod = async () => {
+    try {
+      const response = await api.get("/hod-details");
+      const filteredData = response.data.filter((item) => item.designation === department_name);
+      setHod(filteredData);
+    } catch (error) {
+      console.error("Error fetching hod data", error);
+    }
+  };
+
+  const fetchDescription = async () => {
+    try {
+      const response = await api.get("/department-description");
+      const filteredData = response.data.filter((item) => item.department === department_name);
+      setDescription(filteredData);
+    } catch (error) {
+      console.error("Error fetching description data", error);
+    }
+  }
+
+  const fetchPdf = async () => {
+    try {
+      const response = await api.get("/department-pdfs");
+      const filteredData = response.data.filter((item) => item.department === department_name);
+      setPdf(filteredData);
+    } catch (error) {
+      console.error("Error fetching pdfs data", error);
+    }
+  }
+
+  useEffect(() => {
+    fetchBanner();
+    fetchHod();
+    fetchDescription();
+    fetchPdf();
+  }, []);
+
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
@@ -101,8 +129,8 @@ const AccountsDepartment = () => {
 
       <div className="">
         <img
-          src={banner}
-          alt="dep-img"
+          src={`${baseURL}/${banner[0]?.file_path}`}
+          alt={banner[0]?.name}
           style={{
             width: '100%',
             height: 'auto',
@@ -110,6 +138,7 @@ const AccountsDepartment = () => {
           }}
         />
       </div>
+
       <div id="main-content">
 
         <div className="container-fluid font-location mt-4 mb-2" id="accounts-css">
@@ -117,7 +146,7 @@ const AccountsDepartment = () => {
             <Link to="/" className="breadcrumb-item text-decoration-none">
               Home
             </Link>
-            <Link to="#" className="breadcrumb-item text-decoration-none">
+            <Link to="/departments" className="breadcrumb-item text-decoration-none">
               Department
             </Link>
             <span className="breadcrumb-item active1">Accounts Department</span>
@@ -130,12 +159,25 @@ const AccountsDepartment = () => {
           <div className="row mt-4">
             <div className="col-12">
               <ul className="dept-custom-list">
-                <li>To receive all moneys payable to the Corporation and credit the same in the bank Account of the Corporation </li>
-                <li>To make payment on account of Municipal Fund </li>
-                <li>To estimate Income & Exp. statement for the next financial year before 31st of March</li>
-                <li>To make payment of Salary and pension of the employees </li>
-                <li>To control the budget sanctioned by the Corporation </li>
-                <li>To make scrutiny of every financial proposal on behalf of Hon. commissioner</li>
+                {description.map((item, index) => {
+                  const subDescriptions = Array.isArray(item.subDescriptions) ? item.subDescriptions : [];
+                  return (
+                    <>
+                      <li>
+                        {item.description}
+                      </li>
+                      {subDescriptions.length > 0 && (
+                        <ol type="a">
+                          {subDescriptions.map((subItem, subIndex) => (
+                            <li key={subIndex}>
+                              {subItem}
+                            </li>
+                          ))}
+                        </ol>
+                      )}
+                    </>
+                  );
+                })}
               </ul>
             </div>
           </div>
@@ -144,11 +186,11 @@ const AccountsDepartment = () => {
             <div className="col-lg-3 col-md-4 col-sm-12 col-12">
               <div className="dept-profile-card text-center">
                 <img
-                  src={deptimg}
-                  alt="dept-img"
+                  src={`${baseURL}/${hod[0]?.file_path}`}
+                  alt={hod[0]?.name}
                   className="dept-profile-image"
                 />
-                <p className="dept-custom-title">Mr. Kiran Bhilare</p>
+                <p className="dept-custom-title">{hod[0]?.name}</p>
               </div>
             </div>
             <div className="col-lg-9 col-md-8 col-sm-12 col-12">
@@ -161,7 +203,7 @@ const AccountsDepartment = () => {
                       </div>
                       <div className="dept-text-box">
                         <strong className="dept-label">Designation :</strong>
-                        <span className="dept-value"> Head of Accounts Department</span>
+                        <span className="dept-value"> Head of {hod[0]?.designation}</span>
                       </div>
                     </div>
                     <div className="dept-item">
@@ -172,7 +214,7 @@ const AccountsDepartment = () => {
                         <strong className="dept-label">
                           Education Qualification :
                         </strong>
-                        <span className="dept-value"> -</span>
+                        <span className="dept-value"> {hod[0]?.education}</span>
                       </div>
                     </div>
                     <div className="dept-item">
@@ -182,7 +224,7 @@ const AccountsDepartment = () => {
                       <div className="dept-text-box">
                         <strong className="dept-label">Office Address :</strong>
                         <span className="dept-value">
-                          {" "}-
+                          {" "}{hod[0]?.address}
                         </span>
                       </div>
                     </div>
@@ -192,7 +234,7 @@ const AccountsDepartment = () => {
                       </div>
                       <div className="dept-text-box">
                         <strong className="dept-label">Phone Number : </strong>
-                        <span className="dept-value">9869357664</span>
+                        <span className="dept-value">{hod[0]?.number}</span>
                       </div>
                     </div>
                     <div className="dept-item">
@@ -201,7 +243,7 @@ const AccountsDepartment = () => {
                       </div>
                       <div className="dept-text-box">
                         <strong className="dept-label">Email Address :</strong>
-                        <span className="dept-value"> -</span>
+                        <span className="dept-value"> {hod[0]?.email}</span>
                       </div>
                     </div>
                   </div>
@@ -255,7 +297,7 @@ const AccountsDepartment = () => {
                               color: "#292D32",
                             }}
                           >
-                            {item.title}
+                            {item.heading}
                           </td>
                           <td
                             width="10%"
@@ -283,7 +325,7 @@ const AccountsDepartment = () => {
                                   verticalAlign: "middle",
                                 }}
                               />
-                              {item.action}
+                              View Pdf
                             </Link>
                           </td>
                         </tr>

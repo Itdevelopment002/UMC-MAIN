@@ -129,6 +129,17 @@ import UmcHistory from "../UmcHistory/UmcHistory";
 import AddHistoryImage from "../UmcHistory/AddHistoryImage";
 import Tourism from "../Tourism/Tourism";
 import AddTourism from "../Tourism/AddTourism";
+import AddDepartmentPage from "../DepartmentPage/AddDepartmentPage";
+import DepartmentPage from "../DepartmentPage/DepartmentPage";
+import AddDepartmentBanner from "../DepartmentInformation/AddDepartmentBanner";
+import AddHodDetails from "../DepartmentInformation/AddHodDetails";
+import DepartmentInformation from "../DepartmentInformation/DepartmentInformation";
+import AddDeptPdfs from "../DepartmentInformation/AddDeptPdfs";
+import AddDeptDescription from "../DepartmentInformation/AddDeptDescription";
+import AddAdministration from "../Administration/AddAdministration";
+import Administration from "../Administration/Administration";
+import Annual from "../AnnualFinancial/AnnualFinance";
+import AddAnnual from "../AnnualFinancial/AddAnnualFinance";
 
 
 function SuperAdminRoutes() {
@@ -221,19 +232,20 @@ function SuperAdminRoutes() {
         <Route path="/add-historyImage" element={<AddHistoryImage />} />
         <Route path="/tourism" element={<Tourism />} />
         <Route path="/add-tourism" element={<AddTourism />} />
-
-
-
-
-
-
-
-
-
+        <Route path="/departments" element={<DepartmentPage />} />
+        <Route path="/add-departments" element={<AddDepartmentPage />} />
+        <Route path="/department-information" element={<DepartmentInformation />} />
+        <Route path="/add-department-banner" element={<AddDepartmentBanner />} />
+        <Route path="/add-hod-details" element={<AddHodDetails />} />
+        <Route path="/add-department-pdfs" element={<AddDeptPdfs />} />
+        <Route path="/add-department-description" element={<AddDeptDescription />} />
+        <Route path="/add-adminstration" element={<AddAdministration />} />
+        <Route path="/adminstration" element={<Administration />} />
+        <Route path="/annual" element={<Annual />} />
+        <Route path="/add-annual" element={<AddAnnual />} />
 
           
-          
-        <Route path="/add-user" element={<AddUsers />} />
+        {/* <Route path="/add-user" element={<AddUsers />} />
         <Route path="/user" element={<Users />} />
         <Route path="/add-privacy-policy" element={<AddPrivacyPolicy />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
@@ -379,7 +391,7 @@ function SuperAdminRoutes() {
           )
         ) : (
           <>Loding...</>
-        )}
+        )} */}
         <Route path="*" element={<Navigate to="/home" />} />
       </Routes>
   );
