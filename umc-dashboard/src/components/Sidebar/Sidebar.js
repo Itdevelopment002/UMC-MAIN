@@ -49,7 +49,7 @@ const Sidebar = ({ isOpen, closeSidebar, userDepartment }) => {
                     onClick={() => handleItemClick("/")}
                   >
                     <Link to="/home">
-                      <i className="fa fa-dashboard"></i>Main Menu
+                      <i className="fa fa-dashboard"></i>Header
                     </Link>
                   </li>
                   <li className="submenu">
@@ -212,6 +212,36 @@ const Sidebar = ({ isOpen, closeSidebar, userDepartment }) => {
                       >
                         <Link to="/department-information">
                           Department Information
+                        </Link>
+                      </li>
+                    </ul>
+                  </li>
+                     <li className="submenu">
+                    <Link to="#." onClick={() => toggleSubmenu("corporation")}>
+                      <i className="fa">
+                        <GrServices />
+                      </i>{" "}
+                      <span>Corporation </span>{" "}
+                      <span
+                        className={`menu-arrow ${openSubmenu === "corporation" ? "rotate" : ""
+                          }`}
+                      ></span>
+                    </Link>
+                    <ul className={openSubmenu === "corporation" ? "open" : ""}>
+                      <li
+                        className={activeItem === "/minister" ? "active" : ""}
+                        onClick={() => handleItemClick("/minister")}
+                      >
+                        <Link to="/adminstration">
+                          Administrative
+                        </Link>
+                      </li>
+                      <li
+                        className={activeItem === "/minister" ? "active" : ""}
+                        onClick={() => handleItemClick("/minister")}
+                      >
+                        <Link to="/annual">
+                        Annual Financial
                         </Link>
                       </li>
                     </ul>

@@ -6,7 +6,8 @@ import "./Header.css";
 import api from "../api";
 import { formatDistanceToNow } from "date-fns";
 import headerlogo from '../../assets/img/adminheader.png'
-
+import { FiLogOut } from "react-icons/fi";
+import { FaEdit } from "react-icons/fa";
 const Header = ({ onLogout, userDepartment }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   // eslint-disable-next-line
@@ -135,18 +136,9 @@ const Header = ({ onLogout, userDepartment }) => {
       </Link>
       <div className="main-wrapper">
         <div className="header">
-          {/* <div className="header-left">
-            <Link to="/home" className="logo">
-              KBMC
-            </Link>
-          </div> */}
           <div className="header-left">
             <Link to="/home" className="logo">
-              <img
-                src={headerlogo}
-                alt="KBMC Logo"
-                className="logo-image"
-              />
+              <img src={headerlogo} alt="KBMC Logo" className="logo-image" />
             </Link>
           </div>
 
@@ -162,24 +154,6 @@ const Header = ({ onLogout, userDepartment }) => {
             <i className="fa fa-bars"></i>
           </Link>
           <ul className="nav user-menu float-right">
-            <li className="nav-item">
-              <button
-                className={`btn btn-dark-mode ${darkMode ? "dark-active" : ""}`}
-                onClick={handleDarkModeToggle}
-              >
-                {darkMode ? (
-                  <>
-                    <i className="fa fa-sun"></i> <span className="mode">Light</span>
-                  </>
-                ) : (
-                  <>
-                    <i className="fa fa-moon"></i> <span className="mode">Dark</span>
-                  </>
-                )}
-              </button>
-            </li>
-
-
             <li className="nav-item dropdown d-none d-sm-block">
               <Link
                 to="#."
@@ -198,7 +172,7 @@ const Header = ({ onLogout, userDepartment }) => {
               {isNotificationDropdownOpen && (
                 <div className="dropdown-menu notifications show notification-keep-visible">
                   <div className="topnav-dropdown-header">
-                    <span>Notifications</span>
+                    <span >Notifications</span>
                   </div>
                   <div className="drop-scroll">
                     <ul className="notification-list">
@@ -260,9 +234,7 @@ const Header = ({ onLogout, userDepartment }) => {
                 </div>
               )}
             </li>
-
-            {/* User Profile with Online Status */}
-            <li className="nav-item dropdown d-none d-sm-block">
+            <li className="nav-item dropdown d-none d-sm-block mx-1">
               <Link
                 to="#."
                 className="dropdown-toggle nav-link user-link"
@@ -276,36 +248,27 @@ const Header = ({ onLogout, userDepartment }) => {
                   <img
                     className="rounded-circle"
                     src={img}
-                    width="24"
+                    width="30"
                     alt="Admin"
                   />
-                  <span className="status online"></span>{" "}
-
-                  {/* Online status dot */}
+                  <span className="status online"></span>
                 </span>
-
-                <span className="mx-1">{userDepartment}</span>{" "}
+                <span className="">{userDepartment}</span>
                 <i className="fa fa-angle-down ml-1"></i>
               </Link>
               {isUserDropdownOpen && (
                 <div className="dropdown-menu show dropdown-keep-visible">
                   <Link className="dropdown-item" to="#.">
-                    My Profile
-                  </Link>
-                  <Link className="dropdown-item" to="#.">
+                    <FaEdit className="dropdown-icon" />
                     Edit Profile
                   </Link>
-                  <Link className="dropdown-item" to="#.">
-                    Settings
-                  </Link>
                   <Link className="dropdown-item" onClick={onLogout}>
+                    <FiLogOut className="dropdown-icon" />
                     Logout
                   </Link>
                 </div>
               )}
             </li>
-
-            {/* Mobile user menu, only visible on small screens */}
             <div className="dropdown mobile-user-menu float-right d-block d-sm-none">
               <Link
                 to="#."
@@ -320,15 +283,13 @@ const Header = ({ onLogout, userDepartment }) => {
               {isUserDropdownOpen && (
                 <div className="dropdown-menu dropdown-menu-right show mx-2 dropdown-keep-visible">
                   <Link className="dropdown-item" to="#.">
-                    My Profile
-                  </Link>
-                  <Link className="dropdown-item" to="#.">
+                    <FaEdit className="dropdown-icon" />
+
                     Edit Profile
                   </Link>
-                  <Link className="dropdown-item" to="#.">
-                    Settings
-                  </Link>
                   <Link className="dropdown-item" onClick={onLogout}>
+                    <FiLogOut className="dropdown-icon" />
+
                     Logout
                   </Link>
                 </div>
@@ -337,6 +298,7 @@ const Header = ({ onLogout, userDepartment }) => {
           </ul>
         </div>
       </div>
+
       <Sidebar
         isOpen={isSidebarOpen}
         closeSidebar={closeSidebar}
