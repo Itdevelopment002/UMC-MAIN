@@ -21,8 +21,8 @@ const HomeServices1 = () => {
       const response = await api.get("/home-services2");
       setServices(response.data);
     } catch (error) {
-      console.error("Error fetching services:", error);
-      toast.error("Failed to fetch services data!");
+      console.error("Error fetching home services:", error);
+      toast.error("Failed to fetch home services details!");
     }
   };
 
@@ -31,10 +31,10 @@ const HomeServices1 = () => {
       await api.delete(`/home-services2/${selectedServices.id}`);
       setServices(services.filter((w) => w.id !== selectedServices.id));
       setShowDeleteModal(false);
-      toast.success("Services deleted successfully!");
+      toast.success("Home services deleted successfully!");
     } catch (error) {
-      console.error("Error deleting services:", error);
-      toast.error("Failed to delete the services!");
+      console.error("Error deleting home services:", error);
+      toast.error("Failed to delete home services!");
     }
   };
 
@@ -49,10 +49,10 @@ const HomeServices1 = () => {
       );
       setServices(updatedServices);
       setShowEditModal(false);
-      toast.success("Services updated successfully!");
+      toast.success("Home services updated successfully!");
     } catch (error) {
-      console.error("Error updating services:", error);
-      toast.error("Failed to update the services!");
+      console.error("Error updating home services:", error);
+      toast.error("Failed to update the home services!");
     }
   };
 
