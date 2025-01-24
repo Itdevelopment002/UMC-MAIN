@@ -23,7 +23,7 @@ router.post("/bottom-sliders", upload.single("websitelogo"), (req, res) => {
     return res.status(400).json({ message: "No file uploaded" });
   }
   if (!websitelink) {
-    return res.status(400).json({ message: "Website link is required" });
+    return res.status(400).json({ message: "slider link is required" });
   }
 
   const filePath = `/uploads/${req.file.filename}`;
@@ -35,7 +35,7 @@ router.post("/bottom-sliders", upload.single("websitelogo"), (req, res) => {
       return res.status(500).json({ message: "Database error", error: err });
     }
     res.status(201).json({
-      message: "Website link and logo uploaded successfully",
+      message: "Slider link and logo uploaded successfully",
       logoUrl: filePath,
     });
   });
@@ -61,7 +61,7 @@ router.get("/bottom-sliders/:id", (req, res) => {
       return res.status(500).json({ message: "Database error", error: err });
     }
     if (result.length === 0) {
-      return res.status(404).json({ message: "Website link not found" });
+      return res.status(404).json({ message: "Slider link not found" });
     }
 
     const link = result[0];
@@ -82,7 +82,7 @@ router.delete("/bottom-sliders/:id", (req, res) => {
       return res.status(500).json({ message: "Database error", error: err });
     }
     if (result.length === 0) {
-      return res.status(404).json({ message: "Website link not found" });
+      return res.status(404).json({ message: "Slider link not found" });
     }
 
     const filePath = result[0].websitelogo;
@@ -99,7 +99,7 @@ router.delete("/bottom-sliders/:id", (req, res) => {
         }
       });
 
-      res.status(200).json({ message: "Website link deleted successfully" });
+      res.status(200).json({ message: "Slider link deleted successfully" });
     });
   });
 });
@@ -137,7 +137,7 @@ router.put("/bottom-sliders/:id", upload.single("websitelogo"), (req, res) => {
       return res.status(500).json({ message: "Database error", error: err });
     }
     if (result.length === 0) {
-      return res.status(404).json({ message: "Website link not found" });
+      return res.status(404).json({ message: "Slider link not found" });
     }
 
     const oldFilePath = result[0].websitelogo;
@@ -155,7 +155,7 @@ router.put("/bottom-sliders/:id", upload.single("websitelogo"), (req, res) => {
         });
       }
 
-      res.status(200).json({ message: "Website link updated successfully" });
+      res.status(200).json({ message: "Slider link updated successfully" });
     });
   });
 });

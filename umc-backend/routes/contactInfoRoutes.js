@@ -16,32 +16,32 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-router.post("/minister-details", upload.single("image"), (req, res) => {
-  const { name, designation, bgcolor } = req.body;
+router.post("/contacts-info", upload.single("image"), (req, res) => {
+  const { name, designation } = req.body;
 
-  if (!name || !designation || !bgcolor) {
+  if (!name || !designation) {
     return res
       .status(400)
-      .json({ message: "Name, designation and background color are required" });
+      .json({ message: "Name and designation are required" });
   }
 
   const imagePath = req.file ? `/uploads/${req.file.filename}` : null;
 
   const sql =
-    "INSERT INTO minister (name, designation, bgcolor, image_path) VALUES (?, ?, ?, ?)";
-  db.query(sql, [name, designation, bgcolor, imagePath], (err, result) => {
+    "INSERT INTO contact_info (heading, description, image_path) VALUES (?, ?, ?)";
+  db.query(sql, [name, designation, imagePath], (err, result) => {
     if (err) {
       return res.status(500).json({ message: "Database error", error: err });
     }
     res.status(200).json({
-      message: "Minister added successfully",
+      message: "Contact Info added successfully",
       ministerId: result.insertId,
     });
   });
 });
 
-router.get("/minister-details", (req, res) => {
-  const sql = "SELECT * FROM minister";
+router.get("/contacts-info", (req, res) => {
+  const sql = "SELECT * FROM contact_info";
   db.query(sql, (err, results) => {
     if (err) {
       return res.status(500).json({ message: "Database error", error: err });
@@ -50,40 +50,35 @@ router.get("/minister-details", (req, res) => {
   });
 });
 
-router.get("/minister-details/:id", (req, res) => {
+router.get("/contacts-info/:id", (req, res) => {
   const { id } = req.params;
-  const sql = "SELECT * FROM minister WHERE id = ?";
+  const sql = "SELECT * FROM contact_info WHERE id = ?";
   db.query(sql, [id], (err, result) => {
     if (err) {
       return res.status(500).json({ message: "Database error", error: err });
     }
     if (result.length === 0) {
-      return res.status(404).json({ message: "Minister not found" });
+      return res.status(404).json({ message: "Contact Info not found" });
     }
     res.status(200).json(result[0]);
   });
 });
 
-router.put("/minister-details/:id", upload.single("image"), (req, res) => {
+router.put("/contacts-info/:id", upload.single("image"), (req, res) => {
   const { id } = req.params;
-  const { name, designation, bgcolor } = req.body;
+  const { heading, description } = req.body;
 
-  let updateSql = "UPDATE minister SET";
+  let updateSql = "UPDATE contact_info SET";
   const updateParams = [];
 
-  if (name) {
-    updateSql += " name = ?";
-    updateParams.push(name);
+  if (heading) {
+    updateSql += " heading = ?";
+    updateParams.push(heading);
   }
 
-  if (designation) {
-    updateSql += updateParams.length > 0 ? ", designation = ?" : " designation = ?";
-    updateParams.push(designation);
-  }
-
-  if (bgcolor) {
-    updateSql += updateParams.length > 0 ? ", bgcolor = ?" : " bgcolor = ?";
-    updateParams.push(bgcolor);
+  if (description) {
+    updateSql += updateParams.length > 0 ? ", description = ?" : " description = ?";
+    updateParams.push(description);
   }
 
   let imagePath;
@@ -101,13 +96,13 @@ router.put("/minister-details/:id", upload.single("image"), (req, res) => {
   updateSql += " WHERE id = ?";
   updateParams.push(id);
 
-  const selectSql = "SELECT image_path FROM minister WHERE id = ?";
+  const selectSql = "SELECT image_path FROM contact_info WHERE id = ?";
   db.query(selectSql, [id], (err, result) => {
     if (err) {
       return res.status(500).json({ message: "Database error", error: err });
     }
     if (result.length === 0) {
-      return res.status(404).json({ message: "Minister not found" });
+      return res.status(404).json({ message: "Contact Info not found" });
     }
 
     const oldImagePath = result[0].image_path;
@@ -130,26 +125,26 @@ router.put("/minister-details/:id", upload.single("image"), (req, res) => {
         });
       }
 
-      res.status(200).json({ message: "Minister updated successfully" });
+      res.status(200).json({ message: "Contact Info updated successfully" });
     });
   });
 });
 
-router.delete("/minister-details/:id", (req, res) => {
+router.delete("/contacts-info/:id", (req, res) => {
   const { id } = req.params;
 
-  const selectSql = "SELECT image_path FROM minister WHERE id = ?";
+  const selectSql = "SELECT image_path FROM contact_info WHERE id = ?";
   db.query(selectSql, [id], (err, result) => {
     if (err) {
       return res.status(500).json({ message: "Database error", error: err });
     }
     if (result.length === 0) {
-      return res.status(404).json({ message: "Minister not found" });
+      return res.status(404).json({ message: "Contact Info not found" });
     }
 
     const imagePath = result[0].image_path;
 
-    const deleteSql = "DELETE FROM minister WHERE id = ?";
+    const deleteSql = "DELETE FROM contact_info WHERE id = ?";
     db.query(deleteSql, [id], (err, deleteResult) => {
       if (err) {
         return res.status(500).json({ message: "Database error", error: err });
@@ -163,7 +158,7 @@ router.delete("/minister-details/:id", (req, res) => {
         });
       }
 
-      res.status(200).json({ message: "Minister deleted successfully" });
+      res.status(200).json({ message: "Contact Info deleted successfully" });
     });
   });
 });

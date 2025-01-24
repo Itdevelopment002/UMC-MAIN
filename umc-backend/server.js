@@ -83,6 +83,20 @@ const projectRoutes = require('./routes/projectRoutes');
 const homeService1Routes = require('./routes/homeService1Routes');
 const portalServicesRoutes = require('./routes/portalServicesRoutes');
 const emergencyServicesRoutes = require('./routes/emergencyServicesRoutes');
+const contactInfoRoutes = require('./routes/contactInfoRoutes');
+const locationRoutes = require('./routes/locationRoutes');
+const commissionerDetailsRoutes = require('./routes/commissionerDetailsRoutes');
+const commissionerDescRoutes = require('./routes/commissionerDescRoutes');
+const historyImageRoutes = require('./routes/historyImageRoutes');
+const historyDescRoutes = require('./routes/historyDescRoutes');
+const tourismRoutes = require('./routes/tourismRoutes');
+
+
+
+
+
+
+
 
 
 app.use('/api', sliderRoutes);
@@ -160,6 +174,22 @@ app.use('/api', projectRoutes);
 app.use('/api', homeService1Routes);
 app.use('/api', portalServicesRoutes);
 app.use('/api', emergencyServicesRoutes);
+app.use('/api', contactInfoRoutes);
+app.use('/api', locationRoutes);
+app.use('/api', commissionerDetailsRoutes);
+app.use('/api', commissionerDescRoutes);
+app.use('/api', historyImageRoutes);
+app.use('/api', historyDescRoutes);
+app.use('/api', tourismRoutes);
+
+
+
+
+
+
+
+
+
 
 
 const PORT = process.env.PORT || 5011;

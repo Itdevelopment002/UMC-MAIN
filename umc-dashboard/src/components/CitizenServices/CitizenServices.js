@@ -26,7 +26,7 @@ const CitizeServices = () => {
       const response = await api.get("/citizen-services");
       setCitizenServices(response.data);
     } catch (error) {
-      console.error("Error fetching services:", error);
+      console.error("Error fetching citizen services details:", error);
     }
   };
 
@@ -41,8 +41,8 @@ const CitizeServices = () => {
       setSelectedService(response.data);
       setShowEditModal(true);
     } catch (error) {
-      console.error("Error fetching service:", error);
-      toast.error("Failed to fetch service details");
+      console.error("Error fetching citizen service:", error);
+      toast.error("Failed to fetch citizen service details");
     }
   };
 
@@ -53,10 +53,10 @@ const CitizeServices = () => {
         citzenServices.filter((service) => service.id !== selectedService.id)
       );
       setShowDeleteModal(false);
-      toast.success("Service deleted successfully");
+      toast.success("Citizen service deleted successfully");
     } catch (error) {
-      console.error("Error deleting service:", error);
-      toast.error("Failed to delete service");
+      console.error("Error deleting citizen service:", error);
+      toast.error("Failed to delete citizen service");
     }
   };
 
@@ -85,10 +85,10 @@ const CitizeServices = () => {
       await api.put(`/citizen-services/${selectedService.id}`, formData);
       fetchServices();
       setShowEditModal(false);
-      toast.success("Service updated successfully");
+      toast.success("Citizen service updated successfully");
     } catch (error) {
-      console.error("Error updating service:", error);
-      toast.error("Failed to update service");
+      console.error("Error updating citizen service:", error);
+      toast.error("Failed to update citizen service");
     }
   };
 
