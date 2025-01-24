@@ -116,6 +116,13 @@ import AddHomeService1 from "../HomeService1/AddHomeService1";
 import CitizenCommunication from "../CitizenCommunication/CitizenCommunication";
 import AddPortalServices from "../CitizenCommunication/AddPortalServices";
 import AddEmergencyServices from "../CitizenCommunication/AddEmergencyServices";
+import AddDepartmentPage from "../DepartmentPage/AddDepartmentPage";
+import DepartmentPage from "../DepartmentPage/DepartmentPage";
+import AddDepartmentBanner from "../DepartmentInformation/AddDepartmentBanner";
+import AddHodDetails from "../DepartmentInformation/AddHodDetails";
+import DepartmentInformation from "../DepartmentInformation/DepartmentInformation";
+import AddDeptPdfs from "../DepartmentInformation/AddDeptPdfs";
+import AddDeptDescription from "../DepartmentInformation/AddDeptDescription";
 
 
 function SuperAdminRoutes() {
@@ -195,10 +202,17 @@ function SuperAdminRoutes() {
         <Route path="/citizen-communication" element={<CitizenCommunication />} />
         <Route path="/add-portal-services" element={<AddPortalServices />} />
         <Route path="/add-emergency-services" element={<AddEmergencyServices />} />
+        <Route path="/departments" element={<DepartmentPage />} />
+        <Route path="/add-departments" element={<AddDepartmentPage />} />
+        <Route path="/department-information" element={<DepartmentInformation />} />
+        <Route path="/add-department-banner" element={<AddDepartmentBanner />} />
+        <Route path="/add-hod-details" element={<AddHodDetails />} />
+        <Route path="/add-department-pdfs" element={<AddDeptPdfs />} />
+        <Route path="/add-department-description" element={<AddDeptDescription />} />
 
           
           
-        <Route path="/add-user" element={<AddUsers />} />
+        {/* <Route path="/add-user" element={<AddUsers />} />
         <Route path="/user" element={<Users />} />
         <Route path="/add-privacy-policy" element={<AddPrivacyPolicy />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
@@ -344,7 +358,7 @@ function SuperAdminRoutes() {
           )
         ) : (
           <>Loding...</>
-        )}
+        )} */}
         <Route path="*" element={<Navigate to="/home" />} />
       </Routes>
   );
