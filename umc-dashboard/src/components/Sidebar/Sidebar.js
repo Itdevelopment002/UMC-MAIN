@@ -44,14 +44,14 @@ const Sidebar = ({ isOpen, closeSidebar, userDepartment }) => {
             <ul>
               {userDepartment === "Admin" && (
                 <>
-                  <li
+                  {/* <li
                     className={activeItem === "/" ? "active" : ""}
                     onClick={() => handleItemClick("/")}
                   >
                     <Link to="/home">
                       <i className="fa fa-dashboard"></i>Header
                     </Link>
-                  </li>
+                  </li> */}
                   <li className="submenu">
                     <Link to="#." onClick={() => toggleSubmenu("home")}>
                       <i className="fa">
