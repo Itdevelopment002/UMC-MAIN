@@ -17,8 +17,8 @@ const Home = () => {
       <Carousel />
       <CurrentUpdate />
       <Info />
-      <CitizenServices />
       <EServices />
+      <CitizenServices />
       <GalleryAndCommunication />
       <SocialMediaSection />
     </>
