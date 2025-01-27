@@ -271,17 +271,19 @@ const Tourism = () => {
                                         <table className="table table-bordered m-b-0">
                                             <thead>
                                                 <tr>
-                                                    <th width="5%">Sr. No.</th>
-                                                    <th>Name</th>
-                                                    <th>Address</th>
-                                                    <th>Hours</th>
-                                                    <th>Description</th>
-                                                    <th>Location Link</th>
-                                                    <th>Main Image</th>
-                                                    <th>Gallery</th>
-                                                    <th width="15%">Action</th>
+                                                    <th style={{ width: '5%' }}>S.No.</th>
+                                                    <th style={{ width: '10%' }}>Name</th>
+                                                    <th style={{ width: '15%' }}>Address</th>
+                                                    <th style={{ width: '5%' }}>Hours</th>
+                                                    <th style={{ width: '15%' }}>Description</th>
+                                                    <th style={{ width: '15%' }}>Location Link</th>
+                                                    <th style={{ width: '10%' }}>Main Image</th>
+                                                    <th style={{ width: '20%' }}>Gallery</th>
+                                                    <th style={{ width: '15%' }}>Action</th>
                                                 </tr>
                                             </thead>
+
+
                                             <tbody>
                                                 {paginatedData.map((tourism, index) => (
                                                     <tr key={tourism.id}>
@@ -318,7 +320,7 @@ const Tourism = () => {
                                                         </td>
                                                         <td>
                                                             <button
-                                                                className="btn btn-sm btn-success"
+                                                                className="btn btn-sm btn-success mb-1"
                                                                 onClick={() => handleEdit(tourism)}
                                                             >
                                                                 Edit
