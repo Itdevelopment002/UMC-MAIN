@@ -8,7 +8,8 @@
 .welcome-section .heading {
   border-left: 5px solid;
   border-image: linear-gradient(to bottom, #BA358B, #FAB02F) 1;
-  border-image-slice: 1;}
+  border-image-slice: 1;
+}
 
 .info-heading1 {
   color: #000;
@@ -39,7 +40,9 @@
   font-weight: 700 !important;
   font-family: "Roboto" !important;
   text-decoration: none !important;
-  margin-top: 50px !important;
+
+  background: none;
+  border: none;
 }
 
 .playicon {
@@ -88,11 +91,11 @@
   width: 150px;
   height: 180px;
   border-radius: 20px;
-  background: linear-gradient(to bottom, #BB368A, #FEBA28); 
+  background: linear-gradient(to bottom, #BB368A, #FEBA28);
   border-left: 5px solid transparent;
   border-bottom: 5px solid #FEBA28;
-  object-fit: cover; 
-  box-shadow: 5px -5px 10px rgba(83, 83, 83, 0.1); 
+  object-fit: cover;
+  box-shadow: 5px -5px 10px rgba(83, 83, 83, 0.1);
 }
 
 .custom-name {
@@ -286,5 +289,42 @@
 
   .description {
     text-align: justify;
+  }
+}
+
+
+
+.description-container {
+  max-height: 220px;
+  gap: 5px;
+}
+
+@media (max-width: 767px) {
+  .description-container {
+    max-height: 150px;
+  }
+
+  .see-more-btn {
+    font-size: 14px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+  .description-container {
+    max-height: 200px;
+  }
+
+  .see-more-btn {
+    font-size: 16px;
+  }
+}
+
+@media (min-width: 1025px) {
+  .description-container {
+    max-height: 220px;
+  }
+
+  .see-more-btn {
+    font-size: 18px;
   }
 }
