@@ -1,30 +1,32 @@
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import "./VideoGallery.css";
-import video1 from "../../assets/images/Gallery/VideoGallery/video1.png";
-import video2 from "../../assets/images/Gallery/VideoGallery/video2.png";
-import video3 from "../../assets/images/Gallery/VideoGallery/video3.png";
-import video4 from "../../assets/images/Gallery/VideoGallery/video4.png";
-import video5 from "../../assets/images/Gallery/VideoGallery/video5.png";
-import video6 from "../../assets/images/Gallery/VideoGallery/video6.png";
-import video7 from "../../assets/images/Gallery/VideoGallery/video7.png";
-import video8 from "../../assets/images/Gallery/VideoGallery/video8.png";
-import video9 from "../../assets/images/Gallery/VideoGallery/video9.png";
-import video10 from "../../assets/images/Gallery/VideoGallery/video10.png";
-import video11 from "../../assets/images/Gallery/VideoGallery/video11.png";
-import video12 from "../../assets/images/Gallery/VideoGallery/video12.png";
-import video13 from "../../assets/images/Gallery/VideoGallery/video13.png";
-import video14 from "../../assets/images/Gallery/VideoGallery/video14.png";
-import video15 from "../../assets/images/Gallery/VideoGallery/video15.png";
-import video16 from "../../assets/images/Gallery/VideoGallery/video16.png";
 
 const VideoGallery = () => {
-  const videos1 = [video1, video2, video3, video4, video5, video6, video7, video8];
+  const videos1 = [
+    "https://www.youtube.com/embed/oN5d86o_cKQ?si=OR0l7rzx9mVgumkB",
+    "https://www.youtube.com/embed/WvrIy7ui93E?si=yK5BH6L6LUq3dfKz",
+    "https://www.youtube.com/embed/gb0mQNWTDVY?si=VZuS3HrC8yoA6gwe",
+    "https://www.youtube.com/embed/bbGujp_SQT8?si=4KO9tFkhjC_czZnu",
+    "https://www.youtube.com/embed/PKY8qe7PfmI?si=P4jlYsfeggH5Y1fv",
+    "https://www.youtube.com/embed/CVOY-266IpE?si=CbGn8_M0_gx1zsxH",
+    "https://www.youtube.com/embed/B4Xrokzim1s?si=AYZzPL_95DGsWSBR",
+    "https://www.youtube.com/embed/oA4PXdfGBlk?si=-LtGFw6fOPrQCvdN",
+  ];
 
-  const videos2 = [video9, video10, video11, video12, video13, video14, video15, video16];
+  const videos2 = [
+    "https://www.youtube.com/embed/2ozw8hWZjMA?si=XPJ5seE5SNVAAhQp",
+    "https://www.youtube.com/embed/Rdjwn3asrDc?si=gFf4upfyXJso58CX",
+    "https://www.youtube.com/embed/rI-Od8NxUFM?si=h5MDAPCOnoHZRX-e",
+    "https://www.youtube.com/embed/QWufzY3Oy3g?si=RVwxWLRemRckSpG9",
+    "https://www.youtube.com/embed/UVYGy-dYWMg?si=9rTFySFndrkBuBof",
+    "https://www.youtube.com/embed/pBH2CMS8A3g?si=0_chwIXpThe4E-Jt",
+    "https://www.youtube.com/embed/tC_XQ-9PArU?si=Kk24aXxy5kWRnOyI",
+    "https://www.youtube.com/embed/hd1O6ZjbcOM?si=6wp9YpwjG1FNp4Wf",
+  ];
 
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
 
   return (
@@ -55,11 +57,14 @@ const VideoGallery = () => {
             <div className="row g-3">
               {videos1.map((video, index) => (
                 <div className="col-6 col-sm-6 col-md-4 col-lg-3" key={index}>
-                  <img
+                  <iframe
                     src={video}
-                    alt={`Video1-${index + 1}`}
+                    title={`Video1-${index + 1}`}
                     className="img-styling-photo rounded"
-                  />
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  ></iframe>
                 </div>
               ))}
             </div>
@@ -73,11 +78,14 @@ const VideoGallery = () => {
             <div className="row g-3">
               {videos2.map((video, index) => (
                 <div className="col-6 col-sm-6 col-md-4 col-lg-3" key={index}>
-                  <img
+                  <iframe
                     src={video}
-                    alt={`Video2-${index + 1}`}
+                    title={`Video2-${index + 1}`}
                     className="img-styling-photo rounded"
-                  />
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  ></iframe>
                 </div>
               ))}
             </div>

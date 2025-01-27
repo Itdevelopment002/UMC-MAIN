@@ -28,8 +28,8 @@ const History = () => {
     try {
       const response = await api.get("/history_desc");
       setDesc(response.data);
-      setFirstTwo(response.data.slice(0, 2)); // Get the first two entries
-      setRemainingDesc(response.data.slice(2)); // Get the rest of the entries
+      setFirstTwo(response.data.slice(0, 2));
+      setRemainingDesc(response.data.slice(2)); 
     } catch (error) {
       console.error("Error fetching desc.");
     }
