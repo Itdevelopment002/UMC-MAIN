@@ -182,8 +182,8 @@ function SuperAdminRoutes() {
 
   return (
       <Routes>
-        {/* <Route path="/home" element={<MainMenu />} /> */}
-        {/* <Route path="/add-main-menu" element={<AddMainMenu />} /> */}
+        <Route path="/home" element={<MainMenu />} />
+        <Route path="/add-main-menu" element={<AddMainMenu />} />
         <Route path="/slider" element={<Slider />} />
         <Route path="/add-slider" element={<AddSlider />} />
         <Route path="/minister" element={<MinisterDetails />} />
@@ -392,7 +392,7 @@ function SuperAdminRoutes() {
         ) : (
           <>Loding...</>
         )} */}
-        <Route path="*" element={<Navigate to="/minister" />} />
+        <Route path="*" element={<Navigate to="/home" />} />
       </Routes>
   );
 }
