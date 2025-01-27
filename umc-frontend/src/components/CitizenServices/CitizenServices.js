@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import "./CitizenServices.css";
 import { Link } from "react-router-dom";
 import vector from "../../assets/images/citizen-services/vector-1.png";
@@ -11,12 +11,80 @@ const CitizenServices = () => {
   const [homeservices1, setHomeServices1] = useState([]);
   const [citzenServices, setCitizenServices] = useState([]);
   const [videos, setVideos] = useState([]);
-
+  const [information, setInformation] = useState([]);
+  const [projects, setProjects] = useState([]);
+  const [activeInfoIndex, setActiveInfoIndex] = useState(null);
   useEffect(() => {
     fetchServices();
     fetchVideos();
     fetchHomeServices1();
+    fetchInformation();
+    fetchProjects();
   }, []);
+
+  useEffect(() => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.style.animation = "none";
+      void scrollContainerRef.current.offsetHeight;
+      scrollContainerRef.current.style.animation = "scroll-loop 25s linear infinite";
+    }
+  }, [information]);
+
+  const scrollContainerRef = useRef(null);
+
+  useEffect(() => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.style.animation = "none";
+      void scrollContainerRef.current.offsetHeight;
+      scrollContainerRef.current.style.animation = "scroll-loop 25s linear infinite";
+    }
+  }, [information]);
+
+  const handleMouseEnter = () => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.style.animationPlayState = "paused";
+    }
+  };
+
+  const handleMouseLeave = () => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.style.animationPlayState = "running";
+    }
+  };
+
+  const projectscrollContainerRef = useRef(null);
+
+  const projectshandleMouseEnter = () => {
+    if (projectscrollContainerRef.current) {
+      projectscrollContainerRef.current.style.animationPlayState = "paused";
+    }
+  };
+
+  const projectshandleMouseLeave = () => {
+    if (projectscrollContainerRef.current) {
+      projectscrollContainerRef.current.style.animationPlayState = "running";
+    }
+  };
+  const handleInfoClick = (index) => {
+    setActiveInfoIndex(index);
+  };
+  const fetchInformation = async () => {
+    try {
+      const response = await api.get("/information");
+      setInformation(response.data.reverse());
+    } catch (error) {
+      console.error("Error Fetching information!", error);
+    }
+  };
+
+  const fetchProjects = async () => {
+    try {
+      const response = await api.get("/projects");
+      setProjects(response.data.reverse());
+    } catch (error) {
+      console.error("Error Fetching projects!", error);
+    }
+  };
 
   const fetchServices = async () => {
     try {
@@ -99,10 +167,9 @@ const CitizenServices = () => {
 
   return (
     <div className="background-container" id="citizen-section">
-      <div className="container-fluid citigen-section  d-flex flex-wrap justify-content-between">
-        <div className="row">
-          <div className="col-lg-6 col-md-12 col-sm-12">
-            <div className="citigen mt-1">
+      <div className="container-fluid citigen-section">
+        <div className="row  d-flex flex-wrap justify-content-between" >
+          {/* <div className="citigen mt-1">
               <div className="vertical-line"></div>
               <div className="d-flex">
                 <h2 className="section-title">
@@ -131,6 +198,105 @@ const CitizenServices = () => {
                   </Link>
                 </div>
               ))}
+            </div> */}
+
+          <div className="col-xl-3 col-lg-3 col-md-3 col-sm-12 e-services-margin right-section-font">
+            <div className="upcoming-projects bg-white p-2">
+              <h5 className="p-2 h5-styling-div">Information</h5>
+              <div className="scroll-wrapper">
+                <div
+                  className="info-scroll-container"
+                  ref={scrollContainerRef}
+                  onMouseEnter={handleMouseEnter}
+                  onMouseLeave={handleMouseLeave}
+                >
+                  <ul>
+                    {information.map((info, index) => (
+                      <li key={index} className="para-style1">
+                        <Link
+                          to={info.link}
+                          className={`text-decoration-none custom-list-effect ${activeInfoIndex === index ? "active" : ""
+                            }`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={() => handleInfoClick(index)}
+
+                        >
+                          {info.heading}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                  <ul>
+                    {information.map((info, index) => (
+                      <li key={`duplicate-${index}`} className="para-style1">
+                        <Link
+                          to={info.link}
+                          className={`text-decoration-none custom-list-effect ${activeInfoIndex === index ? "active" : ""
+                            }`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={() => handleInfoClick(index)}
+
+                        >
+                          {info.heading}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="col-xl-3 col-lg-3 col-md-3 col-sm-12 e-services-margin right-section-font">
+            <div className="upcoming-projects bg-white p-2">
+              <h5 className="p-2 h5-styling-5">Upcoming Projects</h5>
+              <div className="scroll-wrapper">
+                <div
+                  className="scroll-container"
+                  ref={projectscrollContainerRef}
+                  onMouseEnter={projectshandleMouseEnter}
+                  onMouseLeave={projectshandleMouseLeave}
+                >
+                  {projects.map((project, index) => (
+                    <div key={index}>
+                      <div className="project-item">
+                        <img
+                          src={`${baseURL}/${project.main_icon_path}`}
+                          alt={project.heading}
+                          className="e-services-img me-3"
+                        />
+                        <div>
+                          <p className="para-style">
+                            <b>{project.heading}, </b>
+                            {project.description}
+                          </p>
+                        </div>
+                      </div>
+                      <hr className="mt-1" />
+                    </div>
+                  ))}
+                  {projects.map((project, index) => (
+                    <div key={`duplicate-${index}`}>
+                      <div className="project-item">
+                        <img
+                          src={`${baseURL}/${project.main_icon_path}`}
+                          alt={project.heading}
+                          className="e-services-img me-3"
+                        />
+                        <div>
+                          <p className="para-style">
+                            <b>{project.heading}, </b>
+                            {project.description}
+                          </p>
+                        </div>
+                      </div>
+                      <hr className="mt-1" />
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
 
@@ -154,7 +320,7 @@ const CitizenServices = () => {
                         src={`https://www.youtube.com/embed/${getYouTubeVideoId(
                           video.video_url
                         )}`}
-                         title={`YouTube video ${index + 1}`}
+                        title={`YouTube video ${index + 1}`}
                         frameBorder="0"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                         referrerPolicy="strict-origin-when-cross-origin"
