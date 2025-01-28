@@ -105,7 +105,7 @@ const ElectricalEngineeringDepartment = () => {
   const fetchPdf = async () => {
     try {
       const response = await api.get("/department-pdfs");
-      const filteredData = response.data.filter((item) => item.department === department_name);
+      const filteredData = response.data.reverse().filter((item) => item.department === department_name);
       setPdf(filteredData);
     } catch (error) {
       console.error("Error fetching pdfs data", error);

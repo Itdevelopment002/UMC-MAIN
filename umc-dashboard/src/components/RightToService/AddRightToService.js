@@ -1,24 +1,26 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import api from "../api";
-import { Link } from "react-router-dom";
 
-const AddTermsAndConditions = () => {
+const AddRightToService = () => {
   const [heading, setHeading] = useState("");
-  const [description, setDescription] = useState("");
-  const [errors, setErrors] = useState({ heading: "", description: "" });
+  const [link, setLink] = useState("");
+  const [errors, setErrors] = useState({});
   const navigate = useNavigate();
 
   const validateForm = () => {
-    const newErrors = {};
+    const validationErrors = {};
+
     if (!heading) {
-      newErrors.heading = "Heading is required.";
+      validationErrors.heading = "Heading is required.";
     }
-    if (!description) {
-      newErrors.description = "Description is required.";
+
+    if (!link) {
+      validationErrors.link = "Link is required.";
     }
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+
+    setErrors(validationErrors);
+    return Object.keys(validationErrors).length === 0;
   };
 
   const handleSubmit = async (e) => {
@@ -28,26 +30,17 @@ const AddTermsAndConditions = () => {
       return;
     }
 
-    const formData = {
-      heading,
-      description,
-    };
-
     try {
-      const response = await api.post("/terms-and-conditions", formData, {
-        headers: {
-          "Content-Type": "application/json",
-        },
+      //eslint-disable-next-line
+      const response = await api.post("/rts", {
+        heading: heading,
+        link: link,
       });
-
-      if (response.status === 201) {
-        setHeading("");
-        setDescription("");
-        setErrors({ heading: "", description: "" });
-        navigate("/terms-and-conditions");
-      }
+      setHeading("");
+      setLink("");
+      navigate("/rts");
     } catch (error) {
-      console.error("Error adding terms & conditions:", error);
+      console.error("Error adding ward:", error);
     }
   };
 
@@ -60,10 +53,10 @@ const AddTermsAndConditions = () => {
               <Link to="/home">Home</Link>
             </li>
             <li className="breadcrumb-item">
-              <Link to="/terms-and-conditions">Terms & Conditions</Link>
+              <Link to="/rts">Right To Service</Link>
             </li>
             <li className="breadcrumb-item active" aria-current="page">
-              Add Terms & Conditions
+              Add Right To Service
             </li>
           </ol>
           <div className="row">
@@ -72,7 +65,7 @@ const AddTermsAndConditions = () => {
                 <div className="card-block">
                   <div className="row">
                     <div className="col-sm-4 col-3">
-                      <h4 className="page-title">Add Terms & Conditions</h4>
+                      <h4 className="page-title">Add Right To Service</h4>
                     </div>
                   </div>
                   <form onSubmit={handleSubmit}>
@@ -83,10 +76,10 @@ const AddTermsAndConditions = () => {
                       <div className="col-md-4">
                         <input
                           type="text"
-                          className={`form-control ${
+                          className={`form-control form-control-md ${
                             errors.heading ? "is-invalid" : ""
                           }`}
-                          placeholder="Enter heading"
+                          placeholder="Enter Heading"
                           value={heading}
                           onChange={(e) => {
                             setHeading(e.target.value);
@@ -96,39 +89,43 @@ const AddTermsAndConditions = () => {
                           }}
                         />
                         {errors.heading && (
-                          <small className="text-danger">{errors.heading}</small>
+                          <div className="invalid-feedback">
+                            {errors.heading}
+                          </div>
                         )}
                       </div>
                     </div>
-                    <div className="form-group row">
-                      <label className="col-form-label col-lg-2">
-                        Description <span className="text-danger">*</span>
+
+                    <div className="form-group row mt-3">
+                      <label className="col-form-label col-md-2">
+                        Link <span className="text-danger">*</span>
                       </label>
                       <div className="col-md-4">
-                        <textarea
-                          className={`form-control ${
-                            errors.description ? "is-invalid" : ""
+                        <input
+                          type="text"
+                          className={`form-control form-control-md ${
+                            errors.link ? "is-invalid" : ""
                           }`}
-                          placeholder="Enter description"
-                          value={description}
+                          placeholder="Enter Link"
+                          value={link}
                           onChange={(e) => {
-                            setDescription(e.target.value);
-                            if (errors.description) {
-                              setErrors({ ...errors, description: "" });
+                            setLink(e.target.value);
+                            if (errors.link) {
+                              setErrors({ ...errors, link: "" });
                             }
                           }}
-                          rows="2"
                         />
-                        {errors.description && (
-                          <small className="text-danger">
-                            {errors.description}
-                          </small>
+                        {errors.link && (
+                          <div className="invalid-feedback">
+                            {errors.link}
+                          </div>
                         )}
                       </div>
                     </div>
+
                     <input
                       type="submit"
-                      className="btn btn-primary btn-sm"
+                      className="btn btn-primary btn-sm mt-3"
                       value="Submit"
                     />
                   </form>
@@ -142,4 +139,4 @@ const AddTermsAndConditions = () => {
   );
 };
 
-export default AddTermsAndConditions;
+export default AddRightToService;
