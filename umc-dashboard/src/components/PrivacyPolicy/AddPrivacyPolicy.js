@@ -80,7 +80,7 @@ const AddPrivacyPolicy = () => {
                   <form onSubmit={handleSubmit}>
                     <div className="form-group row">
                       <label className="col-form-label col-md-2">
-                        Heading <span className="text-danger">*</span>
+                        Policy Heading <span className="text-danger">*</span>
                       </label>
                       <div className="col-md-4">
                         <input
@@ -88,7 +88,7 @@ const AddPrivacyPolicy = () => {
                           className={`form-control ${
                             errors.heading ? "is-invalid" : ""
                           }`}
-                          placeholder="Enter heading"
+                          placeholder="Enter policy heading"
                           value={heading}
                           onChange={(e) => {
                             setHeading(e.target.value);
@@ -106,14 +106,14 @@ const AddPrivacyPolicy = () => {
                     </div>
                     <div className="form-group row">
                       <label className="col-form-label col-lg-2">
-                        Description <span className="text-danger">*</span>
+                        Policy Description <span className="text-danger">*</span>
                       </label>
                       <div className="col-md-4">
                         <textarea
                           className={`form-control ${
                             errors.description ? "is-invalid" : ""
                           }`}
-                          placeholder="Enter description"
+                          placeholder="Enter policy description"
                           value={description}
                           onChange={(e) => {
                             setDescription(e.target.value);

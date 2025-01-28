@@ -1,33 +1,24 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom';
 import './RTS.css';
 import pdficon from '../../assets/images/Departments/document 1.png'
+import exticon from '../../assets/images/extIcon.png'
+import api from "../api"
 
 const RTS = () => {
-    // const menuItems = [
-    //     "Citizens' Charters",
-    //     "Corporators",
-    //     "Submit Tenders",
-    //     "Quotations",
-    //     "Budget",
-    //     "Department",
-    //     "Ward Offices",
-    //     "Circulars",
-    // ];
+    const [rts, setRts] = useState([]);
 
-    const employeesData1 = [
-        { advertise: "Maharashtra Right to Public Service Act, 2015", posting: "View PDF" },
-        { advertise: "Maharashtra Public Service Right Act Rules Gazette", posting: "View PDF" },
-        { advertise: "List of services notified under the Right to Public Services Act", posting: "View PDF" },
-        { advertise: "Online Marriage Certificate", posting: "View PDF" },
-        { advertise: "Fire NOC", posting: "View PDF" },
-        { advertise: "Pandal Permission App", posting: "View PDF" },
-        { advertise: "Divyaang Yojana App", posting: "View PDF" },
-        { advertise: "BIomatric AppDuty attendance system", posting: "View PDF" },
-        { advertise: "Service Book system", posting: "View PDF" },
-    ];
+    const fetchRts = async () => {
+        try {
+            const response = await api.get("/rts");
+            setRts(response.data);
+        } catch (error) {
+            console.error("Error fetching rts data", error);
+        }
+    };
 
     useEffect(() => {
+        fetchRts();
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }, []);
 
@@ -69,7 +60,7 @@ const RTS = () => {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {employeesData1.map((item, index) => (
+                                        {rts.map((item, index) => (
                                             <tr key={index}>
                                                 <td
                                                     className="font-large"
@@ -91,7 +82,7 @@ const RTS = () => {
                                                         color: "#292D32",
                                                     }}
                                                 >
-                                                    {item.advertise}
+                                                    {item.heading}
                                                 </td>
                                                 <td
                                                     width="20%"
@@ -102,17 +93,42 @@ const RTS = () => {
                                                         textAlign: "center",
                                                     }}
                                                 >
-                                                    <img
-                                                        src={pdficon}
-                                                        alt="PDF Icon"
-                                                        style={{
-                                                            width: "18px",
-                                                            height: "18px",
-                                                            marginRight: "8px",
-                                                            verticalAlign: "middle",
-                                                        }}
-                                                    />
-                                                    {item.posting}
+                                                    <Link
+                                                        to={item.link}
+                                                        className="text-decoration-none"
+                                                        target="_blank"
+                                                        style={{ color: "#292D32" }}
+                                                    >
+                                                        {item.link.endsWith("drive_link") ? (
+                                                            <>
+                                                                <img
+                                                                    src={pdficon}
+                                                                    alt="PDF Icon"
+                                                                    style={{
+                                                                        width: "18px",
+                                                                        height: "18px",
+                                                                        marginRight: "8px",
+                                                                        verticalAlign: "middle",
+                                                                    }}
+                                                                />
+                                                                View PDF
+                                                            </>
+                                                        ) : (
+                                                            <>
+                                                                Open Link
+                                                                <img
+                                                                    src={exticon}
+                                                                    alt="PDF Icon"
+                                                                    style={{
+                                                                        width: "18px",
+                                                                        height: "18px",
+                                                                        marginLeft: "8px",
+                                                                        verticalAlign: "middle",
+                                                                    }}
+                                                                />
+                                                            </>
+                                                        )}
+                                                    </Link>
                                                 </td>
                                             </tr>
                                         ))}

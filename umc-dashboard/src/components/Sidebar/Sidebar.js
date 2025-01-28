@@ -295,6 +295,61 @@ const Sidebar = ({ isOpen, closeSidebar, userDepartment }) => {
                     </ul>
                   </li>
                   <li
+                    className={activeItem === "/rts" ? "active" : ""}
+                    onClick={() => handleItemClick("/rts")}
+                  >
+                    <Link to="/rts">
+                      <i className="fa">
+                        <MdMiscellaneousServices />
+                      </i>{" "}
+                      Right to Service
+                    </Link>
+                  </li>
+                  {/* <li
+                    className={activeItem === "/recruitment" ? "active" : ""}
+                    onClick={() => handleItemClick("/recruitment")}
+                  >
+                    <Link to="/recruitment">
+                      <i className="fa">
+                        <MdMiscellaneousServices />
+                      </i>{" "}
+                      Recruitment
+                    </Link>
+                  </li>
+                  <li
+                    className={activeItem === "/privacy-policy" ? "active" : ""}
+                    onClick={() => handleItemClick("/privacy-policy")}
+                  >
+                    <Link to="/privacy-policy">
+                      <i className="fa">
+                        <MdMiscellaneousServices />
+                      </i>{" "}
+                      Privacy Policy
+                    </Link>
+                  </li>
+                  <li
+                    className={activeItem === "/hyperlink-policy" ? "active" : ""}
+                    onClick={() => handleItemClick("/hyperlink-policy")}
+                  >
+                    <Link to="/hyperlink-policy">
+                      <i className="fa">
+                        <MdMiscellaneousServices />
+                      </i>{" "}
+                      Hyperlink Policy
+                    </Link>
+                  </li>
+                  <li
+                    className={activeItem === "/contact-us" ? "active" : ""}
+                    onClick={() => handleItemClick("/contact-us")}
+                  >
+                    <Link to="/contact-us">
+                      <i className="fa">
+                        <MdMiscellaneousServices />
+                      </i>{" "}
+                      Contact Us
+                    </Link>
+                  </li> */}
+                  <li
                     className={activeItem === "/footer" ? "active" : ""}
                     onClick={() => handleItemClick("/footer")}
                   >
