@@ -4,76 +4,76 @@ import api from "../api";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const RightToService = () => {
-  const [rts, setRts] = useState([]);
+const SolidWasteSystem = () => {
+  const [swms, setSwms] = useState([]);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
-  const [selectedRts, setSelectedRts] = useState(null);
+  const [selectedSwms, setSelectedSwms] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const rtsPerPage = 10;
+  const swmsPerPage = 10;
 
   useEffect(() => {
-    fetchRts();
+    fetchSwms();
   }, []);
 
-  const fetchRts = async () => {
+  const fetchSwms = async () => {
     try {
-      const response = await api.get("/rts");
-      setRts(response.data);
+      const response = await api.get("/swms");
+      setSwms(response.data);
     } catch (error) {
-      console.error("Error fetching rts:", error);
-      toast.error("Failed to fetch rts data!");
+      console.error("Error fetching swms:", error);
+      toast.error("Failed to fetch swms data!");
     }
   };
 
   const handleDelete = async () => {
     try {
-      await api.delete(`/rts/${selectedRts.id}`);
-      setRts(rts.filter((w) => w.id !== selectedRts.id));
+      await api.delete(`/swms/${selectedSwms.id}`);
+      setSwms(swms.filter((w) => w.id !== selectedSwms.id));
       setShowDeleteModal(false);
-      toast.success("Rts deleted successfully!");
+      toast.success("Swms deleted successfully!");
     } catch (error) {
-      console.error("Error deleting rts:", error);
-      toast.error("Failed to delete the rts!");
+      console.error("Error deleting swms:", error);
+      toast.error("Failed to delete the swms!");
     }
   };
 
   const handleEditSave = async () => {
     try {
-      await api.put(`/rts/${selectedRts.id}`, {
-        heading: selectedRts.heading,
-        link: selectedRts.link,
+      await api.put(`/swms/${selectedSwms.id}`, {
+        description: selectedSwms.description,
+        link: selectedSwms.link,
       });
-      const updatedRts = rts.map((rts) =>
-        rts.id === selectedRts.id ? selectedRts : rts
+      const updatedSwms = swms.map((swms) =>
+        swms.id === selectedSwms.id ? selectedSwms : swms
       );
-      setRts(updatedRts);
+      setSwms(updatedSwms);
       setShowEditModal(false);
-      toast.success("Rts updated successfully!");
+      toast.success("Swms updated successfully!");
     } catch (error) {
-      console.error("Error updating rts:", error);
-      toast.error("Failed to update the rts!");
+      console.error("Error updating swms:", error);
+      toast.error("Failed to update the swms!");
     }
   };
 
-  const handleEditClick = (rts) => {
-    setSelectedRts({ ...rts });
+  const handleEditClick = (swms) => {
+    setSelectedSwms({ ...swms });
     setShowEditModal(true);
   };
 
-  const handleDeleteClick = (rts) => {
-    setSelectedRts(rts);
+  const handleDeleteClick = (swms) => {
+    setSelectedSwms(swms);
     setShowDeleteModal(true);
   };
 
   const handleEditChange = (e) => {
     const { name, value } = e.target;
-    setSelectedRts({ ...selectedRts, [name]: value });
+    setSelectedSwms({ ...selectedSwms, [name]: value });
   };
 
-  const indexOfLastRts = currentPage * rtsPerPage;
-  const indexOfFirstRts = indexOfLastRts - rtsPerPage;
-  const currentRts = rts.slice(indexOfFirstRts, indexOfLastRts);
+  const indexOfLastSwms = currentPage * swmsPerPage;
+  const indexOfFirstSwms = indexOfLastSwms - swmsPerPage;
+  const currentSwms = swms.slice(indexOfFirstSwms, indexOfLastSwms);
 
   return (
     <div>
@@ -85,7 +85,7 @@ const RightToService = () => {
                 <Link to="/home">Home</Link>
               </li>
               <li className="breadcrumb-item active" aria-current="page">
-                Right To Service
+                Solid Waste Management System
               </li>
             </ol>
           </nav>
@@ -95,14 +95,14 @@ const RightToService = () => {
                 <div className="card-block">
                   <div className="row">
                     <div className="col-sm-4 col-3">
-                      <h4 className="page-title">Right To Service</h4>
+                      <h4 className="page-title">Solid Waste Management System</h4>
                     </div>
                     <div className="col-sm-8 col-9 text-right m-b-20">
                       <Link
-                        to="/add-rts"
+                        to="/add-swms"
                         className="btn btn-primary btn-rounded float-right"
                       >
-                        <i className="fa fa-plus"></i> Add RTS
+                        <i className="fa fa-plus"></i> Add SWMS
                       </Link>
                     </div>
                   </div>
@@ -111,34 +111,39 @@ const RightToService = () => {
                       <thead>
                         <tr>
                           <th width="10%" className="text-center">Sr. No.</th>
-                          <th>Heading</th>
+                          <th>Description</th>
                           <th>Link</th>
                           <th width="15%" className="text-center">Action</th>
                         </tr>
                       </thead>
                       <tbody>
-                        {currentRts.length > 0 ? (
-                          currentRts.map((rts, index) => (
-                            <tr key={rts.id}>
+                        {currentSwms.length > 0 ? (
+                          currentSwms.map((swms, index) => (
+                            <tr key={swms.id}>
                               <td className="text-center">
-                                {index + 1 + (currentPage - 1) * rtsPerPage}
+                                {index + 1 + (currentPage - 1) * swmsPerPage}
                               </td>
-                              <td>{rts.heading}</td>
+                              <td>{swms.description}</td>
                               <td>
-                                <Link to={rts.link} target="_blank" className="text-decoration-none" style={{ color: "#000" }}>
-                                  {rts.link}
+                                <Link
+                                  to={swms.link}
+                                  target="_blank"
+                                  className="text-decoration-none"
+                                  style={{ color: "#000" }}
+                                >
+                                  {swms.link}
                                 </Link>
                               </td>
                               <td className="text-center">
                                 <button
-                                  onClick={() => handleEditClick(rts)}
+                                  onClick={() => handleEditClick(swms)}
                                   className="btn btn-success btn-sm m-t-10"
                                 >
                                   Edit
                                 </button>
                                 <button
                                   className="btn btn-danger btn-sm m-t-10"
-                                  onClick={() => handleDeleteClick(rts)}
+                                  onClick={() => handleDeleteClick(swms)}
                                 >
                                   Delete
                                 </button>
@@ -147,9 +152,10 @@ const RightToService = () => {
                           ))
                         ) : (
                           <tr>
-                            <td colSpan={4} className="text-center">No Rts data available</td>
+                            <td colSpan={4} className="text-center">No Swms data available</td>
                           </tr>
                         )}
+
                       </tbody>
                     </table>
                   </div>
@@ -167,7 +173,7 @@ const RightToService = () => {
                       </button>
                     </li>
                     {Array.from(
-                      { length: Math.ceil(rts.length / rtsPerPage) },
+                      { length: Math.ceil(swms.length / swmsPerPage) },
                       (_, i) => (
                         <li
                           className={`page-item ${currentPage === i + 1 ? "active" : ""
@@ -184,7 +190,7 @@ const RightToService = () => {
                       )
                     )}
                     <li
-                      className={`page-item ${currentPage === Math.ceil(rts.length / rtsPerPage)
+                      className={`page-item ${currentPage === Math.ceil(swms.length / swmsPerPage)
                         ? "disabled"
                         : ""
                         }`}
@@ -215,17 +221,17 @@ const RightToService = () => {
               <div className="modal-dialog modal-dialog-centered">
                 <div className="modal-content">
                   <div className="modal-header">
-                    <h5 className="modal-title">Edit Right To Service</h5>
+                    <h5 className="modal-title">Edit Solid Waste Management System</h5>
                   </div>
                   <div className="modal-body">
                     <form>
                       <div className="mb-3">
-                        <label className="form-label">Heading</label>
+                        <label className="form-label">Description</label>
                         <input
                           type="text"
                           className="form-control"
-                          name="heading"
-                          value={selectedRts?.heading || ""}
+                          name="description"
+                          value={selectedSwms?.description || ""}
                           onChange={handleEditChange}
                         />
                       </div>
@@ -235,7 +241,7 @@ const RightToService = () => {
                           type="text"
                           className="form-control"
                           name="link"
-                          value={selectedRts?.link || ""}
+                          value={selectedSwms?.link || ""}
                           onChange={handleEditChange}
                         />
                       </div>
@@ -304,4 +310,4 @@ const RightToService = () => {
   );
 };
 
-export default RightToService;
+export default SolidWasteSystem;

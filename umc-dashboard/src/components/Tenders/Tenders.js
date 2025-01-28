@@ -4,76 +4,89 @@ import api from "../api";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const RightToService = () => {
-  const [rts, setRts] = useState([]);
+const Tenders = () => {
+  const [tender, setTender] = useState([]);
+  const [departments, setDepartments] = useState([]);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
-  const [selectedRts, setSelectedRts] = useState(null);
+  const [selectedTender, setSelectedTender] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const rtsPerPage = 10;
+  const tenderPerPage = 10;
 
   useEffect(() => {
-    fetchRts();
+    fetchTenders();
+    fetchDepartments();
   }, []);
 
-  const fetchRts = async () => {
+  const fetchTenders = async () => {
     try {
-      const response = await api.get("/rts");
-      setRts(response.data);
+      const response = await api.get("/tenders-quotations");
+      setTender(response.data.reverse());
     } catch (error) {
-      console.error("Error fetching rts:", error);
-      toast.error("Failed to fetch rts data!");
+      console.error("Error fetching tender:", error);
+      toast.error("Failed to fetch tender data!");
+    }
+  };
+
+  const fetchDepartments = async () => {
+    try {
+      const response = await api.get("/department-info");
+      const sortedData = response.data.sort((a, b) => a.heading.localeCompare(b.heading));
+      setDepartments(sortedData);
+    } catch (error) {
+      console.error("Error fetching departments:", error);
     }
   };
 
   const handleDelete = async () => {
     try {
-      await api.delete(`/rts/${selectedRts.id}`);
-      setRts(rts.filter((w) => w.id !== selectedRts.id));
+      await api.delete(`/tenders-quotations/${selectedTender.id}`);
+      setTender(tender.filter((w) => w.id !== selectedTender.id));
       setShowDeleteModal(false);
-      toast.success("Rts deleted successfully!");
+      toast.success("Tender and Quotation deleted successfully!");
     } catch (error) {
-      console.error("Error deleting rts:", error);
-      toast.error("Failed to delete the rts!");
+      console.error("Error deleting tender:", error);
+      toast.error("Failed to delete the tender!");
     }
   };
 
   const handleEditSave = async () => {
     try {
-      await api.put(`/rts/${selectedRts.id}`, {
-        heading: selectedRts.heading,
-        link: selectedRts.link,
+      await api.put(`/tenders-quotations/${selectedTender.id}`, {
+        heading: selectedTender.heading,
+        department: selectedTender.department,
+        link: selectedTender.link,
       });
-      const updatedRts = rts.map((rts) =>
-        rts.id === selectedRts.id ? selectedRts : rts
+      const updatedTender = tender.map((tender) =>
+        tender.id === selectedTender.id ? selectedTender : tender
       );
-      setRts(updatedRts);
+      setTender(updatedTender);
       setShowEditModal(false);
-      toast.success("Rts updated successfully!");
+      toast.success("Tender and Quotation updated successfully!");
     } catch (error) {
-      console.error("Error updating rts:", error);
-      toast.error("Failed to update the rts!");
+      console.error("Error updating tender:", error);
+      toast.error("Failed to update the tender!");
     }
   };
 
-  const handleEditClick = (rts) => {
-    setSelectedRts({ ...rts });
+  const handleEditClick = (tender) => {
+    setSelectedTender({ ...tender });
     setShowEditModal(true);
   };
 
-  const handleDeleteClick = (rts) => {
-    setSelectedRts(rts);
+  const handleDeleteClick = (tender) => {
+    setSelectedTender(tender);
     setShowDeleteModal(true);
   };
 
   const handleEditChange = (e) => {
     const { name, value } = e.target;
-    setSelectedRts({ ...selectedRts, [name]: value });
+    setSelectedTender({ ...selectedTender, [name]: value });
   };
 
-  const indexOfLastRts = currentPage * rtsPerPage;
-  const indexOfFirstRts = indexOfLastRts - rtsPerPage;
-  const currentRts = rts.slice(indexOfFirstRts, indexOfLastRts);
+  const indexOfLastTender = currentPage * tenderPerPage;
+  const indexOfFirstTender = indexOfLastTender - tenderPerPage;
+  const currentTender = tender.slice(indexOfFirstTender, indexOfLastTender);
 
   return (
     <div>
@@ -82,10 +95,10 @@ const RightToService = () => {
           <nav aria-label="breadcrumb">
             <ol className="breadcrumb">
               <li className="breadcrumb-item">
-                <Link to="/home">Home</Link>
+                <Link to="#">Citizen Services</Link>
               </li>
               <li className="breadcrumb-item active" aria-current="page">
-                Right To Service
+                Tenders and Quotations
               </li>
             </ol>
           </nav>
@@ -95,14 +108,14 @@ const RightToService = () => {
                 <div className="card-block">
                   <div className="row">
                     <div className="col-sm-4 col-3">
-                      <h4 className="page-title">Right To Service</h4>
+                      <h4 className="page-title">Tenders and Quotations</h4>
                     </div>
                     <div className="col-sm-8 col-9 text-right m-b-20">
                       <Link
-                        to="/add-rts"
+                        to="/add-tenders-quotations"
                         className="btn btn-primary btn-rounded float-right"
                       >
-                        <i className="fa fa-plus"></i> Add RTS
+                        <i className="fa fa-plus"></i> Add Tenders
                       </Link>
                     </div>
                   </div>
@@ -111,34 +124,41 @@ const RightToService = () => {
                       <thead>
                         <tr>
                           <th width="10%" className="text-center">Sr. No.</th>
-                          <th>Heading</th>
-                          <th>Link</th>
+                          <th width="30%">Tender Heading</th>
+                          <th width="25%">Department Name</th>
+                          <th>Tender Link</th>
                           <th width="15%" className="text-center">Action</th>
                         </tr>
                       </thead>
                       <tbody>
-                        {currentRts.length > 0 ? (
-                          currentRts.map((rts, index) => (
-                            <tr key={rts.id}>
+                        {currentTender.length > 0 ? (
+                          currentTender.map((tender, index) => (
+                            <tr key={tender.id}>
                               <td className="text-center">
-                                {index + 1 + (currentPage - 1) * rtsPerPage}
+                                {index + 1 + (currentPage - 1) * tenderPerPage}
                               </td>
-                              <td>{rts.heading}</td>
+                              <td>{tender.heading}</td>
+                              <td>{tender.department}</td>
                               <td>
-                                <Link to={rts.link} target="_blank" className="text-decoration-none" style={{ color: "#000" }}>
-                                  {rts.link}
+                                <Link
+                                  to={tender.link}
+                                  target="_blank"
+                                  className="text-decoration-none"
+                                  style={{ color: "#000" }}
+                                >
+                                  {tender.link}
                                 </Link>
                               </td>
                               <td className="text-center">
                                 <button
-                                  onClick={() => handleEditClick(rts)}
+                                  onClick={() => handleEditClick(tender)}
                                   className="btn btn-success btn-sm m-t-10"
                                 >
                                   Edit
                                 </button>
                                 <button
                                   className="btn btn-danger btn-sm m-t-10"
-                                  onClick={() => handleDeleteClick(rts)}
+                                  onClick={() => handleDeleteClick(tender)}
                                 >
                                   Delete
                                 </button>
@@ -147,9 +167,10 @@ const RightToService = () => {
                           ))
                         ) : (
                           <tr>
-                            <td colSpan={4} className="text-center">No Rts data available</td>
+                            <td colSpan={5} className="text-center">No Tender data available</td>
                           </tr>
                         )}
+
                       </tbody>
                     </table>
                   </div>
@@ -167,7 +188,7 @@ const RightToService = () => {
                       </button>
                     </li>
                     {Array.from(
-                      { length: Math.ceil(rts.length / rtsPerPage) },
+                      { length: Math.ceil(tender.length / tenderPerPage) },
                       (_, i) => (
                         <li
                           className={`page-item ${currentPage === i + 1 ? "active" : ""
@@ -184,7 +205,7 @@ const RightToService = () => {
                       )
                     )}
                     <li
-                      className={`page-item ${currentPage === Math.ceil(rts.length / rtsPerPage)
+                      className={`page-item ${currentPage === Math.ceil(tender.length / tenderPerPage)
                         ? "disabled"
                         : ""
                         }`}
@@ -215,27 +236,45 @@ const RightToService = () => {
               <div className="modal-dialog modal-dialog-centered">
                 <div className="modal-content">
                   <div className="modal-header">
-                    <h5 className="modal-title">Edit Right To Service</h5>
+                    <h5 className="modal-title">Edit Tenders and Quotations</h5>
                   </div>
                   <div className="modal-body">
                     <form>
                       <div className="mb-3">
-                        <label className="form-label">Heading</label>
+                        <label className="form-label">Tender Heading</label>
                         <input
                           type="text"
                           className="form-control"
                           name="heading"
-                          value={selectedRts?.heading || ""}
+                          value={selectedTender?.heading || ""}
                           onChange={handleEditChange}
                         />
                       </div>
                       <div className="mb-3">
-                        <label className="form-label">Link</label>
+                        <label className="form-label">Department Name</label>
+                        <select
+                          className="form-control"
+                          name="department"
+                          value={selectedTender?.department || ""}
+                          onChange={handleEditChange}
+                        >
+                          <option value="" disabled>
+                            Select Department Name
+                          </option>
+                          {departments.map((department) => (
+                            <option value={department.heading} key={department.id}>
+                              {department.heading}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                      <div className="mb-3">
+                        <label className="form-label">Tender Link</label>
                         <input
                           type="text"
                           className="form-control"
                           name="link"
-                          value={selectedRts?.link || ""}
+                          value={selectedTender?.link || ""}
                           onChange={handleEditChange}
                         />
                       </div>
@@ -304,4 +343,4 @@ const RightToService = () => {
   );
 };
 
-export default RightToService;
+export default Tenders;

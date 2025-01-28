@@ -4,76 +4,76 @@ import api from "../api";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const RightToService = () => {
-  const [rts, setRts] = useState([]);
+const PropertyTaxDept = () => {
+  const [tax, setTax] = useState([]);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
-  const [selectedRts, setSelectedRts] = useState(null);
+  const [selectedTax, setSelectedTax] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const rtsPerPage = 10;
+  const taxPerPage = 10;
 
   useEffect(() => {
-    fetchRts();
+    fetchTax();
   }, []);
 
-  const fetchRts = async () => {
+  const fetchTax = async () => {
     try {
-      const response = await api.get("/rts");
-      setRts(response.data);
+      const response = await api.get("/property-dept");
+      setTax(response.data.reverse());
     } catch (error) {
-      console.error("Error fetching rts:", error);
-      toast.error("Failed to fetch rts data!");
+      console.error("Error fetching property tax data:", error);
+      toast.error("Failed to fetch property tax data!");
     }
   };
 
   const handleDelete = async () => {
     try {
-      await api.delete(`/rts/${selectedRts.id}`);
-      setRts(rts.filter((w) => w.id !== selectedRts.id));
+      await api.delete(`/property-dept/${selectedTax.id}`);
+      setTax(tax.filter((w) => w.id !== selectedTax.id));
       setShowDeleteModal(false);
-      toast.success("Rts deleted successfully!");
+      toast.success("Tax deleted successfully!");
     } catch (error) {
-      console.error("Error deleting rts:", error);
-      toast.error("Failed to delete the rts!");
+      console.error("Error deleting property tax data:", error);
+      toast.error("Failed to delete the property tax data!");
     }
   };
 
   const handleEditSave = async () => {
     try {
-      await api.put(`/rts/${selectedRts.id}`, {
-        heading: selectedRts.heading,
-        link: selectedRts.link,
+      await api.put(`/property-dept/${selectedTax.id}`, {
+        description: selectedTax.description,
+        link: selectedTax.link,
       });
-      const updatedRts = rts.map((rts) =>
-        rts.id === selectedRts.id ? selectedRts : rts
+      const updatedTax = tax.map((tax) =>
+        tax.id === selectedTax.id ? selectedTax : tax
       );
-      setRts(updatedRts);
+      setTax(updatedTax);
       setShowEditModal(false);
-      toast.success("Rts updated successfully!");
+      toast.success("Tax updated successfully!");
     } catch (error) {
-      console.error("Error updating rts:", error);
-      toast.error("Failed to update the rts!");
+      console.error("Error updating property tax data:", error);
+      toast.error("Failed to update the property tax data!");
     }
   };
 
-  const handleEditClick = (rts) => {
-    setSelectedRts({ ...rts });
+  const handleEditClick = (tax) => {
+    setSelectedTax({ ...tax });
     setShowEditModal(true);
   };
 
-  const handleDeleteClick = (rts) => {
-    setSelectedRts(rts);
+  const handleDeleteClick = (tax) => {
+    setSelectedTax(tax);
     setShowDeleteModal(true);
   };
 
   const handleEditChange = (e) => {
     const { name, value } = e.target;
-    setSelectedRts({ ...selectedRts, [name]: value });
+    setSelectedTax({ ...selectedTax, [name]: value });
   };
 
-  const indexOfLastRts = currentPage * rtsPerPage;
-  const indexOfFirstRts = indexOfLastRts - rtsPerPage;
-  const currentRts = rts.slice(indexOfFirstRts, indexOfLastRts);
+  const indexOfLastTax = currentPage * taxPerPage;
+  const indexOfFirstTax = indexOfLastTax - taxPerPage;
+  const currentTax = tax.slice(indexOfFirstTax, indexOfLastTax);
 
   return (
     <div>
@@ -85,7 +85,7 @@ const RightToService = () => {
                 <Link to="/home">Home</Link>
               </li>
               <li className="breadcrumb-item active" aria-current="page">
-                Right To Service
+                Property Tax Department
               </li>
             </ol>
           </nav>
@@ -95,14 +95,14 @@ const RightToService = () => {
                 <div className="card-block">
                   <div className="row">
                     <div className="col-sm-4 col-3">
-                      <h4 className="page-title">Right To Service</h4>
+                      <h4 className="page-title">Property Tax Department</h4>
                     </div>
                     <div className="col-sm-8 col-9 text-right m-b-20">
                       <Link
-                        to="/add-rts"
+                        to="/add-property-tax-department"
                         className="btn btn-primary btn-rounded float-right"
                       >
-                        <i className="fa fa-plus"></i> Add RTS
+                        <i className="fa fa-plus"></i> Add Property Tax
                       </Link>
                     </div>
                   </div>
@@ -111,34 +111,39 @@ const RightToService = () => {
                       <thead>
                         <tr>
                           <th width="10%" className="text-center">Sr. No.</th>
-                          <th>Heading</th>
+                          <th>Description</th>
                           <th>Link</th>
                           <th width="15%" className="text-center">Action</th>
                         </tr>
                       </thead>
                       <tbody>
-                        {currentRts.length > 0 ? (
-                          currentRts.map((rts, index) => (
-                            <tr key={rts.id}>
+                        {currentTax.length > 0 ? (
+                          currentTax.map((tax, index) => (
+                            <tr key={tax.id}>
                               <td className="text-center">
-                                {index + 1 + (currentPage - 1) * rtsPerPage}
+                                {index + 1 + (currentPage - 1) * taxPerPage}
                               </td>
-                              <td>{rts.heading}</td>
+                              <td>{tax.description}</td>
                               <td>
-                                <Link to={rts.link} target="_blank" className="text-decoration-none" style={{ color: "#000" }}>
-                                  {rts.link}
+                                <Link
+                                  to={tax.link}
+                                  target="_blank"
+                                  className="text-decoration-none"
+                                  style={{ color: "#000" }}
+                                >
+                                  {tax.link}
                                 </Link>
                               </td>
                               <td className="text-center">
                                 <button
-                                  onClick={() => handleEditClick(rts)}
+                                  onClick={() => handleEditClick(tax)}
                                   className="btn btn-success btn-sm m-t-10"
                                 >
                                   Edit
                                 </button>
                                 <button
                                   className="btn btn-danger btn-sm m-t-10"
-                                  onClick={() => handleDeleteClick(rts)}
+                                  onClick={() => handleDeleteClick(tax)}
                                 >
                                   Delete
                                 </button>
@@ -147,9 +152,10 @@ const RightToService = () => {
                           ))
                         ) : (
                           <tr>
-                            <td colSpan={4} className="text-center">No Rts data available</td>
+                            <td colSpan={4} className="text-center">No Property tax data available</td>
                           </tr>
                         )}
+
                       </tbody>
                     </table>
                   </div>
@@ -167,7 +173,7 @@ const RightToService = () => {
                       </button>
                     </li>
                     {Array.from(
-                      { length: Math.ceil(rts.length / rtsPerPage) },
+                      { length: Math.ceil(tax.length / taxPerPage) },
                       (_, i) => (
                         <li
                           className={`page-item ${currentPage === i + 1 ? "active" : ""
@@ -184,7 +190,7 @@ const RightToService = () => {
                       )
                     )}
                     <li
-                      className={`page-item ${currentPage === Math.ceil(rts.length / rtsPerPage)
+                      className={`page-item ${currentPage === Math.ceil(tax.length / taxPerPage)
                         ? "disabled"
                         : ""
                         }`}
@@ -215,17 +221,17 @@ const RightToService = () => {
               <div className="modal-dialog modal-dialog-centered">
                 <div className="modal-content">
                   <div className="modal-header">
-                    <h5 className="modal-title">Edit Right To Service</h5>
+                    <h5 className="modal-title">Edit Solid Waste Management System</h5>
                   </div>
                   <div className="modal-body">
                     <form>
                       <div className="mb-3">
-                        <label className="form-label">Heading</label>
+                        <label className="form-label">Description</label>
                         <input
                           type="text"
                           className="form-control"
-                          name="heading"
-                          value={selectedRts?.heading || ""}
+                          name="description"
+                          value={selectedTax?.description || ""}
                           onChange={handleEditChange}
                         />
                       </div>
@@ -235,7 +241,7 @@ const RightToService = () => {
                           type="text"
                           className="form-control"
                           name="link"
-                          value={selectedRts?.link || ""}
+                          value={selectedTax?.link || ""}
                           onChange={handleEditChange}
                         />
                       </div>
@@ -304,4 +310,4 @@ const RightToService = () => {
   );
 };
 
-export default RightToService;
+export default PropertyTaxDept;

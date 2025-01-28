@@ -1,21 +1,25 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import pdficon from '../../assets/images/Departments/document 1.png';
 import './SWMSystem.css';
 import "../TableCss/TableCss.css"
 import Swal from 'sweetalert2';
+import api from "../api"
 
 const SWMSystem = () => {
-    const solidWaste = [
-        { description: "Micro Plan Solid Waste Management System Agreement Copy", link: "https://drive.google.com/file/d/1TtsmgRnAqdlDZpP97cShfzOPddFnDobI/view?usp=drive_link", posting: "View PDF" },
-        { description: "Micro Plan Solid Waste Management System for Ward Committee / Zone No.1", link: "https://drive.google.com/file/d/1AwO2J44SiUmek1xuLZB3RelO01KLJnCS/view?usp=drive_link", posting: "View PDF" },
-        { description: "Micro Plan Solid Waste Management System for Ward Committee / Zone No.2", link: "https://drive.google.com/file/d/1P24327j-LPAC_ljq_s0TAg0S_Y1-SKlq/view?usp=drive_link", posting: "View PDF" },
-        { description: "Micro Plan Solid Waste Management System for Ward Committee / Zone No.3", link: "https://drive.google.com/file/d/1VpRqYBTNi1PzbRwnpcHK_prfyKSRaJOe/view?usp=drive_link", posting: "View PDF" },
-        { description: "Micro Plan Solid Waste Management System for Ward Committee / Zone No.4", link: "https://drive.google.com/file/d/1Oxf3oI7DgF261VN6vUOw0CGvG6ZLZGaW/view?usp=drive_link", posting: "View PDF" },
-        { description: "Solid Waste Management System Contractor Representative Contact Numbers for complaints", link: "#", posting: "View PDF" },
-    ];
+    const [swms, setSwms] = useState([]);
+
+    const fetchSWMS = async()=>{
+        try{
+            const response = await api.get("/swms");
+            setSwms(response.data)
+        } catch(error){
+            console.error("Error fetching swms data", error);
+        }
+    };
 
     useEffect(() => {
+        fetchSWMS();
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }, []);
 
@@ -67,7 +71,7 @@ const SWMSystem = () => {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {solidWaste.map((item, index) => (
+                                        {swms.map((item, index) => (
                                             <tr key={index}>
                                                 <td
                                                     className="font-large"
@@ -117,7 +121,7 @@ const SWMSystem = () => {
                                                                 verticalAlign: "middle",
                                                             }}
                                                         />
-                                                        {item.posting}
+                                                        View Pdf
                                                     </Link>
                                                 </td>
                                             </tr>
