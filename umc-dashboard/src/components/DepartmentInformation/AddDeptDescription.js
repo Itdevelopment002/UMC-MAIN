@@ -171,9 +171,9 @@ const AddDeptDescription = () => {
                                         <div>
                                             <input
                                                 type="button"
-                                                className="btn btn-outline-primary btn-sm mb-2"
+                                                className="btn btn-outline-success btn-sm mb-2"
                                                 onClick={handleAddSubDescription}
-                                                value="Add Sub Description"
+                                                value="+ Add Sub Description"
                                             />
                                             {subDescriptions.map((subDesc, index) => (
                                                 <div className="form-group row" key={index}>
