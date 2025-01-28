@@ -53,8 +53,6 @@ const contactRoutes = require('./routes/contactRoutes');
 const loginRoutes = require('./routes/loginRoutes');
 const visitorRoutes = require('./routes/visitorRoutes');
 const pondImageRoutes = require('./routes/pondImageRoutes');
-const conditionRoutes = require('./routes/conditionRoutes');
-const policyRoutes = require('./routes/policyRoutes');
 const emailRoutes = require('./routes/emailRoutes');
 const publicationRoutes = require('./routes/publicationRoutes');
 const downloadRoutes = require('./routes/downloadRoutes');
@@ -97,6 +95,12 @@ const deptPdfRoutes = require('./routes/deptPdfRoutes');
 const deptDescriptionRoutes = require('./routes/deptDescriptionRoutes');
 const administrativeRoutes = require('./routes/administrationRoutes');
 const annualfinancialRoutes = require('./routes/annualfinancialRoutes');
+const policyRoutes = require('./routes/policyRoutes');
+const hyperlinkRoutes = require('./routes/hyperlinkRoutes');
+const recruitmentRoutes = require('./routes/recruitmentRoutes');
+const rtsRoutes = require('./routes/rtsRoutes');
+const wardRoutes = require('./routes/wardRoutes');
+const contactUsRoutes = require('./routes/contactUsRoutes');
 
 
 app.use('/api', sliderRoutes);
@@ -144,8 +148,6 @@ app.use('/api', contactRoutes);
 app.use('/api', loginRoutes);
 app.use('/api', visitorRoutes);
 app.use('/api', pondImageRoutes);
-app.use('/api', conditionRoutes);
-app.use('/api', policyRoutes);
 app.use('/api', emailRoutes);
 app.use('/api', publicationRoutes);
 app.use('/api', downloadRoutes);
@@ -188,6 +190,12 @@ app.use('/api', deptPdfRoutes);
 app.use('/api', deptDescriptionRoutes);
 app.use('/api', administrativeRoutes);
 app.use('/api', annualfinancialRoutes);
+app.use('/api', policyRoutes);
+app.use('/api', hyperlinkRoutes);
+app.use('/api', recruitmentRoutes);
+app.use('/api', rtsRoutes);
+app.use('/api', wardRoutes);
+app.use('/api', contactUsRoutes);
 
 
 const PORT = process.env.PORT || 5011;

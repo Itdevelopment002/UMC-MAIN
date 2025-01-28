@@ -1,11 +1,37 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./PrivacyPolicy.css";
+import api from "../api";
 
 const PrivacyPolicy = () => {
+    const [policy, setPolicy] = useState([]);
+
     useEffect(() => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        fetchPolicy();
     }, []);
+
+    const fetchPolicy = async () => {
+        try {
+            const response = await api.get("/privacy-policy");
+            setPolicy(response.data);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    useEffect(() => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }, []);
+
+    // Group policies by their headings
+    const groupedPolicies = policy.reduce((acc, currentPolicy) => {
+        const { heading, description } = currentPolicy;
+        if (!acc[heading]) {
+            acc[heading] = [];
+        }
+        acc[heading].push(description);
+        return acc;
+    }, {});
 
     return (
         <>
@@ -27,38 +53,22 @@ const PrivacyPolicy = () => {
 
                     <div className="row">
                         <div className="col-12">
-                            <div className="mb-4">
-                                <h5 className="privacy-h5-style">Disclaimer</h5>
-                                <p className="privacy-p-style">
-                                    Although information and contents of various departmental websites
-                                    on this portal have been provided with care and diligence,
-                                    Government of Maharashtra does not take responsibility on how
-                                    this information is used or the consequences of its use. In case
-                                    of any inconsistency/confusion, the user should contact the
-                                    concerned Department/Officer of the Government of Maharashtra for
-                                    further clarifications.
-                                </p>
-                            </div>
-                            <div>
-                                <h5 className="privacy-h5-style">Copyright Policy</h5>
-                                <p className="privacy-p-style">
-                                    Material featured on this portal may be reproduced free of charge
-                                    in any format or media without requiring specific permission. This
-                                    is subject to the material being reproduced accurately and not
-                                    being used in a derogatory manner or in a misleading context.
-                                    Where the material is being published or issued to others, the
-                                    source must be prominently acknowledged. However, the permission
-                                    to reproduce this material does not extend to any material on this
-                                    site which is identified as being the copyright of the third
-                                    party.
-                                </p>
-                            </div>
+                            {Object.entries(groupedPolicies).map(([heading, descriptions]) => (
+                                <div key={heading} className="mb-4">
+                                    <h5 className="privacy-h5-style">{heading}</h5>
+                                    {descriptions.map((description, index) => (
+                                        <p key={index} className="privacy-p-style">
+                                            {description}
+                                        </p>
+                                    ))}
+                                </div>
+                            ))}
                         </div>
                     </div>
                 </div>
             </div>
         </>
-    )
-}
+    );
+};
 
 export default PrivacyPolicy;

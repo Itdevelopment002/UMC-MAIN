@@ -1,58 +1,23 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./Recruitment.css";
+import api from "../api"
 
 const Recruitment = () => {
+  const [recruitment, setRecruitment] = useState([]);
 
-  //   const menuItems = [
-  //     "Citizens' Charters",
-  //     "Corporators",
-  //     "Submit Tenders",
-  //     "Quotations",
-  //     "Budget",
-  //     "Department",
-  //     "Ward Offices",
-  //     "Circulars",
-  //   ];
+  useEffect(() => {
+    fetchRecruitment();
+  }, []);
 
-  const recruitment = [
-    {
-      advertise: "Public notice about walk in interview at UMC",
-      posting: "12-10-2024",
-    },
-    {
-      advertise: "Recruitment of accountant post on contract for UMC",
-      posting: "15-10-2024",
-    },
-    {
-      advertise: "Walk in interview for yoga teacher",
-      posting: "17-10-2024",
-    },
-    {
-      advertise: "Instruction about recruitment under NUHM",
-      posting: "22-10-2024",
-    },
-    {
-      advertise: "Selection and waiting list of post of the counsellor",
-      posting: "25-10-2024",
-    },
-    {
-      advertise: "Walk in interview for the post of recruiment at Divyanga Bhavan",
-      posting: "01-11-2024",
-    },
-    {
-      advertise: "Recruitment on contract for the post of teachers",
-      posting: "05-11-2024",
-    },
-    {
-      advertise: "Appointment of consultant on contract for UMC Zoo",
-      posting: "08-11-2024",
-    },
-    {
-      advertise: "Recruitment on contract under NUHM fro part time work",
-      posting: "15-11-2024",
-    },
-  ];
+  const fetchRecruitment = async () => {
+    try {
+      const response = await api.get("/recruitment");
+      setRecruitment(response.data.reverse());
+    } catch (error) {
+      console.error("Error fetching recruitment:", error);
+    }
+  };
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -98,7 +63,7 @@ const Recruitment = () => {
                 </thead>
                 <tbody>
                   {recruitment.map((item, index) => (
-                    <tr key={index}>
+                    <tr key={item.id}>
                       <td
                         className="font-large"
                         width="8%"
@@ -119,7 +84,7 @@ const Recruitment = () => {
                           color: "#000000",
                         }}
                       >
-                        {item.advertise}
+                        {item.description}
                       </td>
                       <td
                         width="20%"
@@ -130,7 +95,13 @@ const Recruitment = () => {
                           textAlign: "center"
                         }}
                       >
-                        {item.posting}
+                        {new Date(item.publish_date)
+                          .toLocaleDateString("en-GB", {
+                            day: "2-digit",
+                            month: "2-digit",
+                            year: "numeric",
+                          })
+                          .replace(/\//g, "-")}
                       </td>
                     </tr>
                   ))}
