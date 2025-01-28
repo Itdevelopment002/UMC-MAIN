@@ -15,6 +15,12 @@ import { MdPrivacyTip } from "react-icons/md";
 import { BiMessageSquareError } from "react-icons/bi";
 import { MdContactMail } from "react-icons/md";
 import { MdNotificationsActive } from "react-icons/md";
+import { FaHome } from "react-icons/fa";
+import { MdOutlineCorporateFare } from "react-icons/md";
+import { FaPersonCirclePlus } from "react-icons/fa6";
+import { PiComputerTowerBold } from "react-icons/pi";
+import { GoChecklist } from "react-icons/go";
+import { BsPersonFillCheck } from "react-icons/bs";
 
 const Sidebar = ({ isOpen, closeSidebar, userDepartment }) => {
   const [openSubmenu, setOpenSubmenu] = useState(null);
@@ -55,7 +61,7 @@ const Sidebar = ({ isOpen, closeSidebar, userDepartment }) => {
                   <li className="submenu">
                     <Link to="#." onClick={() => toggleSubmenu("home")}>
                       <i className="fa">
-                        <GrServices />
+                        <FaHome />
                       </i>{" "}
                       <span>Home </span>{" "}
                       <span
@@ -184,12 +190,44 @@ const Sidebar = ({ isOpen, closeSidebar, userDepartment }) => {
                           Bottom Slider
                         </Link>
                       </li>
+                      {/* <li
+                        className={activeItem === "/swms" ? "active" : ""}
+                        onClick={() => handleItemClick("/swms")}
+                      >
+                        <Link to="/swms">
+                          Solid Waste Management System
+                        </Link>
+                      </li> */}
+                      <li
+                        className={activeItem === "/press-note" ? "active" : ""}
+                        onClick={() => handleItemClick("/press-note")}
+                      >
+                        <Link to="/press-note">
+                          Press Note
+                        </Link>
+                      </li>
+                      {/* <li
+                        className={activeItem === "/property-tax-department" ? "active" : ""}
+                        onClick={() => handleItemClick("/property-tax-department")}
+                      >
+                        <Link to="/property-tax-department">
+                          Property Tax Department
+                        </Link>
+                      </li>
+                      <li
+                        className={activeItem === "/rti" ? "active" : ""}
+                        onClick={() => handleItemClick("/rti")}
+                      >
+                        <Link to="/rti">
+                          Right to Information
+                        </Link>
+                      </li> */}
                     </ul>
                   </li>
                   <li className="submenu">
                     <Link to="#." onClick={() => toggleSubmenu("about")}>
                       <i className="fa">
-                        <GrServices />
+                        <BsFillMenuButtonWideFill />
                       </i>{" "}
                       <span>About UMC </span>{" "}
                       <span
@@ -237,7 +275,7 @@ const Sidebar = ({ isOpen, closeSidebar, userDepartment }) => {
                   <li className="submenu">
                     <Link to="#." onClick={() => toggleSubmenu("corporation")}>
                       <i className="fa">
-                        <GrServices />
+                        <MdOutlineCorporateFare />
                       </i>{" "}
                       <span>Corporation </span>{" "}
                       <span
@@ -266,9 +304,7 @@ const Sidebar = ({ isOpen, closeSidebar, userDepartment }) => {
                   </li>
                   <li className="submenu">
                     <Link to="#." onClick={() => toggleSubmenu("departments")}>
-                      <i className="fa">
-                        <GrServices />
-                      </i>{" "}
+                      <i className="fa fa-calendar-check-o"></i>{" "}
                       <span>Departments </span>{" "}
                       <span
                         className={`menu-arrow ${openSubmenu === "departments" ? "rotate" : ""
@@ -294,29 +330,62 @@ const Sidebar = ({ isOpen, closeSidebar, userDepartment }) => {
                       </li>
                     </ul>
                   </li>
+                  <li className="submenu">
+                    <Link to="#." onClick={() => toggleSubmenu("citizen-services")}>
+                      <i className="fa">
+                        <GrServices />
+                      </i>{" "}
+                      <span>Citizen Services </span>{" "}
+                      <span
+                        className={`menu-arrow ${openSubmenu === "citizen-services" ? "rotate" : ""
+                          }`}
+                      ></span>
+                    </Link>
+                    <ul className={openSubmenu === "citizen-services" ? "open" : ""}>
+                      <li
+                        className={activeItem === "/tenders-quotations" ? "active" : ""}
+                        onClick={() => handleItemClick("/tenders-quotations")}
+                      >
+                        <Link to="/tenders-quotations">
+                          Tenders and Quotations
+                        </Link>
+                      </li>
+                    </ul>
+                  </li>
                   <li
                     className={activeItem === "/rts" ? "active" : ""}
                     onClick={() => handleItemClick("/rts")}
                   >
                     <Link to="/rts">
                       <i className="fa">
-                        <MdMiscellaneousServices />
+                        <BsPersonFillCheck />
                       </i>{" "}
                       Right to Service
                     </Link>
                   </li>
-                  {/* <li
+                  <li
                     className={activeItem === "/recruitment" ? "active" : ""}
                     onClick={() => handleItemClick("/recruitment")}
                   >
                     <Link to="/recruitment">
                       <i className="fa">
-                        <MdMiscellaneousServices />
+                        <FaPersonCirclePlus />
                       </i>{" "}
                       Recruitment
                     </Link>
                   </li>
                   <li
+                    className={activeItem === "/contact-us" ? "active" : ""}
+                    onClick={() => handleItemClick("/contact-us")}
+                  >
+                    <Link to="/contact-us">
+                      <i className="fa">
+                        <MdContactMail />
+                      </i>{" "}
+                      Contact Us
+                    </Link>
+                  </li>
+                  {/* <li
                     className={activeItem === "/privacy-policy" ? "active" : ""}
                     onClick={() => handleItemClick("/privacy-policy")}
                   >
@@ -337,25 +406,15 @@ const Sidebar = ({ isOpen, closeSidebar, userDepartment }) => {
                       </i>{" "}
                       Hyperlink Policy
                     </Link>
-                  </li>
-                  <li
-                    className={activeItem === "/contact-us" ? "active" : ""}
-                    onClick={() => handleItemClick("/contact-us")}
-                  >
-                    <Link to="/contact-us">
-                      <i className="fa">
-                        <MdMiscellaneousServices />
-                      </i>{" "}
-                      Contact Us
-                    </Link>
                   </li> */}
+
                   <li
                     className={activeItem === "/footer" ? "active" : ""}
                     onClick={() => handleItemClick("/footer")}
                   >
                     <Link to="/footer">
                       <i className="fa">
-                        <MdMiscellaneousServices />
+                        <PiComputerTowerBold />
                       </i>{" "}
                       Footer
                     </Link>
