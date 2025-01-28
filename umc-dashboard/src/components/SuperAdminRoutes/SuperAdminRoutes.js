@@ -147,6 +147,16 @@ import AddContact from "../ContactUs/AddContact";
 import AddWard from "../ContactUs/AddWard";
 import AddRightToService from "../RightToService/AddRightToService";
 import RightToService from "../RightToService/RightToService";
+import SolidWasteSystem from "../SolidWasteSystem/SolidWasteSystem";
+import AddSolidWasteSystem from "../SolidWasteSystem/AddSolidWasteSystem";
+import Tenders from "../Tenders/Tenders";
+import AddTenders from "../Tenders/AddTenders";
+import PressNote from "../PressNote/PressNote";
+import AddPressNote from "../PressNote/AddPressNote";
+import PropertyTaxDept from "../PropertyTaxDept/PropertyTaxDept";
+import AddPropertyTaxDept from "../PropertyTaxDept/AddPropertyTaxDept";
+import RTI from "../RTI/RTI";
+import AddRTI from "../RTI/AddRTI";
 
 
 function SuperAdminRoutes() {
@@ -262,6 +272,16 @@ function SuperAdminRoutes() {
         <Route path="/contact-us" element={<Contact />} />
         <Route path="/rts" element={<RightToService />} />
         <Route path="/add-rts" element={<AddRightToService />} />
+        <Route path="/swms" element={<SolidWasteSystem />} />
+        <Route path="/add-swms" element={<AddSolidWasteSystem />} />
+        <Route path="/tenders-quotations" element={<Tenders />} />
+        <Route path="/add-tenders-quotations" element={<AddTenders />} />
+        <Route path="/press-note" element={<PressNote />} />
+        <Route path="/add-press-note" element={<AddPressNote />} />
+        <Route path="/property-tax-department" element={<PropertyTaxDept />} />
+        <Route path="/add-property-tax-department" element={<AddPropertyTaxDept />} />
+        <Route path="/rti" element={<RTI />} />
+        <Route path="/add-rti" element={<AddRTI />} />
 
           
         {/* <Route path="/add-user" element={<AddUsers />} />
