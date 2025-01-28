@@ -101,6 +101,11 @@ const recruitmentRoutes = require('./routes/recruitmentRoutes');
 const rtsRoutes = require('./routes/rtsRoutes');
 const wardRoutes = require('./routes/wardRoutes');
 const contactUsRoutes = require('./routes/contactUsRoutes');
+const swmsRoutes = require('./routes/swmsRoutes');
+const tenderQuotationRoutes = require('./routes/tenderQuotationRoutes');
+const pressNotesRoutes = require('./routes/pressNotesRoutes');
+const propertyDeptRoutes = require('./routes/propertyDeptRoutes');
+const rtiRoutes = require('./routes/rtiRoutes');
 
 
 app.use('/api', sliderRoutes);
@@ -196,6 +201,11 @@ app.use('/api', recruitmentRoutes);
 app.use('/api', rtsRoutes);
 app.use('/api', wardRoutes);
 app.use('/api', contactUsRoutes);
+app.use('/api', swmsRoutes);
+app.use('/api', tenderQuotationRoutes);
+app.use('/api', pressNotesRoutes);
+app.use('/api', propertyDeptRoutes);
+app.use('/api', rtiRoutes);
 
 
 const PORT = process.env.PORT || 5011;

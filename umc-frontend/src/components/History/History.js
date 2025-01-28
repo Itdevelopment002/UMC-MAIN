@@ -4,7 +4,6 @@ import api, { baseURL } from "../api";
 import { Link } from "react-router-dom";
 const History = () => {
   const [gallerys, setGallerys] = useState([]);
-  const [desc, setDesc] = useState([]);
   const [firstTwo, setFirstTwo] = useState([]);
   const [remainingDesc, setRemainingDesc] = useState([]);
 
@@ -27,9 +26,8 @@ const History = () => {
   const fetchDesc = async () => {
     try {
       const response = await api.get("/history_desc");
-      setDesc(response.data);
       setFirstTwo(response.data.slice(0, 2));
-      setRemainingDesc(response.data.slice(2)); 
+      setRemainingDesc(response.data.slice(2));
     } catch (error) {
       console.error("Error fetching desc.");
     }

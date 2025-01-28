@@ -1,17 +1,25 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import pdficon from '../../assets/images/Departments/document 1.png';
 import './PTDept.css';
 import "../TableCss/TableCss.css";
 import Swal from "sweetalert2";
+import api from "../api";
 
 const PTDept = () => {
-    const ptdept = [
-        { description: "List of over one lakh property tax arrears holders 06/04/2022", link: "https://drive.google.com/file/d/1PtACAtc7m09lhBCi1JcUlvruOzQkJE7d/view?usp=drive_link", action: "View PDF" },
-        { description: "List of Defaulters over one lakh property tax arrears holders", link: "https://drive.google.com/file/d/1HjMo_dOdW2LiH6Y0jKkXcDJxBDeyaW0v/view?usp=drive_link", action: "View PDF" },
-    ];
+    const [tax, setTax] = useState([]);
+
+    const fetchTax = async()=>{
+        try{
+            const response = await api.get("/property-dept");
+            setTax(response.data.reverse());
+        } catch(error){
+            console.error("Error fetching property tax data", error);
+        }
+    };
 
     useEffect(() => {
+        fetchTax();
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }, []);
 
@@ -71,7 +79,7 @@ const PTDept = () => {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {ptdept.map((item, index) => (
+                                        {tax.map((item, index) => (
                                             <tr key={index}>
                                                 <td
                                                     className="font-large"
@@ -121,7 +129,7 @@ const PTDept = () => {
                                                                 verticalAlign: "middle",
                                                             }}
                                                         />
-                                                        {item.action}
+                                                        View Pdf
                                                     </Link>
                                                 </td>
                                             </tr>
