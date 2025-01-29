@@ -1,22 +1,23 @@
 import React, { useState, useEffect } from "react";
 import "./Carousel.css";
-import AOS from 'aos';
-import 'aos/dist/aos.css';
+import AOS from "aos";
+import "aos/dist/aos.css";
 import api, { baseURL } from "../api";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Pagination, Autoplay, EffectFade } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import "swiper/css/effect-fade";
 
 const Carousel = () => {
   useEffect(() => {
-    AOS.init({
-      duration: 350,
-      delay: 100,
-      once: true,
-    });
+    AOS.init({ duration: 350, delay: 100, once: true });
   }, []);
 
   const backgroundColors = ["#E0F8F2", "#EEECFF", "#FAEDED"];
   const [sliders, setSliders] = useState([]);
   const [ministers, setMinisters] = useState([]);
-  const [currentSlide, setCurrentSlide] = useState(0);
 
   const fetchSliders = async () => {
     try {
@@ -41,20 +42,6 @@ const Carousel = () => {
     fetchMinisters();
   }, []);
 
-  useEffect(() => {
-    if (sliders.length === 0) return;
-
-    const interval = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % sliders.length);
-    }, 3000);
-
-    return () => clearInterval(interval);
-  }, [sliders.length]);
-
-  const handleSlideChange = (index) => {
-    setCurrentSlide(index);
-  };
-
   return (
     <div className="container-fluid">
       <div className="row home-carousel-section">
@@ -75,25 +62,26 @@ const Carousel = () => {
         </div>
 
         <div className="col-md-12 col-lg-8 col-xl-8 col-xxl-9 col-12">
-          <div className="carousel-image-slider position-relative">
-            {sliders.length > 0 && (
-              <img
-                src={`${baseURL}/${sliders[currentSlide]?.file_path}`}
-                alt={sliders[currentSlide]?.slider_name || "Slide"}
-                className="img-fluid rounded"
-              />
-            )}
-
-            <div className="dot-container">
-              {sliders.map((_, index) => (
-                <span
-                  key={index}
-                  className={`dot ${currentSlide === index ? "active" : ""}`}
-                  onClick={() => handleSlideChange(index)}
-                ></span>
-              ))}
-            </div>
-          </div>
+          <Swiper
+            modules={[Navigation, Pagination, Autoplay, EffectFade]}
+            navigation
+            pagination={{ clickable: true }}
+            autoplay={{ delay: 4000, disableOnInteraction: false }}
+            loop={true}
+            effect="fade"
+            speed={1000}
+            className="carousel-image-slider mt-2"
+          >
+            {sliders.map((slide, index) => (
+              <SwiperSlide key={index}>
+                <img
+                  src={`${baseURL}/${slide.file_path}`}
+                  alt={slide.slider_name || "Slide"}
+                  className="img image-4 rounded"
+                />
+              </SwiperSlide>
+            ))}
+          </Swiper>
         </div>
       </div>
     </div>
@@ -102,7 +90,7 @@ const Carousel = () => {
 
 const ProfileCard = ({ name, position, image, bgColor }) => {
   return (
-    <div className='custom-profile-card' style={{ backgroundColor: bgColor }} >
+    <div className="custom-profile-card" style={{ backgroundColor: bgColor }}>
       <div className="d-flex align-items-center">
         <img src={image} alt={name} className="me-3 image" />
         <div>
