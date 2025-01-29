@@ -103,7 +103,7 @@ const AddContact = () => {
                         <input
                           type="text"
                           className={`form-control form-control-md ${
-                            errors.coName ? "is-invalid" : ""
+                            errors.heading ? "is-invalid" : ""
                           }`}
                           name="heading"
                           value={formData.heading}

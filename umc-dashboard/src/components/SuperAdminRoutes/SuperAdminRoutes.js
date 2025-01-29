@@ -173,6 +173,14 @@ import PropertyTaxDept from "../PropertyTaxDept/PropertyTaxDept";
 import AddPropertyTaxDept from "../PropertyTaxDept/AddPropertyTaxDept";
 import RTI from "../RTI/RTI";
 import AddRTI from "../RTI/AddRTI";
+import AddWomenCommittee from "../UmcCommittee/AddWomenCommittee";
+import AddWardCommittee from "../UmcCommittee/AddWardCommittee";
+import AddStandingCommittee from "../UmcCommittee/AddStandingCommittee";
+import UmcCommittee from "../UmcCommittee/UmcCommitttee";
+import AddCirculars from "../Circulars/AddCirculars";
+import Circulars from "../Circulars/Circulars";
+import AddOnlineHomeServices from "../OnlineHomeServices/AddOnlineHomeServices";
+import OnlineHomeServices from "../OnlineHomeServices/OnlineHomeServices";
 
 
 function SuperAdminRoutes() {
@@ -314,6 +322,14 @@ function SuperAdminRoutes() {
         <Route path="/add-property-tax-department" element={<AddPropertyTaxDept />} />
         <Route path="/rti" element={<RTI />} />
         <Route path="/add-rti" element={<AddRTI />} />
+        <Route path="/umc-committee" element={<UmcCommittee />} />
+        <Route path="/add-standing-committee" element={<AddStandingCommittee />} />
+        <Route path="/add-women-committee" element={<AddWomenCommittee />} />
+        <Route path="/add-ward-committee" element={<AddWardCommittee />} />
+        <Route path="/circulars" element={<Circulars />} />
+        <Route path="/add-circulars" element={<AddCirculars />} />
+        <Route path="/online-home-services" element={<OnlineServices />} />
+        <Route path="/add-online-home-services" element={<AddOnlineServices />} />
 
           
         {/* <Route path="/add-user" element={<AddUsers />} />
