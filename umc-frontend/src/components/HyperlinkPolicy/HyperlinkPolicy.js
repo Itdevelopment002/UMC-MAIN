@@ -1,8 +1,24 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./HyperlinkPolicy.css";
+import api from "../api";
 
 const HyperlinkPolicy = () => {
+    const [policy, setPolicy] = useState([]);
+
+    useEffect(() => {
+        fetchPolicy();
+    }, []);
+
+    const fetchPolicy = async () => {
+        try {
+            const response = await api.get("/hyperlink-policy");
+            setPolicy(response.data);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
     useEffect(() => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }, []);
@@ -28,23 +44,11 @@ const HyperlinkPolicy = () => {
                     <div className="row mt-4">
                         <div className="col-12">
                             <div>
-                                <p>
-                                    "We do not object to you linking directly to the information
-                                    that is hosted on our site and no prior permission is required
-                                    for the same. However, we would like you to inform us about any
-                                    links provided to our site so that you can be informed of any
-                                    changes or updation therein. Also, we do not permit our pages to
-                                    be loaded into frames on your site. Our Department's pages MUST
-                                    load into a newly opened browser window of the user".
-                                </p>
-                                <p>
-                                    "Prior permission is required before hyperlinks are directed
-                                    from any website to this site. Permission for the same, stating
-                                    the nature of the content on the pages from where the link has
-                                    to be given and the exact language of the Hyperlink should be
-                                    obtained by sending a request at Email address of the
-                                    Department".
-                                </p>
+                                {policy.map((policy) => (
+                                    <React.Fragment key={policy.id}>
+                                        <p>{policy.description}</p>
+                                    </React.Fragment>
+                                ))}
                             </div>
                         </div>
                     </div>

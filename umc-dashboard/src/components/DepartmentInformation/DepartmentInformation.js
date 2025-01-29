@@ -87,7 +87,7 @@ const DepartmentInformation = () => {
     const fetchPdfData = async () => {
         try {
             const response = await api.get("/department-pdfs");
-            const sortedData = response.data.sort((a, b) => a.department.localeCompare(b.department));
+            const sortedData = response.data.reverse().sort((a, b) => a.department.localeCompare(b.department));
             setPdfData(sortedData);
         } catch (error) {
             toast.error("Failed to fetch pdf data!");

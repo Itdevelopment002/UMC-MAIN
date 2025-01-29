@@ -114,22 +114,22 @@ const TermsAndpolicys = () => {
                     <table className="table table-bordered m-b-0">
                       <thead>
                         <tr>
-                          <th width="10%">Sr. No.</th>
-                          <th>Heading</th>
-                          <th>Description</th>
-                          <th width="15%">Action</th>
+                          <th width="10%" className="text-center">Sr. No.</th>
+                          <th>Policy Heading</th>
+                          <th>Policy Description</th>
+                          <th width="15%" className="text-center">Action</th>
                         </tr>
                       </thead>
                       <tbody>
                         {currentPageData.length > 0 ? (
                           currentPageData.map((policy, index) => (
                             <tr key={policy.id}>
-                              <td>
+                              <td className="text-center">
                                 {(currentPage - 1) * itemsPerPage + index + 1}
                               </td>
                               <td>{policy.heading}</td>
                               <td>{policy.description}</td>
-                              <td>
+                              <td className="text-center">
                                 <button
                                   className="btn btn-success btn-sm m-t-10"
                                   onClick={() => handleEditClick(policy)}
@@ -220,7 +220,7 @@ const TermsAndpolicys = () => {
                   <div className="modal-body">
                     <form>
                       <div className="mb-3">
-                        <label className="form-label">Heading</label>
+                        <label className="form-label">Policy Heading</label>
                         <input
                           type="text"
                           className="form-control form-control-md"
@@ -230,7 +230,7 @@ const TermsAndpolicys = () => {
                         />
                       </div>
                       <div className="mb-3">
-                        <label className="form-label">Description</label>
+                        <label className="form-label">Policy Description</label>
                         <textarea
                           className="form-control form-control-md"
                           name="description"
