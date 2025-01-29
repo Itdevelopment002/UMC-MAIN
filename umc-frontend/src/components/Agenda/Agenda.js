@@ -1,22 +1,37 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "./Agenda.css";
+import api from "../api";
 import pdficon from '../../assets/images/Departments/document 1.png';
 import Swal from 'sweetalert2';
 
-const agenda = [
-    { name: "jhhfh", number: "122323", date: "2022-06-15", notice: "Resolutions", link: "#", posting: "View PDF" },
-    { name: "Municipal Secretary Department", number: "Agenda 2020", date: "2020-11-27", notice: "Resolutions 2021-06-23", link: "https://drive.google.com/file/d/1vnE98rOjDDfy4zc_XVpZyGOFOiTmcJmf/view?usp=drive_link", posting: "View PDF" },
-];
+// const agenda = [
+//     { name: "jhhfh", number: "122323", date: "2022-06-15", notice: "Resolutions", link: "#", posting: "View PDF" },
+//     { name: "Municipal Secretary Department", number: "Agenda 2020", date: "2020-11-27", notice: "Resolutions 2021-06-23", link: "https://drive.google.com/file/d/1vnE98rOjDDfy4zc_XVpZyGOFOiTmcJmf/view?usp=drive_link", posting: "View PDF" },
+// ];
 
 const Agenda = () => {
+        const [agenda, setAgenda] = useState([]);
+        useEffect(() => {
+            fetchAgenda();
+        }, []);
+    
+        const fetchAgenda = async () => {
+            try {
+                const response = await api.get("/agenda_data");
+                setAgenda(response.data);
+            } catch (error) {
+                console.error("Error fetching agenda:", error);
+            }
+        };
+    
     const [itemsPerPage, setItemsPerPage] = useState(10);
     const [currentPage, setCurrentPage] = useState(1);
     //eslint-disable-next-line
     const [searchTerm, setSearchTerm] = useState("");
     const totalEntries = agenda.length;
     const filteredData = agenda.filter((item) =>
-        item.name.toLowerCase().includes(searchTerm.toLowerCase())
+        item.Department_Name.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     const totalPages = Math.ceil(filteredData.length / itemsPerPage);
@@ -150,7 +165,7 @@ const Agenda = () => {
                                                         color: "#292D32",
                                                     }}
                                                 >
-                                                    {item.name}
+                                                    {item.Department_Name}
                                                 </td>
                                                 <td
                                                     width="20%"
@@ -160,7 +175,7 @@ const Agenda = () => {
                                                         color: "#292D32",
                                                     }}
                                                 >
-                                                    {item.number}
+                                                    {item.Agenda_No_Date}
                                                 </td>
                                                 <td
                                                     width="20%"
@@ -170,7 +185,7 @@ const Agenda = () => {
                                                         color: "#292D32",
                                                     }}
                                                 >
-                                                    {item.date}
+                                                   {new Date(item.Schedule_Date_of_Meeting).toLocaleDateString('en-CA')}
                                                 </td>
                                                 <td
                                                     width="20%"
@@ -180,7 +195,7 @@ const Agenda = () => {
                                                         color: "#292D32",
                                                     }}
                                                 >
-                                                    {item.notice}
+                                                    {item.Adjournment_Notice}
                                                 </td>
                                                 <td
                                                     width="10%"
@@ -192,9 +207,9 @@ const Agenda = () => {
                                                     }}
                                                 >
                                                     <Link
-                                                        to={item.link}
+                                                        to={item.pdf_link}
                                                         className="text-decoration-none"
-                                                        target={item.link === "#" ? "" : "_blank"}
+                                                        target={item.pdf_link === "#" ? "" : "_blank"}
                                                         style={{ color: "#333333" }}
                                                         onClick={(e) => handleClick(item.link, e)}
                                                     >
@@ -208,7 +223,7 @@ const Agenda = () => {
                                                                 verticalAlign: "middle",
                                                             }}
                                                         />
-                                                        {item.posting}
+                                                        View PDF
                                                     </Link>
                                                 </td>
                                             </tr>
