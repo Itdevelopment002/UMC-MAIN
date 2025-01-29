@@ -301,39 +301,39 @@ const Sidebar = ({ isOpen, closeSidebar, userDepartment }) => {
                           Annual Financial
                         </Link>
                       </li>
-                      <li
+                      {/* <li
                         className={activeItem === "/elected-member" ? "active" : ""}
                         onClick={() => handleItemClick("/elected-member")}
                       >
                         <Link to="/elected-member">
                           Elected Member
                         </Link>
-                      </li>
-                      {/* <li
+                      </li> */}
+                      <li
                         className={activeItem === "/enews-letter" ? "active" : ""}
                         onClick={() => handleItemClick("/enews-letter")}
                       >
                         <Link to="/enews-letter">
                           e-News Letter
                         </Link>
-                      </li> */}
+                      </li>
                       
-                      {/* <li
+                      <li
                         className={activeItem === "/muncipal-meeting" ? "active" : ""}
                         onClick={() => handleItemClick("/muncipal-meeting")}
                       >
                         <Link to="/muncipal-meeting">
                           Muncipal Meeting
                         </Link>
-                      </li> */}
-                      <li
+                      </li>
+                      {/* <li
                         className={activeItem === "/agenda" ? "active" : ""}
                         onClick={() => handleItemClick("/agenda")}
                       >
                         <Link to="/agenda">
                           UMC Agenda
                         </Link>
-                      </li>
+                      </li> */}
                       {/* <li
                         className={activeItem === "/budgets" ? "active" : ""}
                         onClick={() => handleItemClick("/budgets")}
