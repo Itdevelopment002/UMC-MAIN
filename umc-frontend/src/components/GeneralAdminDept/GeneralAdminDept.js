@@ -11,25 +11,6 @@ import cicon6 from "../../assets/images/Departments/Vector (7).png";
 import pdficon from '../../assets/images/Departments/document 1.png';
 import api, {baseURL} from "../api";
 
-const employeesData1 = [
-  { title: "स्वच्छता निरिक्षक या संवर्गातील पदोन्नती बाबत", link: "https://drive.google.com/file/d/1ZHzt1xdJI16X6GAUWJWXpnK2Jng6dwVt/view?usp=drive_link", action: "View PDF", },
-  { title: "सुधारित बडतर्फ आदेश - 2021-22", link: "#", action: "View PDF", },
-  { title: "विभागीय परीक्षेचे वेळापत्रक व परीक्षार्थी फॉर्म", link: "https://drive.google.com/file/d/1rgftD3TtQPlnRG87ZS_GYo1Fy1bS1WOj/view?usp=drive_link", action: "View PDF", },
-  { title: "विभागीय परीक्षेचे वेळापत्रक व परीक्षार्थी फॉर्म.", link: "https://drive.google.com/file/d/1X9AJfv9kO_asN9gkp4eyYHg4ok2bKPsr/view?usp=drive_link", action: "View PDF", },
-  { title: "महापालिकेच्या संकेतस्थळावर \"मुकादम (बांधकाम)\" पदावर पदोन्नती देण्याबाबत अंतिम यादीबाबत", link: "https://drive.google.com/file/d/1xM2tWWXJD_j60KDLpfvrtORGD6zLZvjD/view?usp=drive_link", action: "View PDF", },
-  { title: "महापालिका आस्थापनेवरील अधिक्षक या संवर्गाची १ जानेवारी २०२२ ची अंतिम सेवाजेष्ठता यादी प्रसिद्ध करणेबाबत", link: "https://drive.google.com/file/d/1n_xxG_ZBc5R5WiteCELGq4R0JT2d-PK8/view?usp=drive_link", action: "View PDF", },
-  { title: "महापालिका आस्थापनेवर कार्यरत कनिष्ठ अभियंता (स्थापत्य) या संवर्गाची ०१ जानेवारी २०२२ ची अंतिम सेवाजेष्ठत यादी प्रसिद्ध करणेबाबत", link: "https://drive.google.com/file/d/16fzmF_Po5TR5EaFmcfPBgbCuKZ_m5KEW/view?usp=drive_link", action: "View PDF", },
-  { title: "प्रारूप सेवा जेष्ठता यादी २०२३- वर्ग - १,२,३,४", link: "https://drive.google.com/file/d/1ineO0sRYpoJGGQgBfQEWbzTnw6BK1Otj/view?usp=drive_link", action: "View PDF", },
-  { title: "अंतिम सेवाजेष्ठता यादी २०२२ वर्ग-४ (Final Seniority List Class 4 2022)", link: "https://drive.google.com/file/d/1G2YdzXrdq-OyGJpFQvzGG8_aF0DTUKQ6/view?usp=drive_link", action: "View PDF", },
-  { title: "अंतिम सेवाजेष्ठता यादी २०२२ वर्ग-३ (Final Seniority List Class 3 2022)", link: "#", action: "View PDF", },
-  { title: "अंतिम सेवाजेष्ठता यादी २०२२ वर्ग-२ (Final Seniority List Class 2 2022)", link: "#", action: "View PDF", },
-  { title: "अंतिम सेवाजेष्ठता यादी २०२२ वर्ग-१ (Final Seniority List Class 1 2022)", link: "#", action: "View PDF", },
-  { title: "Seniority List Class 4 2022 (प्रारूप)", link: "https://drive.google.com/file/d/1VnLEqs6vtJeZDmkUy5m4Xm7sX58u5ssx/view?usp=drive_link", action: "View PDF", },
-  { title: "Seniority List Class 3 2022 (प्रारूप)", link: "https://drive.google.com/file/d/1R8zOQ1HrmP1z_-xNr1PR3yWyge7THo78/view?usp=drive_link", action: "View PDF", },
-  { title: "Seniority List Class 2 2022 (प्रारूप)", link: "https://drive.google.com/file/d/1jnQarTrEAUYTp1tr6d0dYcIGKZz4NMV1/view?usp=drive_link", action: "View PDF", },
-  { title: "Seniority List Class 1 2022 (प्रारूप)", link: "https://drive.google.com/file/d/16K-9Nv_T196Bg-aq5VofmgAoORfj6wpV/view?usp=drive_link", action: "View PDF", },
-];
-
 const ITEMS_PER_PAGE = 10;
 
 const GeneralAdminDepartment = () => {
@@ -123,7 +104,7 @@ const GeneralAdminDepartment = () => {
   const fetchPdf = async () => {
     try {
       const response = await api.get("/department-pdfs");
-      const filteredData = response.data.filter((item) => item.department === department_name);
+      const filteredData = response.data.reverse().filter((item) => item.department === department_name);
       setPdf(filteredData);
     } catch (error) {
       console.error("Error fetching pdfs data", error);

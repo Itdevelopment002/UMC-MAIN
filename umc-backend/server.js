@@ -53,8 +53,6 @@ const contactRoutes = require('./routes/contactRoutes');
 const loginRoutes = require('./routes/loginRoutes');
 const visitorRoutes = require('./routes/visitorRoutes');
 const pondImageRoutes = require('./routes/pondImageRoutes');
-const conditionRoutes = require('./routes/conditionRoutes');
-const policyRoutes = require('./routes/policyRoutes');
 const emailRoutes = require('./routes/emailRoutes');
 const publicationRoutes = require('./routes/publicationRoutes');
 const downloadRoutes = require('./routes/downloadRoutes');
@@ -105,14 +103,17 @@ const eNewsRoutes = require('./routes/eNewsRoutes');
 const electedMemberRoutes = require('./routes/electedMemberRoutes');
 const budgetsRoutes = require('./routes/budgetsRoutes');
 const muncipalMeetingRoutes = require('./routes/muncipalMeetingRoutes');
-
-
-
-
-
-
-
-
+const policyRoutes = require('./routes/policyRoutes');
+const hyperlinkRoutes = require('./routes/hyperlinkRoutes');
+const recruitmentRoutes = require('./routes/recruitmentRoutes');
+const rtsRoutes = require('./routes/rtsRoutes');
+const wardRoutes = require('./routes/wardRoutes');
+const contactUsRoutes = require('./routes/contactUsRoutes');
+const swmsRoutes = require('./routes/swmsRoutes');
+const tenderQuotationRoutes = require('./routes/tenderQuotationRoutes');
+const pressNotesRoutes = require('./routes/pressNotesRoutes');
+const propertyDeptRoutes = require('./routes/propertyDeptRoutes');
+const rtiRoutes = require('./routes/rtiRoutes');
 
 
 app.use('/api', sliderRoutes);
@@ -160,8 +161,6 @@ app.use('/api', contactRoutes);
 app.use('/api', loginRoutes);
 app.use('/api', visitorRoutes);
 app.use('/api', pondImageRoutes);
-app.use('/api', conditionRoutes);
-app.use('/api', policyRoutes);
 app.use('/api', emailRoutes);
 app.use('/api', publicationRoutes);
 app.use('/api', downloadRoutes);
@@ -212,14 +211,17 @@ app.use('/api', eNewsRoutes);
 app.use('/api', electedMemberRoutes);
 app.use('/api', budgetsRoutes);
 app.use('/api', muncipalMeetingRoutes);
-
-
-
-
-
-
-
-
+app.use('/api', policyRoutes);
+app.use('/api', hyperlinkRoutes);
+app.use('/api', recruitmentRoutes);
+app.use('/api', rtsRoutes);
+app.use('/api', wardRoutes);
+app.use('/api', contactUsRoutes);
+app.use('/api', swmsRoutes);
+app.use('/api', tenderQuotationRoutes);
+app.use('/api', pressNotesRoutes);
+app.use('/api', propertyDeptRoutes);
+app.use('/api', rtiRoutes);
 
 
 const PORT = process.env.PORT || 5011;

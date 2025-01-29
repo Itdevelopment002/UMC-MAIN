@@ -22,7 +22,7 @@ const ETender = () => {
         "Know and Pay Property Tax Online.",
         "Read carefully terms and conditions displayed by bank before making payment."
       ],
-      url: "http://www.onlineumc.org.in:8080/umc/jsp/propertydues.jsp?id=4",
+      url: "https://umconlineservices.in/Payment/",
       image: PropertyTaximg,
     },
     {

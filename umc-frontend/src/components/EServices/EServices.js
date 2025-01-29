@@ -22,6 +22,7 @@ const EServices = () => {
   const [initiatives, setInitiatives] = useState([]);
   const [information, setInformation] = useState([]);
   const [projects, setProjects] = useState([]);
+  const [citzenServices, setCitizenServices] = useState([]);
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
@@ -42,7 +43,14 @@ const EServices = () => {
       console.error("Error Fetching umc news!", error);
     }
   };
-
+  const fetchcitizenServices = async () => {
+    try {
+      const response = await api.get("/citizen-services");
+      setCitizenServices(response.data);
+    } catch (error) {
+      console.error("Error fetching services:", error);
+    }
+  };
   const fetchServices = async () => {
     try {
       const response = await api.get("/eservices");
@@ -85,6 +93,7 @@ const EServices = () => {
     fetchInitiatives();
     fetchInformation();
     fetchProjects();
+    fetchcitizenServices();
   }, []);
 
   const tabData = [
@@ -108,39 +117,6 @@ const EServices = () => {
       name: "Election",
     },
   ];
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  // const information = [
-  //   { description: "Action Against Illegal Construction (1st July to 31st December 2020)", link: "https://drive.google.com/file/d/18MZleh2FJBHXdJBQqPcS1HJgggkHZqhK/view?usp=drive_link" },
-  //   { description: "Regularization of Unauthorized Structures", link: "https://drive.google.com/file/d/1jg9u-D3BwFP0k6w26gjAt0DDq4s9ScW1/view?usp=drive_link" },
-  //   { description: "Pollution Control Helpline: 18002331103", link: "https://drive.google.com/file/d/18mMgTmGmafEl8YyxciRTsu1T1nwCOAGP/view?usp=drive_link" },
-  //   { description: "Recycle Water Provision in DCR", link: "https://drive.google.com/file/d/11wcT95cXSkFskkSJ4zmlJUymmEp_3gUk/view?usp=drive_link" },
-  //   { description: "Assessment Guidelines", link: "https://drive.google.com/file/d/1f5goiw1ml4vh1zHeb34wkeHLQXgW8vTD/view?usp=drive_link" },
-  //   { description: "List of Dangerous Buildings Notice - 27th October 2021", link: "https://drive.google.com/file/d/1jVcPAW3VKT523Mz5bnrDdbN7gJlCfADa/view?usp=drive_link" },
-  //   { description: "Report - Illegal Banners, Hoardings, Notice Boards", link: "https://drive.google.com/file/d/1kBGXBm2efETEBsGLCogZWi7ZhIchOaYa/view?usp=drive_link" },
-  //   { description: "Dangerous Building Notice", link: "https://drive.google.com/file/d/1XAffoqCHoAGdyk_lfPHYENQsvKeww9K4/view?usp=drive_link" },
-  //   { description: "Dangerous Building Report", link: "https://drive.google.com/file/d/1R0wfxUWhd9SrU7_CZStuuYy0gGDlnwTt/view?usp=drive_link" },
-  //   { description: "Action Against Illegal Construction (1st July to 31st December 2020)", link: "https://drive.google.com/file/d/1fGNHCg1NZUfM2sUGvKG8k786hMpME4Mw/view?usp=drive_link" },
-  //   { description: "Action Against Illegal Banners and Posters", link: "https://drive.google.com/file/d/1j7mHse3Z6w4OACKmj7V5Ge40RzkQ4P0a/view?usp=drive_link" },
-  //   { description: "Dangerous Building List - 2020", link: "https://drive.google.com/file/d/1YJMRioRzRUEokt4R96VaYUGAB-7EHfhW/view?usp=drive_link" },
-  //   { description: "List of Illegal Constructions", link: "https://drive.google.com/file/d/18yXiPsFoDn28gksxE5QWrGEcBEPoofJ_/view?usp=drive_link" },
-  //   { description: "UMC Disaster Management Plan - 2020", link: "https://drive.google.com/file/d/1OHrYPZ5mmc6SYpOSAowv_JZM14Z-9wL8/view?usp=drive_link" },
-  //   { description: "Drainage Cleaning Report", link: "https://drive.google.com/file/d/1C2VlzaEDkf3wHy39Rcp24cur7Ge2v42t/view?usp=drive_link" },
-  //   { description: "List of Modifications to Town Planning (TP/DP)", link: "https://drive.google.com/file/d/1V7ZswSp4VZjuDfpBiYeqjJ-Fi31RVfj2/view?usp=drive_link" },
-  //   { description: "Public Notice Under Section 28(4) of Development Plan (DP)", link: "https://drive.google.com/file/d/1XIaZpCF-BqewxVbToKaShprMDafpSw1n/view?usp=drive_link" },
-  //   { description: "Citizen Charter", link: "https://drive.google.com/file/d/1ggzzeGO1_p-Py_6vipha9izHYoP39p2X/view?usp=drive_link" },
-  //   { description: "Property Tax Demand & Collection Book", link: "https://drive.google.com/file/d/1BHZK6UyeIZJ8YBSCXytCAci5PE8OAjOC/view?usp=drive_link" },
-  //   { description: "Action Report Against Unauthorized Posters, Banners, Hoardings, Flags, Arches, and Advertisement Boards in Ulhasnagar Municipal Corporation Area", link: "#" },
-  //   { description: "Budget Estimates for the Year 2022-2023", link: "#" },
-  //   { description: "Dismissal Order - 7th December 2021", link: "#" },
-  //   { description: "Pandal Permission", link: "#" },
-  //   { description: "List of Dangerous Buildings - 2019", link: "#" },
-  //   { description: "Click Here for Illegal Construction Complaint Status", link: "#" },
-  //   { description: "Revised Dismissal Order - 6th January 2022", link: "#" },
-  //   { description: "Demolition Action Report (1st January 2021 to 30th June 2021)", link: "#" },
-  //   { description: "Blood Donation", link: "#" },
-  //   { description: "Silence Zone List", link: "#" },
-  // ];
 
   const scrollContainerRef = useRef(null);
 
@@ -300,7 +276,7 @@ const EServices = () => {
             </div>
           </div>
         </div>
-        <div className="col-xl-3 col-lg-6 col-md-6 col-sm-12 e-services-margin right-section-font">
+        {/* <div className="col-xl-3 col-lg-6 col-md-6 col-sm-12 e-services-margin right-section-font">
           <div className="upcoming-projects bg-white p-2">
             <h5 className="p-2 h5-styling-div">Information</h5>
             <div className="scroll-wrapper">
@@ -397,6 +373,38 @@ const EServices = () => {
                 ))}
               </div>
             </div>
+          </div>
+        </div> */}
+        <div className="col-lg-6 col-md-12 col-sm-12">
+          <div className="citigen mt-1">
+            <div className="vertical-line"></div>
+            <div className="d-flex">
+              <h2 className="section-title">
+                Citizen <span className="subtitle">Services</span>
+              </h2>
+            </div>
+          </div>
+
+          <div className="row">
+            {citzenServices.map((service, index) => (
+              <div className="col-6 col-lg-3 col-md-4 col-sm-6 mb-4" key={index}>
+                <Link
+                  to={service.service_link}
+                  className="text-decoration-none"
+                  target={service.service_link.startsWith("/") ? "_self" : "_blank"}
+                  rel={service.service_link.startsWith("/") ? "" : "noopener noreferrer"}
+                >
+                  <div className="service-card text-center">
+                    <img
+                      src={`${baseURL}/${service.main_icon_path}`}
+                      alt={service.service_heading}
+                      className="service-image mb-3"
+                    />
+                    <h5 className="service-title">{service.service_heading}</h5>
+                  </div>
+                </Link>
+              </div>
+            ))}
           </div>
         </div>
       </div>

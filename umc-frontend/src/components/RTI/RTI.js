@@ -1,19 +1,24 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import pdficon from '../../assets/images/Departments/document 1.png';
 import "../TableCss/TableCss.css";
 import Swal from "sweetalert2";
+import api from "../api"
 
 const RTI = () => {
-    const rtis = [
-        { description: "RTI Disclosure for Year 2017", link: "#", action: "View PDF" },
-        { description: "Proactive Disclosure under Section 4", link: "#", action: "View PDF" },
-        { description: "Appeal Form", link: "https://drive.google.com/file/d/14sIcVim6AeER5tXC9IzR94UzkG9dD6mz/view?usp=drive_link", action: "View PDF" },
-        { description: "RTI Officers", link: "https://drive.google.com/file/d/1m5FfuBATBYngrJCvKHdH0BnxGNuC3e-e/view?usp=drive_link", action: "View PDF" },
-        { description: "RTI Application", link: "https://drive.google.com/file/d/1c5Oc-Fokl4q0y53SzQ25mE8Hd5P-fw69/view?usp=drive_link", action: "View PDF" },
-    ];
+    const [rti, setRti]  = useState([]);
+
+    const fetchRti = async()=>{
+        try{
+            const response = await api.get("/rti-info");
+            setRti(response.data);
+        } catch(error){
+            console.error("Error fetching rti data", error);
+        }
+    };
 
     useEffect(() => {
+        fetchRti();
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }, []);
 
@@ -64,7 +69,7 @@ const RTI = () => {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {rtis.map((item, index) => (
+                                        {rti.map((item, index) => (
                                             <tr key={index}>
                                                 <td
                                                     className="font-large"
@@ -114,7 +119,7 @@ const RTI = () => {
                                                                 verticalAlign: "middle",
                                                             }}
                                                         />
-                                                        {item.action}
+                                                        View Pdf
                                                     </Link>
                                                 </td>
                                             </tr>
