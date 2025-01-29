@@ -1,15 +1,28 @@
-import React, { useEffect } from "react";
+import React, { useEffect,useState } from "react";
 import { Link } from "react-router-dom";
 import pdficon from '../../assets/images/Departments/document 1.png';
 import './Policies.css';
 import "../TableCss/TableCss.css"
 import Swal from 'sweetalert2';
+import api from "../api";
+
 
 const Policies = () => {
+        const [policiesdata, setPoliciesdata] = useState([]);
+    
+    useEffect(() => {
+        fetchPoliciesData();
+    }, []);
 
-    const policies = [
-        { description: "test", link: "https://drive.google.com/file/d/1lekTKfmp6V6xG9VSvVjjzDbtPjFUKwp9/view?usp=drive_link", posting: "View PDF" },
-    ];
+    const fetchPoliciesData = async () => {
+        try {
+            const response = await api.get("/policies_data");
+            setPoliciesdata(response.data);
+        } catch (error) {
+            console.error("Error fetching quick links:", error);
+        }
+    };
+
 
     useEffect(() => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -66,7 +79,7 @@ const Policies = () => {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {policies.map((item, index) => (
+                                        {policiesdata.map((item, index) => (
                                             <tr key={index}>
                                                 <td
                                                     className="font-large"
@@ -88,7 +101,7 @@ const Policies = () => {
                                                         textWrap: "pretty",
                                                     }}
                                                 >
-                                                    {item.description}
+                                                    {item.heading}
                                                 </td>
                                                 <td
                                                     width="10%"

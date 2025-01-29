@@ -151,13 +151,13 @@ const Tourism = () => {
 
             // Handle main image
             if (selectedGarden?.main_image) {
-                formData.append("main_image", selectedGarden.main_image); // Add main image if it exists
+                formData.append("main_image", selectedGarden.main_image);
             }
 
             // Handle existing images
             currentImages.forEach((img) => {
                 if (!removedImages.includes(img)) {
-                    formData.append("gallery", img); // Include retained images
+                    formData.append("gallery", img);
                 }
             });
 
@@ -179,27 +179,6 @@ const Tourism = () => {
             console.error("Error saving garden changes:", error);
         }
     };
-
-    // const handleMainImageChange = (e) => {
-    //     const newMainImage = e.target.files[0];
-    //     if (newMainImage) {
-    //         setSelectedFiles([newMainImage, ...selectedFiles]); 
-    //     }
-    // };
-
-
-    // const handleRemoveMainImage = () => {
-    //     setSelectedGarden({
-    //         ...selectedGarden,
-    //         main_image: null, // Clear the main image
-    //     });
-    // };
-
-
-
-    // const handleFileChange = (e) => {
-    //     setSelectedFiles([...selectedFiles, ...Array.from(e.target.files)]);
-    // };
 
     const handleDeleteConfirm = async () => {
         try {
@@ -275,11 +254,11 @@ const Tourism = () => {
                                                     <th style={{ width: '10%' }}>Name</th>
                                                     <th style={{ width: '15%' }}>Address</th>
                                                     <th style={{ width: '5%' }}>Hours</th>
-                                                    <th style={{ width: '15%' }}>Description</th>
-                                                    <th style={{ width: '15%' }}>Location Link</th>
-                                                    <th style={{ width: '10%' }}>Main Image</th>
+                                                    <th style={{ width: '20%' }}>Description</th>
+                                                    <th style={{ width: '10%' }}>Location Link</th>
+                                                    <th style={{ width: '15%' }}>Main Image</th>
                                                     <th style={{ width: '20%' }}>Gallery</th>
-                                                    <th style={{ width: '15%' }}>Action</th>
+                                                    <th style={{ width: '10%' }}>Action</th>
                                                 </tr>
                                             </thead>
 
@@ -293,7 +272,7 @@ const Tourism = () => {
                                                         <td>{tourism.hours}</td>
                                                         <td>{tourism.description}</td>
                                                         <td>
-                                                            <Link href={tourism.location_link} target="_blank" rel="noopener noreferrer">
+                                                            <Link to={tourism.location_link} target="_blank" rel="noopener noreferrer" style={{color:'black'}}>
                                                                 {tourism.location_link}
                                                             </Link>
                                                         </td>
@@ -413,193 +392,6 @@ const Tourism = () => {
                     </div>
 
                     {/* Edit Modal */}
-                    {/* Edit Modal */}
-                    {/* <div
-                        className={`modal fade ${showEditModal ? "show" : ""}`}
-                        id="editModal"
-                        tabIndex="-1"
-                        aria-labelledby="editModalLabel"
-                        aria-hidden={!showEditModal}
-                        style={{ display: showEditModal ? "block" : "none" }} // This forces the modal to be shown/hidden
-                    >
-                        <div className="modal-dialog">
-                            <div className="modal-content">
-                                <div className="modal-header">
-                                    <h5 className="modal-title" id="editModalLabel">
-                                        Edit Tourism
-                                    </h5>
-                                    <button
-                                        type="button"
-                                        className="btn-close"
-                                        onClick={handleCloseEditModal}  // Close the modal on click
-                                        aria-label="Close"
-                                    ></button>
-                                </div>
-                                <div
-                                    className="modal-body"
-                                    style={{
-                                        maxHeight: "500px", // Adjust this value as needed
-                                        overflowY: "auto",  // Enable vertical scrolling
-                                    }}
-                                >
-                                    <div className="form-group">
-                                        <label>Name</label>
-                                        <input
-                                            type="text"
-                                            className="form-control"
-                                            value={selectedGarden?.name || ""}
-                                            onChange={(e) =>
-                                                setSelectedGarden({
-                                                    ...selectedGarden,
-                                                    name: e.target.value,
-                                                })
-                                            }
-                                        />
-                                    </div>
-                                    <div className="form-group">
-                                        <label>Address</label>
-                                        <input
-                                            type="text"
-                                            className="form-control"
-                                            value={selectedGarden?.address || ""}
-                                            onChange={(e) =>
-                                                setSelectedGarden({
-                                                    ...selectedGarden,
-                                                    address: e.target.value,
-                                                })
-                                            }
-                                        />
-                                    </div>
-                                    <div className="form-group">
-                                        <label>Hours</label>
-                                        <input
-                                            type="text"
-                                            className="form-control"
-                                            value={selectedGarden?.hours || ""}
-                                            onChange={(e) =>
-                                                setSelectedGarden({
-                                                    ...selectedGarden,
-                                                    hours: e.target.value,
-                                                })
-                                            }
-                                        />
-                                    </div>
-                                    <div className="form-group">
-                                        <label>Description</label>
-                                        <textarea
-                                            className="form-control"
-                                            rows="3"
-                                            value={selectedGarden?.description || ""}
-                                            onChange={(e) =>
-                                                setSelectedGarden({
-                                                    ...selectedGarden,
-                                                    description: e.target.value,
-                                                })
-                                            }
-                                        ></textarea>
-                                    </div>
-                                    <div className="form-group">
-                                        <label>Location Link</label>
-                                        <input
-                                            type="text"
-                                            className="form-control"
-                                            value={selectedGarden?.location_link || ""}
-                                            onChange={(e) =>
-                                                setSelectedGarden({
-                                                    ...selectedGarden,
-                                                    location_link: e.target.value,
-                                                })
-                                            }
-                                        />
-                                    </div>
-
-                                    <div className="form-group">
-                                        <label>Main Image</label>
-                                        <div className="d-flex flex-column">
-                                            {selectedGarden?.main_image && (
-                                                <div className="position-relative">
-                                                    <img
-                                                        src={`${baseURL}${selectedGarden.main_image}`}
-                                                        alt="Main"
-                                                        style={{
-                                                            width: "150px",
-                                                            height: "150px",
-                                                            marginBottom: "10px",
-                                                        }}
-                                                    />
-                                                    <button
-                                                        type="button"
-                                                        className="btn btn-sm btn-danger position-absolute top-0 end-0"
-                                                        onClick={() => handleRemoveMainImage()}
-                                                    >
-                                                        X
-                                                    </button>
-                                                </div>
-                                            )}
-                                            <input
-                                                type="file"
-                                                onChange={handleMainImageChange}
-                                                className="form-control"
-                                            />
-                                        </div>
-                                    </div>
-
-                                    <div className="form-group">
-                                        <label>Gallery</label>
-                                        <input
-                                            type="file"
-                                            multiple
-                                            onChange={handleFileChange}
-                                            className="form-control"
-                                        />
-                                    </div>
-
-                                    <div className="form-group">
-                                        <label>Images</label>
-                                        <div className="d-flex flex-wrap">
-                                            {currentImages.map((img, index) => (
-                                                <div key={index} className="position-relative me-2">
-                                                    <img
-                                                        src={`${baseURL}${img}`}
-                                                        alt="Gallery"
-                                                        style={{
-                                                            width: "50px",
-                                                            height: "50px",
-                                                            marginRight: "5px",
-                                                        }}
-                                                    />
-                                                    <button
-                                                        type="button"
-                                                        className="btn btn-sm btn-danger position-absolute top-0 end-0"
-                                                        onClick={() => handleRemoveImage(img)}
-                                                    >
-                                                        X
-                                                    </button>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="modal-footer">
-                                    <button
-                                        type="button"
-                                        className="btn btn-secondary"
-                                        onClick={handleCloseEditModal}
-                                    >
-                                        Close
-                                    </button>
-                                    <button
-                                        type="button"
-                                        className="btn btn-primary"
-                                        onClick={handleSaveEdit}
-                                    >
-                                        Save Changes
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div> */}
-
                     <div
                         className={`modal fade ${showEditModal ? "show" : ""}`}
                         id="editModal"
@@ -625,7 +417,8 @@ const Tourism = () => {
                                     className="modal-body"
                                     style={{
                                         maxHeight: "500px", // Adjust this value as needed
-                                        overflowY: "auto",  // Enable vertical scrolling
+                                        overflowY: "auto",
+                                        scrollbarWidth: "thin"  // Enable vertical scrolling
                                     }}
                                 >
                                     <div className="form-group">

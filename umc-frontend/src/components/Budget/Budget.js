@@ -1,45 +1,38 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import "./Budget.css"
-import pdficon from '../../assets/images/Departments/document 1.png'
+import "./Budget.css";
+import pdficon from '../../assets/images/Departments/document 1.png';
 import Swal from 'sweetalert2';
-
-const firstYearData = [
-    { name: 'UMC Budget 2014-2015', pdf: '#', },
-];
-
-const secondYearData = [
-    { name: 'UMC Budget 2015-2016', pdf: '#', },
-];
-
-const thirdYearData = [
-    { name: 'UMC Budget 2017-2018', pdf: '#', },
-];
-
-const fourthYearData = [
-    { name: 'UMC Budget 2018-2019', pdf: 'https://drive.google.com/file/d/11CPGbI6vtn62rKi-mGLxNwz2y8eTxMbG/view?usp=drive_link', },
-];
-
-const fifthYearData = [
-    { name: 'UMC Budget 2019-2020', pdf: 'https://drive.google.com/file/d/1JFJOnioYR9lGDFutlgnivM2daaa_Yd7W/view?usp=drive_link', },
-];
-
-const sixthYearData = [
-    { name: 'UMC Budget 2020-2021', pdf: '#', },
-];
+import api from "../api";
 
 const Budget = () => {
     const [selectedButton, setSelectedButton] = useState('2020-2021');
+    const [budgetData, setBudgetData] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [uniqueYears, setUniqueYears] = useState([]);
 
-    const headersMap = {
-        "2020-2021": ["Budget Name"],
-        "2019-2020": ["Budget Name"],
-        "2018-2019": ["Budget Name"],
-        "2017-2018": ["Budget Name"],
-        "2015-2016": ["Budget Name"],
-        "2014-2015": ["Budget Name"],
-    };
-    const tableHeaders = headersMap[selectedButton] || [];
+    // Fetching data from the API
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await api.get("/budgets_data");
+
+                setBudgetData(response.data);
+                setLoading(false);
+
+                // Extracting unique years from the budget data
+                const years = [...new Set(response.data.map(item => item.year))];
+                setUniqueYears(years);
+
+            } catch (err) {
+                setError("Failed to fetch data.");
+                setLoading(false);
+            }
+        };
+
+        fetchData();
+    }, []);
 
     const handleClick = (link, e) => {
         if (link === "#") {
@@ -48,28 +41,13 @@ const Budget = () => {
                 title: 'Information',
                 text: 'The PDF will be available soon.',
                 icon: 'info',
-                confirmButtonText: 'Ok'
+                confirmButtonText: 'Ok',
             });
         }
     };
 
     const getTableData = () => {
-        switch (selectedButton) {
-            case '2020-2021':
-                return sixthYearData;
-            case '2019-2020':
-                return fifthYearData;
-            case '2018-2019':
-                return fourthYearData;
-            case '2017-2018':
-                return thirdYearData;
-            case '2015-2016':
-                return secondYearData;
-            case '2014-2015':
-                return firstYearData;
-            default:
-                return [];
-        }
+        return budgetData.filter(item => item.year === selectedButton);
     };
 
     const handleButtonClick = (buttonName) => {
@@ -79,13 +57,10 @@ const Budget = () => {
     const tableData = getTableData();
     const [itemsPerPage, setItemsPerPage] = useState(10);
     const [currentPage, setCurrentPage] = useState(1);
-    //eslint-disable-next-line
     const [searchTerm, setSearchTerm] = useState("");
-    //eslint-disable-next-line
-    const totalEntries = tableData.length;
 
     const filteredData = tableData.filter((item) =>
-        item.name.toLowerCase().includes(searchTerm.toLowerCase())
+        item.heading.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     const totalPages = Math.ceil(filteredData.length / itemsPerPage);
@@ -98,13 +73,11 @@ const Budget = () => {
         }
     };
 
-    //eslint-disable-next-line
     const handleItemsPerPageChange = (e) => {
         setItemsPerPage(parseInt(e.target.value));
         setCurrentPage(1);
     };
 
-    //eslint-disable-next-line
     const renderPageNumbers = () => {
         const pageNumbers = [];
         for (let i = 1; i <= totalPages; i++) {
@@ -132,10 +105,8 @@ const Budget = () => {
         return pageNumbers;
     };
 
-    const updatedtotalEntries = tableData.length;
-    //eslint-disable-next-line
+    const updatedtotalEntries = filteredData.length;
     const startEntry = (currentPage - 1) * itemsPerPage + 1;
-    //eslint-disable-next-line
     const endEntry = Math.min(currentPage * itemsPerPage, updatedtotalEntries);
 
     useEffect(() => {
@@ -162,72 +133,79 @@ const Budget = () => {
                         <hr />
                     </h2>
 
-                    <div className="row mt-4 row-styling-3" id='municipal-css'>
+                    <div className="row mt-4 row-styling-3" id="municipal-css">
                         <div className="col-xl-9 col-lg-12 col-md-12 col-sm-12 col-12 ">
+
+                            {/* Dynamic Year Buttons */}
                             <div className="button-group mb-4 d-flex justify-content-start">
-                                <button className={`btn ${selectedButton === '2020-2021' ? "active" : ""}`} onClick={() => handleButtonClick('2020-2021')}>2020-2021</button>
-                                <button className={`btn ${selectedButton === '2019-2020' ? "active" : ""}`} onClick={() => handleButtonClick('2019-2020')}>2019-2020</button>
-                                <button className={`btn ${selectedButton === '2018-2019' ? "active" : ""}`} onClick={() => handleButtonClick('2018-2019')}>2018-2019</button>
-                                <button className={`btn ${selectedButton === '2017-2018' ? "active" : ""}`} onClick={() => handleButtonClick('2017-2018')}>2017-2018</button>
-                                <button className={`btn ${selectedButton === '2015-2016' ? "active" : ""}`} onClick={() => handleButtonClick('2015-2016')}>2015-2016</button>
-                                <button className={`btn ${selectedButton === '2014-2015' ? "active" : ""}`} onClick={() => handleButtonClick('2014-2015')}>2014-2015</button>
+                                {uniqueYears.map((year) => (
+                                    <button
+                                        key={year}
+                                        className={`btn ${selectedButton === year ? "active" : ""}`}
+                                        onClick={() => handleButtonClick(year)}
+                                    >
+                                        {year}
+                                    </button>
+                                ))}
                             </div>
+
                             <div className="circular-wrapper mt-5">
                                 <table className="table table-bordered shadow table-responsive">
                                     <thead className="bg-orange text-white">
-
                                         <tr>
                                             <th className="table-heading-styling text-center" width="8%">Sr. No.</th>
-                                            {tableHeaders.map((header, index) => {
-                                                if (header === "Budget Name") {
-                                                    return (
-                                                        <th className="table-heading-styling text-start" key={index}>
-                                                            {header}
-                                                        </th>
-                                                    );
-                                                }
-                                                return (
-                                                    <th className="table-heading-styling text-center" key={index}>
-                                                        {header}
-                                                    </th>
-                                                );
-                                            })}
+                                            <th className="table-heading-styling text-start">Budget Name</th>
                                             <th className="table-heading-styling text-center" width="10%">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {currentData.map((item, index) => (
-                                            <tr key={index}>
-                                                <td className="font-large text-center">
-                                                    {startIndex + index + 1}
-                                                </td>
-                                                <td>{item.name}</td>
-                                                <td className="text-center">
-                                                    <Link
-                                                        to={item.pdf}
-                                                        className="text-decoration-none"
-                                                        target={item.pdf === "#" ? "" : "_blank"}
-                                                        style={{ color: "#333333" }}
-                                                        onClick={(e) => handleClick(item.pdf, e)}
-                                                    >
-                                                        <img
-                                                            src={pdficon}
-                                                            alt="PDF Icon"
-                                                            style={{
-                                                                width: "18px",
-                                                                height: "18px",
-                                                                marginRight: "8px",
-                                                                verticalAlign: "middle",
-                                                            }}
-                                                        />
-                                                        View PDF
-                                                    </Link>
-                                                </td>
+                                        {loading ? (
+                                            <tr>
+                                                <td colSpan={3} className="text-center">Loading...</td>
                                             </tr>
-                                        ))}
+                                        ) : error ? (
+                                            <tr>
+                                                <td colSpan={3} className="text-center text-danger">{error}</td>
+                                            </tr>
+                                        ) : currentData.length === 0 ? (
+                                            <tr>
+                                                <td colSpan={3} className="text-center">No Data Available</td>
+                                            </tr>
+                                        ) : (
+                                            currentData.map((item, index) => (
+                                                <tr key={index}>
+                                                    <td className="font-large text-center">
+                                                        {startIndex + index + 1}
+                                                    </td>
+                                                    <td>{item.heading}</td>
+                                                    <td className="text-center">
+                                                        <Link
+                                                            to={item.link}
+                                                            className="text-decoration-none"
+                                                            target={item.link === "#" ? "" : "_blank"}
+                                                            style={{ color: "#333333" }}
+                                                            onClick={(e) => handleClick(item.link, e)}
+                                                        >
+                                                            <img
+                                                                src={pdficon}
+                                                                alt="PDF Icon"
+                                                                style={{
+                                                                    width: "18px",
+                                                                    height: "18px",
+                                                                    marginRight: "8px",
+                                                                    verticalAlign: "middle",
+                                                                }}
+                                                            />
+                                                            View PDF
+                                                        </Link>
+                                                    </td>
+                                                </tr>
+                                            ))
+                                        )}
                                     </tbody>
                                 </table>
                             </div>
+
                         </div>
                     </div>
                 </div>

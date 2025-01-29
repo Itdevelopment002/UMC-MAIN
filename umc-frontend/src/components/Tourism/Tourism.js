@@ -4,66 +4,7 @@ import './Tourism.css';
 import { GrLocation } from "react-icons/gr";
 import api, { baseURL } from "../api";
 
-import main1 from "../../assets/images/tourism/main1.png";
-import main2 from "../../assets/images/tourism/main2.png";
-import main3 from "../../assets/images/tourism/main3.png";
-import img1 from "../../assets/images/tourism/img1.png";
-import img2 from "../../assets/images/tourism/img2.png";
-import img3 from "../../assets/images/tourism/img3.png";
-import img4 from "../../assets/images/tourism/img4.png";
-import img5 from "../../assets/images/tourism/img5.png";
-import img6 from "../../assets/images/tourism/img6.png";
-import img7 from "../../assets/images/tourism/img7.png";
-import img8 from "../../assets/images/tourism/img8.png";
-import img9 from "../../assets/images/tourism/img9.png";
-import img10 from "../../assets/images/tourism/img10.png";
-import img11 from "../../assets/images/tourism/img11.png";
-import img12 from "../../assets/images/tourism/img12.png";
 
-// const tourismData = [
-//     {
-//         name: "Birla Mandir",
-//         address: "C 8, Kalyan - Ahmednagar Highway, Century Rayon Colony, Shahad, Ulhasnagar, Maharashtra 421001.",
-//         hours: "6:00 am to 9:00 pm",
-//         description: "Birla Mandir is a Hindu temple of Lord Vithoba in Shahad, Ulhasnagar taluka, Thane district, Maharashtra, India. It is famous for its scenery and architecture. Bollywood films like Suhaag, Tere Naam, Prem Granth, Golmaal: Fun Unlimited, etc. have been filmed at the temple.",
-//         mainImage: main1,
-//         gallery: [
-//             img1,
-//             img2,
-//             img3,
-//             img4,
-//         ],
-//         locationLink: "https://maps.app.goo.gl/7GMmKUvzDYVaDZEo9",
-//     },
-//     {
-//         name: "Shree Chhatrapati Shivaji Maharaj Udyaan",
-//         address: "65V8+94Q, Shahad Station Rd, Additional M.I,D.C, Shahad, Ulhasnagar, Maharashtra 421001",
-//         hours: "Tuesday to Saturday - 06am to 11:30am, 04pm to 08pm | Sunday - 06am to 09pm | Monday - Closed",
-//         description: "Ulhasnagar is a city located 26 km from Thane City in Thane district, Maharashtra, India. This city is a part of Mumbai Metropolitan Region managed by the MMRDA.",
-//         mainImage: main2,
-//         gallery: [
-//             img5,
-//             img6,
-//             img7,
-//             img8,
-//         ],
-//         locationLink: "https://maps.app.goo.gl/2mdCZr9WCt3W3EYZ9",
-//     },
-//     {
-//         name: "Chaliha Sahib Puj Jhulelal Mandir",
-//         address: "55X7+CMQ, Sindhunagar, Ulhasnagar, Maharashtra 421005.",
-//         hours: "5:00 am to 10:00 pm",
-//         description: "This is the Original Akhand Jyot brought by our Ancestors, Mr.Watumal, Mr. Mangalmal, Mr.Mithumal, Mr.Rangalmal, Mr.Mangumal, Mr.Kotumal, Mr. Narumal, Mr.Harpaldas, Mr.Sundardas. This was brought during the partition in 1947  from Puj Chalihasahib Mandir Peergoath in Sindh. And this Akhand Jyot was born around 1897 AD in Peergoath. ",
-//         mainImage: main3,
-//         gallery: [
-//             img9,
-//             img10,
-//             img11,
-//             img12,
-//         ],
-//         locationLink: "https://maps.app.goo.gl/wcFp9FzYQC8mAXdK8",
-//     },
-// ];
 
 const Tourism = () => {
     const [gardensData, setGardensData] = useState([]);
@@ -87,7 +28,7 @@ const Tourism = () => {
 
     return (
         <>
-            <div className="history-header-image"></div>
+            <div className="tourism-header-image"></div>
 
             <div id="main-content">
                 <div className="container-fluid font-location mt-4 mb-5" id="tourism-css">

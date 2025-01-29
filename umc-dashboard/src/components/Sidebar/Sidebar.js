@@ -247,21 +247,87 @@ const Sidebar = ({ isOpen, closeSidebar, userDepartment }) => {
                     </Link>
                     <ul className={openSubmenu === "corporation" ? "open" : ""}>
                       <li
-                        className={activeItem === "/minister" ? "active" : ""}
-                        onClick={() => handleItemClick("/minister")}
+                        className={activeItem === "/adminstration" ? "active" : ""}
+                        onClick={() => handleItemClick("/adminstration")}
                       >
                         <Link to="/adminstration">
-                          Administrative
+                          Administration
                         </Link>
                       </li>
                       <li
-                        className={activeItem === "/minister" ? "active" : ""}
-                        onClick={() => handleItemClick("/minister")}
+                        className={activeItem === "/annual" ? "active" : ""}
+                        onClick={() => handleItemClick("/annual")}
                       >
                         <Link to="/annual">
                           Annual Financial
                         </Link>
                       </li>
+                      <li
+                        className={activeItem === "/elected-member" ? "active" : ""}
+                        onClick={() => handleItemClick("/elected-member")}
+                      >
+                        <Link to="/elected-member">
+                          Elected Member
+                        </Link>
+                      </li>
+                      {/* <li
+                        className={activeItem === "/enews-letter" ? "active" : ""}
+                        onClick={() => handleItemClick("/enews-letter")}
+                      >
+                        <Link to="/enews-letter">
+                          e-News Letter
+                        </Link>
+                      </li> */}
+                      
+                      {/* <li
+                        className={activeItem === "/muncipal-meeting" ? "active" : ""}
+                        onClick={() => handleItemClick("/muncipal-meeting")}
+                      >
+                        <Link to="/muncipal-meeting">
+                          Muncipal Meeting
+                        </Link>
+                      </li> */}
+                      <li
+                        className={activeItem === "/agenda" ? "active" : ""}
+                        onClick={() => handleItemClick("/agenda")}
+                      >
+                        <Link to="/agenda">
+                          UMC Agenda
+                        </Link>
+                      </li>
+                      {/* <li
+                        className={activeItem === "/budgets" ? "active" : ""}
+                        onClick={() => handleItemClick("/budgets")}
+                      >
+                        <Link to="/budgets">
+                          UMC Budget
+                        </Link>
+                      </li> */}
+                      <li
+                        className={activeItem === "/policies" ? "active" : ""}
+                        onClick={() => handleItemClick("/policies")}
+                      >
+                        <Link to="/policies">
+                          UMC Policies
+                        </Link>
+                      </li>
+                      <li
+                        className={activeItem === "/resolution" ? "active" : ""}
+                        onClick={() => handleItemClick("/resolution")}
+                      >
+                        <Link to="/resolution">
+                          UMC Resolution
+                        </Link>
+                      </li>
+                      <li
+                        className={activeItem === "/ward-office" ? "active" : ""}
+                        onClick={() => handleItemClick("/ward-office")}
+                      >
+                        <Link to="/ward-office">
+                          Ward Office
+                        </Link>
+                      </li>
+                      
                     </ul>
                   </li>
                   <li className="submenu">

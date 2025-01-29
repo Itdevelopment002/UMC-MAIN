@@ -1,18 +1,25 @@
-import React, { useEffect } from "react";
+import React, { useEffect,useState } from "react";
 import { Link } from "react-router-dom";
 import "./ElectedMember.css";
+import api from "../api";
 import pdficon from '../../assets/images/Departments/document 1.png'
 import "../TableCss/TableCss.css";
 import Swal from "sweetalert2";
 
 const ElectedMember = () => {
-    const members = [
-        { name: "List of Mayor and Standing Committee Chairman", link: "https://drive.google.com/file/d/1ob1fdk3qSlJgVL7xQburZStYMLbIJpeJ/view?usp=drive_link", action: "View PDF" },
-        { name: "List of Corporators from 2017-2022", link: "https://drive.google.com/file/d/1rB22H63Ot5AWHlFtxkK3czsKQMD5fYQ_/view?usp=drive_link", action: "View PDF" },
-        { name: "List of Corporators from 2012-2017", link: "https://drive.google.com/file/d/163tNag7AktKF6tEej9Tue1MZ0Q6M3nR4/view?usp=drive_link", action: "View PDF" },
-        { name: "List of Corporators from 2002-2007", link: "https://drive.google.com/file/d/1N-pEUAc3_eEHV37jdqJU_fTy66miPHk3/view?usp=drive_link", action: "View PDF" },
-        { name: "List of Corporators from 1997-2002", link: "https://drive.google.com/file/d/1LRzO5_Y61SS5mWOdb1bmxE5133eYour9/view?usp=drive_link", action: "View PDF" },
-    ];
+        const [electeddata, setElecteddata] = useState([]);
+        useEffect(() => {
+            fetchElectedData();
+        }, []);
+    
+        const fetchElectedData = async () => {
+            try {
+                const response = await api.get("/elected_data");
+                setElecteddata(response.data);
+            } catch (error) {
+                console.error("Error fetching elected member data:", error);
+            }
+        };
 
     useEffect(() => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -70,7 +77,7 @@ const ElectedMember = () => {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {members.map((item, index) => (
+                                        {electeddata.map((item, index) => (
                                             <tr key={index}>
                                                 <td
                                                     className="font-large"
@@ -92,7 +99,7 @@ const ElectedMember = () => {
                                                         color: "#292D32",
                                                     }}
                                                 >
-                                                    {item.name}
+                                                    {item.heading}
                                                 </td>
                                                 <td
                                                     width="20%"
@@ -120,7 +127,7 @@ const ElectedMember = () => {
                                                                 verticalAlign: "middle",
                                                             }}
                                                         />
-                                                        {item.action}
+                                                        View PDF
                                                     </Link>
                                                 </td>
                                             </tr>

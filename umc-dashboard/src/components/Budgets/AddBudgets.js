@@ -2,9 +2,10 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../api";
 
-const AddAnnual = () => {
+const AddPolicies = () => {
   const [heading, setHeading] = useState("");
   const [link, setLink] = useState("");
+  const [year, setYear] = useState("");
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
 
@@ -17,6 +18,10 @@ const AddAnnual = () => {
 
     if (!link) {
       validationErrors.link = "Link is required.";
+    }
+
+    if (!year) {
+      validationErrors.year = "Year is required.";
     }
 
     setErrors(validationErrors);
@@ -32,15 +37,17 @@ const AddAnnual = () => {
 
     try {
       //eslint-disable-next-line
-      const response = await api.post("/annual-finance", {
+      const response = await api.post("/budgets_data", {
         heading: heading,
         link: link,
+        year: year,
       });
       setHeading("");
       setLink("");
-      navigate("/annual");
+      setYear("");
+      navigate("/budgets");
     } catch (error) {
-      console.error("Error adding ward:", error);
+      console.error("Error adding budget data:", error);
     }
   };
 
@@ -53,10 +60,10 @@ const AddAnnual = () => {
               <Link to="#">Corporation</Link>
             </li>
             <li className="breadcrumb-item">
-              <Link to="/annual">Annual Financial</Link>
+              <Link to="/budgets">Budget</Link>
             </li>
             <li className="breadcrumb-item active" aria-current="page">
-              Add Annual
+              Add Budget
             </li>
           </ol>
           <div className="row">
@@ -65,10 +72,40 @@ const AddAnnual = () => {
                 <div className="card-block">
                   <div className="row">
                     <div className="col-sm-4 col-3">
-                      <h4 className="page-title">Add Annual</h4>
+                      <h4 className="page-title">Add Budget</h4>
                     </div>
                   </div>
                   <form onSubmit={handleSubmit}>
+                    <div className="form-group row">
+                      <label className="col-form-label col-md-2">
+                        Year <span className="text-danger">*</span>
+                      </label>
+                      <div className="col-md-4">
+                        <select
+                          className={`form-control form-control-md ${
+                            errors.year ? "is-invalid" : ""
+                          }`}
+                          value={year}
+                          onChange={(e) => {
+                            setYear(e.target.value);
+                            if (errors.year) {
+                              setErrors({ ...errors, year: "" });
+                            }
+                          }}
+                        >
+                          <option style={{backgroundColor:'#FBE9ED', color:'#E3435A'}} value="" disabled>Select Year</option>
+                          <option value="2020-2021">2020-2021</option>
+                          <option value="2019-2020">2019-2020</option>
+                          <option value="2018-2019">2018-2019</option>
+                          <option value="2017-2018">2017-2018</option>
+                          <option value="2015-2016">2015-2016</option>
+                          <option value="2014-2015">2014-2015</option>
+                        </select>
+                        {errors.year && (
+                          <div className="invalid-feedback">{errors.year}</div>
+                        )}
+                      </div>
+                    </div>
                     <div className="form-group row">
                       <label className="col-form-label col-md-2">
                         Heading <span className="text-danger">*</span>
@@ -96,9 +133,9 @@ const AddAnnual = () => {
                       </div>
                     </div>
 
-                    <div className="form-group row mt-3">
+                    <div className="form-group row">
                       <label className="col-form-label col-md-2">
-                        Link <span className="text-danger">*</span>
+                        PDF Link <span className="text-danger">*</span>
                       </label>
                       <div className="col-md-4">
                         <input
@@ -116,9 +153,7 @@ const AddAnnual = () => {
                           }}
                         />
                         {errors.link && (
-                          <div className="invalid-feedback">
-                            {errors.link}
-                          </div>
+                          <div className="invalid-feedback">{errors.link}</div>
                         )}
                       </div>
                     </div>
@@ -139,4 +174,4 @@ const AddAnnual = () => {
   );
 };
 
-export default AddAnnual;
+export default AddPolicies;
