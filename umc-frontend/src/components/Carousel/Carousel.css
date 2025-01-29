@@ -1,3 +1,8 @@
+.swiper-button-prev,
+.swiper-button-next {
+  display: none !important;
+}
+
 .home-carousel-section {
   margin-top: 10px !important;
   display: flex;
@@ -6,7 +11,7 @@
 }
 
 .custom-profile-card {
-  margin-bottom: 30px;
+  margin-bottom: 32px;
   margin-top: 10px;
   padding: 12px;
   box-shadow: 0 10px 10px rgba(142, 140, 140, 0.4);
@@ -15,7 +20,7 @@
 
 .custom-profile-card .image {
   width: 74px !important;
-  height: 81px !important;
+  height: 83px !important;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   color: #1A2B3B !important;
 }
@@ -33,34 +38,29 @@
   font-weight: 400;
 }
 
-.dot-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: absolute;
-  bottom: 10px;
-  left: 50%;
-  transform: translateX(-50%);
+.swiper-pagination {
+  position: absolute !important;
+  gap: 15px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
   background-color: #F0A64E80;
-  border-radius: 20px;
-  padding: 5px 15px;
+  border-radius: 20px !important;
+  width: 180px !important;
+  margin: 0 !important;
+  padding-top: 5px !important;
 }
 
-.dot {
-  height: 17px;
-  width: 17px;
-  margin: 0 8px;
-  background-color: #ccc;
-  border-radius: 50%;
-  display: inline-block;
-  cursor: pointer;
-  border: 1px solid #fff;
-  transition: background-color 0.3s ease;
+.swiper-pagination-bullet {
+  margin-left: 15px !important;
+  height: 20px !important;
+  width: 20px !important;
+  border: 1px solid #fff !important;
+  background-color: #7B202A !important;
 }
 
-.dot.active {
-  background-color: #7B202A;
-}
+/* .swiper-pagination-bullet.active {
+  background-color: #7B202A !important;
+} */
 
 .carousel-image-slider {
   padding-top: 10px;
@@ -139,13 +139,18 @@
 
   .custom-profile-card1 {
     margin-top: 15px !important;
-    margin-bottom: -20px !important;
+    margin-bottom: -15px !important;
   }
 }
 
 @media (max-width: 768px) {
   .carousel-image-slider {
     height: 220px;
+  }
+
+  .swiper-pagination-bullet,
+  .swiper-pagination {
+    display: none !important;
   }
 
   .custom-profile-card .image {
@@ -168,6 +173,10 @@
     height: 180px;
   }
 
+  .swiper-pagination-bullet {
+    display: none !important;
+  }
+
   .custom-profile-card .image {
     width: 80px;
     height: 55px;
@@ -188,8 +197,10 @@
     padding: 8px;
   }
 
-  .carousel-image-slider img {
-    object-fit: contain;
+  .image-4 {
+    object-fit: fill !important;
+    height: 200px !important;
+    width: 100% !important;
   }
 
   .custom-profile-card1 {
@@ -199,7 +210,13 @@
 
 @media (max-width: 400px) {
   .carousel-image-slider {
-    height: 200px;
+    height: 200px !important;
+  }
+
+  .image-4 {
+    object-fit: fill !important;
+    height: 150px !important;
+    width: 100% !important;
   }
 
   .custom-profile-card .image {
