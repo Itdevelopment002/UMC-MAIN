@@ -38,10 +38,16 @@ const GalleryAndCommunication = () => {
   }
 
   useEffect(() => {
-    fetchPortal();
-    fetchEmergency();
-    fetchGallery();
-  })
+  const fetchData = async () => {
+    await fetchPortal();
+    await new Promise((res) => setTimeout(res, 1000));
+    await fetchEmergency();
+    await new Promise((res) => setTimeout(res, 1000));
+    await fetchGallery();
+  };
+  fetchData();
+}, []);
+
 
   useEffect(() => {
     GLightbox({
