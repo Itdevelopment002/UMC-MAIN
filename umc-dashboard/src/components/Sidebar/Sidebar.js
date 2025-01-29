@@ -21,6 +21,7 @@ import { FaPersonCirclePlus } from "react-icons/fa6";
 import { PiComputerTowerBold } from "react-icons/pi";
 import { GoChecklist } from "react-icons/go";
 import { BsPersonFillCheck } from "react-icons/bs";
+import { MdOutlineDatasetLinked } from "react-icons/md";
 
 const Sidebar = ({ isOpen, closeSidebar, userDepartment }) => {
   const [openSubmenu, setOpenSubmenu] = useState(null);
@@ -385,29 +386,28 @@ const Sidebar = ({ isOpen, closeSidebar, userDepartment }) => {
                       Contact Us
                     </Link>
                   </li>
-                  {/* <li
+                  <li
                     className={activeItem === "/privacy-policy" ? "active" : ""}
                     onClick={() => handleItemClick("/privacy-policy")}
                   >
                     <Link to="/privacy-policy">
                       <i className="fa">
-                        <MdMiscellaneousServices />
+                        <MdPrivacyTip />
                       </i>{" "}
                       Privacy Policy
                     </Link>
                   </li>
-                  <li
+                  {/* <li
                     className={activeItem === "/hyperlink-policy" ? "active" : ""}
                     onClick={() => handleItemClick("/hyperlink-policy")}
                   >
                     <Link to="/hyperlink-policy">
                       <i className="fa">
-                        <MdMiscellaneousServices />
+                        <MdOutlineDatasetLinked />
                       </i>{" "}
                       Hyperlink Policy
                     </Link>
                   </li> */}
-
                   <li
                     className={activeItem === "/footer" ? "active" : ""}
                     onClick={() => handleItemClick("/footer")}
