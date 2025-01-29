@@ -83,7 +83,7 @@ const Administration = () => {
           <nav aria-label="breadcrumb">
             <ol className="breadcrumb">
               <li className="breadcrumb-item">
-                <Link to="/home">Home</Link>
+                <Link to="#">Corporation</Link>
               </li>
               <li className="breadcrumb-item active" aria-current="page">
                 Administration

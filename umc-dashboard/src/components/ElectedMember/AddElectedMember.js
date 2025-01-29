@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../api";
 
-const AddAnnual = () => {
+const AddElectedMember = () => {
   const [heading, setHeading] = useState("");
   const [link, setLink] = useState("");
   const [errors, setErrors] = useState({});
@@ -32,15 +32,15 @@ const AddAnnual = () => {
 
     try {
       //eslint-disable-next-line
-      const response = await api.post("/annual-finance", {
+      const response = await api.post("/elected_data", {
         heading: heading,
         link: link,
       });
       setHeading("");
       setLink("");
-      navigate("/annual");
+      navigate("/elected-member");
     } catch (error) {
-      console.error("Error adding ward:", error);
+      console.error("Error adding Elected member data:", error);
     }
   };
 
@@ -53,10 +53,10 @@ const AddAnnual = () => {
               <Link to="#">Corporation</Link>
             </li>
             <li className="breadcrumb-item">
-              <Link to="/annual">Annual Financial</Link>
+              <Link to="/elected-member">Elected Member</Link>
             </li>
             <li className="breadcrumb-item active" aria-current="page">
-              Add Annual
+              Add Elected Member
             </li>
           </ol>
           <div className="row">
@@ -65,7 +65,7 @@ const AddAnnual = () => {
                 <div className="card-block">
                   <div className="row">
                     <div className="col-sm-4 col-3">
-                      <h4 className="page-title">Add Annual</h4>
+                      <h4 className="page-title">Add Elected Member</h4>
                     </div>
                   </div>
                   <form onSubmit={handleSubmit}>
@@ -98,7 +98,7 @@ const AddAnnual = () => {
 
                     <div className="form-group row mt-3">
                       <label className="col-form-label col-md-2">
-                        Link <span className="text-danger">*</span>
+                    PDF Link <span className="text-danger">*</span>
                       </label>
                       <div className="col-md-4">
                         <input
@@ -139,4 +139,4 @@ const AddAnnual = () => {
   );
 };
 
-export default AddAnnual;
+export default AddElectedMember;

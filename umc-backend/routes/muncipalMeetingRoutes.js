@@ -1,0 +1,55 @@
+const express = require("express");
+const router = express.Router();
+const db = require("../config/db.js");
+
+// Get all municipal meeting records
+router.get("/muncipal_meetings", (req, res) => {
+  db.query("SELECT * FROM muncipal_meeting", (err, results) => {
+    if (err) throw err;
+    res.json(results);
+  });
+});
+
+// Add a new municipal meeting record
+router.post("/muncipal_meetings", (req, res) => {
+  const { name, year, pdf_link1, pdf_link2, pdf_link3 } = req.body;
+  const sql =
+    "INSERT INTO muncipal_meeting (name, year, pdf_link1, pdf_link2, pdf_link3) VALUES (?, ?, ?, ?, ?)";
+  db.query(sql, [name, year, pdf_link1, pdf_link2, pdf_link3], (err, result) => {
+    if (err) throw err;
+    res.json({
+      id: result.insertId,
+      name,
+      year,
+      pdf_link1,
+      pdf_link2,
+      pdf_link3,
+    });
+  });
+});
+
+// Update a municipal meeting record
+router.put("/muncipal_meetings/:id", (req, res) => {
+  const { name, year, pdf_link1, pdf_link2, pdf_link3 } = req.body;
+  const sql =
+    "UPDATE muncipal_meeting SET name = ?, year = ?, pdf_link1 = ?, pdf_link2 = ?, pdf_link3 = ? WHERE id = ?";
+  db.query(
+    sql,
+    [name, year, pdf_link1, pdf_link2, pdf_link3, req.params.id],
+    (err, result) => {
+      if (err) throw err;
+      res.json({ success: true });
+    }
+  );
+});
+
+// Delete a municipal meeting record
+router.delete("/muncipal_meetings/:id", (req, res) => {
+  const sql = "DELETE FROM muncipal_meeting WHERE id = ?";
+  db.query(sql, [req.params.id], (err, result) => {
+    if (err) throw err;
+    res.json({ success: true });
+  });
+});
+
+module.exports = router;

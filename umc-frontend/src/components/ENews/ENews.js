@@ -1,22 +1,33 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "./ENews.css";
+import api from "../api";
 import pdficon from '../../assets/images/Departments/document 1.png';
 import Swal from 'sweetalert2';
 
-const enews = [
-    { description: "जागतिक सायकल दिनानिमित्त उल्हासनगर महानगरपालिका आयोजित महापालिका मुख्यालयापासून गोल मैदान व शहाड स्टेशन पासुन परत महापालिका मुख्यालय या मार्गावरून पर्यावरण जनजागृतीकरीता सायकल रॅली दि. ०३.०६.२०२२", date: "2022-06-07", link: "https://drive.google.com/file/d/1Id8i8I5f11gkl7oFdrXo9W_dBUR94O_Z/view?usp=drive_link", posting: "View PDF" },
-    { description: "उल्हासनगर महापालिका शिक्षण विभागामार्फत झुलेलाल हायस्कुल, उल्हासनगर- २ येथे महानगरपालिका शाळेच्या सर्व मुख्याध्यापक व शिक्षक यांचे एकदिवसीय शैक्षणिक कार्यशाळेचे आयोजन करण्यात आले", date: "2022-04-28", link: "https://drive.google.com/file/d/1NN_wvF6A8nuP1rPGPSHx752L1f02dUJA/view?usp=drive_link", posting: "View PDF" },
-];
-
 const ENews = () => {
+        const [enewsList, setEnewsList] = useState([]);
+        useEffect(() => {
+            fetchEnews();
+        }, []);
+    
+        const fetchEnews = async () => {
+            try {
+                const response = await api.get("/enews_data");
+                setEnewsList(response.data);
+            } catch (error) {
+                console.error("Error fetching e-news:", error);
+            }
+        };
+    
+    
     const [itemsPerPage, setItemsPerPage] = useState(10);
     const [currentPage, setCurrentPage] = useState(1);
     //eslint-disable-next-line
     const [searchTerm, setSearchTerm] = useState("");
-    const totalEntries = enews.length;
-    const filteredData = enews.filter((item) =>
-        item.description.toLowerCase().includes(searchTerm.toLowerCase())
+    const totalEntries = enewsList.length;
+    const filteredData = enewsList.filter((item) =>
+        item.info.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     const totalPages = Math.ceil(filteredData.length / itemsPerPage);
@@ -74,7 +85,7 @@ const ENews = () => {
         }
     };
 
-    const updatedtotalEntries = enews.length;
+    const updatedtotalEntries = enewsList.length;
     const startEntry = (currentPage - 1) * itemsPerPage + 1;
     const endEntry = Math.min(currentPage * itemsPerPage, updatedtotalEntries);
 
@@ -146,7 +157,7 @@ const ENews = () => {
                                                         textWrap: "pretty",
                                                     }}
                                                 >
-                                                    {item.description}
+                                                    {item.info}
                                                 </td>
                                                 <td
                                                     width="10%"
@@ -157,7 +168,7 @@ const ENews = () => {
                                                         textAlign: "center",
                                                     }}
                                                 >
-                                                    {item.date}
+                                                    {new Date(item.issue_date).toLocaleDateString('en-CA')}
                                                 </td>
                                                 <td
                                                     width="10%"

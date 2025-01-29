@@ -97,6 +97,22 @@ const deptPdfRoutes = require('./routes/deptPdfRoutes');
 const deptDescriptionRoutes = require('./routes/deptDescriptionRoutes');
 const administrativeRoutes = require('./routes/administrationRoutes');
 const annualfinancialRoutes = require('./routes/annualfinancialRoutes');
+const wardOfficeRoutes = require('./routes/wardOfficeRoutes');
+const resolutionRoutes = require('./routes/resolutionRoutes');
+const policiesRoutes = require('./routes/policiesRoutes');
+const agendaRoutes = require('./routes/agendaRoutes');
+const eNewsRoutes = require('./routes/eNewsRoutes');
+const electedMemberRoutes = require('./routes/electedMemberRoutes');
+const budgetsRoutes = require('./routes/budgetsRoutes');
+const muncipalMeetingRoutes = require('./routes/muncipalMeetingRoutes');
+
+
+
+
+
+
+
+
 
 
 app.use('/api', sliderRoutes);
@@ -188,6 +204,22 @@ app.use('/api', deptPdfRoutes);
 app.use('/api', deptDescriptionRoutes);
 app.use('/api', administrativeRoutes);
 app.use('/api', annualfinancialRoutes);
+app.use('/api', wardOfficeRoutes);
+app.use('/api', resolutionRoutes);
+app.use('/api', policiesRoutes);
+app.use('/api', agendaRoutes);
+app.use('/api', eNewsRoutes);
+app.use('/api', electedMemberRoutes);
+app.use('/api', budgetsRoutes);
+app.use('/api', muncipalMeetingRoutes);
+
+
+
+
+
+
+
+
 
 
 const PORT = process.env.PORT || 5011;

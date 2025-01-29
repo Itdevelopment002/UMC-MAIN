@@ -140,6 +140,22 @@ import AddAdministration from "../Administration/AddAdministration";
 import Administration from "../Administration/Administration";
 import Annual from "../AnnualFinancial/AnnualFinance";
 import AddAnnual from "../AnnualFinancial/AddAnnualFinance";
+import WardOffice from "../WardOffice/WardOffice";
+import AddWardOffice from "../WardOffice/AddWardOffice";
+import Resolutions from "../Resolution/Resolution";
+import AddResolution from "../Resolution/AddResolution";
+import Policies from "../Policies/Policies";
+import AddPolicies from "../Policies/AddPolicies";
+import Agenda from "../Agenda/Agenda";
+import AddAgenda from "../Agenda/AddAgenda";
+import ENews from "../eNews/eNews";
+import AddeNews from "../eNews/AddeNews";
+import ElectedMember from "../ElectedMember/ElectedMember";
+import AddElectedMember from "../ElectedMember/AddElectedMember";
+import Budgets from "../Budgets/Budgets";
+import AddBudgets from "../Budgets/AddBudgets";
+import MuncipalMeeting from "../MuncipalMeeting/MuncipalMeeting";
+import AddMuncipalMeeting from "../MuncipalMeeting/AddMuncipalMeeting";
 
 
 function SuperAdminRoutes() {
@@ -243,6 +259,26 @@ function SuperAdminRoutes() {
         <Route path="/adminstration" element={<Administration />} />
         <Route path="/annual" element={<Annual />} />
         <Route path="/add-annual" element={<AddAnnual />} />
+        <Route path="/ward-office" element={<WardOffice />} />
+        <Route path="/add-ward-office" element={<AddWardOffice />} />
+        <Route path="/resolution" element={<Resolutions />} />
+        <Route path="/add-resolution" element={<AddResolution />} />
+        <Route path="/policies" element={<Policies />} />
+        <Route path="/add-policies" element={<AddPolicies />} />
+        <Route path="/agenda" element={<Agenda />} />
+        <Route path="/add-agenda" element={<AddAgenda />} />
+        <Route path="/enews-letter" element={<ENews />} />
+        <Route path="/add-enews-letter" element={<AddeNews />} />
+        <Route path="/elected-member" element={<ElectedMember />} />
+        <Route path="/add-elected-member" element={<AddElectedMember />} />
+        <Route path="/budgets" element={<Budgets />} />
+        <Route path="/add-budgets" element={<AddBudgets />} />
+        <Route path="/muncipal-meeting" element={<MuncipalMeeting />} />
+        <Route path="/add-muncipal-meeting" element={<AddMuncipalMeeting />} />
+
+
+
+
 
           
         {/* <Route path="/add-user" element={<AddUsers />} />

@@ -1,0 +1,345 @@
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import api from "../api";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+const Budgets = () => {
+    const [budgetsData, setBudgetsData] = useState([]);
+    const [filteredBudgets, setFilteredBudgets] = useState([]);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [showEditModal, setShowEditModal] = useState(false);
+    const [selectedBudget, setSelectedBudget] = useState(null);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [selectedYear, setSelectedYear] = useState('2020-2021');
+    const budgetsPerPage = 10;
+
+    useEffect(() => {
+        fetchBudgetsData();
+    }, []);
+
+    useEffect(() => {
+        if (selectedYear) {
+            setFilteredBudgets(
+                budgetsData.filter((budget) => budget.year === selectedYear)
+            );
+        } else {
+            setFilteredBudgets(budgetsData); // Show all if no year is selected
+        }
+    }, [selectedYear, budgetsData]);
+
+    const fetchBudgetsData = async () => {
+        try {
+            const response = await api.get("/budgets_data");
+            setBudgetsData(response.data);
+            setFilteredBudgets(response.data); // Initially show all data
+        } catch (error) {
+            console.error("Error fetching budgets:", error);
+            toast.error("Failed to fetch budgets!");
+        }
+    };
+
+    const handleDelete = async () => {
+        try {
+            await api.delete(`/budgets_data/${selectedBudget.id}`);
+            setBudgetsData(budgetsData.filter((budget) => budget.id !== selectedBudget.id));
+            setShowDeleteModal(false);
+            toast.success("Budget deleted successfully!");
+        } catch (error) {
+            console.error("Error deleting budget:", error);
+            toast.error("Failed to delete the budget!");
+        }
+    };
+
+    const handleEditSave = async () => {
+        try {
+            await api.put(`/budgets_data/${selectedBudget.id}`, {
+                year: selectedBudget.year,
+                heading: selectedBudget.heading,
+                link: selectedBudget.link,
+            });
+            const updatedBudgets = budgetsData.map((budget) =>
+                budget.id === selectedBudget.id ? selectedBudget : budget
+            );
+            setBudgetsData(updatedBudgets);
+            fetchBudgetsData();
+            setShowEditModal(false);
+            toast.success("Budget updated successfully!");
+        } catch (error) {
+            console.error("Error updating budget:", error);
+            toast.error("Failed to update the budget!");
+        }
+    };
+
+    const handleEditClick = (budget) => {
+        setSelectedBudget({ ...budget });
+        setShowEditModal(true);
+    };
+
+    const handleDeleteClick = (budget) => {
+        setSelectedBudget(budget);
+        setShowDeleteModal(true);
+    };
+
+    const handleEditChange = (e) => {
+        const { name, value } = e.target;
+        setSelectedBudget({ ...selectedBudget, [name]: value });
+    };
+
+    const indexOfLastBudget = currentPage * budgetsPerPage;
+    const indexOfFirstBudget = indexOfLastBudget - budgetsPerPage;
+    const currentBudgets = filteredBudgets.slice(indexOfFirstBudget, indexOfLastBudget);
+
+    // Get unique years for the dropdown
+    const uniqueYears = [...new Set(budgetsData.map((budget) => budget.year))];
+
+    return (
+        <>
+            <div className="page-wrapper">
+                <div className="content">
+                    <nav aria-label="breadcrumb">
+                        <ol className="breadcrumb">
+                            <li className="breadcrumb-item">
+                                <Link to="#">Corporation</Link>
+                            </li>
+                            <li className="breadcrumb-item active" aria-current="page">
+                                Budget
+                            </li>
+                        </ol>
+                    </nav>
+
+                    <div className="row">
+                        <div className="col-lg-12">
+                            <div className="card-box">
+                                <div className="card-block">
+                                    <div className="row">
+                                        <div className="col-sm-4 col-3">
+                                            <h4 className="page-title">Budget</h4>
+                                        </div>
+                                        <div className="col-sm-8 col-9 text-right m-b-20">
+                                            <Link
+                                                to="/add-budgets"
+                                                className="btn btn-primary btn-rounded float-right"
+                                            >
+                                                <i className="fa fa-plus"></i> Add Budget
+                                            </Link>
+                                        </div>
+                                    </div>
+
+                                    {/* Dropdown for Year Filter */}
+                                    <div className="form-group">
+                                        <label style={{fontWeight:'500'}}>Filter by Year</label>
+                                        <select
+                                            className="form-control"
+                                            value={selectedYear}
+                                            onChange={(e) => setSelectedYear(e.target.value)}
+                                            style={{ width: '200px' }} // Add this line for fixed width
+                                        >
+                                            
+                                            {uniqueYears.map((year) => (
+                                                <option key={year} value={year}>
+                                                    {year}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    </div>
+
+
+                                    <div className="table-responsive">
+                                        <table className="table table-bordered m-b-0">
+                                            <thead>
+                                                <tr>
+                                                    <th width="10%">Sr. No.</th>
+                                                    <th>Heading</th>
+                                                    <th>PDF Link</th>
+                                                    <th width="15%">Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {currentBudgets.map((budget, index) => (
+                                                    <tr key={budget.id}>
+                                                        <td>
+                                                            {index + 1 + (currentPage - 1) * budgetsPerPage}
+                                                        </td>
+                                                        <td>{budget.heading}</td>
+                                                        <td>{budget.link}</td>
+                                                        <td>
+                                                            <button
+                                                                onClick={() => handleEditClick(budget)}
+                                                                className="btn btn-success btn-sm m-t-10"
+                                                            >
+                                                                Edit
+                                                            </button>
+                                                            <button
+                                                                className="btn btn-danger btn-sm m-t-10"
+                                                                onClick={() => handleDeleteClick(budget)}
+                                                            >
+                                                                Delete
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Pagination */}
+                    <div className="mt-0">
+                        <ul className="pagination">
+                            <li
+                                className={`page-item ${currentPage === 1 ? "disabled" : ""}`}
+                            >
+                                <button
+                                    className="page-link"
+                                    onClick={() => setCurrentPage(currentPage - 1)}
+                                >
+                                    Previous
+                                </button>
+                            </li>
+                            {Array.from(
+                                { length: Math.ceil(filteredBudgets.length / budgetsPerPage) },
+                                (_, i) => (
+                                    <li
+                                        className={`page-item ${currentPage === i + 1 ? "active" : ""}`}
+                                        key={i}
+                                    >
+                                        <button
+                                            className="page-link"
+                                            onClick={() => setCurrentPage(i + 1)}
+                                        >
+                                            {i + 1}
+                                        </button>
+                                    </li>
+                                )
+                            )}
+                            <li
+                                className={`page-item ${currentPage === Math.ceil(filteredBudgets.length / budgetsPerPage) ? "disabled" : ""}`}
+                            >
+                                <button
+                                    className="page-link"
+                                    onClick={() => setCurrentPage(currentPage + 1)}
+                                >
+                                    Next
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+
+                    {/* Edit and Delete Modals */}
+                    {showEditModal && (
+                        <div
+                            className="modal fade show"
+                            style={{
+                                display: "block",
+                                backgroundColor: "rgba(0,0,0,0.5)",
+                                overflowY: "scroll",
+                                scrollbarWidth: "none",
+                            }}
+                        >
+                            <div className="modal-dialog modal-dialog-centered">
+                                <div className="modal-content">
+                                    <div className="modal-header">
+                                        <h5 className="modal-title">Edit Budget</h5>
+                                    </div>
+                                    <div className="modal-body">
+                                        <form>
+                                            {/* <div className="mb-3">
+                                                <label className="form-label">Year</label>
+                                                <input
+                                                    type="text"
+                                                    className="form-control"
+                                                    name="year"
+                                                    value={selectedBudget?.year || ""}
+                                                    onChange={handleEditChange}
+                                                />
+                                            </div> */}
+                                            <div className="mb-3">
+                                                <label className="form-label">Heading</label>
+                                                <input
+                                                    type="text"
+                                                    className="form-control"
+                                                    name="heading"
+                                                    value={selectedBudget?.heading || ""}
+                                                    onChange={handleEditChange}
+                                                />
+                                            </div>
+                                            <div className="mb-3">
+                                                <label className="form-label">PDF Link</label>
+                                                <input
+                                                    type="text"
+                                                    className="form-control"
+                                                    name="link"
+                                                    value={selectedBudget?.link || ""}
+                                                    onChange={handleEditChange}
+                                                />
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div className="modal-footer">
+                                        <button
+                                            type="button"
+                                            className="btn btn-secondary btn-sm"
+                                            onClick={() => setShowEditModal(false)}
+                                        >
+                                            Close
+                                        </button>
+                                        <button
+                                            type="button"
+                                            className="btn btn-primary btn-sm"
+                                            onClick={handleEditSave}
+                                        >
+                                            Save Changes
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {showDeleteModal && (
+                        <div
+                            className="modal fade show"
+                            style={{
+                                display: "block",
+                                backgroundColor: "rgba(0,0,0,0.5)",
+                                overflowY: "scroll",
+                                scrollbarWidth: "none",
+                            }}
+                        >
+                            <div className="modal-dialog modal-dialog-centered">
+                                <div className="modal-content">
+                                    <div className="modal-body text-center">
+                                        <h5>Are you sure you want to delete this entry?</h5>
+                                    </div>
+                                    <div className="modal-footer">
+                                        <button
+                                            type="button"
+                                            className="btn btn-secondary btn-sm"
+                                            onClick={() => setShowDeleteModal(false)}
+                                        >
+                                            Cancel
+                                        </button>
+                                        <button
+                                            type="button"
+                                            className="btn btn-danger btn-sm"
+                                            onClick={handleDelete}
+                                        >
+                                            Delete
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                    <ToastContainer />
+                </div>
+            </div>
+        </>
+    );
+};
+
+export default Budgets;
