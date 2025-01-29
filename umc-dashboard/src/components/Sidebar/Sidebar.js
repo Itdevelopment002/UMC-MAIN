@@ -22,6 +22,8 @@ import { PiComputerTowerBold } from "react-icons/pi";
 import { GoChecklist } from "react-icons/go";
 import { BsPersonFillCheck } from "react-icons/bs";
 import { MdOutlineDatasetLinked } from "react-icons/md";
+import { LuNotepadText } from "react-icons/lu";
+import { BsPersonLinesFill } from "react-icons/bs";
 
 const Sidebar = ({ isOpen, closeSidebar, userDepartment }) => {
   const [openSubmenu, setOpenSubmenu] = useState(null);
@@ -191,14 +193,14 @@ const Sidebar = ({ isOpen, closeSidebar, userDepartment }) => {
                           Bottom Slider
                         </Link>
                       </li>
-                      {/* <li
+                      <li
                         className={activeItem === "/swms" ? "active" : ""}
                         onClick={() => handleItemClick("/swms")}
                       >
                         <Link to="/swms">
                           Solid Waste Management System
                         </Link>
-                      </li> */}
+                      </li>
                       <li
                         className={activeItem === "/press-note" ? "active" : ""}
                         onClick={() => handleItemClick("/press-note")}
@@ -207,7 +209,7 @@ const Sidebar = ({ isOpen, closeSidebar, userDepartment }) => {
                           Press Note
                         </Link>
                       </li>
-                      {/* <li
+                      <li
                         className={activeItem === "/property-tax-department" ? "active" : ""}
                         onClick={() => handleItemClick("/property-tax-department")}
                       >
@@ -222,7 +224,7 @@ const Sidebar = ({ isOpen, closeSidebar, userDepartment }) => {
                         <Link to="/rti">
                           Right to Information
                         </Link>
-                      </li> */}
+                      </li>
                     </ul>
                   </li>
                   <li className="submenu">
@@ -342,6 +344,14 @@ const Sidebar = ({ isOpen, closeSidebar, userDepartment }) => {
                           UMC Budget
                         </Link>
                       </li> */}
+                      {/* <li
+                        className={activeItem === "/umc-committee" ? "active" : ""}
+                        onClick={() => handleItemClick("/umc-committee")}
+                      >
+                        <Link to="/umc-committee">
+                          UMC Committee
+                        </Link>
+                      </li> */}
                       <li
                         className={activeItem === "/policies" ? "active" : ""}
                         onClick={() => handleItemClick("/policies")}
@@ -430,6 +440,28 @@ const Sidebar = ({ isOpen, closeSidebar, userDepartment }) => {
                       Right to Service
                     </Link>
                   </li>
+                  {/* <li
+                    className={activeItem === "/circulars" ? "active" : ""}
+                    onClick={() => handleItemClick("/circulars")}
+                  >
+                    <Link to="/circulars">
+                      <i className="fa">
+                        <LuNotepadText />
+                      </i>{" "}
+                      Circulars
+                    </Link>
+                  </li> */}
+                  {/* <li
+                    className={activeItem === "/online-services" ? "active" : ""}
+                    onClick={() => handleItemClick("/online-services")}
+                  >
+                    <Link to="/online-home-services">
+                      <i className="fa">
+                        <BsPersonLinesFill />
+                      </i>{" "}
+                      Online Services
+                    </Link>
+                  </li> */}
                   <li
                     className={activeItem === "/recruitment" ? "active" : ""}
                     onClick={() => handleItemClick("/recruitment")}
@@ -463,7 +495,7 @@ const Sidebar = ({ isOpen, closeSidebar, userDepartment }) => {
                       Privacy Policy
                     </Link>
                   </li>
-                  {/* <li
+                  <li
                     className={activeItem === "/hyperlink-policy" ? "active" : ""}
                     onClick={() => handleItemClick("/hyperlink-policy")}
                   >
@@ -473,7 +505,7 @@ const Sidebar = ({ isOpen, closeSidebar, userDepartment }) => {
                       </i>{" "}
                       Hyperlink Policy
                     </Link>
-                  </li> */}
+                  </li>
                   <li
                     className={activeItem === "/footer" ? "active" : ""}
                     onClick={() => handleItemClick("/footer")}
