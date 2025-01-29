@@ -1,21 +1,36 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "./Resolutions.css";
+import api from "../api";
 import pdficon from '../../assets/images/Departments/document 1.png';
 import Swal from 'sweetalert2';
 
-const resolutions = [
-    { name: "Resolutions 2022", number: "564", date: "2022-07-04", notice: "Resolutions 2022-07-19", link: "https://drive.google.com/file/d/1NN_wvF6A8nuP1rPGPSHx752L1f02dUJA/view?usp=drive_link", posting: "View PDF" },
-];
+// const resolutions = [
+//     { name: "Resolutions 2022", number: "564", date: "2022-07-04", notice: "Resolutions 2022-07-19", link: "https://drive.google.com/file/d/1NN_wvF6A8nuP1rPGPSHx752L1f02dUJA/view?usp=drive_link", posting: "View PDF" },
+// ];
 
 const Resolutions = () => {
+        const [resolutions, setResolutions] = useState([]);
+         useEffect(() => {
+                fetchResolutions();
+            }, []);
+        const fetchResolutions = async () => {
+            try {
+                const response = await api.get("/resolution");
+                setResolutions(response.data);
+            } catch (error) {
+                console.error("Error fetching resolutions:", error);
+            }
+        };
+    
+    
     const [itemsPerPage, setItemsPerPage] = useState(10);
     const [currentPage, setCurrentPage] = useState(1);
     //eslint-disable-next-line
     const [searchTerm, setSearchTerm] = useState("");
     const totalEntries = resolutions.length;
     const filteredData = resolutions.filter((item) =>
-        item.name.toLowerCase().includes(searchTerm.toLowerCase())
+        item.Department_Name.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     const totalPages = Math.ceil(filteredData.length / itemsPerPage);
@@ -161,7 +176,7 @@ const Resolutions = () => {
                                                         color: "#292D32",
                                                     }}
                                                 >
-                                                    {item.name}
+                                                    {item.Department_Name}
                                                 </td>
                                                 <td
                                                     width="20%"
@@ -171,7 +186,7 @@ const Resolutions = () => {
                                                         color: "#292D32",
                                                     }}
                                                 >
-                                                    {item.number}
+                                                    {item.Resolutions_No_Date}
                                                 </td>
                                                 <td
                                                     width="20%"
@@ -181,7 +196,7 @@ const Resolutions = () => {
                                                         color: "#292D32",
                                                     }}
                                                 >
-                                                    {item.date}
+                                                    {new Date(item.Schedule_Date_of_Meeting).toLocaleDateString('en-CA')}
                                                 </td>
                                                 <td
                                                     width="20%"
@@ -191,7 +206,7 @@ const Resolutions = () => {
                                                         color: "#292D32",
                                                     }}
                                                 >
-                                                    {item.notice}
+                                                    {item.Adjournment_Notice}
                                                 </td>
                                                 <td
                                                     width="10%"
@@ -203,9 +218,9 @@ const Resolutions = () => {
                                                     }}
                                                 >
                                                     <Link
-                                                        to={item.link}
+                                                        to={item.pdf_link}
                                                         className="text-decoration-none"
-                                                        target={item.link === "#" ? "" : "_blank"}
+                                                        target={item.pdf_link === "#" ? "" : "_blank"}
                                                         style={{ color: "#333333" }}
                                                         onClick={(e) => handleClick(item.link, e)}
                                                     >
@@ -219,7 +234,7 @@ const Resolutions = () => {
                                                                 verticalAlign: "middle",
                                                             }}
                                                         />
-                                                        {item.posting}
+                                                        View PDF
                                                     </Link>
                                                 </td>
                                             </tr>

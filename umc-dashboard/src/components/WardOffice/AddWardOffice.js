@@ -1,0 +1,140 @@
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import api from "../api";
+
+const AddWardOffice = () => {
+  const [formData, setFormData] = useState({
+    ward_name: "",
+    officer_name: "",
+    address: "",
+    email: "",
+    mobile: "",
+    landline: "",
+    ward_no: "",
+    areas: "",
+    map_url: "",
+  });
+  const [errors, setErrors] = useState({});
+  const navigate = useNavigate();
+
+  const validateForm = () => {
+    const validationErrors = {};
+    Object.keys(formData).forEach((key) => {
+      if (!formData[key]) {
+        validationErrors[key] = `${key.replace("_", " ")} is required.`;
+      }
+    });
+
+    setErrors(validationErrors);
+    return Object.keys(validationErrors).length === 0;
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+
+    if (errors[name]) {
+      setErrors({ ...errors, [name]: "" });
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!validateForm()) return;
+
+    try {
+      await api.post("/ward-offices", formData);
+      setFormData({
+        ward_name: "",
+        officer_name: "",
+        address: "",
+        email: "",
+        mobile: "",
+        landline: "",
+        ward_no: "",
+        areas: "",
+        map_url: "",
+      });
+      navigate("/ward-office");
+    } catch (error) {
+      console.error("Error adding ward office:", error);
+    }
+  };
+
+  return (
+    <div>
+      <div className="page-wrapper">
+        <div className="content">
+          <ol className="breadcrumb">
+            <li className="breadcrumb-item">
+              <Link to="#">Corporation</Link>
+            </li>
+            <li className="breadcrumb-item">
+              <Link to="/ward-office">Ward Offices</Link>
+            </li>
+            <li className="breadcrumb-item active" aria-current="page">
+              Add Ward Office
+            </li>
+          </ol>
+          <div className="row">
+            <div className="col-lg-12">
+              <div className="card-box">
+                <div className="card-block">
+                  <div className="row">
+                    <div className="col-sm-4 col-3">
+                      <h4 className="page-title">Add Ward Office</h4>
+                    </div>
+                  </div>
+                  <form onSubmit={handleSubmit}>
+                    {[
+                      { label: "Ward Name", name: "ward_name" },
+                      { label: "Officer Name", name: "officer_name" },
+                      { label: "Office Address", name: "address" },
+                      { label: "Email", name: "email", type: "text" },
+                      { label: "Mobile", name: "mobile", type: "text" },
+                      { label: "Landline No.", name: "landline", type: "text" },
+                      { label: "Ward No", name: "ward_no" },
+                      { label: "Areas", name: "areas" },
+                      { label: "Iframe Src", name: "map_url" },
+                    ].map(({ label, name, type = "text" }) => (
+                      <div className="form-group row mt-3" key={name}>
+                        <label className="col-form-label col-md-2">
+                          {label} <span className="text-danger">*</span>
+                        </label>
+                        <div className="col-md-4">
+                          <input
+                            type={type}
+                            className={`form-control form-control-md ${
+                              errors[name] ? "is-invalid" : ""
+                            }`}
+                            placeholder={`Enter ${label}`}
+                            name={name}
+                            value={formData[name]}
+                            onChange={handleChange}
+                          />
+                          {errors[name] && (
+                            <div className="invalid-feedback">
+                              {errors[name]}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                    <input
+                      type="submit"
+                      className="btn btn-primary btn-sm mt-3"
+                      value="Submit"
+                    />
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default AddWardOffice;

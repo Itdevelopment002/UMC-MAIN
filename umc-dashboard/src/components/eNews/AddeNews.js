@@ -2,25 +2,26 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../api";
 
-const AddAdministration = () => {
-  const [name, setName] = useState("");
-  const [designation, setDesignation] = useState("");
-  const [phone, setPhone] = useState("");
+const AddeNews = () => {
+  const [info, setInfo] = useState("");
+  const [issue_date, setIssueDate] = useState("");
+  const [pdf_link, setPdfLink] = useState("");
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
 
   const validateForm = () => {
     const validationErrors = {};
 
-    if (!name) {
-      validationErrors.name = "name is required.";
+    if (!info) {
+      validationErrors.info = "Information is required.";
     }
 
-    if (!designation) {
-      validationErrors.designation = "designation is required.";
+    if (!issue_date) {
+      validationErrors.issue_date = "Issue Date is required.";
     }
-    if (!phone) {
-      validationErrors.phone = "phone is required.";
+
+    if (!pdf_link) {
+      validationErrors.pdf_link = "PDF Link is required.";
     }
 
     setErrors(validationErrors);
@@ -36,17 +37,17 @@ const AddAdministration = () => {
 
     try {
       //eslint-disable-next-line
-      const response = await api.post("/administration", {
-        name: name,
-        designation: designation,
-        phone: phone,
+      const response = await api.post("/enews_data", {
+        info,
+        issue_date,
+        pdf_link,
       });
-      setName("");
-      setDesignation("");
-      setPhone("");
-      navigate("/adminstration");
+      setInfo("");
+      setIssueDate("");
+      setPdfLink("");
+      navigate("/enews-letter");
     } catch (error) {
-      console.error("Error adding ward:", error);
+      console.error("Error adding e-news:", error);
     }
   };
 
@@ -59,10 +60,10 @@ const AddAdministration = () => {
               <Link to="#">Corporation</Link>
             </li>
             <li className="breadcrumb-item">
-              <Link to="/adminstration">Administration</Link>
+              <Link to="/enews-letter">e-News Letter</Link>
             </li>
             <li className="breadcrumb-item active" aria-current="page">
-              Add Administration
+              Add e-News Letter
             </li>
           </ol>
           <div className="row">
@@ -71,31 +72,55 @@ const AddAdministration = () => {
                 <div className="card-block">
                   <div className="row">
                     <div className="col-sm-4 col-3">
-                      <h4 className="page-title">Add Administration</h4>
+                      <h4 className="page-title">Add e-News Letter</h4>
                     </div>
                   </div>
                   <form onSubmit={handleSubmit}>
                     <div className="form-group row">
                       <label className="col-form-label col-md-2">
-                        Name <span className="text-danger">*</span>
+                        Information <span className="text-danger">*</span>
                       </label>
                       <div className="col-md-4">
-                        <input
-                          type="text"
-                          className={`form-control form-control-md ${errors.name ? "is-invalid" : ""
-                            }`}
-                          placeholder="Enter Name"
-                          value={name}
+                        <textarea
+                          className={`form-control form-control-md ${
+                            errors.info ? "is-invalid" : ""
+                          }`}
+                          placeholder="Enter Agenda Information"
+                          value={info}
                           onChange={(e) => {
-                            setName(e.target.value);
-                            if (errors.name) {
-                              setErrors({ ...errors, name: "" });
+                            setInfo(e.target.value);
+                            if (errors.info) {
+                              setErrors({ ...errors, info: "" });
                             }
                           }}
                         />
-                        {errors.name && (
+                        {errors.info && (
+                          <div className="invalid-feedback">{errors.info}</div>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="form-group row mt-3">
+                      <label className="col-form-label col-md-2">
+                        Issue Date <span className="text-danger">*</span>
+                      </label>
+                      <div className="col-md-4">
+                        <input
+                          type="date"
+                          className={`form-control form-control-md ${
+                            errors.issue_date ? "is-invalid" : ""
+                          }`}
+                          value={issue_date}
+                          onChange={(e) => {
+                            setIssueDate(e.target.value);
+                            if (errors.issue_date) {
+                              setErrors({ ...errors, issue_date: "" });
+                            }
+                          }}
+                        />
+                        {errors.issue_date && (
                           <div className="invalid-feedback">
-                            {errors.name}
+                            {errors.issue_date}
                           </div>
                         )}
                       </div>
@@ -103,54 +128,29 @@ const AddAdministration = () => {
 
                     <div className="form-group row mt-3">
                       <label className="col-form-label col-md-2">
-                        Designation <span className="text-danger">*</span>
+                        PDF Link <span className="text-danger">*</span>
                       </label>
                       <div className="col-md-4">
                         <input
                           type="text"
-                          className={`form-control form-control-md ${errors.designation ? "is-invalid" : ""
-                            }`}
-                          placeholder="Enter designation"
-                          value={designation}
+                          className={`form-control form-control-md ${
+                            errors.pdf_link ? "is-invalid" : ""
+                          }`}
+                          placeholder="Enter PDF Link"
+                          value={pdf_link}
                           onChange={(e) => {
-                            setDesignation(e.target.value);
-                            if (errors.designation) {
-                              setErrors({ ...errors, designation: "" });
+                            setPdfLink(e.target.value);
+                            if (errors.pdf_link) {
+                              setErrors({ ...errors, pdf_link: "" });
                             }
                           }}
                         />
-                        {errors.designation && (
-                          <div className="invalid-feedback">
-                            {errors.designation}
-                          </div>
+                        {errors.pdf_link && (
+                          <div className="invalid-feedback">{errors.pdf_link}</div>
                         )}
                       </div>
                     </div>
-                    <div className="form-group row mt-3">
-                      <label className="col-form-label col-md-2">
-                        Phone No. <span className="text-danger">*</span>
-                      </label>
-                      <div className="col-md-4">
-                        <input
-                          type="text"
-                          className={`form-control form-control-md ${errors.phone ? "is-invalid" : ""
-                            }`}
-                          placeholder="Enter Phone"
-                          value={phone}
-                          onChange={(e) => {
-                            setPhone(e.target.value);
-                            if (errors.phone) {
-                              setErrors({ ...errors, phone: "" });
-                            }
-                          }}
-                        />
-                        {errors.phone && (
-                          <div className="invalid-feedback">
-                            {errors.phone}
-                          </div>
-                        )}
-                      </div>
-                    </div>
+
                     <input
                       type="submit"
                       className="btn btn-primary btn-sm mt-3"
@@ -167,4 +167,4 @@ const AddAdministration = () => {
   );
 };
 
-export default AddAdministration;
+export default AddeNews;
