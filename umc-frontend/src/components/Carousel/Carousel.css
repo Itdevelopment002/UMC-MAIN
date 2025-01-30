@@ -51,13 +51,15 @@
 }
 
 .swiper-pagination-bullet {
-  margin-left: 15px !important;
   height: 20px !important;
   width: 20px !important;
   border: 1px solid #fff !important;
   background-color: #7B202A !important;
 }
+.swiper-pagination-bullet:not(:first-child){
+  margin-left: 15px !important;
 
+}
 /* .swiper-pagination-bullet.active {
   background-color: #7B202A !important;
 } */
