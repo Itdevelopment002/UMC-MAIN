@@ -62,7 +62,7 @@ const TopHeader = () => {
     };
 
     const getLanguageText = () => {
-        if (selectedLanguage === "eng") return "english";
+        if (selectedLanguage === "eng") return "English";
         if (selectedLanguage === "hin") return "हिंदी";
         if (selectedLanguage === "mar") return "मराठी";
 
