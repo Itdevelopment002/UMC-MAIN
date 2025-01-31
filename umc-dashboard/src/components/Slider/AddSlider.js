@@ -22,7 +22,7 @@ const AddSlider = () => {
     }
 
     if (!selectedFile) {
-      newErrors.selectedFile = "Image file is required.";
+      newErrors.selectedFile = "Slider Image is required.";
     }
 
     if (Object.keys(newErrors).length > 0) {
@@ -100,7 +100,7 @@ const AddSlider = () => {
                     </div>
                     <div className="form-group row">
                       <label className="col-form-label col-lg-2">
-                        Upload Image <span className="text-danger">*</span>
+                        Slider Image <span className="text-danger">*</span>
                       </label>
                       <div className="col-md-4">
                         <div className="input-group mb-3">
@@ -123,8 +123,8 @@ const AddSlider = () => {
                     </div>
                     <input
                       type="submit"
-                      className="btn btn-primary"
-                      value="Upload"
+                      className="btn btn-primary btn-sm"
+                      value="Submit"
                     />
                   </form>
                 </div>

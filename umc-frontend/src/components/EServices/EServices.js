@@ -168,7 +168,7 @@ const EServices = () => {
   return (
     <div className="container-fluid mb-4 mt-4">
       <div className="row">
-        <div className="col-xl-6 col-lg-12 col-md-12 col-sm-12">
+        <div className="col-xl-6 col-lg-6 col-md-12 col-sm-12">
           <div className="e-services-container p-2">
             <div className="tabs-container right-section-font mb-4">
               <ul className="nav nav-tabs gap-3 custom-nav-border">
@@ -276,106 +276,7 @@ const EServices = () => {
             </div>
           </div>
         </div>
-        {/* <div className="col-xl-3 col-lg-6 col-md-6 col-sm-12 e-services-margin right-section-font">
-          <div className="upcoming-projects bg-white p-2">
-            <h5 className="p-2 h5-styling-div">Information</h5>
-            <div className="scroll-wrapper">
-              <div
-                className="info-scroll-container"
-                ref={scrollContainerRef}
-                onMouseEnter={handleMouseEnter}
-                onMouseLeave={handleMouseLeave}
-              >
-                <ul>
-                  {information.map((info, index) => (
-                    <li key={index} className="para-style1">
-                      <Link
-                        to={info.link}
-                        className={`text-decoration-none custom-list-effect ${activeInfoIndex === index ? "active" : ""
-                          }`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={() => handleInfoClick(index)}
-
-                      >
-                        {info.heading}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-                <ul>
-                  {information.map((info, index) => (
-                    <li key={`duplicate-${index}`} className="para-style1">
-                      <Link
-                        to={info.link}
-                        className={`text-decoration-none custom-list-effect ${activeInfoIndex === index ? "active" : ""
-                          }`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={() => handleInfoClick(index)}
-
-                      >
-                        {info.heading}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="col-xl-3 col-lg-6 col-md-6 col-sm-12 e-services-margin right-section-font">
-          <div className="upcoming-projects bg-white p-2">
-            <h5 className="p-2 h5-styling-5">Upcoming Projects</h5>
-            <div className="scroll-wrapper">
-              <div
-                className="scroll-container"
-                ref={projectscrollContainerRef}
-                onMouseEnter={projectshandleMouseEnter}
-                onMouseLeave={projectshandleMouseLeave}
-              >
-                {projects.map((project, index) => (
-                  <div key={index}>
-                    <div className="project-item">
-                      <img
-                        src={`${baseURL}/${project.main_icon_path}`}
-                        alt={project.heading}
-                        className="e-services-img me-3"
-                      />
-                      <div>
-                        <p className="para-style">
-                          <b>{project.heading}, </b>
-                          {project.description}
-                        </p>
-                      </div>
-                    </div>
-                    <hr className="mt-1" />
-                  </div>
-                ))}
-                {projects.map((project, index) => (
-                  <div key={`duplicate-${index}`}>
-                    <div className="project-item">
-                      <img
-                        src={`${baseURL}/${project.main_icon_path}`}
-                        alt={project.heading}
-                        className="e-services-img me-3"
-                      />
-                      <div>
-                        <p className="para-style">
-                          <b>{project.heading}, </b>
-                          {project.description}
-                        </p>
-                      </div>
-                    </div>
-                    <hr className="mt-1" />
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div> */}
-        <div className="col-lg-6 col-md-12 col-sm-12">
+        <div className="col-xl-6 col-lg-6 col-md-12 col-sm-12">
           <div className="citigen mt-1">
             <div className="vertical-line"></div>
             <div className="d-flex">

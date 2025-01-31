@@ -104,7 +104,7 @@ const Initiatives = () => {
           <nav aria-label="breadcrumb">
             <ol className="breadcrumb">
               <li className="breadcrumb-item">
-                <Link to="/home">Home</Link>
+                <Link to="#">Home</Link>
               </li>
               <li className="breadcrumb-item active" aria-current="page">
                 Initiatives-Programme
@@ -124,7 +124,7 @@ const Initiatives = () => {
                         to="/add-initiatives"
                         className="btn btn-primary btn-rounded float-right"
                       >
-                        <i className="fa fa-plus"></i> Add Initiatives-Programme
+                        <i className="fa fa-plus"></i> Add Initiative
                       </Link>
                     </div>
                   </div>
@@ -132,20 +132,20 @@ const Initiatives = () => {
                     <table className="table table-bordered m-b-0">
                       <thead>
                         <tr>
-                          <th width="10%">Sr. No.</th>
+                          <th width="10%" className="text-center">Sr. No.</th>
                           <th>Initiative Heading</th>
                           <th>Initiative Link</th>
-                          <th>Initiative Icon</th>
-                          <th>Action</th>
+                          <th className="text-center">Initiative Icon</th>
+                          <th className="text-center">Action</th>
                         </tr>
                       </thead>
                       <tbody>
                         {initiatives.map((initiative, index) => (
                           <tr key={initiative.id}>
-                            <td>{index + 1}</td>
+                            <td className="text-center">{index + 1}</td>
                             <td>{initiative.heading}</td>
                             <td>{initiative.link}</td>
-                            <td>
+                            <td className="text-center">
                               <Link
                                 to={`${baseURL}/${initiative.main_icon_path}`}
                                 className="glightbox"
@@ -158,7 +158,7 @@ const Initiatives = () => {
                                 />
                               </Link>
                             </td>
-                            <td>
+                            <td className="text-center">
                               <button
                                 className="btn btn-success btn-sm m-t-10 mx-1"
                                 onClick={() => handleEditModalOpen(initiative.id)}

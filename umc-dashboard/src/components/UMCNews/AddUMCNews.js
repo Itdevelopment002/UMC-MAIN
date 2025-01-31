@@ -12,11 +12,11 @@ const AddUMCNews = () => {
     const validationErrors = {};
 
     if (!heading) {
-      validationErrors.heading = "Heading is required.";
+      validationErrors.heading = "News Heading is required.";
     }
 
     if (!link) {
-      validationErrors.link = "Link is required.";
+      validationErrors.link = "News Link is required.";
     }
 
     setErrors(validationErrors);
@@ -40,7 +40,7 @@ const AddUMCNews = () => {
       setLink("");
       navigate("/umc-news");
     } catch (error) {
-      console.error("Error adding ward:", error);
+      console.error("Error adding news:", error);
     }
   };
 
@@ -50,7 +50,7 @@ const AddUMCNews = () => {
         <div className="content">
           <ol className="breadcrumb">
             <li className="breadcrumb-item">
-              <Link to="/home">Home</Link>
+              <Link to="#">Home</Link>
             </li>
             <li className="breadcrumb-item">
               <Link to="/umc-news">UMC News</Link>
@@ -64,14 +64,14 @@ const AddUMCNews = () => {
               <div className="card-box">
                 <div className="card-block">
                   <div className="row">
-                    <div className="col-sm-4 col-3">
+                    <div className="col-12">
                       <h4 className="page-title">Add UMC News</h4>
                     </div>
                   </div>
                   <form onSubmit={handleSubmit}>
                     <div className="form-group row">
                       <label className="col-form-label col-md-2">
-                        Heading <span className="text-danger">*</span>
+                        News Heading <span className="text-danger">*</span>
                       </label>
                       <div className="col-md-4">
                         <input
@@ -98,7 +98,7 @@ const AddUMCNews = () => {
 
                     <div className="form-group row mt-3">
                       <label className="col-form-label col-md-2">
-                        Link <span className="text-danger">*</span>
+                        News Link <span className="text-danger">*</span>
                       </label>
                       <div className="col-md-4">
                         <input

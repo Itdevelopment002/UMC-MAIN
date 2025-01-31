@@ -12,11 +12,11 @@ const AddEServices = () => {
     const validationErrors = {};
 
     if (!heading) {
-      validationErrors.heading = "Heading is required.";
+      validationErrors.heading = "Service Heading is required.";
     }
 
     if (!link) {
-      validationErrors.link = "Link is required.";
+      validationErrors.link = "Service Link is required.";
     }
 
     setErrors(validationErrors);
@@ -50,7 +50,7 @@ const AddEServices = () => {
         <div className="content">
           <ol className="breadcrumb">
             <li className="breadcrumb-item">
-              <Link to="/home">Home</Link>
+              <Link to="#">Home</Link>
             </li>
             <li className="breadcrumb-item">
               <Link to="/eservices">e-Services</Link>
@@ -64,7 +64,7 @@ const AddEServices = () => {
               <div className="card-box">
                 <div className="card-block">
                   <div className="row">
-                    <div className="col-sm-4 col-3">
+                    <div className="col-12">
                       <h4 className="page-title">Add e-Serive</h4>
                     </div>
                   </div>
@@ -79,7 +79,7 @@ const AddEServices = () => {
                           className={`form-control form-control-md ${
                             errors.heading ? "is-invalid" : ""
                           }`}
-                          placeholder="Enter Heading"
+                          placeholder="Enter Service Heading"
                           value={heading}
                           onChange={(e) => {
                             setHeading(e.target.value);
@@ -106,7 +106,7 @@ const AddEServices = () => {
                           className={`form-control form-control-md ${
                             errors.link ? "is-invalid" : ""
                           }`}
-                          placeholder="Enter Link"
+                          placeholder="Enter Service Link"
                           value={link}
                           onChange={(e) => {
                             setLink(e.target.value);

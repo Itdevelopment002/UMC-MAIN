@@ -82,7 +82,7 @@ const UMCNews = () => {
           <nav aria-label="breadcrumb">
             <ol className="breadcrumb">
               <li className="breadcrumb-item">
-                <Link to="/home">Home</Link>
+                <Link to="#">Home</Link>
               </li>
               <li className="breadcrumb-item active" aria-current="page">
                 UMC News
@@ -94,10 +94,10 @@ const UMCNews = () => {
               <div className="card-box">
                 <div className="card-block">
                   <div className="row">
-                    <div className="col-sm-4 col-3">
+                    <div className="col-6">
                       <h4 className="page-title">UMC News</h4>
                     </div>
-                    <div className="col-sm-8 col-9 text-right m-b-20">
+                    <div className="col-6 text-right m-b-20">
                       <Link
                         to="/add-umc-news"
                         className="btn btn-primary btn-rounded float-right"
@@ -110,21 +110,21 @@ const UMCNews = () => {
                     <table className="table table-bordered m-b-0">
                       <thead>
                         <tr>
-                          <th width="10%">Sr. No.</th>
-                          <th>Heading</th>
-                          <th>Link</th>
-                          <th width="15%">Action</th>
+                          <th width="10%" className="text-center">Sr. No.</th>
+                          <th>News Heading</th>
+                          <th>News Link</th>
+                          <th width="15%" className="text-center">Action</th>
                         </tr>
                       </thead>
                       <tbody>
                         {currentNews.map((news, index) => (
                           <tr key={news.id}>
-                            <td>
+                            <td className="text-center">
                               {index + 1 + (currentPage - 1) * newsPerPage}
                             </td>
                             <td>{news.heading}</td>
                             <td>{news.link}</td>
-                            <td>
+                            <td className="text-center">
                               <button
                                 onClick={() => handleEditClick(news)}
                                 className="btn btn-success btn-sm m-t-10"
