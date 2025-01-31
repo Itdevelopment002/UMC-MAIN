@@ -157,6 +157,9 @@ const AddCategoryVideos = () => {
                         {errors.link && (
                           <div className="invalid-feedback">{errors.link}</div>
                         )}
+                        <small className="form-text text-muted">
+                          Note: A maximum of 8 videos can be added per category.
+                        </small>
                       </div>
                     </div>
                     <input
