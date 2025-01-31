@@ -14,9 +14,9 @@ const AddServices = () => {
 
     const validateForm = () => {
         const errors = {};
-        if (!heading) errors.heading = "Heading is required.";
-        if (!link) errors.link = "Link is required.";
-        if (!mainIcon) errors.mainIcon = "Main Icon is required.";
+        if (!heading) errors.heading = "Initiative Heading is required.";
+        if (!link) errors.link = "Initiative Link is required.";
+        if (!mainIcon) errors.mainIcon = "Initiative Icon is required.";
         setErrors(errors);
         return Object.keys(errors).length === 0;
     };
@@ -74,7 +74,7 @@ const AddServices = () => {
             <div className="page-wrapper">
                 <div className="content">
                     <ol className="breadcrumb">
-                        <li className="breadcrumb-item"><Link to="/home">Home</Link></li>
+                        <li className="breadcrumb-item"><Link to="#">Home</Link></li>
                         <li className="breadcrumb-item"><Link to="/initiatives">Initiatives-Programme</Link></li>
                         <li className="breadcrumb-item active" aria-current="page">Add Initiatives-Programme</li>
                     </ol>
@@ -83,7 +83,7 @@ const AddServices = () => {
                             <div className="card-box">
                                 <div className="card-block">
                                     <div className="row">
-                                        <div className="col-sm-4 col-3">
+                                        <div className="col-12">
                                             <h4 className="page-title">Add Initiatives-Programme</h4>
                                         </div>
                                     </div>
@@ -96,6 +96,7 @@ const AddServices = () => {
                                                     className={`form-control form-control-md ${errors.heading ? 'is-invalid' : ''}`}
                                                     value={heading}
                                                     name="heading"
+                                                    placeholder='Enter Initiative Heading'
                                                     onChange={handleChange}
                                                 />
                                                 {errors.heading && <span className="text-danger">{errors.heading}</span>}
@@ -109,6 +110,7 @@ const AddServices = () => {
                                                     className={`form-control ${errors.link ? 'is-invalid' : ''}`}
                                                     value={link}
                                                     name="link"
+                                                    placeholder='Enter Initiative Link'
                                                     onChange={handleChange}
                                                 />
                                                 {errors.link && <span className="text-danger">{errors.link}</span>}
@@ -129,7 +131,7 @@ const AddServices = () => {
                                                 {errors.mainIcon && <span className="text-danger">{errors.mainIcon}</span>}
                                             </div>
                                         </div>
-                                        <input type="submit" className="btn btn-primary" value="Submit" />
+                                        <input type="submit" className="btn btn-primary btn-sm" value="Submit" />
                                     </form>
                                     <ToastContainer />
                                 </div>

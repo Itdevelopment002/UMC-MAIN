@@ -115,7 +115,7 @@ const HomeGallery = () => {
           <nav aria-label="breadcrumb">
             <ol className="breadcrumb">
               <li className="breadcrumb-item">
-                <Link to="/home">Home</Link>
+                <Link to="#">Home</Link>
               </li>
               <li className="breadcrumb-item active" aria-current="page">
                 Home Gallery
@@ -143,18 +143,18 @@ const HomeGallery = () => {
                     <table className="table table-bordered m-b-0">
                       <thead>
                         <tr>
-                          <th width="10%">Sr. No.</th>
+                          <th width="10%" className="text-center">Sr. No.</th>
                           <th>Photo Gallery Name</th>
-                          <th>Photo Gallery Image</th>
-                          <th>Action</th>
+                          <th width="30%"className="text-center">Photo Gallery Image</th>
+                          <th width="15%" className="text-center">Action</th>
                         </tr>
                       </thead>
                       <tbody>
                         {currentPageData.map((gallery, index) => (
                           <tr key={gallery.id}>
-                            <td>{(currentPage - 1) * itemsPerPage + index + 1}</td>
+                            <td className="text-center">{(currentPage - 1) * itemsPerPage + index + 1}</td>
                             <td>{gallery.photo_name}</td>
-                            <td>
+                            <td className="text-center">
                               <Link
                                 to={`${baseURL}${gallery.file_path}`}
                                 className="glightbox"
@@ -167,7 +167,7 @@ const HomeGallery = () => {
                                 />
                               </Link>
                             </td>
-                            <td>
+                            <td className="text-center">
                             <button
                                 className="btn btn-success btn-sm m-t-10"
                                 onClick={() => handleEdit(gallery)}

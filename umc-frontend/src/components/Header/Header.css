@@ -733,16 +733,16 @@ a {
       .nav-item.about-dropdown:hover{
         height: 180px;
       }
-      .nav-item.administartive-dropdown:hover{
+      .nav-item.administrative-dropdown:hover{
         height: 110px;
       }
       .nav-item.corporation-dropdown:hover{
         height: 200px;
       }
-      .nav-item.department-dropdown:hover{
+      .nav-item.departments-dropdown:hover{
         height: 200px;
       }
-      .nav-item.services-dropdown:hover{
+      .nav-item.online-dropdown:hover{
         height: 170px;
       }
       .nav-item.gallery-dropdown:hover{

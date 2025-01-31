@@ -82,7 +82,7 @@ const EServices = () => {
           <nav aria-label="breadcrumb">
             <ol className="breadcrumb">
               <li className="breadcrumb-item">
-                <Link to="/home">Home</Link>
+                <Link to="#">Home</Link>
               </li>
               <li className="breadcrumb-item active" aria-current="page">
                 e-Services
@@ -110,21 +110,21 @@ const EServices = () => {
                     <table className="table table-bordered m-b-0">
                       <thead>
                         <tr>
-                          <th width="10%">Sr. No.</th>
+                          <th width="10%" className="text-center">Sr. No.</th>
                           <th>Service heading</th>
                           <th>Service link</th>
-                          <th width="15%">Action</th>
+                          <th width="15%" className="text-center">Action</th>
                         </tr>
                       </thead>
                       <tbody>
                         {currentServices.map((service, index) => (
                           <tr key={service.id}>
-                            <td>
+                            <td className="text-center">
                               {index + 1 + (currentPage - 1) * servicesPerPage}
                             </td>
                             <td>{service.heading}</td>
                             <td>{service.link}</td>
-                            <td>
+                            <td className="text-center">
                               <button
                                 onClick={() => handleEditClick(service)}
                                 className="btn btn-success btn-sm m-t-10"

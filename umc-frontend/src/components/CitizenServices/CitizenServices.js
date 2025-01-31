@@ -168,7 +168,7 @@ const CitizenServices = () => {
   return (
     <div className="background-container" id="citizen-section">
       <div className="container-fluid citigen-section">
-        <div className="row  d-flex flex-wrap justify-content-between" >
+        <div className="row py-2 d-flex flex-wrap justify-content-between" >
           {/* <div className="citigen mt-1">
               <div className="vertical-line"></div>
               <div className="d-flex">
@@ -200,7 +200,7 @@ const CitizenServices = () => {
               ))}
             </div> */}
 
-          <div className="col-xl-3 col-lg-3 col-md-3 col-sm-12 e-services-margin right-section-font">
+          <div className="col-xl-3 col-lg-6 col-md-6 col-sm-12 e-services-margin right-section-font">
             <div className="upcoming-projects bg-white p-2">
               <h5 className="p-2 h5-styling-div">Information</h5>
               <div className="scroll-wrapper">
@@ -249,7 +249,7 @@ const CitizenServices = () => {
             </div>
           </div>
 
-          <div className="col-xl-3 col-lg-3 col-md-3 col-sm-12 e-services-margin right-section-font">
+          <div className="col-xl-3 col-lg-6 col-md-6 col-sm-12 e-services-margin right-section-font">
             <div className="upcoming-projects bg-white p-2">
               <h5 className="p-2 h5-styling-5">Upcoming Projects</h5>
               <div className="scroll-wrapper">
@@ -301,7 +301,7 @@ const CitizenServices = () => {
           </div>
 
 
-          <div className="col-lg-2 col-md-4 col-sm-5">
+          <div className="col-xl-2 col-lg-4 col-md-4 col-sm-5">
             <div className="citigen">
               <div className="vertical-line"></div>
               <div className="d-flex">
@@ -338,7 +338,7 @@ const CitizenServices = () => {
           </div>
 
 
-          <div className="col-lg-4 col-md-8 col-sm-7">
+          <div className="col-xl-4 col-lg-8 col-md-8 col-sm-7">
             <div className="menu-list">
               {homeservices1.map((item, index) => (
                 <Link to={item.link} className="text-decoration-none">
