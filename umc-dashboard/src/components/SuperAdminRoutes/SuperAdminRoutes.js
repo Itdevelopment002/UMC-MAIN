@@ -181,6 +181,12 @@ import AddCirculars from "../Circulars/AddCirculars";
 import Circulars from "../Circulars/Circulars";
 import AddOnlineHomeServices from "../OnlineHomeServices/AddOnlineHomeServices";
 import OnlineHomeServices from "../OnlineHomeServices/OnlineHomeServices";
+import PhotosGallery from "../PhotosGallery/PhotosGalllery";
+import AddCategory from "../PhotosGallery/AddCategory";
+import AddCategoryImage from "../PhotosGallery/AddCategoryImages";
+import VideoGallery from "../VideoGallery/VideoGallery";
+import AddVideoCategory from "../VideoGallery/AddVideoCategory";
+import AddCategoryVideos from "../VideoGallery/AddCategoryVideos";
 
 
 function SuperAdminRoutes() {
@@ -328,8 +334,15 @@ function SuperAdminRoutes() {
         <Route path="/add-ward-committee" element={<AddWardCommittee />} />
         <Route path="/circulars" element={<Circulars />} />
         <Route path="/add-circulars" element={<AddCirculars />} />
-        <Route path="/online-home-services" element={<OnlineServices />} />
-        <Route path="/add-online-home-services" element={<AddOnlineServices />} />
+        <Route path="/online-home-services" element={<OnlineHomeServices />} />
+        <Route path="/add-online-home-services" element={<AddOnlineHomeServices />} />
+        {/* <Route path="/photo-gallery" element={<PhotosGallery />} /> */}
+        <Route path="/photo-gallery" element={<PhotosGallery />} />
+        <Route path="/add-category" element={<AddCategory />} />
+        <Route path="/add-category-images" element={<AddCategoryImage />} />
+        <Route path="/video-gallery" element={<VideoGallery />} />
+        <Route path="/add-video-category" element={<AddVideoCategory />} />
+        <Route path="/add-category-videos" element={<AddCategoryVideos />} />
 
           
         {/* <Route path="/add-user" element={<AddUsers />} />

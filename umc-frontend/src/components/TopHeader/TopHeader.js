@@ -3,9 +3,9 @@ import { Link } from "react-router-dom";
 import '../Header/Header.css';
 import { RiArrowDropDownLine } from "react-icons/ri";
 import phoneicon from "../../assets/images/header-img/telephone.png";
-import flag1 from "../../assets/images/header-img/united-states.png";
-import flag2 from "../../assets/images/header-img/india.png";
-import flag3 from "../../assets/images/header-img/hindu.png";
+// import flag1 from "../../assets/images/header-img/united-states.png";
+// import flag2 from "../../assets/images/header-img/india.png";
+// import flag3 from "../../assets/images/header-img/hindu.png";
 import twitter from '../../assets/images/header-img/twitter.png';
 import facebook from '../../assets/images/header-img/facebook.png';
 import instagram from '../../assets/images/header-img/instagram (2).png';
@@ -15,7 +15,6 @@ const TopHeader = () => {
     const [selectedLanguage, setSelectedLanguage] = useState("eng");
 
     useEffect(() => {
-        // Adding the Google Translate script if not already loaded
         if (
             !document.querySelector(
                 'script[src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"]'
@@ -27,7 +26,6 @@ const TopHeader = () => {
             document.body.appendChild(googleTranslateScript);
         }
 
-        // Initializing Google Translate widget
         window.googleTranslateElementInit = () => {
             new window.google.translate.TranslateElement(
                 {
@@ -38,7 +36,6 @@ const TopHeader = () => {
                 "google_translate_element"
             );
 
-            // Set the default language after page load
             setTimeout(() => {
                 updateGoogleTranslate(selectedLanguage);
             }, 100);
@@ -141,7 +138,7 @@ const TopHeader = () => {
                     <span className="divider">|</span>
                     <div className="custom-dropdown">
                         <div className="selected-language">
-                            <img
+                            {/*<img
                                 src={
                                     selectedLanguage === "eng"
                                         ? flag1 
@@ -152,6 +149,7 @@ const TopHeader = () => {
                                 alt={getLanguageText()}
                                 className="flag-icon"
                             />
+                            */}
                             <span>{getLanguageText()}</span>
                             <RiArrowDropDownLine size={25} />
                         </div>
