@@ -85,7 +85,7 @@ const CurrentUpdate = () => {
           <nav aria-label="breadcrumb">
             <ol className="breadcrumb">
               <li className="breadcrumb-item">
-                <Link to="/home">Home</Link>
+                <Link to="#">Home</Link>
               </li>
               <li className="breadcrumb-item active" aria-current="page">
                 Current Update
@@ -97,10 +97,10 @@ const CurrentUpdate = () => {
               <div className="card-box">
                 <div className="card-block">
                   <div className="row">
-                    <div className="col-sm-4 col-3">
+                    <div className="col-sm-4 col-4">
                       <h4 className="page-title">Current Update</h4>
                     </div>
-                    <div className="col-sm-8 col-9 text-right m-b-20">
+                    <div className="col-sm-8 col-8 text-right m-b-20">
                       <Link
                         to="/add-current-update"
                         className="btn btn-primary btn-rounded float-right"
@@ -113,20 +113,20 @@ const CurrentUpdate = () => {
                     <table className="table table-bordered m-b-0">
                       <thead>
                         <tr>
-                          <th width="10%">Sr. No.</th>
+                          <th width="10%" className="text-center">Sr. No.</th>
                           <th>Description</th>
-                          <th width="15%">Action</th>
+                          <th width="15%" className="text-center">Action</th>
                         </tr>
                       </thead>
                       <tbody>
                         {currentPageData.length > 0 ? (
                           currentPageData.map((item, index) => (
                             <tr key={item.id}>
-                              <td>
+                              <td className="text-center">
                                 {(currentPage - 1) * itemsPerPage + index + 1}
                               </td>
                               <td>{item.description}</td>
-                              <td>
+                              <td className="text-center">
                                 <button
                                   className="btn btn-success btn-sm m-t-10"
                                   onClick={() => handleEditClick(item)}

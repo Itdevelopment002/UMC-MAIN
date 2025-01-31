@@ -152,20 +152,20 @@ const MinisterDetails = () => {
                     <table className="table table-bordered m-b-0">
                       <thead>
                         <tr>
-                          <th>Sr. No.</th>
+                          <th className="text-center">Sr. No.</th>
                           <th>Minister Name</th>
                           <th>Designation</th>
-                          <th>Image</th>
-                          <th>Action</th>
+                          <th className="text-center">Minister Image</th>
+                          <th className="text-center">Action</th>
                         </tr>
                       </thead>
                       <tbody>
                         {ministers.map((minister, index) => (
                           <tr key={minister.id}>
-                            <td>{index + 1}</td>
+                            <td className="text-center">{index + 1}</td>
                             <td>{minister.name}</td>
                             <td>{minister.designation}</td>
-                            <td>
+                            <td className="text-center">
                               <Link
                                 to={`${baseURL}${minister.image_path}`}
                                 className="glightbox"
@@ -178,7 +178,7 @@ const MinisterDetails = () => {
                                 />
                               </Link>
                             </td>
-                            <td>
+                            <td className="text-center">
                               <button
                                 className="btn btn-success btn-sm"
                                 onClick={() => handleEditModalOpen(minister)}

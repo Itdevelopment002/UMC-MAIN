@@ -36,13 +36,13 @@ const AddMinisterDetails = () => {
   const validateForm = () => {
     const newErrors = {};
     if (!formData.name) {
-      newErrors.name = "Name is required";
+      newErrors.name = "Minister Name is required";
     }
     if (!formData.designation) {
       newErrors.designation = "Designation is required";
     }
     if (!formData.image) {
-      newErrors.image = "Image is required";
+      newErrors.image = "Minister Image is required";
     }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -116,7 +116,7 @@ const AddMinisterDetails = () => {
                   </div>
                   <form onSubmit={handleSubmit}>
                     <div className="form-group row">
-                      <label className="col-form-label col-md-3">
+                      <label className="col-form-label col-md-2">
                         Minister Name <span className="text-danger">*</span>
                       </label>
                       <div className="col-md-5">
@@ -137,7 +137,7 @@ const AddMinisterDetails = () => {
                       </div>
                     </div>
                     <div className="form-group row">
-                      <label className="col-form-label col-md-3">
+                      <label className="col-form-label col-md-2">
                         Designation <span className="text-danger">*</span>
                       </label>
                       <div className="col-md-5">
@@ -158,8 +158,8 @@ const AddMinisterDetails = () => {
                       </div>
                     </div>
                     <div className="form-group row">
-                      <label className="col-form-label col-md-3">
-                        Upload Minister Image
+                      <label className="col-form-label col-md-2">
+                        Minister Image
                         <span className="text-danger">*</span>
                       </label>
                       <div className="col-md-5">
@@ -180,7 +180,7 @@ const AddMinisterDetails = () => {
                     </div>
                     <input
                       type="submit"
-                      className="btn btn-primary"
+                      className="btn btn-primary btn-sm"
                       value="Submit"
                     />
                   </form>

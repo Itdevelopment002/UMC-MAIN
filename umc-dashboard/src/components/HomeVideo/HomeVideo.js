@@ -139,16 +139,16 @@ const HomeVideo = () => {
                     <table className="table table-bordered m-b-0">
                       <thead>
                         <tr>
-                          <th width="10%">Sr. No.</th>
+                          <th width="10%" className="text-center">Sr. No.</th>
                           <th>Videos</th>
-                          <th width="20%">Action</th>
+                          <th width="15%" className="text-center">Action</th>
                         </tr>
                       </thead>
                       <tbody>
                         {currentPageData.length > 0 ? (
                           currentPageData.map((video, index) => (
                             <tr key={video.id}>
-                              <td>
+                              <td className="text-center">
                                 {(currentPage - 1) * itemsPerPage + index + 1}
                               </td>
                               <td>
@@ -170,7 +170,7 @@ const HomeVideo = () => {
                                   />
                                 </button>
                               </td>
-                              <td>
+                              <td className="text-center">
                                 <button
                                   type="button"
                                   className="btn btn-success btn-sm m-t-10"

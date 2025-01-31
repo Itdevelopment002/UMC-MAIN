@@ -51,7 +51,7 @@ const AddHomeVideo = () => {
         <div className="content">
           <ol className="breadcrumb">
             <li className="breadcrumb-item">
-              <Link to="/home">Home</Link>
+              <Link to="#">Home</Link>
             </li>
             <li className="breadcrumb-item">
               <Link to="/home-video">Home Video</Link>
@@ -65,14 +65,14 @@ const AddHomeVideo = () => {
               <div className="card-box">
                 <div className="card-block">
                   <div className="row">
-                    <div className="col-sm-4 col-3">
+                    <div className="col-12">
                       <h4 className="page-title">Add Home Video</h4>
                     </div>
                   </div>
                   <form onSubmit={handleSubmit}>
                     <div className="form-group row">
-                      <label className="col-form-label col-lg-3">
-                        Upload URL <span className="text-danger">*</span>
+                      <label className="col-form-label col-lg-2">
+                        Video URL <span className="text-danger">*</span>
                       </label>
                       <div className="col-md-4">
                         <div className="input-group">
@@ -100,7 +100,7 @@ const AddHomeVideo = () => {
                     </div>
                     <input
                       type="submit"
-                      className="btn btn-primary"
+                      className="btn btn-primary btn-sm"
                       value="Submit"
                     />
                   </form>

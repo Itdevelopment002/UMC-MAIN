@@ -500,3 +500,19 @@
   margin: 0 !important;
   padding: 0 !important;
 }
+
+@media (min-width:992px) and (max-width: 1255px) {
+  .tabs-container .nav-tabs .nav-item .nav-link{
+    padding: 3px 5px 3px 5px !important;
+    font-size: 15px !important;
+  }
+  .gap-3{
+    gap: 0.5rem !important;
+  }
+  .e-services-container {
+    height: 410px;
+  }
+  .news-list {
+    max-height: 300px;
+  }
+}
