@@ -5,6 +5,7 @@ import PropertyTaximg from "../../assets/images/online-services/property.png";
 import BirthCertificateimg from "../../assets/images/online-services/birth.png";
 import DeathCertificateimg from "../../assets/images/online-services/death.png";
 import eTenderimg from "../../assets/images/online-services/tender.png";
+import api from "../api"
 
 const DeathCertificate = () => {
   const [activeTab, setActiveTab] = useState("#death-certificate");
@@ -13,7 +14,7 @@ const DeathCertificate = () => {
     setActiveTab(tab);
   };
 
-  const tabData = [
+  const [tabData, setTabData] = useState([
     {
       id: "#property-tax-payment",
       link: "/property-tax-payment",
@@ -22,7 +23,7 @@ const DeathCertificate = () => {
         "Know and Pay Property Tax Online.",
         "Read carefully terms and conditions displayed by bank before making payment."
       ],
-      url: "https://umconlineservices.in/Payment/",
+      url: "",
       image: PropertyTaximg,
     },
     {
@@ -32,7 +33,7 @@ const DeathCertificate = () => {
       description: [
         "For Birth Certificate, Please register here.",
       ],
-      url: "https://crsorgi.gov.in/web/index.php/auth/login",
+      url: "",
       image: BirthCertificateimg,
     },
     {
@@ -42,7 +43,7 @@ const DeathCertificate = () => {
       description: [
         "For Death Certificate, Please contact our office.",
       ],
-      url: "https://crsorgi.gov.in/web/index.php/auth/login",
+      url: "",
       image: DeathCertificateimg,
     },
     {
@@ -52,10 +53,33 @@ const DeathCertificate = () => {
       description: [
         "For e-Tender information, visit this page.",
       ],
-      url: "https://mahatenders.gov.in/nicgep/app",
+      url: "",
       image: eTenderimg,
     },
-  ];
+  ]);
+
+  const fetchServices = async () => {
+    try {
+      const response = await api.get("/online-services-home");
+      const serviceData = response.data;
+      const updatedTabData = tabData.map((tab) => {
+        const matchingService = serviceData.find(
+          (service) => service.heading === tab.name
+        );
+        return matchingService
+          ? { ...tab, url: matchingService.link }
+          : tab;
+      });
+
+      setTabData(updatedTabData);
+    } catch (error) {
+      console.error("Error fetching service data", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchServices();
+  }, []);
 
   const activeTabData = tabData.find((tab) => tab.id === activeTab);
 

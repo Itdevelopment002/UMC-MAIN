@@ -119,6 +119,8 @@ const womenRoutes = require('./routes/womenRoutes');
 const wardCommitteeRoutes = require('./routes/wardCommitteeRoutes');
 const circularRoutes = require('./routes/circularRoutes');
 const onlineServiceRoutes = require('./routes/onlineServiceRoutes');
+const imagesGalleryRoutes = require('./routes/imagesGalleryRoutes');
+const videoGalleryRoutes = require('./routes/videoGalleryRoutes');
 
 
 app.use('/api', sliderRoutes);
@@ -232,6 +234,8 @@ app.use('/api', womenRoutes);
 app.use('/api', wardCommitteeRoutes);
 app.use('/api', circularRoutes);
 app.use('/api', onlineServiceRoutes);
+app.use('/api', imagesGalleryRoutes);
+app.use('/api', videoGalleryRoutes);
 
 
 const PORT = process.env.PORT || 5011;

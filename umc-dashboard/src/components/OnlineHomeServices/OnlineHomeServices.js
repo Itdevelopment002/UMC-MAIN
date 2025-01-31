@@ -99,7 +99,7 @@ const OnlineHomeServices = () => {
                     </div>
                     <div className="col-sm-8 col-9 text-right m-b-20">
                       <Link
-                        to="/add-online-services"
+                        to="/add-online-home-services"
                         className="btn btn-primary btn-rounded float-right"
                       >
                         <i className="fa fa-plus"></i> Add Online Service

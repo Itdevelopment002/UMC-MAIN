@@ -441,7 +441,7 @@ const MunicipalMeeting = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const [availableButtons, setAvailableButtons] = useState([]);
     const [headersMap, setHeadersMap] = useState({});
-    
+
 
     // Fetch data from the backend
     useEffect(() => {
@@ -470,21 +470,9 @@ const MunicipalMeeting = () => {
                 console.error("Error fetching data: ", error);
             });
     }, []);
-    
+
 
     const tableHeaders = headersMap[selectedButton] || [];
-
-    const handleClick = (link, e) => {
-        if (link === "#") {
-            e.preventDefault();
-            Swal.fire({
-                title: 'Information',
-                text: 'The PDF will be available soon.',
-                icon: 'info',
-                confirmButtonText: 'Ok'
-            });
-        }
-    };
 
     const getTableData = () => {
         return tableData.filter(item => item.name === selectedButton);
@@ -493,7 +481,7 @@ const MunicipalMeeting = () => {
     const handleButtonClick = (buttonName) => {
         setSelectedButton(buttonName);
     };
-    
+
 
     const filteredData = getTableData().filter((item) =>
         item.year.toLowerCase().includes(searchTerm.toLowerCase())
@@ -630,58 +618,70 @@ const MunicipalMeeting = () => {
                                     <tbody>
                                         {currentData.map((item, index) => (
                                             <tr key={index}>
-                                                <td className="font-large text-center">{index + 1 + (currentPage - 1)}</td>
+                                                <td className="font-large text-center">{startEntry + index}</td> {/* Corrected Serial Number */}
                                                 <td>{item.year}</td>
                                                 <td className="text-center">
-                                                    <Link
-                                                        to={item.pdf_link1}
-                                                        onClick={(e) => handleClick(item.pdf_link1, e)}
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                    >
-                                                        <img src={pdficon} alt="PDF"
-                                                            style={{
-                                                                width: "18px",
-                                                                height: "18px",
-                                                                marginRight: "8px",
-                                                                verticalAlign: "middle",
-                                                            }}
-                                                        />
-                                                    </Link>
+                                                    {item.pdf_link1 && item.pdf_link1 !== "#" ? (
+                                                        <Link
+                                                            to={item.pdf_link1}
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                        >
+                                                            <img
+                                                                src={pdficon}
+                                                                alt="PDF"
+                                                                style={{
+                                                                    width: "18px",
+                                                                    height: "18px",
+                                                                    verticalAlign: "middle",
+                                                                }}
+                                                            />
+                                                        </Link>
+                                                    ) : (
+                                                        "-"
+                                                    )}
                                                 </td>
                                                 <td className="text-center">
-                                                    <Link
-                                                        to={item.pdf_link2}
-                                                        onClick={(e) => handleClick(item.pdf_link2, e)}
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                    >
-                                                        <img src={pdficon} alt="PDF"
-                                                            style={{
-                                                                width: "18px",
-                                                                height: "18px",
-                                                                marginRight: "8px",
-                                                                verticalAlign: "middle",
-                                                            }}
-                                                        />
-                                                    </Link>
+                                                    {item.pdf_link2 && item.pdf_link2 !== "#" ? (
+                                                        <Link
+                                                            to={item.pdf_link2}
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                        >
+                                                            <img
+                                                                src={pdficon}
+                                                                alt="PDF"
+                                                                style={{
+                                                                    width: "18px",
+                                                                    height: "18px",
+                                                                    verticalAlign: "middle",
+                                                                }}
+                                                            />
+                                                        </Link>
+                                                    ) : (
+                                                        "-"
+                                                    )}
                                                 </td>
                                                 <td className="text-center">
-                                                    <Link
-                                                        to={item.pdf_link3}
-                                                        onClick={(e) => handleClick(item.pdf_link3, e)}
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                    >
-                                                        <img src={pdficon} alt="PDF"
-                                                            style={{
-                                                                width: "18px",
-                                                                height: "18px",
-                                                                marginRight: "8px",
-                                                                verticalAlign: "middle",
-                                                            }}
-                                                        />
-                                                    </Link>
+                                                    {item.pdf_link3 && item.pdf_link3 !== "#" ? (
+                                                        <Link
+                                                            to={item.pdf_link3}
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                        >
+                                                            <img
+                                                                src={pdficon}
+                                                                alt="PDF"
+                                                                style={{
+                                                                    width: "18px",
+                                                                    height: "18px",
+                                                                    verticalAlign: "middle",
+                                                                }}
+                                                            />
+                                                        </Link>
+                                                    ) : (
+                                                        "-"
+                                                    )}
                                                 </td>
                                             </tr>
                                         ))}
