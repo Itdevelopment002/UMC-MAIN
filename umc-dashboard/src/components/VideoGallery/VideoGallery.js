@@ -7,14 +7,13 @@ import "react-toastify/dist/ReactToastify.css";
 const VideoGallery = () => {
   const [categoryData, setCategoryData] = useState([]);
   const [categoryVideoData, setCategoryVideoData] = useState([]);
-  const [images, setImages] = useState([]); 
-  const [selectedCategory, setSelectedCategory] = useState(""); 
+  const [videos, setVideos] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("");
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [modalType, setModalType] = useState("");
   const [selectedItem, setSelectedItem] = useState(null);
   const [editData, setEditData] = useState({});
-  const [imagePreview, setImagePreview] = useState("");
   const navigate = useNavigate();
 
   const fetchCategoryVideoData = async () => {
@@ -24,8 +23,8 @@ const VideoGallery = () => {
       const allCategories = response.data;
       const filteredCategories = [];
       for (const category of allCategories) {
-        const imageResponse = await api.get(`/category-videos/${category.id}`);
-        if (imageResponse.data.length > 0) {
+        const videoResponse = await api.get(`/category-videos/${category.id}`);
+        if (videoResponse.data.length > 0) {
           filteredCategories.push(category);
         }
       }
@@ -46,39 +45,35 @@ const VideoGallery = () => {
   const handleCategoryChange = (categoryId) => {
     setSelectedCategory(categoryId);
     api.get(`/category-videos/${categoryId}`)
-      .then((response) => setImages(response.data))
-      .catch((error) => toast.error("Failed to fetch images!"));
+      .then((response) => setVideos(response.data))
+      .catch((error) => toast.error("Failed to fetch videos!"));
   };
 
   const handleDelete = async (id, type) => {
     try {
       if (type === "category") {
         await api.delete(`/video-categories/${id}`);
-        setCategoryVideoData((prevData) => prevData.filter((item) => item.id !== id));
-        fetchCategoryVideoData();
-      }
-      else if (type === "categoryVideo") {
+        setCategoryVideoData(prevData => prevData.filter(item => item.id !== id));
+      } else if (type === "categoryVideo") {
         await api.delete(`/category-videos/${id}`);
-        setImages(images.filter((img) => img.id !== id));
+        setVideos(prevData => prevData.filter(item => item.id !== id));
         handleCategoryChange(selectedCategory);
-        fetchCategoryVideoData()
       }
-      toast.success(
-        `${type === "category" ? "Category" : "Category Image"} data deleted successfully!`
-      );
+      fetchCategoryVideoData();
+      toast.success(`${type === "category" ? "Category" : "Category Video"} deleted successfully!`);
     } catch (error) {
       console.error(error);
       toast.error("Failed to delete the entry!");
+    } finally {
+      closeModal(); 
     }
-    closeModal();
   };
 
   const openEditModal = (item, type) => {
     setSelectedItem(item);
     setEditData(
-      type === "category" ? { name: item.name } : { ...item }
+      type === "category" ? { name: item.name } : { video_url: item.video_url }
     );
-    setImagePreview(type === "categoryVideo" ? `${baseURL}${item.image_url}` : "");
     setModalType(type);
     setShowEditModal(true);
   };
@@ -88,7 +83,6 @@ const VideoGallery = () => {
     setShowDeleteModal(false);
     setSelectedItem(null);
     setEditData({});
-    setImagePreview("");
   };
 
   const handleSaveChanges = async () => {
@@ -107,19 +101,16 @@ const VideoGallery = () => {
         fetchCategoryVideoData();
       }
       else if (modalType === "categoryVideo") {
-        const formData = new FormData();
-        formData.append("video_url", editData.video_url);
-
-        await api.put(`/category-videos/${selectedItem.id}`, formData);
-        setImages(
-          images.map((item) =>
-            item.id === selectedItem.id ? { ...item, ...editData } : item
+        await api.put(`/category-videos/${selectedItem.id}`, {video_url: editData.video_url});
+        setVideos(
+          videos.map((item) =>
+            item.id === selectedItem.id ? { ...item, video_url: editData.video_url } : item
           )
         );
         handleCategoryChange(selectedCategory);
       }
       toast.success(
-        `${modalType === "category" ? "Category" : "Category Image"} data updated successfully!`
+        `${modalType === "category" ? "Category" : "Category Video"} data updated successfully!`
       );
       navigate("/video-gallery");
     } catch (error) {
@@ -127,18 +118,6 @@ const VideoGallery = () => {
       toast.error("Failed to update the entry!");
     }
     closeModal();
-  };
-
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreview(reader.result);
-        setEditData({ ...editData, imageFile: file });
-      };
-      reader.readAsDataURL(file);
-    }
   };
 
   return (
@@ -256,19 +235,19 @@ const VideoGallery = () => {
                       <thead>
                         <tr>
                           <th width="10%" className="text-center">Sr. No.</th>
-                          <th>Category Image</th>
+                          <th>Category Video</th>
                           <th width="15%" className="text-center">Action</th>
                         </tr>
                       </thead>
                       <tbody>
-                        {selectedCategory && images.length > 0 ? (
-                          images.map((item, index) => (
+                        {selectedCategory && videos.length > 0 ? (
+                          videos.map((item, index) => (
                             <tr key={item.id}>
                               <td className="text-center">{index + 1}</td>
                               <td>
                                 <Link
                                   className="text-decoration-none"
-                                  style={{color: "#000"}}
+                                  style={{ color: "#000" }}
                                   target="_blank"
                                   to={item.video_url}
                                 >
@@ -324,7 +303,7 @@ const VideoGallery = () => {
                     <h5 className="modal-title">
                       {modalType === "category"
                         ? "Edit Category"
-                        : "Edit Category Image"}
+                        : "Edit Category Video"}
                     </h5>
                   </div>
                   <div className="modal-body">
@@ -346,25 +325,19 @@ const VideoGallery = () => {
                     ) : (
                       <>
                         <div className="form-group">
-                          <label htmlFor="coImage">Category Image</label>
-                          <input
-                            type="file"
-                            className="form-control"
-                            id="image"
-                            onChange={handleImageChange}
-                          />
-                          {imagePreview && (
-                            <img
-                              src={imagePreview}
-                              alt="Preview"
-                              style={{
-                                width: "150px",
-                                height: "100px",
-                                marginTop: "10px",
-                              }}
-                            />
-                          )}
-                        </div>
+                        <label htmlFor="video_url">Category Name</label>
+                        <input
+                          className="form-control"
+                          id="video_url"
+                          value={editData.video_url}
+                          onChange={(e) =>
+                            setEditData({
+                              ...editData,
+                              video_url: e.target.value,
+                            })
+                          }
+                        />
+                      </div>
                       </>
                     )}
                   </div>

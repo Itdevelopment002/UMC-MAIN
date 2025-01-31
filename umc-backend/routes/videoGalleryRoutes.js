@@ -1,22 +1,12 @@
 const express = require("express");
-const multer = require("multer");
-const path = require("path");
-const fs = require("fs");
 const router = express.Router();
 const db = require("../config/db.js");
 
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, "uploads/");
-    },
-    filename: (req, file, cb) => {
-        cb(null, Date.now() + path.extname(file.originalname));
-    },
-});
-
-const upload = multer({
-    storage,
-    limits: { fileSize: 10 * 1024 * 1024 },
+router.get("/video-categories", (req, res) => {
+    db.query("SELECT * FROM videocategories", (err, results) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json(results);
+    });
 });
 
 router.post("/video-categories", (req, res) => {
@@ -43,6 +33,24 @@ router.put("/video-categories/:id", (req, res) => {
     });
 });
 
+router.delete("/video-categories/:id", (req, res) => {
+    const { id } = req.params;
+
+    db.query("DELETE FROM videocategories WHERE id = ?", [id], (err, result) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json({ message: "Category deleted successfully" });
+    });
+});
+
+router.get("/category-videos/:category_id", (req, res) => {
+    const { category_id } = req.params;
+
+    db.query("SELECT * FROM category_videos WHERE category_id = ?", [category_id], (err, results) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json(results);
+    });
+});
+
 router.post("/category-videos", (req, res) => {
     const { category_id, link } = req.body;
 
@@ -64,47 +72,22 @@ router.post("/category-videos", (req, res) => {
     });
 });
 
-router.put("/video-categories/:id", (req, res) => {
+router.put("/category-videos/:id", (req, res) => {
     const { video_url } = req.body;
     const sql = "UPDATE category_videos SET video_url = ? WHERE id = ?";
     db.query(sql, [video_url, req.params.id], (err, result) => {
-      if (err) throw err;
-      res.json({ success: true });
-    });
-  });
-
-
-router.get("/video-categories", (req, res) => {
-    db.query("SELECT * FROM videocategories", (err, results) => {
-        if (err) return res.status(500).json({ error: err.message });
-        res.json(results);
+        if (err) throw err;
+        res.json({ success: true });
     });
 });
 
-router.get("/category-videos/:category_id", (req, res) => {
-    const { category_id } = req.params;
-
-    db.query("SELECT * FROM category_videos WHERE category_id = ?", [category_id], (err, results) => {
-        if (err) return res.status(500).json({ error: err.message });
-        res.json(results);
-    });
-});
-
-router.delete("/video-categories/:id", (req, res) => {
+router.delete("/category-videos/:id", (req, res) => {
     const { id } = req.params;
 
-    db.query("DELETE FROM videocategories WHERE id = ?", [id], (err, result) => {
+    db.query("DELETE FROM category_videos WHERE id = ?", [id], (err, result) => {
         if (err) return res.status(500).json({ error: err.message });
-        res.json({ message: "Category deleted successfully" });
+        res.json({ message: "Category Video deleted successfully" });
     });
 });
-
-router.delete("/categories-videos/:id", (req, res) => {
-    const sql = "DELETE FROM category_videos WHERE id = ?";
-    db.query(sql, [req.params.id], (err, result) => {
-      if (err) throw err;
-      res.json({ success: true });
-    });
-  });
 
 module.exports = router;

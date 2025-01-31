@@ -1,29 +1,34 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./VideoGallery.css";
+import api from "../api"
 
 const VideoGallery = () => {
-  const videos1 = [
-    "https://www.youtube.com/embed/oN5d86o_cKQ?si=OR0l7rzx9mVgumkB",
-    "https://www.youtube.com/embed/WvrIy7ui93E?si=yK5BH6L6LUq3dfKz",
-    "https://www.youtube.com/embed/gb0mQNWTDVY?si=VZuS3HrC8yoA6gwe",
-    "https://www.youtube.com/embed/bbGujp_SQT8?si=4KO9tFkhjC_czZnu",
-    "https://www.youtube.com/embed/PKY8qe7PfmI?si=P4jlYsfeggH5Y1fv",
-    "https://www.youtube.com/embed/CVOY-266IpE?si=CbGn8_M0_gx1zsxH",
-    "https://www.youtube.com/embed/B4Xrokzim1s?si=AYZzPL_95DGsWSBR",
-    "https://www.youtube.com/embed/oA4PXdfGBlk?si=-LtGFw6fOPrQCvdN",
-  ];
+  const [categories, setCategories] = useState([]);
+  const [videos, setVideos] = useState({});
 
-  const videos2 = [
-    "https://www.youtube.com/embed/2ozw8hWZjMA?si=XPJ5seE5SNVAAhQp",
-    "https://www.youtube.com/embed/Rdjwn3asrDc?si=gFf4upfyXJso58CX",
-    "https://www.youtube.com/embed/rI-Od8NxUFM?si=h5MDAPCOnoHZRX-e",
-    "https://www.youtube.com/embed/QWufzY3Oy3g?si=RVwxWLRemRckSpG9",
-    "https://www.youtube.com/embed/UVYGy-dYWMg?si=9rTFySFndrkBuBof",
-    "https://www.youtube.com/embed/pBH2CMS8A3g?si=0_chwIXpThe4E-Jt",
-    "https://www.youtube.com/embed/tC_XQ-9PArU?si=Kk24aXxy5kWRnOyI",
-    "https://www.youtube.com/embed/hd1O6ZjbcOM?si=6wp9YpwjG1FNp4Wf",
-  ];
+  useEffect(() => {
+    api.get("/video-categories")
+      .then((response) => {
+        setCategories(response.data);
+      })
+      .catch((error) => console.error("Error fetching categories:", error));
+  }, []);
+
+  useEffect(() => {
+    if (categories.length > 0) {
+      categories.forEach((category) => {
+        api.get(`/category-videos/${category.id}`)
+          .then((response) => {
+            setVideos((prevVideos) => ({
+              ...prevVideos,
+              [category.id]: response.data.map(video => video.video_url),
+            }));
+          })
+          .catch((error) => console.error("Error fetching videos:", error));
+      });
+    }
+  }, [categories]);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -48,48 +53,29 @@ const VideoGallery = () => {
             <span className="highlight">Video</span>
             <span className="highlighted-text"> Gallery</span>
           </h2>
-          <div className="mt-4 image-section-div">
-            <h3 className="text-orange">
-              Video <span className="text-black">Heading</span>
-              <span className="divider"></span>
-            </h3>
-            <hr />
-            <div className="row g-3">
-              {videos1.map((video, index) => (
-                <div className="col-6 col-sm-6 col-md-4 col-lg-3" key={index}>
-                  <iframe
-                    src={video}
-                    title={`Video1-${index + 1}`}
-                    className="img-styling-photo rounded"
-                    frameBorder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                  ></iframe>
-                </div>
-              ))}
+          {categories.map((category) => (
+            <div className="mt-4 image-section-div" key={category.id}>
+              <h3 className="text-orange">
+                {category.name} <span className="text-black"></span>
+                <span className="divider"></span>
+              </h3>
+              <hr />
+              <div className="row g-3">
+                {videos[category.id] && videos[category.id].map((video, index) => (
+                  <div className="col-6 col-sm-6 col-md-4 col-lg-3" key={index}>
+                    <iframe
+                      src={video}
+                      title={`Video-${category.id}-${index + 1}`}
+                      className="img-styling-photo rounded"
+                      frameBorder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                    ></iframe>
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
-          <div className="mt-5 image-section-div">
-            <h3 className="text-orange">
-              Video <span className="text-black">Heading</span>
-              <span className="divider"></span>
-            </h3>
-            <hr />
-            <div className="row g-3">
-              {videos2.map((video, index) => (
-                <div className="col-6 col-sm-6 col-md-4 col-lg-3" key={index}>
-                  <iframe
-                    src={video}
-                    title={`Video2-${index + 1}`}
-                    className="img-styling-photo rounded"
-                    frameBorder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                  ></iframe>
-                </div>
-              ))}
-            </div>
-          </div>
+          ))}
         </div>
       </div>
     </>
