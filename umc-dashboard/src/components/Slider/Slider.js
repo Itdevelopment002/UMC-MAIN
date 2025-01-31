@@ -140,20 +140,20 @@ const Slider = () => {
                     <table className="table table-bordered m-b-0">
                       <thead>
                         <tr>
-                          <th width="10%">Sr. No.</th>
-                          <th>Image Name</th>
-                          <th>Slider Image</th>
-                          <th>Action</th>
+                          <th width="10%" className="text-center">Sr. No.</th>
+                          <th>Slider Name</th>
+                          <th className="text-center">Slider Image</th>
+                          <th width="15%" className="text-center">Action</th>
                         </tr>
                       </thead>
                       <tbody>
                         {currentPageData.map((slider, index) => (
                           <tr key={slider.id}>
-                            <td>
+                            <td className="text-center">
                               {index + 1 + (currentPage - 1) * itemsPerPage}
                             </td>
                             <td>{slider.slider_name}</td>
-                            <td>
+                            <td className="text-center">
                               <Link
                                 to={`${baseURL}/${slider.file_path}`}
                                 className="glightbox"
@@ -166,7 +166,7 @@ const Slider = () => {
                                 />
                               </Link>
                             </td>
-                            <td>
+                            <td className="text-center">
                               <button
                                 className="btn btn-success btn-sm m-t-10 mx-1"
                                 onClick={() => handleEdit(slider)}

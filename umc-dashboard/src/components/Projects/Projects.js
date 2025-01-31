@@ -106,7 +106,7 @@ const Projects = () => {
           <nav aria-label="breadcrumb">
             <ol className="breadcrumb">
               <li className="breadcrumb-item">
-                <Link to="/home">Home</Link>
+                <Link to="#">Home</Link>
               </li>
               <li className="breadcrumb-item active" aria-current="page">
                 Upcoming Projects
@@ -126,7 +126,7 @@ const Projects = () => {
                         to="/add-projects"
                         className="btn btn-primary btn-rounded float-right"
                       >
-                        <i className="fa fa-plus"></i> Add Upcoming Project
+                        <i className="fa fa-plus"></i> Add Project
                       </Link>
                     </div>
                   </div>
@@ -134,22 +134,22 @@ const Projects = () => {
                     <table className="table table-bordered m-b-0">
                       <thead>
                         <tr>
-                          <th width="10%">Sr. No.</th>
+                          <th width="10%" className="text-center">Sr. No.</th>
                           <th>Project Heading</th>
                           <th>Project Description</th>
                           <th>Project Link</th>
                           <th>Project Image</th>
-                          <th>Action</th>
+                          <th className="text-center">Action</th>
                         </tr>
                       </thead>
                       <tbody>
                         {projects.map((project, index) => (
                           <tr key={project.id}>
-                            <td>{index + 1}</td>
+                            <td className="text-center">{index + 1}</td>
                             <td>{project.heading}</td>
                             <td>{project.description}</td>
                             <td>{project.link}</td>
-                            <td>
+                            <td className="text-center">
                               <Link
                                 to={`${baseURL}/${project.main_icon_path}`}
                                 className="glightbox"
@@ -162,7 +162,7 @@ const Projects = () => {
                                 />
                               </Link>
                             </td>
-                            <td>
+                            <td className="text-center">
                               <button
                                 className="btn btn-success btn-sm m-t-10 mx-1"
                                 onClick={() => handleEditModalOpen(project.id)}

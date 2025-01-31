@@ -15,10 +15,10 @@ const AddPortalServices = () => {
 
     const validateForm = () => {
         const errors = {};
-        if (!heading) errors.heading = "Heading is required.";
-        if (!description) errors.description = "Description is required.";
-        if (!link) errors.link = "Link is required.";
-        if (!portalImage) errors.portalImage = "Main Icon is required.";
+        if (!heading) errors.heading = "Service Heading is required.";
+        if (!description) errors.description = "Service Description is required.";
+        if (!link) errors.link = "Service Link is required.";
+        if (!portalImage) errors.portalImage = "Service Image is required.";
         setErrors(errors);
         return Object.keys(errors).length === 0;
     };
@@ -79,7 +79,7 @@ const AddPortalServices = () => {
             <div className="page-wrapper">
                 <div className="content">
                     <ol className="breadcrumb">
-                        <li className="breadcrumb-item"><Link to="/home">Home</Link></li>
+                        <li className="breadcrumb-item"><Link to="#">Home</Link></li>
                         <li className="breadcrumb-item"><Link to="/citizen-communication">Citizen Communication</Link></li>
                         <li className="breadcrumb-item active" aria-current="page">Add Portal Services</li>
                     </ol>
@@ -88,7 +88,7 @@ const AddPortalServices = () => {
                             <div className="card-box">
                                 <div className="card-block">
                                     <div className="row">
-                                        <div className="col-sm-4 col-3">
+                                        <div className="col-12">
                                             <h4 className="page-title">Add Portal Services</h4>
                                         </div>
                                     </div>
@@ -101,6 +101,7 @@ const AddPortalServices = () => {
                                                     className={`form-control form-control-md ${errors.heading ? 'is-invalid' : ''}`}
                                                     value={heading}
                                                     name="heading"
+                                                    placeholder='Enter Service Heading'
                                                     onChange={handleChange}
                                                 />
                                                 {errors.heading && <span className="text-danger">{errors.heading}</span>}
@@ -114,6 +115,7 @@ const AddPortalServices = () => {
                                                     className={`form-control form-control-md ${errors.description ? 'is-invalid' : ''}`}
                                                     value={description}
                                                     name="description"
+                                                    placeholder='Enter Service Heading'
                                                     onChange={handleChange}
                                                 />
                                                 {errors.description && <span className="text-danger">{errors.description}</span>}
@@ -124,9 +126,10 @@ const AddPortalServices = () => {
                                             <div className="col-md-4">
                                                 <input
                                                     type="text"
-                                                    className={`form-control ${errors.link ? 'is-invalid' : ''}`}
+                                                    className={`form-control form-control-md ${errors.link ? 'is-invalid' : ''}`}
                                                     value={link}
                                                     name="link"
+                                                    placeholder='Enter Service Link'
                                                     onChange={handleChange}
                                                 />
                                                 {errors.link && <span className="text-danger">{errors.link}</span>}
@@ -147,7 +150,7 @@ const AddPortalServices = () => {
                                                 {errors.portalImage && <span className="text-danger">{errors.portalImage}</span>}
                                             </div>
                                         </div>
-                                        <input type="submit" className="btn btn-primary" value="Submit" />
+                                        <input type="submit" className="btn btn-primary btn-sm" value="Submit" />
                                     </form>
                                     <ToastContainer />
                                 </div>

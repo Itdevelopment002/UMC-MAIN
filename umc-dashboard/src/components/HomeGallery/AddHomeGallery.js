@@ -18,10 +18,10 @@ const AddHomeGallery = () => {
   const validateForm = () => {
     const newErrors = {};
     if (!photoName.trim()) {
-      newErrors.photoName = "Photo gallery name is required.";
+      newErrors.photoName = "Photo gallery name is required";
     }
     if (!selectedFile) {
-      newErrors.selectedFile = "Please select a file to upload.";
+      newErrors.selectedFile = "Photo gallery image is required";
     }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -77,7 +77,7 @@ const AddHomeGallery = () => {
               <div className="card-box">
                 <div className="card-block">
                   <div className="row">
-                    <div className="col-sm-4 col-3">
+                    <div className="col-12">
                       <h4 className="page-title">Add Home Gallery</h4>
                     </div>
                   </div>
@@ -90,7 +90,7 @@ const AddHomeGallery = () => {
                       <div className="col-md-4">
                         <input
                           type="text"
-                          className={`form-control form-control-lg ${
+                          className={`form-control form-control-md ${
                             errors.photoName ? "is-invalid" : ""
                           }`}
                           placeholder=""
@@ -112,7 +112,7 @@ const AddHomeGallery = () => {
                     </div>
                     <div className="form-group row">
                       <label className="col-form-label col-lg-2">
-                        Upload Photo Gallery{" "}
+                        Photo Gallery Image{" "}
                         <span className="text-danger">*</span>
                       </label>
                       <div className="col-md-4">
@@ -121,7 +121,7 @@ const AddHomeGallery = () => {
                             type="file"
                             id="image"
                             name="image"
-                            className={`form-control col-md-12 col-xs-12 userfile ${
+                            className={`form-control form-control-md col-md-12 col-xs-12 userfile ${
                               errors.selectedFile ? "is-invalid" : ""
                             }`}
                             onChange={(e) => {
@@ -144,8 +144,8 @@ const AddHomeGallery = () => {
                     </div>
                     <input
                       type="submit"
-                      className="btn btn-primary"
-                      value="Upload"
+                      className="btn btn-primary btn-sm"
+                      value="Submit"
                     />
                   </form>
                 </div>

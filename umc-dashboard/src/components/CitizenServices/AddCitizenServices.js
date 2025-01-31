@@ -16,7 +16,7 @@ const AddCitizeServices = () => {
         const errors = {};
         if (!serviceHeading) errors.serviceHeading = "Service Heading is required.";
         if (!serviceLink) errors.serviceLink = "Service Link is required.";
-        if (!mainIcon) errors.mainIcon = "Main Icon is required.";
+        if (!mainIcon) errors.mainIcon = "Service Icon is required.";
         setErrors(errors);
         return Object.keys(errors).length === 0;
     };
@@ -76,7 +76,7 @@ const AddCitizeServices = () => {
             <div className="page-wrapper">
                 <div className="content">
                     <ol className="breadcrumb">
-                        <li className="breadcrumb-item"><Link to="/home">Home</Link></li>
+                        <li className="breadcrumb-item"><Link to="#">Home</Link></li>
                         <li className="breadcrumb-item"><Link to="/citizen-services">Citizen Services</Link></li>
                         <li className="breadcrumb-item active" aria-current="page">Add Citizen Services</li>
                     </ol>
@@ -85,7 +85,7 @@ const AddCitizeServices = () => {
                             <div className="card-box">
                                 <div className="card-block">
                                     <div className="row">
-                                        <div className="col-sm-4 col-3">
+                                        <div className="col-12">
                                             <h4 className="page-title">Add Citizen Services</h4>
                                         </div>
                                     </div>
@@ -98,6 +98,7 @@ const AddCitizeServices = () => {
                                                     className={`form-control form-control-md ${errors.serviceHeading ? 'is-invalid' : ''}`}
                                                     value={serviceHeading}
                                                     name="serviceHeading"
+                                                    placeholder='Enter Service Heading'
                                                     onChange={handleChange}
                                                 />
                                                 {errors.serviceHeading && <span className="text-danger">{errors.serviceHeading}</span>}
@@ -111,6 +112,7 @@ const AddCitizeServices = () => {
                                                     className={`form-control ${errors.serviceLink ? 'is-invalid' : ''}`}
                                                     value={serviceLink}
                                                     name="serviceLink"
+                                                    placeholder='Enter Service Link'
                                                     onChange={handleChange}
                                                 />
                                                 {errors.serviceLink && <span className="text-danger">{errors.serviceLink}</span>}
@@ -131,7 +133,7 @@ const AddCitizeServices = () => {
                                                 {errors.mainIcon && <span className="text-danger">{errors.mainIcon}</span>}
                                             </div>
                                         </div>
-                                        <input type="submit" className="btn btn-primary" value="Submit" />
+                                        <input type="submit" className="btn btn-primary btn-sm" value="Submit" />
                                     </form>
                                     <ToastContainer />
                                 </div>

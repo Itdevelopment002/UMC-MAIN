@@ -51,7 +51,7 @@ const AddCurrentUpdate = () => {
         <div className="content">
           <ol className="breadcrumb">
             <li className="breadcrumb-item">
-              <Link to="/home">Home</Link>
+              <Link to="#">Home</Link>
             </li>
             <li className="breadcrumb-item">
               <Link to="/current-update">Current Update</Link>
@@ -65,7 +65,7 @@ const AddCurrentUpdate = () => {
               <div className="card-box">
                 <div className="card-block">
                   <div className="row">
-                    <div className="col-sm-4 col-3">
+                    <div className="col-12">
                       <h4 className="page-title">Add Current Update</h4>
                     </div>
                   </div>
@@ -77,10 +77,10 @@ const AddCurrentUpdate = () => {
                       <div className="col-md-4">
                         <input
                           type="text"
-                          className={`form-control ${
+                          className={`form-control form-control-md ${
                             errors.description ? "is-invalid" : ""
                           }`}
-                          placeholder=""
+                          placeholder="Enter Description"
                           value={description}
                           onChange={(e) => {
                             setDescription(e.target.value);
@@ -98,7 +98,7 @@ const AddCurrentUpdate = () => {
                     </div>
                     <input
                       type="submit"
-                      className="btn btn-primary"
+                      className="btn btn-primary btn-sm"
                       value="Submit"
                     />
                   </form>

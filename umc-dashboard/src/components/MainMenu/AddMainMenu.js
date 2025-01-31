@@ -121,7 +121,7 @@ const AddMainMenu = () => {
               <div className="card-box">
                 <div className="card-block">
                   <div className="row">
-                    <div className="col-sm-4 col-3">
+                    <div className="col-12">
                       <h4 className="page-title">Add Main Menu</h4>
                     </div>
                   </div>
@@ -129,14 +129,14 @@ const AddMainMenu = () => {
                     {menuItems.map((item, index) => (
                       <div key={index}>
                         <div className="form-group row">
-                          <label className="col-form-label col-md-2">
+                          <label className="col-form-label col-md-2 m-t-10">
                             Main Menu <span className="text-danger">*</span>
                           </label>
                           <div className="col-md-3">
                             <input
                               type="text"
                               placeholder="Enter Main menu name"
-                              className={`form-control ${
+                              className={`form-control form-control-md m-t-10${
                                 formErrors[index]?.mainMenu ? "is-invalid" : ""
                               }`}
                               value={item.mainMenu}
@@ -158,7 +158,7 @@ const AddMainMenu = () => {
                             <input
                               type="text"
                               placeholder="Enter Main menu link"
-                              className={`form-control ${
+                              className={`form-control form-control-md m-t-10${
                                 formErrors[index]?.mainMenuLink
                                   ? "is-invalid"
                                   : ""
@@ -182,14 +182,14 @@ const AddMainMenu = () => {
                         </div>
                         {item.subMenus.map((subMenu, subIndex) => (
                           <div className="form-group row" key={subIndex}>
-                            <label className="col-form-label col-md-2">
+                            <label className="col-form-label col-md-2 m-t-10">
                               Sub Menu <span className="text-danger">*</span>
                             </label>
                             <div className="col-md-3">
                               <input
                                 type="text"
                                 placeholder="Enter Sub menu name"
-                                className={`form-control ${
+                                className={`form-control m-t-10 ${
                                   formErrors[index]?.subMenus[subIndex]?.subMenu
                                     ? "is-invalid"
                                     : ""

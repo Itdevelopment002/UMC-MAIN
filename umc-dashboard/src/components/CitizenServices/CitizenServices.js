@@ -134,20 +134,20 @@ const CitizeServices = () => {
                     <table className="table table-bordered m-b-0">
                       <thead>
                         <tr>
-                          <th width="10%">Sr. No.</th>
+                          <th width="10%" className="text-center">Sr. No.</th>
                           <th>Service Heading</th>
                           <th>Service Link</th>
-                          <th>Service Icon</th>
-                          <th>Action</th>
+                          <th className="text-center">Service Icon</th>
+                          <th className="text-center">Action</th>
                         </tr>
                       </thead>
                       <tbody>
                         {citzenServices.map((service, index) => (
                           <tr key={service.id}>
-                            <td>{index + 1}</td>
+                            <td className="text-center">{index + 1}</td>
                             <td>{service.service_heading}</td>
                             <td>{service.service_link}</td>
-                            <td>
+                            <td className="text-center">
                               <Link
                                 to={`${baseURL}/${service.main_icon_path}`}
                                 className="glightbox"
@@ -160,7 +160,7 @@ const CitizeServices = () => {
                                 />
                               </Link>
                             </td>
-                            <td>
+                            <td className="text-center">
                               <button
                                 className="btn btn-success btn-sm m-t-10 mx-1"
                                 onClick={() => handleEditModalOpen(service.id)}

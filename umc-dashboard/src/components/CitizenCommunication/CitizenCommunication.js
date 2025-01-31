@@ -159,7 +159,7 @@ const CitizenCommunication = () => {
                     <nav aria-label="breadcrumb">
                         <ol className="breadcrumb">
                             <li className="breadcrumb-item">
-                                <Link to="/hme">Home</Link>
+                                <Link to="#">Home</Link>
                             </li>
                             <li className="breadcrumb-item active" aria-current="page">
                                 Citizen Communication
@@ -179,7 +179,7 @@ const CitizenCommunication = () => {
                                                 to="/add-portal-services"
                                                 className="btn btn-primary btn-rounded float-right"
                                             >
-                                                <i className="fa fa-plus"></i> Add Portal Service
+                                                <i className="fa fa-plus"></i> Add Service
                                             </Link>
                                         </div>
                                     </div>
@@ -187,23 +187,23 @@ const CitizenCommunication = () => {
                                         <table className="table table-bordered m-b-0">
                                             <thead>
                                                 <tr>
-                                                    <th width="10%">Sr. No.</th>
+                                                    <th width="10%" className="text-center">Sr. No.</th>
                                                     <th>Servcie Heading</th>
                                                     <th>Servcie Description</th>
                                                     <th>Servcie Link</th>
-                                                    <th>Servcie Image</th>
-                                                    <th width="15%">Action</th>
+                                                    <th className="text-center">Servcie Image</th>
+                                                    <th width="15%" className="text-center">Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 {portalData.length > 0 ? (
                                                     portalData.map((item, index) => (
                                                         <tr key={item.id}>
-                                                            <td>{index + 1}</td>
+                                                            <td className="text-center">{index + 1}</td>
                                                             <td>{item.heading}</td>
                                                             <td>{item.description}</td>
                                                             <td>{item.link}</td>
-                                                            <td>
+                                                            <td className="text-center">
                                                                 <Link
                                                                     className="glightbox"
                                                                     to={`${baseURL}/${item.main_icon_path}`}
@@ -218,7 +218,7 @@ const CitizenCommunication = () => {
                                                                     />
                                                                 </Link>
                                                             </td>
-                                                            <td>
+                                                            <td className="text-center">
                                                                 <button
                                                                     onClick={() => openEditModal(item, "portal")}
                                                                     className="btn btn-success btn-sm m-t-10"
@@ -255,7 +255,7 @@ const CitizenCommunication = () => {
                                                 to="/add-emergency-services"
                                                 className="btn btn-primary btn-rounded float-right"
                                             >
-                                                <i className="fa fa-plus"></i> Add Emergency Service
+                                                <i className="fa fa-plus"></i> Add Service
                                             </Link>
                                         </div>
                                     </div>
@@ -263,21 +263,21 @@ const CitizenCommunication = () => {
                                         <table className="table table-bordered m-b-0">
                                             <thead>
                                                 <tr>
-                                                    <th width="10%">Sr. No.</th>
+                                                    <th width="10%" className="text-center">Sr. No.</th>
                                                     <th>Servcie Heading</th>
                                                     <th>Servcie Number</th>
-                                                    <th>Servcie Image</th>
-                                                    <th width="15%">Action</th>
+                                                    <th className="text-center">Servcie Image</th>
+                                                    <th width="15%" className="text-center">Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 {emergencyData.length > 0 ? (
                                                     emergencyData.map((item, index) => (
                                                         <tr key={item.id}>
-                                                            <td>{index + 1}</td>
+                                                            <td className="text-center">{index + 1}</td>
                                                             <td>{item.heading}</td>
                                                             <td>{item.number}</td>
-                                                            <td>
+                                                            <td className="text-center">
                                                                 <Link
                                                                     className="glightbox"
                                                                     to={`${baseURL}/${item.main_icon_path}`}
@@ -292,7 +292,7 @@ const CitizenCommunication = () => {
                                                                     />
                                                                 </Link>
                                                             </td>
-                                                            <td>
+                                                            <td className="text-center">
                                                                 <button
                                                                     onClick={() => openEditModal(item, "emergency")}
                                                                     className="btn btn-success btn-sm m-t-10"
