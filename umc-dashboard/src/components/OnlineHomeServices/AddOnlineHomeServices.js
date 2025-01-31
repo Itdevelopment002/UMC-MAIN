@@ -38,7 +38,7 @@ const AddOnlineHomeServices = () => {
       });
       setHeading("");
       setLink("");
-      navigate("/online-services");
+      navigate("/online-home-services");
     } catch (error) {
       console.error("Error adding online services:", error);
     }

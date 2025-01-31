@@ -344,14 +344,14 @@ const Sidebar = ({ isOpen, closeSidebar, userDepartment }) => {
                           UMC Budget
                         </Link>
                       </li> */}
-                      {/* <li
+                      <li
                         className={activeItem === "/umc-committee" ? "active" : ""}
                         onClick={() => handleItemClick("/umc-committee")}
                       >
                         <Link to="/umc-committee">
                           UMC Committee
                         </Link>
-                      </li> */}
+                      </li>
                       <li
                         className={activeItem === "/policies" ? "active" : ""}
                         onClick={() => handleItemClick("/policies")}
@@ -440,7 +440,7 @@ const Sidebar = ({ isOpen, closeSidebar, userDepartment }) => {
                       Right to Service
                     </Link>
                   </li>
-                  {/* <li
+                  <li
                     className={activeItem === "/circulars" ? "active" : ""}
                     onClick={() => handleItemClick("/circulars")}
                   >
@@ -450,10 +450,10 @@ const Sidebar = ({ isOpen, closeSidebar, userDepartment }) => {
                       </i>{" "}
                       Circulars
                     </Link>
-                  </li> */}
-                  {/* <li
-                    className={activeItem === "/online-services" ? "active" : ""}
-                    onClick={() => handleItemClick("/online-services")}
+                  </li>
+                  <li
+                    className={activeItem === "/online-home-services" ? "active" : ""}
+                    onClick={() => handleItemClick("/online-home-services")}
                   >
                     <Link to="/online-home-services">
                       <i className="fa">
@@ -461,6 +461,36 @@ const Sidebar = ({ isOpen, closeSidebar, userDepartment }) => {
                       </i>{" "}
                       Online Services
                     </Link>
+                  </li>
+                  {/* <li className="submenu">
+                    <Link to="#." onClick={() => toggleSubmenu("gallery")}>
+                      <i className="fa">
+                        <GrServices />
+                      </i>{" "}
+                      <span>Gallery </span>{" "}
+                      <span
+                        className={`menu-arrow ${openSubmenu === "gallery" ? "rotate" : ""
+                          }`}
+                      ></span>
+                    </Link>
+                    <ul className={openSubmenu === "gallery" ? "open" : ""}>
+                      <li
+                        className={activeItem === "/photo-gallery" ? "active" : ""}
+                        onClick={() => handleItemClick("/photo-gallery")}
+                      >
+                        <Link to="/photo-gallery">
+                          Photo Gallery
+                        </Link>
+                      </li>
+                      <li
+                        className={activeItem === "/video-gallery" ? "active" : ""}
+                        onClick={() => handleItemClick("/video-gallery")}
+                      >
+                        <Link to="/video-gallery">
+                          Video Gallery
+                        </Link>
+                      </li>
+                    </ul>
                   </li> */}
                   <li
                     className={activeItem === "/recruitment" ? "active" : ""}

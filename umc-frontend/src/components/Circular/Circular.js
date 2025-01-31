@@ -3,43 +3,31 @@ import { Link } from "react-router-dom";
 import "./Circular.css"
 import "../DepartmentCustomCss/DepartmentCustom.css"
 import pdficon from '../../assets/images/Departments/document 1.png'
-
-const circularData = [
-    // {
-    //     title: "Circular Title Here",
-    //     number: "CLR/04-01-25/000123",
-    //     date: "04-01-2025",
-    //     posting: "View PDF",
-    // },
-    // {
-    //     title: "Circular Title Here",
-    //     number: "CLR/04-01-25/000123",
-    //     date: "04-01-2025",
-    //     posting: "View PDF",
-    // },
-    // {
-    //     title: "Circular Title Here",
-    //     number: "CLR/04-01-25/000123",
-    //     date: "04-01-2025",
-    //     posting: "View PDF",
-    // },
-    // {
-    //     title: "Circular Title Here",
-    //     number: "CLR/04-01-25/000123",
-    //     date: "04-01-2025",
-    //     posting: "View PDF",
-    // },
-
-];
+import api from "../api"
 
 const Circular = () => {
-
     const [itemsPerPage, setItemsPerPage] = useState(10);
     const [currentPage, setCurrentPage] = useState(1);
     const [searchTerm, setSearchTerm] = useState("");
+    const [circularData, setCircularData] = useState([]);
+
+    const fetchData = async () => {
+        try {
+            const response = await api.get("/circular-info");
+            setCircularData(response.data);
+        } catch (error) {
+            console.error("Error fetching data", error);
+        }
+    };
+
+    useEffect(() => {
+        fetchData();
+    }, []);
 
     const filteredData = circularData.filter((item) =>
-        item.title.toLowerCase().includes(searchTerm.toLowerCase())
+        item.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.number.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.publish_date.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     const totalPages = Math.ceil(filteredData.length / itemsPerPage);
@@ -164,24 +152,34 @@ const Circular = () => {
                                         {currentData.length > 0 ? (
                                             currentData.map((item, index) => (
                                                 <tr key={index}>
-                                                    <td className="font-large text-center">
+                                                    <td className="font-large text-center" style={{ color: "#292D32" }}>
                                                         {startIndex + index + 1}
                                                     </td>
-                                                    <td>{item.title}</td>
-                                                    <td className="text-center">{item.number}</td>
-                                                    <td className="text-center">{item.date}</td>
+                                                    <td style={{ color: "#292D32" }}>{item.description}</td>
+                                                    <td className="text-center" style={{ color: "#292D32" }}>{item.number}</td>
+                                                    <td className="text-center" style={{ color: "#292D32" }}>
+                                                        {new Date(item.publish_date)
+                                                            .toLocaleDateString("en-GB", {
+                                                                day: "2-digit",
+                                                                month: "2-digit",
+                                                                year: "numeric",
+                                                            })
+                                                            .replace(/\//g, "-")}
+                                                    </td>
                                                     <td className="text-center">
-                                                        <img
-                                                            src={pdficon}
-                                                            alt="PDF Icon"
-                                                            style={{
-                                                                width: "18px",
-                                                                height: "18px",
-                                                                marginRight: "8px",
-                                                                verticalAlign: "middle",
-                                                            }}
-                                                        />
-                                                        {item.posting}
+                                                        <Link to={item.link} className="text-decoration-none" target="_blank" style={{ color: "#292D32" }}>
+                                                            <img
+                                                                src={pdficon}
+                                                                alt="PDF Icon"
+                                                                style={{
+                                                                    width: "18px",
+                                                                    height: "18px",
+                                                                    marginRight: "8px",
+                                                                    verticalAlign: "middle",
+                                                                }}
+                                                            />
+                                                            View Pdf
+                                                        </Link>
                                                     </td>
                                                 </tr>
                                             ))
