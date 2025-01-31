@@ -19,7 +19,7 @@ const Annual = () => {
   const fetchAnnual = async () => {
     try {
       const response = await api.get("/annual-finance");
-      setAnnual(response.data);
+      setAnnual(response.data.reverse());
     } catch (error) {
       console.error("Error fetching Annual:", error);
       toast.error("Failed to fetch Annual data!");

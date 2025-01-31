@@ -462,7 +462,7 @@ const Sidebar = ({ isOpen, closeSidebar, userDepartment }) => {
                       Online Services
                     </Link>
                   </li>
-                  {/* <li className="submenu">
+                  <li className="submenu">
                     <Link to="#." onClick={() => toggleSubmenu("gallery")}>
                       <i className="fa">
                         <GrServices />
@@ -491,7 +491,7 @@ const Sidebar = ({ isOpen, closeSidebar, userDepartment }) => {
                         </Link>
                       </li>
                     </ul>
-                  </li> */}
+                  </li>
                   <li
                     className={activeItem === "/recruitment" ? "active" : ""}
                     onClick={() => handleItemClick("/recruitment")}
