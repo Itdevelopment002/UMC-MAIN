@@ -159,21 +159,21 @@ const TopHeader = () => {
                                 className={`dropdown-option ${selectedLanguage === "eng" ? "selected" : ""}`}
                                 onClick={() => handleLanguageChange("eng")}
                             >
-                                <img src={flag1} alt="English" className="flag-icon" />
+                                {/* <img src={flag1} alt="English" className="flag-icon" /> */}
                                 English
                             </div>
                             <div
                                 className={`dropdown-option ${selectedLanguage === "hin" ? "selected" : ""}`}
                                 onClick={() => handleLanguageChange("hin")}
                             >
-                                <img src={flag2} alt="Hindi" className="flag-icon" />
+                                {/* <img src={flag2} alt="Hindi" className="flag-icon" /> */}
                                 हिंदी
                             </div>
                             <div
                                 className={`dropdown-option ${selectedLanguage === "mar" ? "selected" : ""}`}
                                 onClick={() => handleLanguageChange("mar")}
                             >
-                                <img src={flag3} alt="Marathi" className="flag-icon" />
+                                {/* <img src={flag3} alt="Marathi" className="flag-icon" /> */}
                                 मराठी
                             </div>
                         </div>
