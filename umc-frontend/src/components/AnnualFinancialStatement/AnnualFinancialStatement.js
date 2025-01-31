@@ -3,25 +3,32 @@ import { Link } from "react-router-dom";
 import "./AnnualFinancialStatement.css";
 import pdficon from '../../assets/images/Departments/document 1.png'
 import Swal from 'sweetalert2';
-
-const circularData = [
-    { statement: "Financial Statement 2015-16", link: "https://drive.google.com/file/d/1U6iiT7DwRYF2C86bt40DCLjsQ16dTVnr/view?usp=drive_link", action: "View PDF", },
-    { statement: "Financial Statement 2016-17", link: "https://drive.google.com/file/d/1yjXvIdkULx3-OU4bm84mZmOp5BOcM-f1/view?usp=drive_link", action: "View PDF", },
-    { statement: "Financial Statement 2017-18", link: "https://drive.google.com/file/d/19zpO5sU4S5mbj8Sl8A7CE8bYBlXjGLoV/view?usp=drive_link", action: "View PDF", },
-    { statement: "Financial Statement 2018-19", link: "https://drive.google.com/file/d/1N7hEwpRW9mYESmh48Pf4Lv-iXUAhQ449/view?usp=drive_link", action: "View PDF", },
-];
+import api from "../api";
 
 const AnnualFinancialStatement = () => {
-
     const [itemsPerPage, setItemsPerPage] = useState(10);
+    const [annualData, setAnnualData] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [searchTerm, setSearchTerm] = useState("");
-    const totalEntries = circularData.length;
-    const filteredData = circularData.filter((item) =>
-        item.statement.toLowerCase().includes(searchTerm.toLowerCase())
+    const totalEntries = annualData.length;
+    const filteredData = annualData.filter((item) =>
+        item.heading.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
-    const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+    useEffect(() => {
+        fetchAnnual();
+    }, []);
+
+    const fetchAnnual = async () => {
+        try {
+            const response = await api.get("/annual-finance");
+            setAnnualData(response.data);
+        } catch (error) {
+            console.error("Error fetching Annual:", error);
+        }
+    };
+
+    const totalPages = Math.ceil(annualData.length / itemsPerPage);
     const startIndex = (currentPage - 1) * itemsPerPage;
     const currentData = filteredData.reverse().slice(startIndex, startIndex + itemsPerPage);
 
@@ -73,7 +80,7 @@ const AnnualFinancialStatement = () => {
             });
         }
     };
-    const updatedtotalEntries = circularData.length;
+    const updatedtotalEntries = annualData.length;
     const startEntry = (currentPage - 1) * itemsPerPage + 1;
     const endEntry = Math.min(currentPage * itemsPerPage, updatedtotalEntries);
 
@@ -158,7 +165,7 @@ const AnnualFinancialStatement = () => {
                                                 <td className="font-large text-center">
                                                     {startIndex + index + 1}
                                                 </td>
-                                                <td>{item.statement}</td>
+                                                <td>{item.heading}</td>
                                                 <td
                                                     width="20%"
                                                     style={{
@@ -182,7 +189,7 @@ const AnnualFinancialStatement = () => {
                                                                 verticalAlign: "middle",
                                                             }}
                                                         />
-                                                        {item.action}
+                                                        View PDF
                                                     </Link>
                                                 </td>
                                             </tr>
