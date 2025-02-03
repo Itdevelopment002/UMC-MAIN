@@ -38,7 +38,7 @@ const AddAnnual = () => {
       });
       setHeading("");
       setLink("");
-      navigate("/annual");
+      navigate("/annual-financial-statement");
     } catch (error) {
       console.error("Error adding ward:", error);
     }
@@ -53,10 +53,10 @@ const AddAnnual = () => {
               <Link to="#">Corporation</Link>
             </li>
             <li className="breadcrumb-item">
-              <Link to="/annual">Annual Financial</Link>
+              <Link to="/annual-financial-statement">Annual Financial Statement</Link>
             </li>
             <li className="breadcrumb-item active" aria-current="page">
-              Add Annual
+              Add Annual Financial Statement
             </li>
           </ol>
           <div className="row">
@@ -64,8 +64,8 @@ const AddAnnual = () => {
               <div className="card-box">
                 <div className="card-block">
                   <div className="row">
-                    <div className="col-sm-4 col-3">
-                      <h4 className="page-title">Add Annual</h4>
+                    <div className="col-12">
+                      <h4 className="page-title">Add Annual Financial Statement</h4>
                     </div>
                   </div>
                   <form onSubmit={handleSubmit}>

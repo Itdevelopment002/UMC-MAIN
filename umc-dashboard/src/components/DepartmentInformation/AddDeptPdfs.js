@@ -13,16 +13,16 @@ const AddDeptPdfs = () => {
   const validateForm = () => {
     const validationErrors = {};
 
+    if (!department) {
+      validationErrors.department = "Department Name is required.";
+  }
+
     if (!heading) {
-      validationErrors.heading = "Heading is required.";
+      validationErrors.heading = "Pdf Heading is required.";
     }
 
     if (!link) {
-      validationErrors.link = "Link is required.";
-    }
-
-    if (!department) {
-      validationErrors.link = "Department is required.";
+      validationErrors.link = "Pdf Link is required.";
     }
 
     setErrors(validationErrors);
@@ -72,6 +72,9 @@ const AddDeptPdfs = () => {
         <div className="content">
           <ol className="breadcrumb">
             <li className="breadcrumb-item">
+              <Link to="#">Departments</Link>
+            </li>
+            <li className="breadcrumb-item">
               <Link to="/department-information">Department Information</Link>
             </li>
             <li className="breadcrumb-item active" aria-current="page">
@@ -83,7 +86,7 @@ const AddDeptPdfs = () => {
               <div className="card-box">
                 <div className="card-block">
                   <div className="row">
-                    <div className="col-sm-4 col-3">
+                    <div className="col-12">
                       <h4 className="page-title">Add Department Pdfs</h4>
                     </div>
                   </div>
@@ -105,9 +108,9 @@ const AddDeptPdfs = () => {
                           <option value="" disabled>
                             Select Department Name
                           </option>
-                          {departments.map((dept) => (
-                            <option value={dept.heading} key={dept.id}>
-                              {dept.heading}
+                          {departments.map((department) => (
+                            <option value={department.heading} key={department.id}>
+                              {department.heading}
                             </option>
                           ))}
                         </select>
@@ -151,7 +154,7 @@ const AddDeptPdfs = () => {
                           type="text"
                           className={`form-control form-control-md ${errors.link ? "is-invalid" : ""
                             }`}
-                          placeholder="Enter PDF Link"
+                          placeholder="Enter Pdf Link"
                           value={link}
                           onChange={(e) => {
                             setLink(e.target.value);

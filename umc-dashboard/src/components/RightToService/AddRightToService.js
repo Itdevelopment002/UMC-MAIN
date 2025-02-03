@@ -40,7 +40,7 @@ const AddRightToService = () => {
       setLink("");
       navigate("/rts");
     } catch (error) {
-      console.error("Error adding ward:", error);
+      console.error("Error adding rts:", error);
     }
   };
 
@@ -50,7 +50,7 @@ const AddRightToService = () => {
         <div className="content">
           <ol className="breadcrumb">
             <li className="breadcrumb-item">
-              <Link to="/home">Home</Link>
+              <Link to="#">Home</Link>
             </li>
             <li className="breadcrumb-item">
               <Link to="/rts">Right To Service</Link>
@@ -64,7 +64,7 @@ const AddRightToService = () => {
               <div className="card-box">
                 <div className="card-block">
                   <div className="row">
-                    <div className="col-sm-4 col-3">
+                    <div className="col-12">
                       <h4 className="page-title">Add Right To Service</h4>
                     </div>
                   </div>

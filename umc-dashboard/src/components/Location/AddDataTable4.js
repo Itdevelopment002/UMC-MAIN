@@ -11,7 +11,6 @@ const AddDataTable4 = () => {
   const [errors, setErrors] = useState({ heading: "", description: "" });
   const navigate = useNavigate();
 
-  // Handle input field changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -23,7 +22,6 @@ const AddDataTable4 = () => {
     }
   };
 
-  // Validate form data
   const validateForm = () => {
     const newErrors = {};
     if (!formData.heading) {
@@ -85,7 +83,7 @@ const AddDataTable4 = () => {
               <div className="card-box">
                 <div className="card-block">
                   <div className="row">
-                    <div className="col-sm-4 col-3">
+                    <div className="col-12">
                       <h4 className="page-title">Add Table 4 Data</h4>
                     </div>
                   </div>

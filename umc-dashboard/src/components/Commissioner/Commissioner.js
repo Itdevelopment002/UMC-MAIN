@@ -180,7 +180,7 @@ const Commissioner = () => {
                     <nav aria-label="breadcrumb">
                         <ol className="breadcrumb">
                             <li className="breadcrumb-item">
-                                <Link to="#.">About KBMC</Link>
+                                <Link to="#">About UMC</Link>
                             </li>
                             <li className="breadcrumb-item active" aria-current="page">
                                 Commissioner
@@ -215,23 +215,23 @@ const Commissioner = () => {
                                         <table className="table table-bordered m-b-0">
                                             <thead>
                                                 <tr>
-                                                    <th width="10%">Sr. No.</th>
-                                                    <th>Commissioner Image</th>
+                                                    <th width="10%" className="text-center">Sr. No.</th>
+                                                    <th className="text-center">Commissioner Image</th>
                                                     <th>Commissioner Name</th>
                                                     <th>Designation</th>
                                                     <th>Education Qualification</th>
                                                     <th>Office Address</th>
                                                     <th>Phone No.</th>
                                                     <th>Mail Id</th>
-                                                    <th width="15%">Action</th>
+                                                    <th width="15%" className="text-center">Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 {coData.length > 0 ? (
                                                     coData.map((item, index) => (
                                                         <tr key={item.id}>
-                                                            <td>{index + 1}</td>
-                                                            <td>
+                                                            <td className="text-center">{index + 1}</td>
+                                                            <td className="text-center">
                                                                 <Link
                                                                     className="glightbox"
                                                                     to={`${baseURL}${item.image_path}`}
@@ -253,7 +253,7 @@ const Commissioner = () => {
                                                             <td>{item.address}</td>
                                                             <td>{item.number}</td>
                                                             <td>{item.email}</td>
-                                                            <td>
+                                                            <td className="text-center">
                                                                 <button
                                                                     onClick={() => openEditModal(item, "co")}
                                                                     className="btn btn-success btn-sm m-t-10"
@@ -281,7 +281,15 @@ const Commissioner = () => {
                                             </tbody>
                                         </table>
                                     </div>
-                                    <div className="row m-t-50">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="col-lg-12">
+                            <div className="card-box">
+                                <div className="card-block">
+                                    <div className="row">
                                         <div className="col-sm-4 col-3">
                                             <h4 className="page-title">Commissioner Description</h4>
                                         </div>
@@ -290,7 +298,7 @@ const Commissioner = () => {
                                                 to="/add-commissioner-desc"
                                                 className="btn btn-primary btn-rounded float-right"
                                             >
-                                                <i className="fa fa-plus"></i> Add Description
+                                                <i className="fa fa-plus"></i> Add Desc
                                             </Link>
                                         </div>
                                     </div>
@@ -298,18 +306,18 @@ const Commissioner = () => {
                                         <table className="table table-bordered m-b-0">
                                             <thead>
                                                 <tr>
-                                                    <th width="10%">Sr. No.</th>
+                                                    <th width="10%" className="text-center">Sr. No.</th>
                                                     <th>Description</th>
-                                                    <th width="15%">Action</th>
+                                                    <th width="15%" className="text-center">Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 {currentPageData.length > 0 ? (
                                                     currentPageData.map((item, index) => (
                                                         <tr key={item.id}>
-                                                            <td>{index + 1}</td>
+                                                            <td className="text-center">{index + 1}</td>
                                                             <td>{item.description}</td>
-                                                            <td>
+                                                            <td className="text-center">
                                                                 <button
                                                                     onClick={() => openEditModal(item, "history")}
                                                                     className="btn btn-success btn-sm m-t-10"

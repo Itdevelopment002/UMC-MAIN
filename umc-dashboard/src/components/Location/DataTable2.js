@@ -11,7 +11,7 @@ const DataTable2 = () => {
   const [selectedPolicy, setSelectedPolicy] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
-  const [selectedType, setSelectedType] = useState(""); // To store the selected type
+  const [selectedType, setSelectedType] = useState("");
 
   useEffect(() => {
     fetchPolicy();
@@ -94,16 +94,16 @@ const DataTable2 = () => {
           <div className="card-box">
             <div className="card-block">
               <div className="row">
-                <div className="col-sm-4 col-3">
+                <div className="col-6">
                   <h4 className="page-title">Table 2 Data</h4>
                 </div>
-                <div className="col-sm-8 col-9 text-right m-b-20">
+                <div className="col-6 text-right m-b-20">
                   <Link
                     to="/add-datatable2"
                     className="btn btn-primary btn-rounded ml-2"
                     onClick={() => handleLinkClick("Table 2")}
                   >
-                    <i className="fa fa-plus"></i> Add Table 2
+                    <i className="fa fa-plus"></i> Add Data 2
                   </Link>
                 </div>
               </div>
@@ -111,35 +111,35 @@ const DataTable2 = () => {
                 <table className="table table-bordered m-b-0">
                   <thead>
                     <tr>
-                      <th width="10%">Sr. No.</th>
+                      <th width="10%" className="text-center">Sr. No.</th>
                       <th>Title</th>
                       <th>Description</th>
-                      <th width="15%">Action</th>
+                      <th width="15%" className="text-center">Action</th>
                     </tr>
                   </thead>
                   <tbody>
-                  {currentPageData.length > 0 ? (
+                    {currentPageData.length > 0 ? (
                       currentPageData.map((policy, index) => (
-                          <tr key={policy.id}>
-                            <td>{(currentPage - 1) * itemsPerPage + index + 1}</td>
-                            <td>{policy.heading}</td>
-                            <td>{policy.description}</td>
-                            <td>
-                              <button
-                                className="btn btn-success btn-sm m-t-10"
-                                onClick={() => handleEditClick(policy)}
-                              >
-                                Edit
-                              </button>
-                              <button
-                                className="btn btn-danger btn-sm m-t-10"
-                                onClick={() => handleDeleteClick(policy)}
-                              >
-                                Delete
-                              </button>
-                            </td>
-                          </tr>
-                        ))
+                        <tr key={policy.id}>
+                          <td className="text-center">{(currentPage - 1) * itemsPerPage + index + 1}</td>
+                          <td>{policy.heading}</td>
+                          <td>{policy.description}</td>
+                          <td className="text-center">
+                            <button
+                              className="btn btn-success btn-sm m-t-10"
+                              onClick={() => handleEditClick(policy)}
+                            >
+                              Edit
+                            </button>
+                            <button
+                              className="btn btn-danger btn-sm m-t-10"
+                              onClick={() => handleDeleteClick(policy)}
+                            >
+                              Delete
+                            </button>
+                          </td>
+                        </tr>
+                      ))
                     ) : (
                       <tr>
                         <td colSpan="4" className="text-center">
@@ -151,50 +151,48 @@ const DataTable2 = () => {
                 </table>
               </div>
             </div>
+            <div className="mt-4">
+              <ul className="pagination">
+                <li
+                  className={`page-item ${currentPage === 1 ? "disabled" : ""}`}
+                >
+                  <button
+                    className="page-link"
+                    onClick={() => setCurrentPage(currentPage - 1)}
+                  >
+                    Previous
+                  </button>
+                </li>
+                {Array.from({ length: totalPages }, (_, i) => (
+                  <li
+                    className={`page-item ${currentPage === i + 1 ? "active" : ""}`}
+                    key={i}
+                  >
+                    <button
+                      className="page-link"
+                      onClick={() => setCurrentPage(i + 1)}
+                    >
+                      {i + 1}
+                    </button>
+                  </li>
+                ))}
+                <li
+                  className={`page-item ${currentPage === totalPages ? "disabled" : ""
+                    }`}
+                >
+                  <button
+                    className="page-link"
+                    onClick={() => setCurrentPage(currentPage + 1)}
+                  >
+                    Next
+                  </button>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
 
-      <div className="mt-4">
-        <ul className="pagination">
-          <li
-            className={`page-item ${currentPage === 1 ? "disabled" : ""}`}
-          >
-            <button
-              className="page-link"
-              onClick={() => setCurrentPage(currentPage - 1)}
-            >
-              Previous
-            </button>
-          </li>
-          {Array.from({ length: totalPages }, (_, i) => (
-            <li
-              className={`page-item ${currentPage === i + 1 ? "active" : ""}`}
-              key={i}
-            >
-              <button
-                className="page-link"
-                onClick={() => setCurrentPage(i + 1)}
-              >
-                {i + 1}
-              </button>
-            </li>
-          ))}
-          <li
-            className={`page-item ${currentPage === totalPages ? "disabled" : ""
-              }`}
-          >
-            <button
-              className="page-link"
-              onClick={() => setCurrentPage(currentPage + 1)}
-            >
-              Next
-            </button>
-          </li>
-        </ul>
-      </div>
-
-      {/* Link for the selected form type */}
       {selectedType && (
         <Link
           to={`/add-datatable${selectedType.slice(-1)}`}
@@ -276,7 +274,7 @@ const DataTable2 = () => {
           <div className="modal-dialog modal-dialog-centered">
             <div className="modal-content">
               <div className="modal-body text-center">
-                <h5>Are you sure you want to delete this policy?</h5>
+                <h5>Are you sure you want to delete this item?</h5>
               </div>
               <div className="modal-footer">
                 <button
