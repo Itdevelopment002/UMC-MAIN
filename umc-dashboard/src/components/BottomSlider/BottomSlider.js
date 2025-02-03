@@ -32,7 +32,7 @@ const BottomSlider = () => {
 
   useEffect(() => {
     initLightbox();
-  }, [links]);
+  }, [links, currentPageData]);
 
   const initLightbox = () => {
     GLightbox({
@@ -79,13 +79,13 @@ const BottomSlider = () => {
     const updatedLinks = links.map((websitelink) =>
       websitelink.id === editLinkData.id
         ? {
-            ...websitelink,
-            websitelink: editLinkData.websitelink,
-            websitelogo:
-              editLinkData.websitelogo instanceof File
-                ? URL.createObjectURL(editLinkData.websitelogo)
-                : websitelink.websitelogo,
-          }
+          ...websitelink,
+          websitelink: editLinkData.websitelink,
+          websitelogo:
+            editLinkData.websitelogo instanceof File
+              ? URL.createObjectURL(editLinkData.websitelogo)
+              : websitelink.websitelogo,
+        }
         : websitelink
     );
     setLinks(updatedLinks);
@@ -122,7 +122,7 @@ const BottomSlider = () => {
           <nav aria-label="breadcrumb">
             <ol className="breadcrumb">
               <li className="breadcrumb-item">
-                <Link to="/home">Home</Link>{" "}
+                <Link to="#">Home</Link>{" "}
               </li>
               <li className="breadcrumb-item active" aria-current="page">
                 Bottom Slider
@@ -150,34 +150,38 @@ const BottomSlider = () => {
                     <table className="table table-bordered m-b-0">
                       <thead>
                         <tr>
-                          <th width="10%">Sr. No.</th>
+                          <th width="10%" className="text-center">Sr. No.</th>
                           <th>Slider Link</th>
-                          <th>Slider Image</th>
-                          <th>Action</th>
+                          <th className="text-center">Slider Image</th>
+                          <th width="15%" className="text-center">Action</th>
                         </tr>
                       </thead>
                       <tbody>
                         {currentPageData.map((websitelink, index) => (
                           <tr key={websitelink.id}>
-                            <td>
+                            <td className="text-center">
                               {(currentPage - 1) * itemsPerPage + index + 1}
                             </td>
-                            <td>{websitelink.websitelink}</td>
                             <td>
+                              <Link to={websitelink.websitelink} className="text-decoration-none" style={{ color: "#000" }} target="_blank">
+                                {websitelink.websitelink}
+                              </Link>
+                            </td>
+                            <td className="text-center">
                               <Link
                                 to={`${baseURL}${websitelink.websitelogo}`}
                                 className="glightbox"
                                 data-gallery="web-links-gallery"
                               >
                                 <img
-                                  width="120px"
+                                  width="100px"
                                   src={`${baseURL}${websitelink.websitelogo}`}
                                   alt={websitelink.id}
                                   style={{ borderRadius: "5px" }}
                                 />
                               </Link>
                             </td>
-                            <td>
+                            <td className="text-center">
                               <button
                                 className="btn btn-success btn-sm m-t-10"
                                 onClick={() => openEditModal(websitelink)}
@@ -200,55 +204,112 @@ const BottomSlider = () => {
                     </table>
                   </div>
                 </div>
+                <div>
+                  <ul className="pagination mt-4">
+                    <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
+                      <button
+                        className="page-link"
+                        onClick={() => setCurrentPage(currentPage - 1)}
+                      >
+                        Previous
+                      </button>
+                    </li>
+                    {currentPage > 2 && (
+                      <li className={`page-item ${currentPage === 1 ? "active" : ""}`}>
+                        <button className="page-link" onClick={() => setCurrentPage(1)}>
+                          1
+                        </button>
+                      </li>
+                    )}
+                    {currentPage > 3 && (
+                      <li className={`page-item ${currentPage === 2 ? "active" : ""}`}>
+                        <button className="page-link" onClick={() => setCurrentPage(2)}>
+                          2
+                        </button>
+                      </li>
+                    )}
+                    {currentPage > 4 && (
+                      <li className="page-item disabled">
+                        <span className="page-link">...</span>
+                      </li>
+                    )}
+                    {Array.from(
+                      { length: Math.ceil(links.length / itemsPerPage) },
+                      (_, i) => i + 1
+                    )
+                      .filter(
+                        (page) =>
+                          page >= currentPage - 1 && page <= currentPage + 1 // Show current page and its neighbors
+                      )
+                      .map((page) => (
+                        <li
+                          className={`page-item ${currentPage === page ? "active" : ""}`}
+                          key={page}
+                        >
+                          <button
+                            className="page-link"
+                            onClick={() => setCurrentPage(page)}
+                          >
+                            {page}
+                          </button>
+                        </li>
+                      ))}
+                    {currentPage < Math.ceil(links.length / itemsPerPage) - 3 && (
+                      <li className="page-item disabled">
+                        <span className="page-link">...</span>
+                      </li>
+                    )}
+                    {currentPage < Math.ceil(links.length / itemsPerPage) - 2 && (
+                      <li
+                        className={`page-item ${currentPage === Math.ceil(links.length / itemsPerPage) - 1
+                          ? "active"
+                          : ""
+                          }`}
+                      >
+                        <button
+                          className="page-link"
+                          onClick={() =>
+                            setCurrentPage(Math.ceil(links.length / itemsPerPage) - 1)
+                          }
+                        >
+                          {Math.ceil(links.length / itemsPerPage) - 1}
+                        </button>
+                      </li>
+                    )}
+                    {currentPage < Math.ceil(links.length / itemsPerPage) - 1 && (
+                      <li
+                        className={`page-item ${currentPage === Math.ceil(links.length / itemsPerPage)
+                          ? "active"
+                          : ""
+                          }`}
+                      >
+                        <button
+                          className="page-link"
+                          onClick={() =>
+                            setCurrentPage(Math.ceil(links.length / itemsPerPage))
+                          }
+                        >
+                          {Math.ceil(links.length / itemsPerPage)}
+                        </button>
+                      </li>
+                    )}
+                    <li
+                      className={`page-item ${currentPage === Math.ceil(links.length / itemsPerPage)
+                        ? "disabled"
+                        : ""
+                        }`}
+                    >
+                      <button
+                        className="page-link"
+                        onClick={() => setCurrentPage(currentPage + 1)}
+                      >
+                        Next
+                      </button>
+                    </li>
+                  </ul>
+                </div>
               </div>
             </div>
-          </div>
-
-          <div>
-            <ul className="pagination">
-              <li
-                className={`page-item ${currentPage === 1 ? "disabled" : ""}`}
-              >
-                <button
-                  className="page-link"
-                  onClick={() => setCurrentPage(currentPage - 1)}
-                >
-                  Previous
-                </button>
-              </li>
-              {Array.from(
-                { length: Math.ceil(links.length / itemsPerPage) },
-                (_, i) => (
-                  <li
-                    className={`page-item ${
-                      currentPage === i + 1 ? "active" : ""
-                    }`}
-                    key={i}
-                  >
-                    <button
-                      className="page-link"
-                      onClick={() => setCurrentPage(i + 1)}
-                    >
-                      {i + 1}
-                    </button>
-                  </li>
-                )
-              )}
-              <li
-                className={`page-item ${
-                  currentPage === Math.ceil(links.length / itemsPerPage)
-                    ? "disabled"
-                    : ""
-                }`}
-              >
-                <button
-                  className="page-link"
-                  onClick={() => setCurrentPage(currentPage + 1)}
-                >
-                  Next
-                </button>
-              </li>
-            </ul>
           </div>
 
           {/* Delete Modal */}
@@ -286,77 +347,76 @@ const BottomSlider = () => {
             </div>
           </div>
 
-          {/* Edit Modal */}
-          <div
-            className={`modal fade ${showEditModal ? "show" : ""}`}
-            style={{ display: showEditModal ? "block" : "none" }}
-            id="editModal"
-            tabIndex="-1"
-            role="dialog"
-            aria-labelledby="editModalLabel"
-            aria-hidden="true"
-          >
-            <div className="modal-dialog modal-dialog-centered" role="document">
-              <div className="modal-content">
-              <div className="modal-header">
+          {showEditModal && (
+            <div className="modal fade show d-block"
+              style={{
+                overflowY: "auto",
+                maxHeight: "100vh",
+                scrollbarWidth: "none",
+              }} tabIndex="-1">
+              <div className="modal-dialog modal-dialog-centered">
+                <div className="modal-content">
+                  <div className="modal-header">
                     <h5 className="modal-title">Edit Bottom Slider</h5>
                   </div>
-                <div className="modal-body">
-                  <form onSubmit={handleEditSubmit}>
-                    <div className="form-group">
-                      <label htmlFor="websitelink">Slider Link</label>
-                      <input
-                        type="text"
-                        id="websitelink"
-                        className="form-control"
-                        value={editLinkData.websitelink}
-                        onChange={(e) =>
-                          setEditLinkData({
-                            ...editLinkData,
-                            websitelink: e.target.value,
-                          })
-                        }
-                      />
-                    </div>
-                    <div className="form-group">
-                      <label htmlFor="websitelogo">Slider Image</label>
-                      <input
-                        type="file"
-                        id="websitelogo"
-                        className="form-control"
-                        onChange={(e) =>
-                          setEditLinkData({
-                            ...editLinkData,
-                            websitelogo: e.target.files[0],
-                          })
-                        }
-                      />
-                      {editLinkData.websitelogoPreview && (
-                        <img
-                          src={editLinkData.websitelogoPreview}
-                          alt="Preview"
-                          width="100px"
-                          className="mt-2"
+                  <div className="modal-body">
+                    <form>
+                      <div className="form-group">
+                        <label htmlFor="websitelink">Slider Link</label>
+                        <input
+                          type="text"
+                          id="websitelink"
+                          className="form-control"
+                          value={editLinkData.websitelink}
+                          onChange={(e) =>
+                            setEditLinkData({
+                              ...editLinkData,
+                              websitelink: e.target.value,
+                            })
+                          }
                         />
-                      )}
-                    </div>
-                    <div className="modal-footer">
-                      <button
-                        type="button"
-                        className="btn btn-sm btn-secondary"
-                        onClick={() => setShowEditModal(false)}
-                      >
-                        Close
-                      </button>
-                      <button type="submit" className="btn btn-sm btn-primary">
-                        Save changes
-                      </button>
-                    </div>
-                  </form>
+                      </div>
+                      <div className="form-group">
+                        <label htmlFor="websitelogo">Slider Image</label>
+                        <input
+                          type="file"
+                          id="websitelogo"
+                          className="form-control"
+                          onChange={(e) =>
+                            setEditLinkData({
+                              ...editLinkData,
+                              websitelogo: e.target.files[0],
+                            })
+                          }
+                        />
+                        {editLinkData.websitelogoPreview && (
+                          <img
+                            src={editLinkData.websitelogoPreview}
+                            alt="Preview"
+                            width="100px"
+                            className="mt-2"
+                          />
+                        )}
+                      </div>
+
+                    </form>
+                  </div>
+                  <div className="modal-footer">
+                    <button
+                      type="button"
+                      className="btn btn-sm btn-secondary"
+                      onClick={() => setShowEditModal(false)}
+                    >
+                      Close
+                    </button>
+                    <button type="submit" className="btn btn-sm btn-primary" onClick={handleEditSubmit}>
+                      Save changes
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </>

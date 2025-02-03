@@ -21,13 +21,16 @@ const MinisterDetails = () => {
   const itemsPerPage = 5;
   const totalItems = ministers.length;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
+  const indexOfLastItem = currentPage * itemsPerPage;
+
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  //eslint-disable-next-line
+  const currentMinisters = ministers.slice(indexOfFirstItem, indexOfLastItem);
 
   useEffect(() => {
     const lightbox = GLightbox({ selector: ".glightbox" });
-    return () => {
-      lightbox.destroy();
-    };
-  }, [ministers]);
+    return () => lightbox.destroy();
+  }, [currentMinisters]);
 
   const fetchMinisters = () => {
     api
@@ -112,11 +115,6 @@ const MinisterDetails = () => {
     setCurrentPage(page);
   };
 
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  //eslint-disable-next-line
-  const currentMinisters = ministers.slice(indexOfFirstItem, indexOfLastItem);
-
   return (
     <>
       <div className="page-wrapper">
@@ -124,7 +122,7 @@ const MinisterDetails = () => {
           <nav aria-label="breadcrumb">
             <ol className="breadcrumb">
               <li className="breadcrumb-item">
-                <Link to="/home">Home</Link>
+                <Link to="#">Home</Link>
               </li>
               <li className="breadcrumb-item active" aria-current="page">
                 Ministers
@@ -160,9 +158,9 @@ const MinisterDetails = () => {
                         </tr>
                       </thead>
                       <tbody>
-                        {ministers.map((minister, index) => (
+                        {currentMinisters.map((minister, index) => (
                           <tr key={minister.id}>
-                            <td className="text-center">{index + 1}</td>
+                            <td className="text-center">{indexOfFirstItem + index + 1}</td>
                             <td>{minister.name}</td>
                             <td>{minister.designation}</td>
                             <td className="text-center">
@@ -198,46 +196,98 @@ const MinisterDetails = () => {
                     </table>
                   </div>
                 </div>
+                <ul className="pagination mt-4">
+                  <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
+                    <button
+                      className="page-link"
+                      onClick={() => handlePageChange(currentPage - 1)}
+                    >
+                      Previous
+                    </button>
+                  </li>
+                  {currentPage > 2 && (
+                    <li className={`page-item ${currentPage === 1 ? "active" : ""}`}>
+                      <button className="page-link" onClick={() => handlePageChange(1)}>
+                        1
+                      </button>
+                    </li>
+                  )}
+                  {currentPage > 3 && (
+                    <li className={`page-item ${currentPage === 2 ? "active" : ""}`}>
+                      <button className="page-link" onClick={() => handlePageChange(2)}>
+                        2
+                      </button>
+                    </li>
+                  )}
+                  {currentPage > 4 && (
+                    <li className="page-item disabled">
+                      <span className="page-link">...</span>
+                    </li>
+                  )}
+                  {Array.from({ length: totalPages }, (_, i) => i + 1)
+                    .filter(
+                      (page) =>
+                        page >= currentPage - 1 && page <= currentPage + 1
+                    )
+                    .map((page) => (
+                      <li
+                        className={`page-item ${currentPage === page ? "active" : ""}`}
+                        key={page}
+                      >
+                        <button
+                          className="page-link"
+                          onClick={() => handlePageChange(page)}
+                        >
+                          {page}
+                        </button>
+                      </li>
+                    ))}
+                  {currentPage < totalPages - 3 && (
+                    <li className="page-item disabled">
+                      <span className="page-link">...</span>
+                    </li>
+                  )}
+                  {currentPage < totalPages - 2 && (
+                    <li
+                      className={`page-item ${currentPage === totalPages - 1 ? "active" : ""
+                        }`}
+                    >
+                      <button
+                        className="page-link"
+                        onClick={() => handlePageChange(totalPages - 1)}
+                      >
+                        {totalPages - 1}
+                      </button>
+                    </li>
+                  )}
+                  {currentPage < totalPages - 1 && (
+                    <li
+                      className={`page-item ${currentPage === totalPages ? "active" : ""
+                        }`}
+                    >
+                      <button
+                        className="page-link"
+                        onClick={() => handlePageChange(totalPages)}
+                      >
+                        {totalPages}
+                      </button>
+                    </li>
+                  )}
+                  <li
+                    className={`page-item ${currentPage === totalPages ? "disabled" : ""
+                      }`}
+                  >
+                    <button
+                      className="page-link"
+                      onClick={() => handlePageChange(currentPage + 1)}
+                    >
+                      Next
+                    </button>
+                  </li>
+                </ul>
               </div>
             </div>
           </div>
-
-          <ul className="pagination  mt-3">
-            <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
-              <button
-                className="page-link"
-                onClick={() => handlePageChange(currentPage - 1)}
-              >
-                Previous
-              </button>
-            </li>
-            {Array.from({ length: totalPages }, (_, i) => (
-              <li
-                key={i}
-                className={`page-item ${currentPage === i + 1 ? "active" : ""}`}
-              >
-                <button
-                  className="page-link"
-                  onClick={() => handlePageChange(i + 1)}
-                >
-                  {i + 1}
-                </button>
-              </li>
-            ))}
-            <li
-              className={`page-item ${currentPage === totalPages ? "disabled" : ""
-                }`}
-            >
-              <button
-                className="page-link"
-                onClick={() => handlePageChange(currentPage + 1)}
-              >
-                Next
-              </button>
-            </li>
-          </ul>
-
-          <ToastContainer />
 
           {showDeleteModal && (
             <div className="modal fade show d-block" tabIndex="-1">
@@ -320,7 +370,7 @@ const MinisterDetails = () => {
                           <img
                             src={imagePreview}
                             alt="preview"
-                            width="100"
+                            width="100px"
                             className="mt-2"
                           />
                         )}
@@ -349,6 +399,8 @@ const MinisterDetails = () => {
           )}
         </div>
       </div>
+
+      <ToastContainer />
     </>
   );
 };

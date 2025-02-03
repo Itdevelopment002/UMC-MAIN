@@ -202,7 +202,11 @@ const CitizenCommunication = () => {
                                                             <td className="text-center">{index + 1}</td>
                                                             <td>{item.heading}</td>
                                                             <td>{item.description}</td>
-                                                            <td>{item.link}</td>
+                                                            <td>
+                                                                <Link to={item.link} className="text-decoration-none" target="_blank" style={{ color: "#000" }}>
+                                                                    {item.link}
+                                                                </Link>
+                                                            </td>
                                                             <td className="text-center">
                                                                 <Link
                                                                     className="glightbox"
@@ -246,7 +250,15 @@ const CitizenCommunication = () => {
                                             </tbody>
                                         </table>
                                     </div>
-                                    <div className="row m-t-50">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="col-lg-12">
+                            <div className="card-box">
+                                <div className="card-block">
+                                    <div className="row">
                                         <div className="col-sm-4 col-3">
                                             <h4 className="page-title">Emergency Services</h4>
                                         </div>
@@ -276,7 +288,11 @@ const CitizenCommunication = () => {
                                                         <tr key={item.id}>
                                                             <td className="text-center">{index + 1}</td>
                                                             <td>{item.heading}</td>
-                                                            <td>{item.number}</td>
+                                                            <td>
+                                                                <Link to={`tel:${item.number}`} className="text-decoration-none" style={{ color: "#000" }}>
+                                                                    {item.number}
+                                                                </Link>
+                                                            </td>
                                                             <td className="text-center">
                                                                 <Link
                                                                     className="glightbox"

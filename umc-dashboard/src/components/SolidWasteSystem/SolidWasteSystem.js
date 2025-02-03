@@ -126,8 +126,8 @@ const SolidWasteSystem = () => {
                               <td>{swms.description}</td>
                               <td>
                                 <Link
-                                  to={swms.link}
-                                  target="_blank"
+                                  to={swms.link !== "#" ? `${swms.link}` : "#"}
+                                  target={swms.link !== "#" ? "_blank" : ""}
                                   className="text-decoration-none"
                                   style={{ color: "#000" }}
                                 >
@@ -162,9 +162,7 @@ const SolidWasteSystem = () => {
                 </div>
                 <div className="mt-4">
                   <ul className="pagination">
-                    <li
-                      className={`page-item ${currentPage === 1 ? "disabled" : ""}`}
-                    >
+                    <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
                       <button
                         className="page-link"
                         onClick={() => setCurrentPage(currentPage - 1)}
@@ -172,22 +170,84 @@ const SolidWasteSystem = () => {
                         Previous
                       </button>
                     </li>
+                    {currentPage > 2 && (
+                      <li className={`page-item ${currentPage === 1 ? "active" : ""}`}>
+                        <button className="page-link" onClick={() => setCurrentPage(1)}>
+                          1
+                        </button>
+                      </li>
+                    )}
+                    {currentPage > 3 && (
+                      <li className={`page-item ${currentPage === 2 ? "active" : ""}`}>
+                        <button className="page-link" onClick={() => setCurrentPage(2)}>
+                          2
+                        </button>
+                      </li>
+                    )}
+                    {currentPage > 4 && (
+                      <li className="page-item disabled">
+                        <span className="page-link">...</span>
+                      </li>
+                    )}
                     {Array.from(
                       { length: Math.ceil(swms.length / swmsPerPage) },
-                      (_, i) => (
+                      (_, i) => i + 1
+                    )
+                      .filter(
+                        (page) =>
+                          page >= currentPage - 1 && page <= currentPage + 1 // Show current page and its neighbors
+                      )
+                      .map((page) => (
                         <li
-                          className={`page-item ${currentPage === i + 1 ? "active" : ""
-                            }`}
-                          key={i}
+                          className={`page-item ${currentPage === page ? "active" : ""}`}
+                          key={page}
                         >
                           <button
                             className="page-link"
-                            onClick={() => setCurrentPage(i + 1)}
+                            onClick={() => setCurrentPage(page)}
                           >
-                            {i + 1}
+                            {page}
                           </button>
                         </li>
-                      )
+                      ))}
+                    {currentPage < Math.ceil(swms.length / swmsPerPage) - 3 && (
+                      <li className="page-item disabled">
+                        <span className="page-link">...</span>
+                      </li>
+                    )}
+                    {currentPage < Math.ceil(swms.length / swmsPerPage) - 2 && (
+                      <li
+                        className={`page-item ${currentPage === Math.ceil(swms.length / swmsPerPage) - 1
+                          ? "active"
+                          : ""
+                          }`}
+                      >
+                        <button
+                          className="page-link"
+                          onClick={() =>
+                            setCurrentPage(Math.ceil(swms.length / swmsPerPage) - 1)
+                          }
+                        >
+                          {Math.ceil(swms.length / swmsPerPage) - 1}
+                        </button>
+                      </li>
+                    )}
+                    {currentPage < Math.ceil(swms.length / swmsPerPage) - 1 && (
+                      <li
+                        className={`page-item ${currentPage === Math.ceil(swms.length / swmsPerPage)
+                          ? "active"
+                          : ""
+                          }`}
+                      >
+                        <button
+                          className="page-link"
+                          onClick={() =>
+                            setCurrentPage(Math.ceil(swms.length / swmsPerPage))
+                          }
+                        >
+                          {Math.ceil(swms.length / swmsPerPage)}
+                        </button>
+                      </li>
                     )}
                     <li
                       className={`page-item ${currentPage === Math.ceil(swms.length / swmsPerPage)
@@ -281,7 +341,7 @@ const SolidWasteSystem = () => {
               <div className="modal-dialog modal-dialog-centered">
                 <div className="modal-content">
                   <div className="modal-body text-center">
-                    <h5>Are you sure you want to delete this entry?</h5>
+                    <h5>Are you sure you want to delete this item?</h5>
                   </div>
                   <div className="modal-footer">
                     <button

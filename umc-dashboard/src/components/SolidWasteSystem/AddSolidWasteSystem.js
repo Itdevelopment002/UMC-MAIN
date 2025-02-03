@@ -50,7 +50,7 @@ const AddSolidWasteSystem = () => {
         <div className="content">
           <ol className="breadcrumb">
             <li className="breadcrumb-item">
-              <Link to="/home">Home</Link>
+              <Link to="#">Home</Link>
             </li>
             <li className="breadcrumb-item">
               <Link to="/swms">Solid Waste Management System</Link>
@@ -64,7 +64,7 @@ const AddSolidWasteSystem = () => {
               <div className="card-box">
                 <div className="card-block">
                   <div className="row">
-                    <div className="col-sm-4 col-3">
+                    <div className="col-12">
                       <h4 className="page-title">Add Solid Waste Management System</h4>
                     </div>
                   </div>

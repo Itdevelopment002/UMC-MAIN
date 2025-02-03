@@ -123,7 +123,11 @@ const EServices = () => {
                               {index + 1 + (currentPage - 1) * servicesPerPage}
                             </td>
                             <td>{service.heading}</td>
-                            <td>{service.link}</td>
+                            <td>
+                              <Link to={service.link} target="_blank" className="text-decoration-none" style={{ color: "#000" }}>
+                                {service.link}
+                              </Link>
+                            </td>
                             <td className="text-center">
                               <button
                                 onClick={() => handleEditClick(service)}
@@ -144,53 +148,112 @@ const EServices = () => {
                     </table>
                   </div>
                 </div>
+                <div className="mt-4">
+                  <ul className="pagination">
+                    <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
+                      <button
+                        className="page-link"
+                        onClick={() => setCurrentPage(currentPage - 1)}
+                      >
+                        Previous
+                      </button>
+                    </li>
+                    {currentPage > 2 && (
+                      <li className={`page-item ${currentPage === 1 ? "active" : ""}`}>
+                        <button className="page-link" onClick={() => setCurrentPage(1)}>
+                          1
+                        </button>
+                      </li>
+                    )}
+                    {currentPage > 3 && (
+                      <li className={`page-item ${currentPage === 2 ? "active" : ""}`}>
+                        <button className="page-link" onClick={() => setCurrentPage(2)}>
+                          2
+                        </button>
+                      </li>
+                    )}
+                    {currentPage > 4 && (
+                      <li className="page-item disabled">
+                        <span className="page-link">...</span>
+                      </li>
+                    )}
+                    {Array.from(
+                      { length: Math.ceil(services.length / servicesPerPage) },
+                      (_, i) => i + 1
+                    )
+                      .filter(
+                        (page) =>
+                          page >= currentPage - 1 && page <= currentPage + 1
+                      )
+                      .map((page) => (
+                        <li
+                          className={`page-item ${currentPage === page ? "active" : ""}`}
+                          key={page}
+                        >
+                          <button
+                            className="page-link"
+                            onClick={() => setCurrentPage(page)}
+                          >
+                            {page}
+                          </button>
+                        </li>
+                      ))}
+                    {currentPage < Math.ceil(services.length / servicesPerPage) - 3 && (
+                      <li className="page-item disabled">
+                        <span className="page-link">...</span>
+                      </li>
+                    )}
+                    {currentPage < Math.ceil(services.length / servicesPerPage) - 2 && (
+                      <li
+                        className={`page-item ${currentPage === Math.ceil(services.length / servicesPerPage) - 1
+                          ? "active"
+                          : ""
+                          }`}
+                      >
+                        <button
+                          className="page-link"
+                          onClick={() =>
+                            setCurrentPage(Math.ceil(services.length / servicesPerPage) - 1)
+                          }
+                        >
+                          {Math.ceil(services.length / servicesPerPage) - 1}
+                        </button>
+                      </li>
+                    )}
+                    {currentPage < Math.ceil(services.length / servicesPerPage) - 1 && (
+                      <li
+                        className={`page-item ${currentPage === Math.ceil(services.length / servicesPerPage)
+                          ? "active"
+                          : ""
+                          }`}
+                      >
+                        <button
+                          className="page-link"
+                          onClick={() =>
+                            setCurrentPage(Math.ceil(services.length / servicesPerPage))
+                          }
+                        >
+                          {Math.ceil(services.length / servicesPerPage)}
+                        </button>
+                      </li>
+                    )}
+                    <li
+                      className={`page-item ${currentPage === Math.ceil(services.length / servicesPerPage)
+                        ? "disabled"
+                        : ""
+                        }`}
+                    >
+                      <button
+                        className="page-link"
+                        onClick={() => setCurrentPage(currentPage + 1)}
+                      >
+                        Next
+                      </button>
+                    </li>
+                  </ul>
+                </div>
               </div>
             </div>
-          </div>
-
-          <div className="mt-4">
-            <ul className="pagination">
-              <li
-                className={`page-item ${currentPage === 1 ? "disabled" : ""}`}
-              >
-                <button
-                  className="page-link"
-                  onClick={() => setCurrentPage(currentPage - 1)}
-                >
-                  Previous
-                </button>
-              </li>
-              {Array.from(
-                { length: Math.ceil(services.length / servicesPerPage) },
-                (_, i) => (
-                  <li
-                    className={`page-item ${currentPage === i + 1 ? "active" : ""
-                      }`}
-                    key={i}
-                  >
-                    <button
-                      className="page-link"
-                      onClick={() => setCurrentPage(i + 1)}
-                    >
-                      {i + 1}
-                    </button>
-                  </li>
-                )
-              )}
-              <li
-                className={`page-item ${currentPage === Math.ceil(services.length / servicesPerPage)
-                    ? "disabled"
-                    : ""
-                  }`}
-              >
-                <button
-                  className="page-link"
-                  onClick={() => setCurrentPage(currentPage + 1)}
-                >
-                  Next
-                </button>
-              </li>
-            </ul>
           </div>
 
           {showEditModal && (
@@ -266,7 +329,7 @@ const EServices = () => {
               <div className="modal-dialog modal-dialog-centered">
                 <div className="modal-content">
                   <div className="modal-body text-center">
-                    <h5>Are you sure you want to delete this entry?</h5>
+                    <h5>Are you sure you want to delete this item?</h5>
                   </div>
                   <div className="modal-footer">
                     <button

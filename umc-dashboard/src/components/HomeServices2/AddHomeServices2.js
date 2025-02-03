@@ -13,11 +13,11 @@ const AddHomeServices2 = () => {
     const validationErrors = {};
 
     if (!heading) {
-      validationErrors.heading = "Heading is required.";
+      validationErrors.heading = "Service Heading is required.";
     }
 
     if (!link) {
-      validationErrors.link = "Link is required.";
+      validationErrors.link = "Service Link is required.";
     }
 
     setErrors(validationErrors);
@@ -52,13 +52,13 @@ const AddHomeServices2 = () => {
         <div className="content">
           <ol className="breadcrumb">
             <li className="breadcrumb-item">
-              <Link to="/home">Home</Link>
+              <Link to="#">Home</Link>
             </li>
             <li className="breadcrumb-item">
-              <Link to="/home-service2">Home Services 2</Link>
+              <Link to="/home-service2">Home Service 2</Link>
             </li>
             <li className="breadcrumb-item active" aria-current="page">
-              Add Home Services 2
+              Add Home Service 2
             </li>
           </ol>
           <div className="row">
@@ -66,8 +66,8 @@ const AddHomeServices2 = () => {
               <div className="card-box">
                 <div className="card-block">
                   <div className="row">
-                    <div className="col-sm-4 col-3">
-                      <h4 className="page-title">Add Home Services 2</h4>
+                    <div className="col-12">
+                      <h4 className="page-title">Add Home Service 2</h4>
                     </div>
                   </div>
                   <form onSubmit={handleSubmit}>
@@ -80,7 +80,7 @@ const AddHomeServices2 = () => {
                           type="text"
                           className={`form-control form-control-md ${errors.heading ? "is-invalid" : ""
                             }`}
-                          placeholder="Enter Heading"
+                          placeholder="Enter Service Heading"
                           value={heading}
                           onChange={(e) => {
                             setHeading(e.target.value);
@@ -99,14 +99,14 @@ const AddHomeServices2 = () => {
 
                     <div className="form-group row mt-3">
                       <label className="col-form-label col-md-2">
-                        Service link <span className="text-danger">*</span>
+                        Service Link <span className="text-danger">*</span>
                       </label>
                       <div className="col-md-4">
                         <input
                           type="text"
                           className={`form-control form-control-md ${errors.link ? "is-invalid" : ""
                             }`}
-                          placeholder="Enter Link"
+                          placeholder="Enter Service Link"
                           value={link}
                           onChange={(e) => {
                             setLink(e.target.value);

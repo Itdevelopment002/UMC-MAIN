@@ -79,7 +79,7 @@ const AddUMCNews = () => {
                           className={`form-control form-control-md ${
                             errors.heading ? "is-invalid" : ""
                           }`}
-                          placeholder="Enter Heading"
+                          placeholder="Enter News Heading"
                           value={heading}
                           onChange={(e) => {
                             setHeading(e.target.value);
@@ -106,7 +106,7 @@ const AddUMCNews = () => {
                           className={`form-control form-control-md ${
                             errors.link ? "is-invalid" : ""
                           }`}
-                          placeholder="Enter Link"
+                          placeholder="Enter News Link"
                           value={link}
                           onChange={(e) => {
                             setLink(e.target.value);
