@@ -28,10 +28,10 @@ const AddRecruitment = () => {
   const validateForm = () => {
     const newErrors = {};
     if (!description) {
-      newErrors.description = "Home Video Description is required.";
+      newErrors.description = "Job Description is required.";
     }
     if (!publishDate) {
-      newErrors.publishDate = "Publish Date is required.";
+      newErrors.publishDate = "Posting Date is required.";
     }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -69,7 +69,7 @@ const AddRecruitment = () => {
         <div className="content">
           <ol className="breadcrumb">
             <li className="breadcrumb-item">
-              <Link to="/home">Home</Link>
+              <Link to="#">Home</Link>
             </li>
             <li className="breadcrumb-item">
               <Link to="/recruitment">Recruitment</Link>
@@ -83,13 +83,13 @@ const AddRecruitment = () => {
               <div className="card-box">
                 <div className="card-block">
                   <div className="row">
-                    <div className="col-sm-4 col-3">
+                    <div className="col-12">
                       <h4 className="page-title">Add Recruitment</h4>
                     </div>
                   </div>
                   <form onSubmit={handleSubmit}>
                     <div className="form-group row">
-                      <label className="col-form-label col-md-3">
+                      <label className="col-form-label col-md-2">
                         Job Description{" "}
                         <span className="text-danger">*</span>
                       </label>
@@ -109,14 +109,14 @@ const AddRecruitment = () => {
                           }}
                         />
                         {errors.description && (
-                          <small className="text-danger">
+                          <small className="invalid-feedback">
                             {errors.description}
                           </small>
                         )}
                       </div>
                     </div>
                     <div className="form-group row">
-                      <label className="col-form-label col-md-3">
+                      <label className="col-form-label col-md-2">
                         Posting Date <span className="text-danger">*</span>
                       </label>
                       <div className="cal-icon col-md-4">
@@ -143,7 +143,7 @@ const AddRecruitment = () => {
                           }}
                         />
                         {errors.publishDate && (
-                          <small className="text-danger">
+                          <small className="invalid-feedback">
                             {errors.publishDate}
                           </small>
                         )}

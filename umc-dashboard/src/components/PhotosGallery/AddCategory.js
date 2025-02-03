@@ -48,7 +48,7 @@ const AddCategory = () => {
               <div className="card-box">
                 <div className="card-block">
                   <div className="row">
-                    <div className="col-sm-4 col-3">
+                    <div className="col-12">
                       <h4 className="page-title">Add Category</h4>
                     </div>
                   </div>

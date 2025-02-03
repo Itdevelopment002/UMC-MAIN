@@ -10,7 +10,7 @@ const TermsAndpolicys = () => {
   const [showEditModal, setShowEditModal] = useState(false);
   const [selectedPolicy, setSelectedPolicy] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+  const itemsPerPage = 5;
 
   useEffect(() => {
     fetchPolicy();
@@ -98,15 +98,15 @@ const TermsAndpolicys = () => {
               <div className="card-box">
                 <div className="card-block">
                   <div className="row">
-                    <div className="col-sm-4 col-3">
+                    <div className="col-6">
                       <h4 className="page-title">Privacy Policy</h4>
                     </div>
-                    <div className="col-sm-8 col-9 text-right m-b-20">
+                    <div className="col-6 text-right m-b-20">
                       <Link
                         to="/add-privacy-policy"
                         className="btn btn-primary btn-rounded float-right"
                       >
-                        <i className="fa fa-plus"></i> Add Privacy Policy
+                        <i className="fa fa-plus"></i> Add Policy
                       </Link>
                     </div>
                   </div>
@@ -156,50 +156,99 @@ const TermsAndpolicys = () => {
                     </table>
                   </div>
                 </div>
+                <div className="mt-4">
+                  <ul className="pagination">
+                    <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
+                      <button
+                        className="page-link"
+                        onClick={() => setCurrentPage(currentPage - 1)}
+                      >
+                        Previous
+                      </button>
+                    </li>
+                    {currentPage > 2 && (
+                      <li className={`page-item ${currentPage === 1 ? "active" : ""}`}>
+                        <button className="page-link" onClick={() => setCurrentPage(1)}>
+                          1
+                        </button>
+                      </li>
+                    )}
+                    {currentPage > 3 && (
+                      <li className={`page-item ${currentPage === 2 ? "active" : ""}`}>
+                        <button className="page-link" onClick={() => setCurrentPage(2)}>
+                          2
+                        </button>
+                      </li>
+                    )}
+                    {currentPage > 4 && (
+                      <li className="page-item disabled">
+                        <span className="page-link">...</span>
+                      </li>
+                    )}
+                    {Array.from({ length: totalPages }, (_, i) => i + 1)
+                      .filter(
+                        (page) =>
+                          page >= currentPage - 1 && page <= currentPage + 1
+                      )
+                      .map((page) => (
+                        <li
+                          className={`page-item ${currentPage === page ? "active" : ""}`}
+                          key={page}
+                        >
+                          <button
+                            className="page-link"
+                            onClick={() => setCurrentPage(page)}
+                          >
+                            {page}
+                          </button>
+                        </li>
+                      ))}
+                    {currentPage < totalPages - 3 && (
+                      <li className="page-item disabled">
+                        <span className="page-link">...</span>
+                      </li>
+                    )}
+                    {currentPage < totalPages - 2 && (
+                      <li
+                        className={`page-item ${currentPage === totalPages - 1 ? "active" : ""
+                          }`}
+                      >
+                        <button
+                          className="page-link"
+                          onClick={() => setCurrentPage(totalPages - 1)}
+                        >
+                          {totalPages - 1}
+                        </button>
+                      </li>
+                    )}
+                    {currentPage < totalPages - 1 && (
+                      <li
+                        className={`page-item ${currentPage === totalPages ? "active" : ""
+                          }`}
+                      >
+                        <button
+                          className="page-link"
+                          onClick={() => setCurrentPage(totalPages)}
+                        >
+                          {totalPages}
+                        </button>
+                      </li>
+                    )}
+                    <li
+                      className={`page-item ${currentPage === totalPages ? "disabled" : ""
+                        }`}
+                    >
+                      <button
+                        className="page-link"
+                        onClick={() => setCurrentPage(currentPage + 1)}
+                      >
+                        Next
+                      </button>
+                    </li>
+                  </ul>
+                </div>
               </div>
             </div>
-          </div>
-
-          <div className="mt-4">
-            <ul className="pagination">
-              <li
-                className={`page-item ${currentPage === 1 ? "disabled" : ""}`}
-              >
-                <button
-                  className="page-link"
-                  onClick={() => setCurrentPage(currentPage - 1)}
-                >
-                  Previous
-                </button>
-              </li>
-              {Array.from({ length: totalPages }, (_, i) => (
-                <li
-                  className={`page-item ${
-                    currentPage === i + 1 ? "active" : ""
-                  }`}
-                  key={i}
-                >
-                  <button
-                    className="page-link"
-                    onClick={() => setCurrentPage(i + 1)}
-                  >
-                    {i + 1}
-                  </button>
-                </li>
-              ))}
-              <li
-                className={`page-item ${
-                  currentPage === totalPages ? "disabled" : ""
-                }`}
-              >
-                <button
-                  className="page-link"
-                  onClick={() => setCurrentPage(currentPage + 1)}
-                >
-                  Next
-                </button>
-              </li>
-            </ul>
           </div>
 
           {showEditModal && (
@@ -274,7 +323,7 @@ const TermsAndpolicys = () => {
               <div className="modal-dialog modal-dialog-centered">
                 <div className="modal-content">
                   <div className="modal-body text-center">
-                    <h5>Are you sure you want to delete this policy?</h5>
+                    <h5>Are you sure you want to delete this item?</h5>
                   </div>
                   <div className="modal-footer">
                     <button

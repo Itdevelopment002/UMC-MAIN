@@ -49,7 +49,7 @@ const AddCategoryVideos = () => {
       newErrors.category_id = "Category Name is required.";
     }
     if (!formData.link) {
-      newErrors.link = "Video link is required.";
+      newErrors.link = "Video Link is required.";
     } else if (!isValidUrl(formData.link)) {
       newErrors.link = "Enter a valid URL.";
     }
@@ -105,7 +105,7 @@ const AddCategoryVideos = () => {
               <div className="card-box">
                 <div className="card-block">
                   <div className="row">
-                    <div className="col-sm-4 col-3">
+                    <div className="col-12">
                       <h4 className="page-title">Add Category Video</h4>
                     </div>
                   </div>
@@ -152,7 +152,7 @@ const AddCategoryVideos = () => {
                             errors.link ? "is-invalid" : ""
                           }`}
                           onChange={handleChange}
-                          placeholder="Enter video URL"
+                          placeholder="Enter Video Link"
                         />
                         {errors.link && (
                           <div className="invalid-feedback">{errors.link}</div>

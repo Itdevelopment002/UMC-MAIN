@@ -154,7 +154,7 @@ const ContactUs = () => {
           <nav aria-label="breadcrumb">
             <ol className="breadcrumb">
               <li className="breadcrumb-item">
-                <Link to="/home">Home</Link>
+                <Link to="#">Home</Link>
               </li>
               <li className="breadcrumb-item active" aria-current="page">
                 Contact Us
@@ -166,15 +166,15 @@ const ContactUs = () => {
               <div className="card-box">
                 <div className="card-block">
                   <div className="row">
-                    <div className="col-sm-4 col-3">
+                    <div className="col-6">
                       <h4 className="page-title">Contact Information</h4>
                     </div>
-                    <div className="col-sm-8 col-9 text-right m-b-20">
+                    <div className="col-6 text-right m-b-20">
                       <Link
                         to="/add-contact-info"
                         className="btn btn-primary btn-rounded float-right"
                       >
-                        <i className="fa fa-plus"></i> Add Contact Info
+                        <i className="fa fa-plus"></i> Add Info
                       </Link>
                     </div>
                   </div>
@@ -185,7 +185,7 @@ const ContactUs = () => {
                           <th width="10%" className="text-center">Sr. No.</th>
                           <th>Heading</th>
                           <th>Description</th>
-                          <th className="text-center">Icon</th>
+                          <th className="text-center">Contact Icon</th>
                           <th width="15%" className="text-center">Action</th>
                         </tr>
                       </thead>
@@ -196,7 +196,7 @@ const ContactUs = () => {
                               <td className="text-center">{index + 1}</td>
                               <td>{item.heading}</td>
                               <td>{item.description}</td>
-                              <td style={{backgroundColor: "#000"}} className="text-center">
+                              <td style={{ backgroundColor: "#000" }} className="text-center">
                                 <Link
                                   className="glightbox"
                                   to={`${baseURL}${item.image_path}`}
@@ -239,7 +239,15 @@ const ContactUs = () => {
                       </tbody>
                     </table>
                   </div>
-                  <div className="row m-t-50">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="row">
+            <div className="col-lg-12">
+              <div className="card-box">
+                <div className="card-block">
+                  <div className="row">
                     <div className="col-sm-4 col-3">
                       <h4 className="page-title">Ward Information</h4>
                     </div>
@@ -248,7 +256,7 @@ const ContactUs = () => {
                         to="/add-ward-info"
                         className="btn btn-primary btn-rounded float-right"
                       >
-                        <i className="fa fa-plus"></i> Add Ward Info
+                        <i className="fa fa-plus"></i> Add Info
                       </Link>
                     </div>
                   </div>
@@ -258,7 +266,7 @@ const ContactUs = () => {
                         <tr>
                           <th width="10%" className="text-center">Sr. No.</th>
                           <th className="text-center">Ward Office No.</th>
-                          <th>Address</th>
+                          <th>Office Address</th>
                           <th>Phone Number</th>
                           <th>Email Id</th>
                           <th width="15%" className="text-center">Action</th>
@@ -330,7 +338,8 @@ const ContactUs = () => {
                       <>
                         <div className="form-group">
                           <label htmlFor="heading">Heading</label>
-                          <textarea
+                          <input
+                            type="text"
                             className="form-control"
                             id="heading"
                             value={editData.heading}
@@ -344,7 +353,8 @@ const ContactUs = () => {
                         </div>
                         <div className="form-group">
                           <label htmlFor="description">Description</label>
-                          <textarea
+                          <input
+                            type="text"
                             className="form-control"
                             id="description"
                             value={editData.description}
@@ -357,7 +367,7 @@ const ContactUs = () => {
                           />
                         </div>
                         <div className="form-group">
-                          <label htmlFor="contactIcon">Icon</label>
+                          <label htmlFor="contactIcon">Contact Icon</label>
                           <input
                             type="file"
                             className="form-control"
@@ -372,6 +382,7 @@ const ContactUs = () => {
                                 width: "100px",
                                 height: "100px",
                                 marginTop: "10px",
+                                backgroundColor: "#000",
                               }}
                             />
                           )}
@@ -395,7 +406,7 @@ const ContactUs = () => {
                           />
                         </div>
                         <div className="form-group">
-                          <label htmlFor="address">Address</label>
+                          <label htmlFor="address">Office Address</label>
                           <input
                             type="text"
                             className="form-control"

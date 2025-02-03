@@ -160,7 +160,8 @@ const Banner = () => {
                                 data-gallery="banner-images"
                               >
                                 <img
-                                  width="120px"
+                                  width="150px"
+                                  height="20px"
                                   src={`${baseURL}${banner.file_path}`}
                                   alt={`banner-${index + 1}`}
                                 />
