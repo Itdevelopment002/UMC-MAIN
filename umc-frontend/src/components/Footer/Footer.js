@@ -172,7 +172,7 @@ const Footer = () => {
               {onlineservices.length > 0 ? (
                 onlineservices.map((data, index) => (
                   <li key={index}>
-                    <Link to={data.link} target={data.external ? "_blank" : "_self"} rel="noopener noreferrer">
+                    <Link to={data.link} target={data.link.startsWith("/") ? "_self" : "_blank"} rel="noopener noreferrer">
                       {data.heading}
                     </Link>
                   </li>
