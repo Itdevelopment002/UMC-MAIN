@@ -99,11 +99,9 @@ import AddHomeServices2 from "../HomeServices2/AddHomeServices2";
 import HomeGallery from "../HomeGallery/HomeGallery";
 import AddHomeGallery from "../HomeGallery/AddHomeGallery";
 import Footer from "../Footer/Footer";
+import AddContactInfo from "../Footer/AddContactInfo";
 import AddQuickLinks from "../Footer/AddQuickLinks";
-import QuickLinks from "../Footer/QuickLinks";
-import Help from "../Footer/Help";
 import AddHelp from "../Footer/AddHelp";
-import OnlineServices from "../Footer/OnlineServices";
 import AddOnlineServices from "../Footer/AddOnlineServices";
 import Information from "../Information/Information";
 import AddInformation from "../Information/AddInformation";
@@ -114,7 +112,6 @@ import AddHomeService1 from "../HomeService1/AddHomeService1";
 import CitizenCommunication from "../CitizenCommunication/CitizenCommunication";
 import AddPortalServices from "../CitizenCommunication/AddPortalServices";
 import AddEmergencyServices from "../CitizenCommunication/AddEmergencyServices";
-import AddContactInfo from "../Footer/AddContactInfo";
 import AddDataTable1 from "../Location/AddDataTable1";
 import AddDataTable2 from "../Location/AddDataTable2";
 import AddDataTable3 from "../Location/AddDataTable3";
@@ -347,6 +344,7 @@ function SuperAdminRoutes() {
         <Route path="/add-category-videos" element={<AddCategoryVideos />} />
         <Route path="/banner" element={<Banner />} />
         <Route path="/add-banner" element={<AddBanner />} />
+        <Route path="/add-contact" element={<AddContactInfo />} />
 
           
         {/* <Route path="/add-user" element={<AddUsers />} />

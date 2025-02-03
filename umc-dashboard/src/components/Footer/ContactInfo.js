@@ -19,15 +19,17 @@ const ContactInfo = () => {
   const [imagePreview, setImagePreview] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
-  const totalItems = contacts.length;
-  const totalPages = Math.ceil(totalItems / itemsPerPage);
+
+  const indexOfLastServices = currentPage * itemsPerPage;
+  const indexOfFirstServices = indexOfLastServices - itemsPerPage;
+  const currentContacts = contacts.slice(indexOfFirstServices, indexOfLastServices);
 
   useEffect(() => {
     const lightbox = GLightbox({ selector: ".glightbox" });
     return () => {
       lightbox.destroy();
     };
-  }, [contacts]);
+  }, [contacts, currentContacts]);
 
   const fetchContacts = () => {
     api
@@ -112,14 +114,8 @@ const ContactInfo = () => {
     setCurrentPage(page);
   };
 
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  //eslint-disable-next-line
-  const currentContacts = contacts.slice(indexOfFirstItem, indexOfLastItem);
-
   return (
     <>
-
       <div className="row">
         <div className="col-lg-12">
           <div className="card-box">
@@ -130,7 +126,7 @@ const ContactInfo = () => {
                 </div>
                 <div className="col-sm-8 col-9 text-right m-b-20">
                   <Link
-                    to="/add-contact-info"
+                    to="/add-contact"
                     className="btn btn-primary btn-rounded float-right"
                   >
                     <i className="fa fa-plus"></i> Add Contact Info
@@ -141,20 +137,20 @@ const ContactInfo = () => {
                 <table className="table table-bordered m-b-0">
                   <thead>
                     <tr>
-                      <th>Sr. No.</th>
-                      <th width='15%'>Title</th>
-                      <th>Description</th>
-                      <th>Image</th>
-                      <th>Action</th>
+                      <th width="10%" className="text-center">Sr. No.</th>
+                      <th>Contact Title</th>
+                      <th>Contact Description</th>
+                      <th className="text-center">Contact Icon</th>
+                      <th width="15%" className="text-center">Action</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {contacts.map((contact, index) => (
+                    {currentContacts.map((contact, index) => (
                       <tr key={contact.id}>
-                        <td>{index + 1}</td>
+                        <td className="text-center">{index + 1 + (currentPage - 1) * itemsPerPage}</td>
                         <td>{contact.heading}</td>
                         <td>{contact.description}</td>
-                        <td>
+                        <td className="text-center">
                           <Link
                             to={`${baseURL}${contact.image_path}`}
                             className="glightbox"
@@ -167,7 +163,7 @@ const ContactInfo = () => {
                             />
                           </Link>
                         </td>
-                        <td>
+                        <td className="text-center">
                           <button
                             className="btn btn-success btn-sm"
                             onClick={() => handleEditModalOpen(contact)}
@@ -187,46 +183,113 @@ const ContactInfo = () => {
                 </table>
               </div>
             </div>
+            <div className="mt-4">
+              <ul className="pagination">
+                <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
+                  <button
+                    className="page-link"
+                    onClick={() => setCurrentPage(currentPage - 1)}
+                  >
+                    Previous
+                  </button>
+                </li>
+                {currentPage > 2 && (
+                  <li className={`page-item ${currentPage === 1 ? "active" : ""}`}>
+                    <button className="page-link" onClick={() => setCurrentPage(1)}>
+                      1
+                    </button>
+                  </li>
+                )}
+                {currentPage > 3 && (
+                  <li className={`page-item ${currentPage === 2 ? "active" : ""}`}>
+                    <button className="page-link" onClick={() => setCurrentPage(2)}>
+                      2
+                    </button>
+                  </li>
+                )}
+                {currentPage > 4 && (
+                  <li className="page-item disabled">
+                    <span className="page-link">...</span>
+                  </li>
+                )}
+                {Array.from(
+                  { length: Math.ceil(contacts.length / itemsPerPage) },
+                  (_, i) => i + 1
+                )
+                  .filter(
+                    (page) =>
+                      page >= currentPage - 1 && page <= currentPage + 1 // Show current page and its neighbors
+                  )
+                  .map((page) => (
+                    <li
+                      className={`page-item ${currentPage === page ? "active" : ""}`}
+                      key={page}
+                    >
+                      <button
+                        className="page-link"
+                        onClick={() => setCurrentPage(page)}
+                      >
+                        {page}
+                      </button>
+                    </li>
+                  ))}
+                {currentPage < Math.ceil(contacts.length / itemsPerPage) - 3 && (
+                  <li className="page-item disabled">
+                    <span className="page-link">...</span>
+                  </li>
+                )}
+                {currentPage < Math.ceil(contacts.length / itemsPerPage) - 2 && (
+                  <li
+                    className={`page-item ${currentPage === Math.ceil(contacts.length / itemsPerPage) - 1
+                      ? "active"
+                      : ""
+                      }`}
+                  >
+                    <button
+                      className="page-link"
+                      onClick={() =>
+                        setCurrentPage(Math.ceil(contacts.length / itemsPerPage) - 1)
+                      }
+                    >
+                      {Math.ceil(contacts.length / itemsPerPage) - 1}
+                    </button>
+                  </li>
+                )}
+                {currentPage < Math.ceil(contacts.length / itemsPerPage) - 1 && (
+                  <li
+                    className={`page-item ${currentPage === Math.ceil(contacts.length / itemsPerPage)
+                      ? "active"
+                      : ""
+                      }`}
+                  >
+                    <button
+                      className="page-link"
+                      onClick={() =>
+                        setCurrentPage(Math.ceil(contacts.length / itemsPerPage))
+                      }
+                    >
+                      {Math.ceil(contacts.length / itemsPerPage)}
+                    </button>
+                  </li>
+                )}
+                <li
+                  className={`page-item ${currentPage === Math.ceil(contacts.length / itemsPerPage)
+                    ? "disabled"
+                    : ""
+                    }`}
+                >
+                  <button
+                    className="page-link"
+                    onClick={() => setCurrentPage(currentPage + 1)}
+                  >
+                    Next
+                  </button>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
-
-      <ul className="pagination  mt-0">
-        <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
-          <button
-            className="page-link"
-            onClick={() => handlePageChange(currentPage - 1)}
-          >
-            Previous
-          </button>
-        </li>
-        {Array.from({ length: totalPages }, (_, i) => (
-          <li
-            key={i}
-            className={`page-item ${currentPage === i + 1 ? "active" : ""}`}
-          >
-            <button
-              className="page-link"
-              onClick={() => handlePageChange(i + 1)}
-            >
-              {i + 1}
-            </button>
-          </li>
-        ))}
-        <li
-          className={`page-item ${currentPage === totalPages ? "disabled" : ""
-            }`}
-        >
-          <button
-            className="page-link"
-            onClick={() => handlePageChange(currentPage + 1)}
-          >
-            Next
-          </button>
-        </li>
-      </ul>
-
-      <ToastContainer />
 
       {showDeleteModal && (
         <div className="modal fade show d-block" tabIndex="-1">
@@ -271,7 +334,7 @@ const ContactInfo = () => {
               <div className="modal-body">
                 <form>
                   <div className="form-group">
-                    <label>Title</label>
+                    <label>Contact Title</label>
                     <input
                       type="text"
                       className="form-control"
@@ -285,7 +348,7 @@ const ContactInfo = () => {
                     />
                   </div>
                   <div className="form-group">
-                    <label>Description</label>
+                    <label>Contact Description</label>
                     <input
                       type="text"
                       className="form-control"
@@ -299,7 +362,7 @@ const ContactInfo = () => {
                     />
                   </div>
                   <div className="form-group">
-                    <label>Image</label>
+                    <label>Contact Icon</label>
                     <input
                       type="file"
                       className="form-control"
@@ -337,6 +400,7 @@ const ContactInfo = () => {
         </div>
       )}
 
+      <ToastContainer />
     </>
   );
 };

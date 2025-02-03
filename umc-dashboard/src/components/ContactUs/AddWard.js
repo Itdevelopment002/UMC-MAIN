@@ -4,57 +4,78 @@ import api from "../api";
 import { useNavigate } from "react-router-dom";
 
 const AddWard = () => {
-  const [office, setOffice] = useState("");
-  const [address, setAddress] = useState("");
-  const [phone, setPhone] = useState("");
-  const [email, setEmail] = useState("");
   const navigate = useNavigate();
-  const [error, setError] = useState("")
+  const [errors, setErrors] = useState({})
+
+  const [formData, setFormData] = useState({
+    office: "",
+    address: "",
+    phone: "",
+    email: "",
+  });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    if (name === "office") setOffice(value);
-    if (name === "address") setAddress(value);
-    if (name === "phone") setPhone(value);
-    if (name === "email") setEmail(value);
-    setError("");
+    setFormData({ ...formData, [name]: value });
+    setErrors({ ...errors, [name]: "" });
+  };
+
+
+  const validateForm = () => {
+    const newErrors = {};
+    if (!formData.office.trim()) {
+      newErrors.office = "Ward Office no. is required.";
+    }
+
+    if (!formData.address.trim()) {
+      newErrors.address = "Office Address is required.";
+    }
+
+    if (!formData.phone) {
+      newErrors.phone = "Phone Number is required.";
+    }
+
+    if (!formData.email) {
+      newErrors.email = "Email Id is required.";
+    }
+
+    return newErrors;
   };
 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!office.trim()) {
-      setError("Ward Office No. is required.");
-      return;
-    }
-    if (!address.trim()) {
-      setError("address is required.");
-      return;
-    }
-    if (!phone.trim()) {
-      setError("Phone Number is required.");
-      return;
-    }
-    if (!email.trim()) {
-      setError("Email Id is required.");
+    const validationErrors = validateForm();
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
       return;
     }
 
     try {
-      await api.post("/ward-info", { office, address, phone, email });
-      navigate("/contact-us");
+      const response = await api.post("/ward-info", {
+        office: formData.office,
+        address: formData.address,
+        phone: formData.phone,
+        email: formData.email
+      });
+
+      if (response.status === 201) {
+        navigate("/contact-us");
+      }
     } catch (error) {
-      console.error("Error submitting description:", error);
+      console.error("Error submitting form:", error);
     }
   };
+
+
   return (
     <div>
       <div className="page-wrapper">
         <div className="content">
           <ol className="breadcrumb">
             <li className="breadcrumb-item">
-              <Link to="/home">Home</Link>
+              <Link to="#">Home</Link>
             </li>
             <li className="breadcrumb-item">
               <Link to="/contact-us">Contact Us</Link>
@@ -68,7 +89,7 @@ const AddWard = () => {
               <div className="card-box">
                 <div className="card-block">
                   <div className="row">
-                    <div className="col-sm-4 col-3">
+                    <div className="col-12">
                       <h4 className="page-title">Add Ward Information</h4>
                     </div>
                   </div>
@@ -80,31 +101,39 @@ const AddWard = () => {
                       <div className="col-md-4">
                         <input
                           type="text"
-                          className={`form-control form-control-md ${error ? "is-invalid" : ""
+                          className={`form-control form-control-md ${errors.office ? "is-invalid" : ""
                             }`}
                           name="office"
-                          value={office}
+                          value={formData.office}
                           onChange={handleChange}
                           placeholder="Enter Ward office no."
                         />
-                        {error && <div className="invalid-feedback">{error}</div>}
+                        {errors.office && (
+                          <div className="invalid-feedback">
+                            {errors.office}
+                          </div>
+                        )}
                       </div>
                     </div>
                     <div className="form-group row">
                       <label className="col-form-label col-md-2">
-                        Address <span className="text-danger">*</span>
+                        Office Address <span className="text-danger">*</span>
                       </label>
                       <div className="col-md-4">
                         <input
                           type="text"
-                          className={`form-control form-control-md ${error ? "is-invalid" : ""
+                          className={`form-control form-control-md ${errors.address ? "is-invalid" : ""
                             }`}
                           name="address"
-                          value={address}
+                          value={formData.address}
                           onChange={handleChange}
-                          placeholder="Enter Address"
+                          placeholder="Enter Office Address"
                         />
-                        {error && <div className="invalid-feedback">{error}</div>}
+                        {errors.address && (
+                          <div className="invalid-feedback">
+                            {errors.address}
+                          </div>
+                        )}
                       </div>
                     </div>
                     <div className="form-group row">
@@ -114,14 +143,18 @@ const AddWard = () => {
                       <div className="col-md-4">
                         <input
                           type="text"
-                          className={`form-control form-control-md ${error ? "is-invalid" : ""
+                          className={`form-control form-control-md ${errors.phone ? "is-invalid" : ""
                             }`}
                           name="phone"
-                          value={phone}
+                          value={formData.phone}
                           onChange={handleChange}
                           placeholder="Enter Phone number"
                         />
-                        {error && <div className="invalid-feedback">{error}</div>}
+                        {errors.phone && (
+                          <div className="invalid-feedback">
+                            {errors.phone}
+                          </div>
+                        )}
                       </div>
                     </div>
                     <div className="form-group row">
@@ -131,14 +164,18 @@ const AddWard = () => {
                       <div className="col-md-4">
                         <input
                           type="text"
-                          className={`form-control form-control-md ${error ? "is-invalid" : ""
+                          className={`form-control form-control-md ${errors.email ? "is-invalid" : ""
                             }`}
                           name="email"
-                          value={email}
+                          value={formData.email}
                           onChange={handleChange}
                           placeholder="Enter Email Id"
                         />
-                        {error && <div className="invalid-feedback">{error}</div>}
+                        {errors.email && (
+                          <div className="invalid-feedback">
+                            {errors.email}
+                          </div>
+                        )}
                       </div>
                     </div>
                     <input

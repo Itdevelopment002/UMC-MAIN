@@ -83,7 +83,7 @@ const AddCirculars = () => {
         <div className="content">
           <ol className="breadcrumb">
             <li className="breadcrumb-item">
-              <Link to="/home">Home</Link>
+              <Link to="#">Home</Link>
             </li>
             <li className="breadcrumb-item">
               <Link to="/circulars">Circulars</Link>
@@ -97,13 +97,13 @@ const AddCirculars = () => {
               <div className="card-box">
                 <div className="card-block">
                   <div className="row">
-                    <div className="col-sm-4 col-3">
+                    <div className="col-12">
                       <h4 className="page-title">Add Circular</h4>
                     </div>
                   </div>
                   <form onSubmit={handleSubmit}>
                     <div className="form-group row">
-                      <label className="col-form-label col-md-3">
+                      <label className="col-form-label col-md-2">
                         Circular Title{" "}
                         <span className="text-danger">*</span>
                       </label>
@@ -130,7 +130,7 @@ const AddCirculars = () => {
                       </div>
                     </div>
                     <div className="form-group row">
-                      <label className="col-form-label col-md-3">
+                      <label className="col-form-label col-md-2">
                         Circular Number{" "}
                         <span className="text-danger">*</span>
                       </label>
@@ -157,7 +157,7 @@ const AddCirculars = () => {
                       </div>
                     </div>
                     <div className="form-group row">
-                      <label className="col-form-label col-md-3">
+                      <label className="col-form-label col-md-2">
                         Circular Date <span className="text-danger">*</span>
                       </label>
                       <div className="cal-icon col-md-4">
@@ -191,7 +191,7 @@ const AddCirculars = () => {
                       </div>
                     </div>
                     <div className="form-group row">
-                      <label className="col-form-label col-md-3">
+                      <label className="col-form-label col-md-2">
                         Circular Link{" "}
                         <span className="text-danger">*</span>
                       </label>

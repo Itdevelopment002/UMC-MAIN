@@ -76,7 +76,7 @@ const AddContact = () => {
         <div className="content">
           <ol className="breadcrumb">
             <li className="breadcrumb-item">
-              <Link to="/home">Home</Link>
+              <Link to="#">Home</Link>
             </li>
             <li className="breadcrumb-item">
               <Link to="/contact-us">Contact Us</Link>
@@ -90,7 +90,7 @@ const AddContact = () => {
               <div className="card-box">
                 <div className="card-block">
                   <div className="row">
-                    <div className="col-sm-4 col-3">
+                    <div className="col-12">
                       <h4 className="page-title">Add Contact Information</h4>
                     </div>
                   </div>
@@ -108,7 +108,7 @@ const AddContact = () => {
                           name="heading"
                           value={formData.heading}
                           onChange={handleChange}
-                          placeholder="Enter heading"
+                          placeholder="Enter Heading"
                         />
                         {errors.heading && (
                           <div className="invalid-feedback">
@@ -130,7 +130,7 @@ const AddContact = () => {
                           name="description"
                           value={formData.description}
                           onChange={handleChange}
-                          placeholder="Enter description"
+                          placeholder="Enter Description"
                         />
                         {errors.description && (
                           <div className="invalid-feedback">

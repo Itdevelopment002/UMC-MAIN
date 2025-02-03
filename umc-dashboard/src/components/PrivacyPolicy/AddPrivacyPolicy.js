@@ -12,10 +12,10 @@ const AddPrivacyPolicy = () => {
   const validateForm = () => {
     const newErrors = {};
     if (!heading) {
-      newErrors.heading = "Heading is required.";
+      newErrors.heading = "Policy Heading is required.";
     }
     if (!description) {
-      newErrors.description = "Description is required.";
+      newErrors.description = "Policy Description is required.";
     }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -59,7 +59,7 @@ const AddPrivacyPolicy = () => {
         <div className="content">
           <ol className="breadcrumb">
             <li className="breadcrumb-item">
-              <Link to="/home">Home</Link>
+              <Link to="#">Home</Link>
             </li>
             <li className="breadcrumb-item">
               <Link to="/privacy-policy">Privacy Policy</Link>
@@ -73,7 +73,7 @@ const AddPrivacyPolicy = () => {
               <div className="card-box">
                 <div className="card-block">
                   <div className="row">
-                    <div className="col-sm-4 col-3">
+                    <div className="col-12">
                       <h4 className="page-title">Add Privacy Policy</h4>
                     </div>
                   </div>
@@ -88,7 +88,7 @@ const AddPrivacyPolicy = () => {
                           className={`form-control ${
                             errors.heading ? "is-invalid" : ""
                           }`}
-                          placeholder="Enter policy heading"
+                          placeholder="Enter Policy heading"
                           value={heading}
                           onChange={(e) => {
                             setHeading(e.target.value);
@@ -113,7 +113,7 @@ const AddPrivacyPolicy = () => {
                           className={`form-control ${
                             errors.description ? "is-invalid" : ""
                           }`}
-                          placeholder="Enter policy description"
+                          placeholder="Enter Policy description"
                           value={description}
                           onChange={(e) => {
                             setDescription(e.target.value);

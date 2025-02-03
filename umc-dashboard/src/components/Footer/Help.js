@@ -10,7 +10,7 @@ const Help = () => {
     const [showEditModal, setShowEditModal] = useState(false);
     const [selectedServices, setSelectedServices] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
-    const servicesPerPage = 10;
+    const servicesPerPage = 5;
 
     useEffect(() => {
         fetchHelpLinks();
@@ -99,21 +99,21 @@ const Help = () => {
                                 <table className="table table-bordered m-b-0">
                                     <thead>
                                         <tr>
-                                            <th width="10%">Sr. No.</th>
+                                            <th width="10%" className="text-center">Sr. No.</th>
                                             <th>Heading</th>
                                             <th>Link</th>
-                                            <th width="15%">Action</th>
+                                            <th width="15%" className="text-center">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {currentServices.map((service, index) => (
                                             <tr key={service.id}>
-                                                <td>
+                                                <td className="text-center">
                                                     {index + 1 + (currentPage - 1) * servicesPerPage}
                                                 </td>
                                                 <td>{service.heading}</td>
                                                 <td>{service.link}</td>
-                                                <td>
+                                                <td className="text-center">
                                                     <button
                                                         onClick={() => handleEditClick(service)}
                                                         className="btn btn-success btn-sm m-t-10"
@@ -133,53 +133,112 @@ const Help = () => {
                                 </table>
                             </div>
                         </div>
+                        <div className="mt-4">
+                            <ul className="pagination">
+                                <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
+                                    <button
+                                        className="page-link"
+                                        onClick={() => setCurrentPage(currentPage - 1)}
+                                    >
+                                        Previous
+                                    </button>
+                                </li>
+                                {currentPage > 2 && (
+                                    <li className={`page-item ${currentPage === 1 ? "active" : ""}`}>
+                                        <button className="page-link" onClick={() => setCurrentPage(1)}>
+                                            1
+                                        </button>
+                                    </li>
+                                )}
+                                {currentPage > 3 && (
+                                    <li className={`page-item ${currentPage === 2 ? "active" : ""}`}>
+                                        <button className="page-link" onClick={() => setCurrentPage(2)}>
+                                            2
+                                        </button>
+                                    </li>
+                                )}
+                                {currentPage > 4 && (
+                                    <li className="page-item disabled">
+                                        <span className="page-link">...</span>
+                                    </li>
+                                )}
+                                {Array.from(
+                                    { length: Math.ceil(helplinks.length / servicesPerPage) },
+                                    (_, i) => i + 1
+                                )
+                                    .filter(
+                                        (page) =>
+                                            page >= currentPage - 1 && page <= currentPage + 1 // Show current page and its neighbors
+                                    )
+                                    .map((page) => (
+                                        <li
+                                            className={`page-item ${currentPage === page ? "active" : ""}`}
+                                            key={page}
+                                        >
+                                            <button
+                                                className="page-link"
+                                                onClick={() => setCurrentPage(page)}
+                                            >
+                                                {page}
+                                            </button>
+                                        </li>
+                                    ))}
+                                {currentPage < Math.ceil(helplinks.length / servicesPerPage) - 3 && (
+                                    <li className="page-item disabled">
+                                        <span className="page-link">...</span>
+                                    </li>
+                                )}
+                                {currentPage < Math.ceil(helplinks.length / servicesPerPage) - 2 && (
+                                    <li
+                                        className={`page-item ${currentPage === Math.ceil(helplinks.length / servicesPerPage) - 1
+                                            ? "active"
+                                            : ""
+                                            }`}
+                                    >
+                                        <button
+                                            className="page-link"
+                                            onClick={() =>
+                                                setCurrentPage(Math.ceil(helplinks.length / servicesPerPage) - 1)
+                                            }
+                                        >
+                                            {Math.ceil(helplinks.length / servicesPerPage) - 1}
+                                        </button>
+                                    </li>
+                                )}
+                                {currentPage < Math.ceil(helplinks.length / servicesPerPage) - 1 && (
+                                    <li
+                                        className={`page-item ${currentPage === Math.ceil(helplinks.length / servicesPerPage)
+                                            ? "active"
+                                            : ""
+                                            }`}
+                                    >
+                                        <button
+                                            className="page-link"
+                                            onClick={() =>
+                                                setCurrentPage(Math.ceil(helplinks.length / servicesPerPage))
+                                            }
+                                        >
+                                            {Math.ceil(helplinks.length / servicesPerPage)}
+                                        </button>
+                                    </li>
+                                )}
+                                <li
+                                    className={`page-item ${currentPage === Math.ceil(helplinks.length / servicesPerPage)
+                                        ? "disabled"
+                                        : ""
+                                        }`}
+                                >
+                                    <button
+                                        className="page-link"
+                                        onClick={() => setCurrentPage(currentPage + 1)}
+                                    >
+                                        Next
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
-            </div>
-
-            <div className="mt-0">
-                <ul className="pagination">
-                    <li
-                        className={`page-item ${currentPage === 1 ? "disabled" : ""}`}
-                    >
-                        <button
-                            className="page-link"
-                            onClick={() => setCurrentPage(currentPage - 1)}
-                        >
-                            Previous
-                        </button>
-                    </li>
-                    {Array.from(
-                        { length: Math.ceil(helplinks.length / servicesPerPage) },
-                        (_, i) => (
-                            <li
-                                className={`page-item ${currentPage === i + 1 ? "active" : ""
-                                    }`}
-                                key={i}
-                            >
-                                <button
-                                    className="page-link"
-                                    onClick={() => setCurrentPage(i + 1)}
-                                >
-                                    {i + 1}
-                                </button>
-                            </li>
-                        )
-                    )}
-                    <li
-                        className={`page-item ${currentPage === Math.ceil(helplinks.length / servicesPerPage)
-                            ? "disabled"
-                            : ""
-                            }`}
-                    >
-                        <button
-                            className="page-link"
-                            onClick={() => setCurrentPage(currentPage + 1)}
-                        >
-                            Next
-                        </button>
-                    </li>
-                </ul>
             </div>
 
             {showEditModal && (
@@ -255,7 +314,7 @@ const Help = () => {
                     <div className="modal-dialog modal-dialog-centered">
                         <div className="modal-content">
                             <div className="modal-body text-center">
-                                <h5>Are you sure you want to delete this entry?</h5>
+                                <h5>Are you sure you want to delete this item?</h5>
                             </div>
                             <div className="modal-footer">
                                 <button
