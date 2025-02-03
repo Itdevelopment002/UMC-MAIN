@@ -4,20 +4,44 @@ import pdficon from '../../assets/images/Departments/document 1.png';
 import './SWMSystem.css';
 import "../TableCss/TableCss.css"
 import Swal from 'sweetalert2';
-import api from "../api"
+import api, { baseURL } from "../api"
 
 const SWMSystem = () => {
     const [swms, setSwms] = useState([]);
+    const [bgImage, setBgImage] = useState("");
 
-    const fetchSWMS = async()=>{
-        try{
-            const response = await api.get("/swms");
-            setSwms(response.data)
-        } catch(error){
-            console.error("Error fetching swms data", error);
+    const fetchHeaderImage = async () => {
+        try {
+            const response = await api.get("/banner");
+
+            if (response.data.length > 0) {
+                let selectedBanner = response.data.find(banner => banner.banner_name === "Solid-waste-management-system");
+
+                if (selectedBanner) {
+                    setBgImage(`${baseURL}${selectedBanner.file_path}`);
+                } else {
+                    console.error("Banner with specified name not found.");
+                }
+            } else {
+                console.error("No banner image found.");
+            }
+        } catch (error) {
+            console.error("Error fetching header image:", error);
         }
     };
 
+
+    const fetchSWMS = async () => {
+        try {
+            const response = await api.get("/swms");
+            setSwms(response.data)
+        } catch (error) {
+            console.error("Error fetching swms data", error);
+        }
+    };
+    useEffect(() => {
+        fetchHeaderImage();
+    }, []);
     useEffect(() => {
         fetchSWMS();
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -37,7 +61,13 @@ const SWMSystem = () => {
 
     return (
         <>
-            <div className="history-header-image"></div>
+            <div
+                className="history-header-image"
+                style={{
+                    backgroundImage: `url(${bgImage})`,
+
+                }}
+            ></div>
 
             <div id="main-content">
                 <div className="container-fluid font-location mt-4 mb-2" id="solid-system-css">
@@ -52,7 +82,7 @@ const SWMSystem = () => {
                         <span className="highlighted-text"> Management System</span>
                         <hr />
                     </h2>
-                    
+
                     <div className="row mt-4">
                         <div className="col-12 col-xl-9 col-lg-12 col-md-12 col-sm-12">
                             <div className="circular-wrapper">
