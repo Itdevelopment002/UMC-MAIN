@@ -50,10 +50,10 @@ const AddOnlineHomeServices = () => {
         <div className="content">
           <ol className="breadcrumb">
             <li className="breadcrumb-item">
-              <Link to="/home">Home</Link>
+              <Link to="#">Home</Link>
             </li>
             <li className="breadcrumb-item">
-              <Link to="/online-services">Online Services</Link>
+              <Link to="/online-home-services">Online Services</Link>
             </li>
             <li className="breadcrumb-item active" aria-current="page">
               Add Online Service
@@ -64,7 +64,7 @@ const AddOnlineHomeServices = () => {
               <div className="card-box">
                 <div className="card-block">
                   <div className="row">
-                    <div className="col-sm-4 col-3">
+                    <div className="col-12">
                       <h4 className="page-title">Add Online Service</h4>
                     </div>
                   </div>
