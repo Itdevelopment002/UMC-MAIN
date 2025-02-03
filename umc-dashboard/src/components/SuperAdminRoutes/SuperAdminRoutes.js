@@ -287,8 +287,8 @@ function SuperAdminRoutes() {
         <Route path="/add-department-description" element={<AddDeptDescription />} />
         <Route path="/add-adminstration" element={<AddAdministration />} />
         <Route path="/adminstration" element={<Administration />} />
-        <Route path="/annual" element={<Annual />} />
-        <Route path="/add-annual" element={<AddAnnual />} />
+        <Route path="/annual-financial-statement" element={<Annual />} />
+        <Route path="/add-annual-financial-statement" element={<AddAnnual />} />
         <Route path="/ward-office" element={<WardOffice />} />
         <Route path="/add-ward-office" element={<AddWardOffice />} />
         <Route path="/resolution" element={<Resolutions />} />

@@ -120,7 +120,7 @@ const WardOffice = () => {
                     <table className="table table-bordered m-b-0">
                       <thead>
                         <tr>
-                          <th>Sr. No.</th>
+                          <th width="10%" className="text-center">Sr. No.</th>
                           <th>Ward Name</th>
                           <th>Officer Name</th>
                           <th>Office Address</th>
@@ -129,14 +129,14 @@ const WardOffice = () => {
                           <th>Landline No.</th>
                           <th>Ward No</th>
                           <th>Areas</th>
-                          <th>Iframe Src</th>
-                          <th>Action</th>
+                          <th width="20%">Iframe Src</th>
+                          <th width="15%" className="text-center">Action</th>
                         </tr>
                       </thead>
                       <tbody>
                         {currentWardOffices.map((wardOffice, index) => (
                           <tr key={wardOffice.id}>
-                            <td>
+                            <td className="text-center">
                               {index + 1 + (currentPage - 1) * wardOfficesPerPage}
                             </td>
                             <td>{wardOffice.ward_no}</td>
@@ -147,11 +147,13 @@ const WardOffice = () => {
                             <td>{wardOffice.landline}</td>
                             <td>{wardOffice.ward_name}</td>
                             <td>{wardOffice.areas}</td>
-                            <td>{wardOffice.map_url}</td>
-                            <td>
+                            <td style={{ textWrap: "pretty", overflow: "hidden", whiteSpace: "nowrap" }}>
+                              {wardOffice.map_url.length > 15 ? `${wardOffice.map_url.slice(0, 30)}...` : wardOffice.map_url}
+                            </td>
+                            <td className="text-center">
                               <button
                                 onClick={() => handleEditClick(wardOffice)}
-                                className="btn btn-success btn-sm mb-1"
+                                className="btn btn-success btn-sm"
                               >
                                 Edit
                               </button>
@@ -314,8 +316,8 @@ const WardOffice = () => {
                   </div>
                   <div className="mb-3">
                     <label className="form-label">Iframe Src</label>
-                    <input
-                      type="text"
+                    <textarea
+                      rows={3}
                       className="form-control"
                       name="map_url"
                       value={selectedWardOffice?.map_url || ""}
@@ -357,17 +359,17 @@ const WardOffice = () => {
               <div className="modal-footer">
                 <button
                   type="button"
-                  className="btn btn-sm btn-danger"
-                  onClick={handleDelete}
-                >
-                  Delete
-                </button>
-                <button
-                  type="button"
                   className="btn btn-sm btn-secondary"
                   onClick={() => setShowDeleteModal(false)}
                 >
                   Cancel
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-sm btn-danger"
+                  onClick={handleDelete}
+                >
+                  Delete
                 </button>
               </div>
             </div>

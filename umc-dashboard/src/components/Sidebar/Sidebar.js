@@ -297,11 +297,11 @@ const Sidebar = ({ isOpen, closeSidebar, userDepartment }) => {
                         </Link>
                       </li>
                       <li
-                        className={activeItem === "/annual" ? "active" : ""}
-                        onClick={() => handleItemClick("/annual")}
+                        className={activeItem === "/annual-financial-statement" ? "active" : ""}
+                        onClick={() => handleItemClick("/annual-financial-statement")}
                       >
-                        <Link to="/annual">
-                          Annual Financial
+                        <Link to="/annual-financial-statement">
+                          Annual Financial Statement
                         </Link>
                       </li>
                       <li

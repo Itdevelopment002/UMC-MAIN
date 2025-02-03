@@ -70,11 +70,11 @@ const AddDepartmentPage = () => {
     };
 
     return (
-        <>
+        <div>
             <div className="page-wrapper">
                 <div className="content">
                     <ol className="breadcrumb">
-                        <li className="breadcrumb-item"><Link to="/home">Home</Link></li>
+                        <li className="breadcrumb-item"><Link to="#">Home</Link></li>
                         <li className="breadcrumb-item"><Link to="/departments">Departments</Link></li>
                         <li className="breadcrumb-item active" aria-current="page">Add Departments</li>
                     </ol>
@@ -83,7 +83,7 @@ const AddDepartmentPage = () => {
                             <div className="card-box">
                                 <div className="card-block">
                                     <div className="row">
-                                        <div className="col-sm-4 col-3">
+                                        <div className="col-12">
                                             <h4 className="page-title">Add Departments</h4>
                                         </div>
                                     </div>
@@ -98,7 +98,7 @@ const AddDepartmentPage = () => {
                                                     name="heading"
                                                     onChange={handleChange}
                                                 />
-                                                {errors.heading && <span className="text-danger">{errors.heading}</span>}
+                                                {errors.heading && <span className="invalid-feedback">{errors.heading}</span>}
                                             </div>
                                         </div>
                                         <div className="form-group row">
@@ -111,7 +111,7 @@ const AddDepartmentPage = () => {
                                                     name="link"
                                                     onChange={handleChange}
                                                 />
-                                                {errors.link && <span className="text-danger">{errors.link}</span>}
+                                                {errors.link && <span className="invalid-feedback">{errors.link}</span>}
                                             </div>
                                         </div>
 
@@ -126,10 +126,10 @@ const AddDepartmentPage = () => {
                                                     accept="image/*"
                                                     onChange={(e) => handleFileChange(e, setMainIcon, 'mainIcon')}
                                                 />
-                                                {errors.mainIcon && <span className="text-danger">{errors.mainIcon}</span>}
+                                                {errors.mainIcon && <span className="invalid-feedback">{errors.mainIcon}</span>}
                                             </div>
                                         </div>
-                                        <input type="submit" className="btn btn-primary" value="Submit" />
+                                        <input type="submit" className="btn btn-primary btn-sm" value="Submit" />
                                     </form>
                                     <ToastContainer />
                                 </div>
@@ -138,7 +138,7 @@ const AddDepartmentPage = () => {
                     </div>
                 </div>
             </div>
-        </>
+        </div>
     );
 };
 

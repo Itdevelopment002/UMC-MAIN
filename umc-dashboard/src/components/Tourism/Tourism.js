@@ -8,8 +8,6 @@ const Tourism = () => {
     const [gardensData, setGardensData] = useState([]);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
-    // const [selectedGarden, setSelectedGarden] = useState(null);
-    // const [selectedFiles, setSelectedFiles] = useState([]);
     const [currentImages, setCurrentImages] = useState([]);
     const [removedImages, setRemovedImages] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
@@ -23,8 +21,6 @@ const Tourism = () => {
         const newMainImage = e.target.files[0];
         if (newMainImage) {
             setSelectedGarden({ ...selectedGarden, main_image: newMainImage });
-
-            // Revoke previous URL and set new one
             if (objectURLs.mainImageURL) {
                 URL.revokeObjectURL(objectURLs.mainImageURL);
             }
@@ -40,10 +36,8 @@ const Tourism = () => {
         if (newFiles.length > 0) {
             setSelectedFiles(newFiles);
 
-            // Cleanup existing gallery URLs
             objectURLs.galleryURLs.forEach((url) => URL.revokeObjectURL(url));
 
-            // Create new URLs for gallery
             setObjectURLs((prev) => ({
                 ...prev,
                 galleryURLs: newFiles.map((file) => URL.createObjectURL(file)),
@@ -250,15 +244,15 @@ const Tourism = () => {
                                         <table className="table table-bordered m-b-0">
                                             <thead>
                                                 <tr>
-                                                    <th style={{ width: '5%' }}>S.No.</th>
+                                                    <th style={{ width: '5%' }} className="text-center">Sr. No.</th>
                                                     <th style={{ width: '10%' }}>Name</th>
                                                     <th style={{ width: '15%' }}>Address</th>
                                                     <th style={{ width: '5%' }}>Hours</th>
                                                     <th style={{ width: '20%' }}>Description</th>
                                                     <th style={{ width: '10%' }}>Location Link</th>
-                                                    <th style={{ width: '15%' }}>Main Image</th>
-                                                    <th style={{ width: '20%' }}>Gallery</th>
-                                                    <th style={{ width: '10%' }}>Action</th>
+                                                    <th style={{ width: '15%' }} className="text-center">Main Image</th>
+                                                    <th style={{ width: '20%' }} className="text-center">Gallery</th>
+                                                    <th style={{ width: '10%' }} className="text-center">Action</th>
                                                 </tr>
                                             </thead>
 
@@ -266,17 +260,17 @@ const Tourism = () => {
                                             <tbody>
                                                 {paginatedData.map((tourism, index) => (
                                                     <tr key={tourism.id}>
-                                                        <td>{(currentPage - 1) * itemsPerPage + index + 1}</td>
+                                                        <td className="text-center">{(currentPage - 1) * itemsPerPage + index + 1}</td>
                                                         <td>{tourism.name}</td>
                                                         <td>{tourism.address}</td>
                                                         <td>{tourism.hours}</td>
                                                         <td>{tourism.description}</td>
                                                         <td>
-                                                            <Link to={tourism.location_link} target="_blank" rel="noopener noreferrer" style={{color:'black'}}>
+                                                            <Link to={tourism.location_link} target="_blank" rel="noopener noreferrer" style={{ color: 'black' }}>
                                                                 {tourism.location_link}
                                                             </Link>
                                                         </td>
-                                                        <td>
+                                                        <td className="text-center">
                                                             <img
                                                                 src={`${baseURL}${tourism.main_image}`}
                                                                 alt="Main"
@@ -284,7 +278,7 @@ const Tourism = () => {
                                                             />
                                                         </td>
 
-                                                        <td>
+                                                        <td className="text-center">
                                                             <div className="d-flex flex-wrap">
                                                                 {JSON.parse(tourism.gallery).map((img, imgIndex) => (
                                                                     <div key={imgIndex} className="position-relative me-2">
@@ -297,15 +291,15 @@ const Tourism = () => {
                                                                 ))}
                                                             </div>
                                                         </td>
-                                                        <td>
+                                                        <td className="text-center">
                                                             <button
-                                                                className="btn btn-sm btn-success mb-1"
+                                                                className="btn btn-success btn-sm m-t-10"
                                                                 onClick={() => handleEdit(tourism)}
                                                             >
                                                                 Edit
                                                             </button>
                                                             <button
-                                                                className="btn btn-sm btn-danger mx-1"
+                                                                className="btn btn-danger btn-sm m-t-10"
                                                                 onClick={() => handleDelete(tourism)}
                                                             >
                                                                 Delete
@@ -315,51 +309,32 @@ const Tourism = () => {
                                                 ))}
                                             </tbody>
                                         </table>
-
                                     </div>
+                                </div>
+                                <div>
+                                    <ul className="pagination mt-4">
+                                        <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
+                                            <button className="page-link" onClick={() => handlePageChange(currentPage - 1)}>
+                                                Previous
+                                            </button>
+                                        </li>
+                                        {Array.from({ length: totalPages }, (_, i) => (
+                                            <li key={i + 1} className={`page-item ${currentPage === i + 1 ? "active" : ""}`}>
+                                                <button className="page-link" onClick={() => handlePageChange(i + 1)}>
+                                                    {i + 1}
+                                                </button>
+                                            </li>
+                                        ))}
+                                        <li className={`page-item ${currentPage === totalPages ? "disabled" : ""}`}>
+                                            <button className="page-link" onClick={() => handlePageChange(currentPage + 1)}>
+                                                Next
+                                            </button>
+                                        </li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>
                     </div>
-
-                    <ul className="pagination">
-                        <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
-                            <Link
-                                className="page-link"
-                                to="#"
-                                onClick={() => handlePageChange(currentPage - 1)}
-                            >
-                                Previous
-                            </Link>
-                        </li>
-                        {Array.from({ length: totalPages }, (_, index) => (
-                            <li
-                                key={index + 1}
-                                className={`page-item ${currentPage === index + 1 ? "active" : ""
-                                    }`}
-                            >
-                                <Link
-                                    className="page-link"
-                                    to="#"
-                                    onClick={() => handlePageChange(index + 1)}
-                                >
-                                    {index + 1}
-                                </Link>
-                            </li>
-                        ))}
-                        <li
-                            className={`page-item ${currentPage === totalPages ? "disabled" : ""
-                                }`}
-                        >
-                            <Link
-                                className="page-link"
-                                to="#"
-                                onClick={() => handlePageChange(currentPage + 1)}
-                            >
-                                Next
-                            </Link>
-                        </li>
-                    </ul>
 
                     {/* Delete Modal */}
                     <div

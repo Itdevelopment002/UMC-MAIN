@@ -46,7 +46,7 @@ const HistoryContent = () => {
             setDesc([...desc, response.data]);
             setDescription("");
             setShowAddNewModal(false);
-            toast.success("Description added successfully!");
+            toast.success("History Description added successfully!");
         } catch (error) {
             toast.error("Error adding Description.");
         }
@@ -61,7 +61,7 @@ const HistoryContent = () => {
         try {
             await api.delete(`/history_desc/${selectedWork.id}`);
             setDesc(desc.filter((work) => work.id !== selectedWork.id));
-            toast.success("Description deleted successfully!");
+            toast.success("History Description deleted successfully!");
         } catch (error) {
             toast.error("Error deleting Description.");
         } finally {
@@ -83,7 +83,7 @@ const HistoryContent = () => {
                 setDesc(
                     desc.map((work) => (work.id === editData.id ? response.data : work))
                 );
-                toast.success("Description updated successfully!");
+                toast.success("History Description updated successfully!");
             } else {
                 toast.error("Failed to update Description.");
             }
@@ -116,23 +116,22 @@ const HistoryContent = () => {
 
     return (
         <>
-
             <div className="row">
                 <div className="col-lg-12">
                     <div className="card-box">
                         <div className="card-block">
                             <div className="row">
-                                <div className="col-sm-4 col-3">
+                                <div className="col-6">
                                     <h4 className="page-title">
                                         History Description
                                     </h4>
                                 </div>
-                                <div className="col-sm-8 col-9 text-right m-b-20">
+                                <div className="col-6 text-right m-b-20">
                                     <button
                                         onClick={() => setShowAddNewModal(true)}
                                         className="btn btn-primary btn-rounded float-right"
                                     >
-                                        <i className="fa fa-plus"></i> Add New
+                                        <i className="fa fa-plus"></i> Add Desc
                                     </button>
                                 </div>
                             </div>
@@ -140,17 +139,17 @@ const HistoryContent = () => {
                                 <table className="table table-bordered m-b-0">
                                     <thead>
                                         <tr>
-                                            <th width="10%">Sr. No.</th>
+                                            <th width="10%" className="text-center">Sr. No.</th>
                                             <th>Description</th>
-                                            <th width="15%">Action</th>
+                                            <th width="15%" className="text-center">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {currentPageData.map((item, index) => (
                                             <tr key={item.id}>
-                                                <td>{index + 1}</td>
+                                                <td className="text-center">{((currentPage - 1) * itemsPerPage) + (index + 1)}</td>
                                                 <td>{item.description}</td>
-                                                <td>
+                                                <td className="text-center">
                                                     <button
                                                         className="btn btn-success btn-sm m-t-10"
                                                         onClick={() => handleEditClick(item)}
@@ -170,30 +169,29 @@ const HistoryContent = () => {
                                 </table>
                             </div>
                         </div>
+                        <div>
+                            <ul className="pagination mt-4">
+                                <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
+                                    <button className="page-link" onClick={() => handlePageChange(currentPage - 1)}>
+                                        Previous
+                                    </button>
+                                </li>
+                                {Array.from({ length: totalPages }, (_, i) => (
+                                    <li key={i + 1} className={`page-item ${currentPage === i + 1 ? "active" : ""}`}>
+                                        <button className="page-link" onClick={() => handlePageChange(i + 1)}>
+                                            {i + 1}
+                                        </button>
+                                    </li>
+                                ))}
+                                <li className={`page-item ${currentPage === totalPages ? "disabled" : ""}`}>
+                                    <button className="page-link" onClick={() => handlePageChange(currentPage + 1)}>
+                                        Next
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
-            </div>
-
-            <div>
-                <ul className="pagination">
-                    <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
-                        <button className="page-link" onClick={() => handlePageChange(currentPage - 1)}>
-                            Previous
-                        </button>
-                    </li>
-                    {Array.from({ length: totalPages }, (_, i) => (
-                        <li key={i + 1} className={`page-item ${currentPage === i + 1 ? "active" : ""}`}>
-                            <button className="page-link" onClick={() => handlePageChange(i + 1)}>
-                                {i + 1}
-                            </button>
-                        </li>
-                    ))}
-                    <li className={`page-item ${currentPage === totalPages ? "disabled" : ""}`}>
-                        <button className="page-link" onClick={() => handlePageChange(currentPage + 1)}>
-                            Next
-                        </button>
-                    </li>
-                </ul>
             </div>
 
             {showAddNewModal && (
@@ -209,14 +207,14 @@ const HistoryContent = () => {
                     >
                         <div className="modal-content">
                             <div className="modal-header">
-                                <h5 className="modal-title">Add New Description</h5>
+                                <h5 className="modal-title">Add History Description</h5>
                             </div>
                             <div className="modal-body">
                                 <form>
                                     <div className="form-group">
                                         <label>Description</label>
-                                        <input
-                                            type="text"
+                                        <textarea
+                                            rows={3}
                                             className={`form-control ${errors.description ? "is-invalid" : ""
                                                 }`}
                                             placeholder="Enter Description"
@@ -246,7 +244,7 @@ const HistoryContent = () => {
                                     className="btn btn-sm btn-primary"
                                     onClick={handleAddWork}
                                 >
-                                    Add
+                                    Submit
                                 </button>
                             </div>
                         </div>
@@ -267,7 +265,7 @@ const HistoryContent = () => {
                     >
                         <div className="modal-content">
                             <div className="modal-body text-center">
-                                <h5>Are you sure you want to delete this description?</h5>
+                                <h5>Are you sure you want to delete this item?</h5>
                             </div>
                             <div className="modal-footer">
                                 <button
@@ -309,8 +307,8 @@ const HistoryContent = () => {
                                 <form>
                                     <div className="form-group">
                                         <label>Description</label>
-                                        <input
-                                            type="text"
+                                        <textarea
+                                            rows={3}
                                             className="form-control"
                                             value={editData.description}
                                             onChange={(e) =>

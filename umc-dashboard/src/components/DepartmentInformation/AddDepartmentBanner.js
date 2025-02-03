@@ -33,7 +33,7 @@ const AddDepartmentBanner = () => {
         const newErrors = {};
 
         if (!departmentName) {
-            newErrors.departmentName = "Department name is required.";
+            newErrors.departmentName = "Department Name is required.";
         }
 
         if (!selectedFile) {
@@ -85,7 +85,7 @@ const AddDepartmentBanner = () => {
                             <div className="card-box">
                                 <div className="card-block">
                                     <div className="row">
-                                        <div className="col-sm-4 col-3">
+                                        <div className="col-12">
                                             <h4 className="page-title">Add Department Banner</h4>
                                         </div>
                                     </div>
@@ -120,7 +120,7 @@ const AddDepartmentBanner = () => {
                                         </div>
                                         <div className="form-group row">
                                             <label className="col-form-label col-lg-2">
-                                                Banner Image <span className="text-danger">*</span>
+                                                Department Banner <span className="text-danger">*</span>
                                             </label>
                                             <div className="col-md-4">
                                                 <div className="input-group mb-3">

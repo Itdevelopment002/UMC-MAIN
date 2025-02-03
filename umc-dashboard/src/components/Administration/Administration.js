@@ -50,7 +50,7 @@ const Administration = () => {
       );
       setAdministration(updatedadministration);
       setShowEditModal(false);
-      toast.success("administration updated successfully!");
+      toast.success("Administration updated successfully!");
     } catch (error) {
       console.error("Error updating administration:", error);
       toast.error("Failed to update the administration!");
@@ -95,15 +95,15 @@ const Administration = () => {
               <div className="card-box">
                 <div className="card-block">
                   <div className="row">
-                    <div className="col-sm-4 col-3">
+                    <div className="col-6">
                       <h4 className="page-title">Administration</h4>
                     </div>
-                    <div className="col-sm-8 col-9 text-right m-b-20">
+                    <div className="col-6 text-right m-b-20">
                       <Link
                         to="/add-adminstration"
                         className="btn btn-primary btn-rounded float-right"
                       >
-                        <i className="fa fa-plus"></i> Add Administration
+                        <i className="fa fa-plus"></i> Add Info
                       </Link>
                     </div>
                   </div>
@@ -111,23 +111,23 @@ const Administration = () => {
                     <table className="table table-bordered m-b-0">
                       <thead>
                         <tr>
-                          <th width="10%">Sr. No.</th>
+                          <th width="10%" className="text-center">Sr. No.</th>
                           <th>Name</th>
                           <th>Designation</th>
-                          <th>Phone No.</th>
-                          <th width="15%">Action</th>
+                          <th className="text-center">Phone No.</th>
+                          <th width="15%" className="text-center">Action</th>
                         </tr>
                       </thead>
                       <tbody>
                         {currentadministration.map((administration, index) => (
                           <tr key={administration.id}>
-                            <td>
+                            <td className="text-center">
                               {index + 1 + (currentPage - 1) * administrationPerPage}
                             </td>
                             <td>{administration.name}</td>
                             <td>{administration.designation}</td>
-                            <td>{administration.phone}</td>
-                            <td>
+                            <td className="text-center">{administration.phone}</td>
+                            <td className="text-center">
                               <button
                                 onClick={() => handleEditClick(administration)}
                                 className="btn btn-success btn-sm m-t-10"
@@ -147,55 +147,52 @@ const Administration = () => {
                     </table>
                   </div>
                 </div>
+                <div className="mt-4">
+                  <ul className="pagination">
+                    <li
+                      className={`page-item ${currentPage === 1 ? "disabled" : ""}`}
+                    >
+                      <button
+                        className="page-link"
+                        onClick={() => setCurrentPage(currentPage - 1)}
+                      >
+                        Previous
+                      </button>
+                    </li>
+                    {Array.from(
+                      { length: Math.ceil(administration.length / administrationPerPage) },
+                      (_, i) => (
+                        <li
+                          className={`page-item ${currentPage === i + 1 ? "active" : ""
+                            }`}
+                          key={i}
+                        >
+                          <button
+                            className="page-link"
+                            onClick={() => setCurrentPage(i + 1)}
+                          >
+                            {i + 1}
+                          </button>
+                        </li>
+                      )
+                    )}
+                    <li
+                      className={`page-item ${currentPage === Math.ceil(administration.length / administrationPerPage)
+                          ? "disabled"
+                          : ""
+                        }`}
+                    >
+                      <button
+                        className="page-link"
+                        onClick={() => setCurrentPage(currentPage + 1)}
+                      >
+                        Next
+                      </button>
+                    </li>
+                  </ul>
+                </div>
               </div>
             </div>
-          </div>
-
-          <div className="mt-4">
-            <ul className="pagination">
-              <li
-                className={`page-item ${currentPage === 1 ? "disabled" : ""}`}
-              >
-                <button
-                  className="page-link"
-                  onClick={() => setCurrentPage(currentPage - 1)}
-                >
-                  Previous
-                </button>
-              </li>
-              {Array.from(
-                { length: Math.ceil(administration.length / administrationPerPage) },
-                (_, i) => (
-                  <li
-                    className={`page-item ${
-                      currentPage === i + 1 ? "active" : ""
-                    }`}
-                    key={i}
-                  >
-                    <button
-                      className="page-link"
-                      onClick={() => setCurrentPage(i + 1)}
-                    >
-                      {i + 1}
-                    </button>
-                  </li>
-                )
-              )}
-              <li
-                className={`page-item ${
-                  currentPage === Math.ceil(administration.length / administrationPerPage)
-                    ? "disabled"
-                    : ""
-                }`}
-              >
-                <button
-                  className="page-link"
-                  onClick={() => setCurrentPage(currentPage + 1)}
-                >
-                  Next
-                </button>
-              </li>
-            </ul>
           </div>
 
           {showEditModal && (
@@ -281,7 +278,7 @@ const Administration = () => {
               <div className="modal-dialog modal-dialog-centered">
                 <div className="modal-content">
                   <div className="modal-body text-center">
-                    <h5>Are you sure you want to delete this entry?</h5>
+                    <h5>Are you sure you want to delete this item?</h5>
                   </div>
                   <div className="modal-footer">
                     <button

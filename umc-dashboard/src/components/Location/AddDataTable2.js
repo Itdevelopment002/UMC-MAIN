@@ -11,7 +11,6 @@ const AddDataTable2 = () => {
   const [errors, setErrors] = useState({ heading: "", description: "" });
   const navigate = useNavigate();
 
-  // Handle input field changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -83,7 +82,7 @@ const AddDataTable2 = () => {
               <div className="card-box">
                 <div className="card-block">
                   <div className="row">
-                    <div className="col-sm-4 col-3">
+                    <div className="col-12">
                       <h4 className="page-title">Add Table 2 Data</h4>
                     </div>
                   </div>

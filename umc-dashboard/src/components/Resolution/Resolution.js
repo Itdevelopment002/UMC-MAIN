@@ -120,31 +120,31 @@ const Resolutions = () => {
                                         <table className="table table-bordered m-b-0">
                                             <thead>
                                                 <tr>
-                                                    <th width="10%">Sr. No.</th>
+                                                    <th width="10%" className="text-center">Sr. No.</th>
                                                     <th width="20%">Department Name</th>
-                                                    <th>Resolution No/Date</th>
-                                                    <th width="15%">Schedule Date</th>
-                                                    <th width="20%">Adjournment Notice</th>
+                                                    <th className="text-center">Resolution No/Date</th>
+                                                    <th className="text-center">Schedule Date</th>
+                                                    <th>Adjournment Notice</th>
                                                     <th>PDF Link</th>
-                                                    <th width="25%">Action</th>
+                                                    <th width="15%" className="text-center">Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 {currentResolutions.map((resolution, index) => (
                                                     <tr key={resolution.Sr_No}>
-                                                        <td>
+                                                        <td className="text-center">
                                                             {index + 1 + (currentPage - 1) * resolutionsPerPage}
                                                         </td>
                                                         <td>{resolution.Department_Name}</td>
-                                                        <td>{resolution.Resolutions_No_Date}</td>
-                                                        <td>{new Date(resolution.Schedule_Date_of_Meeting).toLocaleDateString('en-CA')}</td>
+                                                        <td className="text-center">{resolution.Resolutions_No_Date}</td>
+                                                        <td className="text-center">{new Date(resolution.Schedule_Date_of_Meeting).toLocaleDateString('en-CA')}</td>
                                                         <td>{resolution.Adjournment_Notice}</td>
                                                         <td>
                                                             <Link to={resolution.pdf_link} target="_blank" rel="noreferrer" style={{ color: 'black' }}>
                                                                 {resolution.pdf_link}
                                                             </Link>
                                                         </td>
-                                                        <td>
+                                                        <td className="text-center">
                                                             <button
                                                                 onClick={() => handleEditClick(resolution)}
                                                                 className="btn btn-success btn-sm m-t-10"
@@ -164,54 +164,52 @@ const Resolutions = () => {
                                         </table>
                                     </div>
                                 </div>
+                                <div className="mt-4">
+                                    <ul className="pagination">
+                                        <li
+                                            className={`page-item ${currentPage === 1 ? "disabled" : ""}`}
+                                        >
+                                            <button
+                                                className="page-link"
+                                                onClick={() => setCurrentPage(currentPage - 1)}
+                                            >
+                                                Previous
+                                            </button>
+                                        </li>
+                                        {Array.from(
+                                            { length: Math.ceil(resolutions.length / resolutionsPerPage) },
+                                            (_, i) => (
+                                                <li
+                                                    className={`page-item ${currentPage === i + 1 ? "active" : ""
+                                                        }`}
+                                                    key={i}
+                                                >
+                                                    <button
+                                                        className="page-link"
+                                                        onClick={() => setCurrentPage(i + 1)}
+                                                    >
+                                                        {i + 1}
+                                                    </button>
+                                                </li>
+                                            )
+                                        )}
+                                        <li
+                                            className={`page-item ${currentPage === Math.ceil(resolutions.length / resolutionsPerPage)
+                                                ? "disabled"
+                                                : ""
+                                                }`}
+                                        >
+                                            <button
+                                                className="page-link"
+                                                onClick={() => setCurrentPage(currentPage + 1)}
+                                            >
+                                                Next
+                                            </button>
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
-                    </div>
-
-                    {/* Pagination */}
-                    <div className="mt-0">
-                        <ul className="pagination">
-                            <li
-                                className={`page-item ${currentPage === 1 ? "disabled" : ""}`}
-                            >
-                                <button
-                                    className="page-link"
-                                    onClick={() => setCurrentPage(currentPage - 1)}
-                                >
-                                    Previous
-                                </button>
-                            </li>
-                            {Array.from(
-                                { length: Math.ceil(resolutions.length / resolutionsPerPage) },
-                                (_, i) => (
-                                    <li
-                                        className={`page-item ${currentPage === i + 1 ? "active" : ""
-                                            }`}
-                                        key={i}
-                                    >
-                                        <button
-                                            className="page-link"
-                                            onClick={() => setCurrentPage(i + 1)}
-                                        >
-                                            {i + 1}
-                                        </button>
-                                    </li>
-                                )
-                            )}
-                            <li
-                                className={`page-item ${currentPage === Math.ceil(resolutions.length / resolutionsPerPage)
-                                    ? "disabled"
-                                    : ""
-                                    }`}
-                            >
-                                <button
-                                    className="page-link"
-                                    onClick={() => setCurrentPage(currentPage + 1)}
-                                >
-                                    Next
-                                </button>
-                            </li>
-                        </ul>
                     </div>
 
                     {/* Modals */}
@@ -317,7 +315,7 @@ const Resolutions = () => {
                             <div className="modal-dialog modal-dialog-centered">
                                 <div className="modal-content">
                                     <div className="modal-body text-center">
-                                        <h5>Are you sure you want to delete this entry?</h5>
+                                        <h5>Are you sure you want to delete this item?</h5>
                                     </div>
                                     <div className="modal-footer">
                                         <button

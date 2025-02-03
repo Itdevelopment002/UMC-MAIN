@@ -21,8 +21,8 @@ const Annual = () => {
       const response = await api.get("/annual-finance");
       setAnnual(response.data.reverse());
     } catch (error) {
-      console.error("Error fetching Annual:", error);
-      toast.error("Failed to fetch Annual data!");
+      console.error("Error fetching Annual Financial Statement:", error);
+      toast.error("Failed to fetch Annual Financial Statement data!");
     }
   };
 
@@ -31,7 +31,7 @@ const Annual = () => {
       await api.delete(`/annual-finance/${selectedAnnual.id}`);
       setAnnual(annual.filter((w) => w.id !== selectedAnnual.id));
       setShowDeleteModal(false);
-      toast.success("Annual deleted successfully!");
+      toast.success("Annual Financial Statement deleted successfully!");
     } catch (error) {
       console.error("Error deleting Annual:", error);
       toast.error("Failed to delete the Annual!");
@@ -49,7 +49,7 @@ const Annual = () => {
       );
       setAnnual(updatedAnnual);
       setShowEditModal(false);
-      toast.success("annual updated successfully!");
+      toast.success("Annual Financial Statement updated successfully!");
     } catch (error) {
       console.error("Error updating annual:", error);
       toast.error("Failed to update the annual!");
@@ -85,7 +85,7 @@ const Annual = () => {
                 <Link to="#">Corporation</Link>
               </li>
               <li className="breadcrumb-item active" aria-current="page">
-              Annual Financial Statement
+                Annual Financial Statement
               </li>
             </ol>
           </nav>
@@ -99,10 +99,10 @@ const Annual = () => {
                     </div>
                     <div className="col-sm-8 col-9 text-right m-b-20">
                       <Link
-                        to="/add-annual"
+                        to="/add-annual-financial-statement"
                         className="btn btn-primary btn-rounded float-right"
                       >
-                        <i className="fa fa-plus"></i> Add Annual
+                        <i className="fa fa-plus"></i> Add Statement
                       </Link>
                     </div>
                   </div>
@@ -110,21 +110,30 @@ const Annual = () => {
                     <table className="table table-bordered m-b-0">
                       <thead>
                         <tr>
-                          <th width="10%">Sr. No.</th>
+                          <th width="10%" className="text-center">Sr. No.</th>
                           <th>Heading</th>
                           <th>Link</th>
-                          <th width="15%">Action</th>
+                          <th width="15%" className="text-center">Action</th>
                         </tr>
                       </thead>
                       <tbody>
                         {currentAnnual.map((annual, index) => (
                           <tr key={annual.id}>
-                            <td>
+                            <td className="text-center">
                               {index + 1 + (currentPage - 1) * annualPerPage}
                             </td>
                             <td>{annual.heading}</td>
-                            <td>{annual.link}</td>
                             <td>
+                              <Link
+                                to={annual.link !== "#" ? `${annual.link}` : "#"}
+                                target={annual.link !== "#" ? "_blank" : ""}
+                                className="text-decoration-none"
+                                style={{ color: "#000" }}
+                              >
+                                {annual.link}
+                              </Link>
+                            </td>
+                            <td className="text-center">
                               <button
                                 onClick={() => handleEditClick(annual)}
                                 className="btn btn-success btn-sm m-t-10"
@@ -144,55 +153,52 @@ const Annual = () => {
                     </table>
                   </div>
                 </div>
+                <div className="mt-4">
+                  <ul className="pagination">
+                    <li
+                      className={`page-item ${currentPage === 1 ? "disabled" : ""}`}
+                    >
+                      <button
+                        className="page-link"
+                        onClick={() => setCurrentPage(currentPage - 1)}
+                      >
+                        Previous
+                      </button>
+                    </li>
+                    {Array.from(
+                      { length: Math.ceil(annual.length / annualPerPage) },
+                      (_, i) => (
+                        <li
+                          className={`page-item ${currentPage === i + 1 ? "active" : ""
+                            }`}
+                          key={i}
+                        >
+                          <button
+                            className="page-link"
+                            onClick={() => setCurrentPage(i + 1)}
+                          >
+                            {i + 1}
+                          </button>
+                        </li>
+                      )
+                    )}
+                    <li
+                      className={`page-item ${currentPage === Math.ceil(annual.length / annualPerPage)
+                        ? "disabled"
+                        : ""
+                        }`}
+                    >
+                      <button
+                        className="page-link"
+                        onClick={() => setCurrentPage(currentPage + 1)}
+                      >
+                        Next
+                      </button>
+                    </li>
+                  </ul>
+                </div>
               </div>
             </div>
-          </div>
-
-          <div className="mt-4">
-            <ul className="pagination">
-              <li
-                className={`page-item ${currentPage === 1 ? "disabled" : ""}`}
-              >
-                <button
-                  className="page-link"
-                  onClick={() => setCurrentPage(currentPage - 1)}
-                >
-                  Previous
-                </button>
-              </li>
-              {Array.from(
-                { length: Math.ceil(annual.length / annualPerPage) },
-                (_, i) => (
-                  <li
-                    className={`page-item ${
-                      currentPage === i + 1 ? "active" : ""
-                    }`}
-                    key={i}
-                  >
-                    <button
-                      className="page-link"
-                      onClick={() => setCurrentPage(i + 1)}
-                    >
-                      {i + 1}
-                    </button>
-                  </li>
-                )
-              )}
-              <li
-                className={`page-item ${
-                  currentPage === Math.ceil(annual.length / annualPerPage)
-                    ? "disabled"
-                    : ""
-                }`}
-              >
-                <button
-                  className="page-link"
-                  onClick={() => setCurrentPage(currentPage + 1)}
-                >
-                  Next
-                </button>
-              </li>
-            </ul>
           </div>
 
           {showEditModal && (
@@ -208,7 +214,7 @@ const Annual = () => {
               <div className="modal-dialog modal-dialog-centered">
                 <div className="modal-content">
                   <div className="modal-header">
-                    <h5 className="modal-title">Edit Annual</h5>
+                    <h5 className="modal-title">Edit Annual Financial Statement</h5>
                   </div>
                   <div className="modal-body">
                     <form>
@@ -268,7 +274,7 @@ const Annual = () => {
               <div className="modal-dialog modal-dialog-centered">
                 <div className="modal-content">
                   <div className="modal-body text-center">
-                    <h5>Are you sure you want to delete this entry?</h5>
+                    <h5>Are you sure you want to delete this item?</h5>
                   </div>
                   <div className="modal-footer">
                     <button

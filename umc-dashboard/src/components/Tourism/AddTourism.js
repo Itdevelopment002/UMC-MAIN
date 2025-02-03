@@ -18,25 +18,25 @@ const AddTourism = () => {
 
     const validationErrors = {};
     if (!name.trim()) {
-      validationErrors.name = "Name is required.";
+      validationErrors.name = "Site Name is required.";
     }
     if (!address.trim()) {
-      validationErrors.address = "Address is required.";
+      validationErrors.address = "Site Address is required.";
     }
     if (!hours.trim()) {
-      validationErrors.hours = "Hours are required.";
+      validationErrors.hours = "Open Hours are required.";
     }
     if (!description.trim()) {
-      validationErrors.description = "Description is required.";
+      validationErrors.description = "Site Description is required.";
     }
     if (!locationLink.trim()) {
       validationErrors.locationLink = "Location link is required.";
     }
     if (!mainImage) {
-      validationErrors.mainImage = "Main image is required.";
+      validationErrors.mainImage = "Site Main Image is required.";
     }
     if (galleryImages.length === 0) {
-      validationErrors.galleryImages = "Please upload at least one gallery image.";
+      validationErrors.galleryImages = "Please upload at least one site image.";
     }
 
     if (Object.keys(validationErrors).length > 0) {
@@ -56,6 +56,7 @@ const AddTourism = () => {
     });
 
     try {
+      // eslint-disable-next-line
       const response = await api.post("/tourism", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -153,14 +154,14 @@ const AddTourism = () => {
               <div className="card-box">
                 <div className="card-block">
                   <div className="row">
-                    <div className="col-sm-4 col-3">
+                    <div className="col-6">
                       <h4 className="page-title">Add Tourism</h4>
                     </div>
                   </div>
                   <form onSubmit={handleSubmit}>
                     <div className="form-group row">
-                      <label className="col-form-label col-md-3">
-                        Name <span className="text-danger">*</span>
+                      <label className="col-form-label col-md-2">
+                        Site Name <span className="text-danger">*</span>
                       </label>
                       <div className="col-md-5">
                         <input
@@ -168,14 +169,14 @@ const AddTourism = () => {
                           className={`form-control form-control-md ${errors.name ? "is-invalid" : ""}`}
                           value={name}
                           onChange={handleNameChange}
-                          placeholder="Tourism Site Name"
+                          placeholder="Enter Site Name"
                         />
-                        {errors.name && <div className="text-danger mt-1">{errors.name}</div>}
+                        {errors.name && <div className="invalid-feedback">{errors.name}</div>}
                       </div>
                     </div>
                     <div className="form-group row">
-                      <label className="col-form-label col-md-3">
-                        Address <span className="text-danger">*</span>
+                      <label className="col-form-label col-md-2">
+                        Site Address <span className="text-danger">*</span>
                       </label>
                       <div className="col-md-5">
                         <input
@@ -183,14 +184,14 @@ const AddTourism = () => {
                           className={`form-control form-control-md ${errors.address ? "is-invalid" : ""}`}
                           value={address}
                           onChange={handleAddressChange}
-                          placeholder="Address"
+                          placeholder="Enter Site Address"
                         />
-                        {errors.address && <div className="text-danger mt-1">{errors.address}</div>}
+                        {errors.address && <div className="invalid-feedback">{errors.address}</div>}
                       </div>
                     </div>
                     <div className="form-group row">
-                      <label className="col-form-label col-md-3">
-                        Hours <span className="text-danger">*</span>
+                      <label className="col-form-label col-md-2">
+                        Open Hours <span className="text-danger">*</span>
                       </label>
                       <div className="col-md-5">
                         <input
@@ -198,27 +199,28 @@ const AddTourism = () => {
                           className={`form-control form-control-md ${errors.hours ? "is-invalid" : ""}`}
                           value={hours}
                           onChange={handleHoursChange}
-                          placeholder="Operating Hours"
+                          placeholder="Enter Open Hours"
                         />
-                        {errors.hours && <div className="text-danger mt-1">{errors.hours}</div>}
+                        {errors.hours && <div className="invalid-feedback">{errors.hours}</div>}
                       </div>
                     </div>
                     <div className="form-group row">
-                      <label className="col-form-label col-md-3">
-                        Description <span className="text-danger">*</span>
+                      <label className="col-form-label col-md-2">
+                        Site Description <span className="text-danger">*</span>
                       </label>
                       <div className="col-md-5">
                         <textarea
+                          rows={2}
                           className={`form-control form-control-md ${errors.description ? "is-invalid" : ""}`}
                           value={description}
                           onChange={handleDescriptionChange}
-                          placeholder="Description"
+                          placeholder="Enter Site Description"
                         />
-                        {errors.description && <div className="text-danger mt-1">{errors.description}</div>}
+                        {errors.description && <div className="invalid-feedback">{errors.description}</div>}
                       </div>
                     </div>
                     <div className="form-group row">
-                      <label className="col-form-label col-md-3">
+                      <label className="col-form-label col-md-2">
                         Location Link <span className="text-danger">*</span>
                       </label>
                       <div className="col-md-5">
@@ -227,14 +229,14 @@ const AddTourism = () => {
                           className={`form-control form-control-md ${errors.locationLink ? "is-invalid" : ""}`}
                           value={locationLink}
                           onChange={handleLocationLinkChange}
-                          placeholder="Location Link"
+                          placeholder="Enter Location Link"
                         />
-                        {errors.locationLink && <div className="text-danger mt-1">{errors.locationLink}</div>}
+                        {errors.locationLink && <div className="invalid-feedback">{errors.locationLink}</div>}
                       </div>
                     </div>
                     <div className="form-group row">
-                      <label className="col-form-label col-md-3">
-                        Main Image <span className="text-danger">*</span>
+                      <label className="col-form-label col-md-2">
+                        Site Main Image <span className="text-danger">*</span>
                       </label>
                       <div className="col-md-5">
                         <input
@@ -243,12 +245,12 @@ const AddTourism = () => {
                           onChange={handleMainImageChange}
                           accept="image/*"
                         />
-                        {errors.mainImage && <div className="text-danger mt-1">{errors.mainImage}</div>}
+                        {errors.mainImage && <div className="invalid-feedback">{errors.mainImage}</div>}
                       </div>
                     </div>
                     <div className="form-group row">
-                      <label className="col-form-label col-md-3">
-                        Gallery Images <span className="text-danger">*</span>
+                      <label className="col-form-label col-md-2">
+                        Site Images <span className="text-danger">*</span>
                       </label>
                       <div className="col-md-5">
                         <input
@@ -258,10 +260,10 @@ const AddTourism = () => {
                           onChange={handleGalleryImagesChange}
                           accept="image/*"
                         />
-                        {errors.galleryImages && <div className="text-danger mt-1">{errors.galleryImages}</div>}
+                        {errors.galleryImages && <div className="invalid-feedback">{errors.galleryImages}</div>}
                       </div>
                     </div>
-                    <input type="submit" className="btn btn-primary" value="Submit" />
+                    <input type="submit" className="btn btn-primary btn-sm" value="Submit" />
                   </form>
                 </div>
               </div>

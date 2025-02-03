@@ -23,7 +23,6 @@ const AddDataTable3 = () => {
     }
   };
 
-  // Form validation
   const validateForm = () => {
     const newErrors = {};
     if (!formData.heading) {
@@ -85,7 +84,7 @@ const AddDataTable3 = () => {
               <div className="card-box">
                 <div className="card-block">
                   <div className="row">
-                    <div className="col-sm-4 col-3">
+                    <div className="col-12">
                       <h4 className="page-title">Add Table 3 Data</h4>
                     </div>
                   </div>

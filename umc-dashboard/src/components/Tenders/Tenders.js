@@ -124,7 +124,7 @@ const Tenders = () => {
                       <thead>
                         <tr>
                           <th width="10%" className="text-center">Sr. No.</th>
-                          <th width="30%">Tender Heading</th>
+                          <th>Tender Heading</th>
                           <th width="25%">Department Name</th>
                           <th>Tender Link</th>
                           <th width="15%" className="text-center">Action</th>
@@ -141,8 +141,8 @@ const Tenders = () => {
                               <td>{tender.department}</td>
                               <td>
                                 <Link
-                                  to={tender.link}
-                                  target="_blank"
+                                  to={tender.link !== "#" ? `${tender.link}` : "#"}
+                                  target={tender.link !== "#" ? "_blank" : ""}
                                   className="text-decoration-none"
                                   style={{ color: "#000" }}
                                 >
@@ -177,9 +177,7 @@ const Tenders = () => {
                 </div>
                 <div className="mt-4">
                   <ul className="pagination">
-                    <li
-                      className={`page-item ${currentPage === 1 ? "disabled" : ""}`}
-                    >
+                    <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
                       <button
                         className="page-link"
                         onClick={() => setCurrentPage(currentPage - 1)}
@@ -187,22 +185,85 @@ const Tenders = () => {
                         Previous
                       </button>
                     </li>
+                    {currentPage > 2 && (
+                      <li className={`page-item ${currentPage === 1 ? "active" : ""}`}>
+                        <button className="page-link" onClick={() => setCurrentPage(1)}>
+                          1
+                        </button>
+                      </li>
+                    )}
+                    {currentPage > 3 && (
+                      <li className={`page-item ${currentPage === 2 ? "active" : ""}`}>
+                        <button className="page-link" onClick={() => setCurrentPage(2)}>
+                          2
+                        </button>
+                      </li>
+                    )}
+                    {currentPage > 4 && (
+                      <li className="page-item disabled">
+                        <span className="page-link">...</span>
+                      </li>
+                    )}
+
                     {Array.from(
                       { length: Math.ceil(tender.length / tenderPerPage) },
-                      (_, i) => (
+                      (_, i) => i + 1
+                    )
+                      .filter(
+                        (page) =>
+                          page >= currentPage - 1 && page <= currentPage + 1
+                      )
+                      .map((page) => (
                         <li
-                          className={`page-item ${currentPage === i + 1 ? "active" : ""
-                            }`}
-                          key={i}
+                          className={`page-item ${currentPage === page ? "active" : ""}`}
+                          key={page}
                         >
                           <button
                             className="page-link"
-                            onClick={() => setCurrentPage(i + 1)}
+                            onClick={() => setCurrentPage(page)}
                           >
-                            {i + 1}
+                            {page}
                           </button>
                         </li>
-                      )
+                      ))}
+                    {currentPage < Math.ceil(tender.length / tenderPerPage) - 3 && (
+                      <li className="page-item disabled">
+                        <span className="page-link">...</span>
+                      </li>
+                    )}
+                    {currentPage < Math.ceil(tender.length / tenderPerPage) - 2 && (
+                      <li
+                        className={`page-item ${currentPage === Math.ceil(tender.length / tenderPerPage) - 1
+                          ? "active"
+                          : ""
+                          }`}
+                      >
+                        <button
+                          className="page-link"
+                          onClick={() =>
+                            setCurrentPage(Math.ceil(tender.length / tenderPerPage) - 1)
+                          }
+                        >
+                          {Math.ceil(tender.length / tenderPerPage) - 1}
+                        </button>
+                      </li>
+                    )}
+                    {currentPage < Math.ceil(tender.length / tenderPerPage) - 1 && (
+                      <li
+                        className={`page-item ${currentPage === Math.ceil(tender.length / tenderPerPage)
+                          ? "active"
+                          : ""
+                          }`}
+                      >
+                        <button
+                          className="page-link"
+                          onClick={() =>
+                            setCurrentPage(Math.ceil(tender.length / tenderPerPage))
+                          }
+                        >
+                          {Math.ceil(tender.length / tenderPerPage)}
+                        </button>
+                      </li>
                     )}
                     <li
                       className={`page-item ${currentPage === Math.ceil(tender.length / tenderPerPage)
@@ -314,7 +375,7 @@ const Tenders = () => {
               <div className="modal-dialog modal-dialog-centered">
                 <div className="modal-content">
                   <div className="modal-body text-center">
-                    <h5>Are you sure you want to delete this entry?</h5>
+                    <h5>Are you sure you want to delete this item?</h5>
                   </div>
                   <div className="modal-footer">
                     <button
