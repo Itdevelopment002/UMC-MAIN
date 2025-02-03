@@ -5,13 +5,36 @@ import "../DepartmentCustomCss/DepartmentCustom.css";
 import "../TableCss/TableCss.css";
 import pdficon from '../../assets/images/Departments/document 1.png';
 import Swal from "sweetalert2";
-import api from "../api"
+import api,{baseURL} from "../api"
 
 const ITEMS_PER_PAGE = 20;
 
 const PressNote = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [notes, setNotes] = useState([]);
+    const [bgImage, setBgImage] = useState("");
+
+    const fetchHeaderImage = async () => {
+        try {
+            const response = await api.get("/banner");
+
+            if (response.data.length > 0) {
+                let selectedBanner = response.data.find(banner => banner.banner_name === "Press-Note");
+
+                if (selectedBanner) {
+                    setBgImage(`${baseURL}${selectedBanner.file_path}`);
+                } else {
+                    console.error("Banner with specified name not found.");
+                }
+            } else {
+                console.error("No banner image found.");
+            }
+        } catch (error) {
+            console.error("Error fetching header image:", error);
+        }
+    };
+
+
 
     const fetchNotes = async()=>{
         try{
@@ -24,6 +47,7 @@ const PressNote = () => {
 
     useEffect(()=>{
         fetchNotes();
+        fetchHeaderImage();
     },[]);
 
     const totalPages = Math.ceil(notes.length / ITEMS_PER_PAGE);
@@ -81,7 +105,13 @@ const PressNote = () => {
 
     return (
         <>
-            <div className="history-header-image"></div>
+           <div
+                className="history-header-image"
+                style={{
+                    backgroundImage: `url(${bgImage})`,
+
+                }}
+            ></div>
 
             <div id="main-content">
                 <div className="container-fluid font-location mt-4 mb-2" id="press-css">
