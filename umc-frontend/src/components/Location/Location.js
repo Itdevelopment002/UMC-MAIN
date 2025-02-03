@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom"
-import api from "../api";
+import api, { baseURL } from "../api";
 import "./Location.css";
 
 const Location = () => {
 
 
   const [tableData, setTableData] = useState([]);
+  const [bgImage, setBgImage] = useState("");
 
 
   useEffect(() => {
     fetchPolicy();
+    fetchHeaderImage();
   }, []);
 
   const fetchPolicy = async () => {
@@ -22,7 +24,20 @@ const Location = () => {
     }
   };
 
+  const fetchHeaderImage = async () => {
+    try {
+      const response = await api.get("/banner");
 
+      if (response.data.length > 0) {
+        let latestBanner = response.data[response.data.length - 1];
+        setBgImage(`${baseURL}${latestBanner.file_path}`);
+      } else {
+        console.error("No banner image found.");
+      }
+    } catch (error) {
+      console.error("Error fetching header image:", error);
+    }
+  };
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -30,7 +45,24 @@ const Location = () => {
 
   return (
     <>
-      <div className="history-header-image"></div>
+      <div
+        className="history-header-image"
+        style={{
+          backgroundImage: `url(${bgImage})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          width: "100%",
+          height: "150px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          position: "relative",
+          overflow: "hidden",
+          marginTop: "-20px",
+          zIndex: "-1",
+        }}
+      ></div>
       <div id="main-content">
         <div className="container-fluid font-location mt-4 mb-5" id="location-css">
           <nav className="breadcrumb">

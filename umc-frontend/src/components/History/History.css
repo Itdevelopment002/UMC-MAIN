@@ -1,18 +1,4 @@
-.history-header-image {
-  background-image: url(../../assets/images/inner.jpg);
-  background-size: contain;
-  background-position: center;
-  background-repeat: no-repeat;
-  width: 100%;
-  height: 150px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  overflow: hidden;
-  margin-top: -20px;
-  z-index: -1;
-}
+
 
 #history-css .sidebar-image {
   background: linear-gradient(to bottom, #BB368A, #FEBA28);
@@ -128,10 +114,26 @@
 
 }
 
-@media (max-width: 1400px) {
+@media (max-width: 1024px) {
   .history-header-image {
-    background-size: cover;
-    margin-top: -0px;
-    margin-bottom: 20px;
+      height: 120px;
+      background-size: cover;
+      margin-top: -15px;
+  }
+}
+
+@media (max-width: 768px) {
+  .history-header-image {
+      height: 100px;
+      background-size: cover;
+      margin-top: -10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .history-header-image {
+      height: 80px;
+      background-size: cover;
+      margin-top: -5px;
   }
 }
