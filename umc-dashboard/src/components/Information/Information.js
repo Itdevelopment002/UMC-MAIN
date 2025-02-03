@@ -123,7 +123,11 @@ const Information = () => {
                               {index + 1 + (currentPage - 1) * infoPerPage}
                             </td>
                             <td>{info.heading}</td>
-                            <td>{info.link}</td>
+                            <td>
+                              <Link to={info.link} target="_blank" className="text-decoration-none" style={{ color: "#000" }}>
+                                {info.link}
+                              </Link>
+                            </td>
                             <td className="text-center">
                               <button
                                 onClick={() => handleEditClick(info)}
@@ -144,55 +148,129 @@ const Information = () => {
                     </table>
                   </div>
                 </div>
+                <div className="mt-4">
+                  <ul className="pagination">
+                    {/* Previous Button */}
+                    <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
+                      <button
+                        className="page-link"
+                        onClick={() => setCurrentPage(currentPage - 1)}
+                      >
+                        Previous
+                      </button>
+                    </li>
+
+                    {/* Always show the first page */}
+                    {currentPage > 2 && (
+                      <li className={`page-item ${currentPage === 1 ? "active" : ""}`}>
+                        <button className="page-link" onClick={() => setCurrentPage(1)}>
+                          1
+                        </button>
+                      </li>
+                    )}
+
+                    {/* Show the second page if currentPage is greater than 2 */}
+                    {currentPage > 3 && (
+                      <li className={`page-item ${currentPage === 2 ? "active" : ""}`}>
+                        <button className="page-link" onClick={() => setCurrentPage(2)}>
+                          2
+                        </button>
+                      </li>
+                    )}
+
+                    {/* Show ellipsis if currentPage is far from the start */}
+                    {currentPage > 4 && (
+                      <li className="page-item disabled">
+                        <span className="page-link">...</span>
+                      </li>
+                    )}
+
+                    {/* Show currentPage and its neighbors */}
+                    {Array.from(
+                      { length: Math.ceil(info.length / infoPerPage) },
+                      (_, i) => i + 1
+                    )
+                      .filter(
+                        (page) =>
+                          page >= currentPage - 1 && page <= currentPage + 1 // Show current page and its neighbors
+                      )
+                      .map((page) => (
+                        <li
+                          className={`page-item ${currentPage === page ? "active" : ""}`}
+                          key={page}
+                        >
+                          <button
+                            className="page-link"
+                            onClick={() => setCurrentPage(page)}
+                          >
+                            {page}
+                          </button>
+                        </li>
+                      ))}
+
+                    {/* Show ellipsis if currentPage is far from the end */}
+                    {currentPage < Math.ceil(info.length / infoPerPage) - 3 && (
+                      <li className="page-item disabled">
+                        <span className="page-link">...</span>
+                      </li>
+                    )}
+
+                    {/* Show the second-to-last page if currentPage is not near the end */}
+                    {currentPage < Math.ceil(info.length / infoPerPage) - 2 && (
+                      <li
+                        className={`page-item ${currentPage === Math.ceil(info.length / infoPerPage) - 1
+                            ? "active"
+                            : ""
+                          }`}
+                      >
+                        <button
+                          className="page-link"
+                          onClick={() =>
+                            setCurrentPage(Math.ceil(info.length / infoPerPage) - 1)
+                          }
+                        >
+                          {Math.ceil(info.length / infoPerPage) - 1}
+                        </button>
+                      </li>
+                    )}
+
+                    {/* Always show the last page */}
+                    {currentPage < Math.ceil(info.length / infoPerPage) - 1 && (
+                      <li
+                        className={`page-item ${currentPage === Math.ceil(info.length / infoPerPage)
+                            ? "active"
+                            : ""
+                          }`}
+                      >
+                        <button
+                          className="page-link"
+                          onClick={() =>
+                            setCurrentPage(Math.ceil(info.length / infoPerPage))
+                          }
+                        >
+                          {Math.ceil(info.length / infoPerPage)}
+                        </button>
+                      </li>
+                    )}
+
+                    {/* Next Button */}
+                    <li
+                      className={`page-item ${currentPage === Math.ceil(info.length / infoPerPage)
+                          ? "disabled"
+                          : ""
+                        }`}
+                    >
+                      <button
+                        className="page-link"
+                        onClick={() => setCurrentPage(currentPage + 1)}
+                      >
+                        Next
+                      </button>
+                    </li>
+                  </ul>
+                </div>
               </div>
             </div>
-          </div>
-
-          <div className="mt-4">
-            <ul className="pagination">
-              <li
-                className={`page-item ${currentPage === 1 ? "disabled" : ""}`}
-              >
-                <button
-                  className="page-link"
-                  onClick={() => setCurrentPage(currentPage - 1)}
-                >
-                  Previous
-                </button>
-              </li>
-              {Array.from(
-                { length: Math.ceil(info.length / infoPerPage) },
-                (_, i) => (
-                  <li
-                    className={`page-item ${
-                      currentPage === i + 1 ? "active" : ""
-                    }`}
-                    key={i}
-                  >
-                    <button
-                      className="page-link"
-                      onClick={() => setCurrentPage(i + 1)}
-                    >
-                      {i + 1}
-                    </button>
-                  </li>
-                )
-              )}
-              <li
-                className={`page-item ${
-                  currentPage === Math.ceil(info.length / infoPerPage)
-                    ? "disabled"
-                    : ""
-                }`}
-              >
-                <button
-                  className="page-link"
-                  onClick={() => setCurrentPage(currentPage + 1)}
-                >
-                  Next
-                </button>
-              </li>
-            </ul>
           </div>
 
           {showEditModal && (
@@ -268,7 +346,7 @@ const Information = () => {
               <div className="modal-dialog modal-dialog-centered">
                 <div className="modal-content">
                   <div className="modal-body text-center">
-                    <h5>Are you sure you want to delete this entry?</h5>
+                    <h5>Are you sure you want to delete this item?</h5>
                   </div>
                   <div className="modal-footer">
                     <button

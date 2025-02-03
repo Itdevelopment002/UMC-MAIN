@@ -50,7 +50,7 @@ const AddPressNote = () => {
         <div className="content">
           <ol className="breadcrumb">
             <li className="breadcrumb-item">
-              <Link to="/home">Home</Link>
+              <Link to="#">Home</Link>
             </li>
             <li className="breadcrumb-item">
               <Link to="/press-note">Press Note</Link>
@@ -64,7 +64,7 @@ const AddPressNote = () => {
               <div className="card-box">
                 <div className="card-block">
                   <div className="row">
-                    <div className="col-sm-4 col-3">
+                    <div className="col-12">
                       <h4 className="page-title">Add Press Note</h4>
                     </div>
                   </div>
@@ -124,7 +124,7 @@ const AddPressNote = () => {
                     </div>
                     <input
                       type="submit"
-                      className="btn btn-primary btn-sm mt-3"
+                      className="btn btn-primary btn-sm"
                       value="Submit"
                     />
                   </form>

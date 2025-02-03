@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import api from "../api";
 import { Link, useNavigate } from "react-router-dom";
 
-const AddSlider = () => {
-  const [sliderName, setSliderName] = useState("");
+const AddBanner = () => {
+  const [bannerName, setBannerName] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
@@ -17,12 +17,12 @@ const AddSlider = () => {
     e.preventDefault();
     const newErrors = {};
 
-    if (!sliderName.trim()) {
-      newErrors.sliderName = "Slider name is required.";
+    if (!bannerName.trim()) {
+      newErrors.bannerName = "Banner name is required.";
     }
 
     if (!selectedFile) {
-      newErrors.selectedFile = "Slider image is required.";
+      newErrors.selectedFile = "Banner image is required.";
     }
 
     if (Object.keys(newErrors).length > 0) {
@@ -32,19 +32,19 @@ const AddSlider = () => {
 
     const formData = new FormData();
     formData.append("image", selectedFile);
-    formData.append("sliderName", sliderName);
+    formData.append("bannerName", bannerName);
 
     try {
       // eslint-disable-next-line
-      const response = await api.post("/sliders", formData, {
+      const response = await api.post("/banner", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
-      setSliderName("");
+      setBannerName("");
       setSelectedFile(null);
       document.getElementById("image").value = "";
-      navigate("/slider");
+      navigate("/banner");
     } catch (error) {
       console.error("Error uploading file:", error);
     }
@@ -59,10 +59,10 @@ const AddSlider = () => {
               <Link to="#">Home</Link>
             </li>
             <li className="breadcrumb-item">
-              <Link to="/slider">Slider</Link>
+              <Link to="/banner">Banner</Link>
             </li>
             <li className="breadcrumb-item active" aria-current="page">
-              Add Slider
+              Add Banner
             </li>
           </ol>
           <div className="row">
@@ -71,36 +71,36 @@ const AddSlider = () => {
                 <div className="card-block">
                   <div className="row">
                     <div className="col-12">
-                      <h4 className="page-title">Add Slider</h4>
+                      <h4 className="page-title">Add Banner</h4>
                     </div>
                   </div>
                   <form onSubmit={handleSubmit}>
                     <div className="form-group row">
                       <label className="col-form-label col-md-2">
-                        Slider Name <span className="text-danger">*</span>
+                        Banner Name <span className="text-danger">*</span>
                       </label>
                       <div className="col-md-4">
                         <input
                           type="text"
                           className={`form-control ${
-                            errors.sliderName ? "is-invalid" : ""
+                            errors.bannerName ? "is-invalid" : ""
                           }`}
-                          value={sliderName}
+                          value={bannerName}
                           onChange={(e) => {
-                            setSliderName(e.target.value);
-                            setErrors((prev) => ({ ...prev, sliderName: "" }));
+                            setBannerName(e.target.value);
+                            setErrors((prev) => ({ ...prev, bannerName: "" }));
                           }}
                         />
-                        {errors.sliderName && (
+                        {errors.bannerName && (
                           <div className="invalid-feedback">
-                            {errors.sliderName}
+                            {errors.bannerName}
                           </div>
                         )}
                       </div>
                     </div>
                     <div className="form-group row">
                       <label className="col-form-label col-lg-2">
-                        Slider Image <span className="text-danger">*</span>
+                        Banner Image <span className="text-danger">*</span>
                       </label>
                       <div className="col-md-4">
                         <div className="input-group mb-3">
@@ -137,4 +137,4 @@ const AddSlider = () => {
   );
 };
 
-export default AddSlider;
+export default AddBanner;

@@ -14,9 +14,9 @@ const AddEmergencyServices = () => {
 
     const validateForm = () => {
         const errors = {};
-        if (!heading) errors.heading = "Heading is required.";
-        if (!number) errors.number = "Number is required.";
-        if (!emergencyImage) errors.emergencyImage = "Main Icon is required.";
+        if (!heading) errors.heading = "Service Heading is required.";
+        if (!number) errors.number = "Service Number is required.";
+        if (!emergencyImage) errors.emergencyImage = "Service Image is required.";
         setErrors(errors);
         return Object.keys(errors).length === 0;
     };
@@ -74,7 +74,7 @@ const AddEmergencyServices = () => {
             <div className="page-wrapper">
                 <div className="content">
                     <ol className="breadcrumb">
-                        <li className="breadcrumb-item"><Link to="/home">Home</Link></li>
+                        <li className="breadcrumb-item"><Link to="#">Home</Link></li>
                         <li className="breadcrumb-item"><Link to="/citizen-communication">Citizen Communication</Link></li>
                         <li className="breadcrumb-item active" aria-current="page">Add Emergency Services</li>
                     </ol>
@@ -83,7 +83,7 @@ const AddEmergencyServices = () => {
                             <div className="card-box">
                                 <div className="card-block">
                                     <div className="row">
-                                        <div className="col-sm-4 col-3">
+                                        <div className="col-12">
                                             <h4 className="page-title">Add Emergency Services</h4>
                                         </div>
                                     </div>
@@ -96,6 +96,7 @@ const AddEmergencyServices = () => {
                                                     className={`form-control form-control-md ${errors.heading ? 'is-invalid' : ''}`}
                                                     value={heading}
                                                     name="heading"
+                                                    placeholder='Enter Service Heading'
                                                     onChange={handleChange}
                                                 />
                                                 {errors.heading && <span className="text-danger">{errors.heading}</span>}
@@ -109,6 +110,7 @@ const AddEmergencyServices = () => {
                                                     className={`form-control form-control-md ${errors.number ? 'is-invalid' : ''}`}
                                                     value={number}
                                                     name="number"
+                                                    placeholder='Enter Service Number'
                                                     onChange={handleChange}
                                                 />
                                                 {errors.number && <span className="text-danger">{errors.number}</span>}

@@ -11,10 +11,10 @@ const AddBottomSlider = () => {
   const validateForm = () => {
     const newErrors = {};
     if (!websitelink.trim()) {
-      newErrors.websitelink = "Slider link is required.";
+      newErrors.websitelink = "Slider Link is required.";
     }
     if (!websitelogo) {
-      newErrors.websitelogo = "Slider image is required.";
+      newErrors.websitelogo = "Slider Image is required.";
     }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -67,7 +67,7 @@ const AddBottomSlider = () => {
         <div className="content">
           <ol className="breadcrumb">
             <li className="breadcrumb-item">
-              <Link to="/home">Home</Link>
+              <Link to="#">Home</Link>
             </li>
             <li className="breadcrumb-item">
               <Link to="/bottom-slider">Bottom Slider</Link>
@@ -81,7 +81,7 @@ const AddBottomSlider = () => {
               <div className="card-box">
                 <div className="card-block">
                   <div className="row">
-                    <div className="col-sm-4 col-3">
+                    <div className="col-12">
                       <h4 className="page-title">Add Bottom Slider</h4>
                     </div>
                   </div>
@@ -97,7 +97,7 @@ const AddBottomSlider = () => {
                           className={`form-control ${
                             errors.websitelink ? "is-invalid" : ""
                           }`}
-                          placeholder="Enter Slider link"
+                          placeholder="Enter Slider Link"
                           value={websitelink}
                           onChange={(e) => {
                             setLink(e.target.value);
@@ -144,7 +144,7 @@ const AddBottomSlider = () => {
                     </div>
                     <input
                       type="submit"
-                      className="btn btn-primary"
+                      className="btn btn-primary btn-sm"
                       value="Submit"
                     />
                   </form>

@@ -123,7 +123,11 @@ const UMCNews = () => {
                               {index + 1 + (currentPage - 1) * newsPerPage}
                             </td>
                             <td>{news.heading}</td>
-                            <td>{news.link}</td>
+                            <td>
+                              <Link to={news.link} target="_blank" className="text-decoration-none" style={{ color: "#000" }}>
+                                {news.link}
+                              </Link>
+                            </td>
                             <td className="text-center">
                               <button
                                 onClick={() => handleEditClick(news)}
@@ -144,55 +148,104 @@ const UMCNews = () => {
                     </table>
                   </div>
                 </div>
+                <div className="mt-4">
+                  <ul className="pagination">
+                    <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
+                      <button
+                        className="page-link"
+                        onClick={() => setCurrentPage(currentPage - 1)}
+                      >
+                        Previous
+                      </button>
+                    </li>
+                    {currentPage > 2 && (
+                      <li className={`page-item ${currentPage === 1 ? "active" : ""}`}>
+                        <button className="page-link" onClick={() => setCurrentPage(1)}>
+                          1
+                        </button>
+                      </li>
+                    )}
+                    {currentPage > 3 && (
+                      <li className={`page-item ${currentPage === 2 ? "active" : ""}`}>
+                        <button className="page-link" onClick={() => setCurrentPage(2)}>
+                          2
+                        </button>
+                      </li>
+                    )}
+                    {currentPage > 4 && (
+                      <li className="page-item disabled">
+                        <span className="page-link">...</span>
+                      </li>
+                    )}
+                    {Array.from(
+                      { length: Math.ceil(news.length / newsPerPage) },
+                      (_, i) => i + 1
+                    )
+                      .filter(
+                        (page) =>
+                          page >= currentPage - 1 && page <= currentPage + 1
+                      )
+                      .map((page) => (
+                        <li
+                          className={`page-item ${currentPage === page ? "active" : ""}`}
+                          key={page}
+                        >
+                          <button
+                            className="page-link"
+                            onClick={() => setCurrentPage(page)}
+                          >
+                            {page}
+                          </button>
+                        </li>
+                      ))}
+                    {currentPage < Math.ceil(news.length / newsPerPage) - 3 && (
+                      <li className="page-item disabled">
+                        <span className="page-link">...</span>
+                      </li>
+                    )}
+                    {currentPage < Math.ceil(news.length / newsPerPage) - 2 && (
+                      <li
+                        className={`page-item ${currentPage === Math.ceil(news.length / newsPerPage) - 1 ? "active" : ""
+                          }`}
+                      >
+                        <button
+                          className="page-link"
+                          onClick={() =>
+                            setCurrentPage(Math.ceil(news.length / newsPerPage) - 1)
+                          }
+                        >
+                          {Math.ceil(news.length / newsPerPage) - 1}
+                        </button>
+                      </li>
+                    )}
+                    {currentPage < Math.ceil(news.length / newsPerPage) - 1 && (
+                      <li
+                        className={`page-item ${currentPage === Math.ceil(news.length / newsPerPage) ? "active" : ""
+                          }`}
+                      >
+                        <button
+                          className="page-link"
+                          onClick={() => setCurrentPage(Math.ceil(news.length / newsPerPage))}
+                        >
+                          {Math.ceil(news.length / newsPerPage)}
+                        </button>
+                      </li>
+                    )}
+                    <li
+                      className={`page-item ${currentPage === Math.ceil(news.length / newsPerPage) ? "disabled" : ""
+                        }`}
+                    >
+                      <button
+                        className="page-link"
+                        onClick={() => setCurrentPage(currentPage + 1)}
+                      >
+                        Next
+                      </button>
+                    </li>
+                  </ul>
+                </div>
               </div>
             </div>
-          </div>
-
-          <div className="mt-4">
-            <ul className="pagination">
-              <li
-                className={`page-item ${currentPage === 1 ? "disabled" : ""}`}
-              >
-                <button
-                  className="page-link"
-                  onClick={() => setCurrentPage(currentPage - 1)}
-                >
-                  Previous
-                </button>
-              </li>
-              {Array.from(
-                { length: Math.ceil(news.length / newsPerPage) },
-                (_, i) => (
-                  <li
-                    className={`page-item ${
-                      currentPage === i + 1 ? "active" : ""
-                    }`}
-                    key={i}
-                  >
-                    <button
-                      className="page-link"
-                      onClick={() => setCurrentPage(i + 1)}
-                    >
-                      {i + 1}
-                    </button>
-                  </li>
-                )
-              )}
-              <li
-                className={`page-item ${
-                  currentPage === Math.ceil(news.length / newsPerPage)
-                    ? "disabled"
-                    : ""
-                }`}
-              >
-                <button
-                  className="page-link"
-                  onClick={() => setCurrentPage(currentPage + 1)}
-                >
-                  Next
-                </button>
-              </li>
-            </ul>
           </div>
 
           {showEditModal && (
@@ -268,7 +321,7 @@ const UMCNews = () => {
               <div className="modal-dialog modal-dialog-centered">
                 <div className="modal-content">
                   <div className="modal-body text-center">
-                    <h5>Are you sure you want to delete this entry?</h5>
+                    <h5>Are you sure you want to delete this item?</h5>
                   </div>
                   <div className="modal-footer">
                     <button

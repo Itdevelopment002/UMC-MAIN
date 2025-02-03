@@ -81,7 +81,7 @@ const AddHomeVideo = () => {
                             className={`form-control col-md-12 col-xs-12 userfile ${
                               errors.videoUrl ? "is-invalid" : ""
                             }`}
-                            placeholder=""
+                            placeholder="Enter Video URL"
                             value={videoUrl}
                             onChange={(e) => {
                               setVideoUrl(e.target.value);

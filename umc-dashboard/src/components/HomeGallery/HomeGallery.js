@@ -13,6 +13,7 @@ const HomeGallery = () => {
   const [selectedGallery, setSelectedGallery] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [imagePreview, setImagePreview] = useState(null);
   const itemsPerPage = 10;
 
   useEffect(() => {
@@ -71,6 +72,7 @@ const HomeGallery = () => {
   const handleEdit = (gallery) => {
     setSelectedGallery(gallery);
     setShowEditModal(true);
+    setImagePreview(`${baseURL}${gallery.file_path}`);
     setSelectedFile(null);
   };
 
@@ -105,6 +107,7 @@ const HomeGallery = () => {
     if (e.target.files[0]) {
       const imageUrl = URL.createObjectURL(e.target.files[0]);
       setSelectedGallery({ ...selectedGallery, image: imageUrl });
+      setImagePreview(URL.createObjectURL(e.target.files[0]));
     }
   };
 
@@ -145,7 +148,7 @@ const HomeGallery = () => {
                         <tr>
                           <th width="10%" className="text-center">Sr. No.</th>
                           <th>Photo Gallery Name</th>
-                          <th width="30%"className="text-center">Photo Gallery Image</th>
+                          <th width="30%" className="text-center">Photo Gallery Image</th>
                           <th width="15%" className="text-center">Action</th>
                         </tr>
                       </thead>
@@ -168,7 +171,7 @@ const HomeGallery = () => {
                               </Link>
                             </td>
                             <td className="text-center">
-                            <button
+                              <button
                                 className="btn btn-success btn-sm m-t-10"
                                 onClick={() => handleEdit(gallery)}
                               >
@@ -180,7 +183,7 @@ const HomeGallery = () => {
                               >
                                 Delete
                               </button>
-                              
+
                             </td>
                           </tr>
                         ))}
@@ -188,31 +191,99 @@ const HomeGallery = () => {
                     </table>
                   </div>
                 </div>
+                <div>
+                  <ul className="pagination mt-4">
+                    <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
+                      <button
+                        className="page-link"
+                        onClick={() => handlePageChange(currentPage - 1)}
+                      >
+                        Previous
+                      </button>
+                    </li>
+                    {currentPage > 2 && (
+                      <li className={`page-item ${currentPage === 1 ? "active" : ""}`}>
+                        <button className="page-link" onClick={() => handlePageChange(1)}>
+                          1
+                        </button>
+                      </li>
+                    )}
+                    {currentPage > 3 && (
+                      <li className={`page-item ${currentPage === 2 ? "active" : ""}`}>
+                        <button className="page-link" onClick={() => handlePageChange(2)}>
+                          2
+                        </button>
+                      </li>
+                    )}
+                    {currentPage > 4 && (
+                      <li className="page-item disabled">
+                        <span className="page-link">...</span>
+                      </li>
+                    )}
+                    {Array.from({ length: totalPages }, (_, i) => i + 1)
+                      .filter(
+                        (page) =>
+                          page >= currentPage - 1 && page <= currentPage + 1
+                      )
+                      .map((page) => (
+                        <li
+                          className={`page-item ${currentPage === page ? "active" : ""}`}
+                          key={page}
+                        >
+                          <button
+                            className="page-link"
+                            onClick={() => handlePageChange(page)}
+                          >
+                            {page}
+                          </button>
+                        </li>
+                      ))}
+                    {currentPage < totalPages - 3 && (
+                      <li className="page-item disabled">
+                        <span className="page-link">...</span>
+                      </li>
+                    )}
+                    {currentPage < totalPages - 2 && (
+                      <li
+                        className={`page-item ${currentPage === totalPages - 1 ? "active" : ""
+                          }`}
+                      >
+                        <button
+                          className="page-link"
+                          onClick={() => handlePageChange(totalPages - 1)}
+                        >
+                          {totalPages - 1}
+                        </button>
+                      </li>
+                    )}
+                    {currentPage < totalPages - 1 && (
+                      <li
+                        className={`page-item ${currentPage === totalPages ? "active" : ""
+                          }`}
+                      >
+                        <button
+                          className="page-link"
+                          onClick={() => handlePageChange(totalPages)}
+                        >
+                          {totalPages}
+                        </button>
+                      </li>
+                    )}
+                    <li
+                      className={`page-item ${currentPage === totalPages ? "disabled" : ""
+                        }`}
+                    >
+                      <button
+                        className="page-link"
+                        onClick={() => handlePageChange(currentPage + 1)}
+                      >
+                        Next
+                      </button>
+                    </li>
+                  </ul>
+                </div>
               </div>
             </div>
-          </div>
-
-          {/* Pagination */}
-          <div>
-            <ul className="pagination">
-              <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
-                <button className="page-link" onClick={() => handlePageChange(currentPage - 1)}>
-                  Previous
-                </button>
-              </li>
-              {Array.from({ length: totalPages }, (_, i) => (
-                <li key={i + 1} className={`page-item ${currentPage === i + 1 ? "active" : ""}`}>
-                  <button className="page-link" onClick={() => handlePageChange(i + 1)}>
-                    {i + 1}
-                  </button>
-                </li>
-              ))}
-              <li className={`page-item ${currentPage === totalPages ? "disabled" : ""}`}>
-                <button className="page-link" onClick={() => handlePageChange(currentPage + 1)}>
-                  Next
-                </button>
-              </li>
-            </ul>
           </div>
 
           {/* Delete Modal */}
@@ -269,18 +340,19 @@ const HomeGallery = () => {
                       />
                     </div>
                     <div className="form-group">
-                      <label>Upload Image</label>
+                      <label>Gallery Image</label>
                       <input
                         type="file"
                         className="form-control"
                         onChange={handleFileChange}
                       />
                     </div>
-                    {selectedGallery?.image && (
+                    {imagePreview && (
                       <img
-                        src={selectedGallery.image}
-                        alt="Selected"
-                        style={{ width: "100%", height: "auto", marginTop: "10px" }}
+                        src={imagePreview}
+                        alt="preview"
+                        width="100"
+                        className="mt-2"
                       />
                     )}
                   </div>

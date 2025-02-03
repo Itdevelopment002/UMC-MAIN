@@ -14,9 +14,9 @@ const AddHomeService1 = () => {
 
     const validateForm = () => {
         const errors = {};
-        if (!heading) errors.heading = "Heading is required.";
-        if (!link) errors.link = "Link is required.";
-        if (!mainIcon) errors.mainIcon = "Main Icon is required.";
+        if (!heading) errors.heading = "Service Heading is required.";
+        if (!link) errors.link = "Service Link is required.";
+        if (!mainIcon) errors.mainIcon = "Service Icon is required.";
         setErrors(errors);
         return Object.keys(errors).length === 0;
     };
@@ -74,7 +74,7 @@ const AddHomeService1 = () => {
             <div className="page-wrapper">
                 <div className="content">
                     <ol className="breadcrumb">
-                        <li className="breadcrumb-item"><Link to="/home">Home</Link></li>
+                        <li className="breadcrumb-item"><Link to="#">Home</Link></li>
                         <li className="breadcrumb-item"><Link to="/home-services1">Home Service 1</Link></li>
                         <li className="breadcrumb-item active" aria-current="page">Add Home Service 1</li>
                     </ol>
@@ -83,40 +83,42 @@ const AddHomeService1 = () => {
                             <div className="card-box">
                                 <div className="card-block">
                                     <div className="row">
-                                        <div className="col-sm-4 col-3">
+                                        <div className="col-12">
                                             <h4 className="page-title">Add Home Service 1</h4>
                                         </div>
                                     </div>
                                     <form onSubmit={handleSubmit}>
                                         <div className="form-group row">
-                                            <label className="col-form-label col-md-3">Service Heading <span className="text-danger">*</span></label>
+                                            <label className="col-form-label col-md-2">Service Heading <span className="text-danger">*</span></label>
                                             <div className="col-md-4">
                                                 <input
                                                     type="text"
                                                     className={`form-control form-control-md ${errors.heading ? 'is-invalid' : ''}`}
                                                     value={heading}
                                                     name="heading"
+                                                    placeholder='Enter Service Heading'
                                                     onChange={handleChange}
                                                 />
-                                                {errors.heading && <span className="text-danger">{errors.heading}</span>}
+                                                {errors.heading && <span className="invalid-feedback">{errors.heading}</span>}
                                             </div>
                                         </div>
                                         <div className="form-group row">
-                                            <label className="col-form-label col-md-3">Service Link <span className="text-danger">*</span></label>
+                                            <label className="col-form-label col-md-2">Service Link <span className="text-danger">*</span></label>
                                             <div className="col-md-4">
                                                 <input
                                                     type="text"
                                                     className={`form-control ${errors.link ? 'is-invalid' : ''}`}
                                                     value={link}
                                                     name="link"
+                                                    placeholder='Enter Service Link'
                                                     onChange={handleChange}
                                                 />
-                                                {errors.link && <span className="text-danger">{errors.link}</span>}
+                                                {errors.link && <span className="invalid-feedback">{errors.link}</span>}
                                             </div>
                                         </div>
 
                                         <div className="form-group row">
-                                            <label className="col-form-label col-lg-3">Service Icon <span className="text-danger">*</span></label>
+                                            <label className="col-form-label col-lg-2">Service Icon <span className="text-danger">*</span></label>
                                             <div className="col-md-4">
                                                 <input
                                                     type="file"
@@ -126,10 +128,10 @@ const AddHomeService1 = () => {
                                                     accept="image/*"
                                                     onChange={(e) => handleFileChange(e, setMainIcon, 'mainIcon')}
                                                 />
-                                                {errors.mainIcon && <span className="text-danger">{errors.mainIcon}</span>}
+                                                {errors.mainIcon && <span className="invalid-feedback">{errors.mainIcon}</span>}
                                             </div>
                                         </div>
-                                        <input type="submit" className="btn btn-primary" value="Submit" />
+                                        <input type="submit" className="btn btn-primary btn-sm" value="Submit" />
                                     </form>
                                     <ToastContainer />
                                 </div>
