@@ -1,18 +1,40 @@
-import React, { useEffect,useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import pdficon from '../../assets/images/Departments/document 1.png';
 import './Policies.css';
 import "../TableCss/TableCss.css"
 import Swal from 'sweetalert2';
-import api from "../api";
+import api, { baseURL } from "../api";
 
 
 const Policies = () => {
-        const [policiesdata, setPoliciesdata] = useState([]);
-    
+    const [policiesdata, setPoliciesdata] = useState([]);
+    const [bgImage, setBgImage] = useState("");
     useEffect(() => {
         fetchPoliciesData();
+        fetchHeaderImage();
     }, []);
+    const fetchHeaderImage = async () => {
+        try {
+            const response = await api.get("/banner");
+
+            if (response.data.length > 0) {
+                let selectedBanner = response.data.find(banner => banner.banner_name === "Policies");
+
+                if (selectedBanner) {
+                    setBgImage(`${baseURL}${selectedBanner.file_path}`);
+                } else {
+                    console.error("Banner with specified name not found.");
+                }
+            } else {
+                console.error("No banner image found.");
+            }
+        } catch (error) {
+            console.error("Error fetching header image:", error);
+        }
+    };
+
+
 
     const fetchPoliciesData = async () => {
         try {
@@ -42,7 +64,13 @@ const Policies = () => {
 
     return (
         <>
-            <div className="history-header-image"></div>
+            <div
+                className="history-header-image"
+                style={{
+                    backgroundImage: `url(${bgImage})`,
+
+                }}
+            ></div>
 
             <div id="main-content">
                 <div className="container-fluid font-location mt-4 mb-2" id="policies-css">

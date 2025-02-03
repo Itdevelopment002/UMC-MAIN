@@ -1,37 +1,62 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import api from "../api";  // Importing the API instance
+import api, { baseURL } from "../api";
 import "./WardOffice.css";
 
 const WardOffice = () => {
-    const [wardData, setWardData] = useState([]);  // State to store ward data
-    const [selectedWard, setSelectedWard] = useState(null);  // State to store the selected ward
-
-    // Fetch data from the API using the imported 'api' instance
+    const [wardData, setWardData] = useState([]);
+    const [selectedWard, setSelectedWard] = useState(null);
+    const [bgImage, setBgImage] = useState("");
     useEffect(() => {
-        // Fetch all ward offices from API
+        fetchHeaderImage();
+    }, []);
+    const fetchHeaderImage = async () => {
+        try {
+            const response = await api.get("/banner");
+
+            if (response.data.length > 0) {
+                let selectedBanner = response.data.find(banner => banner.banner_name === "Ward-office");
+
+                if (selectedBanner) {
+                    setBgImage(`${baseURL}${selectedBanner.file_path}`);
+                } else {
+                    console.error("Banner with specified name not found.");
+                }
+            } else {
+                console.error("No banner image found.");
+            }
+        } catch (error) {
+            console.error("Error fetching header image:", error);
+        }
+    };
+    useEffect(() => {
         api.get('/ward-offices')
             .then((response) => {
-                setWardData(response.data); // Update state with the fetched data
+                setWardData(response.data);
                 if (response.data.length > 0) {
-                    setSelectedWard(response.data[0]);  // Set default selected ward (first ward)
+                    setSelectedWard(response.data[0]);
                 }
             })
             .catch((error) => {
                 console.error("Error fetching ward data:", error);
             });
 
-        // Scroll to top on page load
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }, []);
 
     const handleWardClick = (ward) => {
-        setSelectedWard(ward); // Set selected ward when a ward is clicked
+        setSelectedWard(ward);
     };
 
     return (
         <>
-            <div className="history-header-image"></div>
+            <div
+                className="history-header-image"
+                style={{
+                    backgroundImage: `url(${bgImage})`,
+
+                }}
+            ></div>
 
             <div id="main-content">
                 <div className="container-fluid font-location mt-4 mb-2" id="ward-css">
@@ -94,12 +119,12 @@ const WardOffice = () => {
                                             </thead>
                                             <tbody>
                                                 {/* Check if 'areas' is an array before mapping */}
-                                                
-                                                        <tr>
-                                                            <td style={{ textAlign: 'center', height: '100px' }}>{selectedWard.ward_no}</td>
-                                                            <td className="areapadding">{selectedWard.areas}</td>
-                                                        </tr>
-                                                    
+
+                                                <tr>
+                                                    <td style={{ textAlign: 'center', height: '100px' }}>{selectedWard.ward_no}</td>
+                                                    <td className="areapadding">{selectedWard.areas}</td>
+                                                </tr>
+
                                             </tbody>
                                         </table>
                                     </div>
