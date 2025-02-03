@@ -5,7 +5,27 @@ import api, { baseURL } from "../api";
 
 const Departments = () => {
     const [departments, setDepartments] = useState([]);
+    const [bgImage, setBgImage] = useState("");
 
+    const fetchHeaderImage = async () => {
+        try {
+            const response = await api.get("/banner");
+
+            if (response.data.length > 0) {
+                let selectedBanner = response.data.find(banner => banner.banner_name === "Departments");
+
+                if (selectedBanner) {
+                    setBgImage(`${baseURL}${selectedBanner.file_path}`);
+                } else {
+                    console.error("Banner with specified name not found.");
+                }
+            } else {
+                console.error("No banner image found.");
+            }
+        } catch (error) {
+            console.error("Error fetching header image:", error);
+        }
+    };
     const fetchDepartments = async () => {
         try {
             const response = await api.get("/department-info");
@@ -17,13 +37,20 @@ const Departments = () => {
     };
 
     useEffect(() => {
+        fetchHeaderImage();
         fetchDepartments();
         window.scrollTo({ top: 0, behavior: "smooth" });
     }, []);
 
     return (
         <>
-            <div className="history-header-image"></div>
+             <div
+                className="history-header-image"
+                style={{
+                    backgroundImage: `url(${bgImage})`,
+
+                }}
+            ></div>
             <div id="main-content">
                 <div className="container-fluid font-location mt-4 mb-2" id="contact-css">
                     <nav className="breadcrumb">

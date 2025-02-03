@@ -4,11 +4,31 @@ import pdficon from '../../assets/images/Departments/document 1.png';
 import './PTDept.css';
 import "../TableCss/TableCss.css";
 import Swal from "sweetalert2";
-import api from "../api";
+import api,{baseURL} from "../api";
 
 const PTDept = () => {
     const [tax, setTax] = useState([]);
+    const [bgImage, setBgImage] = useState("");
 
+    const fetchHeaderImage = async () => {
+        try {
+            const response = await api.get("/banner");
+
+            if (response.data.length > 0) {
+                let selectedBanner = response.data.find(banner => banner.banner_name === "Property-Tax-Dept");
+
+                if (selectedBanner) {
+                    setBgImage(`${baseURL}${selectedBanner.file_path}`);
+                } else {
+                    console.error("Banner with specified name not found.");
+                }
+            } else {
+                console.error("No banner image found.");
+            }
+        } catch (error) {
+            console.error("Error fetching header image:", error);
+        }
+    };
     const fetchTax = async()=>{
         try{
             const response = await api.get("/property-dept");
@@ -19,6 +39,7 @@ const PTDept = () => {
     };
 
     useEffect(() => {
+        fetchHeaderImage();
         fetchTax();
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }, []);
@@ -37,7 +58,13 @@ const PTDept = () => {
 
     return (
         <>
-            <div className="history-header-image"></div>
+             <div
+                className="history-header-image"
+                style={{
+                    backgroundImage: `url(${bgImage})`,
+
+                }}
+            ></div>
 
             <div id="main-content">
                 <div className="container-fluid font-location mt-4 mb-2" id="pt-css">
