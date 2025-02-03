@@ -3,13 +3,15 @@ import { Link } from "react-router-dom";
 import "./AnnualFinancialStatement.css";
 import pdficon from '../../assets/images/Departments/document 1.png'
 import Swal from 'sweetalert2';
-import api from "../api";
+import api, { baseURL } from "../api";
 
 const AnnualFinancialStatement = () => {
     const [itemsPerPage, setItemsPerPage] = useState(10);
     const [annualData, setAnnualData] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [searchTerm, setSearchTerm] = useState("");
+    const [bgImage, setBgImage] = useState("");
+
     const totalEntries = annualData.length;
     const filteredData = annualData.filter((item) =>
         item.heading.toLowerCase().includes(searchTerm.toLowerCase())
@@ -17,6 +19,7 @@ const AnnualFinancialStatement = () => {
 
     useEffect(() => {
         fetchAnnual();
+        fetchHeaderImage();
     }, []);
 
     const fetchAnnual = async () => {
@@ -84,13 +87,45 @@ const AnnualFinancialStatement = () => {
     const startEntry = (currentPage - 1) * itemsPerPage + 1;
     const endEntry = Math.min(currentPage * itemsPerPage, updatedtotalEntries);
 
+    const fetchHeaderImage = async () => {
+        try {
+            const response = await api.get("/banner");
+
+            if (response.data.length > 0) {
+                let latestBanner = response.data[response.data.length - 1];
+                setBgImage(`${baseURL}${latestBanner.file_path}`);
+            } else {
+                console.error("No banner image found.");
+            }
+        } catch (error) {
+            console.error("Error fetching header image:", error);
+        }
+    };
+
     useEffect(() => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }, []);
 
     return (
         <>
-            <div className="history-header-image"></div>
+            <div
+                className="history-header-image"
+                style={{
+                    backgroundImage: `url(${bgImage})`,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                    backgroundRepeat: "no-repeat",
+                    width: "100%",
+                    height: "150px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    position: "relative",
+                    overflow: "hidden",
+                    marginTop: "-20px",
+                    zIndex: "-1",
+                }}
+            ></div>
             <div id="main-content">
                 <div className="container-fluid font-location mt-4 mb-5" id="accounts-css">
                     <nav className="breadcrumb">
