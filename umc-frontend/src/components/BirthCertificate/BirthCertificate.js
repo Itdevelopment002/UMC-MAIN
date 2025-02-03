@@ -5,10 +5,32 @@ import PropertyTaximg from "../../assets/images/online-services/property.png";
 import BirthCertificateimg from "../../assets/images/online-services/birth.png";
 import DeathCertificateimg from "../../assets/images/online-services/death.png";
 import eTenderimg from "../../assets/images/online-services/tender.png";
-import api from "../api";
+import api, { baseURL } from "../api";
 
 const BirthCertificate = () => {
   const [activeTab, setActiveTab] = useState("#birth-certificate");
+  const [bgImage, setBgImage] = useState("");
+
+  const fetchHeaderImage = async () => {
+    try {
+      const response = await api.get("/banner");
+
+      if (response.data.length > 0) {
+        let selectedBanner = response.data.find(banner => banner.banner_name === "Birth-Certificate");
+
+        if (selectedBanner) {
+          setBgImage(`${baseURL}${selectedBanner.file_path}`);
+        } else {
+          console.error("Banner with specified name not found.");
+        }
+      } else {
+        console.error("No banner image found.");
+      }
+    } catch (error) {
+      console.error("Error fetching header image:", error);
+    }
+  };
+
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
@@ -57,7 +79,7 @@ const BirthCertificate = () => {
       image: eTenderimg,
     },
   ]);
-  
+
   const fetchServices = async () => {
     try {
       const response = await api.get("/online-services-home");
@@ -70,15 +92,16 @@ const BirthCertificate = () => {
           ? { ...tab, url: matchingService.link }
           : tab;
       });
-  
+
       setTabData(updatedTabData);
     } catch (error) {
       console.error("Error fetching service data", error);
     }
   };
-  
+
   useEffect(() => {
     fetchServices();
+    fetchHeaderImage();
   }, []);
 
   const activeTabData = tabData.find((tab) => tab.id === activeTab);
@@ -90,7 +113,13 @@ const BirthCertificate = () => {
   return (
     <>
 
-      <div className="history-header-image"></div>
+      <div
+        className="history-header-image"
+        style={{
+          backgroundImage: `url(${bgImage})`,
+
+        }}
+      ></div>
 
       <div id="main-content">
         <div

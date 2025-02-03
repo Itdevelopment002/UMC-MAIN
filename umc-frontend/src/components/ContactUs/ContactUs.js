@@ -6,7 +6,29 @@ import api, { baseURL } from "../api"
 const ContactUs = () => {
     const [contact, setContact] = useState([]);
     const [ward, setWard] = useState([]);
+    const [bgImage, setBgImage] = useState("");
+     useEffect(() => {
+            fetchHeaderImage();
+        }, []);
+    const fetchHeaderImage = async () => {
+        try {
+            const response = await api.get("/banner");
 
+            if (response.data.length > 0) {
+                let selectedBanner = response.data.find(banner => banner.banner_name === "Contact-us");
+
+                if (selectedBanner) {
+                    setBgImage(`${baseURL}${selectedBanner.file_path}`);
+                } else {
+                    console.error("Banner with specified name not found.");
+                }
+            } else {
+                console.error("No banner image found.");
+            }
+        } catch (error) {
+            console.error("Error fetching header image:", error);
+        }
+    };
     const fetchContact = async () => {
         try {
             const response = await api.get("/contact-info");
@@ -34,7 +56,13 @@ const ContactUs = () => {
 
     return (
         <>
-            <div className="history-header-image"></div>
+          <div
+                className="history-header-image"
+                style={{
+                    backgroundImage: `url(${bgImage})`,
+
+                }}
+            ></div>
 
             <div id="main-content">
                 <div className="container-fluid font-location mt-4 mb-2" id="contact-css">
