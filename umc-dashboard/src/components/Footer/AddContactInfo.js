@@ -36,13 +36,13 @@ const AddContactInfo = () => {
   const validateForm = () => {
     const newErrors = {};
     if (!formData.name) {
-      newErrors.name = "Name is required";
+      newErrors.name = "Contact Title is required";
     }
     if (!formData.designation) {
-      newErrors.designation = "Designation is required";
+      newErrors.designation = "Contact Description is required";
     }
     if (!formData.image) {
-      newErrors.image = "Image is required";
+      newErrors.image = "Contact Icon is required";
     }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -96,7 +96,7 @@ const AddContactInfo = () => {
         <div className="content">
           <ol className="breadcrumb">
             <li className="breadcrumb-item">
-              <Link to="/home">Home</Link>
+              <Link to="#">Home</Link>
             </li>
             <li className="breadcrumb-item">
               <Link to="/footer">Footer</Link>
@@ -110,21 +110,21 @@ const AddContactInfo = () => {
               <div className="card-box">
                 <div className="card-block">
                   <div className="row">
-                    <div className="col-sm-4 col-3">
+                    <div className="col-12">
                       <h4 className="page-title">Add Contact Info</h4>
                     </div>
                   </div>
                   <form onSubmit={handleSubmit}>
                     <div className="form-group row">
-                      <label className="col-form-label col-md-3">
-                        Title <span className="text-danger">*</span>
+                      <label className="col-form-label col-lg-2">
+                        Contact Title <span className="text-danger">*</span>
                       </label>
                       <div className="col-md-5">
                         <input
                           type="text"
                           className={`form-control  ${errors.name ? "is-invalid" : ""
                             }`}
-                          placeholder=""
+                          placeholder="Enter Contact Title"
                           name="name"
                           value={formData.name}
                           onChange={handleChange}
@@ -137,15 +137,15 @@ const AddContactInfo = () => {
                       </div>
                     </div>
                     <div className="form-group row">
-                      <label className="col-form-label col-md-3">
-                        Description <span className="text-danger">*</span>
+                      <label className="col-form-label col-lg-2">
+                        Contact Description <span className="text-danger">*</span>
                       </label>
                       <div className="col-md-5">
                         <input
                           type="text"
                           className={`form-control  ${errors.designation ? "is-invalid" : ""
                             }`}
-                          placeholder=""
+                          placeholder="Enter Contact Description"
                           name="designation"
                           value={formData.designation}
                           onChange={handleChange}
@@ -158,8 +158,8 @@ const AddContactInfo = () => {
                       </div>
                     </div>
                     <div className="form-group row">
-                      <label className="col-form-label col-md-3">
-                        Upload Image
+                      <label className="col-form-label col-lg-2">
+                        Contact Icon
                         <span className="text-danger">*</span>
                       </label>
                       <div className="col-md-5">
@@ -169,6 +169,7 @@ const AddContactInfo = () => {
                             className={`form-control col-md-12 col-xs-12 userfile  ${errors.image ? "is-invalid" : ""
                               }`}
                             name="image"
+                            placeholder="Enter Contact Icon"
                             onChange={handleChange}
                             ref={fileInputRef}
                           />
@@ -180,7 +181,7 @@ const AddContactInfo = () => {
                     </div>
                     <input
                       type="submit"
-                      className="btn btn-primary"
+                      className="btn btn-primary btn-sm"
                       value="Submit"
                     />
                   </form>

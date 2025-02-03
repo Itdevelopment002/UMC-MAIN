@@ -37,7 +37,7 @@ const AddVideoCategory = () => {
               <Link to="#">Gallery</Link>
             </li>
             <li className="breadcrumb-item">
-              <Link to="/photo-gallery">Video Gallery</Link>
+              <Link to="/video-gallery">Video Gallery</Link>
             </li>
             <li className="breadcrumb-item active" aria-current="page">
               Add Category
@@ -48,7 +48,7 @@ const AddVideoCategory = () => {
               <div className="card-box">
                 <div className="card-block">
                   <div className="row">
-                    <div className="col-sm-4 col-3">
+                    <div className="col-12">
                       <h4 className="page-title">Add Category</h4>
                     </div>
                   </div>
