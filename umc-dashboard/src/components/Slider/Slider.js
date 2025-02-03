@@ -13,6 +13,7 @@ const Slider = () => {
   const [selectedSlider, setSelectedSlider] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [imagePreview, setImagePreview] = useState(null);
   const itemsPerPage = 10;
   let lightbox = null;
 
@@ -62,6 +63,7 @@ const Slider = () => {
   const handleEdit = (slider) => {
     setSelectedSlider(slider);
     setShowEditModal(true);
+    setImagePreview(`${baseURL}${slider.file_path}`);
     setSelectedFile(null);
   };
 
@@ -81,6 +83,7 @@ const Slider = () => {
       fetchSliders();
       toast.success("Slider updated successfully!");
       setShowEditModal(false);
+      setImagePreview(null);
     } catch (error) {
       console.error("Error updating slider:", error);
       toast.error("Error updating slider!");
@@ -88,10 +91,10 @@ const Slider = () => {
   };
 
   const handleFileChange = (e) => {
-    setSelectedFile(e.target.files[0]);
-    if (e.target.files[0]) {
-      const imageUrl = URL.createObjectURL(e.target.files[0]);
+    const imageUrl = e.target.files[0];
+    if (imageUrl) {
       setSelectedSlider({ ...selectedSlider, image: imageUrl });
+      setImagePreview(URL.createObjectURL(imageUrl));
     }
   };
 
@@ -112,7 +115,7 @@ const Slider = () => {
           <nav aria-label="breadcrumb">
             <ol className="breadcrumb">
               <li className="breadcrumb-item">
-                <Link to="/home">Home</Link>
+                <Link to="#">Home</Link>
               </li>
               <li className="breadcrumb-item active" aria-current="page">
                 Slider
@@ -185,49 +188,96 @@ const Slider = () => {
                       </tbody>
                     </table>
                   </div>
-
-                  <ul className="pagination mt-3">
-                    <li
-                      className={`page-item ${
-                        currentPage === 1 ? "disabled" : ""
-                      }`}
+                </div>
+                <ul className="pagination mt-4">
+                  <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
+                    <button
+                      className="page-link"
+                      onClick={() => handlePageChange(currentPage - 1)}
                     >
-                      <button
-                        className="page-link"
-                        onClick={() => handlePageChange(currentPage - 1)}
-                      >
-                        Previous
+                      Previous
+                    </button>
+                  </li>
+                  {currentPage > 2 && (
+                    <li className={`page-item ${currentPage === 1 ? "active" : ""}`}>
+                      <button className="page-link" onClick={() => handlePageChange(1)}>
+                        1
                       </button>
                     </li>
-                    {Array.from({ length: totalPages }, (_, i) => (
+                  )}
+                  {currentPage > 3 && (
+                    <li className={`page-item ${currentPage === 2 ? "active" : ""}`}>
+                      <button className="page-link" onClick={() => handlePageChange(2)}>
+                        2
+                      </button>
+                    </li>
+                  )}
+                  {currentPage > 4 && (
+                    <li className="page-item disabled">
+                      <span className="page-link">...</span>
+                    </li>
+                  )}
+                  {Array.from({ length: totalPages }, (_, i) => i + 1)
+                    .filter(
+                      (page) =>
+                        page >= currentPage - 1 && page <= currentPage + 1
+                    )
+                    .map((page) => (
                       <li
-                        key={i + 1}
-                        className={`page-item ${
-                          currentPage === i + 1 ? "active" : ""
-                        }`}
+                        className={`page-item ${currentPage === page ? "active" : ""}`}
+                        key={page}
                       >
                         <button
                           className="page-link"
-                          onClick={() => handlePageChange(i + 1)}
+                          onClick={() => handlePageChange(page)}
                         >
-                          {i + 1}
+                          {page}
                         </button>
                       </li>
                     ))}
+                  {currentPage < totalPages - 3 && (
+                    <li className="page-item disabled">
+                      <span className="page-link">...</span>
+                    </li>
+                  )}
+                  {currentPage < totalPages - 2 && (
                     <li
-                      className={`page-item ${
-                        currentPage === totalPages ? "disabled" : ""
-                      }`}
+                      className={`page-item ${currentPage === totalPages - 1 ? "active" : ""
+                        }`}
                     >
                       <button
                         className="page-link"
-                        onClick={() => handlePageChange(currentPage + 1)}
+                        onClick={() => handlePageChange(totalPages - 1)}
                       >
-                        Next
+                        {totalPages - 1}
                       </button>
                     </li>
-                  </ul>
-                </div>
+                  )}
+                  {currentPage < totalPages - 1 && (
+                    <li
+                      className={`page-item ${currentPage === totalPages ? "active" : ""
+                        }`}
+                    >
+                      <button
+                        className="page-link"
+                        onClick={() => handlePageChange(totalPages)}
+                      >
+                        {totalPages}
+                      </button>
+                    </li>
+                  )}
+                  <li
+                    className={`page-item ${currentPage === totalPages ? "disabled" : ""
+                      }`}
+                  >
+                    <button
+                      className="page-link"
+                      onClick={() => handlePageChange(currentPage + 1)}
+                    >
+                      Next
+                    </button>
+                  </li>
+                </ul>
               </div>
             </div>
           </div>
@@ -288,15 +338,14 @@ const Slider = () => {
                         onChange={handleFileChange}
                       />
                     </div>
-                    {selectedSlider?.image && (
-                      <div className="form-group">
-                        <img
-                          src={selectedSlider.image}
-                          alt="Preview"
-                          width="20%"
-                          className="img-thumbnail"
-                        />
-                      </div>
+                    {imagePreview && (
+                      <img
+                        src={imagePreview}
+                        alt="preview"
+                        width="120px"
+                        height="50px"
+                        className="mt-2"
+                      />
                     )}
                   </div>
                   <div className="modal-footer">

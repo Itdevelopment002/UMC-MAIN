@@ -24,6 +24,7 @@ import { BsPersonFillCheck } from "react-icons/bs";
 import { MdOutlineDatasetLinked } from "react-icons/md";
 import { LuNotepadText } from "react-icons/lu";
 import { BsPersonLinesFill } from "react-icons/bs";
+import { PiFlagBannerFoldFill } from "react-icons/pi";
 
 const Sidebar = ({ isOpen, closeSidebar, userDepartment }) => {
   const [openSubmenu, setOpenSubmenu] = useState(null);
@@ -319,7 +320,7 @@ const Sidebar = ({ isOpen, closeSidebar, userDepartment }) => {
                           e-News Letter
                         </Link>
                       </li>
-                      
+
                       <li
                         className={activeItem === "/muncipal-meeting" ? "active" : ""}
                         onClick={() => handleItemClick("/muncipal-meeting")}
@@ -376,7 +377,7 @@ const Sidebar = ({ isOpen, closeSidebar, userDepartment }) => {
                           Ward Office
                         </Link>
                       </li>
-                      
+
                     </ul>
                   </li>
                   <li className="submenu">
@@ -465,7 +466,7 @@ const Sidebar = ({ isOpen, closeSidebar, userDepartment }) => {
                   <li className="submenu">
                     <Link to="#." onClick={() => toggleSubmenu("gallery")}>
                       <i className="fa">
-                        <GrServices />
+                        <GrGallery />
                       </i>{" "}
                       <span>Gallery </span>{" "}
                       <span
@@ -501,6 +502,17 @@ const Sidebar = ({ isOpen, closeSidebar, userDepartment }) => {
                         <FaPersonCirclePlus />
                       </i>{" "}
                       Recruitment
+                    </Link>
+                  </li>
+                  <li
+                    className={activeItem === "/banner" ? "active" : ""}
+                    onClick={() => handleItemClick("/banner")}
+                  >
+                    <Link to="/banner">
+                      <i className="fa">
+                        <PiFlagBannerFoldFill />
+                      </i>{" "}
+                      Banner
                     </Link>
                   </li>
                   <li

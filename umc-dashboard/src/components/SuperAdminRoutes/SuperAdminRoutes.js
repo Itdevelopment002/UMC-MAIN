@@ -187,6 +187,8 @@ import AddCategoryImage from "../PhotosGallery/AddCategoryImages";
 import VideoGallery from "../VideoGallery/VideoGallery";
 import AddVideoCategory from "../VideoGallery/AddVideoCategory";
 import AddCategoryVideos from "../VideoGallery/AddCategoryVideos";
+import AddBanner from "../Banner/AddBanner";
+import Banner from "../Banner/Banner";
 
 
 function SuperAdminRoutes() {
@@ -250,7 +252,7 @@ function SuperAdminRoutes() {
         <Route path="/bottom-slider" element={<BottomSlider />} />
         <Route path="/add-bottom-slider" element={<AddBottomSlider />} />
         <Route path="/home-services2" element={<HomeServices2 />} />
-        <Route path="/add-homeservices2" element={<AddHomeServices2 />} />
+        <Route path="/add-home-services2" element={<AddHomeServices2 />} />
         <Route path="/home-gallery" element={<HomeGallery />} />
         <Route path="/add-home-gallery" element={<AddHomeGallery />} />
         <Route path="/footer" element={<Footer />} />
@@ -343,6 +345,8 @@ function SuperAdminRoutes() {
         <Route path="/video-gallery" element={<VideoGallery />} />
         <Route path="/add-video-category" element={<AddVideoCategory />} />
         <Route path="/add-category-videos" element={<AddCategoryVideos />} />
+        <Route path="/banner" element={<Banner />} />
+        <Route path="/add-banner" element={<AddBanner />} />
 
           
         {/* <Route path="/add-user" element={<AddUsers />} />
