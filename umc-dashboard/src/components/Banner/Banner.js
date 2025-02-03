@@ -127,14 +127,14 @@ const Banner = () => {
                     <div className="col-sm-4 col-12">
                       <h4 className="page-title">Banner</h4>
                     </div>
-                    {/* <div className="col-sm-8 col-9 text-right m-b-20">
+                    <div className="col-sm-8 col-9 text-right m-b-20">
                       <Link
                         to="/add-banner"
                         className="btn btn-primary btn-rounded float-right"
                       >
                         <i className="fa fa-plus"></i> Add Banner
                       </Link>
-                    </div> */}
+                    </div>
                   </div>
                   <div className="table-responsive">
                     <table className="table table-bordered m-b-0">
@@ -174,12 +174,12 @@ const Banner = () => {
                               >
                                 Edit
                               </button>
-                              {/* <button
+                              <button
                                 className="btn btn-danger btn-sm m-t-10"
                                 onClick={() => handleDelete(banner)}
                               >
                                 Delete
-                              </button> */}
+                              </button>
                             </td>
                           </tr>
                         ))}
