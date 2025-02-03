@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../api";
+import { FaTrash } from "react-icons/fa";
 
 const AddDeptDescription = () => {
     const [description, setDescription] = useState("");
@@ -14,7 +15,7 @@ const AddDeptDescription = () => {
         const validationErrors = {};
 
         if (!description) {
-            validationErrors.description = "Description is required.";
+            validationErrors.description = "Department description is required.";
         }
 
         if (!department) {
@@ -24,7 +25,7 @@ const AddDeptDescription = () => {
         // Check if any sub-description is empty
         subDescriptions.forEach((subDesc, index) => {
             if (!subDesc) {
-                validationErrors[`subDescription${index}`] = `Sub Description ${index + 1} is required.`;
+                validationErrors[`subDescription${index}`] = `Sub description ${index + 1} is required.`;
             }
         });
 
@@ -109,14 +110,14 @@ const AddDeptDescription = () => {
                             <div className="card-box">
                                 <div className="card-block">
                                     <div className="row">
-                                        <div className="col-sm-4 col-3">
+                                        <div className="col-12">
                                             <h4 className="page-title">Add Department Description</h4>
                                         </div>
                                     </div>
                                     <form onSubmit={handleSubmit}>
                                         {/* Department Name Dropdown */}
                                         <div className="form-group row">
-                                            <label className="col-form-label col-md-2">
+                                            <label className="col-form-label col-md-3">
                                                 Department Name <span className="text-danger">*</span>
                                             </label>
                                             <div className="col-md-4">
@@ -146,8 +147,8 @@ const AddDeptDescription = () => {
 
                                         {/* Description Input */}
                                         <div className="form-group row">
-                                            <label className="col-form-label col-md-2">
-                                                Description <span className="text-danger">*</span>
+                                            <label className="col-form-label col-md-3">
+                                                Department Description <span className="text-danger">*</span>
                                             </label>
                                             <div className="col-md-4">
                                                 <input
@@ -195,10 +196,10 @@ const AddDeptDescription = () => {
                                                     <div className="col-md-2">
                                                         <button
                                                             type="button"
-                                                            className="btn btn-danger btn-sm m-t-10"
+                                                            className="btn btn-danger btn-md"
                                                             onClick={() => handleRemoveSubDescription(index)}
                                                         >
-                                                            Remove
+                                                            <FaTrash />
                                                         </button>
                                                     </div>
                                                 </div>

@@ -48,7 +48,7 @@ const AddCommissionerInfo = () => {
               <div className="card-box">
                 <div className="card-block">
                   <div className="row">
-                    <div className="col-sm-4 col-3">
+                    <div className="col-12">
                       <h4 className="page-title">Add Commissioner Description</h4>
                     </div>
                   </div>
@@ -66,7 +66,7 @@ const AddCommissionerInfo = () => {
                           name="description"
                           value={description}
                           onChange={handleChange}
-                          placeholder="Enter description"
+                          placeholder="Enter Description"
                         />
                         {error && <div className="invalid-feedback">{error}</div>}
                       </div>

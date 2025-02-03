@@ -28,15 +28,15 @@ const AddTenders = () => {
     const validationErrors = {};
 
     if (!heading) {
-      validationErrors.heading = "Heading is required.";
+      validationErrors.heading = "Tender Heading is required.";
     }
 
     if (!department) {
-      validationErrors.department = "Department is required.";
+      validationErrors.department = "Department Name is required.";
     }
 
     if (!link) {
-      validationErrors.link = "Link is required.";
+      validationErrors.link = "Tender Link is required.";
     }
 
     setErrors(validationErrors);
@@ -86,7 +86,7 @@ const AddTenders = () => {
               <div className="card-box">
                 <div className="card-block">
                   <div className="row">
-                    <div className="col-sm-4 col-3">
+                    <div className="col-12">
                       <h4 className="page-title">Add Tenders and Quotations</h4>
                     </div>
                   </div>

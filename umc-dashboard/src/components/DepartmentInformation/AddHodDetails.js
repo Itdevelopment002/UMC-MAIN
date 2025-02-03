@@ -101,7 +101,7 @@ const AddHodDetails = () => {
                 <div className="content">
                     <ol className="breadcrumb">
                         <li className="breadcrumb-item">
-                            <Link to="/home">Home</Link>
+                            <Link to="#">Departments</Link>
                         </li>
                         <li className="breadcrumb-item">
                             <Link to="/department-information">Department Information</Link>
@@ -115,7 +115,7 @@ const AddHodDetails = () => {
                             <div className="card-box">
                                 <div className="card-block">
                                     <div className="row">
-                                        <div className="col-sm-4 col-3">
+                                        <div className="col-12">
                                             <h4 className="page-title">Add Hod Details</h4>
                                         </div>
                                     </div>
@@ -133,7 +133,7 @@ const AddHodDetails = () => {
                                                         setErrors((prev) => ({ ...prev, hodName: "" }));
                                                     }}
                                                 />
-                                                {errors.hodName && <span className="text-danger">{errors.hodName}</span>}
+                                                {errors.hodName && <span className="invalid-feedback">{errors.hodName}</span>}
                                             </div>
                                         </div>
                                         <div className="form-group row">
@@ -177,7 +177,7 @@ const AddHodDetails = () => {
                                                         setErrors((prev) => ({ ...prev, education: "" }));
                                                     }}
                                                 />
-                                                {errors.education && <span className="text-danger">{errors.education}</span>}
+                                                {errors.education && <span className="invalid-feedback">{errors.education}</span>}
                                             </div>
                                         </div>
                                         <div className="form-group row">
@@ -193,7 +193,7 @@ const AddHodDetails = () => {
                                                         setErrors((prev) => ({ ...prev, address: "" }));
                                                     }}
                                                 />
-                                                {errors.address && <span className="text-danger">{errors.address}</span>}
+                                                {errors.address && <span className="invalid-feedback">{errors.address}</span>}
                                             </div>
                                         </div>
                                         <div className="form-group row">
@@ -209,7 +209,7 @@ const AddHodDetails = () => {
                                                         setErrors((prev) => ({ ...prev, number: "" }));
                                                     }}
                                                 />
-                                                {errors.number && <span className="text-danger">{errors.number}</span>}
+                                                {errors.number && <span className="invalid-feedback">{errors.number}</span>}
                                             </div>
                                         </div>
                                         <div className="form-group row">
@@ -225,7 +225,7 @@ const AddHodDetails = () => {
                                                         setErrors((prev) => ({ ...prev, email: "" }));
                                                     }}
                                                 />
-                                                {errors.email && <span className="text-danger">{errors.email}</span>}
+                                                {errors.email && <span className="invalid-feedback">{errors.email}</span>}
                                             </div>
                                         </div>
                                         <div className="form-group row">
@@ -252,7 +252,7 @@ const AddHodDetails = () => {
                                         </div>
                                         <input
                                             type="submit"
-                                            className="btn btn-primary"
+                                            className="btn btn-primary btn-sm"
                                             value="Submit"
                                         />
                                     </form>

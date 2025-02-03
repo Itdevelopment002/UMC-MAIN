@@ -13,14 +13,14 @@ const AddAdministration = () => {
     const validationErrors = {};
 
     if (!name) {
-      validationErrors.name = "name is required.";
+      validationErrors.name = "Name is required.";
     }
 
     if (!designation) {
-      validationErrors.designation = "designation is required.";
+      validationErrors.designation = "Designation is required.";
     }
     if (!phone) {
-      validationErrors.phone = "phone is required.";
+      validationErrors.phone = "Phone number is required.";
     }
 
     setErrors(validationErrors);
@@ -70,7 +70,7 @@ const AddAdministration = () => {
               <div className="card-box">
                 <div className="card-block">
                   <div className="row">
-                    <div className="col-sm-4 col-3">
+                    <div className="col-6">
                       <h4 className="page-title">Add Administration</h4>
                     </div>
                   </div>
@@ -110,7 +110,7 @@ const AddAdministration = () => {
                           type="text"
                           className={`form-control form-control-md ${errors.designation ? "is-invalid" : ""
                             }`}
-                          placeholder="Enter designation"
+                          placeholder="Enter Designation"
                           value={designation}
                           onChange={(e) => {
                             setDesignation(e.target.value);
@@ -128,14 +128,14 @@ const AddAdministration = () => {
                     </div>
                     <div className="form-group row mt-3">
                       <label className="col-form-label col-md-2">
-                        Phone No. <span className="text-danger">*</span>
+                        Phone Number <span className="text-danger">*</span>
                       </label>
                       <div className="col-md-4">
                         <input
                           type="text"
                           className={`form-control form-control-md ${errors.phone ? "is-invalid" : ""
                             }`}
-                          placeholder="Enter Phone"
+                          placeholder="Enter Phone Number"
                           value={phone}
                           onChange={(e) => {
                             setPhone(e.target.value);

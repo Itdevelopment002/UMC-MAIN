@@ -29,26 +29,21 @@ const AddCommissionerDetails = () => {
 
   const validateForm = () => {
     const newErrors = {};
-    if (!formData.coName.trim()) newErrors.coName = "CO Name is required.";
+    if (!formData.coName.trim()) newErrors.coName = "Commissioner Name is required.";
     if (!formData.designation.trim())
       newErrors.designation = "Designation is required.";
     if (!formData.qualification.trim())
-      newErrors.qualification = "Qualification is required.";
-    if (!formData.address.trim()) newErrors.address = "Address is required.";
-    if (!formData.number.trim()) newErrors.address = "Address is required.";
-    // if (!formData.number.trim()) {
-    //   newErrors.number = "Phone number is required.";
-    // } else if (!/^\d{10}$/.test(formData.number)) {
-    //   newErrors.number = "Phone number must be 10 digits.";
-    // }
+      newErrors.qualification = "Education Qualification is required.";
+    if (!formData.address.trim()) newErrors.address = "Office Address is required.";
+    if (!formData.number.trim()) newErrors.number = "Phone Number is required.";
     if (!formData.email.trim()) {
-      newErrors.email = "Email is required.";
+      newErrors.email = "Email Id is required.";
     } else if (
       !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(formData.email)
     ) {
       newErrors.email = "Invalid email format.";
     }
-    if (!formData.coImage) newErrors.coImage = "CO Image is required.";
+    if (!formData.coImage) newErrors.coImage = "Commissioner Image is required.";
     return newErrors;
   };
 

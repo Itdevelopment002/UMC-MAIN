@@ -1,6 +1,4 @@
 import React from "react";
-//eslint-disable-next-line
-import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Link } from "react-router-dom";
 import HistoryImage from "./HistoryImage";
@@ -23,8 +21,6 @@ const UmcHistory = () => {
               </li>
             </ol>
           </nav>
-
-          
           <HistoryImage />
           <HistoryContent />
         </div>

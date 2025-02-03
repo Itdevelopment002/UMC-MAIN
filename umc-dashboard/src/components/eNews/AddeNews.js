@@ -71,7 +71,7 @@ const AddeNews = () => {
               <div className="card-box">
                 <div className="card-block">
                   <div className="row">
-                    <div className="col-sm-4 col-3">
+                    <div className="col-12">
                       <h4 className="page-title">Add e-News Letter</h4>
                     </div>
                   </div>
@@ -82,10 +82,11 @@ const AddeNews = () => {
                       </label>
                       <div className="col-md-4">
                         <textarea
+                          rows={2}
                           className={`form-control form-control-md ${
                             errors.info ? "is-invalid" : ""
                           }`}
-                          placeholder="Enter Agenda Information"
+                          placeholder="Enter Information"
                           value={info}
                           onChange={(e) => {
                             setInfo(e.target.value);
@@ -153,7 +154,7 @@ const AddeNews = () => {
 
                     <input
                       type="submit"
-                      className="btn btn-primary btn-sm mt-3"
+                      className="btn btn-primary btn-sm"
                       value="Submit"
                     />
                   </form>
