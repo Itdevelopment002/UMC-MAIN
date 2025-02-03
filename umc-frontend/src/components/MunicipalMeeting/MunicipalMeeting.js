@@ -430,7 +430,7 @@ import { Link } from "react-router-dom";
 import "./MunicipalMeeting.css";
 import pdficon from '../../assets/images/Departments/document 1.png';
 import Swal from 'sweetalert2';
-import api from "../api";
+import api, { baseURL } from "../api";
 
 
 const MunicipalMeeting = () => {
@@ -441,6 +441,7 @@ const MunicipalMeeting = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const [availableButtons, setAvailableButtons] = useState([]);
     const [headersMap, setHeadersMap] = useState({});
+    const [bgImage, setBgImage] = useState("");
 
 
     // Fetch data from the backend
@@ -470,7 +471,23 @@ const MunicipalMeeting = () => {
                 console.error("Error fetching data: ", error);
             });
     }, []);
+    useEffect(() => {
+        fetchHeaderImage();
+    }, []);
+    const fetchHeaderImage = async () => {
+        try {
+            const response = await api.get("/banner");
 
+            if (response.data.length > 0) {
+                let latestBanner = response.data[response.data.length - 1];
+                setBgImage(`${baseURL}${latestBanner.file_path}`);
+            } else {
+                console.error("No banner image found.");
+            }
+        } catch (error) {
+            console.error("Error fetching header image:", error);
+        }
+    };
 
     const tableHeaders = headersMap[selectedButton] || [];
 
@@ -539,7 +556,25 @@ const MunicipalMeeting = () => {
 
     return (
         <>
-            <div className="history-header-image"></div>
+
+            <div
+                className="history-header-image"
+                style={{
+                    backgroundImage: `url(${bgImage})`,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                    backgroundRepeat: "no-repeat",
+                    width: "100%",
+                    height: "150px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    position: "relative",
+                    overflow: "hidden",
+                    marginTop: "-20px",
+                    zIndex: "-1",
+                }}
+            ></div>
             <div id="main-content">
                 <div className="container-fluid font-location mt-4 mb-5" id="accounts-css">
                     <nav className="breadcrumb">

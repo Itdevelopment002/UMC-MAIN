@@ -1,25 +1,43 @@
-import React, { useEffect,useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./ElectedMember.css";
-import api from "../api";
+import api, { baseURL } from "../api";
 import pdficon from '../../assets/images/Departments/document 1.png'
 import "../TableCss/TableCss.css";
 import Swal from "sweetalert2";
 
 const ElectedMember = () => {
-        const [electeddata, setElecteddata] = useState([]);
-        useEffect(() => {
-            fetchElectedData();
-        }, []);
+    const [electeddata, setElecteddata] = useState([]);
+        const [bgImage, setBgImage] = useState("");
     
-        const fetchElectedData = async () => {
-            try {
-                const response = await api.get("/elected_data");
-                setElecteddata(response.data);
-            } catch (error) {
-                console.error("Error fetching elected member data:", error);
+    useEffect(() => {
+        fetchElectedData();
+        fetchHeaderImage();
+    }, []);
+
+    const fetchElectedData = async () => {
+        try {
+            const response = await api.get("/elected_data");
+            setElecteddata(response.data);
+        } catch (error) {
+            console.error("Error fetching elected member data:", error);
+        }
+    };
+
+    const fetchHeaderImage = async () => {
+        try {
+            const response = await api.get("/banner");
+
+            if (response.data.length > 0) {
+                let latestBanner = response.data[response.data.length - 1];
+                setBgImage(`${baseURL}${latestBanner.file_path}`);
+            } else {
+                console.error("No banner image found.");
             }
-        };
+        } catch (error) {
+            console.error("Error fetching header image:", error);
+        }
+    };
 
     useEffect(() => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -39,8 +57,24 @@ const ElectedMember = () => {
 
     return (
         <>
-
-            <div className="history-header-image"></div>
+            <div
+                className="history-header-image"
+                style={{
+                    backgroundImage: `url(${bgImage})`,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                    backgroundRepeat: "no-repeat",
+                    width: "100%",
+                    height: "150px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    position: "relative",
+                    overflow: "hidden",
+                    marginTop: "-20px",
+                    zIndex: "-1",
+                }}
+            ></div>
 
             <div id="main-content">
                 <div className="container-fluid font-location mt-4 mb-2" id="elected-css">
