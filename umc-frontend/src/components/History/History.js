@@ -2,16 +2,18 @@ import React, { useEffect, useState } from "react";
 import "./History.css";
 import api, { baseURL } from "../api";
 import { Link } from "react-router-dom";
+
 const History = () => {
   const [gallerys, setGallerys] = useState([]);
   const [firstTwo, setFirstTwo] = useState([]);
   const [remainingDesc, setRemainingDesc] = useState([]);
-
+  const [bgImage, setBgImage] = useState("");
 
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: "smooth" });
     fetchGallerys();
     fetchDesc();
+    fetchHeaderImage(); 
   }, []);
 
   const fetchGallerys = async () => {
@@ -33,10 +35,43 @@ const History = () => {
     }
   };
 
+  const fetchHeaderImage = async () => {
+    try {
+      const response = await api.get("/banner");
+  
+      if (response.data.length > 0) {
+        let latestBanner = response.data[response.data.length - 1];
+        setBgImage(`${baseURL}${latestBanner.file_path}`);
+      } else {
+        console.error("No banner image found.");
+      }
+    } catch (error) {
+      console.error("Error fetching header image:", error);
+    }
+  };
+  
+  
+
   return (
     <>
-
-      <div className="history-header-image"></div>
+      <div
+        className="history-header-image"
+        style={{
+          backgroundImage: `url(${bgImage})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          width: "100%",
+          height: "150px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          position: "relative",
+          overflow: "hidden",
+          marginTop: "-20px",
+          zIndex: "-1",
+        }}
+      ></div>
 
       <div id="main-content">
         <div className="container-fluid font-location mt-2 mb-5" id="history-css">
@@ -52,13 +87,9 @@ const History = () => {
 
           <div className="row mt-5">
             {gallerys.map((gallery, index) => (
-              <div className="col-lg-3 col-md-4 col-sm-12 col-12 sidebar">
+              <div className="col-lg-3 col-md-4 col-sm-12 col-12 sidebar" key={index}>
                 <div className="sidebar-image text-center">
-                  <img
-                    src={`${baseURL}${gallery.file_path}`}
-                    alt="UMC Building"
-                    className="img-fluid"
-                  />
+                  <img src={`${baseURL}${gallery.file_path}`} alt="UMC Building" className="img-fluid" />
                 </div>
               </div>
             ))}
@@ -74,7 +105,6 @@ const History = () => {
                     <br />
                   </div>
                 ))}
-
               </div>
             </div>
             <div className="row">

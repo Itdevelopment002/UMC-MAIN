@@ -1,30 +1,46 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "./ENews.css";
-import api from "../api";
+import api,{baseURL} from "../api";
 import pdficon from '../../assets/images/Departments/document 1.png';
 import Swal from 'sweetalert2';
 
 const ENews = () => {
-        const [enewsList, setEnewsList] = useState([]);
-        useEffect(() => {
-            fetchEnews();
-        }, []);
-    
-        const fetchEnews = async () => {
-            try {
-                const response = await api.get("/enews_data");
-                setEnewsList(response.data);
-            } catch (error) {
-                console.error("Error fetching e-news:", error);
+    const [enewsList, setEnewsList] = useState([]);
+    useEffect(() => {
+        fetchEnews();
+        fetchHeaderImage();
+    }, []);
+
+    const fetchEnews = async () => {
+        try {
+            const response = await api.get("/enews_data");
+            setEnewsList(response.data);
+        } catch (error) {
+            console.error("Error fetching e-news:", error);
+        }
+    };
+    const fetchHeaderImage = async () => {
+        try {
+            const response = await api.get("/banner");
+
+            if (response.data.length > 0) {
+                let latestBanner = response.data[response.data.length - 1];
+                setBgImage(`${baseURL}${latestBanner.file_path}`);
+            } else {
+                console.error("No banner image found.");
             }
-        };
-    
-    
+        } catch (error) {
+            console.error("Error fetching header image:", error);
+        }
+    };
+
     const [itemsPerPage, setItemsPerPage] = useState(10);
     const [currentPage, setCurrentPage] = useState(1);
     //eslint-disable-next-line
     const [searchTerm, setSearchTerm] = useState("");
+    const [bgImage, setBgImage] = useState("");
+
     const totalEntries = enewsList.length;
     const filteredData = enewsList.filter((item) =>
         item.info.toLowerCase().includes(searchTerm.toLowerCase())
@@ -96,7 +112,24 @@ const ENews = () => {
     return (
         <>
 
-            <div className="history-header-image"></div>
+            <div
+                className="history-header-image"
+                style={{
+                    backgroundImage: `url(${bgImage})`,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                    backgroundRepeat: "no-repeat",
+                    width: "100%",
+                    height: "150px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    position: "relative",
+                    overflow: "hidden",
+                    marginTop: "-20px",
+                    zIndex: "-1",
+                }}
+            ></div>
 
             <div id="main-content">
                 <div className="container-fluid font-location mt-4 mb-5" id="resolution-css">

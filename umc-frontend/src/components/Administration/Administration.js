@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./Administration.css"
 import "../DepartmentCustomCss/DepartmentCustom.css";
-import api from "../api"
+import api, { baseURL } from "../api"
 
 const ITEMS_PER_PAGE = 10;
 
@@ -12,19 +12,21 @@ const Administration = () => {
     const totalPages = Math.ceil(administration.length / ITEMS_PER_PAGE);
     const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
     const currentData = administration.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+    const [bgImage, setBgImage] = useState("");
 
-    const fetchAdministration = async()=>{
-        try{
+    const fetchAdministration = async () => {
+        try {
             const response = await api.get("/administration");
             setAdinistration(response.data);
-        } catch(error){
+        } catch (error) {
             console.error("Error fetching administration data", error);
         }
     };
 
-    useEffect(()=>{
+    useEffect(() => {
         fetchAdministration();
-    },[]);
+        fetchHeaderImage();
+    }, []);
 
     const handlePageChange = (pageNumber) => {
         if (pageNumber >= 1 && pageNumber <= totalPages) {
@@ -58,14 +60,44 @@ const Administration = () => {
         }
         return pageNumbers;
     };
+    const fetchHeaderImage = async () => {
+        try {
+            const response = await api.get("/banner");
 
+            if (response.data.length > 0) {
+                let latestBanner = response.data[response.data.length - 1];
+                setBgImage(`${baseURL}${latestBanner.file_path}`);
+            } else {
+                console.error("No banner image found.");
+            }
+        } catch (error) {
+            console.error("Error fetching header image:", error);
+        }
+    };
     useEffect(() => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }, []);
 
     return (
         <>
-            <div className="history-header-image"></div>
+            <div
+                className="history-header-image"
+                style={{
+                    backgroundImage: `url(${bgImage})`,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                    backgroundRepeat: "no-repeat",
+                    width: "100%",
+                    height: "150px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    position: "relative",
+                    overflow: "hidden",
+                    marginTop: "-20px",
+                    zIndex: "-1",
+                }}
+            ></div>
 
             <div id="main-content">
                 <div className="container-fluid font-location mt-4 mb-5" id="accounts-css">
