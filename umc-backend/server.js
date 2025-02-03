@@ -121,6 +121,7 @@ const circularRoutes = require('./routes/circularRoutes');
 const onlineServiceRoutes = require('./routes/onlineServiceRoutes');
 const imagesGalleryRoutes = require('./routes/imagesGalleryRoutes');
 const videoGalleryRoutes = require('./routes/videoGalleryRoutes');
+const bannerRoutes = require('./routes/bannerRoutes');
 
 
 app.use('/api', sliderRoutes);
@@ -236,6 +237,7 @@ app.use('/api', circularRoutes);
 app.use('/api', onlineServiceRoutes);
 app.use('/api', imagesGalleryRoutes);
 app.use('/api', videoGalleryRoutes);
+app.use('/api', bannerRoutes);
 
 
 const PORT = process.env.PORT || 5011;

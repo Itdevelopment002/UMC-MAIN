@@ -75,13 +75,13 @@ const AddCurrentUpdate = () => {
                         Description <span className="text-danger">*</span>
                       </label>
                       <div className="col-md-4">
-                        <input
-                          type="text"
+                        <textarea
                           className={`form-control form-control-md ${
                             errors.description ? "is-invalid" : ""
                           }`}
                           placeholder="Enter Description"
                           value={description}
+                          rows="3"
                           onChange={(e) => {
                             setDescription(e.target.value);
                             if (errors.description) {

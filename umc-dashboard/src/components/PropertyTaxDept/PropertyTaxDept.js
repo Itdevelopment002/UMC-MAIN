@@ -82,7 +82,7 @@ const PropertyTaxDept = () => {
           <nav aria-label="breadcrumb">
             <ol className="breadcrumb">
               <li className="breadcrumb-item">
-                <Link to="/home">Home</Link>
+                <Link to="#">Home</Link>
               </li>
               <li className="breadcrumb-item active" aria-current="page">
                 Property Tax Department
@@ -126,8 +126,8 @@ const PropertyTaxDept = () => {
                               <td>{tax.description}</td>
                               <td>
                                 <Link
-                                  to={tax.link}
-                                  target="_blank"
+                                  to={tax.link !== "#" ? `${tax.link}` : "#"}
+                                  target={tax.link !== "#" ? "_blank" : ""}
                                   className="text-decoration-none"
                                   style={{ color: "#000" }}
                                 >
@@ -155,16 +155,13 @@ const PropertyTaxDept = () => {
                             <td colSpan={4} className="text-center">No Property tax data available</td>
                           </tr>
                         )}
-
                       </tbody>
                     </table>
                   </div>
                 </div>
                 <div className="mt-4">
                   <ul className="pagination">
-                    <li
-                      className={`page-item ${currentPage === 1 ? "disabled" : ""}`}
-                    >
+                    <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
                       <button
                         className="page-link"
                         onClick={() => setCurrentPage(currentPage - 1)}
@@ -172,22 +169,84 @@ const PropertyTaxDept = () => {
                         Previous
                       </button>
                     </li>
+                    {currentPage > 2 && (
+                      <li className={`page-item ${currentPage === 1 ? "active" : ""}`}>
+                        <button className="page-link" onClick={() => setCurrentPage(1)}>
+                          1
+                        </button>
+                      </li>
+                    )}
+                    {currentPage > 3 && (
+                      <li className={`page-item ${currentPage === 2 ? "active" : ""}`}>
+                        <button className="page-link" onClick={() => setCurrentPage(2)}>
+                          2
+                        </button>
+                      </li>
+                    )}
+                    {currentPage > 4 && (
+                      <li className="page-item disabled">
+                        <span className="page-link">...</span>
+                      </li>
+                    )}
                     {Array.from(
                       { length: Math.ceil(tax.length / taxPerPage) },
-                      (_, i) => (
+                      (_, i) => i + 1
+                    )
+                      .filter(
+                        (page) =>
+                          page >= currentPage - 1 && page <= currentPage + 1 // Show current page and its neighbors
+                      )
+                      .map((page) => (
                         <li
-                          className={`page-item ${currentPage === i + 1 ? "active" : ""
-                            }`}
-                          key={i}
+                          className={`page-item ${currentPage === page ? "active" : ""}`}
+                          key={page}
                         >
                           <button
                             className="page-link"
-                            onClick={() => setCurrentPage(i + 1)}
+                            onClick={() => setCurrentPage(page)}
                           >
-                            {i + 1}
+                            {page}
                           </button>
                         </li>
-                      )
+                      ))}
+                    {currentPage < Math.ceil(tax.length / taxPerPage) - 3 && (
+                      <li className="page-item disabled">
+                        <span className="page-link">...</span>
+                      </li>
+                    )}
+                    {currentPage < Math.ceil(tax.length / taxPerPage) - 2 && (
+                      <li
+                        className={`page-item ${currentPage === Math.ceil(tax.length / taxPerPage) - 1
+                          ? "active"
+                          : ""
+                          }`}
+                      >
+                        <button
+                          className="page-link"
+                          onClick={() =>
+                            setCurrentPage(Math.ceil(tax.length / taxPerPage) - 1)
+                          }
+                        >
+                          {Math.ceil(tax.length / taxPerPage) - 1}
+                        </button>
+                      </li>
+                    )}
+                    {currentPage < Math.ceil(tax.length / taxPerPage) - 1 && (
+                      <li
+                        className={`page-item ${currentPage === Math.ceil(tax.length / taxPerPage)
+                          ? "active"
+                          : ""
+                          }`}
+                      >
+                        <button
+                          className="page-link"
+                          onClick={() =>
+                            setCurrentPage(Math.ceil(tax.length / taxPerPage))
+                          }
+                        >
+                          {Math.ceil(tax.length / taxPerPage)}
+                        </button>
+                      </li>
                     )}
                     <li
                       className={`page-item ${currentPage === Math.ceil(tax.length / taxPerPage)
@@ -281,7 +340,7 @@ const PropertyTaxDept = () => {
               <div className="modal-dialog modal-dialog-centered">
                 <div className="modal-content">
                   <div className="modal-body text-center">
-                    <h5>Are you sure you want to delete this entry?</h5>
+                    <h5>Are you sure you want to delete this item?</h5>
                   </div>
                   <div className="modal-footer">
                     <button

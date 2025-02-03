@@ -11,6 +11,7 @@ const HomeService1 = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [selectedInitiative, setSelectedInitiative] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
 
   useEffect(() => {
     fetchInitiatives();
@@ -39,6 +40,7 @@ const HomeService1 = () => {
     try {
       const response = await api.get(`/home-services1/${initiativeId}`);
       setSelectedInitiative(response.data);
+      setImagePreview(`${baseURL}/${response.data.main_icon_path}`);
       setShowEditModal(true);
     } catch (error) {
       console.error("Error fetching home services:", error);
@@ -94,6 +96,7 @@ const HomeService1 = () => {
     const file = e.target.files[0];
     if (file) {
       setSelectedInitiative((prevInitiative) => ({ ...prevInitiative, [field]: file }));
+      setImagePreview(URL.createObjectURL(file));
     }
   };
 
@@ -104,7 +107,7 @@ const HomeService1 = () => {
           <nav aria-label="breadcrumb">
             <ol className="breadcrumb">
               <li className="breadcrumb-item">
-                <Link to="/home">Home</Link>
+                <Link to="#">Home</Link>
               </li>
               <li className="breadcrumb-item active" aria-current="page">
                 Home Service 1
@@ -116,15 +119,15 @@ const HomeService1 = () => {
               <div className="card-box">
                 <div className="card-block">
                   <div className="row">
-                    <div className="col-sm-4 col-3">
+                    <div className="col-sm-4 col-6">
                       <h4 className="page-title">Home Service 1</h4>
                     </div>
-                    <div className="col-sm-8 col-9 text-right m-b-20">
+                    <div className="col-sm-8 col-6 text-right m-b-20">
                       <Link
                         to="/add-home-services1"
                         className="btn btn-primary btn-rounded float-right"
                       >
-                        <i className="fa fa-plus"></i> Add Home Service 1
+                        <i className="fa fa-plus"></i> Add Service
                       </Link>
                     </div>
                   </div>
@@ -132,20 +135,24 @@ const HomeService1 = () => {
                     <table className="table table-bordered m-b-0">
                       <thead>
                         <tr>
-                          <th width="10%">Sr. No.</th>
+                          <th width="10%" className="text-center">Sr. No.</th>
                           <th>Service Heading</th>
                           <th>Service Link</th>
-                          <th>Service Icon</th>
-                          <th>Action</th>
+                          <th className="text-center">Service Icon</th>
+                          <th width="15%" className="text-center">Action</th>
                         </tr>
                       </thead>
                       <tbody>
                         {initiatives.map((initiative, index) => (
                           <tr key={initiative.id}>
-                            <td>{index + 1}</td>
+                            <td className="text-center">{index + 1}</td>
                             <td>{initiative.heading}</td>
-                            <td>{initiative.link}</td>
-                            <td style={{backgroundColor: "black"}}>
+                            <td>
+                              <Link to={initiative.link.startsWith("/") ? "#" : `${initiative.link}`} className="text-decoration-none" target={initiative.link.startsWith("/") ? "" : "_blank"} style={{ color: "#000" }}>
+                                {initiative.link}
+                              </Link>
+                            </td>
+                            <td style={{ backgroundColor: "black" }} className="text-center">
                               <Link
                                 to={`${baseURL}/${initiative.main_icon_path}`}
                                 className="glightbox"
@@ -158,7 +165,7 @@ const HomeService1 = () => {
                                 />
                               </Link>
                             </td>
-                            <td>
+                            <td className="text-center">
                               <button
                                 className="btn btn-success btn-sm m-t-10 mx-1"
                                 onClick={() => handleEditModalOpen(initiative.id)}
@@ -192,7 +199,7 @@ const HomeService1 = () => {
               <div className="modal-dialog modal-dialog-centered">
                 <div className="modal-content">
                   <div className="modal-body text-center">
-                    <h5>Are you sure you want to delete this service?</h5>
+                    <h5>Are you sure you want to delete this item?</h5>
                   </div>
                   <div className="modal-footer justify-content-right">
                     <button
@@ -268,6 +275,15 @@ const HomeService1 = () => {
                           className="form-control"
                           onChange={(e) => handleFileChange(e, "mainIcon")}
                         />
+                        {imagePreview && (
+                          <img
+                            src={imagePreview}
+                            alt="preview"
+                            width="100px"
+                            style={{ backgroundColor: "#000" }}
+                            className="mt-2"
+                          />
+                        )}
                       </div>
                     </form>
                   </div>
@@ -282,7 +298,7 @@ const HomeService1 = () => {
                     </button>
                     <button
                       type="button"
-                      className="btn brn-sm btn-primary"
+                      className="btn btn-sm btn-primary"
                       onClick={handleSaveEdit}
                     >
                       Save changes

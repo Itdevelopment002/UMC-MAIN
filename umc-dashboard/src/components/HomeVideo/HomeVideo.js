@@ -52,7 +52,7 @@ const HomeVideo = () => {
   const handleSaveEdit = async () => {
     try {
       setIsLoading(true);
-      const {video_url } = selectedVideo;
+      const { video_url } = selectedVideo;
       await api.put(`/home-video/${selectedVideo.id}`, {
         video_url
       });
@@ -199,52 +199,111 @@ const HomeVideo = () => {
                     </table>
                   </div>
                 </div>
+                <ul className="pagination mt-4">
+                  <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
+                    <button
+                      className="page-link"
+                      onClick={() => setCurrentPage(currentPage - 1)}
+                    >
+                      Previous
+                    </button>
+                  </li>
+                  {currentPage > 2 && (
+                    <li className={`page-item ${currentPage === 1 ? "active" : ""}`}>
+                      <button className="page-link" onClick={() => setCurrentPage(1)}>
+                        1
+                      </button>
+                    </li>
+                  )}
+                  {currentPage > 3 && (
+                    <li className={`page-item ${currentPage === 2 ? "active" : ""}`}>
+                      <button className="page-link" onClick={() => setCurrentPage(2)}>
+                        2
+                      </button>
+                    </li>
+                  )}
+                  {currentPage > 4 && (
+                    <li className="page-item disabled">
+                      <span className="page-link">...</span>
+                    </li>
+                  )}
+                  {Array.from(
+                    { length: Math.ceil(videos.length / itemsPerPage) },
+                    (_, i) => i + 1
+                  )
+                    .filter(
+                      (page) =>
+                        page >= currentPage - 1 && page <= currentPage + 1
+                    )
+                    .map((page) => (
+                      <li
+                        className={`page-item ${currentPage === page ? "active" : ""}`}
+                        key={page}
+                      >
+                        <button
+                          className="page-link"
+                          onClick={() => setCurrentPage(page)}
+                        >
+                          {page}
+                        </button>
+                      </li>
+                    ))}
+                  {currentPage < Math.ceil(videos.length / itemsPerPage) - 3 && (
+                    <li className="page-item disabled">
+                      <span className="page-link">...</span>
+                    </li>
+                  )}
+                  {currentPage < Math.ceil(videos.length / itemsPerPage) - 2 && (
+                    <li
+                      className={`page-item ${currentPage === Math.ceil(videos.length / itemsPerPage) - 1
+                        ? "active"
+                        : ""
+                        }`}
+                    >
+                      <button
+                        className="page-link"
+                        onClick={() =>
+                          setCurrentPage(Math.ceil(videos.length / itemsPerPage) - 1)
+                        }
+                      >
+                        {Math.ceil(videos.length / itemsPerPage) - 1}
+                      </button>
+                    </li>
+                  )}
+                  {currentPage < Math.ceil(videos.length / itemsPerPage) - 1 && (
+                    <li
+                      className={`page-item ${currentPage === Math.ceil(videos.length / itemsPerPage)
+                        ? "active"
+                        : ""
+                        }`}
+                    >
+                      <button
+                        className="page-link"
+                        onClick={() =>
+                          setCurrentPage(Math.ceil(videos.length / itemsPerPage))
+                        }
+                      >
+                        {Math.ceil(videos.length / itemsPerPage)}
+                      </button>
+                    </li>
+                  )}
+                  <li
+                    className={`page-item ${currentPage === Math.ceil(videos.length / itemsPerPage)
+                      ? "disabled"
+                      : ""
+                      }`}
+                  >
+                    <button
+                      className="page-link"
+                      onClick={() => setCurrentPage(currentPage + 1)}
+                    >
+                      Next
+                    </button>
+                  </li>
+                </ul>
               </div>
             </div>
           </div>
-
-          <ul className="pagination">
-            <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
-              <button
-                className="page-link"
-                onClick={() => setCurrentPage(currentPage - 1)}
-              >
-                Previous
-              </button>
-            </li>
-            {Array.from(
-              { length: Math.ceil(videos.length / itemsPerPage) },
-              (_, i) => (
-                <li
-                  className={`page-item ${
-                    currentPage === i + 1 ? "active" : ""
-                  }`}
-                  key={i}
-                >
-                  <button
-                    className="page-link"
-                    onClick={() => setCurrentPage(i + 1)}
-                  >
-                    {i + 1}
-                  </button>
-                </li>
-              )
-            )}
-            <li
-              className={`page-item ${
-                currentPage === Math.ceil(videos.length / itemsPerPage)
-                  ? "disabled"
-                  : ""
-              }`}
-            >
-              <button
-                className="page-link"
-                onClick={() => setCurrentPage(currentPage + 1)}
-              >
-                Next
-              </button>
-            </li>
-          </ul>
 
           {/* Delete Modal */}
           <div
@@ -253,7 +312,7 @@ const HomeVideo = () => {
             aria-hidden={!showDeleteModal}
             style={{ display: showDeleteModal ? "block" : "none" }}
           >
-            <div className="modal-dialog">
+            <div className="modal-dialog modal-dialog-centered">
               <div className="modal-content">
                 <div className="modal-body text-center">
                   <h5>Are you sure you want to delete this item?</h5>
@@ -279,95 +338,104 @@ const HomeVideo = () => {
             </div>
           </div>
 
-          {/* Edit Modal */}
-          <div
-            className={`modal fade ${showEditModal ? "show" : ""}`}
-            tabIndex="-1"
-            aria-hidden={!showEditModal}
-            style={{ display: showEditModal ? "block" : "none" }}
-          >
-            <div className="modal-dialog">
-              <div className="modal-content">
-                <div className="modal-header">
-                  <h5 className="modal-title">Edit Video</h5>
-                </div>
-                <div className="modal-body">
-                  <form>
-                    <div className="form-group">
-                      <label>Video URL</label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        value={selectedVideo?.video_url || ""}
-                        onChange={(e) =>
-                          setSelectedVideo({
-                            ...selectedVideo,
-                            video_url: e.target.value,
-                          })
-                        }
-                      />
-                    </div>
-                  </form>
-                </div>
-                <div className="modal-footer">
-                  <button
-                    type="button"
-                    className="btn btn-sm btn-secondary"
-                    onClick={() => setShowEditModal(false)}
-                  >
-                    Close
-                  </button>
-                  <button
-                    type="button"
-                    className="btn btn-sm btn-primary"
-                    onClick={handleSaveEdit}
-                    disabled={isLoading}
-                  >
-                    Save Changes
-                  </button>
+          {showEditModal && (
+            <div
+              className="modal fade show"
+              style={{
+                display: "block",
+                backgroundColor: "rgba(0,0,0,0.5)",
+                overflowY: "scroll",
+                scrollbarWidth: "none",
+              }}
+            >
+              <div className="modal-dialog modal-dialog-centered">
+                <div className="modal-content">
+                  <div className="modal-header">
+                    <h5 className="modal-title">Edit Video</h5>
+                  </div>
+                  <div className="modal-body">
+                    <form>
+                      <div className="form-group">
+                        <label>Video URL</label>
+                        <input
+                          type="text"
+                          className="form-control"
+                          value={selectedVideo?.video_url || ""}
+                          onChange={(e) =>
+                            setSelectedVideo({
+                              ...selectedVideo,
+                              video_url: e.target.value,
+                            })
+                          }
+                        />
+                      </div>
+                    </form>
+                  </div>
+                  <div className="modal-footer">
+                    <button
+                      type="button"
+                      className="btn btn-secondary btn-sm"
+                      onClick={() => setShowEditModal(false)}
+                    >
+                      Close
+                    </button>
+                    <button
+                      type="button"
+                      className="btn btn-primary btn-sm"
+                      onClick={handleSaveEdit}
+                    >
+                      Save Changes
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          )}
 
-          {/* Video Modal */}
-          <div
-            className={`modal fade ${showVideoModal ? "show" : ""}`}
-            tabIndex="-1"
-            aria-hidden={!showVideoModal}
-            style={{ display: showVideoModal ? "block" : "none" }}
-          >
-            <div className="modal-dialog">
-              <div className="modal-content">
-                <div className="modal-body text-center">
-                  {selectedVideo && (
-                    <iframe
-                      width="100%"
-                      height="315"
-                      src={`https://www.youtube.com/embed/${getYouTubeVideoId(
-                        selectedVideo.video_url
-                      )}`}
-                      title="Video"
-                      frameBorder="0"
-                      allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-                      allowFullScreen
-                    ></iframe>
-                  )}
-                </div>
-                <div className="modal-footer">
-                  <button
-                    type="button"
-                    className="btn btn-secondary"
-                    onClick={handleCloseVideoModal}
-                  >
-                    Close
-                  </button>
+
+          {showVideoModal && (
+            <div
+              className="modal fade show"
+              style={{
+                display: "block",
+                backgroundColor: "rgba(0,0,0,0.5)",
+                overflowY: "scroll",
+                scrollbarWidth: "none",
+              }}
+            >
+              <div className="modal-dialog modal-dialog-centered">
+                <div className="modal-content">
+                  <div className="modal-body text-center">
+                    {selectedVideo && (
+                      <iframe
+                        width="100%"
+                        height="315"
+                        src={`https://www.youtube.com/embed/${getYouTubeVideoId(
+                          selectedVideo.video_url
+                        )}`}
+                        title="Video"
+                        frameBorder="0"
+                        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                      ></iframe>
+                    )}
+                  </div>
+                  <div className="modal-footer">
+                    <button
+                      type="button"
+                      className="btn btn-secondary btn-sm"
+                      onClick={handleCloseVideoModal}
+                    >
+                      Close
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          )}
+
+          <ToastContainer />
         </div>
-        <ToastContainer />
       </div>
     </div>
   );

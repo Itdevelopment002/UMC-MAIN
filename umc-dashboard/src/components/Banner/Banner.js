@@ -1,117 +1,112 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import api, { baseURL } from "../api";
+import { Link } from "react-router-dom";
 import GLightbox from "glightbox";
 import "glightbox/dist/css/glightbox.min.css";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const Initiatives = () => {
-  const [initiatives, setInitiatives] = useState([]);
+const Banner = () => {
+  const [banners, setBanners] = useState([]);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
-  const [selectedInitiative, setSelectedInitiative] = useState(null);
+  const [selectedBanner, setSelectedBanner] = useState(null);
+  const [selectedFile, setSelectedFile] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
-  const totalItems = initiatives.length;
-  const totalPages = Math.ceil(totalItems / itemsPerPage);
+  let lightbox = null;
 
   useEffect(() => {
-    fetchInitiatives();
+    fetchBanners();
   }, []);
+
+  useEffect(() => {
+    initLightbox();
+    // eslint-disable-next-line
+  }, [banners, currentPage]);
+
+  const initLightbox = () => {
+    if (lightbox) {
+      lightbox.destroy();
+    }
+    lightbox = GLightbox({ selector: ".glightbox" });
+  };
+
+  const fetchBanners = async () => {
+    try {
+      const response = await api.get("/banner");
+      setBanners(response.data);
+    } catch (error) {
+      console.error("Error fetching banners:", error);
+    }
+  };
+
+  const handleDelete = (banner) => {
+    setSelectedBanner(banner);
+    setShowDeleteModal(true);
+  };
+
+  const confirmDelete = async () => {
+    try {
+      await api.delete(`/banner/${selectedBanner.id}`);
+      setBanners(banners.filter((banner) => banner.id !== selectedBanner.id));
+      toast.success("Banner deleted successfully!");
+      setShowDeleteModal(false);
+      setSelectedBanner(null);
+    } catch (error) {
+      console.error("Error deleting banner:", error);
+      toast.error("Error deleting banner!");
+    }
+  };
+
+  const handleEdit = (banner) => {
+    setSelectedBanner(banner);
+    setShowEditModal(true);
+    setSelectedFile(null);
+  };
+
+  const handleSaveEdit = async () => {
+    const formData = new FormData();
+    if (selectedBanner.banner_name) {
+      formData.append("banner_name", selectedBanner.banner_name);
+    }
+    if (selectedFile) {
+      formData.append("image", selectedFile);
+    }
+
+    try {
+      await api.put(`/banner/${selectedBanner.id}`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      fetchBanners();
+      toast.success("Banner updated successfully!");
+      setShowEditModal(false);
+    } catch (error) {
+      console.error("Error updating banner:", error);
+      toast.error("Error updating banner!");
+    }
+  };
+
+  const handleFileChange = (e) => {
+    setSelectedFile(e.target.files[0]);
+    if (e.target.files[0]) {
+      const imageUrl = URL.createObjectURL(e.target.files[0]);
+      setSelectedBanner({ ...selectedBanner, image: imageUrl });
+    }
+  };
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
 
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  //eslint-disable-next-line
-  const currentInitiatives = initiatives.slice(indexOfFirstItem, indexOfLastItem);
-
-  useEffect(() => {
-    const lightbox = GLightbox({ selector: ".glightbox" });
-    return () => lightbox.destroy();
-  }, [currentInitiatives]);
-
-  const fetchInitiatives = async () => {
-    try {
-      const response = await api.get("/initiatives");
-      setInitiatives(response.data);
-    } catch (error) {
-      console.error("Error fetching initiatives:", error);
-    }
-  };
-
-  const handleDeleteModalOpen = (initiative) => {
-    setSelectedInitiative(initiative);
-    setShowDeleteModal(true);
-  };
-
-  const handleEditModalOpen = async (initiativeId) => {
-    try {
-      const response = await api.get(`/initiatives/${initiativeId}`);
-      setSelectedInitiative(response.data);
-      setShowEditModal(true);
-    } catch (error) {
-      console.error("Error fetching initiative:", error);
-      toast.error("Failed to fetch initiative details");
-    }
-  };
-
-  const handleDelete = async () => {
-    try {
-      await api.delete(`/initiatives/${selectedInitiative.id}`);
-      setInitiatives(
-        initiatives.filter((initiative) => initiative.id !== selectedInitiative.id)
-      );
-      setShowDeleteModal(false);
-      toast.success("Initiative deleted successfully");
-    } catch (error) {
-      console.error("Error deleting initiative:", error);
-      toast.error("Failed to delete initiative");
-    }
-  };
-
-  const handleCloseDeleteModal = () => {
-    setShowDeleteModal(false);
-    setSelectedInitiative(null);
-  };
-
-  const handleCloseEditModal = () => {
-    setShowEditModal(false);
-    setSelectedInitiative(null);
-  };
-
-  const handleSaveEdit = async () => {
-    const formData = new FormData();
-    if (selectedInitiative.heading)
-      formData.append("heading", selectedInitiative.heading);
-    if (selectedInitiative.link)
-      formData.append("link", selectedInitiative.link);
-    if (selectedInitiative.mainIcon)
-      formData.append("mainIcon", selectedInitiative.mainIcon);
-
-    try {
-      await api.put(`/initiatives/${selectedInitiative.id}`, formData);
-      fetchInitiatives();
-      setShowEditModal(false);
-      toast.success("Initiative updated successfully");
-    } catch (error) {
-      console.error("Error updating initiative:", error);
-      toast.error("Failed to update initiative");
-    }
-  };
-
-  const handleFileChange = (e, field) => {
-    const file = e.target.files[0];
-    if (file) {
-      setSelectedInitiative((prevInitiative) => ({ ...prevInitiative, [field]: file }));
-    }
-  };
+  const totalPages = Math.ceil(banners.length / itemsPerPage);
+  const currentPageData = banners.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
   return (
-    <>
+    <div>
       <div className="page-wrapper">
         <div className="content">
           <nav aria-label="breadcrumb">
@@ -120,7 +115,7 @@ const Initiatives = () => {
                 <Link to="#">Home</Link>
               </li>
               <li className="breadcrumb-item active" aria-current="page">
-                Initiatives-Programme
+                Banner
               </li>
             </ol>
           </nav>
@@ -129,66 +124,61 @@ const Initiatives = () => {
               <div className="card-box">
                 <div className="card-block">
                   <div className="row">
-                    <div className="col-sm-4 col-3">
-                      <h4 className="page-title">Initiatives-Programme</h4>
+                    <div className="col-sm-4 col-12">
+                      <h4 className="page-title">Banner</h4>
                     </div>
-                    <div className="col-sm-8 col-9 text-right m-b-20">
+                    {/* <div className="col-sm-8 col-9 text-right m-b-20">
                       <Link
-                        to="/add-initiatives"
+                        to="/add-banner"
                         className="btn btn-primary btn-rounded float-right"
                       >
-                        <i className="fa fa-plus"></i> Add Initiative
+                        <i className="fa fa-plus"></i> Add Banner
                       </Link>
-                    </div>
+                    </div> */}
                   </div>
                   <div className="table-responsive">
                     <table className="table table-bordered m-b-0">
                       <thead>
                         <tr>
                           <th width="10%" className="text-center">Sr. No.</th>
-                          <th>Initiative Heading</th>
-                          <th>Initiative Link</th>
-                          <th className="text-center">Initiative Icon</th>
+                          <th>Banner Name</th>
+                          <th className="text-center">Banner Image</th>
                           <th width="15%" className="text-center">Action</th>
                         </tr>
                       </thead>
                       <tbody>
-                        {currentInitiatives.map((initiative, index) => (
-                          <tr key={initiative.id}>
-                            <td className="text-center">{indexOfFirstItem + index + 1}</td>
-                            <td>{initiative.heading}</td>
-
-                            <td>
-                              <Link to={initiative.link} target="_blank" className="text-decoration-none" style={{ color: "#000" }}>
-                                {initiative.link}
-                              </Link>
+                        {currentPageData.map((banner, index) => (
+                          <tr key={banner.id}>
+                            <td className="text-center">
+                              {index + 1 + (currentPage - 1) * itemsPerPage}
                             </td>
+                            <td>{banner.banner_name}</td>
                             <td className="text-center">
                               <Link
-                                to={`${baseURL}/${initiative.main_icon_path}`}
+                                to={`${baseURL}/${banner.file_path}`}
                                 className="glightbox"
-                                data-gallery="initiative-images"
+                                data-gallery="banner-images"
                               >
                                 <img
-                                  width="35px"
-                                  src={`${baseURL}/${initiative.main_icon_path}`}
-                                  alt={initiative.heading}
+                                  width="120px"
+                                  src={`${baseURL}${banner.file_path}`}
+                                  alt={`banner-${index + 1}`}
                                 />
                               </Link>
                             </td>
                             <td className="text-center">
                               <button
                                 className="btn btn-success btn-sm m-t-10 mx-1"
-                                onClick={() => handleEditModalOpen(initiative.id)}
+                                onClick={() => handleEdit(banner)}
                               >
                                 Edit
                               </button>
-                              <button
+                              {/* <button
                                 className="btn btn-danger btn-sm m-t-10"
-                                onClick={() => handleDeleteModalOpen(initiative)}
+                                onClick={() => handleDelete(banner)}
                               >
                                 Delete
-                              </button>
+                              </button> */}
                             </td>
                           </tr>
                         ))}
@@ -290,29 +280,22 @@ const Initiatives = () => {
           </div>
 
           {showDeleteModal && (
-            <div
-              className="modal fade show d-block"
-              tabIndex="-1"
-              aria-hidden="true"
-              role="dialog"
-            >
+            <div className="modal fade show" style={{ display: "block" }}>
               <div className="modal-dialog modal-dialog-centered">
                 <div className="modal-content">
                   <div className="modal-body text-center">
                     <h5>Are you sure you want to delete this item?</h5>
                   </div>
-                  <div className="modal-footer justify-content-right">
+                  <div className="modal-footer">
                     <button
-                      type="button"
                       className="btn btn-sm btn-secondary"
-                      onClick={handleCloseDeleteModal}
+                      onClick={() => setShowDeleteModal(false)}
                     >
                       Cancel
                     </button>
                     <button
-                      type="button"
                       className="btn btn-sm btn-danger"
-                      onClick={handleDelete}
+                      onClick={confirmDelete}
                     >
                       Delete
                     </button>
@@ -323,73 +306,55 @@ const Initiatives = () => {
           )}
 
           {showEditModal && (
-            <div
-              className="modal fade show d-block"
-              tabIndex="-1"
-              aria-hidden="true"
-              role="dialog"
-            >
+            <div className="modal fade show" style={{ display: "block" }}>
               <div className="modal-dialog modal-dialog-centered">
                 <div className="modal-content">
                   <div className="modal-header">
-                    <h5 className="modal-title">Edit Initiatives-Programme</h5>
+                    <h5 className="modal-title">Edit Banner</h5>
                   </div>
                   <div className="modal-body">
-                    <form>
-                      <div className="mb-3">
-                        <label className="form-label">Initiative Heading</label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          placeholder="Initiative Heading"
-                          value={selectedInitiative?.heading || ""}
-                          onChange={(e) =>
-                            setSelectedInitiative({
-                              ...selectedInitiative,
-                              heading: e.target.value,
-                            })
-                          }
+                    <div className="form-group">
+                      <label>Banner Name</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        value={selectedBanner?.banner_name || ""}
+                        onChange={(e) =>
+                          setSelectedBanner({
+                            ...selectedBanner,
+                            banner_name: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label>Banner Image</label>
+                      <input
+                        type="file"
+                        className="form-control"
+                        onChange={handleFileChange}
+                      />
+                    </div>
+                    {selectedBanner?.image && (
+                      <div className="form-group">
+                        <img
+                          src={selectedBanner.image}
+                          alt="Preview"
+                          width="20%"
+                          className="img-thumbnail"
                         />
                       </div>
-                      <div className="mb-3">
-                        <label className="form-label">Initiative Link</label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          placeholder="Initiative Link"
-                          value={selectedInitiative?.link || ""}
-                          onChange={(e) =>
-                            setSelectedInitiative({
-                              ...selectedInitiative,
-                              link: e.target.value,
-                            })
-                          }
-                        />
-                      </div>
-                      <div className="mb-3">
-                        <label className="form-label">
-                          Initiative Icon
-                        </label>
-                        <input
-                          type="file"
-                          className="form-control"
-                          onChange={(e) => handleFileChange(e, "mainIcon")}
-                        />
-                      </div>
-                    </form>
+                    )}
                   </div>
-
                   <div className="modal-footer">
                     <button
-                      type="button"
                       className="btn btn-sm btn-secondary"
-                      onClick={handleCloseEditModal}
+                      onClick={() => setShowEditModal(false)}
                     >
                       Close
                     </button>
                     <button
-                      type="button"
-                      className="btn brn-sm btn-primary"
+                      className="btn btn-sm btn-primary"
                       onClick={handleSaveEdit}
                     >
                       Save changes
@@ -402,8 +367,8 @@ const Initiatives = () => {
         </div>
       </div>
       <ToastContainer />
-    </>
+    </div>
   );
 };
 
-export default Initiatives;
+export default Banner;

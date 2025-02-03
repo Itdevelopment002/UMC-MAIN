@@ -153,50 +153,99 @@ const CurrentUpdate = () => {
                     </table>
                   </div>
                 </div>
+                <div className="mt-4">
+                  <ul className="pagination">
+                    <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
+                      <button
+                        className="page-link"
+                        onClick={() => handlePageChange(currentPage - 1)}
+                      >
+                        Previous
+                      </button>
+                    </li>
+                    {currentPage > 2 && (
+                      <li className={`page-item ${currentPage === 1 ? "active" : ""}`}>
+                        <button className="page-link" onClick={() => handlePageChange(1)}>
+                          1
+                        </button>
+                      </li>
+                    )}
+                    {currentPage > 3 && (
+                      <li className={`page-item ${currentPage === 2 ? "active" : ""}`}>
+                        <button className="page-link" onClick={() => handlePageChange(2)}>
+                          2
+                        </button>
+                      </li>
+                    )}
+                    {currentPage > 4 && (
+                      <li className="page-item disabled">
+                        <span className="page-link">...</span>
+                      </li>
+                    )}
+                    {Array.from({ length: totalPages }, (_, i) => i + 1)
+                      .filter(
+                        (page) =>
+                          page >= currentPage - 1 && page <= currentPage + 1
+                      )
+                      .map((page) => (
+                        <li
+                          className={`page-item ${currentPage === page ? "active" : ""}`}
+                          key={page}
+                        >
+                          <button
+                            className="page-link"
+                            onClick={() => handlePageChange(page)}
+                          >
+                            {page}
+                          </button>
+                        </li>
+                      ))}
+                    {currentPage < totalPages - 3 && (
+                      <li className="page-item disabled">
+                        <span className="page-link">...</span>
+                      </li>
+                    )}
+                    {currentPage < totalPages - 2 && (
+                      <li
+                        className={`page-item ${currentPage === totalPages - 1 ? "active" : ""
+                          }`}
+                      >
+                        <button
+                          className="page-link"
+                          onClick={() => handlePageChange(totalPages - 1)}
+                        >
+                          {totalPages - 1}
+                        </button>
+                      </li>
+                    )}
+                    {currentPage < totalPages - 1 && (
+                      <li
+                        className={`page-item ${currentPage === totalPages ? "active" : ""
+                          }`}
+                      >
+                        <button
+                          className="page-link"
+                          onClick={() => handlePageChange(totalPages)}
+                        >
+                          {totalPages}
+                        </button>
+                      </li>
+                    )}
+                    <li
+                      className={`page-item ${currentPage === totalPages ? "disabled" : ""
+                        }`}
+                    >
+                      <button
+                        className="page-link"
+                        onClick={() => handlePageChange(currentPage + 1)}
+                      >
+                        Next
+                      </button>
+                    </li>
+                  </ul>
+                </div>
               </div>
             </div>
-          </div>
-
-          <div>
-            <ul className="pagination">
-              <li
-                className={`page-item ${currentPage === 1 ? "disabled" : ""}`}
-              >
-                <button
-                  className="page-link"
-                  onClick={() => handlePageChange(currentPage - 1)}
-                >
-                  Previous
-                </button>
-              </li>
-              {Array.from({ length: totalPages }, (_, i) => (
-                <li
-                  key={i}
-                  className={`page-item ${
-                    currentPage === i + 1 ? "active" : ""
-                  }`}
-                >
-                  <button
-                    className="page-link"
-                    onClick={() => handlePageChange(i + 1)}
-                  >
-                    {i + 1}
-                  </button>
-                </li>
-              ))}
-              <li
-                className={`page-item ${
-                  currentPage === totalPages ? "disabled" : ""
-                }`}
-              >
-                <button
-                  className="page-link"
-                  onClick={() => handlePageChange(currentPage + 1)}
-                >
-                  Next
-                </button>
-              </li>
-            </ul>
           </div>
 
           {modalType && (

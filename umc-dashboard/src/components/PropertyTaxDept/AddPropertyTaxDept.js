@@ -50,10 +50,10 @@ const AddPropertyTaxDept = () => {
         <div className="content">
           <ol className="breadcrumb">
             <li className="breadcrumb-item">
-              <Link to="/home">Home</Link>
+              <Link to="#">Home</Link>
             </li>
             <li className="breadcrumb-item">
-              <Link to="/property-tax-epartment">Property Tax Department</Link>
+              <Link to="/property-tax-department">Property Tax Department</Link>
             </li>
             <li className="breadcrumb-item active" aria-current="page">
               Add Property Tax Department
@@ -64,7 +64,7 @@ const AddPropertyTaxDept = () => {
               <div className="card-box">
                 <div className="card-block">
                   <div className="row">
-                    <div className="col-sm-4 col-3">
+                    <div className="col-12">
                       <h4 className="page-title">Add Property Tax Department</h4>
                     </div>
                   </div>

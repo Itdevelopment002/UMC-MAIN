@@ -82,10 +82,10 @@ const HomeServices1 = () => {
           <nav aria-label="breadcrumb">
             <ol className="breadcrumb">
               <li className="breadcrumb-item">
-                <Link to="/home">Home</Link>
+                <Link to="#">Home</Link>
               </li>
               <li className="breadcrumb-item active" aria-current="page">
-              Home Services 2
+                Home Service 2
               </li>
             </ol>
           </nav>
@@ -94,15 +94,15 @@ const HomeServices1 = () => {
               <div className="card-box">
                 <div className="card-block">
                   <div className="row">
-                    <div className="col-sm-4 col-3">
-                      <h4 className="page-title">Home Services 2</h4>
+                    <div className="col-6">
+                      <h4 className="page-title">Home Service 2</h4>
                     </div>
-                    <div className="col-sm-8 col-9 text-right m-b-20">
+                    <div className="col-6">
                       <Link
-                        to="/add-home-service2"
+                        to="/add-home-services2"
                         className="btn btn-primary btn-rounded float-right"
                       >
-                        <i className="fa fa-plus"></i> Add Home Services 2
+                        <i className="fa fa-plus"></i> Add Service
                       </Link>
                     </div>
                   </div>
@@ -110,21 +110,25 @@ const HomeServices1 = () => {
                     <table className="table table-bordered m-b-0">
                       <thead>
                         <tr>
-                          <th width="10%">Sr. No.</th>
+                          <th width="10%" className="text-center">Sr. No.</th>
                           <th>Service heading</th>
                           <th>Service link</th>
-                          <th width="15%">Action</th>
+                          <th width="15%" className="text-center">Action</th>
                         </tr>
                       </thead>
                       <tbody>
                         {currentServices.map((service, index) => (
                           <tr key={service.id}>
-                            <td>
+                            <td className="text-center">
                               {index + 1 + (currentPage - 1) * servicesPerPage}
                             </td>
                             <td>{service.heading}</td>
-                            <td>{service.link}</td>
                             <td>
+                              <Link to={service.link.startsWith("/") ? "#" : `${service.link}`} className="text-decoration-none" target={service.link.startsWith("/") ? "" : "_blank"} style={{ color: "#000" }}>
+                                {service.link}
+                              </Link>
+                            </td>
+                            <td className="text-center">
                               <button
                                 onClick={() => handleEditClick(service)}
                                 className="btn btn-success btn-sm m-t-10"
@@ -148,51 +152,6 @@ const HomeServices1 = () => {
             </div>
           </div>
 
-          <div className="mt-4">
-            <ul className="pagination">
-              <li
-                className={`page-item ${currentPage === 1 ? "disabled" : ""}`}
-              >
-                <button
-                  className="page-link"
-                  onClick={() => setCurrentPage(currentPage - 1)}
-                >
-                  Previous
-                </button>
-              </li>
-              {Array.from(
-                { length: Math.ceil(services.length / servicesPerPage) },
-                (_, i) => (
-                  <li
-                    className={`page-item ${currentPage === i + 1 ? "active" : ""
-                      }`}
-                    key={i}
-                  >
-                    <button
-                      className="page-link"
-                      onClick={() => setCurrentPage(i + 1)}
-                    >
-                      {i + 1}
-                    </button>
-                  </li>
-                )
-              )}
-              <li
-                className={`page-item ${currentPage === Math.ceil(services.length / servicesPerPage)
-                    ? "disabled"
-                    : ""
-                  }`}
-              >
-                <button
-                  className="page-link"
-                  onClick={() => setCurrentPage(currentPage + 1)}
-                >
-                  Next
-                </button>
-              </li>
-            </ul>
-          </div>
-
           {showEditModal && (
             <div
               className="modal fade show"
@@ -206,12 +165,12 @@ const HomeServices1 = () => {
               <div className="modal-dialog modal-dialog-centered">
                 <div className="modal-content">
                   <div className="modal-header">
-                    <h5 className="modal-title">Edit Home Services 2</h5>
+                    <h5 className="modal-title">Edit Home Service 2</h5>
                   </div>
                   <div className="modal-body">
                     <form>
                       <div className="mb-3">
-                        <label className="form-label">Service heading</label>
+                        <label className="form-label">Service Heading</label>
                         <input
                           type="text"
                           className="form-control"
@@ -221,7 +180,7 @@ const HomeServices1 = () => {
                         />
                       </div>
                       <div className="mb-3">
-                        <label className="form-label">Service link</label>
+                        <label className="form-label">Service Link</label>
                         <input
                           type="text"
                           className="form-control"
@@ -266,7 +225,7 @@ const HomeServices1 = () => {
               <div className="modal-dialog modal-dialog-centered">
                 <div className="modal-content">
                   <div className="modal-body text-center">
-                    <h5>Are you sure you want to delete this entry?</h5>
+                    <h5>Are you sure you want to delete this item?</h5>
                   </div>
                   <div className="modal-footer">
                     <button

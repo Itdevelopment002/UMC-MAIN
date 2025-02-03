@@ -11,6 +11,20 @@ const Projects = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [selectedProject, setSelectedProject] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+  const [imagePreview, setImagePreview] = useState(null);
+  const totalItems = projects.length;
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  //eslint-disable-next-line
+  const currentProjects = projects.slice(indexOfFirstItem, indexOfLastItem);
 
   useEffect(() => {
     fetchProjects();
@@ -19,7 +33,7 @@ const Projects = () => {
   useEffect(() => {
     const lightbox = GLightbox({ selector: ".glightbox" });
     return () => lightbox.destroy();
-  }, [projects]);
+  }, [currentProjects]);
 
   const fetchProjects = async () => {
     try {
@@ -39,6 +53,7 @@ const Projects = () => {
     try {
       const response = await api.get(`/projects/${projectId}`);
       setSelectedProject(response.data);
+      setImagePreview(`${baseURL}/${response.data.main_icon_path}`);
       setShowEditModal(true);
     } catch (error) {
       console.error("Error fetching project:", error);
@@ -85,6 +100,7 @@ const Projects = () => {
       await api.put(`/projects/${selectedProject.id}`, formData);
       fetchProjects();
       setShowEditModal(false);
+      setImagePreview(null);
       toast.success("Project updated successfully");
     } catch (error) {
       console.error("Error updating project:", error);
@@ -96,6 +112,7 @@ const Projects = () => {
     const file = e.target.files[0];
     if (file) {
       setSelectedProject((prevProject) => ({ ...prevProject, [field]: file }));
+      setImagePreview(URL.createObjectURL(file));
     }
   };
 
@@ -139,13 +156,13 @@ const Projects = () => {
                           <th>Project Description</th>
                           <th>Project Link</th>
                           <th>Project Image</th>
-                          <th className="text-center">Action</th>
+                          <th width="12%" className="text-center">Action</th>
                         </tr>
                       </thead>
                       <tbody>
-                        {projects.map((project, index) => (
+                        {currentProjects.map((project, index) => (
                           <tr key={project.id}>
-                            <td className="text-center">{index + 1}</td>
+                            <td className="text-center">{indexOfFirstItem + index + 1}</td>
                             <td>{project.heading}</td>
                             <td>{project.description}</td>
                             <td>{project.link}</td>
@@ -182,6 +199,95 @@ const Projects = () => {
                     </table>
                   </div>
                 </div>
+                <ul className="pagination mt-4">
+                  <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
+                    <button
+                      className="page-link"
+                      onClick={() => handlePageChange(currentPage - 1)}
+                    >
+                      Previous
+                    </button>
+                  </li>
+                  {currentPage > 2 && (
+                    <li className={`page-item ${currentPage === 1 ? "active" : ""}`}>
+                      <button className="page-link" onClick={() => handlePageChange(1)}>
+                        1
+                      </button>
+                    </li>
+                  )}
+                  {currentPage > 3 && (
+                    <li className={`page-item ${currentPage === 2 ? "active" : ""}`}>
+                      <button className="page-link" onClick={() => handlePageChange(2)}>
+                        2
+                      </button>
+                    </li>
+                  )}
+                  {currentPage > 4 && (
+                    <li className="page-item disabled">
+                      <span className="page-link">...</span>
+                    </li>
+                  )}
+                  {Array.from({ length: totalPages }, (_, i) => i + 1)
+                    .filter(
+                      (page) =>
+                        page >= currentPage - 1 && page <= currentPage + 1
+                    )
+                    .map((page) => (
+                      <li
+                        className={`page-item ${currentPage === page ? "active" : ""}`}
+                        key={page}
+                      >
+                        <button
+                          className="page-link"
+                          onClick={() => handlePageChange(page)}
+                        >
+                          {page}
+                        </button>
+                      </li>
+                    ))}
+                  {currentPage < totalPages - 3 && (
+                    <li className="page-item disabled">
+                      <span className="page-link">...</span>
+                    </li>
+                  )}
+                  {currentPage < totalPages - 2 && (
+                    <li
+                      className={`page-item ${currentPage === totalPages - 1 ? "active" : ""
+                        }`}
+                    >
+                      <button
+                        className="page-link"
+                        onClick={() => handlePageChange(totalPages - 1)}
+                      >
+                        {totalPages - 1}
+                      </button>
+                    </li>
+                  )}
+                  {currentPage < totalPages - 1 && (
+                    <li
+                      className={`page-item ${currentPage === totalPages ? "active" : ""
+                        }`}
+                    >
+                      <button
+                        className="page-link"
+                        onClick={() => handlePageChange(totalPages)}
+                      >
+                        {totalPages}
+                      </button>
+                    </li>
+                  )}
+                  <li
+                    className={`page-item ${currentPage === totalPages ? "disabled" : ""
+                      }`}
+                  >
+                    <button
+                      className="page-link"
+                      onClick={() => handlePageChange(currentPage + 1)}
+                    >
+                      Next
+                    </button>
+                  </li>
+                </ul>
               </div>
             </div>
           </div>
@@ -196,7 +302,7 @@ const Projects = () => {
               <div className="modal-dialog modal-dialog-centered">
                 <div className="modal-content">
                   <div className="modal-body text-center">
-                    <h5>Are you sure you want to delete this service?</h5>
+                    <h5>Are you sure you want to delete this item?</h5>
                   </div>
                   <div className="modal-footer justify-content-right">
                     <button
@@ -280,13 +386,21 @@ const Projects = () => {
                       </div>
                       <div className="mb-3">
                         <label className="form-label">
-                        Project Image
+                          Project Image
                         </label>
                         <input
                           type="file"
                           className="form-control"
                           onChange={(e) => handleFileChange(e, "mainIcon")}
                         />
+                        {imagePreview && (
+                          <img
+                            src={imagePreview}
+                            alt="preview"
+                            width="100px"
+                            className="mt-2"
+                          />
+                        )}
                       </div>
                     </form>
                   </div>
@@ -301,7 +415,7 @@ const Projects = () => {
                     </button>
                     <button
                       type="button"
-                      className="btn brn-sm btn-primary"
+                      className="btn btn-sm btn-primary"
                       onClick={handleSaveEdit}
                     >
                       Save changes
