@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./Committee.css";
-import api from "../api";
+import api, { baseURL } from "../api";
 
 const Committee = () => {
     const [selectedButton, setSelectedButton] = useState("Standing Committee");
@@ -10,6 +10,30 @@ const Committee = () => {
     const [wardData, setWardData] = useState([]);
     const itemsPerPage = 10;
     const [currentPage, setCurrentPage] = useState(1);
+    const [bgImage, setBgImage] = useState("");
+
+    useEffect(() => {
+        fetchHeaderImage();
+    }, []);
+    const fetchHeaderImage = async () => {
+        try {
+            const response = await api.get("/banner");
+
+            if (response.data.length > 0) {
+                let selectedBanner = response.data.find(banner => banner.banner_name === "Committee");
+
+                if (selectedBanner) {
+                    setBgImage(`${baseURL}${selectedBanner.file_path}`);
+                } else {
+                    console.error("Banner with specified name not found.");
+                }
+            } else {
+                console.error("No banner image found.");
+            }
+        } catch (error) {
+            console.error("Error fetching header image:", error);
+        }
+    };
 
     useEffect(() => {
         const fetchData = async () => {
@@ -82,7 +106,7 @@ const Committee = () => {
         ? standingData.length
         : selectedButton === "Women and child Welfare Committee"
             ? womenData.length
-            : transformedData.length; 
+            : transformedData.length;
 
     const totalPages = Math.ceil(totalEntries / itemsPerPage);
     const startEntry = (currentPage - 1) * itemsPerPage + 1;
@@ -96,7 +120,13 @@ const Committee = () => {
 
     return (
         <>
-            <div className="history-header-image"></div>
+            <div
+                className="history-header-image"
+                style={{
+                    backgroundImage: `url(${bgImage})`,
+
+                }}
+            ></div>
             <div id="main-content">
                 <div className="container-fluid font-location mt-4 mb-5" id="committee-css">
                     <nav className="breadcrumb">

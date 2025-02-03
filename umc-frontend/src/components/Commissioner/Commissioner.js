@@ -46,8 +46,13 @@ const Commissioner = () => {
       const response = await api.get("/banner");
 
       if (response.data.length > 0) {
-        let latestBanner = response.data[response.data.length - 1];
-        setBgImage(`${baseURL}${latestBanner.file_path}`);
+        let selectedBanner = response.data.find(banner => banner.banner_name === "Commissioner");
+
+        if (selectedBanner) {
+          setBgImage(`${baseURL}${selectedBanner.file_path}`);
+        } else {
+          console.error("Banner with specified name not found.");
+        }
       } else {
         console.error("No banner image found.");
       }
@@ -66,18 +71,7 @@ const Commissioner = () => {
         className="history-header-image"
         style={{
           backgroundImage: `url(${bgImage})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
-          width: "100%",
-          height: "150px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          position: "relative",
-          overflow: "hidden",
-          marginTop: "-20px",
-          zIndex: "-1",
+         
         }}
       ></div>
       <div id="main-content">
