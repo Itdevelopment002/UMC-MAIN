@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "./Agenda.css";
-import api from "../api";
+import api, { baseURL } from "../api";
 import pdficon from '../../assets/images/Departments/document 1.png';
 import Swal from 'sweetalert2';
 
@@ -11,20 +11,43 @@ import Swal from 'sweetalert2';
 // ];
 
 const Agenda = () => {
-        const [agenda, setAgenda] = useState([]);
-        useEffect(() => {
-            fetchAgenda();
-        }, []);
-    
-        const fetchAgenda = async () => {
-            try {
-                const response = await api.get("/agenda_data");
-                setAgenda(response.data);
-            } catch (error) {
-                console.error("Error fetching agenda:", error);
+    const [agenda, setAgenda] = useState([]);
+    const [bgImage, setBgImage] = useState("");
+
+    useEffect(() => {
+        fetchAgenda();
+        fetchHeaderImage();
+
+    }, []);
+
+    const fetchAgenda = async () => {
+        try {
+            const response = await api.get("/agenda_data");
+            setAgenda(response.data);
+        } catch (error) {
+            console.error("Error fetching agenda:", error);
+        }
+    };
+
+    const fetchHeaderImage = async () => {
+        try {
+            const response = await api.get("/banner");
+
+            if (response.data.length > 0) {
+                let selectedBanner = response.data.find(banner => banner.banner_name === "Agenda");
+
+                if (selectedBanner) {
+                    setBgImage(`${baseURL}${selectedBanner.file_path}`);
+                } else {
+                    console.error("Banner with specified name not found.");
+                }
+            } else {
+                console.error("No banner image found.");
             }
-        };
-    
+        } catch (error) {
+            console.error("Error fetching header image:", error);
+        }
+    };
     const [itemsPerPage, setItemsPerPage] = useState(10);
     const [currentPage, setCurrentPage] = useState(1);
     //eslint-disable-next-line
@@ -99,7 +122,13 @@ const Agenda = () => {
 
     return (
         <>
-            <div className="history-header-image"></div>
+            <div
+                className="history-header-image"
+                style={{
+                    backgroundImage: `url(${bgImage})`,
+
+                }}
+            ></div>
             <div id="main-content">
                 <div className="container-fluid font-location mt-4 mb-5" id="resolution-css">
                     <nav className="breadcrumb">
@@ -185,7 +214,7 @@ const Agenda = () => {
                                                         color: "#292D32",
                                                     }}
                                                 >
-                                                   {new Date(item.Schedule_Date_of_Meeting).toLocaleDateString('en-CA')}
+                                                    {new Date(item.Schedule_Date_of_Meeting).toLocaleDateString('en-CA')}
                                                 </td>
                                                 <td
                                                     width="20%"

@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import "./Budget.css";
 import pdficon from '../../assets/images/Departments/document 1.png';
 import Swal from 'sweetalert2';
-import api from "../api";
+import api, { baseURL } from "../api";
 
 const Budget = () => {
     const [selectedButton, setSelectedButton] = useState('2020-2021');
@@ -11,7 +11,30 @@ const Budget = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [uniqueYears, setUniqueYears] = useState([]);
+    const [bgImage, setBgImage] = useState("");
+    useEffect(() => {
+        fetchHeaderImage();
 
+    }, []);
+    const fetchHeaderImage = async () => {
+        try {
+            const response = await api.get("/banner");
+
+            if (response.data.length > 0) {
+                let selectedBanner = response.data.find(banner => banner.banner_name === "Budget");
+
+                if (selectedBanner) {
+                    setBgImage(`${baseURL}${selectedBanner.file_path}`);
+                } else {
+                    console.error("Banner with specified name not found.");
+                }
+            } else {
+                console.error("No banner image found.");
+            }
+        } catch (error) {
+            console.error("Error fetching header image:", error);
+        }
+    };
     // Fetching data from the API
     useEffect(() => {
         const fetchData = async () => {
@@ -115,7 +138,13 @@ const Budget = () => {
 
     return (
         <>
-            <div className="history-header-image"></div>
+             <div
+                className="history-header-image"
+                style={{
+                    backgroundImage: `url(${bgImage})`,
+
+                }}
+            ></div>
             <div id="main-content">
                 <div className="container-fluid font-location mt-4 mb-5" id="budget-css">
                     <nav className="breadcrumb">

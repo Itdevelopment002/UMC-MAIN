@@ -8,6 +8,31 @@ import api, { baseURL } from "../api";
 const PhotoGallery = () => {
   const [categories, setCategories] = useState([]);
   const [images, setImages] = useState({});
+  const [bgImage, setBgImage] = useState("");
+
+  useEffect(() => {
+    fetchHeaderImage();
+  }, []);
+  const fetchHeaderImage = async () => {
+    try {
+      const response = await api.get("/banner");
+
+      if (response.data.length > 0) {
+        let selectedBanner = response.data.find(banner => banner.banner_name === "Photo-Gallery");
+
+        if (selectedBanner) {
+          setBgImage(`${baseURL}${selectedBanner.file_path}`);
+        } else {
+          console.error("Banner with specified name not found.");
+        }
+      } else {
+        console.error("No banner image found.");
+      }
+    } catch (error) {
+      console.error("Error fetching header image:", error);
+    }
+  };
+
 
   useEffect(() => {
     api.get("/categories")
@@ -42,7 +67,13 @@ const PhotoGallery = () => {
 
   return (
     <>
-      <div className="history-header-image"></div>
+      <div
+        className="history-header-image"
+        style={{
+          backgroundImage: `url(${bgImage})`,
+
+        }}
+      ></div>
 
       <div id="main-content">
         <div className="container-fluid font-location mt-2 mb-5" id="photo-gallery-css">

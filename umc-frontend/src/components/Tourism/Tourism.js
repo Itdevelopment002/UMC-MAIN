@@ -8,6 +8,7 @@ import api, { baseURL } from "../api";
 
 const Tourism = () => {
     const [gardensData, setGardensData] = useState([]);
+    const [bgImage, setBgImage] = useState("");
 
     useEffect(() => {
         const fetchGardens = async () => {
@@ -20,7 +21,28 @@ const Tourism = () => {
         };
         fetchGardens();
     }, []);
+    useEffect(() => {
+        fetchHeaderImage();
+    }, []);
+    const fetchHeaderImage = async () => {
+        try {
+            const response = await api.get("/banner");
 
+            if (response.data.length > 0) {
+                let selectedBanner = response.data.find(banner => banner.banner_name === "Tourism");
+
+                if (selectedBanner) {
+                    setBgImage(`${baseURL}${selectedBanner.file_path}`);
+                } else {
+                    console.error("Banner with specified name not found.");
+                }
+            } else {
+                console.error("No banner image found.");
+            }
+        } catch (error) {
+            console.error("Error fetching header image:", error);
+        }
+    };
 
     useEffect(() => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -28,7 +50,13 @@ const Tourism = () => {
 
     return (
         <>
-            <div className="tourism-header-image"></div>
+             <div
+                className="history-header-image"
+                style={{
+                    backgroundImage: `url(${bgImage})`,
+                   
+                }}
+            ></div>
 
             <div id="main-content">
                 <div className="container-fluid font-location mt-4 mb-5" id="tourism-css">

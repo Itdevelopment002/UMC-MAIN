@@ -13,18 +13,23 @@ const Quotations = () => {
     }, []);
     const fetchHeaderImage = async () => {
         try {
-            const response = await api.get("/banner");
-
-            if (response.data.length > 0) {
-                let latestBanner = response.data[response.data.length - 1];
-                setBgImage(`${baseURL}${latestBanner.file_path}`);
+          const response = await api.get("/banner");
+    
+          if (response.data.length > 0) {
+            let selectedBanner = response.data.find(banner => banner.banner_name === "Quotations");
+    
+            if (selectedBanner) {
+              setBgImage(`${baseURL}${selectedBanner.file_path}`);
             } else {
-                console.error("No banner image found.");
+              console.error("Banner with specified name not found.");
             }
+          } else {
+            console.error("No banner image found.");
+          }
         } catch (error) {
-            console.error("Error fetching header image:", error);
+          console.error("Error fetching header image:", error);
         }
-    };
+      };
     useEffect(() => {
         window.scrollTo({ top: 0, behavior: "smooth" });
     }, []);
@@ -35,18 +40,7 @@ const Quotations = () => {
                 className="history-header-image"
                 style={{
                     backgroundImage: `url(${bgImage})`,
-                    backgroundSize: "cover",
-                    backgroundPosition: "center",
-                    backgroundRepeat: "no-repeat",
-                    width: "100%",
-                    height: "150px",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    position: "relative",
-                    overflow: "hidden",
-                    marginTop: "-20px",
-                    zIndex: "-1",
+                   
                 }}
             ></div>
 

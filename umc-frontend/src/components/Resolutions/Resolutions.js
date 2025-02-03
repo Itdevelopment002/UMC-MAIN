@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "./Resolutions.css";
-import api from "../api";
+import api, { baseURL } from "../api";
 import pdficon from '../../assets/images/Departments/document 1.png';
 import Swal from 'sweetalert2';
 
@@ -10,20 +10,41 @@ import Swal from 'sweetalert2';
 // ];
 
 const Resolutions = () => {
-        const [resolutions, setResolutions] = useState([]);
-         useEffect(() => {
-                fetchResolutions();
-            }, []);
-        const fetchResolutions = async () => {
-            try {
-                const response = await api.get("/resolution");
-                setResolutions(response.data);
-            } catch (error) {
-                console.error("Error fetching resolutions:", error);
+    const [resolutions, setResolutions] = useState([]);
+    const [bgImage, setBgImage] = useState("");
+
+    useEffect(() => {
+        fetchResolutions();
+        fetchHeaderImage();
+    }, []);
+    const fetchResolutions = async () => {
+        try {
+            const response = await api.get("/resolution");
+            setResolutions(response.data);
+        } catch (error) {
+            console.error("Error fetching resolutions:", error);
+        }
+    };
+
+    const fetchHeaderImage = async () => {
+        try {
+            const response = await api.get("/banner");
+
+            if (response.data.length > 0) {
+                let selectedBanner = response.data.find(banner => banner.banner_name === "Resolutions");
+
+                if (selectedBanner) {
+                    setBgImage(`${baseURL}${selectedBanner.file_path}`);
+                } else {
+                    console.error("Banner with specified name not found.");
+                }
+            } else {
+                console.error("No banner image found.");
             }
-        };
-    
-    
+        } catch (error) {
+            console.error("Error fetching header image:", error);
+        }
+    };
     const [itemsPerPage, setItemsPerPage] = useState(10);
     const [currentPage, setCurrentPage] = useState(1);
     //eslint-disable-next-line
@@ -98,7 +119,13 @@ const Resolutions = () => {
 
     return (
         <>
-            <div className="history-header-image"></div>
+            <div
+                className="history-header-image"
+                style={{
+                    backgroundImage: `url(${bgImage})`,
+
+                }}
+            ></div>
 
             <div id="main-content">
                 <div className="container-fluid font-location mt-4 mb-5" id="resolution-css">

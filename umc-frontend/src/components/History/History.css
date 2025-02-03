@@ -114,8 +114,23 @@
 
 }
 
+.history-header-image{
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  width: 100%;
+  height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  margin-top: -20px;
+  z-index: -1;
+}
+
 @media (max-width: 1024px) {
-  .history-header-image {
+  .history-header-image{
       height: 120px;
       background-size: cover;
       margin-top: -15px;
@@ -123,7 +138,7 @@
 }
 
 @media (max-width: 768px) {
-  .history-header-image {
+  .history-header-image{
       height: 100px;
       background-size: cover;
       margin-top: -10px;
@@ -131,7 +146,7 @@
 }
 
 @media (max-width: 480px) {
-  .history-header-image {
+  .history-header-image{
       height: 80px;
       background-size: cover;
       margin-top: -5px;

@@ -1,18 +1,4 @@
-.tourism-header-image {
-    background-image: url(../../assets/images/tourism/imgpsh_fullsize_anim.jpg);
-    background-size: contain;
-    background-position: center;
-    background-repeat: no-repeat;
-    width: 100%;
-    height: 150px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    overflow: hidden;
-    margin-top: -25px;
-    z-index: -1;
-  }
+
 
 #tourism-css .card1 {
     position: relative;

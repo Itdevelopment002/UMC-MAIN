@@ -3,14 +3,35 @@ import { Link } from "react-router-dom";
 import "./Circular.css"
 import "../DepartmentCustomCss/DepartmentCustom.css"
 import pdficon from '../../assets/images/Departments/document 1.png'
-import api from "../api"
+import api, { baseURL } from "../api"
 
 const Circular = () => {
     const [itemsPerPage, setItemsPerPage] = useState(10);
     const [currentPage, setCurrentPage] = useState(1);
     const [searchTerm, setSearchTerm] = useState("");
     const [circularData, setCircularData] = useState([]);
+        const [bgImage, setBgImage] = useState("");
+    
 
+    const fetchHeaderImage = async () => {
+        try {
+            const response = await api.get("/banner");
+
+            if (response.data.length > 0) {
+                let selectedBanner = response.data.find(banner => banner.banner_name === "Circular");
+
+                if (selectedBanner) {
+                    setBgImage(`${baseURL}${selectedBanner.file_path}`);
+                } else {
+                    console.error("Banner with specified name not found.");
+                }
+            } else {
+                console.error("No banner image found.");
+            }
+        } catch (error) {
+            console.error("Error fetching header image:", error);
+        }
+    };
     const fetchData = async () => {
         try {
             const response = await api.get("/circular-info");
@@ -22,6 +43,7 @@ const Circular = () => {
 
     useEffect(() => {
         fetchData();
+        fetchHeaderImage();
     }, []);
 
     const filteredData = circularData.filter((item) =>
@@ -79,7 +101,13 @@ const Circular = () => {
     return (
         <>
 
-            <div className="history-header-image"></div>
+            <div
+                className="history-header-image"
+                style={{
+                    backgroundImage: `url(${bgImage})`,
+
+                }}
+            ></div>
 
             <div id="main-content">
                 <div className="container-fluid font-location mt-4 mb-5" id="accounts-css">
