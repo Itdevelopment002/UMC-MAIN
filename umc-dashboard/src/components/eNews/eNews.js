@@ -33,7 +33,7 @@ const ENews = () => {
                 enewsList.filter((agenda) => agenda.id !== selectedAgenda.id)
             );
             setShowDeleteModal(false);
-            toast.success("e-news deleted successfully!");
+            toast.success("e-News deleted successfully!");
         } catch (error) {
             console.error("Error deleting e-news:", error);
             toast.error("Failed to delete the e-news!");
@@ -52,7 +52,7 @@ const ENews = () => {
             );
             setEnewsList(updatedAgendaList);
             setShowEditModal(false);
-            toast.success("e-news updated successfully!");
+            toast.success("e-News updated successfully!");
         } catch (error) {
             console.error("Error updating e-news:", error);
             toast.error("Failed to update the e-news!");
@@ -97,15 +97,15 @@ const ENews = () => {
                             <div className="card-box">
                                 <div className="card-block">
                                     <div className="row">
-                                        <div className="col-sm-4 col-3">
+                                        <div className="col-6">
                                             <h4 className="page-title">e-News Letter</h4>
                                         </div>
-                                        <div className="col-sm-8 col-9 text-right m-b-20">
+                                        <div className="col-6 text-right m-b-20">
                                             <Link
                                                 to="/add-enews-letter"
                                                 className="btn btn-primary btn-rounded float-right"
                                             >
-                                                <i className="fa fa-plus"></i> Add E-News
+                                                <i className="fa fa-plus"></i> Add e-News
                                             </Link>
                                         </div>
                                     </div>
@@ -113,34 +113,34 @@ const ENews = () => {
                                         <table className="table table-bordered m-b-0">
                                             <thead>
                                                 <tr>
-                                                    <th width="10%">Sr. No.</th>
+                                                    <th width="10%" className="text-center">Sr. No.</th>
                                                     <th width="40%">Information</th>
-                                                    <th width="20%">Issue Date</th>
+                                                    <th width="15%" className="text-center">Issue Date</th>
                                                     <th width="20%">PDF Link</th>
-                                                    <th width="10%">Action</th>
+                                                    <th width="15%" className="text-center">Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 {currentAgendas.map((agenda, index) => (
                                                     <tr key={agenda.id}>
-                                                        <td>
+                                                        <td className="text-center">
                                                             {index + 1 + (currentPage - 1) * agendasPerPage}
                                                         </td>
                                                         <td>{agenda.info}</td>
-                                                        <td>
+                                                        <td className="text-center">
                                                             {new Date(agenda.issue_date).toLocaleDateString("en-CA")}
                                                         </td>
                                                         <td>
                                                             <Link
-                                                                to={agenda.pdf_link}
-                                                                target="_blank"
-                                                                rel="noreferrer"
-                                                                style={{ color: "black" }}
+                                                                to={agenda.pdf_link !== "#" ? `${agenda.pdf_link}` : "#"}
+                                                                target={agenda.pdf_link !== "#" ? "_blank" : ""}
+                                                                className="text-decoration-none"
+                                                                style={{ color: "#000" }}
                                                             >
                                                                 {agenda.pdf_link}
                                                             </Link>
                                                         </td>
-                                                        <td>
+                                                        <td className="text-center">
                                                             <button
                                                                 onClick={() => handleEditClick(agenda)}
                                                                 className="btn btn-success btn-sm m-t-10"
@@ -160,56 +160,52 @@ const ENews = () => {
                                         </table>
                                     </div>
                                 </div>
+                                <div className="mt-4">
+                                    <ul className="pagination">
+                                        <li
+                                            className={`page-item ${currentPage === 1 ? "disabled" : ""}`}
+                                        >
+                                            <button
+                                                className="page-link"
+                                                onClick={() => setCurrentPage(currentPage - 1)}
+                                            >
+                                                Previous
+                                            </button>
+                                        </li>
+                                        {Array.from(
+                                            { length: Math.ceil(enewsList.length / agendasPerPage) },
+                                            (_, i) => (
+                                                <li
+                                                    className={`page-item ${currentPage === i + 1 ? "active" : ""
+                                                        }`}
+                                                    key={i}
+                                                >
+                                                    <button
+                                                        className="page-link"
+                                                        onClick={() => setCurrentPage(i + 1)}
+                                                    >
+                                                        {i + 1}
+                                                    </button>
+                                                </li>
+                                            )
+                                        )}
+                                        <li
+                                            className={`page-item ${currentPage === Math.ceil(enewsList.length / agendasPerPage)
+                                                ? "disabled"
+                                                : ""
+                                                }`}
+                                        >
+                                            <button
+                                                className="page-link"
+                                                onClick={() => setCurrentPage(currentPage + 1)}
+                                            >
+                                                Next
+                                            </button>
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
-                    </div>
-
-                    {/* Pagination */}
-                    <div className="mt-0">
-                        <ul className="pagination">
-                            <li
-                                className={`page-item ${currentPage === 1 ? "disabled" : ""}`}
-                            >
-                                <button
-                                    className="page-link"
-                                    onClick={() => setCurrentPage(currentPage - 1)}
-                                >
-                                    Previous
-                                </button>
-                            </li>
-                            {Array.from(
-                                { length: Math.ceil(enewsList.length / agendasPerPage) },
-                                (_, i) => (
-                                    <li
-                                        className={`page-item ${
-                                            currentPage === i + 1 ? "active" : ""
-                                        }`}
-                                        key={i}
-                                    >
-                                        <button
-                                            className="page-link"
-                                            onClick={() => setCurrentPage(i + 1)}
-                                        >
-                                            {i + 1}
-                                        </button>
-                                    </li>
-                                )
-                            )}
-                            <li
-                                className={`page-item ${
-                                    currentPage === Math.ceil(enewsList.length / agendasPerPage)
-                                        ? "disabled"
-                                        : ""
-                                }`}
-                            >
-                                <button
-                                    className="page-link"
-                                    onClick={() => setCurrentPage(currentPage + 1)}
-                                >
-                                    Next
-                                </button>
-                            </li>
-                        </ul>
                     </div>
 
                     {/* Modals */}
@@ -225,7 +221,7 @@ const ENews = () => {
                             <div className="modal-dialog modal-dialog-centered">
                                 <div className="modal-content">
                                     <div className="modal-header">
-                                        <h5 className="modal-title">Edit Agenda</h5>
+                                        <h5 className="modal-title">Edit e-News Letter</h5>
                                     </div>
                                     <div className="modal-body">
                                         <form>
@@ -264,13 +260,13 @@ const ENews = () => {
                                     <div className="modal-footer">
                                         <button
                                             onClick={() => setShowEditModal(false)}
-                                            className="btn btn-secondary"
+                                            className="btn btn-secondary btn-sm"
                                         >
                                             Cancel
                                         </button>
                                         <button
                                             onClick={handleEditSave}
-                                            className="btn btn-primary"
+                                            className="btn btn-primary btn-sm"
                                         >
                                             Save Changes
                                         </button>
@@ -286,26 +282,25 @@ const ENews = () => {
                             style={{
                                 display: "block",
                                 backgroundColor: "rgba(0,0,0,0.5)",
+                                overflowY: "scroll",
+                                scrollbarWidth: "none",
                             }}
                         >
                             <div className="modal-dialog modal-dialog-centered">
                                 <div className="modal-content">
-                                    <div className="modal-header">
-                                        <h5 className="modal-title">Confirm Delete</h5>
-                                    </div>
-                                    <div className="modal-body">
-                                        Are you sure you want to delete this agenda?
+                                    <div className="modal-body text-center">
+                                        <h5>Are you sure you want to delete this item?</h5>
                                     </div>
                                     <div className="modal-footer">
                                         <button
                                             onClick={() => setShowDeleteModal(false)}
-                                            className="btn btn-secondary"
+                                            className="btn btn-secondary btn-sm"
                                         >
                                             Cancel
                                         </button>
                                         <button
                                             onClick={handleDelete}
-                                            className="btn btn-danger"
+                                            className="btn btn-danger btn-sm"
                                         >
                                             Delete
                                         </button>

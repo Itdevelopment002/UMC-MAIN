@@ -35,15 +35,6 @@ const DepartmentInformation = () => {
         fetchPdfData();
     }, []);
 
-    useEffect(() => {
-        const lightbox = GLightbox({
-            selector: ".glightbox",
-        });
-        return () => {
-            lightbox.destroy();
-        };
-    }, [hodData, bannerData]);
-
     const fetchDepartments = async () => {
         try {
             const response = await api.get("/department-info");
@@ -271,6 +262,15 @@ const DepartmentInformation = () => {
     const bannerPageData = bannerData.slice((bannerCurrentPage - 1) * itemsPerPage, bannerCurrentPage * itemsPerPage);
     const hodPageData = hodData.slice((hodCurrentPage - 1) * itemsPerPage, hodCurrentPage * itemsPerPage);
 
+    useEffect(() => {
+        const lightbox = GLightbox({
+            selector: ".glightbox",
+        });
+        return () => {
+            lightbox.destroy();
+        };
+    }, [hodPageData, bannerPageData]);
+
     return (
         <div>
             <div className="page-wrapper">
@@ -290,15 +290,15 @@ const DepartmentInformation = () => {
                             <div className="card-box">
                                 <div className="card-block">
                                     <div className="row">
-                                        <div className="col-sm-4 col-3">
+                                        <div className="col-6">
                                             <h4 className="page-title">Department Banner</h4>
                                         </div>
-                                        <div className="col-sm-8 col-9 text-right m-b-20">
+                                        <div className="col-6 text-right m-b-20">
                                             <Link
                                                 to="/add-department-banner"
                                                 className="btn btn-primary btn-rounded float-right"
                                             >
-                                                <i className="fa fa-plus"></i> Add Department Banner
+                                                <i className="fa fa-plus"></i> Add Banner
                                             </Link>
                                         </div>
                                     </div>
@@ -364,7 +364,7 @@ const DepartmentInformation = () => {
                                         </table>
                                     </div>
                                 </div>
-                                <ul className="pagination m-t-20">
+                                <ul className="pagination mt-4">
                                     <li className={`page-item ${bannerCurrentPage === 1 ? "disabled" : ""}`}>
                                         <button
                                             className="page-link"
@@ -373,22 +373,85 @@ const DepartmentInformation = () => {
                                             Previous
                                         </button>
                                     </li>
-                                    {[
-                                        ...Array(Math.ceil(bannerData.length / itemsPerPage)).keys(),
-                                    ].map((page) => (
+                                    {bannerCurrentPage > 2 && (
+                                        <li className={`page-item ${bannerCurrentPage === 1 ? "active" : ""}`}>
+                                            <button className="page-link" onClick={() => setBannerCurrentPage(1)}>
+                                                1
+                                            </button>
+                                        </li>
+                                    )}
+                                    {bannerCurrentPage > 3 && (
+                                        <li className={`page-item ${bannerCurrentPage === 2 ? "active" : ""}`}>
+                                            <button className="page-link" onClick={() => setBannerCurrentPage(2)}>
+                                                2
+                                            </button>
+                                        </li>
+                                    )}
+                                    {bannerCurrentPage > 4 && (
+                                        <li className="page-item disabled">
+                                            <span className="page-link">...</span>
+                                        </li>
+                                    )}
+                                    {Array.from(
+                                        { length: Math.ceil(bannerData.length / itemsPerPage) },
+                                        (_, i) => i + 1
+                                    )
+                                        .filter(
+                                            (page) =>
+                                                page >= bannerCurrentPage - 1 && page <= bannerCurrentPage + 1
+                                        )
+                                        .map((page) => (
+                                            <li
+                                                className={`page-item ${bannerCurrentPage === page ? "active" : ""}`}
+                                                key={page}
+                                            >
+                                                <button
+                                                    className="page-link"
+                                                    onClick={() => setBannerCurrentPage(page)}
+                                                >
+                                                    {page}
+                                                </button>
+                                            </li>
+                                        ))}
+                                    {bannerCurrentPage < Math.ceil(bannerData.length / itemsPerPage) - 3 && (
+                                        <li className="page-item disabled">
+                                            <span className="page-link">...</span>
+                                        </li>
+                                    )}
+                                    {bannerCurrentPage < Math.ceil(bannerData.length / itemsPerPage) - 2 && (
                                         <li
-                                            key={page + 1}
-                                            className={`page-item ${bannerCurrentPage === page + 1 ? "active" : ""
+                                            className={`page-item ${bannerCurrentPage === Math.ceil(bannerData.length / itemsPerPage) - 1
+                                                ? "active"
+                                                : ""
                                                 }`}
                                         >
                                             <button
                                                 className="page-link"
-                                                onClick={() => setBannerCurrentPage(page + 1)}
+                                                onClick={() =>
+                                                    setBannerCurrentPage(Math.ceil(bannerData.length / itemsPerPage) - 1)
+                                                }
                                             >
-                                                {page + 1}
+                                                {Math.ceil(bannerData.length / itemsPerPage) - 1}
                                             </button>
                                         </li>
-                                    ))}
+                                    )}
+                                    {bannerCurrentPage < Math.ceil(bannerData.length / itemsPerPage) - 1 && (
+                                        <li
+                                            className={`page-item ${bannerCurrentPage === Math.ceil(bannerData.length / itemsPerPage)
+                                                ? "active"
+                                                : ""
+                                                }`}
+                                        >
+                                            <button
+                                                className="page-link"
+                                                onClick={() =>
+                                                    setBannerCurrentPage(Math.ceil(bannerData.length / itemsPerPage))
+                                                }
+                                            >
+                                                {Math.ceil(bannerData.length / itemsPerPage)}
+                                            </button>
+                                        </li>
+                                    )}
                                     <li
                                         className={`page-item ${bannerCurrentPage === Math.ceil(bannerData.length / itemsPerPage)
                                             ? "disabled"
@@ -419,7 +482,7 @@ const DepartmentInformation = () => {
                                                 to="/add-department-description"
                                                 className="btn btn-primary btn-rounded float-right"
                                             >
-                                                <i className="fa fa-plus"></i> Add Department Description
+                                                <i className="fa fa-plus"></i> Add Description
                                             </Link>
                                         </div>
                                     </div>
@@ -509,7 +572,7 @@ const DepartmentInformation = () => {
                                             </tbody>
                                         </table>
                                     </div>
-                                    <ul className="pagination m-t-20">
+                                    <ul className="pagination mt-4">
                                         <li className={`page-item ${descriptionCurrentPage === 1 ? "disabled" : ""}`}>
                                             <button
                                                 className="page-link"
@@ -518,21 +581,105 @@ const DepartmentInformation = () => {
                                                 Previous
                                             </button>
                                         </li>
-                                        {[...Array(Math.ceil(filteredDescriptionData.length / itemsPerPage)).keys()].map((page) => (
-                                            <li
-                                                key={page + 1}
-                                                className={`page-item ${descriptionCurrentPage === page + 1 ? "active" : ""}`}
-                                            >
+                                        {descriptionCurrentPage > 2 && (
+                                            <li className={`page-item ${descriptionCurrentPage === 1 ? "active" : ""}`}>
                                                 <button
                                                     className="page-link"
-                                                    onClick={() => setDescriptionCurrentPage(page + 1)}
+                                                    onClick={() => setDescriptionCurrentPage(1)}
                                                 >
-                                                    {page + 1}
+                                                    1
                                                 </button>
                                             </li>
-                                        ))}
+                                        )}
+                                        {descriptionCurrentPage > 3 && (
+                                            <li className={`page-item ${descriptionCurrentPage === 2 ? "active" : ""}`}>
+                                                <button
+                                                    className="page-link"
+                                                    onClick={() => setDescriptionCurrentPage(2)}
+                                                >
+                                                    2
+                                                </button>
+                                            </li>
+                                        )}
+                                        {descriptionCurrentPage > 4 && (
+                                            <li className="page-item disabled">
+                                                <span className="page-link">...</span>
+                                            </li>
+                                        )}
+                                        {Array.from(
+                                            { length: Math.ceil(filteredDescriptionData.length / itemsPerPage) },
+                                            (_, i) => i + 1
+                                        )
+                                            .filter(
+                                                (page) =>
+                                                    page >= descriptionCurrentPage - 1 &&
+                                                    page <= descriptionCurrentPage + 1
+                                            )
+                                            .map((page) => (
+                                                <li
+                                                    className={`page-item ${descriptionCurrentPage === page ? "active" : ""
+                                                        }`}
+                                                    key={page}
+                                                >
+                                                    <button
+                                                        className="page-link"
+                                                        onClick={() => setDescriptionCurrentPage(page)}
+                                                    >
+                                                        {page}
+                                                    </button>
+                                                </li>
+                                            ))}
+                                        {descriptionCurrentPage <
+                                            Math.ceil(filteredDescriptionData.length / itemsPerPage) - 3 && (
+                                                <li className="page-item disabled">
+                                                    <span className="page-link">...</span>
+                                                </li>
+                                            )}
+                                        {descriptionCurrentPage <
+                                            Math.ceil(filteredDescriptionData.length / itemsPerPage) - 2 && (
+                                                <li
+                                                    className={`page-item ${descriptionCurrentPage ===
+                                                        Math.ceil(filteredDescriptionData.length / itemsPerPage) - 1
+                                                        ? "active"
+                                                        : ""
+                                                        }`}
+                                                >
+                                                    <button
+                                                        className="page-link"
+                                                        onClick={() =>
+                                                            setDescriptionCurrentPage(
+                                                                Math.ceil(filteredDescriptionData.length / itemsPerPage) - 1
+                                                            )
+                                                        }
+                                                    >
+                                                        {Math.ceil(filteredDescriptionData.length / itemsPerPage) - 1}
+                                                    </button>
+                                                </li>
+                                            )}
+                                        {descriptionCurrentPage <
+                                            Math.ceil(filteredDescriptionData.length / itemsPerPage) - 1 && (
+                                                <li
+                                                    className={`page-item ${descriptionCurrentPage ===
+                                                        Math.ceil(filteredDescriptionData.length / itemsPerPage)
+                                                        ? "active"
+                                                        : ""
+                                                        }`}
+                                                >
+                                                    <button
+                                                        className="page-link"
+                                                        onClick={() =>
+                                                            setDescriptionCurrentPage(
+                                                                Math.ceil(filteredDescriptionData.length / itemsPerPage)
+                                                            )
+                                                        }
+                                                    >
+                                                        {Math.ceil(filteredDescriptionData.length / itemsPerPage)}
+                                                    </button>
+                                                </li>
+                                            )}
                                         <li
-                                            className={`page-item ${descriptionCurrentPage === Math.ceil(filteredDescriptionData.length / itemsPerPage)
+                                            className={`page-item ${descriptionCurrentPage ===
+                                                Math.ceil(filteredDescriptionData.length / itemsPerPage)
                                                 ? "disabled"
                                                 : ""
                                                 }`}
@@ -554,15 +701,15 @@ const DepartmentInformation = () => {
                             <div className="card-box">
                                 <div className="card-block">
                                     <div className="row">
-                                        <div className="col-sm-4 col-3">
+                                        <div className="col-6">
                                             <h4 className="page-title">Hod Details</h4>
                                         </div>
-                                        <div className="col-sm-8 col-9 text-right m-b-20">
+                                        <div className="col-6 text-right m-b-20">
                                             <Link
                                                 to="/add-hod-details"
                                                 className="btn btn-primary btn-rounded float-right"
                                             >
-                                                <i className="fa fa-plus"></i> Add Hod Detail
+                                                <i className="fa fa-plus"></i> Add Detail
                                             </Link>
                                         </div>
                                     </div>
@@ -638,7 +785,7 @@ const DepartmentInformation = () => {
                                         </table>
                                     </div>
                                 </div>
-                                <ul className="pagination m-t-20">
+                                <ul className="pagination mt-4">
                                     <li className={`page-item ${hodCurrentPage === 1 ? "disabled" : ""}`}>
                                         <button
                                             className="page-link"
@@ -647,22 +794,85 @@ const DepartmentInformation = () => {
                                             Previous
                                         </button>
                                     </li>
-                                    {[
-                                        ...Array(Math.ceil(hodData.length / itemsPerPage)).keys(),
-                                    ].map((page) => (
+                                    {hodCurrentPage > 2 && (
+                                        <li className={`page-item ${hodCurrentPage === 1 ? "active" : ""}`}>
+                                            <button className="page-link" onClick={() => setHodCurrentPage(1)}>
+                                                1
+                                            </button>
+                                        </li>
+                                    )}
+                                    {hodCurrentPage > 3 && (
+                                        <li className={`page-item ${hodCurrentPage === 2 ? "active" : ""}`}>
+                                            <button className="page-link" onClick={() => setHodCurrentPage(2)}>
+                                                2
+                                            </button>
+                                        </li>
+                                    )}
+                                    {hodCurrentPage > 4 && (
+                                        <li className="page-item disabled">
+                                            <span className="page-link">...</span>
+                                        </li>
+                                    )}
+                                    {Array.from(
+                                        { length: Math.ceil(hodData.length / itemsPerPage) },
+                                        (_, i) => i + 1
+                                    )
+                                        .filter(
+                                            (page) =>
+                                                page >= hodCurrentPage - 1 && page <= hodCurrentPage + 1
+                                        )
+                                        .map((page) => (
+                                            <li
+                                                className={`page-item ${hodCurrentPage === page ? "active" : ""}`}
+                                                key={page}
+                                            >
+                                                <button
+                                                    className="page-link"
+                                                    onClick={() => setHodCurrentPage(page)}
+                                                >
+                                                    {page}
+                                                </button>
+                                            </li>
+                                        ))}
+                                    {hodCurrentPage < Math.ceil(hodData.length / itemsPerPage) - 3 && (
+                                        <li className="page-item disabled">
+                                            <span className="page-link">...</span>
+                                        </li>
+                                    )}
+                                    {hodCurrentPage < Math.ceil(hodData.length / itemsPerPage) - 2 && (
                                         <li
-                                            key={page + 1}
-                                            className={`page-item ${hodCurrentPage === page + 1 ? "active" : ""
+                                            className={`page-item ${hodCurrentPage === Math.ceil(hodData.length / itemsPerPage) - 1
+                                                ? "active"
+                                                : ""
                                                 }`}
                                         >
                                             <button
                                                 className="page-link"
-                                                onClick={() => setHodCurrentPage(page + 1)}
+                                                onClick={() =>
+                                                    setHodCurrentPage(Math.ceil(hodData.length / itemsPerPage) - 1)
+                                                }
                                             >
-                                                {page + 1}
+                                                {Math.ceil(hodData.length / itemsPerPage) - 1}
                                             </button>
                                         </li>
-                                    ))}
+                                    )}
+                                    {hodCurrentPage < Math.ceil(hodData.length / itemsPerPage) - 1 && (
+                                        <li
+                                            className={`page-item ${hodCurrentPage === Math.ceil(hodData.length / itemsPerPage)
+                                                ? "active"
+                                                : ""
+                                                }`}
+                                        >
+                                            <button
+                                                className="page-link"
+                                                onClick={() =>
+                                                    setHodCurrentPage(Math.ceil(hodData.length / itemsPerPage))
+                                                }
+                                            >
+                                                {Math.ceil(hodData.length / itemsPerPage)}
+                                            </button>
+                                        </li>
+                                    )}
                                     <li
                                         className={`page-item ${hodCurrentPage === Math.ceil(hodData.length / itemsPerPage)
                                             ? "disabled"
@@ -685,15 +895,15 @@ const DepartmentInformation = () => {
                             <div className="card-box">
                                 <div className="card-block">
                                     <div className="row">
-                                        <div className="col-sm-4 col-3">
+                                        <div className="col-6">
                                             <h4 className="page-title">Department Pdfs</h4>
                                         </div>
-                                        <div className="col-sm-8 col-9 text-right m-b-20">
+                                        <div className="col-6 text-right m-b-20">
                                             <Link
                                                 to="/add-department-pdfs"
                                                 className="btn btn-primary btn-rounded float-right"
                                             >
-                                                <i className="fa fa-plus"></i> Add Department Pdf
+                                                <i className="fa fa-plus"></i> Add Pdf
                                             </Link>
                                         </div>
                                     </div>
@@ -771,7 +981,7 @@ const DepartmentInformation = () => {
                                             </tbody>
                                         </table>
                                     </div>
-                                    <ul className="pagination m-t-20">
+                                    <ul className="pagination mt-4">
                                         <li className={`page-item ${pdfCurrentPage === 1 ? "disabled" : ""}`}>
                                             <button
                                                 className="page-link"
@@ -780,19 +990,85 @@ const DepartmentInformation = () => {
                                                 Previous
                                             </button>
                                         </li>
-                                        {[...Array(Math.ceil(filteredPdfData.length / itemsPerPage)).keys()].map((page) => (
+                                        {pdfCurrentPage > 2 && (
+                                            <li className={`page-item ${pdfCurrentPage === 1 ? "active" : ""}`}>
+                                                <button className="page-link" onClick={() => setPdfCurrentPage(1)}>
+                                                    1
+                                                </button>
+                                            </li>
+                                        )}
+                                        {pdfCurrentPage > 3 && (
+                                            <li className={`page-item ${pdfCurrentPage === 2 ? "active" : ""}`}>
+                                                <button className="page-link" onClick={() => setPdfCurrentPage(2)}>
+                                                    2
+                                                </button>
+                                            </li>
+                                        )}
+                                        {pdfCurrentPage > 4 && (
+                                            <li className="page-item disabled">
+                                                <span className="page-link">...</span>
+                                            </li>
+                                        )}
+                                        {Array.from(
+                                            { length: Math.ceil(filteredPdfData.length / itemsPerPage) },
+                                            (_, i) => i + 1
+                                        )
+                                            .filter(
+                                                (page) =>
+                                                    page >= pdfCurrentPage - 1 && page <= pdfCurrentPage + 1
+                                            )
+                                            .map((page) => (
+                                                <li
+                                                    className={`page-item ${pdfCurrentPage === page ? "active" : ""}`}
+                                                    key={page}
+                                                >
+                                                    <button
+                                                        className="page-link"
+                                                        onClick={() => setPdfCurrentPage(page)}
+                                                    >
+                                                        {page}
+                                                    </button>
+                                                </li>
+                                            ))}
+                                        {pdfCurrentPage < Math.ceil(filteredPdfData.length / itemsPerPage) - 3 && (
+                                            <li className="page-item disabled">
+                                                <span className="page-link">...</span>
+                                            </li>
+                                        )}
+                                        {pdfCurrentPage < Math.ceil(filteredPdfData.length / itemsPerPage) - 2 && (
                                             <li
-                                                key={page + 1}
-                                                className={`page-item ${pdfCurrentPage === page + 1 ? "active" : ""}`}
+                                                className={`page-item ${pdfCurrentPage === Math.ceil(filteredPdfData.length / itemsPerPage) - 1
+                                                    ? "active"
+                                                    : ""
+                                                    }`}
                                             >
                                                 <button
                                                     className="page-link"
-                                                    onClick={() => setPdfCurrentPage(page + 1)}
+                                                    onClick={() =>
+                                                        setPdfCurrentPage(Math.ceil(filteredPdfData.length / itemsPerPage) - 1)
+                                                    }
                                                 >
-                                                    {page + 1}
+                                                    {Math.ceil(filteredPdfData.length / itemsPerPage) - 1}
                                                 </button>
                                             </li>
-                                        ))}
+                                        )}
+                                        {pdfCurrentPage < Math.ceil(filteredPdfData.length / itemsPerPage) - 1 && (
+                                            <li
+                                                className={`page-item ${pdfCurrentPage === Math.ceil(filteredPdfData.length / itemsPerPage)
+                                                    ? "active"
+                                                    : ""
+                                                    }`}
+                                            >
+                                                <button
+                                                    className="page-link"
+                                                    onClick={() =>
+                                                        setPdfCurrentPage(Math.ceil(filteredPdfData.length / itemsPerPage))
+                                                    }
+                                                >
+                                                    {Math.ceil(filteredPdfData.length / itemsPerPage)}
+                                                </button>
+                                            </li>
+                                        )}
                                         <li
                                             className={`page-item ${pdfCurrentPage === Math.ceil(filteredPdfData.length / itemsPerPage)
                                                 ? "disabled"

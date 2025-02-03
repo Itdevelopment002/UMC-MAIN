@@ -11,6 +11,16 @@ const DepartmentPage = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [selectedDepartment, setSelectedDepartment] = useState(null);
+  const itemsPerPage = 10;
+  const totalItems = departments.length;
+  const [currentPage, setCurrentPage] = useState(1);
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const [imagePreview, setImagePreview] = useState(null);
+
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  //eslint-disable-next-line
+  const currentDepartments = departments.slice(indexOfFirstItem, indexOfLastItem);
 
   useEffect(() => {
     fetchDepartments();
@@ -19,7 +29,7 @@ const DepartmentPage = () => {
   useEffect(() => {
     const lightbox = GLightbox({ selector: ".glightbox" });
     return () => lightbox.destroy();
-  }, [departments]);
+  }, [departments, currentDepartments]);
 
   const fetchDepartments = async () => {
     try {
@@ -40,6 +50,7 @@ const DepartmentPage = () => {
     try {
       const response = await api.get(`/department-info/${departmentId}`);
       setSelectedDepartment(response.data);
+      setImagePreview(`${baseURL}/${response.data.main_icon_path}`);
       setShowEditModal(true);
     } catch (error) {
       console.error("Error fetching department:", error);
@@ -69,6 +80,7 @@ const DepartmentPage = () => {
   const handleCloseEditModal = () => {
     setShowEditModal(false);
     setSelectedDepartment(null);
+    setImagePreview(null);
   };
 
   const handleSaveEdit = async () => {
@@ -95,7 +107,12 @@ const DepartmentPage = () => {
     const file = e.target.files[0];
     if (file) {
       setSelectedDepartment((prevDepartment) => ({ ...prevDepartment, [field]: file }));
+      setImagePreview(URL.createObjectURL(file));
     }
+  };
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
   };
 
   return (
@@ -105,10 +122,10 @@ const DepartmentPage = () => {
           <nav aria-label="breadcrumb">
             <ol className="breadcrumb">
               <li className="breadcrumb-item">
-                <Link to="/home">Home</Link>
+                <Link to="#">Home</Link>
               </li>
               <li className="breadcrumb-item active" aria-current="page">
-              Departments
+                Departments
               </li>
             </ol>
           </nav>
@@ -133,20 +150,20 @@ const DepartmentPage = () => {
                     <table className="table table-bordered m-b-0">
                       <thead>
                         <tr>
-                          <th width="10%">Sr. No.</th>
+                          <th width="10%" className="text-center">Sr. No.</th>
                           <th>Department Name</th>
                           <th>Department Link</th>
-                          <th>Department Icon</th>
-                          <th>Action</th>
+                          <th className="text-center">Department Icon</th>
+                          <th width="15%" className="text-center">Action</th>
                         </tr>
                       </thead>
                       <tbody>
-                        {departments.map((department, index) => (
+                        {currentDepartments.map((department, index) => (
                           <tr key={department.id}>
-                            <td>{index + 1}</td>
+                            <td className="text-center">{indexOfFirstItem + index + 1}</td>
                             <td>{department.heading}</td>
                             <td>{department.link}</td>
-                            <td>
+                            <td className="text-center">
                               <Link
                                 to={`${baseURL}/${department.main_icon_path}`}
                                 className="glightbox"
@@ -159,7 +176,7 @@ const DepartmentPage = () => {
                                 />
                               </Link>
                             </td>
-                            <td>
+                            <td className="text-center">
                               <button
                                 className="btn btn-success btn-sm m-t-10 mx-1"
                                 onClick={() => handleEditModalOpen(department.id)}
@@ -179,6 +196,95 @@ const DepartmentPage = () => {
                     </table>
                   </div>
                 </div>
+                <ul className="pagination mt-4">
+                  <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
+                    <button
+                      className="page-link"
+                      onClick={() => handlePageChange(currentPage - 1)}
+                    >
+                      Previous
+                    </button>
+                  </li>
+                  {currentPage > 2 && (
+                    <li className={`page-item ${currentPage === 1 ? "active" : ""}`}>
+                      <button className="page-link" onClick={() => handlePageChange(1)}>
+                        1
+                      </button>
+                    </li>
+                  )}
+                  {currentPage > 3 && (
+                    <li className={`page-item ${currentPage === 2 ? "active" : ""}`}>
+                      <button className="page-link" onClick={() => handlePageChange(2)}>
+                        2
+                      </button>
+                    </li>
+                  )}
+                  {currentPage > 4 && (
+                    <li className="page-item disabled">
+                      <span className="page-link">...</span>
+                    </li>
+                  )}
+                  {Array.from({ length: totalPages }, (_, i) => i + 1)
+                    .filter(
+                      (page) =>
+                        page >= currentPage - 1 && page <= currentPage + 1
+                    )
+                    .map((page) => (
+                      <li
+                        className={`page-item ${currentPage === page ? "active" : ""}`}
+                        key={page}
+                      >
+                        <button
+                          className="page-link"
+                          onClick={() => handlePageChange(page)}
+                        >
+                          {page}
+                        </button>
+                      </li>
+                    ))}
+                  {currentPage < totalPages - 3 && (
+                    <li className="page-item disabled">
+                      <span className="page-link">...</span>
+                    </li>
+                  )}
+                  {currentPage < totalPages - 2 && (
+                    <li
+                      className={`page-item ${currentPage === totalPages - 1 ? "active" : ""
+                        }`}
+                    >
+                      <button
+                        className="page-link"
+                        onClick={() => handlePageChange(totalPages - 1)}
+                      >
+                        {totalPages - 1}
+                      </button>
+                    </li>
+                  )}
+                  {currentPage < totalPages - 1 && (
+                    <li
+                      className={`page-item ${currentPage === totalPages ? "active" : ""
+                        }`}
+                    >
+                      <button
+                        className="page-link"
+                        onClick={() => handlePageChange(totalPages)}
+                      >
+                        {totalPages}
+                      </button>
+                    </li>
+                  )}
+                  <li
+                    className={`page-item ${currentPage === totalPages ? "disabled" : ""
+                      }`}
+                  >
+                    <button
+                      className="page-link"
+                      onClick={() => handlePageChange(currentPage + 1)}
+                    >
+                      Next
+                    </button>
+                  </li>
+                </ul>
               </div>
             </div>
           </div>
@@ -193,7 +299,7 @@ const DepartmentPage = () => {
               <div className="modal-dialog modal-dialog-centered">
                 <div className="modal-content">
                   <div className="modal-body text-center">
-                    <h5>Are you sure you want to delete this service?</h5>
+                    <h5>Are you sure you want to delete this item?</h5>
                   </div>
                   <div className="modal-footer justify-content-right">
                     <button
@@ -262,13 +368,21 @@ const DepartmentPage = () => {
                       </div>
                       <div className="mb-3">
                         <label className="form-label">
-                        Department Icon
+                          Department Icon
                         </label>
                         <input
                           type="file"
                           className="form-control"
                           onChange={(e) => handleFileChange(e, "mainIcon")}
                         />
+                        {imagePreview && (
+                          <img
+                            src={imagePreview}
+                            alt="preview"
+                            width="100px"
+                            className="mt-2"
+                          />
+                        )}
                       </div>
                     </form>
                   </div>

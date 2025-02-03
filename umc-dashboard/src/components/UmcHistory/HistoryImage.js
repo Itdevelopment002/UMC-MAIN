@@ -13,7 +13,7 @@ const HistoryImage = () => {
   const [selectedGallery, setSelectedGallery] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+  const itemsPerPage = 5;
 
   useEffect(() => {
     fetchGallerys();
@@ -34,7 +34,7 @@ const HistoryImage = () => {
       const response = await api.get("/history-img");
       setGallerys(response.data);
     } catch (error) {
-      console.error("Error fetching home gallery:", error);
+      console.error("Error fetching history image:", error);
     }
   };
 
@@ -44,6 +44,7 @@ const HistoryImage = () => {
     currentPage * itemsPerPage
   );
 
+  //eslint-disable-next-line
   const handlePageChange = (pageNumber) => {
     if (pageNumber > 0 && pageNumber <= totalPages) {
       setCurrentPage(pageNumber);
@@ -59,12 +60,12 @@ const HistoryImage = () => {
     try {
       await api.delete(`/history-img/${selectedGallery.id}`);
       setGallerys(gallerys.filter((gallery) => gallery.id !== selectedGallery.id));
-      toast.success("Home gallery deleted successfully!");
+      toast.success("History Image deleted successfully!");
       setShowDeleteModal(false);
       setSelectedGallery(null);
     } catch (error) {
-      console.error("Error deleting home gallery:", error);
-      toast.error("Error deleting home gallery!");
+      console.error("Error deleting history image:", error);
+      toast.error("Error deleting history image!");
     }
   };
 
@@ -92,11 +93,11 @@ const HistoryImage = () => {
         },
       });
       fetchGallerys();
-      toast.success("Home gallery updated successfully!");
+      toast.success("History Image updated successfully!");
       setShowEditModal(false);
     } catch (error) {
-      console.error("Error updating home gallery:", error);
-      toast.error("Error updating home gallery!");
+      console.error("Error updating history image:", error);
+      toast.error("Error updating history image!");
     }
   };
 
@@ -110,40 +111,39 @@ const HistoryImage = () => {
 
   return (
     <>
-
           <div className="row">
             <div className="col-lg-12">
               <div className="card-box">
                 <div className="card-block">
                   <div className="row">
-                    <div className="col-sm-4 col-3">
+                    <div className="col-12">
                       <h4 className="page-title">History Image</h4>
                     </div>
-                    <div className="col-sm-8 col-9 text-right m-b-20">
+                    {/* <div className="col-6 text-right m-b-20">
                       <Link
                         to="/add-historyImage"
                         className="btn btn-primary btn-rounded float-right"
                       >
                         <i className="fa fa-plus"></i> Add Image
                       </Link>
-                    </div>
+                    </div> */}
                   </div>
                   <div className="table-responsive">
                     <table className="table table-bordered m-b-0">
                       <thead>
                         <tr>
-                          <th width="10%">Sr. No.</th>
+                          <th width="10%" className="text-center">Sr. No.</th>
                           <th>Image Name</th>
-                          <th>Image</th>
-                          <th>Action</th>
+                          <th className="text-center">Image</th>
+                          <th width="15%" className="text-center">Action</th>
                         </tr>
                       </thead>
                       <tbody>
                         {currentPageData.map((gallery, index) => (
                           <tr key={gallery.id}>
-                            <td>{(currentPage - 1) * itemsPerPage + index + 1}</td>
+                            <td className="text-center">{(currentPage - 1) * itemsPerPage + index + 1}</td>
                             <td>{gallery.photo_name}</td>
-                            <td>
+                            <td className="text-center">
                               <Link
                                 to={`${baseURL}${gallery.file_path}`}
                                 className="glightbox"
@@ -156,7 +156,7 @@ const HistoryImage = () => {
                                 />
                               </Link>
                             </td>
-                            <td>
+                            <td className="text-center">
                             <button
                                 className="btn btn-success btn-sm m-t-10"
                                 onClick={() => handleEdit(gallery)}
@@ -182,7 +182,7 @@ const HistoryImage = () => {
           </div>
 
           {/* Pagination */}
-          <div>
+          {/* <div>
             <ul className="pagination">
               <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
                 <button className="page-link" onClick={() => handlePageChange(currentPage - 1)}>
@@ -202,7 +202,7 @@ const HistoryImage = () => {
                 </button>
               </li>
             </ul>
-          </div>
+          </div> */}
 
           {/* Delete Modal */}
           {showDeleteModal && (

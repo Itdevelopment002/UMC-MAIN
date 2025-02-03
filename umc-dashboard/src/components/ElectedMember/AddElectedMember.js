@@ -16,7 +16,7 @@ const AddElectedMember = () => {
     }
 
     if (!link) {
-      validationErrors.link = "Link is required.";
+      validationErrors.link = "PDF Link is required.";
     }
 
     setErrors(validationErrors);
@@ -64,7 +64,7 @@ const AddElectedMember = () => {
               <div className="card-box">
                 <div className="card-block">
                   <div className="row">
-                    <div className="col-sm-4 col-3">
+                    <div className="col-12">
                       <h4 className="page-title">Add Elected Member</h4>
                     </div>
                   </div>
@@ -76,9 +76,8 @@ const AddElectedMember = () => {
                       <div className="col-md-4">
                         <input
                           type="text"
-                          className={`form-control form-control-md ${
-                            errors.heading ? "is-invalid" : ""
-                          }`}
+                          className={`form-control form-control-md ${errors.heading ? "is-invalid" : ""
+                            }`}
                           placeholder="Enter Heading"
                           value={heading}
                           onChange={(e) => {
@@ -98,15 +97,14 @@ const AddElectedMember = () => {
 
                     <div className="form-group row mt-3">
                       <label className="col-form-label col-md-2">
-                    PDF Link <span className="text-danger">*</span>
+                        PDF Link <span className="text-danger">*</span>
                       </label>
                       <div className="col-md-4">
                         <input
                           type="text"
-                          className={`form-control form-control-md ${
-                            errors.link ? "is-invalid" : ""
-                          }`}
-                          placeholder="Enter Link"
+                          className={`form-control form-control-md ${errors.link ? "is-invalid" : ""
+                            }`}
+                          placeholder="Enter PDF Link"
                           value={link}
                           onChange={(e) => {
                             setLink(e.target.value);

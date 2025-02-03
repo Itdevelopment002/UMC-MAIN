@@ -82,7 +82,7 @@ const AddWardOffice = () => {
               <div className="card-box">
                 <div className="card-block">
                   <div className="row">
-                    <div className="col-sm-4 col-3">
+                    <div className="col-12">
                       <h4 className="page-title">Add Ward Office</h4>
                     </div>
                   </div>
@@ -91,8 +91,8 @@ const AddWardOffice = () => {
                       { label: "Ward Name", name: "ward_name" },
                       { label: "Officer Name", name: "officer_name" },
                       { label: "Office Address", name: "address" },
-                      { label: "Email", name: "email", type: "text" },
-                      { label: "Mobile", name: "mobile", type: "text" },
+                      { label: "Email Address", name: "email", type: "text" },
+                      { label: "Mobile No.", name: "mobile", type: "text" },
                       { label: "Landline No.", name: "landline", type: "text" },
                       { label: "Ward No", name: "ward_no" },
                       { label: "Areas", name: "areas" },
@@ -123,7 +123,7 @@ const AddWardOffice = () => {
                     ))}
                     <input
                       type="submit"
-                      className="btn btn-primary btn-sm mt-3"
+                      className="btn btn-primary btn-sm"
                       value="Submit"
                     />
                   </form>

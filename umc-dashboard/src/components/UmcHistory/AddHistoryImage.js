@@ -18,7 +18,7 @@ const AddHistoryImage = () => {
   const validateForm = () => {
     const newErrors = {};
     if (!photoName.trim()) {
-      newErrors.photoName = "Photo gallery name is required.";
+      newErrors.photoName = "Image name is required.";
     }
     if (!selectedFile) {
       newErrors.selectedFile = "Please select a file to upload.";
@@ -77,7 +77,7 @@ const AddHistoryImage = () => {
               <div className="card-box">
                 <div className="card-block">
                   <div className="row">
-                    <div className="col-sm-4 col-3">
+                    <div className="col-12">
                       <h4 className="page-title">Add History Image</h4>
                     </div>
                   </div>
@@ -90,7 +90,7 @@ const AddHistoryImage = () => {
                       <div className="col-md-4">
                         <input
                           type="text"
-                          className={`form-control form-control-lg ${
+                          className={`form-control form-control-md ${
                             errors.photoName ? "is-invalid" : ""
                           }`}
                           placeholder=""
@@ -112,7 +112,7 @@ const AddHistoryImage = () => {
                     </div>
                     <div className="form-group row">
                       <label className="col-form-label col-lg-2">
-                        Upload Photo{" "}
+                        Upload Image{" "}
                         <span className="text-danger">*</span>
                       </label>
                       <div className="col-md-4">
