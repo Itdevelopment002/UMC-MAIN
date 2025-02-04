@@ -2,7 +2,12 @@ const express = require("express");
 const router = express.Router();
 const db = require("../config/db.js");
 
-// Fetch all resolutions
+const convertToMySQLDate = (dateString) => {
+  const [day, month, year] = dateString.split("-");
+  return `${year}-${month}-${day}`;
+};
+
+
 router.get("/resolution", (req, res) => {
   db.query("SELECT * FROM resolution", (err, results) => {
     if (err) {
@@ -13,9 +18,10 @@ router.get("/resolution", (req, res) => {
   });
 });
 
-// Add a new resolution
+
 router.post("/resolution", (req, res) => {
   const { Department_Name, Resolutions_No_Date, Schedule_Date_of_Meeting, Adjournment_Notice, pdf_link } = req.body;
+  const formattedDate = convertToMySQLDate(Schedule_Date_of_Meeting);
   const sql = `
     INSERT INTO resolution 
     (Department_Name, Resolutions_No_Date, Schedule_Date_of_Meeting, Adjournment_Notice, pdf_link) 
@@ -23,27 +29,21 @@ router.post("/resolution", (req, res) => {
   `;
   db.query(
     sql,
-    [Department_Name, Resolutions_No_Date, Schedule_Date_of_Meeting, Adjournment_Notice, pdf_link],
+    [Department_Name, Resolutions_No_Date, formattedDate, Adjournment_Notice, pdf_link],
     (err, result) => {
       if (err) {
         console.error(err);
         return res.status(500).json({ error: "Failed to add resolution." });
       }
-      res.json({
-        id: result.insertId,
-        Department_Name,
-        Resolutions_No_Date,
-        Schedule_Date_of_Meeting,
-        Adjournment_Notice,
-        pdf_link,
-      });
-    }
-  );
+      res
+        .status(200)
+        .json({ message: "Resolution added successfully", resolutionId: result.insertId });
+    });
 });
 
-// Update an existing resolution
 router.put("/resolution/:Sr_No", (req, res) => {
   const { Department_Name, Resolutions_No_Date, Schedule_Date_of_Meeting, Adjournment_Notice, pdf_link } = req.body;
+  const formattedDate = Schedule_Date_of_Meeting ? convertToMySQLDate(Schedule_Date_of_Meeting) : null;
   const sql = `
     UPDATE resolution 
     SET Department_Name = ?, Resolutions_No_Date = ?, Schedule_Date_of_Meeting = ?, Adjournment_Notice = ?, pdf_link = ? 
@@ -51,7 +51,7 @@ router.put("/resolution/:Sr_No", (req, res) => {
   `;
   db.query(
     sql,
-    [Department_Name, Resolutions_No_Date, Schedule_Date_of_Meeting, Adjournment_Notice, pdf_link, req.params.Sr_No],
+    [Department_Name, Resolutions_No_Date, formattedDate, Adjournment_Notice, pdf_link, req.params.Sr_No],
     (err, result) => {
       if (err) {
         console.error(err);

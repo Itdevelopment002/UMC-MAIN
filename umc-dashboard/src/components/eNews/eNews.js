@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import api from "../api";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Flatpickr from "react-flatpickr";
+import "flatpickr/dist/themes/material_blue.css";
 
 const ENews = () => {
     const [enewsList, setEnewsList] = useState([]);
@@ -41,10 +43,13 @@ const ENews = () => {
     };
 
     const handleEditSave = async () => {
+        const formattedPublishDate = selectedAgenda.issue_date
+            ? formatDate(selectedAgenda.issue_date)
+            : "";
         try {
             await api.put(`/enews_data/${selectedAgenda.id}`, {
                 info: selectedAgenda.info,
-                issue_date: selectedAgenda.issue_date,
+                issue_date: formattedPublishDate,
                 pdf_link: selectedAgenda.pdf_link,
             });
             const updatedAgendaList = enewsList.map((agenda) =>
@@ -77,6 +82,14 @@ const ENews = () => {
     const indexOfLastAgenda = currentPage * agendasPerPage;
     const indexOfFirstAgenda = indexOfLastAgenda - agendasPerPage;
     const currentAgendas = enewsList.slice(indexOfFirstAgenda, indexOfLastAgenda);
+
+    const formatDate = (date) => {
+        const d = new Date(date);
+        const day = String(d.getDate()).padStart(2, "0");
+        const month = String(d.getMonth() + 1).padStart(2, "0");
+        const year = d.getFullYear();
+        return `${day}-${month}-${year}`;
+    };
 
     return (
         <>
@@ -128,7 +141,13 @@ const ENews = () => {
                                                         </td>
                                                         <td>{agenda.info}</td>
                                                         <td className="text-center">
-                                                            {new Date(agenda.issue_date).toLocaleDateString("en-CA")}
+                                                            {new Date(agenda.issue_date)
+                                                                .toLocaleDateString("en-GB", {
+                                                                    day: "2-digit",
+                                                                    month: "2-digit",
+                                                                    year: "numeric",
+                                                                })
+                                                                .replace(/\//g, "-")}
                                                         </td>
                                                         <td>
                                                             <Link
@@ -237,12 +256,16 @@ const ENews = () => {
                                             </div>
                                             <div className="mb-3">
                                                 <label className="form-label">Issue Date</label>
-                                                <input
-                                                    type="date"
-                                                    className="form-control"
-                                                    name="issue_date"
+                                                <Flatpickr
                                                     value={selectedAgenda?.issue_date || ""}
-                                                    onChange={handleEditChange}
+                                                    onChange={(date) =>
+                                                        setSelectedAgenda({
+                                                            ...selectedAgenda,
+                                                            issue_date: date[0],
+                                                        })
+                                                    }
+                                                    className="form-control"
+                                                    options={{ dateFormat: "d-m-Y" }}
                                                 />
                                             </div>
                                             <div className="mb-3">

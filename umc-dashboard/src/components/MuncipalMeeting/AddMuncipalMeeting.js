@@ -15,7 +15,7 @@ const AddMuncipalMeeting = () => {
     const validationErrors = {};
 
     if (!name) {
-      validationErrors.name = "Name is required.";
+      validationErrors.name = "Meeting Name is required.";
     }
 
     if (!year) {
@@ -85,14 +85,14 @@ const AddMuncipalMeeting = () => {
               <div className="card-box">
                 <div className="card-block">
                   <div className="row">
-                    <div className="col-sm-4 col-3">
+                    <div className="col-12">
                       <h4 className="page-title">Add Municipal Meeting</h4>
                     </div>
                   </div>
                   <form onSubmit={handleSubmit}>
                     <div className="form-group row">
                       <label className="col-form-label col-md-2">
-                        Name <span className="text-danger">*</span>
+                        Meeting Name <span className="text-danger">*</span>
                       </label>
                       <div className="col-md-4">
                         <select
