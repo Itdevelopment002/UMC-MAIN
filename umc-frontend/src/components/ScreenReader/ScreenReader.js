@@ -1,9 +1,12 @@
-import React, { useEffect } from "react";
+import React, { useEffect,useState } from "react";
 import { Link } from "react-router-dom";
 import './ScreenReader.css';
 import "../TableCss/TableCss.css";
+import api, { baseURL } from "../api";
 
 const ScreenReader = () => {
+    const [bgImage, setBgImage] = useState("");
+
     const readers = [
         {
             "name": "Screen Access For All (SAFA)",
@@ -52,13 +55,42 @@ const ScreenReader = () => {
         }
     ];
 
+
+    const fetchHeaderImage = async () => {
+        try {
+          const response = await api.get("/banner");
+    
+          if (response.data.length > 0) {
+            let selectedBanner = response.data.find(banner => banner.banner_name === "Screen Reader");
+    
+            if (selectedBanner) {
+              setBgImage(`${baseURL}${selectedBanner.file_path}`);
+            } else {
+              console.error("Banner with specified name not found.");
+            }
+          } else {
+            console.error("No banner image found.");
+          }
+        } catch (error) {
+          console.error("Error fetching header image:", error);
+        }
+      };
+    
+
     useEffect(() => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
+        fetchHeaderImage();
     }, []);
 
     return (
         <>
-            <div className="history-header-image"></div>
+            <div
+        className="history-header-image"
+        style={{
+          backgroundImage: `url(${bgImage})`,
+         
+        }}
+      ></div>
             <div id="main-content">
                 <div className="container-fluid font-location mt-4 mb-2" id="reader-css">
                     <nav className="breadcrumb">
