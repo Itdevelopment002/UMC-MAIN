@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../api";
+import Flatpickr from "react-flatpickr";
+import "flatpickr/dist/themes/material_blue.css";
 
 const AddResolution = () => {
   const [Department_Name, setDepartmentName] = useState("");
@@ -10,6 +12,14 @@ const AddResolution = () => {
   const [pdf_link, setPdfLink] = useState("");
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
+
+  const formatDate = (date) => {
+    const d = new Date(date);
+    const day = String(d.getDate()).padStart(2, "0");
+    const month = String(d.getMonth() + 1).padStart(2, "0");
+    const year = d.getFullYear();
+    return `${day}-${month}-${year}`;
+  };
 
   const validateForm = () => {
     const validationErrors = {};
@@ -45,12 +55,14 @@ const AddResolution = () => {
       return;
     }
 
+    const formattedDate = formatDate(Schedule_Date_of_Meeting);
+
     try {
       //eslint-disable-next-line
       const response = await api.post("/resolution", {
         Department_Name,
         Resolutions_No_Date,
-        Schedule_Date_of_Meeting,
+        Schedule_Date_of_Meeting: formattedDate,
         Adjournment_Notice,
         pdf_link,
       });
@@ -74,10 +86,10 @@ const AddResolution = () => {
               <Link to="#">Corporation</Link>
             </li>
             <li className="breadcrumb-item">
-              <Link to="/resolution">Resolutions</Link>
+              <Link to="/resolution">UMC Resolution</Link>
             </li>
             <li className="breadcrumb-item active" aria-current="page">
-              Add Resolution
+              Add UMC Resolution
             </li>
           </ol>
           <div className="row">
@@ -86,7 +98,7 @@ const AddResolution = () => {
                 <div className="card-block">
                   <div className="row">
                     <div className="col-12">
-                      <h4 className="page-title">Add Resolution</h4>
+                      <h4 className="page-title">Add UMC Resolution</h4>
                     </div>
                   </div>
                   <form onSubmit={handleSubmit}>
@@ -97,9 +109,8 @@ const AddResolution = () => {
                       <div className="col-md-4">
                         <input
                           type="text"
-                          className={`form-control form-control-md ${
-                            errors.Department_Name ? "is-invalid" : ""
-                          }`}
+                          className={`form-control form-control-md ${errors.Department_Name ? "is-invalid" : ""
+                            }`}
                           placeholder="Enter Department Name"
                           value={Department_Name}
                           onChange={(e) => {
@@ -116,7 +127,6 @@ const AddResolution = () => {
                         )}
                       </div>
                     </div>
-
                     <div className="form-group row mt-3">
                       <label className="col-form-label col-md-2">
                         Resolution No/Date <span className="text-danger">*</span>
@@ -124,9 +134,8 @@ const AddResolution = () => {
                       <div className="col-md-4">
                         <input
                           type="text"
-                          className={`form-control form-control-md ${
-                            errors.Resolutions_No_Date ? "is-invalid" : ""
-                          }`}
+                          className={`form-control form-control-md ${errors.Resolutions_No_Date ? "is-invalid" : ""
+                            }`}
                           placeholder="Enter Resolution No/Date"
                           value={Resolutions_No_Date}
                           onChange={(e) => {
@@ -144,28 +153,36 @@ const AddResolution = () => {
                       </div>
                     </div>
 
-                    <div className="form-group row mt-3">
+                    <div className="form-group row">
                       <label className="col-form-label col-md-2">
                         Schedule Date of Meeting <span className="text-danger">*</span>
                       </label>
-                      <div className="col-md-4">
-                        <input
-                          type="date"
-                          className={`form-control form-control-md ${
-                            errors.Schedule_Date_of_Meeting ? "is-invalid" : ""
-                          }`}
+                      <div className="cal-icon col-md-4">
+                        <Flatpickr
+                          id="startDatePicker"
+                          className={`form-control ${errors.Schedule_Date_of_Meeting ? "is-invalid" : ""
+                            }`}
+                          placeholder="Select Schedule Date of Meeting"
                           value={Schedule_Date_of_Meeting}
-                          onChange={(e) => {
-                            setScheduleDateOfMeeting(e.target.value);
-                            if (errors.Schedule_Date_of_Meeting) {
+                          onChange={(date) => {
+                            setScheduleDateOfMeeting(date[0]);
+                            if (Schedule_Date_of_Meeting) {
                               setErrors({ ...errors, Schedule_Date_of_Meeting: "" });
                             }
                           }}
+                          options={{
+                            dateFormat: "d-m-Y",
+                            monthSelectorType: "dropdown",
+                            prevArrow:
+                              '<svg><path d="M10 5L5 10L10 15"></path></svg>',
+                            nextArrow:
+                              '<svg><path d="M5 5L10 10L5 15"></path></svg>',
+                          }}
                         />
                         {errors.Schedule_Date_of_Meeting && (
-                          <div className="invalid-feedback">
+                          <small className="invalid-feedback">
                             {errors.Schedule_Date_of_Meeting}
-                          </div>
+                          </small>
                         )}
                       </div>
                     </div>
@@ -176,10 +193,10 @@ const AddResolution = () => {
                       </label>
                       <div className="col-md-4">
                         <textarea
-                          className={`form-control form-control-md ${
-                            errors.Adjournment_Notice ? "is-invalid" : ""
-                          }`}
+                          className={`form-control form-control-md ${errors.Adjournment_Notice ? "is-invalid" : ""
+                            }`}
                           placeholder="Enter Adjournment Notice"
+                          rows={2}
                           value={Adjournment_Notice}
                           onChange={(e) => {
                             setAdjournmentNotice(e.target.value);
@@ -203,9 +220,8 @@ const AddResolution = () => {
                       <div className="col-md-4">
                         <input
                           type="text"
-                          className={`form-control form-control-md ${
-                            errors.pdf_link ? "is-invalid" : ""
-                          }`}
+                          className={`form-control form-control-md ${errors.pdf_link ? "is-invalid" : ""
+                            }`}
                           placeholder="Enter PDF Link"
                           value={pdf_link}
                           onChange={(e) => {

@@ -42,7 +42,7 @@ const AddWardCommittee = () => {
         <div className="content">
           <ol className="breadcrumb">
             <li className="breadcrumb-item">
-              <Link to="/home">Home</Link>
+              <Link to="#">Corporation</Link>
             </li>
             <li className="breadcrumb-item">
               <Link to="/umc-committee">UMC Committee</Link>
@@ -56,7 +56,7 @@ const AddWardCommittee = () => {
               <div className="card-box">
                 <div className="card-block">
                   <div className="row">
-                    <div className="col-sm-4 col-3">
+                    <div className="col-12">
                       <h4 className="page-title">Add Ward Committee</h4>
                     </div>
                   </div>

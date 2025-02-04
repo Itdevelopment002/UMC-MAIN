@@ -24,6 +24,7 @@ const UmcCommittee = () => {
     fetchStandingData();
     fetchWomenData();
     fetchWardData();
+    //eslint-disable-next-line
   }, []);
 
   const fetchStandingData = async () => {
@@ -175,15 +176,15 @@ const UmcCommittee = () => {
               <div className="card-box">
                 <div className="card-block">
                   <div className="row">
-                    <div className="col-sm-4 col-3">
+                    <div className="col-6">
                       <h4 className="page-title">Standing Committee</h4>
                     </div>
-                    <div className="col-sm-8 col-9 text-right m-b-20">
+                    <div className="col-6 text-right m-b-20">
                       <Link
                         to="/add-standing-committee"
                         className="btn btn-primary btn-rounded float-right"
                       >
-                        <i className="fa fa-plus"></i> Add Standing Committee
+                        <i className="fa fa-plus"></i> Add Info
                       </Link>
                     </div>
                   </div>
@@ -278,12 +279,12 @@ const UmcCommittee = () => {
               <div className="card-box">
                 <div className="card-block">
                   <div className="row">
-                    <div className="col-sm-4 col-3">
+                    <div className="col-6">
                       <h4 className="page-title">Ward Committee</h4>
                     </div>
-                    <div className="col-sm-8 col-9 text-right m-b-20">
+                    <div className="col-6 text-right m-b-20">
                       <Link to="/add-ward-committee" className="btn btn-primary btn-rounded float-right">
-                        <i className="fa fa-plus"></i> Add Ward Committee
+                        <i className="fa fa-plus"></i> Add Info
                       </Link>
                     </div>
                   </div>
@@ -376,15 +377,15 @@ const UmcCommittee = () => {
               <div className="card-box">
                 <div className="card-block">
                   <div className="row">
-                    <div className="col-sm-4 col-3">
+                    <div className="col-6">
                       <h4 className="page-title">Women and child Welfare Committee</h4>
                     </div>
-                    <div className="col-sm-8 col-9 text-right m-b-20">
+                    <div className="col-6 text-right m-b-20">
                       <Link
                         to="/add-women-committee"
                         className="btn btn-primary btn-rounded float-right"
                       >
-                        <i className="fa fa-plus"></i> Add Women Committee
+                        <i className="fa fa-plus"></i> Add Info
                       </Link>
                     </div>
                   </div>
@@ -489,12 +490,12 @@ const UmcCommittee = () => {
                 <div className="modal-content">
                   <div className="modal-header">
                     <h5 className="modal-title">
-                      {modalType === "banner"
-                        ? "Edit Department Banner"
-                        : modalType === "description"
-                          ? "Edit Department Description"
-                          : modalType === "hod"
-                            ? "Edit Hod Detail"
+                      {modalType === "standing"
+                        ? "Edit Standing Committee"
+                        : modalType === "women"
+                          ? "Edit Women and child Welfare Committee"
+                          : modalType === "ward"
+                            ? "Edit Ward Committee"
                             : "Edit Department Pdf"}
                     </h5>
                   </div>
@@ -518,7 +519,7 @@ const UmcCommittee = () => {
                     {modalType === "ward" && (
                       <>
                         <div className="form-group">
-                          <label htmlFor="heading">ward Name</label>
+                          <label htmlFor="heading">Ward Name</label>
                           <select
                             className="form-control"
                             name="ward"

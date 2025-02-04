@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../api";
+import Flatpickr from "react-flatpickr";
+import "flatpickr/dist/themes/material_blue.css";
 
 const AddAgenda = () => {
   const [Department_Name, setDepartmentName] = useState("");
@@ -10,6 +12,14 @@ const AddAgenda = () => {
   const [pdf_link, setPdfLink] = useState("");
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
+
+  const formatDate = (date) => {
+    const d = new Date(date);
+    const day = String(d.getDate()).padStart(2, "0");
+    const month = String(d.getMonth() + 1).padStart(2, "0");
+    const year = d.getFullYear();
+    return `${day}-${month}-${year}`;
+  };
 
   const validateForm = () => {
     const validationErrors = {};
@@ -45,12 +55,14 @@ const AddAgenda = () => {
       return;
     }
 
+    const formattedDate = formatDate(Schedule_Date_of_Meeting);
+
     try {
       //eslint-disable-next-line
       const response = await api.post("/agenda_data", {
         Department_Name,
         Agenda_No_Date,
-        Schedule_Date_of_Meeting,
+        Schedule_Date_of_Meeting: formattedDate,
         Adjournment_Notice,
         pdf_link,
       });
@@ -61,7 +73,7 @@ const AddAgenda = () => {
       setPdfLink("");
       navigate("/agenda");
     } catch (error) {
-      console.error("Error adding resolution:", error);
+      console.error("Error adding umc agenda:", error);
     }
   };
 
@@ -74,10 +86,10 @@ const AddAgenda = () => {
               <Link to="#">Corporation</Link>
             </li>
             <li className="breadcrumb-item">
-              <Link to="/agenda">Agenda</Link>
+              <Link to="/agenda">UMC Agenda</Link>
             </li>
             <li className="breadcrumb-item active" aria-current="page">
-              Add Agenda
+              Add UMC Agenda
             </li>
           </ol>
           <div className="row">
@@ -86,7 +98,7 @@ const AddAgenda = () => {
                 <div className="card-block">
                   <div className="row">
                     <div className="col-sm-4 col-3">
-                      <h4 className="page-title">Add Agenda</h4>
+                      <h4 className="page-title">Add UMC Agenda</h4>
                     </div>
                   </div>
                   <form onSubmit={handleSubmit}>
@@ -97,9 +109,8 @@ const AddAgenda = () => {
                       <div className="col-md-4">
                         <input
                           type="text"
-                          className={`form-control form-control-md ${
-                            errors.Department_Name ? "is-invalid" : ""
-                          }`}
+                          className={`form-control form-control-md ${errors.Department_Name ? "is-invalid" : ""
+                            }`}
                           placeholder="Enter Department Name"
                           value={Department_Name}
                           onChange={(e) => {
@@ -124,9 +135,8 @@ const AddAgenda = () => {
                       <div className="col-md-4">
                         <input
                           type="text"
-                          className={`form-control form-control-md ${
-                            errors.Agenda_No_Date ? "is-invalid" : ""
-                          }`}
+                          className={`form-control form-control-md ${errors.Agenda_No_Date ? "is-invalid" : ""
+                            }`}
                           placeholder="Enter Agenda No/Date"
                           value={Agenda_No_Date}
                           onChange={(e) => {
@@ -144,28 +154,36 @@ const AddAgenda = () => {
                       </div>
                     </div>
 
-                    <div className="form-group row mt-3">
+                    <div className="form-group row">
                       <label className="col-form-label col-md-2">
                         Schedule Date of Meeting <span className="text-danger">*</span>
                       </label>
-                      <div className="col-md-4">
-                        <input
-                          type="date"
-                          className={`form-control form-control-md ${
-                            errors.Schedule_Date_of_Meeting ? "is-invalid" : ""
-                          }`}
+                      <div className="cal-icon col-md-4">
+                        <Flatpickr
+                          id="startDatePicker"
+                          className={`form-control ${errors.Schedule_Date_of_Meeting ? "is-invalid" : ""
+                            }`}
+                          placeholder="Select Schedule Date of Meeting"
                           value={Schedule_Date_of_Meeting}
-                          onChange={(e) => {
-                            setScheduleDateOfMeeting(e.target.value);
-                            if (errors.Schedule_Date_of_Meeting) {
+                          onChange={(date) => {
+                            setScheduleDateOfMeeting(date[0]);
+                            if (Schedule_Date_of_Meeting) {
                               setErrors({ ...errors, Schedule_Date_of_Meeting: "" });
                             }
                           }}
+                          options={{
+                            dateFormat: "d-m-Y",
+                            monthSelectorType: "dropdown",
+                            prevArrow:
+                              '<svg><path d="M10 5L5 10L10 15"></path></svg>',
+                            nextArrow:
+                              '<svg><path d="M5 5L10 10L5 15"></path></svg>',
+                          }}
                         />
                         {errors.Schedule_Date_of_Meeting && (
-                          <div className="invalid-feedback">
+                          <small className="invalid-feedback">
                             {errors.Schedule_Date_of_Meeting}
-                          </div>
+                          </small>
                         )}
                       </div>
                     </div>
@@ -176,9 +194,8 @@ const AddAgenda = () => {
                       </label>
                       <div className="col-md-4">
                         <textarea
-                          className={`form-control form-control-md ${
-                            errors.Adjournment_Notice ? "is-invalid" : ""
-                          }`}
+                          className={`form-control form-control-md ${errors.Adjournment_Notice ? "is-invalid" : ""
+                            }`}
                           placeholder="Enter Adjournment Notice"
                           value={Adjournment_Notice}
                           onChange={(e) => {
@@ -203,9 +220,8 @@ const AddAgenda = () => {
                       <div className="col-md-4">
                         <input
                           type="text"
-                          className={`form-control form-control-md ${
-                            errors.pdf_link ? "is-invalid" : ""
-                          }`}
+                          className={`form-control form-control-md ${errors.pdf_link ? "is-invalid" : ""
+                            }`}
                           placeholder="Enter PDF Link"
                           value={pdf_link}
                           onChange={(e) => {

@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import api from "../api";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Flatpickr from "react-flatpickr";
+import "flatpickr/dist/themes/material_blue.css";
 
 const Resolutions = () => {
     const [resolutions, setResolutions] = useState([]);
@@ -42,10 +44,13 @@ const Resolutions = () => {
 
     const handleEditSave = async () => {
         try {
+            const formattedPublishDate = selectedResolution.Schedule_Date_of_Meeting
+                ? formatDate(selectedResolution.Schedule_Date_of_Meeting)
+                : "";
             await api.put(`/resolution/${selectedResolution.Sr_No}`, {
                 Department_Name: selectedResolution.Department_Name,
                 Resolutions_No_Date: selectedResolution.Resolutions_No_Date,
-                Schedule_Date_of_Meeting: selectedResolution.Schedule_Date_of_Meeting,
+                Schedule_Date_of_Meeting: formattedPublishDate,
                 Adjournment_Notice: selectedResolution.Adjournment_Notice,
                 pdf_link: selectedResolution.pdf_link,
             });
@@ -85,6 +90,14 @@ const Resolutions = () => {
         indexOfLastResolution
     );
 
+    const formatDate = (date) => {
+        const d = new Date(date);
+        const day = String(d.getDate()).padStart(2, "0");
+        const month = String(d.getMonth() + 1).padStart(2, "0");
+        const year = d.getFullYear();
+        return `${day}-${month}-${year}`;
+    };
+
     return (
         <>
             <div className="page-wrapper">
@@ -95,7 +108,7 @@ const Resolutions = () => {
                                 <Link to="#">Corporation</Link>
                             </li>
                             <li className="breadcrumb-item active" aria-current="page">
-                                Resolution
+                                UMC Resolution
                             </li>
                         </ol>
                     </nav>
@@ -105,7 +118,7 @@ const Resolutions = () => {
                                 <div className="card-block">
                                     <div className="row">
                                         <div className="col-sm-4 col-3">
-                                            <h4 className="page-title">Resolutions</h4>
+                                            <h4 className="page-title">UMC Resolution</h4>
                                         </div>
                                         <div className="col-sm-8 col-9 text-right m-b-20">
                                             <Link
@@ -137,10 +150,23 @@ const Resolutions = () => {
                                                         </td>
                                                         <td>{resolution.Department_Name}</td>
                                                         <td className="text-center">{resolution.Resolutions_No_Date}</td>
-                                                        <td className="text-center">{new Date(resolution.Schedule_Date_of_Meeting).toLocaleDateString('en-CA')}</td>
+                                                        <td className="text-center">
+                                                            {new Date(resolution.Schedule_Date_of_Meeting)
+                                                                .toLocaleDateString("en-GB", {
+                                                                    day: "2-digit",
+                                                                    month: "2-digit",
+                                                                    year: "numeric",
+                                                                })
+                                                                .replace(/\//g, "-")}
+                                                        </td>
                                                         <td>{resolution.Adjournment_Notice}</td>
                                                         <td>
-                                                            <Link to={resolution.pdf_link} target="_blank" rel="noreferrer" style={{ color: 'black' }}>
+                                                            <Link
+                                                                to={resolution.pdf_link !== "#" ? `${resolution.pdf_link}` : "#"}
+                                                                target={resolution.pdf_link !== "#" ? "_blank" : ""}
+                                                                className="text-decoration-none"
+                                                                style={{ color: "#000" }}
+                                                            >
                                                                 {resolution.pdf_link}
                                                             </Link>
                                                         </td>
@@ -225,7 +251,7 @@ const Resolutions = () => {
                             <div className="modal-dialog modal-dialog-centered">
                                 <div className="modal-content">
                                     <div className="modal-header">
-                                        <h5 className="modal-title">Edit Resolution</h5>
+                                        <h5 className="modal-title">Edit UMC Resolution</h5>
                                     </div>
                                     <div className="modal-body">
                                         <form>
@@ -251,14 +277,16 @@ const Resolutions = () => {
                                             </div>
                                             <div className="mb-3">
                                                 <label className="form-label">Schedule Date</label>
-                                                <input
-                                                    type="date"
-                                                    className="form-control"
-                                                    name="Schedule_Date_of_Meeting"
-                                                    value={
-                                                        selectedResolution?.Schedule_Date_of_Meeting || ""
+                                                <Flatpickr
+                                                    value={selectedResolution?.Schedule_Date_of_Meeting || ""}
+                                                    onChange={(date) =>
+                                                        setSelectedResolution({
+                                                            ...selectedResolution,
+                                                            Schedule_Date_of_Meeting: date[0],
+                                                        })
                                                     }
-                                                    onChange={handleEditChange}
+                                                    className="form-control"
+                                                    options={{ dateFormat: "d-m-Y" }}
                                                 />
                                             </div>
                                             <div className="mb-3">

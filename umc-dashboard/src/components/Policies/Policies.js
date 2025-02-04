@@ -31,7 +31,7 @@ const Policies = () => {
             await api.delete(`/policies_data/${selectedServices.id}`);
             setPoliciesdata(policiesdata.filter((w) => w.id !== selectedServices.id));
             setShowDeleteModal(false);
-            toast.success("Quick Links deleted successfully!");
+            toast.success("Policies deleted successfully!");
         } catch (error) {
             console.error("Error deleting quick links:", error);
             toast.error("Failed to delete the quick links!");
@@ -49,7 +49,7 @@ const Policies = () => {
             );
             setPoliciesdata(updatedServices);
             setShowEditModal(false);
-            toast.success("Quick Links updated successfully!");
+            toast.success("Policies updated successfully!");
         } catch (error) {
             console.error("Error updating quick links:", error);
             toast.error("Failed to update the quick links!");
@@ -85,7 +85,7 @@ const Policies = () => {
                                 <Link to="#">Corporation</Link>
                             </li>
                             <li className="breadcrumb-item active" aria-current="page">
-                                Policies
+                                UMC Policies
                             </li>
                         </ol>
                     </nav>
@@ -95,10 +95,10 @@ const Policies = () => {
                             <div className="card-box">
                                 <div className="card-block">
                                     <div className="row">
-                                        <div className="col-sm-4 col-3">
-                                            <h4 className="page-title">Policies</h4>
+                                        <div className="col-6">
+                                            <h4 className="page-title">UMC Policies</h4>
                                         </div>
-                                        <div className="col-sm-8 col-9 text-right m-b-20">
+                                        <div className="col-6 text-right m-b-20">
                                             <Link
                                                 to="/add-policies"
                                                 className="btn btn-primary btn-rounded float-right"
@@ -111,21 +111,30 @@ const Policies = () => {
                                         <table className="table table-bordered m-b-0">
                                             <thead>
                                                 <tr>
-                                                    <th width="10%">Sr. No.</th>
-                                                    <th>Heading</th>
-                                                    <th>PDF Link</th>
-                                                    <th width="15%">Action</th>
+                                                    <th width="10%" className="text-center">Sr. No.</th>
+                                                    <th width="35%">Heading</th>
+                                                    <th width="35%">PDF Link</th>
+                                                    <th width="15%" className="text-center">Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 {currentServices.map((service, index) => (
                                                     <tr key={service.id}>
-                                                        <td>
+                                                        <td className="text-center">
                                                             {index + 1 + (currentPage - 1) * servicesPerPage}
                                                         </td>
                                                         <td>{service.heading}</td>
-                                                        <td>{service.link}</td>
                                                         <td>
+                                                            <Link
+                                                                to={service.link !== "#" ? `${service.link}` : "#"}
+                                                                target={service.link !== "#" ? "_blank" : ""}
+                                                                className="text-decoration-none"
+                                                                style={{ color: "#000" }}
+                                                            >
+                                                                {service.link}
+                                                            </Link>
+                                                        </td>
+                                                        <td className="text-center">
                                                             <button
                                                                 onClick={() => handleEditClick(service)}
                                                                 className="btn btn-success btn-sm m-t-10"
@@ -145,53 +154,52 @@ const Policies = () => {
                                         </table>
                                     </div>
                                 </div>
+                                <div className="mt-4">
+                                    <ul className="pagination">
+                                        <li
+                                            className={`page-item ${currentPage === 1 ? "disabled" : ""}`}
+                                        >
+                                            <button
+                                                className="page-link"
+                                                onClick={() => setCurrentPage(currentPage - 1)}
+                                            >
+                                                Previous
+                                            </button>
+                                        </li>
+                                        {Array.from(
+                                            { length: Math.ceil(policiesdata.length / servicesPerPage) },
+                                            (_, i) => (
+                                                <li
+                                                    className={`page-item ${currentPage === i + 1 ? "active" : ""
+                                                        }`}
+                                                    key={i}
+                                                >
+                                                    <button
+                                                        className="page-link"
+                                                        onClick={() => setCurrentPage(i + 1)}
+                                                    >
+                                                        {i + 1}
+                                                    </button>
+                                                </li>
+                                            )
+                                        )}
+                                        <li
+                                            className={`page-item ${currentPage === Math.ceil(policiesdata.length / servicesPerPage)
+                                                ? "disabled"
+                                                : ""
+                                                }`}
+                                        >
+                                            <button
+                                                className="page-link"
+                                                onClick={() => setCurrentPage(currentPage + 1)}
+                                            >
+                                                Next
+                                            </button>
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
-                    </div>
-
-                    <div className="mt-0">
-                        <ul className="pagination">
-                            <li
-                                className={`page-item ${currentPage === 1 ? "disabled" : ""}`}
-                            >
-                                <button
-                                    className="page-link"
-                                    onClick={() => setCurrentPage(currentPage - 1)}
-                                >
-                                    Previous
-                                </button>
-                            </li>
-                            {Array.from(
-                                { length: Math.ceil(policiesdata.length / servicesPerPage) },
-                                (_, i) => (
-                                    <li
-                                        className={`page-item ${currentPage === i + 1 ? "active" : ""
-                                            }`}
-                                        key={i}
-                                    >
-                                        <button
-                                            className="page-link"
-                                            onClick={() => setCurrentPage(i + 1)}
-                                        >
-                                            {i + 1}
-                                        </button>
-                                    </li>
-                                )
-                            )}
-                            <li
-                                className={`page-item ${currentPage === Math.ceil(policiesdata.length / servicesPerPage)
-                                    ? "disabled"
-                                    : ""
-                                    }`}
-                            >
-                                <button
-                                    className="page-link"
-                                    onClick={() => setCurrentPage(currentPage + 1)}
-                                >
-                                    Next
-                                </button>
-                            </li>
-                        </ul>
                     </div>
 
                     {showEditModal && (
@@ -207,7 +215,7 @@ const Policies = () => {
                             <div className="modal-dialog modal-dialog-centered">
                                 <div className="modal-content">
                                     <div className="modal-header">
-                                        <h5 className="modal-title">Edit Quick Links</h5>
+                                        <h5 className="modal-title">Edit UMC Policies</h5>
                                     </div>
                                     <div className="modal-body">
                                         <form>
@@ -267,7 +275,7 @@ const Policies = () => {
                             <div className="modal-dialog modal-dialog-centered">
                                 <div className="modal-content">
                                     <div className="modal-body text-center">
-                                        <h5>Are you sure you want to delete this entry?</h5>
+                                        <h5>Are you sure you want to delete this item?</h5>
                                     </div>
                                     <div className="modal-footer">
                                         <button

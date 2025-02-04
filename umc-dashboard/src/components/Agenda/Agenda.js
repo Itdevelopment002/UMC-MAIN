@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import api from "../api";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Flatpickr from "react-flatpickr";
+import "flatpickr/dist/themes/material_blue.css";
 
 const Agenda = () => {
     const [resolutions, setResolutions] = useState([]);
@@ -41,11 +43,14 @@ const Agenda = () => {
     };
 
     const handleEditSave = async () => {
+        const formattedPublishDate = selectedResolution.Schedule_Date_of_Meeting
+            ? formatDate(selectedResolution.Schedule_Date_of_Meeting)
+            : "";
         try {
             await api.put(`/agenda_data/${selectedResolution.Sr_No}`, {
                 Department_Name: selectedResolution.Department_Name,
                 Agenda_No_Date: selectedResolution.Agenda_No_Date,
-                Schedule_Date_of_Meeting: selectedResolution.Schedule_Date_of_Meeting,
+                Schedule_Date_of_Meeting: formattedPublishDate,
                 Adjournment_Notice: selectedResolution.Adjournment_Notice,
                 pdf_link: selectedResolution.pdf_link,
             });
@@ -85,6 +90,14 @@ const Agenda = () => {
         indexOfLastResolution
     );
 
+    const formatDate = (date) => {
+        const d = new Date(date);
+        const day = String(d.getDate()).padStart(2, "0");
+        const month = String(d.getMonth() + 1).padStart(2, "0");
+        const year = d.getFullYear();
+        return `${day}-${month}-${year}`;
+    };
+
     return (
         <>
             <div className="page-wrapper">
@@ -95,7 +108,7 @@ const Agenda = () => {
                                 <Link to="#">Corporation</Link>
                             </li>
                             <li className="breadcrumb-item active" aria-current="page">
-                                Agenda
+                                UMC Agenda
                             </li>
                         </ol>
                     </nav>
@@ -105,7 +118,7 @@ const Agenda = () => {
                                 <div className="card-block">
                                     <div className="row">
                                         <div className="col-sm-4 col-3">
-                                            <h4 className="page-title">Agenda</h4>
+                                            <h4 className="page-title">UMC Agenda</h4>
                                         </div>
                                         <div className="col-sm-8 col-9 text-right m-b-20">
                                             <Link
@@ -120,31 +133,44 @@ const Agenda = () => {
                                         <table className="table table-bordered m-b-0">
                                             <thead>
                                                 <tr>
-                                                    <th width="10%">Sr. No.</th>
-                                                    <th width="20%">Department Name</th>
-                                                    <th>Agenda No/Date</th>
-                                                    <th width="15%">Schedule Date</th>
-                                                    <th width="20%">Adjournment Notice</th>
+                                                    <th width="10%" className="text-center">Sr. No.</th>
+                                                    <th width="15%">Department Name</th>
+                                                    <th width="15%" className="text-center">Agenda No/Date</th>
+                                                    <th width="15%" className="text-center">Schedule Date</th>
+                                                    <th width="10%">Adjournment Notice</th>
                                                     <th>PDF Link</th>
-                                                    <th width="25%">Action</th>
+                                                    <th width="15%" className="text-center">Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 {currentResolutions.map((resolution, index) => (
                                                     <tr key={resolution.Sr_No}>
-                                                        <td>
+                                                        <td className="text-center">
                                                             {index + 1 + (currentPage - 1) * resolutionsPerPage}
                                                         </td>
                                                         <td>{resolution.Department_Name}</td>
-                                                        <td>{resolution.Agenda_No_Date}</td>
-                                                        <td>{new Date(resolution.Schedule_Date_of_Meeting).toLocaleDateString('en-CA')}</td>
+                                                        <td className="text-center">{resolution.Agenda_No_Date}</td>
+                                                        <td className="text-center">
+                                                            {new Date(resolution.Schedule_Date_of_Meeting)
+                                                                .toLocaleDateString("en-GB", {
+                                                                    day: "2-digit",
+                                                                    month: "2-digit",
+                                                                    year: "numeric",
+                                                                })
+                                                                .replace(/\//g, "-")}
+                                                        </td>
                                                         <td>{resolution.Adjournment_Notice}</td>
                                                         <td>
-                                                            <Link to={resolution.pdf_link} target="_blank" rel="noreferrer" style={{ color: 'black' }}>
+                                                            <Link
+                                                                to={resolution.pdf_link !== "#" ? `${resolution.pdf_link}` : "#"}
+                                                                target={resolution.pdf_link !== "#" ? "_blank" : ""}
+                                                                className="text-decoration-none"
+                                                                style={{ color: "#000" }}
+                                                            >
                                                                 {resolution.pdf_link}
                                                             </Link>
                                                         </td>
-                                                        <td>
+                                                        <td className="text-center">
                                                             <button
                                                                 onClick={() => handleEditClick(resolution)}
                                                                 className="btn btn-success btn-sm m-t-10"
@@ -164,54 +190,52 @@ const Agenda = () => {
                                         </table>
                                     </div>
                                 </div>
+                                <div className="mt-4">
+                                    <ul className="pagination">
+                                        <li
+                                            className={`page-item ${currentPage === 1 ? "disabled" : ""}`}
+                                        >
+                                            <button
+                                                className="page-link"
+                                                onClick={() => setCurrentPage(currentPage - 1)}
+                                            >
+                                                Previous
+                                            </button>
+                                        </li>
+                                        {Array.from(
+                                            { length: Math.ceil(resolutions.length / resolutionsPerPage) },
+                                            (_, i) => (
+                                                <li
+                                                    className={`page-item ${currentPage === i + 1 ? "active" : ""
+                                                        }`}
+                                                    key={i}
+                                                >
+                                                    <button
+                                                        className="page-link"
+                                                        onClick={() => setCurrentPage(i + 1)}
+                                                    >
+                                                        {i + 1}
+                                                    </button>
+                                                </li>
+                                            )
+                                        )}
+                                        <li
+                                            className={`page-item ${currentPage === Math.ceil(resolutions.length / resolutionsPerPage)
+                                                ? "disabled"
+                                                : ""
+                                                }`}
+                                        >
+                                            <button
+                                                className="page-link"
+                                                onClick={() => setCurrentPage(currentPage + 1)}
+                                            >
+                                                Next
+                                            </button>
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
-                    </div>
-
-                    {/* Pagination */}
-                    <div className="mt-0">
-                        <ul className="pagination">
-                            <li
-                                className={`page-item ${currentPage === 1 ? "disabled" : ""}`}
-                            >
-                                <button
-                                    className="page-link"
-                                    onClick={() => setCurrentPage(currentPage - 1)}
-                                >
-                                    Previous
-                                </button>
-                            </li>
-                            {Array.from(
-                                { length: Math.ceil(resolutions.length / resolutionsPerPage) },
-                                (_, i) => (
-                                    <li
-                                        className={`page-item ${currentPage === i + 1 ? "active" : ""
-                                            }`}
-                                        key={i}
-                                    >
-                                        <button
-                                            className="page-link"
-                                            onClick={() => setCurrentPage(i + 1)}
-                                        >
-                                            {i + 1}
-                                        </button>
-                                    </li>
-                                )
-                            )}
-                            <li
-                                className={`page-item ${currentPage === Math.ceil(resolutions.length / resolutionsPerPage)
-                                    ? "disabled"
-                                    : ""
-                                    }`}
-                            >
-                                <button
-                                    className="page-link"
-                                    onClick={() => setCurrentPage(currentPage + 1)}
-                                >
-                                    Next
-                                </button>
-                            </li>
-                        </ul>
                     </div>
 
                     {/* Modals */}
@@ -227,7 +251,7 @@ const Agenda = () => {
                             <div className="modal-dialog modal-dialog-centered">
                                 <div className="modal-content">
                                     <div className="modal-header">
-                                        <h5 className="modal-title">Edit Resolution</h5>
+                                        <h5 className="modal-title">Edit UMC Agenda</h5>
                                     </div>
                                     <div className="modal-body">
                                         <form>
@@ -253,14 +277,16 @@ const Agenda = () => {
                                             </div>
                                             <div className="mb-3">
                                                 <label className="form-label">Schedule Date</label>
-                                                <input
-                                                    type="date"
-                                                    className="form-control"
-                                                    name="Schedule_Date_of_Meeting"
-                                                    value={
-                                                        selectedResolution?.Schedule_Date_of_Meeting || ""
+                                                <Flatpickr
+                                                    value={selectedResolution?.Schedule_Date_of_Meeting || ""}
+                                                    onChange={(date) =>
+                                                        setSelectedResolution({
+                                                            ...selectedResolution,
+                                                            Schedule_Date_of_Meeting: date[0],
+                                                        })
                                                     }
-                                                    onChange={handleEditChange}
+                                                    className="form-control"
+                                                    options={{ dateFormat: "d-m-Y" }}
                                                 />
                                             </div>
                                             <div className="mb-3">
@@ -317,7 +343,7 @@ const Agenda = () => {
                             <div className="modal-dialog modal-dialog-centered">
                                 <div className="modal-content">
                                     <div className="modal-body text-center">
-                                        <h5>Are you sure you want to delete this entry?</h5>
+                                        <h5>Are you sure you want to delete this item?</h5>
                                     </div>
                                     <div className="modal-footer">
                                         <button
