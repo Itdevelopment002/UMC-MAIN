@@ -148,7 +148,7 @@
 }
 
 .logo-image {
-  width: 250px;
+  /* width: 250px; */
   height: 55px;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   object-fit: cover;

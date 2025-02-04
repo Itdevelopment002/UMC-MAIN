@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../api";
+import Flatpickr from "react-flatpickr";
+import "flatpickr/dist/themes/material_blue.css";
 
 const AddeNews = () => {
   const [info, setInfo] = useState("");
@@ -8,6 +10,14 @@ const AddeNews = () => {
   const [pdf_link, setPdfLink] = useState("");
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
+
+  const formatDate = (date) => {
+    const d = new Date(date);
+    const day = String(d.getDate()).padStart(2, "0");
+    const month = String(d.getMonth() + 1).padStart(2, "0");
+    const year = d.getFullYear();
+    return `${day}-${month}-${year}`;
+  };
 
   const validateForm = () => {
     const validationErrors = {};
@@ -35,11 +45,13 @@ const AddeNews = () => {
       return;
     }
 
+    const formattedDate = formatDate(issue_date);
+
     try {
       //eslint-disable-next-line
       const response = await api.post("/enews_data", {
         info,
-        issue_date,
+        issue_date: formattedDate,
         pdf_link,
       });
       setInfo("");
@@ -83,9 +95,8 @@ const AddeNews = () => {
                       <div className="col-md-4">
                         <textarea
                           rows={2}
-                          className={`form-control form-control-md ${
-                            errors.info ? "is-invalid" : ""
-                          }`}
+                          className={`form-control form-control-md ${errors.info ? "is-invalid" : ""
+                            }`}
                           placeholder="Enter Information"
                           value={info}
                           onChange={(e) => {
@@ -101,28 +112,36 @@ const AddeNews = () => {
                       </div>
                     </div>
 
-                    <div className="form-group row mt-3">
+                    <div className="form-group row">
                       <label className="col-form-label col-md-2">
                         Issue Date <span className="text-danger">*</span>
                       </label>
-                      <div className="col-md-4">
-                        <input
-                          type="date"
-                          className={`form-control form-control-md ${
-                            errors.issue_date ? "is-invalid" : ""
-                          }`}
+                      <div className="cal-icon col-md-4">
+                        <Flatpickr
+                          id="startDatePicker"
+                          className={`form-control ${errors.issue_date ? "is-invalid" : ""
+                            }`}
+                          placeholder="Select Issue Date"
                           value={issue_date}
-                          onChange={(e) => {
-                            setIssueDate(e.target.value);
-                            if (errors.issue_date) {
+                          onChange={(date) => {
+                            setIssueDate(date[0]);
+                            if (issue_date) {
                               setErrors({ ...errors, issue_date: "" });
                             }
                           }}
+                          options={{
+                            dateFormat: "d-m-Y",
+                            monthSelectorType: "dropdown",
+                            prevArrow:
+                              '<svg><path d="M10 5L5 10L10 15"></path></svg>',
+                            nextArrow:
+                              '<svg><path d="M5 5L10 10L5 15"></path></svg>',
+                          }}
                         />
                         {errors.issue_date && (
-                          <div className="invalid-feedback">
+                          <small className="invalid-feedback">
                             {errors.issue_date}
-                          </div>
+                          </small>
                         )}
                       </div>
                     </div>
@@ -134,9 +153,8 @@ const AddeNews = () => {
                       <div className="col-md-4">
                         <input
                           type="text"
-                          className={`form-control form-control-md ${
-                            errors.pdf_link ? "is-invalid" : ""
-                          }`}
+                          className={`form-control form-control-md ${errors.pdf_link ? "is-invalid" : ""
+                            }`}
                           placeholder="Enter PDF Link"
                           value={pdf_link}
                           onChange={(e) => {

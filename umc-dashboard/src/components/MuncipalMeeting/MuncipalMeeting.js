@@ -19,14 +19,13 @@ const MuncipalMeeting = () => {
     }, []);
 
     useEffect(() => {
-        filterMeetingsByName(selectedMeetingName); // Filter the meetings when `selectedMeetingName` changes
+        filterMeetingsByName(selectedMeetingName);
     }, [selectedMeetingName, municipalMeetingsData]);
 
     const fetchMunicipalMeetingsData = async () => {
         try {
             const response = await api.get("/muncipal_meetings");
             setMunicipalMeetingsData(response.data);
-            // Dynamically set the first name as selectedMeetingName
             if (response.data.length > 0) {
                 setSelectedMeetingName(response.data[0].name); // Set the default to the first meeting's name
             }
@@ -39,13 +38,13 @@ const MuncipalMeeting = () => {
 
     const filterMeetingsByName = (name) => {
         const filtered = name
-            ? municipalMeetingsData.filter((meeting) => 
+            ? municipalMeetingsData.filter((meeting) =>
                 meeting.name.toLowerCase() === name.toLowerCase() // Exact match
             )
             : municipalMeetingsData; // If name is empty, show all
         setFilteredMeetings(filtered);
     };
-    
+
     const handleDelete = async () => {
         try {
             await api.delete(`/muncipal_meetings/${selectedMeeting.id}`);
@@ -135,12 +134,11 @@ const MuncipalMeeting = () => {
                                                 to="/add-muncipal-meeting"
                                                 className="btn btn-primary btn-rounded float-right"
                                             >
-                                                <i className="fa fa-plus"></i> Add Municipal
+                                                <i className="fa fa-plus"></i> Add Data
                                             </Link>
                                         </div>
                                     </div>
 
-                                    {/* Dropdown for selecting meeting type */}
                                     <div className="form-group">
                                         <label style={{ fontWeight: "500" }}>Select Meeting Name</label>
                                         <select
@@ -149,7 +147,6 @@ const MuncipalMeeting = () => {
                                             onChange={handleMeetingNameChange}
                                             style={{ width: '250px' }}
                                         >
-                                            {/* Dynamically generate options from meetingNames */}
                                             {meetingNames.map((name, index) => (
                                                 <option key={index} value={name}>
                                                     {name}
@@ -162,27 +159,30 @@ const MuncipalMeeting = () => {
                                         <table className="table table-bordered m-b-0">
                                             <thead>
                                                 <tr>
-                                                    <th width="10%">Sr. No.</th>
+                                                    <th width="10%" className="text-center">Sr. No.</th>
                                                     <th>Year</th>
                                                     <th>PDF Links</th>
-                                                    <th width="15%">Action</th>
+                                                    <th width="15%" className="text-center">Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody>{currentMeetings.map((meeting, index) => (
                                                 <React.Fragment key={meeting.id}>
                                                     <tr>
-                                                        <td rowSpan="3">
+                                                        <td rowSpan="3" className="text-center">
                                                             {index + 1 + (currentPage - 1) * meetingsPerPage}
                                                         </td>
                                                         <td rowSpan="3">{meeting.year}</td>
-
-                                                        
                                                         <td>
-                                                            <Link to={meeting.pdf_link1} target="_blank" style={{ color: 'black' }}>
+                                                            <Link
+                                                                to={meeting.pdf_link1 !== "#" ? `${meeting.pdf_link1}` : "#"}
+                                                                target={meeting.pdf_link1 !== "#" ? "_blank" : ""}
+                                                                className="text-decoration-none"
+                                                                style={{ color: "#000" }}
+                                                            >
                                                                 {meeting.pdf_link1}
                                                             </Link>
                                                         </td>
-                                                        <td rowSpan="3" style={{ textAlign: 'center' }}>
+                                                        <td rowSpan="3" className="text-center" style={{ textAlign: 'center' }}>
                                                             <button
                                                                 onClick={() => handleEditClick(meeting)}
                                                                 className="btn btn-success btn-sm m-t-10"
@@ -197,20 +197,26 @@ const MuncipalMeeting = () => {
                                                             </button>
                                                         </td>
                                                     </tr>
-
-                                                    
                                                     <tr>
                                                         <td>
-                                                            <Link to={meeting.pdf_link2} target="_blank" style={{ color: 'black' }}>
+                                                            <Link
+                                                                to={meeting.pdf_link2 !== "#" ? `${meeting.pdf_link2}` : "#"}
+                                                                target={meeting.pdf_link2 !== "#" ? "_blank" : ""}
+                                                                className="text-decoration-none"
+                                                                style={{ color: "#000" }}
+                                                            >
                                                                 {meeting.pdf_link2}
                                                             </Link>
                                                         </td>
                                                     </tr>
-
-                                                    {/* Third row for the third PDF link */}
                                                     <tr>
                                                         <td>
-                                                            <Link to={meeting.pdf_link3} target="_blank" style={{ color: 'black' }}>
+                                                            <Link
+                                                                to={meeting.pdf_link3 !== "#" ? `${meeting.pdf_link3}` : "#"}
+                                                                target={meeting.pdf_link3 !== "#" ? "_blank" : ""}
+                                                                className="text-decoration-none"
+                                                                style={{ color: "#000" }}
+                                                            >
                                                                 {meeting.pdf_link3}
                                                             </Link>
                                                         </td>
@@ -222,50 +228,48 @@ const MuncipalMeeting = () => {
                                         </table>
                                     </div>
                                 </div>
+                                <div className="mt-4">
+                                    <ul className="pagination">
+                                        <li
+                                            className={`page-item ${currentPage === 1 ? "disabled" : ""}`}
+                                        >
+                                            <button
+                                                className="page-link"
+                                                onClick={() => setCurrentPage(currentPage - 1)}
+                                            >
+                                                Previous
+                                            </button>
+                                        </li>
+                                        {Array.from(
+                                            { length: Math.ceil(filteredMeetings.length / meetingsPerPage) },
+                                            (_, i) => (
+                                                <li
+                                                    className={`page-item ${currentPage === i + 1 ? "active" : ""}`}
+                                                    key={i}
+                                                >
+                                                    <button
+                                                        className="page-link"
+                                                        onClick={() => setCurrentPage(i + 1)}
+                                                    >
+                                                        {i + 1}
+                                                    </button>
+                                                </li>
+                                            )
+                                        )}
+                                        <li
+                                            className={`page-item ${currentPage === Math.ceil(filteredMeetings.length / meetingsPerPage) ? "disabled" : ""}`}
+                                        >
+                                            <button
+                                                className="page-link"
+                                                onClick={() => setCurrentPage(currentPage + 1)}
+                                            >
+                                                Next
+                                            </button>
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
-                    </div>
-
-                    {/* Pagination */}
-                    <div className="mt-0">
-                        <ul className="pagination">
-                            <li
-                                className={`page-item ${currentPage === 1 ? "disabled" : ""}`}
-                            >
-                                <button
-                                    className="page-link"
-                                    onClick={() => setCurrentPage(currentPage - 1)}
-                                >
-                                    Previous
-                                </button>
-                            </li>
-                            {Array.from(
-                                { length: Math.ceil(filteredMeetings.length / meetingsPerPage) },
-                                (_, i) => (
-                                    <li
-                                        className={`page-item ${currentPage === i + 1 ? "active" : ""}`}
-                                        key={i}
-                                    >
-                                        <button
-                                            className="page-link"
-                                            onClick={() => setCurrentPage(i + 1)}
-                                        >
-                                            {i + 1}
-                                        </button>
-                                    </li>
-                                )
-                            )}
-                            <li
-                                className={`page-item ${currentPage === Math.ceil(filteredMeetings.length / meetingsPerPage) ? "disabled" : ""}`}
-                            >
-                                <button
-                                    className="page-link"
-                                    onClick={() => setCurrentPage(currentPage + 1)}
-                                >
-                                    Next
-                                </button>
-                            </li>
-                        </ul>
                     </div>
 
                     {/* Edit and Delete Modals */}
@@ -341,14 +345,14 @@ const MuncipalMeeting = () => {
                                     <div className="modal-footer">
                                         <button
                                             type="button"
-                                            className="btn btn-secondary"
+                                            className="btn btn-secondary btn-sm"
                                             onClick={() => setShowEditModal(false)}
                                         >
                                             Close
                                         </button>
                                         <button
                                             type="button"
-                                            className="btn btn-primary"
+                                            className="btn btn-primary btn-sm"
                                             onClick={handleEditSave}
                                         >
                                             Save changes
@@ -372,23 +376,20 @@ const MuncipalMeeting = () => {
                         >
                             <div className="modal-dialog modal-dialog-centered">
                                 <div className="modal-content">
-                                    <div className="modal-header">
-                                        <h5 className="modal-title">Delete Municipal Meeting</h5>
-                                    </div>
-                                    <div className="modal-body">
-                                        <p>Are you sure you want to delete this meeting?</p>
+                                    <div className="modal-body text-center">
+                                        <h5>Are you sure you want to delete this item?</h5>
                                     </div>
                                     <div className="modal-footer">
                                         <button
                                             type="button"
-                                            className="btn btn-secondary"
+                                            className="btn btn-secondary btn-sm"
                                             onClick={() => setShowDeleteModal(false)}
                                         >
                                             Close
                                         </button>
                                         <button
                                             type="button"
-                                            className="btn btn-danger"
+                                            className="btn btn-danger btn-sm"
                                             onClick={handleDelete}
                                         >
                                             Delete
