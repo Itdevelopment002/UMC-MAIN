@@ -16,7 +16,7 @@ const AddPolicies = () => {
     }
 
     if (!link) {
-      validationErrors.link = "Link is required.";
+      validationErrors.link = "PDF Link is required.";
     }
 
     setErrors(validationErrors);
@@ -53,10 +53,10 @@ const AddPolicies = () => {
               <Link to="#">Corporation</Link>
             </li>
             <li className="breadcrumb-item">
-              <Link to="/policies">Policies</Link>
+              <Link to="/policies">UMC Policies</Link>
             </li>
             <li className="breadcrumb-item active" aria-current="page">
-              Add Policies
+              Add UMC Policies
             </li>
           </ol>
           <div className="row">
@@ -64,8 +64,8 @@ const AddPolicies = () => {
               <div className="card-box">
                 <div className="card-block">
                   <div className="row">
-                    <div className="col-sm-4 col-3">
-                      <h4 className="page-title">Add Policies</h4>
+                    <div className="col-12">
+                      <h4 className="page-title">Add UMC Policies</h4>
                     </div>
                   </div>
                   <form onSubmit={handleSubmit}>
@@ -106,7 +106,7 @@ const AddPolicies = () => {
                           className={`form-control form-control-md ${
                             errors.link ? "is-invalid" : ""
                           }`}
-                          placeholder="Enter Link"
+                          placeholder="Enter PDF Link"
                           value={link}
                           onChange={(e) => {
                             setLink(e.target.value);
@@ -125,7 +125,7 @@ const AddPolicies = () => {
 
                     <input
                       type="submit"
-                      className="btn btn-primary btn-sm mt-3"
+                      className="btn btn-primary btn-sm"
                       value="Submit"
                     />
                   </form>
