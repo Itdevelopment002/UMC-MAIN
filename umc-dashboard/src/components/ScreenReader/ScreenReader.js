@@ -4,80 +4,81 @@ import api from "../api";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const PrivacyPolicy = () => {
-  const [policyData, setPolicyData] = useState([]);
+const ScreenReader = () => {
+  const [readerData, setReaderData] = useState([]);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
-  const [selectedPolicy, setSelectedPolicy] = useState(null);
+  const [selectedReader, setSelectedReader] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
 
   useEffect(() => {
-    fetchPolicy();
+    fetchReader();
   }, []);
 
-  const fetchPolicy = async () => {
+  const fetchReader = async () => {
     try {
-      const response = await api.get("/privacy-policy");
-      setPolicyData(response.data);
+      const response = await api.get("/screen-reader");
+      setReaderData(response.data);
     } catch (error) {
-      toast.error("Failed to fetch privacy policy data!");
+      toast.error("Failed to fetch screen reader data!");
     }
   };
 
   const handleDelete = async () => {
     try {
-      await api.delete(`/privacy-policy/${selectedPolicy.id}`);
-      setPolicyData((prevData) =>
-        prevData.filter((policy) => policy.id !== selectedPolicy.id)
+      await api.delete(`/screen-reader/${selectedReader.id}`);
+      setReaderData((prevData) =>
+        prevData.filter((reader) => reader.id !== selectedReader.id)
       );
       setShowDeleteModal(false);
-      toast.success("Privacy Policy deleted successfully!");
+      toast.success("Screen Reader Access deleted successfully!");
     } catch (error) {
-      console.error("Error deleting privacy policy:", error);
-      toast.error("Failed to delete the privacy policy!");
+      console.error("Error deleting screen reader data:", error);
+      toast.error("Failed to delete the screen reader data!");
     }
   };
 
   const handleEditSave = async () => {
     try {
-      await api.put(`/privacy-policy/${selectedPolicy.id}`, {
-        heading: selectedPolicy.heading,
-        description: selectedPolicy.description,
+      await api.put(`/screen-reader/${selectedReader.id}`, {
+        name: selectedReader.name,
+        website: selectedReader.website,
+        available: selectedReader.available,
       });
 
-      const updatedPolicy = policyData.map((policy) =>
-        policy.id === selectedPolicy.id ? selectedPolicy : policy
+      const updatedReader = readerData.map((reader) =>
+        reader.id === selectedReader.id ? selectedReader : reader
       );
-      setPolicyData(updatedPolicy);
+      setReaderData(updatedReader);
       setShowEditModal(false);
-      toast.success("Privacy Policy updated successfully!");
+      toast.success("Screen Reader Access updated successfully!");
     } catch (error) {
-      toast.error("Failed to update the privacy policy!");
+      toast.error("Failed to update the screen reader data!");
     }
   };
 
-  const handleEditClick = (policy) => {
-    setSelectedPolicy({ ...policy });
+  const handleEditClick = (reader) => {
+    setSelectedReader({ ...reader });
     setShowEditModal(true);
   };
 
-  const handleDeleteClick = (policy) => {
-    setSelectedPolicy(policy);
+  const handleDeleteClick = (reader) => {
+    setSelectedReader(reader);
     setShowDeleteModal(true);
   };
 
   const handleEditChange = (e) => {
     const { name, value } = e.target;
-    setSelectedPolicy({ ...selectedPolicy, [name]: value });
+    setSelectedReader({ ...selectedReader, [name]: value });
   };
 
-  const currentPageData = policyData.slice(
+  const currentPageData = readerData.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
 
-  const totalPages = Math.ceil(policyData.length / itemsPerPage);
+  const totalPages = Math.ceil(readerData.length / itemsPerPage);
 
   return (
     <div>
@@ -86,10 +87,10 @@ const PrivacyPolicy = () => {
           <nav aria-label="breadcrumb">
             <ol className="breadcrumb">
               <li className="breadcrumb-item">
-                <Link to="/home">Home</Link>
+                <Link to="#">Home</Link>
               </li>
               <li className="breadcrumb-item active" aria-current="page">
-                Privacy Policy
+                Screen Reader Access
               </li>
             </ol>
           </nav>
@@ -99,14 +100,14 @@ const PrivacyPolicy = () => {
                 <div className="card-block">
                   <div className="row">
                     <div className="col-6">
-                      <h4 className="page-title">Privacy Policy</h4>
+                      <h4 className="page-title">Screen Reader Access</h4>
                     </div>
                     <div className="col-6 text-right m-b-20">
                       <Link
-                        to="/add-privacy-policy"
+                        to="/add-screen-reader-access"
                         className="btn btn-primary btn-rounded float-right"
                       >
-                        <i className="fa fa-plus"></i> Add Policy
+                        <i className="fa fa-plus"></i> Add Reader
                       </Link>
                     </div>
                   </div>
@@ -115,30 +116,41 @@ const PrivacyPolicy = () => {
                       <thead>
                         <tr>
                           <th width="10%" className="text-center">Sr. No.</th>
-                          <th>Policy Heading</th>
-                          <th>Policy Description</th>
+                          <th>Reader Name</th>
+                          <th>Reader Website</th>
+                          <th className="text-center">Reader Availability</th>
                           <th width="15%" className="text-center">Action</th>
                         </tr>
                       </thead>
                       <tbody>
                         {currentPageData.length > 0 ? (
-                          currentPageData.map((policy, index) => (
-                            <tr key={policy.id}>
+                          currentPageData.map((reader, index) => (
+                            <tr key={reader.id}>
                               <td className="text-center">
                                 {(currentPage - 1) * itemsPerPage + index + 1}
                               </td>
-                              <td>{policy.heading}</td>
-                              <td>{policy.description}</td>
+                              <td>{reader.name}</td>
+                              <td>
+                                <Link
+                                  to={reader.website !== "#" ? `${reader.website}` : "#"}
+                                  target={reader.website !== "#" ? "_blank" : ""}
+                                  className="text-decoration-none"
+                                  style={{ color: "#000" }}
+                                >
+                                  {reader.website}
+                                </Link>
+                              </td>
+                              <td className="text-center">{reader.available}</td>
                               <td className="text-center">
                                 <button
                                   className="btn btn-success btn-sm m-t-10"
-                                  onClick={() => handleEditClick(policy)}
+                                  onClick={() => handleEditClick(reader)}
                                 >
                                   Edit
                                 </button>
                                 <button
                                   className="btn btn-danger btn-sm m-t-10"
-                                  onClick={() => handleDeleteClick(policy)}
+                                  onClick={() => handleDeleteClick(reader)}
                                 >
                                   Delete
                                 </button>
@@ -147,8 +159,8 @@ const PrivacyPolicy = () => {
                           ))
                         ) : (
                           <tr>
-                            <td colSpan="4" className="text-center">
-                              No privacy policy available.
+                            <td colSpan="5" className="text-center">
+                              No Screen Reader Access Data available.
                             </td>
                           </tr>
                         )}
@@ -264,29 +276,44 @@ const PrivacyPolicy = () => {
               <div className="modal-dialog modal-dialog-centered">
                 <div className="modal-content">
                   <div className="modal-header">
-                    <h5 className="modal-title">Edit Privacy Policy</h5>
+                    <h5 className="modal-title">Edit Screen Reader Access</h5>
                   </div>
                   <div className="modal-body">
                     <form>
                       <div className="mb-3">
-                        <label className="form-label">Policy Heading</label>
+                        <label className="form-label">Reader Name</label>
                         <input
                           type="text"
                           className="form-control form-control-md"
-                          name="heading"
-                          value={selectedPolicy?.heading || ""}
+                          name="name"
+                          value={selectedReader?.name || ""}
                           onChange={handleEditChange}
                         />
                       </div>
                       <div className="mb-3">
-                        <label className="form-label">Policy Description</label>
-                        <textarea
+                        <label className="form-label">Reader Website</label>
+                        <input
+                          type="text"
                           className="form-control form-control-md"
-                          name="description"
-                          value={selectedPolicy?.description || ""}
+                          name="website"
+                          value={selectedReader?.website || ""}
                           onChange={handleEditChange}
-                        ></textarea>
+                        />
                       </div>
+                      <div className="mb-3">
+                        <label className="form-label">Reader Availability</label>
+                        <select
+                          className="form-control form-control-md"
+                          name="available"
+                          value={selectedReader?.available || ""}
+                          onChange={handleEditChange}
+                        >
+                          <option value="" disabled>Select Availability</option>
+                          <option value="Free">Free</option>
+                          <option value="Commercial">Commercial</option>
+                        </select>
+                      </div>
+
                     </form>
                   </div>
                   <div className="modal-footer">
@@ -352,4 +379,4 @@ const PrivacyPolicy = () => {
   );
 };
 
-export default PrivacyPolicy;
+export default ScreenReader;

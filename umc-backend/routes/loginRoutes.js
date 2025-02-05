@@ -24,6 +24,7 @@ router.post("/login", generateUniqueId, (req, res) => {
       res.json({
         message: "Login successful",
         user: {
+          id: user.id,
           department: user.department,
         },
         uniqueId: req.uniqueId,
