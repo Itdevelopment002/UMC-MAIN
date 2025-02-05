@@ -75,7 +75,7 @@ const Carousel = () => {
             {sliders.map((slide, index) => (
               <SwiperSlide key={index}>
                 <img
-                  src={`${baseURL}/${slide.file_path}`}
+                  src={`${baseURL}/${slide.image_path}`}
                   alt={slide.slider_name || "Slide"}
                   className="img image-4 rounded"
                 />
