@@ -1,6 +1,22 @@
 const express = require("express");
+const multer = require("multer");
+const path = require("path");
+const fs = require("fs");
 const router = express.Router();
 const db = require("../config/db.js");
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "uploads/");
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + path.extname(file.originalname));
+  },
+});
+
+const upload = multer({ storage,
+ limits: { fileSize: 10 * 1024 * 1024 },
+});
 
 router.post("/users", (req, res) => {
   const { username, password, department } = req.body;
@@ -27,7 +43,7 @@ router.get("/users", (req, res) => {
   });
 });
 
-router.get("/users:id", (req, res) => {
+router.get("/users/:id", (req, res) => { 
   const { id } = req.params;
 
   const query = "SELECT * FROM users WHERE id = ?";
@@ -43,20 +59,63 @@ router.get("/users:id", (req, res) => {
   });
 });
 
-router.put("/users:id", (req, res) => {
+router.put("/users/:id", upload.single("userImage"), async (req, res) => {
   const { id } = req.params;
-  const { username, password, department } = req.body;
+  const { fullname, email, mobile, designation, password } = req.body;
+  const imagePath = req.file ? `uploads/${req.file.filename}` : null;
 
-  const query =
-    "UPDATE users SET username = ?, password = ?, department = ? WHERE id = ?";
-  db.query(query, [username, password, department, id], (err, results) => {
-    if (err) {
-      console.error("Error updating user:", err);
-      return res.status(500).json({ message: "Error updating user" });
-    }
-    res.json({ message: "User updated successfully", username, department });
-  });
+  try {
+    db.query("SELECT * FROM users WHERE id = ?", [id], async (err, results) => {
+      if (err) {
+        console.error("Error fetching user:", err);
+        return res.status(500).json({ message: "Error fetching user" });
+      }
+      if (results.length === 0) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      let user = results[0];
+
+      const updatedFullname = fullname || user.fullname;
+      const updatedEmail = email || user.email;
+      const updatedMobile = mobile || user.mobile;
+      const updatedDesignation = designation || user.designation;
+      const updatedPassword = password || user.password;
+      const updatedImage = imagePath || user.userImage;
+
+      const query =
+        "UPDATE users SET fullname = ?, email = ?, mobile = ?, designation = ?, password = ?, userImage = ? WHERE id = ?";
+      const values = [updatedFullname, updatedEmail, updatedMobile, updatedDesignation, updatedPassword, updatedImage, id];
+
+      db.query(query, values, (err, results) => {
+        if (err) {
+          console.error("Error updating user:", err);
+          return res.status(500).json({ message: "Error updating user" });
+        }
+
+        if (imagePath && user.userImage) {
+          fs.unlink(user.userImage, (err) => {
+            if (err) console.error("Error deleting old image:", err);
+          });
+        }
+
+        res.json({
+          message: "User updated successfully",
+          fullname: updatedFullname,
+          email: updatedEmail,
+          mobile: updatedMobile,
+          designation: updatedDesignation,
+          userImage: updatedImage,
+        });
+      });
+    });
+  } catch (error) {
+    console.error("Error in updating user:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
 });
+
+
 
 router.delete("/users:id", (req, res) => {
   const { id } = req.params;

@@ -1,56 +1,24 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import './ScreenReader.css';
 import "../TableCss/TableCss.css";
+import api from "../api";
 
 const ScreenReader = () => {
-    const readers = [
-        {
-            "name": "Screen Access For All (SAFA)",
-            "link": "http://safa-reader.software.informer.com/download/",
-            "available": "Free"
-        },
-        {
-            "name": "Non Visual Desktop Access (NVDA)",
-            "link": "http://www.nvda-project.org/",
-            "available": "Free"
-        },
-        {
-            "name": "System Access To Go",
-            "link": "http://www.satogo.com/",
-            "available": "Free"
-        },
-        {
-            "name": "Thunder",
-            "link": "http://www.screenreader.net/index.php?pageid=11",
-            "available": "Free"
-        },
-        {
-            "name": "Web any where",
-            "link": "http://webanywhere.cs.washington.edu/wa.php",
-            "available": "Free"
-        },
-        {
-            "name": "Hal",
-            "link": "http://www.yourdolphin.co.uk/productdetail.asp?id=5",
-            "available": "Commercial"
-        },
-        {
-            "name": "JAWS",
-            "link": "http://www.freedomscientific.com/Products/Blindness/JAWS",
-            "available": "Commercial"
-        },
-        {
-            "name": "Supernova",
-            "link": "http://www.yourdolphin.co.uk/productdetail.asp?id=1",
-            "available": "Commercial"
-        },
-        {
-            "name": "Window-Eyes",
-            "link": "http://www.gwmicro.com/Window-Eyes/",
-            "available": "Commercial"
+    const [reader, setReader] = useState([]);
+
+    const fetchReader = async ()=>{
+        try{
+            const response = await api.get("/screen-reader");
+            setReader(response.data);
+        } catch(error){
+            console.error("Error fetching reader data");
         }
-    ];
+    };
+
+    useEffect(()=>{
+        fetchReader();
+    },[]);
 
     useEffect(() => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -87,7 +55,7 @@ const ScreenReader = () => {
                                 <table className="table table-bordered table-responsive shadow">
                                     <thead className="bg-orange text-white">
                                         <tr>
-                                            <th className="table-heading-styling" style={{ textAlign: "center" }}>
+                                            <th className="table-heading-styling text-center" >
                                                 Sr. No.
                                             </th>
                                             <th className="table-heading-styling">
@@ -96,13 +64,13 @@ const ScreenReader = () => {
                                             <th className="table-heading-styling">
                                                 Website
                                             </th>
-                                            <th className="table-heading-styling" style={{ textAlign: "center" }}>
+                                            <th className="table-heading-styling text-center" >
                                                 Free / Commercial
                                             </th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {readers.map((item, index) => (
+                                        {reader.map((item, index) => (
                                             <tr key={index}>
                                                 <td
                                                     className="font-large"
@@ -133,8 +101,8 @@ const ScreenReader = () => {
                                                         paddingRight: "10px",
                                                     }}
                                                 >
-                                                    <Link to={item.link} className="text-decoration-none custom-list-effect" target="_blank">
-                                                        {item.link}
+                                                    <Link to={item.website} className="text-decoration-none custom-list-effect" target="_blank">
+                                                        {item.website}
                                                     </Link>
                                                 </td>
                                                 <td

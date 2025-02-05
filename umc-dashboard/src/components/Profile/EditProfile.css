@@ -1,0 +1,14 @@
+.custom-input-edit-profile {
+    border: none;
+    border-bottom: 1px solid #333;
+    background: transparent;
+    outline: none;
+    box-shadow: none;
+    border-radius: 0;
+}
+
+.custom-input-edit-profile:focus {
+    border-bottom: 2px solid #000;
+    outline: none;
+    box-shadow: none;
+}

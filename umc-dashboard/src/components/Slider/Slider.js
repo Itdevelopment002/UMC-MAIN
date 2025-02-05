@@ -1,100 +1,111 @@
 import React, { useState, useEffect } from "react";
-import api, { baseURL } from "../api";
 import { Link } from "react-router-dom";
 import GLightbox from "glightbox";
 import "glightbox/dist/css/glightbox.min.css";
-import { ToastContainer, toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import api, { baseURL } from "../api";
 
 const Slider = () => {
-  const [sliders, setSliders] = useState([]);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [selectedSlider, setSelectedSlider] = useState(null);
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [sliders, setSliders] = useState([]);
+  const [editData, setEditData] = useState({
+    name: "",
+    image: null,
+  });
   const [imagePreview, setImagePreview] = useState(null);
-  const itemsPerPage = 10;
-  let lightbox = null;
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
+  const totalItems = sliders.length;
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
+  const indexOfLastItem = currentPage * itemsPerPage;
+
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  //eslint-disable-next-line
+  const currentSliders = sliders.slice(indexOfFirstItem, indexOfLastItem);
+
+  useEffect(() => {
+    const lightbox = GLightbox({ selector: ".glightbox" });
+    return () => lightbox.destroy();
+  }, [currentSliders]);
+
+  const fetchSliders = () => {
+    api
+      .get("/sliders")
+      .then((response) => setSliders(response.data))
+      .catch((error) => {
+        console.error("Error fetching slider!", error);
+        toast.error("Failed to load slider.");
+      });
+  };
 
   useEffect(() => {
     fetchSliders();
   }, []);
 
-  useEffect(() => {
-    initLightbox();
-    // eslint-disable-next-line
-  }, [sliders, currentPage]);
-
-  const initLightbox = () => {
-    if (lightbox) {
-      lightbox.destroy();
-    }
-    lightbox = GLightbox({ selector: ".glightbox" });
-  };
-
-  const fetchSliders = async () => {
-    try {
-      const response = await api.get("/sliders");
-      setSliders(response.data);
-    } catch (error) {
-      console.error("Error fetching sliders:", error);
-    }
-  };
-
-  const handleDelete = (slider) => {
+  const handleDeleteModalOpen = (slider) => {
     setSelectedSlider(slider);
     setShowDeleteModal(true);
   };
 
-  const confirmDelete = async () => {
-    try {
-      await api.delete(`/sliders/${selectedSlider.id}`);
-      setSliders(sliders.filter((slider) => slider.id !== selectedSlider.id));
-      toast.success("Slider deleted successfully!");
-      setShowDeleteModal(false);
-      setSelectedSlider(null);
-    } catch (error) {
-      console.error("Error deleting slider:", error);
-      toast.error("Error deleting slider!");
-    }
-  };
-
-  const handleEdit = (slider) => {
-    setSelectedSlider(slider);
+  const handleEditModalOpen = (slider) => {
+    setEditData(slider);
+    setImagePreview(`${baseURL}${slider.image_path}`);
     setShowEditModal(true);
-    setImagePreview(`${baseURL}${slider.file_path}`);
-    setSelectedFile(null);
   };
 
-  const handleSaveEdit = async () => {
+  const handleDelete = () => {
+    api
+      .delete(`/sliders/${selectedSlider.id}`)
+      .then(() => {
+        setSliders(
+          sliders.filter((slider) => slider.id !== selectedSlider.id)
+        );
+        setShowDeleteModal(false);
+        setSelectedSlider(null);
+        toast.success("Slider deleted successfully!");
+      })
+      .catch((error) => {
+        console.error("Error deleting slider!", error);
+        toast.error("Failed to delete slider.");
+      });
+  };
+
+  const handleEditSubmit = async () => {
     const formData = new FormData();
-    if (selectedSlider.slider_name) {
-      formData.append("slider_name", selectedSlider.slider_name);
-    }
-    if (selectedFile) {
-      formData.append("image", selectedFile);
+    formData.append("name", editData.name);
+    if (editData.image) {
+      formData.append("image", editData.image);
     }
 
     try {
-      await api.put(`/sliders/${selectedSlider.id}`, formData, {
+      await api.put(`/sliders/${editData.id}`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
+
       fetchSliders();
-      toast.success("Slider updated successfully!");
       setShowEditModal(false);
-      setImagePreview(null);
+      toast.success("Slider updated successfully!");
     } catch (error) {
-      console.error("Error updating slider:", error);
-      toast.error("Error updating slider!");
+      console.error("Error updating slider!", error);
+      toast.error("Failed to update slider.");
     }
   };
 
-  const handleFileChange = (e) => {
-    const imageUrl = e.target.files[0];
-    if (imageUrl) {
-      setSelectedSlider({ ...selectedSlider, image: imageUrl });
-      setImagePreview(URL.createObjectURL(imageUrl));
+  const handleCloseDeleteModal = () => setShowDeleteModal(false);
+  const handleCloseEditModal = () => {
+    setShowEditModal(false);
+    setEditData({ name: "", image: null });
+    setImagePreview(null);
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setEditData({ ...editData, image: file });
+      setImagePreview(URL.createObjectURL(file));
     }
   };
 
@@ -102,14 +113,8 @@ const Slider = () => {
     setCurrentPage(page);
   };
 
-  const totalPages = Math.ceil(sliders.length / itemsPerPage);
-  const currentPageData = sliders.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
-
   return (
-    <div>
+    <>
       <div className="page-wrapper">
         <div className="content">
           <nav aria-label="breadcrumb">
@@ -118,7 +123,7 @@ const Slider = () => {
                 <Link to="#">Home</Link>
               </li>
               <li className="breadcrumb-item active" aria-current="page">
-                Slider
+                Sliders
               </li>
             </ol>
           </nav>
@@ -128,7 +133,7 @@ const Slider = () => {
                 <div className="card-block">
                   <div className="row">
                     <div className="col-sm-4 col-3">
-                      <h4 className="page-title">Slider</h4>
+                      <h4 className="page-title">Sliders</h4>
                     </div>
                     <div className="col-sm-8 col-9 text-right m-b-20">
                       <Link
@@ -139,7 +144,7 @@ const Slider = () => {
                       </Link>
                     </div>
                   </div>
-                  <div className="table-responsive">
+                  <div className="table-responsive m-t-10">
                     <table className="table table-bordered m-b-0">
                       <thead>
                         <tr>
@@ -150,35 +155,33 @@ const Slider = () => {
                         </tr>
                       </thead>
                       <tbody>
-                        {currentPageData.map((slider, index) => (
+                        {currentSliders.map((slider, index) => (
                           <tr key={slider.id}>
-                            <td className="text-center">
-                              {index + 1 + (currentPage - 1) * itemsPerPage}
-                            </td>
-                            <td>{slider.slider_name}</td>
+                            <td className="text-center">{indexOfFirstItem + index + 1}</td>
+                            <td>{slider.name}</td>
                             <td className="text-center">
                               <Link
-                                to={`${baseURL}/${slider.file_path}`}
+                                to={`${baseURL}${slider.image_path}`}
                                 className="glightbox"
                                 data-gallery="slider-images"
                               >
                                 <img
                                   width="100px"
-                                  src={`${baseURL}${slider.file_path}`}
-                                  alt={`slider${index + 1}`}
+                                  src={`${baseURL}${slider.image_path}`}
+                                  alt={`slider-img${slider.image_path}`}
                                 />
                               </Link>
                             </td>
                             <td className="text-center">
                               <button
-                                className="btn btn-success btn-sm m-t-10 mx-1"
-                                onClick={() => handleEdit(slider)}
+                                className="btn btn-success btn-sm"
+                                onClick={() => handleEditModalOpen(slider)}
                               >
                                 Edit
                               </button>
                               <button
-                                className="btn btn-danger btn-sm m-t-10"
-                                onClick={() => handleDelete(slider)}
+                                className="btn btn-danger btn-sm"
+                                onClick={() => handleDeleteModalOpen(slider)}
                               >
                                 Delete
                               </button>
@@ -283,7 +286,7 @@ const Slider = () => {
           </div>
 
           {showDeleteModal && (
-            <div className="modal fade show" style={{ display: "block" }}>
+            <div className="modal fade show d-block" tabIndex="-1">
               <div className="modal-dialog modal-dialog-centered">
                 <div className="modal-content">
                   <div className="modal-body text-center">
@@ -291,14 +294,16 @@ const Slider = () => {
                   </div>
                   <div className="modal-footer">
                     <button
+                      type="button"
                       className="btn btn-sm btn-secondary"
-                      onClick={() => setShowDeleteModal(false)}
+                      onClick={handleCloseDeleteModal}
                     >
                       Cancel
                     </button>
                     <button
+                      type="button"
                       className="btn btn-sm btn-danger"
-                      onClick={confirmDelete}
+                      onClick={handleDelete}
                     >
                       Delete
                     </button>
@@ -309,55 +314,63 @@ const Slider = () => {
           )}
 
           {showEditModal && (
-            <div className="modal fade show" style={{ display: "block" }}>
+            <div className="modal fade show d-block"
+              style={{
+                overflowY: "auto",
+                maxHeight: "100vh",
+                scrollbarWidth: "none",
+              }} tabIndex="-1">
               <div className="modal-dialog modal-dialog-centered">
                 <div className="modal-content">
                   <div className="modal-header">
                     <h5 className="modal-title">Edit Slider</h5>
                   </div>
                   <div className="modal-body">
-                    <div className="form-group">
-                      <label>Slider Name</label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        value={selectedSlider?.slider_name || ""}
-                        onChange={(e) =>
-                          setSelectedSlider({
-                            ...selectedSlider,
-                            slider_name: e.target.value,
-                          })
-                        }
-                      />
-                    </div>
-                    <div className="form-group">
-                      <label>Slider Image</label>
-                      <input
-                        type="file"
-                        className="form-control"
-                        onChange={handleFileChange}
-                      />
-                    </div>
-                    {imagePreview && (
-                      <img
-                        src={imagePreview}
-                        alt="preview"
-                        width="120px"
-                        height="50px"
-                        className="mt-2"
-                      />
-                    )}
+                    <form>
+                      <div className="form-group">
+                        <label>Slider Name</label>
+                        <input
+                          type="text"
+                          className="form-control"
+                          value={editData.name}
+                          onChange={(e) =>
+                            setEditData({
+                              ...editData,
+                              name: e.target.value,
+                            })
+                          }
+                        />
+                      </div>
+                      <div className="form-group">
+                        <label>Slider Image</label>
+                        <input
+                          type="file"
+                          className="form-control"
+                          onChange={handleImageChange}
+                        />
+                        {imagePreview && (
+                          <img
+                            src={imagePreview}
+                            alt="preview"
+                            width="100px"
+                            className="mt-2"
+                          />
+                        )}
+                      </div>
+                    </form>
                   </div>
                   <div className="modal-footer">
                     <button
+                      type="button"
                       className="btn btn-sm btn-secondary"
-                      onClick={() => setShowEditModal(false)}
+                      onClick={handleCloseEditModal}
                     >
                       Close
                     </button>
                     <button
+                      type="button"
                       className="btn btn-sm btn-primary"
-                      onClick={handleSaveEdit}
+                      onClick={handleEditSubmit}
                     >
                       Save changes
                     </button>
@@ -368,8 +381,9 @@ const Slider = () => {
           )}
         </div>
       </div>
+
       <ToastContainer />
-    </div>
+    </>
   );
 };
 

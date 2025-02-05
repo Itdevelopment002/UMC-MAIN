@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./Info.css";
 import { Link } from "react-router-dom";
-import Commissioner from "../../assets/images/commissioner/Commissioner.png";
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import api, { baseURL } from "../api"
@@ -9,6 +8,7 @@ import api, { baseURL } from "../api"
 const Info = () => {
   const [activeButton, setActiveButton] = useState(1);
   const [services, setServices] = useState([]);
+  const [coData, setCoData] = useState([]);
   const [desc, setDesc] = useState([]);
   const [expanded, setExpanded] = useState(false);
   const colors = ["#42B8F9", "#F8D05C", "#5FD35F", "#F5507A", "#A57BF6"];
@@ -28,6 +28,16 @@ const Info = () => {
       console.error("Error fetching desc.");
     }
   };
+
+  const fetchCoData = async () => {
+    try {
+      const response = await api.get("/commissioner-details");
+      setCoData(response.data);
+    } catch (error) {
+      console.error("Failed to fetch Commissioner Details data!", error);
+    }
+  };
+
   const fetchServices = async () => {
     try {
       const response = await api.get("/home-services1");
@@ -40,7 +50,7 @@ const Info = () => {
   useEffect(() => {
     fetchServices();
     fetchDesc();
-
+    fetchCoData();
   }, []);
 
   useEffect(() => {
@@ -62,11 +72,11 @@ const Info = () => {
           <div className="col-lg-3 col-md-12 profile-div" data-aos="fade-right">
             <div className="profile-card">
               <img
-                src={Commissioner}
+                src={`${baseURL}${coData[0]?.image_path}`}
                 alt="Commissioner"
                 className="profile-image"
               />
-              <h5 className="custom-name">Ms. Manisha Awhale </h5>
+              <h5 className="custom-name">{coData[0]?.coName} </h5>
               <p className="custom-title">Commissioner</p>
               <p className="organization">Ulhasnagar Municipal Corporation</p>
             </div>
@@ -79,8 +89,8 @@ const Info = () => {
             <div
               className="description-container"
               style={{
-                overflowY: expanded ? "auto" : "hidden", 
-                maxHeight: "220px", 
+                overflowY: expanded ? "auto" : "hidden",
+                maxHeight: "220px",
                 gap: "10px",
               }}
             >
