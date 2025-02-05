@@ -22,12 +22,14 @@ function App() {
     !!localStorage.getItem("authToken") 
   );
   const [department, setDepartment] = useState(null);
+  const [userData, setUserData] = useState({});
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const savedUser = JSON.parse(localStorage.getItem("userData"));
     if (savedUser) {
       setDepartment(savedUser.department);
+      setUserData(savedUser);
     }
   }, [isAuthenticated]);
 
@@ -43,6 +45,7 @@ function App() {
     localStorage.removeItem("authToken");
     localStorage.removeItem("userData");
     setDepartment(null);
+    setUserData({})
     setIsAuthenticated(false);
   };
 
@@ -56,6 +59,8 @@ function App() {
       return <AdminRoutes department={department} />;
     }
   };
+
+  console.log(userData)
 
   return (
     <Router>
@@ -77,7 +82,7 @@ function App() {
                   </div>
           ) : (
             <>
-              <Header onLogout={handleLogout} userDepartment={department} />
+              <Header onLogout={handleLogout} userDepartment={userData} />
               <div>
                 <Sidebar userDepartment={department} />
                 <div>{renderRoutes()}</div>

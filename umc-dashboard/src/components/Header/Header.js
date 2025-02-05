@@ -3,13 +3,15 @@ import img from "../../assets/img/user.jpg";
 import { Link } from "react-router-dom";
 import Sidebar from "../Sidebar/Sidebar";
 import "./Header.css";
-import api from "../api";
+import api, { baseURL } from "../api";
 import { formatDistanceToNow } from "date-fns";
 import headerlogo from '../../assets/img/adminheader.png'
 import { FiLogOut } from "react-icons/fi";
 import { FaEdit } from "react-icons/fa";
+import { FaUser } from "react-icons/fa";
 const Header = ({ onLogout, userDepartment }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [user, setUser] = useState([]);
   // eslint-disable-next-line
   const [isScreenLarge, setIsScreenLarge] = useState(window.innerWidth > 990);
   const [isNotificationDropdownOpen, setIsNotificationDropdownOpen] =
@@ -29,7 +31,7 @@ const Header = ({ onLogout, userDepartment }) => {
       const response = await api.get("/notification");
       const data = response.data.reverse();
       const filteredNotifications = data.filter(
-        (notification) => notification.role === userDepartment
+        (notification) => notification.role === userDepartment.department
       );
 
       setNotifications(filteredNotifications);
@@ -52,6 +54,21 @@ const Header = ({ onLogout, userDepartment }) => {
     }
     // eslint-disable-next-line
   }, [userDepartment]);
+
+  const fetchUser = async () => {
+    try {
+      const response = await api.get(`/users/${userDepartment.id}`);
+      setUser(response.data);
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchUser();
+    //eslint-disable-next-line
+  }, [userDepartment]);
+
 
   const handleDarkModeToggle = () => {
     setDarkMode((prev) => !prev);
@@ -120,6 +137,8 @@ const Header = ({ onLogout, userDepartment }) => {
     document.addEventListener("mousedown", handleOutsideClick);
     return () => document.removeEventListener("mousedown", handleOutsideClick);
   }, []);
+
+  console.log(user)
 
   return (
     <>
@@ -247,18 +266,24 @@ const Header = ({ onLogout, userDepartment }) => {
                 <span className="user-img">
                   <img
                     className="rounded-circle"
-                    src={img}
+                    src={user?.userImage ? `${baseURL}/${user.userImage}` : "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMwAAADACAMAAAB/Pny7AAAAMFBMVEXk5ueutLfY29ypr7Ln6ere4eK8wcPU19nq7O22u77b3t/Hy83R1NazuLvN0NK5vsDaM1loAAAE90lEQVR4nO2d25LbIAxAMYiLwZf//9viOG02jWMbkCNlR2f60N2++AwIEAiqlCAIgiAIgiAIgiAIgiAIgiAIgiAIlwMAStlolz/LD0D9QdUAWO2nlNxKStMQ7Xf6BDsk148m02XM7S+9S8PX+UDQqe82GXunv0kHgp/HbZXVZ/ZfoxP0m0b5Qa/DN+iAnc2hS44hp9jbgBq6My7LiDBQf+wBYN05lbVxLOfGAT2ed8k2nab+4vfA2S72sOHb1aYik5WJZ0+DVOHC1abOhaVNjpda2MUN+GqXrvO82gbi3lrsANMxm28K5soNG0f9+U9MLS7ZZqIWeACxzSXbRDYdDZo62U2m5yIDQ6tLthmY2ECzSmbkIRMao/9OCtQiCygNk5uG2mMBcBqGR9NAw9z/xExt0rgoe4Z+QAsOy8U4chl7vEd2lj4SuzSkMa9Q97PKXHkTk4hlLFrIZJwldQGPFzJ53qRNOVFDhjpoICFN/zeoczRcmUQaNHFGdMkrGkoZiJjxv0ybhEEDHmuVeYdWBtel079JhnKiQZ5mOuPpXERGZESmVAZ7nqEdmn+TzIkqmRJG0sOAiJlo5oUm6ZZGSXXJMYY4b0bOZ0hdoKYo470MbUkADKjDGfEZOupwRpqbLSAOZ8Qho1T4TTuaoPGChngPcAFvf4Z4llGo/Yz+HBAsVj+jXZjdbbDGM/qDM4zCmTv04a/QTjVnDi556YzRNIZFw+SmOVX8f0BPPpT9BaGqiUe7KIwaLUM/xzxoXQawqZ1baF2hUZczPNOWcTKqN73RsEQjz2NeqK9uoN6T2aL2eNOQnsq+o7KCfqTckn0LqCoZBgv/LaCi9HTke8ExFMaN6TnfpC0sP+OQj+0Aw/nG6akr/w6BmE7eb0xMQ/8noLw7oeM839D/CVjvzJ6OMW5gdjNrB7D6bWczWUVznPT3sNNsXton/2Yevs3kRo6edHtD4x9j+pJI2QRCUNYP0zQN3qrwFa8z7AEPqD+lltvjOa/kX97/8StYGsDaGHPfSsnN6ysn60AwjrNzKXc4HaNir7SIRJ0tXL8+mvMyOt9/O84pTV5bxbXvLY8ZDSnlptiQ2JptlueBJm/5+QSIw9oehxpPSksbTV4xGuWWt4xcwxF6Fso+1BYLEFTq2w/PRqeB2gfAox3Qjom0u4E6m7ucwzi6FMemwng/tjE9zZmT3c9Zqn3GvIj7qBAofY3KqjN9NEl4n3rh6MwfS0QhpqLnpar4zBYBqAnjPPaQ8QMjW9C4F7N26NO10w6EhFyVvctsL1wUBPuxZrkzXWaDfY3hBCZdNQ6g1jCftbmkCLXo6UJMmxH/GgpEGpfugkvCoHsql1tVLWZXA3/p8uXYBnEYIBjG/rPBe9uV3CWDZRMYuHQdTtxg1pS3gFFbj31LvhqMyzVEc+UW7dsDFGuYN7SWpGO8kIdG4wuVYKkFnmi7YAMfyZDPYxrKuQKjgFlpeAYRpS4elfr6Z7x32BCp3FADTf3hW7i6pgmf3r04R9XUyWGtvEVVwR3a9StsKpoG/REGNCrWAZiP/eHSl8+cyI99YVKcC+Be9Eel4u4AnzTmlcIhAPvZElRKdwVZ5TH/U/x0ILv18k8KH6lllPlvUJbWsNmS2aYsaEBzbpjSS2qetUzhigbrEfaLGIuGM9aDWaZIxhneFP2XYlHzpsRFEARBEARBoOAPhEhJogo6DqQAAAAASUVORK5CYII="}
                     width="30"
                     alt="Admin"
+                    style={{ backgroundColor: "white" }}
                   />
                   <span className="status online"></span>
                 </span>
-                <span className="">{userDepartment}</span>
+                <span className="">{user?.username}</span>
                 <i className="fa fa-angle-down ml-1"></i>
               </Link>
               {isUserDropdownOpen && (
                 <div className="dropdown-menu show dropdown-keep-visible">
-                  <Link className="dropdown-item" to="#.">
+                  <Link className="dropdown-item" to={`/view-profile/${userDepartment.id}`}>
+                    <FaUser className="dropdown-icon" />
+                    View Profile
+                  </Link>
+
+                  <Link className="dropdown-item" to={`/edit-profile/${userDepartment.id}`}>
                     <FaEdit className="dropdown-icon" />
                     Edit Profile
                   </Link>
@@ -282,11 +307,16 @@ const Header = ({ onLogout, userDepartment }) => {
               </Link>
               {isUserDropdownOpen && (
                 <div className="dropdown-menu dropdown-menu-right show mx-2 dropdown-keep-visible">
-                  <Link className="dropdown-item" to="#.">
-                    <FaEdit className="dropdown-icon" />
+                  <Link className="dropdown-item" to={`/view-profile/${userDepartment.id}`}>
+                    <FaUser className="dropdown-icon" />
+                    View Profile
+                  </Link>
 
+                  <Link className="dropdown-item" to={`/edit-profile/${userDepartment.id}`}>
+                    <FaEdit className="dropdown-icon" />
                     Edit Profile
                   </Link>
+
                   <Link className="dropdown-item" onClick={onLogout}>
                     <FiLogOut className="dropdown-icon" />
 

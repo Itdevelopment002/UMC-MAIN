@@ -1,0 +1,55 @@
+const express = require("express");
+const router = express.Router();
+const db = require("../config/db.js");
+
+router.get("/screen-reader", (req, res) => {
+    const sql = "SELECT * FROM screen_reader";
+    db.query(sql, (err, results) => {
+        if (err) {
+            console.error("Error fetching data:", err);
+            return res.status(500).json({ error: "Failed to fetch screen reader access" });
+        }
+        res.json(results);
+    });
+});
+
+router.post("/screen-reader", (req, res) => {
+    const { name, website, available } = req.body;
+
+    const sql = "INSERT INTO screen_reader (name, website, available) VALUES (?, ?, ?)";
+    db.query(sql, [name, website, available], (err, result) => {
+        if (err) {
+            console.error("Error inserting data:", err);
+            return res.status(500).json({ error: "Failed to add screen reader access" });
+        }
+        res.status(201).json({ id: result.insertId, name, website, available });
+    });
+});
+
+
+router.put("/screen-reader/:id", (req, res) => {
+    const { id } = req.params;
+    const { name, website, available } = req.body;
+    const sql = "UPDATE screen_reader SET name = ?, website = ?, available = ? WHERE id = ?";
+    db.query(sql, [name, website, available, id], (err, result) => {
+        if (err) {
+            console.error("Error updating data:", err);
+            return res.status(500).json({ error: "Failed to update screen reader access" });
+        }
+        res.json({ message: "Screen Reader Access updated successfully" });
+    });
+});
+
+router.delete("/screen-reader/:id", (req, res) => {
+    const { id } = req.params;
+    const sql = "DELETE FROM screen_reader WHERE id = ?";
+    db.query(sql, [id], (err, result) => {
+        if (err) {
+            console.error("Error deleting data:", err);
+            return res.status(500).json({ error: "Failed to delete screen reader access" });
+        }
+        res.json({ message: "Screen Reader Access deleted successfully" });
+    });
+});
+
+module.exports = router;

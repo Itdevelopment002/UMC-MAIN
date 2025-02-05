@@ -14,30 +14,28 @@ const storage = multer.diskStorage({
   },
 });
 
-const upload = multer({ storage,
- limits: { fileSize: 10 * 1024 * 1024 },
-});
+const upload = multer({ storage });
 
 router.post("/sliders", upload.single("image"), (req, res) => {
-  if (!req.file) {
-    return res.status(400).json({ message: "No file uploaded" });
-  }
-
-  const filePath = `/uploads/${req.file.filename}`;
-  const sliderName = req.body.sliderName;
+  const { sliderName } = req.body;
 
   if (!sliderName) {
-    return res.status(400).json({ message: "Slider name is required" });
+    return res
+      .status(400)
+      .json({ message: "Slider Name is required" });
   }
 
-  const sql = "INSERT INTO slider (slider_name, file_path) VALUES (?, ?)";
-  db.query(sql, [sliderName, filePath], (err, result) => {
+  const imagePath = req.file ? `/uploads/${req.file.filename}` : null;
+
+  const sql =
+    "INSERT INTO slider (name, image_path) VALUES (?, ?)";
+  db.query(sql, [sliderName, imagePath], (err, result) => {
     if (err) {
       return res.status(500).json({ message: "Database error", error: err });
     }
-    res.status(201).json({
-      message: "Image and slider name uploaded successfully",
-      imageUrl: filePath,
+    res.status(200).json({
+      message: "Slider added successfully",
+      sliderId: result.insertId,
     });
   });
 });
@@ -48,102 +46,42 @@ router.get("/sliders", (req, res) => {
     if (err) {
       return res.status(500).json({ message: "Database error", error: err });
     }
-
-    const formattedResults = results.map((row, index) => {
-      const date = new Date(row.uploaded_at);
-      const day = String(date.getDate()).padStart(2, "0");
-      const month = String(date.getMonth() + 1).padStart(2, "0");
-      const year = date.getFullYear().toString().slice(-2);
-
-      const formattedId = `IN/${String(index + 1).padStart(
-        4,
-        "0"
-      )}/${day}-${month}-${year}`;
-
-      return {
-        id: row.id,
-        slider_name: row.slider_name,
-        file_path: row.file_path,
-        uploaded_at: row.uploaded_at,
-        formattedId: formattedId,
-      };
-    });
-
-    res.status(200).json(formattedResults);
+    res.status(200).json(results);
   });
 });
 
 router.get("/sliders/:id", (req, res) => {
   const { id } = req.params;
-
   const sql = "SELECT * FROM slider WHERE id = ?";
   db.query(sql, [id], (err, result) => {
     if (err) {
       return res.status(500).json({ message: "Database error", error: err });
     }
-
     if (result.length === 0) {
       return res.status(404).json({ message: "Slider not found" });
     }
-
-    const slider = result[0];
-    res.status(200).json({
-      id: slider.id,
-      slider_name: slider.slider_name,
-      file_path: slider.file_path,
-      uploaded_at: slider.uploaded_at,
-    });
-  });
-});
-
-router.delete("/sliders/:id", (req, res) => {
-  const { id } = req.params;
-
-  const selectSql = "SELECT file_path FROM slider WHERE id = ?";
-  db.query(selectSql, [id], (err, result) => {
-    if (err) {
-      return res.status(500).json({ message: "Database error", error: err });
-    }
-
-    if (result.length === 0) {
-      return res.status(404).json({ message: "Slider not found" });
-    }
-
-    const filePath = result[0].file_path;
-
-    const deleteSql = "DELETE FROM slider WHERE id = ?";
-    db.query(deleteSql, [id], (err, deleteResult) => {
-      if (err) {
-        return res.status(500).json({ message: "Database error", error: err });
-      }
-
-      fs.unlink(path.join(__dirname, "..", filePath), (fsErr) => {
-        if (fsErr) {
-          console.error("Error deleting file:", fsErr);
-        }
-      });
-
-      res.status(200).json({ message: "Slider deleted successfully" });
-    });
+    res.status(200).json(result[0]);
   });
 });
 
 router.put("/sliders/:id", upload.single("image"), (req, res) => {
   const { id } = req.params;
-  const { slider_name } = req.body;
+  const { name } = req.body;
 
   let updateSql = "UPDATE slider SET";
   const updateParams = [];
 
-  if (slider_name) {
-    updateSql += " slider_name = ?";
-    updateParams.push(slider_name);
+  if (name) {
+    updateSql += " name = ?";
+    updateParams.push(name);
   }
 
+  let imagePath;
   if (req.file) {
-    const newFilePath = `/uploads/${req.file.filename}`;
-    updateSql += updateParams.length > 0 ? ", file_path = ?" : " file_path = ?";
-    updateParams.push(newFilePath);
+    imagePath = `/uploads/${req.file.filename}`;
+    updateSql +=
+      updateParams.length > 0 ? ", image_path = ?" : " image_path = ?";
+    updateParams.push(imagePath);
   }
 
   if (updateParams.length === 0) {
@@ -153,32 +91,69 @@ router.put("/sliders/:id", upload.single("image"), (req, res) => {
   updateSql += " WHERE id = ?";
   updateParams.push(id);
 
-  const selectSql = "SELECT file_path FROM slider WHERE id = ?";
+  const selectSql = "SELECT image_path FROM slider WHERE id = ?";
   db.query(selectSql, [id], (err, result) => {
     if (err) {
       return res.status(500).json({ message: "Database error", error: err });
     }
-
     if (result.length === 0) {
       return res.status(404).json({ message: "Slider not found" });
     }
 
-    const oldFilePath = result[0].file_path;
+    const oldImagePath = result[0].image_path;
 
     db.query(updateSql, updateParams, (err, updateResult) => {
       if (err) {
         return res.status(500).json({ message: "Database error", error: err });
       }
 
-      if (req.file) {
-        fs.unlink(path.join(__dirname, "..", oldFilePath), (fsErr) => {
+      if (req.file && oldImagePath) {
+        const fullPath = path.join(
+          __dirname,
+          "..",
+          oldImagePath.replace(/^\//, "")
+        );
+        fs.unlink(fullPath, (fsErr) => {
           if (fsErr) {
-            console.error("Error deleting old file:", fsErr);
+            console.error("Error deleting old image:", fsErr);
           }
         });
       }
 
       res.status(200).json({ message: "Slider updated successfully" });
+    });
+  });
+});
+
+router.delete("/sliders/:id", (req, res) => {
+  const { id } = req.params;
+
+  const selectSql = "SELECT image_path FROM slider WHERE id = ?";
+  db.query(selectSql, [id], (err, result) => {
+    if (err) {
+      return res.status(500).json({ message: "Database error", error: err });
+    }
+    if (result.length === 0) {
+      return res.status(404).json({ message: "Slider not found" });
+    }
+
+    const imagePath = result[0].image_path;
+
+    const deleteSql = "DELETE FROM slider WHERE id = ?";
+    db.query(deleteSql, [id], (err, deleteResult) => {
+      if (err) {
+        return res.status(500).json({ message: "Database error", error: err });
+      }
+
+      if (imagePath) {
+        fs.unlink(path.join(__dirname, "..", imagePath), (fsErr) => {
+          if (fsErr) {
+            console.error("Error deleting image:", fsErr);
+          }
+        });
+      }
+
+      res.status(200).json({ message: "Slider deleted successfully" });
     });
   });
 });
