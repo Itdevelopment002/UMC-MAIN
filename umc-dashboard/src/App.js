@@ -60,8 +60,6 @@ function App() {
     }
   };
 
-  console.log(userData)
-
   return (
     <Router>
       {!isAuthenticated ? (
