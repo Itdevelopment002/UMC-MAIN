@@ -2,31 +2,51 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import './ScreenReader.css';
 import "../TableCss/TableCss.css";
-import api from "../api";
+import api, { baseURL } from "../api";
 
 const ScreenReader = () => {
     const [reader, setReader] = useState([]);
+    const [bgImage, setBgImage] = useState("");
 
-    const fetchReader = async ()=>{
-        try{
+    const fetchReader = async () => {
+        try {
             const response = await api.get("/screen-reader");
             setReader(response.data);
-        } catch(error){
+        } catch (error) {
             console.error("Error fetching reader data");
         }
     };
 
-    useEffect(()=>{
-        fetchReader();
-    },[]);
+
+    const fetchHeaderImage = async () => {
+        try {
+            const response = await api.get("/banner");
+
+            if (response.data.length > 0) {
+                let selectedBanner = response.data.find(banner => banner.banner_name === "Right to Service");
+
+                if (selectedBanner) {
+                    setBgImage(`${baseURL}${selectedBanner.file_path}`);
+                } else {
+                    console.error("Banner with specified name not found.");
+                }
+            } else {
+                console.error("No banner image found.");
+            }
+        } catch (error) {
+            console.error("Error fetching header image:", error);
+        }
+    };
 
     useEffect(() => {
+        fetchReader();
+        fetchHeaderImage();
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }, []);
 
     return (
         <>
-            <div className="history-header-image"></div>
+            <div className="history-header-image" style={{ backgroundImage: `url(${bgImage})` }}></div>
             <div id="main-content">
                 <div className="container-fluid font-location mt-4 mb-2" id="reader-css">
                     <nav className="breadcrumb">
