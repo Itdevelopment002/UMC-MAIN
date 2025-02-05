@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../api";
 
-const AddPolicies = () => {
+const AddBudget = () => {
   const [heading, setHeading] = useState("");
   const [link, setLink] = useState("");
   const [year, setYear] = useState("");
@@ -60,10 +60,10 @@ const AddPolicies = () => {
               <Link to="#">Corporation</Link>
             </li>
             <li className="breadcrumb-item">
-              <Link to="/budgets">Budget</Link>
+              <Link to="/budget">UMC Budget</Link>
             </li>
             <li className="breadcrumb-item active" aria-current="page">
-              Add Budget
+              Add UMC Budget
             </li>
           </ol>
           <div className="row">
@@ -71,8 +71,8 @@ const AddPolicies = () => {
               <div className="card-box">
                 <div className="card-block">
                   <div className="row">
-                    <div className="col-sm-4 col-3">
-                      <h4 className="page-title">Add Budget</h4>
+                    <div className="col-12">
+                      <h4 className="page-title">Add UMC Budget</h4>
                     </div>
                   </div>
                   <form onSubmit={handleSubmit}>
@@ -174,4 +174,4 @@ const AddPolicies = () => {
   );
 };
 
-export default AddPolicies;
+export default AddBudget;
