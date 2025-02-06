@@ -4,7 +4,7 @@ import api from "../api";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const RTI = () => {
+const SubRti = () => {
   const [rti, setRti] = useState([]);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -13,34 +13,34 @@ const RTI = () => {
   const rtiPerPage = 10;
 
   useEffect(() => {
-    fetchRTI();
+    fetchSubRTI();
   }, []);
 
-  const fetchRTI = async () => {
+  const fetchSubRTI = async () => {
     try {
-      const response = await api.get("/rti-info");
+      const response = await api.get("/sub-rti");
       setRti(response.data);
     } catch (error) {
-      console.error("Error fetching rti:", error);
-      toast.error("Failed to fetch rti data!");
+      console.error("Error fetching sub rti:", error);
+      toast.error("Failed to fetch sub rti data!");
     }
   };
 
   const handleDelete = async () => {
     try {
-      await api.delete(`/rti-info/${selectedRti.id}`);
+      await api.delete(`/sub-rti/${selectedRti.id}`);
       setRti(rti.filter((w) => w.id !== selectedRti.id));
       setShowDeleteModal(false);
-      toast.success("Right to Information deleted successfully!");
+      toast.success("Sub RTI deleted successfully!");
     } catch (error) {
-      console.error("Error deleting rti:", error);
-      toast.error("Failed to delete the rti!");
+      console.error("Error deleting sub rti:", error);
+      toast.error("Failed to delete the sub rti!");
     }
   };
 
   const handleEditSave = async () => {
     try {
-      await api.put(`/rti-info/${selectedRti.id}`, {
+      await api.put(`/sub-rti/${selectedRti.id}`, {
         description: selectedRti.description,
         link: selectedRti.link,
       });
@@ -49,10 +49,10 @@ const RTI = () => {
       );
       setRti(updatedRti);
       setShowEditModal(false);
-      toast.success("Right to Information updated successfully!");
+      toast.success("Sub RTI updated successfully!");
     } catch (error) {
-      console.error("Error updating rti:", error);
-      toast.error("Failed to update the rti!");
+      console.error("Error updating sub rti:", error);
+      toast.error("Failed to update the sub rti!");
     }
   };
 
@@ -85,7 +85,7 @@ const RTI = () => {
                 <Link to="#">RTI</Link>
               </li>
               <li className="breadcrumb-item active" aria-current="page">
-                Right to Information
+                Sub RTI
               </li>
             </ol>
           </nav>
@@ -94,15 +94,15 @@ const RTI = () => {
               <div className="card-box">
                 <div className="card-block">
                   <div className="row">
-                    <div className="col-sm-4 col-3">
-                      <h4 className="page-title">Right to Information</h4>
+                    <div className="col-6">
+                      <h4 className="page-title">Sub RTI</h4>
                     </div>
-                    <div className="col-sm-8 col-9 text-right m-b-20">
+                    <div className="col-6 text-right m-b-20">
                       <Link
-                        to="/add-rti"
+                        to="/add-sub-rti"
                         className="btn btn-primary btn-rounded float-right"
                       >
-                        <i className="fa fa-plus"></i> Add RTI
+                        <i className="fa fa-plus"></i> Add Sub RTI
                       </Link>
                     </div>
                   </div>
@@ -152,7 +152,7 @@ const RTI = () => {
                           ))
                         ) : (
                           <tr>
-                            <td colSpan={4} className="text-center">No RTI data available</td>
+                            <td colSpan={4} className="text-center">No Sub RTI data available</td>
                           </tr>
                         )}
                       </tbody>
@@ -280,7 +280,7 @@ const RTI = () => {
               <div className="modal-dialog modal-dialog-centered">
                 <div className="modal-content">
                   <div className="modal-header">
-                    <h5 className="modal-title">Edit Right to Information</h5>
+                    <h5 className="modal-title">Edit Sub RTI</h5>
                   </div>
                   <div className="modal-body">
                     <form>
@@ -369,4 +369,4 @@ const RTI = () => {
   );
 };
 
-export default RTI;
+export default SubRti;
