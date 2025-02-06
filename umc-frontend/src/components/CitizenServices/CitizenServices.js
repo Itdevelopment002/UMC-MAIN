@@ -134,35 +134,6 @@ const CitizenServices = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
-
-  // const menuItems = [
-  //   {
-  //     name: "Pressnote",
-  //     link: "/press-note"
-  //   },
-  //   {
-  //     name: "General Election",
-  //     link: "http://www.umcelection2022.in/"
-  //   },
-  //   {
-  //     name: "Property Tax Department",
-  //     link: "/property-tax-dept"
-  //   },
-  //   {
-  //     name: "Quotation / Tenders",
-  //     link: "/tenders-and-quotations"
-  //   },
-  //   {
-  //     name: "Right to Information",
-  //     link: "/rti"
-  //   },
-  //   {
-  //     name: "Disaster Management",
-  //     link: "/disaster-management-department"
-  //   },
-
-  // ];
-
   const colors = ["#1EB174", "#FA5F68", "#F8C437", "#898989", "#F37F1B", "#0C8DD4"];
 
   return (
@@ -261,37 +232,41 @@ const CitizenServices = () => {
                 >
                   {projects.map((project, index) => (
                     <div key={index}>
-                      <div className="project-item">
-                        <img
-                          src={`${baseURL}/${project.main_icon_path}`}
-                          alt={project.heading}
-                          className="e-services-img me-3"
-                        />
-                        <div>
-                          <p className="para-style">
-                            <b>{project.heading}, </b>
-                            {project.description}
-                          </p>
+                      <Link to={project.link} className="text-decoartion-none" style={{color: "black"}}>
+                        <div className="project-item">
+                          <img
+                            src={`${baseURL}/${project.main_icon_path}`}
+                            alt={project.heading}
+                            className="e-services-img me-3"
+                          />
+                          <div>
+                            <p className="para-style">
+                              <b>{project.heading}, </b>
+                              {project.description}
+                            </p>
+                          </div>
                         </div>
-                      </div>
+                      </Link>
                       <hr className="mt-1" />
                     </div>
                   ))}
                   {projects.map((project, index) => (
                     <div key={`duplicate-${index}`}>
-                      <div className="project-item">
-                        <img
-                          src={`${baseURL}/${project.main_icon_path}`}
-                          alt={project.heading}
-                          className="e-services-img me-3"
-                        />
-                        <div>
-                          <p className="para-style">
-                            <b>{project.heading}, </b>
-                            {project.description}
-                          </p>
+                      <Link to={project.link} className="text-decoartion-none" style={{color: "black"}}>
+                        <div className="project-item">
+                          <img
+                            src={`${baseURL}/${project.main_icon_path}`}
+                            alt={project.heading}
+                            className="e-services-img me-3"
+                          />
+                          <div>
+                            <p className="para-style">
+                              <b>{project.heading}, </b>
+                              {project.description}
+                            </p>
+                          </div>
                         </div>
-                      </div>
+                      </Link>
                       <hr className="mt-1" />
                     </div>
                   ))}

@@ -31,10 +31,10 @@ const ProactiveDisclosure = () => {
     };
     const fetchRti = async () => {
         try {
-            const response = await api.get("/rti-info");
+            const response = await api.get("/proactive-disclosure");
             setRti(response.data);
         } catch (error) {
-            console.error("Error fetching rti data", error);
+            console.error("Error fetching proactive disclosure data", error);
         }
     };
 
@@ -120,11 +120,11 @@ const ProactiveDisclosure = () => {
                                                         paddingLeft: "10px",
                                                         paddingRight: "10px",
                                                         color: "#292D32",
+                                                        textWrap: "pretty"
                                                     }}
                                                 >
                                                     {item.description}
                                                 </td>
-
                                                 <td
                                                     width="20%"
                                                     style={{
@@ -137,7 +137,7 @@ const ProactiveDisclosure = () => {
                                                     <Link
                                                         to={item.link}
                                                         className="text-decoration-none"
-                                                        target="_blank"
+                                                        target={item.link.startsWith("/") ? "_self" : "_blank"}
                                                         style={{ color: "#292D32" }}
                                                         onClick={(e) => handleClick(item.link, e)}
                                                     >
@@ -160,7 +160,7 @@ const ProactiveDisclosure = () => {
                                                                 Open Link
                                                                 <img
                                                                     src={exticon}
-                                                                    alt="PDF Icon"
+                                                                    alt="External Link Icon"
                                                                     style={{
                                                                         width: "18px",
                                                                         height: "18px",
@@ -172,7 +172,6 @@ const ProactiveDisclosure = () => {
                                                         )}
                                                     </Link>
                                                 </td>
-
                                             </tr>
                                         ))}
                                     </tbody>

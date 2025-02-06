@@ -4,7 +4,7 @@ import api from "../api";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const RTI = () => {
+const ProactiveDisclosure = () => {
   const [rti, setRti] = useState([]);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -13,34 +13,34 @@ const RTI = () => {
   const rtiPerPage = 10;
 
   useEffect(() => {
-    fetchRTI();
+    fetchProactive();
   }, []);
 
-  const fetchRTI = async () => {
+  const fetchProactive = async () => {
     try {
-      const response = await api.get("/rti-info");
+      const response = await api.get("/proactive-disclosure");
       setRti(response.data);
     } catch (error) {
-      console.error("Error fetching rti:", error);
-      toast.error("Failed to fetch rti data!");
+      console.error("Error fetching proactive disclosure:", error);
+      toast.error("Failed to fetch proactive disclosure data!");
     }
   };
 
   const handleDelete = async () => {
     try {
-      await api.delete(`/rti-info/${selectedRti.id}`);
+      await api.delete(`/proactive-disclosure/${selectedRti.id}`);
       setRti(rti.filter((w) => w.id !== selectedRti.id));
       setShowDeleteModal(false);
-      toast.success("Right to Information deleted successfully!");
+      toast.success("Proactive disclosure deleted successfully!");
     } catch (error) {
-      console.error("Error deleting rti:", error);
-      toast.error("Failed to delete the rti!");
+      console.error("Error deleting proactive disclosure:", error);
+      toast.error("Failed to delete the proactive disclosure!");
     }
   };
 
   const handleEditSave = async () => {
     try {
-      await api.put(`/rti-info/${selectedRti.id}`, {
+      await api.put(`/proactive-disclosure/${selectedRti.id}`, {
         description: selectedRti.description,
         link: selectedRti.link,
       });
@@ -49,10 +49,10 @@ const RTI = () => {
       );
       setRti(updatedRti);
       setShowEditModal(false);
-      toast.success("Right to Information updated successfully!");
+      toast.success("Proactive disclosure updated successfully!");
     } catch (error) {
-      console.error("Error updating rti:", error);
-      toast.error("Failed to update the rti!");
+      console.error("Error updating proactive disclosure:", error);
+      toast.error("Failed to update the proactive disclosure!");
     }
   };
 
@@ -85,7 +85,7 @@ const RTI = () => {
                 <Link to="#">RTI</Link>
               </li>
               <li className="breadcrumb-item active" aria-current="page">
-                Right to Information
+                Proactive Disclosure
               </li>
             </ol>
           </nav>
@@ -95,14 +95,14 @@ const RTI = () => {
                 <div className="card-block">
                   <div className="row">
                     <div className="col-sm-4 col-3">
-                      <h4 className="page-title">Right to Information</h4>
+                      <h4 className="page-title">Proactive Disclosure</h4>
                     </div>
                     <div className="col-sm-8 col-9 text-right m-b-20">
                       <Link
-                        to="/add-rti"
+                        to="/add-proactive-disclosure"
                         className="btn btn-primary btn-rounded float-right"
                       >
-                        <i className="fa fa-plus"></i> Add RTI
+                        <i className="fa fa-plus"></i> Add Disclosure
                       </Link>
                     </div>
                   </div>
@@ -152,7 +152,7 @@ const RTI = () => {
                           ))
                         ) : (
                           <tr>
-                            <td colSpan={4} className="text-center">No RTI data available</td>
+                            <td colSpan={4} className="text-center">No Proactive Disclosure data available</td>
                           </tr>
                         )}
                       </tbody>
@@ -369,4 +369,4 @@ const RTI = () => {
   );
 };
 
-export default RTI;
+export default ProactiveDisclosure;
