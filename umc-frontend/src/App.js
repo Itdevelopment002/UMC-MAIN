@@ -87,6 +87,8 @@ import Authorities from "./components//Authorities/Authorities";
 import WardCommittee from "./components/WardCommittee/WardCommittee";
 import CustomerSupport from "./components/CustomerSupport/CustomerSupport";
 import ScreenReader from "./components/ScreenReader/ScreenReader";
+import ProactiveDisclosure from "./components/ProactiveDisclosure/ProactiveDisclosure";
+import SubRti from "./components/SubRti/SubRti";
 
 
 
@@ -228,8 +230,8 @@ function App() {
             <Route path="/authorities" element={<Authorities />} />
             <Route path="/ward-committee" element={<WardCommittee />} />
             <Route path="/customer-support" element={<CustomerSupport />} />
-
-
+            <Route path="/proactive-disclosure" element={<ProactiveDisclosure />} />
+            <Route path="/sub-rti" element={<SubRti />} />
           </Routes>
           <BottomSlider data-aos="fade-up" />
           <WhatsAppChat data-aos="fade-right" />
