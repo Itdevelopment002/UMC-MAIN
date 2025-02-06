@@ -16,6 +16,8 @@ import { LuNotepadText } from "react-icons/lu";
 import { BsPersonLinesFill } from "react-icons/bs";
 import { PiFlagBannerFoldFill } from "react-icons/pi";
 import { MdRecordVoiceOver } from "react-icons/md";
+import { IoInformationCircle } from "react-icons/io5";
+
 
 const Sidebar = ({ isOpen, closeSidebar, userDepartment }) => {
   const [openSubmenu, setOpenSubmenu] = useState(null);
@@ -207,14 +209,6 @@ const Sidebar = ({ isOpen, closeSidebar, userDepartment }) => {
                       >
                         <Link to="/property-tax-department">
                           Property Tax Department
-                        </Link>
-                      </li>
-                      <li
-                        className={activeItem === "/rti" ? "active" : ""}
-                        onClick={() => handleItemClick("/rti")}
-                      >
-                        <Link to="/rti">
-                          Right to Information
                         </Link>
                       </li>
                     </ul>
@@ -480,6 +474,44 @@ const Sidebar = ({ isOpen, closeSidebar, userDepartment }) => {
                       >
                         <Link to="/video-gallery">
                           Video Gallery
+                        </Link>
+                      </li>
+                    </ul>
+                  </li>
+                  <li className="submenu">
+                    <Link to="#." onClick={() => toggleSubmenu("right-to-service")}>
+                      <i className="fa">
+                        <IoInformationCircle />
+                      </i>{" "}
+                      <span>RTI </span>{" "}
+                      <span
+                        className={`menu-arrow ${openSubmenu === "right-to-service" ? "rotate" : ""
+                          }`}
+                      ></span>
+                    </Link>
+                    <ul className={openSubmenu === "right-to-service" ? "open" : ""}>
+                      <li
+                        className={activeItem === "/rti" ? "active" : ""}
+                        onClick={() => handleItemClick("/rti")}
+                      >
+                        <Link to="/rti">
+                          Right to Information
+                        </Link>
+                      </li>
+                      <li
+                        className={activeItem === "/proactive-disclosure" ? "active" : ""}
+                        onClick={() => handleItemClick("/proactive-disclosure")}
+                      >
+                        <Link to="/proactive-disclosure">
+                          Proactive Disclosure
+                        </Link>
+                      </li>
+                      <li
+                        className={activeItem === "/sub-rti" ? "active" : ""}
+                        onClick={() => handleItemClick("/sub-rti")}
+                      >
+                        <Link to="/sub-rti">
+                          Sub RTI
                         </Link>
                       </li>
                     </ul>

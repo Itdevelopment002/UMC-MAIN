@@ -31,7 +31,7 @@ const SubRti = () => {
     };
     const fetchRti = async () => {
         try {
-            const response = await api.get("/rti-info");
+            const response = await api.get("/sub-rti");
             setRti(response.data);
         } catch (error) {
             console.error("Error fetching rti data", error);
@@ -72,16 +72,16 @@ const SubRti = () => {
                         <Link to="/" className="breadcrumb-item text-decoration-none">
                             Home
                         </Link>
-                        <Link to="rti" className="breadcrumb-item text-decoration-none">
-                            Home
+                        <Link to="/rti" className="breadcrumb-item text-decoration-none">
+                            RTI
                         </Link>
-                        <Link to="rti" className="breadcrumb-item text-decoration-none">
+                        <Link to="/proactive-disclosure" className="breadcrumb-item text-decoration-none">
                             Proactive Disclosure
                         </Link>
-                        <span className="breadcrumb-item active1">SUB RTI</span>
+                        <span className="breadcrumb-item active1">Sub RTI</span>
                     </nav>
                     <h2 className="location-title">
-                        <span className="highlight">SUB</span>
+                        <span className="highlight">Sub</span>
                         <span className="highlighted-text"> RTI</span>
                         <hr />
                     </h2>
@@ -139,7 +139,7 @@ const SubRti = () => {
                                                     <Link
                                                         to={item.link}
                                                         className="text-decoration-none"
-                                                        target="_blank"
+                                                        target={item.link.startsWith("/") ? "_self" : "_blank"}
                                                         style={{ color: "#292D32" }}
                                                         onClick={(e) => handleClick(item.link, e)}
                                                     >
@@ -162,7 +162,7 @@ const SubRti = () => {
                                                                 Open Link
                                                                 <img
                                                                     src={exticon}
-                                                                    alt="PDF Icon"
+                                                                    alt="External Link Icon"
                                                                     style={{
                                                                         width: "18px",
                                                                         height: "18px",

@@ -232,10 +232,6 @@ function App() {
             <Route path="/customer-support" element={<CustomerSupport />} />
             <Route path="/proactive-disclosure" element={<ProactiveDisclosure />} />
             <Route path="/sub-rti" element={<SubRti />} />
-
-
-
-
           </Routes>
           <BottomSlider data-aos="fade-up" />
           <WhatsAppChat data-aos="fade-right" />

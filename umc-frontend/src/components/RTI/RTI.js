@@ -133,7 +133,7 @@ const RTI = () => {
                                                     <Link
                                                         to={item.link}
                                                         className="text-decoration-none"
-                                                        target="_blank"
+                                                        target={item.link.startsWith("/") ? "_self" : "_blank"}
                                                         style={{ color: "#292D32" }}
                                                         onClick={(e) => handleClick(item.link, e)}
                                                     >
@@ -156,7 +156,7 @@ const RTI = () => {
                                                                 Open Link
                                                                 <img
                                                                     src={exticon}
-                                                                    alt="PDF Icon"
+                                                                    alt="External Link Icon"
                                                                     style={{
                                                                         width: "18px",
                                                                         height: "18px",
