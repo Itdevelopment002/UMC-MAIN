@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../api";
 
-const AddRTI = () => {
+const AddSubRti = () => {
   const [description, setDescription] = useState("");
   const [link, setLink] = useState("");
   const [errors, setErrors] = useState({});
@@ -32,15 +32,15 @@ const AddRTI = () => {
 
     try {
       //eslint-disable-next-line
-      const response = await api.post("/rti-info", {
+      const response = await api.post("/sub-rti", {
         description: description,
         link: link,
       });
       setDescription("");
       setLink("");
-      navigate("/rti");
+      navigate("/sub-rti");
     } catch (error) {
-      console.error("Error adding rti data:", error);
+      console.error("Error adding sub rti data:", error);
     }
   };
 
@@ -53,10 +53,10 @@ const AddRTI = () => {
               <Link to="#">RTI</Link>
             </li>
             <li className="breadcrumb-item">
-              <Link to="/rti">Right to Information</Link>
+              <Link to="/sub-rti">Sub RTI</Link>
             </li>
             <li className="breadcrumb-item active" aria-current="page">
-              Add Right to Information
+              Add Sub RTI
             </li>
           </ol>
           <div className="row">
@@ -65,7 +65,7 @@ const AddRTI = () => {
                 <div className="card-block">
                   <div className="row">
                     <div className="col-12">
-                      <h4 className="page-title">Add Right to Information</h4>
+                      <h4 className="page-title">Add Sub RTI</h4>
                     </div>
                   </div>
                   <form onSubmit={handleSubmit}>
@@ -136,4 +136,4 @@ const AddRTI = () => {
   );
 };
 
-export default AddRTI;
+export default AddSubRti;

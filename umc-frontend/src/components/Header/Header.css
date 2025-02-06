@@ -48,7 +48,7 @@
 
 .rts-act-button {
     font-family: 'roboto';
-    background-color: #FEB20D;
+    background-color: #f5507a;
     color: white;
     border: none;
     padding: 3px 10px;
@@ -62,7 +62,7 @@
 }
 
 .rts-act-button:hover {
-    background-color: #cc5200;
+    background-color: #e85f81;
 }
 
 @keyframes pulse {
