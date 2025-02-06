@@ -120,6 +120,10 @@ import EditProfile from "../Profile/EditProfile";
 import ScreenReader from "../ScreenReader/ScreenReader";
 import AddScreenReader from "../ScreenReader/AddScreenReader";
 import api from "../api";
+import ProactiveDisclosure from "../ProactiveDisclosure/ProactiveDisclosure";
+import AddProactiveDisclosure from "../ProactiveDisclosure/AddProactiveDisclosure";
+import SubRti from "../SubRti/SubRti";
+import AddSubRti from "../SubRti/AddSubRti";
 
 
 function SuperAdminRoutes() {
@@ -281,6 +285,10 @@ function SuperAdminRoutes() {
       <Route path="/edit-profile/:id" element={<EditProfile />} />
       <Route path="/screen-reader-access" element={<ScreenReader />} />
       <Route path="/add-screen-reader-access" element={<AddScreenReader />} />
+      <Route path="/proactive-disclosure" element={<ProactiveDisclosure />} />
+      <Route path="/add-proactive-disclosure" element={<AddProactiveDisclosure />} />
+      <Route path="/sub-rti" element={<SubRti />} />
+      <Route path="/add-sub-rti" element={<AddSubRti />} />
       <Route path="*" element={<Navigate to="/home" />} />
     </Routes>
   );

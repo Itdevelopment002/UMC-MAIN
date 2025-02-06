@@ -1,6 +1,7 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./UpcomingProjects.css";
+import api, {baseURL} from "../api";
 
 import img1 from "../../assets/images/project/img1.png";
 import img2 from "../../assets/images/project/img2.png";
@@ -8,13 +9,42 @@ import img3 from "../../assets/images/project/img3.png";
 import img4 from "../../assets/images/project/img4.png";
 
 const UpcomingProjects = () => {
+    const [bgImage, setBgImage] = useState([]);
+
+    const fetchHeaderImage = async () => {
+        try {
+            const response = await api.get("/banner");
+
+            if (response.data.length > 0) {
+                let selectedBanner = response.data.find(banner => banner.banner_name === "Upcoming Projects");
+
+                if (selectedBanner) {
+                    setBgImage(`${baseURL}${selectedBanner.file_path}`);
+                } else {
+                    console.error("Banner with specified name not found.");
+                }
+            } else {
+                console.error("No banner image found.");
+            }
+        } catch (error) {
+            console.error("Error fetching header image:", error);
+        }
+    };
+
     useEffect(() => {
+        fetchHeaderImage();
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }, []);
 
     return (
         <>
-            <div className="history-header-image"></div>
+            <div
+                className="history-header-image"
+                style={{
+                    backgroundImage: `url(${bgImage})`,
+
+                }}
+            ></div>
 
             <div className="container-fluid font-location mt-4 mb-2" id="project-css">
                 <nav className="breadcrumb">

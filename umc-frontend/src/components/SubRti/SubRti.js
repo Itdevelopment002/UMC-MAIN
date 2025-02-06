@@ -6,7 +6,7 @@ import "../TableCss/TableCss.css";
 import Swal from "sweetalert2";
 import api, { baseURL } from "../api"
 
-const RTI = () => {
+const SubRti = () => {
     const [rti, setRti] = useState([]);
     const [bgImage, setBgImage] = useState("");
 
@@ -15,7 +15,7 @@ const RTI = () => {
             const response = await api.get("/banner");
 
             if (response.data.length > 0) {
-                let selectedBanner = response.data.find(banner => banner.banner_name === "Rti");
+                let selectedBanner = response.data.find(banner => banner.banner_name === "SUB RTI");
 
                 if (selectedBanner) {
                     setBgImage(`${baseURL}${selectedBanner.file_path}`);
@@ -31,7 +31,7 @@ const RTI = () => {
     };
     const fetchRti = async () => {
         try {
-            const response = await api.get("/rti-info");
+            const response = await api.get("/sub-rti");
             setRti(response.data);
         } catch (error) {
             console.error("Error fetching rti data", error);
@@ -72,11 +72,17 @@ const RTI = () => {
                         <Link to="/" className="breadcrumb-item text-decoration-none">
                             Home
                         </Link>
-                        <span className="breadcrumb-item active1">Right to Information</span>
+                        <Link to="/rti" className="breadcrumb-item text-decoration-none">
+                            RTI
+                        </Link>
+                        <Link to="/proactive-disclosure" className="breadcrumb-item text-decoration-none">
+                            Proactive Disclosure
+                        </Link>
+                        <span className="breadcrumb-item active1">Sub RTI</span>
                     </nav>
                     <h2 className="location-title">
-                        <span className="highlight">Right</span>
-                        <span className="highlighted-text"> to Information</span>
+                        <span className="highlight">Sub</span>
+                        <span className="highlighted-text"> RTI</span>
                         <hr />
                     </h2>
                     <div className="row mt-4">
@@ -181,4 +187,4 @@ const RTI = () => {
     )
 }
 
-export default RTI;
+export default SubRti;

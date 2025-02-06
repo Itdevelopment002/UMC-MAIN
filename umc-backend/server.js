@@ -123,6 +123,8 @@ const imagesGalleryRoutes = require('./routes/imagesGalleryRoutes');
 const videoGalleryRoutes = require('./routes/videoGalleryRoutes');
 const bannerRoutes = require('./routes/bannerRoutes');
 const screenReaderRoutes = require('./routes/screenReaderRoutes');
+const proactiveDisclosureRoutes = require('./routes/proactiveDisclosureRoutes');
+const subRtiRoutes = require('./routes/subRtiRoutes');
 
 
 app.use('/api', sliderRoutes);
@@ -240,6 +242,8 @@ app.use('/api', imagesGalleryRoutes);
 app.use('/api', videoGalleryRoutes);
 app.use('/api', bannerRoutes);
 app.use('/api', screenReaderRoutes);
+app.use('/api', proactiveDisclosureRoutes);
+app.use('/api', subRtiRoutes);
 
 
 const PORT = process.env.PORT || 5011;
