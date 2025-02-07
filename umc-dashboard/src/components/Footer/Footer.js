@@ -31,6 +31,7 @@ const Footer = () => {
           <OnlineServices />
         </div>
       </div>
+      <ToastContainer />
     </>
   );
 };

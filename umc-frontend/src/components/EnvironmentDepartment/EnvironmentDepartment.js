@@ -325,7 +325,7 @@ const EnvironmentDepartment = () => {
                                   verticalAlign: "middle",
                                 }}
                               />
-                              View Pdf
+                              View PDF
                             </Link>
                           </td>
                         </tr>

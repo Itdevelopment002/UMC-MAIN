@@ -326,7 +326,7 @@ const ElectricalEngineeringDepartment = () => {
                                   verticalAlign: "middle",
                                 }}
                               />
-                              View Pdf
+                              View PDF
                             </Link>
                           </td>
                         </tr>

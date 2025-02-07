@@ -5,10 +5,6 @@ import api, { baseURL } from "../api";
 import pdficon from '../../assets/images/Departments/document 1.png';
 import Swal from 'sweetalert2';
 
-// const agenda = [
-//     { name: "jhhfh", number: "122323", date: "2022-06-15", notice: "Resolutions", link: "#", posting: "View PDF" },
-//     { name: "Municipal Secretary Department", number: "Agenda 2020", date: "2020-11-27", notice: "Resolutions 2021-06-23", link: "https://drive.google.com/file/d/1vnE98rOjDDfy4zc_XVpZyGOFOiTmcJmf/view?usp=drive_link", posting: "View PDF" },
-// ];
 
 const Agenda = () => {
     const [agenda, setAgenda] = useState([]);
@@ -234,13 +230,14 @@ const Agenda = () => {
                                                         color: "#292D32",
                                                         textAlign: "center",
                                                     }}
+                                                    
                                                 >
                                                     <Link
                                                         to={item.pdf_link}
                                                         className="text-decoration-none"
                                                         target={item.pdf_link === "#" ? "" : "_blank"}
                                                         style={{ color: "#333333" }}
-                                                        onClick={(e) => handleClick(item.link, e)}
+                                                        onClick={(e) => handleClick(item.pdf_link, e)}
                                                     >
                                                         <img
                                                             src={pdficon}
