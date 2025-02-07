@@ -45,7 +45,7 @@ const AddBudget = () => {
       setHeading("");
       setLink("");
       setYear("");
-      navigate("/budgets");
+      navigate("/budget");
     } catch (error) {
       console.error("Error adding budget data:", error);
     }

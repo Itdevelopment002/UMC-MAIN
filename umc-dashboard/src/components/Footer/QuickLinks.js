@@ -335,7 +335,6 @@ const QuickLinks = () => {
                     </div>
                 </div>
             )}
-            <ToastContainer />
 
         </div>
 

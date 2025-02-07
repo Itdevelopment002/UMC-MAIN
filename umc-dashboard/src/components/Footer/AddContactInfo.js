@@ -192,6 +192,7 @@ const AddContactInfo = () => {
         </div>
       </div>
     </>
+    
   );
 };
 

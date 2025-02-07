@@ -336,7 +336,6 @@ const OnlineServices = () => {
                     </div>
                 </div>
             )}
-            <ToastContainer />
 
         </div>
 
