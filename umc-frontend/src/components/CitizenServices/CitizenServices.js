@@ -140,37 +140,6 @@ const CitizenServices = () => {
     <div className="background-container" id="citizen-section">
       <div className="container-fluid citigen-section">
         <div className="row py-2 d-flex flex-wrap justify-content-between" >
-          {/* <div className="citigen mt-1">
-              <div className="vertical-line"></div>
-              <div className="d-flex">
-                <h2 className="section-title">
-                  Citizen <span className="subtitle">Services</span>
-                </h2>
-              </div>
-            </div>
-
-            <div className="row">
-              {citzenServices.map((service, index) => (
-                <div className="col-6 col-lg-3 col-md-4 col-sm-6 mb-4" key={index}>
-                  <Link
-                    to={service.service_link}
-                    className="text-decoration-none"
-                    target={service.service_link.startsWith("/") ? "_self" : "_blank"}
-                    rel={service.service_link.startsWith("/") ? "" : "noopener noreferrer"}
-                  >
-                    <div className="service-card text-center">
-                      <img
-                        src={`${baseURL}/${service.main_icon_path}`}
-                        alt={service.service_heading}
-                        className="service-image mb-3"
-                      />
-                      <h5 className="service-title">{service.service_heading}</h5>
-                    </div>
-                  </Link>
-                </div>
-              ))}
-            </div> */}
-
           <div className="col-xl-3 col-lg-6 col-md-6 col-sm-12 e-services-margin right-section-font">
             <div className="upcoming-projects bg-white p-2">
               <h5 className="p-2 h5-styling-div">Information</h5>

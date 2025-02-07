@@ -324,7 +324,7 @@ const AuditDepartment = () => {
                                   verticalAlign: "middle",
                                 }}
                               />
-                              View Pdf
+                              View PDF
                             </Link>
                           </td>
                         </tr>

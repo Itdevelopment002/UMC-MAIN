@@ -336,7 +336,6 @@ const Help = () => {
                     </div>
                 </div>
             )}
-            <ToastContainer />
 
         </div>
 
