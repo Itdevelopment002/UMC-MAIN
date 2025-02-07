@@ -12,7 +12,7 @@ import instagram from '../../assets/images/header-img/instagram (2).png';
 import youtube from '../../assets/images/header-img/Youtube.png';
 
 const TopHeader = () => {
-    const [selectedLanguage, setSelectedLanguage] = useState("eng");
+    const [selectedLanguage, setSelectedLanguage] = useState("mar");
 
     useEffect(() => {
         if (
@@ -25,7 +25,7 @@ const TopHeader = () => {
                 "//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
             document.body.appendChild(googleTranslateScript);
         }
-
+    
         window.googleTranslateElementInit = () => {
             new window.google.translate.TranslateElement(
                 {
@@ -35,20 +35,19 @@ const TopHeader = () => {
                 },
                 "google_translate_element"
             );
-
+    
             setTimeout(() => {
-                updateGoogleTranslate(selectedLanguage);
-            }, 100);
+                updateGoogleTranslate("mar");
+            }, 1000);
         };
     }, []);
+    
 
-    // Function to handle language change
     const handleLanguageChange = (language) => {
         setSelectedLanguage(language);
         updateGoogleTranslate(language);
     };
 
-    // Function to update Google Translate dropdown manually
     const updateGoogleTranslate = (language) => {
         const googleTranslateDropdown = document.querySelector(".goog-te-combo");
         if (googleTranslateDropdown) {
@@ -63,7 +62,7 @@ const TopHeader = () => {
         if (selectedLanguage === "hin") return "हिंदी";
         if (selectedLanguage === "mar") return "मराठी";
 
-        // return "मराठी";
+        return "मराठी";
     };
 
     const [defaultfontSize, setDefaultFontSize] = useState(16);
