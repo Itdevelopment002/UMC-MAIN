@@ -9,10 +9,12 @@ const PhotoGallery = () => {
   const [categories, setCategories] = useState([]);
   const [images, setImages] = useState({});
   const [bgImage, setBgImage] = useState("");
+  const [currentIndices, setCurrentIndices] = useState({});
 
   useEffect(() => {
     fetchHeaderImage();
   }, []);
+
   const fetchHeaderImage = async () => {
     try {
       const response = await api.get("/banner");
@@ -33,7 +35,6 @@ const PhotoGallery = () => {
     }
   };
 
-
   useEffect(() => {
     api.get("/categories")
       .then((response) => {
@@ -51,6 +52,10 @@ const PhotoGallery = () => {
               ...prevImages,
               [category.id]: response.data.map(image => `${baseURL}${image.image_url}`),
             }));
+            setCurrentIndices((prevIndices) => ({
+              ...prevIndices,
+              [category.id]: 0,
+            }));
           })
           .catch((error) => console.error("Error fetching images:", error));
       });
@@ -65,13 +70,36 @@ const PhotoGallery = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
+  const handleNext = (categoryId) => {
+    setCurrentIndices((prevIndices) => {
+      const totalImages = images[categoryId]?.length || 0;
+      const newIndex = prevIndices[categoryId] + 8;
+  
+      return {
+        ...prevIndices,
+        [categoryId]: newIndex < totalImages ? newIndex : prevIndices[categoryId],
+      };
+    });
+  };
+  
+  const handlePrevious = (categoryId) => {
+    setCurrentIndices((prevIndices) => {
+      const newIndex = prevIndices[categoryId] - 8;
+  
+      return {
+        ...prevIndices,
+        [categoryId]: newIndex >= 0 ? newIndex : 0,
+      };
+    });
+  };
+  
+
   return (
     <>
       <div
         className="history-header-image"
         style={{
           backgroundImage: `url(${bgImage})`,
-
         }}
       ></div>
 
@@ -92,13 +120,28 @@ const PhotoGallery = () => {
           </h2>
           {categories.map((category) => (
             <div className="mt-4 image-section-div" key={category.id}>
-              <h3 className="text-orange">
-                {category.name} <span className="text-black"></span>
-                <span className="divider"></span>
-              </h3>
+
+              <div className="d-flex justify-content-between align-items-center mt-4">
+                <h3 className="text-orange">
+                  {category.name} <span className="text-black"></span>
+                  <span className="divider"></span>
+                </h3>
+                {images[category.id] && images[category.id].length > 8 && (
+                  <div className="slider-controls">
+                    <button onClick={() => handlePrevious(category.id)} className="gallery-custom-btn">
+                      <i className="fas fa-chevron-left"></i>
+                    </button>
+                    <button onClick={() => handleNext(category.id)} className="gallery-custom-btn">
+                      <i className="fas fa-chevron-right"></i>
+                    </button>
+                  </div>
+
+                )}
+              </div>
+
               <hr />
               <div className="row g-3">
-                {images[category.id] && images[category.id].map((image, index) => (
+                {images[category.id] && images[category.id].slice(currentIndices[category.id], currentIndices[category.id] + 8).map((image, index) => (
                   <div className="col-6 col-sm-6 col-md-4 col-lg-3" key={index}>
                     <a href={image} className="glightbox" data-gallery={category.name}>
                       <img
@@ -110,6 +153,7 @@ const PhotoGallery = () => {
                   </div>
                 ))}
               </div>
+
             </div>
           ))}
         </div>

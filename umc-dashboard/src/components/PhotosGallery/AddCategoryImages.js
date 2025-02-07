@@ -24,9 +24,8 @@ const AddCategoryImage = () => {
           const imageResponse = await api.get(`/category-images/${category.id}`);
           const categoryImages = imageResponse.data;
 
-          if (categoryImages.length < 8) {
-            filteredCategories.push(category);
-          }
+          filteredCategories.push(category);
+
         }
 
         setCategories(filteredCategories);
@@ -153,9 +152,7 @@ const AddCategoryImage = () => {
                           onChange={handleFileChange}
                         />
                         {errors.image && <div className="invalid-feedback">{errors.image}</div>}
-                        <small className="form-text text-muted">
-                          Note: A maximum of 8 images can be added per category.
-                        </small>
+                        
                       </div>
                     </div>
                     <input
