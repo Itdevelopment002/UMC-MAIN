@@ -297,7 +297,6 @@ const DataTable4 = () => {
           </div>
         </div>
       )}
-      <ToastContainer />
     </div>
   );
 };

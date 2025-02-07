@@ -277,7 +277,7 @@ const EServices = () => {
           </div>
         </div>
         <div className="col-xl-6 col-lg-6 col-md-12 col-sm-12">
-          <div className="citigen mt-1">
+          <div className="citigen mt-1 mb-1">
             <div className="vertical-line"></div>
             <div className="d-flex">
               <h2 className="section-title">
@@ -288,7 +288,7 @@ const EServices = () => {
 
           <div className="row">
             {citzenServices.map((service, index) => (
-              <div className="col-6 col-lg-3 col-md-4 col-sm-6 mb-4" key={index}>
+              <div className="col-6 col-lg-3 col-md-4 col-sm-6 mb-4 mt-1" key={index}>
                 <Link
                   to={service.service_link}
                   className="text-decoration-none"

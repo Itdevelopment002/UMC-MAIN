@@ -300,7 +300,6 @@ const DataTable3 = () => {
           </div>
         </div>
       )}
-      <ToastContainer />
     </div>
 
   );

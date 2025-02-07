@@ -1,6 +1,5 @@
 import React from "react";
-//eslint-disable-next-line
-import { toast, ToastContainer } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Link } from "react-router-dom";
 import DataTable1 from "./DataTable1";
@@ -31,6 +30,7 @@ const Location = () => {
           <DataTable4 />
         </div>
       </div>
+      <ToastContainer />
     </>
   );
 };

@@ -399,8 +399,6 @@ const ContactInfo = () => {
           </div>
         </div>
       )}
-
-      <ToastContainer />
     </>
   );
 };
