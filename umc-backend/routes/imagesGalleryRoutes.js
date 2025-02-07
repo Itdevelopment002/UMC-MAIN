@@ -54,9 +54,7 @@ router.post("/category-images", upload.single("image"), (req, res) => {
     db.query("SELECT COUNT(*) AS count FROM category_images WHERE category_id = ?", [category_id], (err, results) => {
         if (err) return res.status(500).json({ error: err.message });
 
-        if (results[0].count >= 8) {
-            return res.status(400).json({ error: "Maximum 8 images allowed per category" });
-        }
+        
 
         db.query("INSERT INTO category_images (category_id, image_url) VALUES (?, ?)", [category_id, image_url], (err, result) => {
             if (err) return res.status(500).json({ error: err.message });
