@@ -69,9 +69,11 @@ const AddCategoryImage = () => {
 
     const data = new FormData();
     data.append("category_id", formData.category_id);
-    if (formData.image) {
-      data.append("image", formData.image);
+    if (!formData.image) {
+      setErrors({ image: "Image is required." });
+      return;
     }
+    data.append("image", formData.image);
 
     try {
       const response = await api.post("/category-images", data, {
@@ -82,9 +84,10 @@ const AddCategoryImage = () => {
         navigate(`/photo-gallery`);
       }
     } catch (error) {
-      console.error("Error uploading image:", error);
+      console.error("Error uploading image:", error.response?.data || error.message);
     }
   };
+
 
   return (
     <div>
@@ -152,7 +155,7 @@ const AddCategoryImage = () => {
                           onChange={handleFileChange}
                         />
                         {errors.image && <div className="invalid-feedback">{errors.image}</div>}
-                        
+
                       </div>
                     </div>
                     <input
