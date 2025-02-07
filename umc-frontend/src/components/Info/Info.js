@@ -84,7 +84,7 @@ const Info = () => {
 
           <div className="col-lg-6 col-md-12 welcome-section" data-aos="fade-down">
             <div className="heading">
-              <h1 data-aos="fade-up" className="info-heading1">Welcome to <span className="info-heading2 fw-bold">Ulhasnagar Municipal Corporation</span></h1>
+              <h1 data-aos="fade-up" className="info-heading1"><span className="info-heading2 fw-bold">Ulhasnagar Municipal Corporation</span></h1>
             </div>
             <div
               className="description-container"
