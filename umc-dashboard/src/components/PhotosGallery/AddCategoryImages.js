@@ -18,17 +18,7 @@ const AddCategoryImage = () => {
       try {
         const categoryResponse = await api.get("/categories");
         const allCategories = categoryResponse.data;
-        const filteredCategories = [];
-
-        for (let category of allCategories) {
-          const imageResponse = await api.get(`/category-images/${category.id}`);
-          const categoryImages = imageResponse.data;
-
-          filteredCategories.push(category);
-
-        }
-
-        setCategories(filteredCategories);
+        setCategories(allCategories);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -69,10 +59,6 @@ const AddCategoryImage = () => {
 
     const data = new FormData();
     data.append("category_id", formData.category_id);
-    if (!formData.image) {
-      setErrors({ image: "Image is required." });
-      return;
-    }
     data.append("image", formData.image);
 
     try {
@@ -81,13 +67,12 @@ const AddCategoryImage = () => {
       });
 
       if (response.status === 200) {
-        navigate(`/photo-gallery`);
+        navigate("/photo-gallery");
       }
     } catch (error) {
       console.error("Error uploading image:", error.response?.data || error.message);
     }
   };
-
 
   return (
     <div>
@@ -120,8 +105,7 @@ const AddCategoryImage = () => {
                       </label>
                       <div className="col-md-4">
                         <select
-                          className={`form-control form-control-md ${errors.category_id ? "is-invalid" : ""
-                            }`}
+                          className={`form-control form-control-md ${errors.category_id ? "is-invalid" : ""}`}
                           name="category_id"
                           value={formData.category_id}
                           onChange={handleChange}
@@ -155,7 +139,6 @@ const AddCategoryImage = () => {
                           onChange={handleFileChange}
                         />
                         {errors.image && <div className="invalid-feedback">{errors.image}</div>}
-
                       </div>
                     </div>
                     <input
