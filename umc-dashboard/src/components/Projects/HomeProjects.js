@@ -6,7 +6,7 @@ import "glightbox/dist/css/glightbox.min.css";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const Projects = () => {
+const HomeProjects = () => {
   const [projects, setProjects] = useState([]);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -123,10 +123,10 @@ const Projects = () => {
           <nav aria-label="breadcrumb">
             <ol className="breadcrumb">
               <li className="breadcrumb-item">
-                <Link to="#">Home</Link>
+                <Link to="#">Upcoming Projects</Link>
               </li>
               <li className="breadcrumb-item active" aria-current="page">
-                Upcoming Projects
+                Home Projects
               </li>
             </ol>
           </nav>
@@ -136,11 +136,11 @@ const Projects = () => {
                 <div className="card-block">
                   <div className="row">
                     <div className="col-sm-4 col-3">
-                      <h4 className="page-title">Upcoming Projects</h4>
+                      <h4 className="page-title">Home Projects</h4>
                     </div>
                     <div className="col-sm-8 col-9 text-right m-b-20">
                       <Link
-                        to="/add-projects"
+                        to="/add-home-projects"
                         className="btn btn-primary btn-rounded float-right"
                       >
                         <i className="fa fa-plus"></i> Add Project
@@ -335,7 +335,7 @@ const Projects = () => {
               <div className="modal-dialog modal-dialog-centered">
                 <div className="modal-content">
                   <div className="modal-header">
-                    <h5 className="modal-title">Edit Upcoming Project</h5>
+                    <h5 className="modal-title">Edit Home Project</h5>
                   </div>
                   <div className="modal-body">
                     <form>
@@ -432,4 +432,4 @@ const Projects = () => {
   );
 };
 
-export default Projects;
+export default HomeProjects;

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
-import { FaPencilAlt } from "react-icons/fa";
+import { FaPencilAlt, FaEye, FaEyeSlash } from "react-icons/fa"; 
 import api, { baseURL } from "../api";
 import './EditProfile.css';
 import { ToastContainer, toast } from "react-toastify";
@@ -22,7 +22,10 @@ const EditProfile = () => {
     const [oldPassword, setOldPassword] = useState("");
     const [errors, setErrors] = useState({});
     const [showModal, setShowModal] = useState(false);
-    const [isChanged, setIsChanged] = useState(false); // Track changes
+    const [isChanged, setIsChanged] = useState(false); 
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    const [showOldPassword, setShowOldPassword] = useState(false);
 
     useEffect(() => {
         fetchUser();
@@ -39,7 +42,7 @@ const EditProfile = () => {
             setMobile(userData.mobile || "");
             setDesignation(userData.designation || "");
             setPreviewImage(userData.userImage ? `${baseURL}/${userData.userImage}` : "https://via.placeholder.com/150");
-            setIsChanged(false); // Reset change tracking when data is fetched
+            setIsChanged(false); 
         } catch (error) {
             console.error("Error fetching user data:", error);
         }
@@ -50,7 +53,7 @@ const EditProfile = () => {
         if (file) {
             setImage(file);
             setPreviewImage(URL.createObjectURL(file));
-            setIsChanged(true); // Mark as changed when image is selected
+            setIsChanged(true); 
         }
     };
 
@@ -120,15 +123,14 @@ const EditProfile = () => {
         }
     };
 
-    // Handle change detection for form fields
     const handleFieldChange = (e, field) => {
         const value = e.target.value;
         if (field === "fullname") setFullname(value);
         if (field === "email") setEmail(value);
         if (field === "mobile") setMobile(value);
         if (field === "designation") setDesignation(value);
-        
-        setIsChanged(true); // Mark as changed when fields are edited
+
+        setIsChanged(true); 
     };
 
     return (
@@ -204,10 +206,10 @@ const EditProfile = () => {
                                 </div>
                             </div>
                             <div className="mt-4 d-flex justify-content-end">
-                                <button 
-                                    className="btn btn-success mx-2 btn-sm" 
+                                <button
+                                    className="btn btn-success mx-2 btn-sm"
                                     onClick={handleSaveProfile}
-                                    disabled={!isChanged} // Disable if no changes
+                                    disabled={!isChanged} 
                                 >
                                     Save Changes
                                 </button>
@@ -229,25 +231,41 @@ const EditProfile = () => {
                             <form onSubmit={handleSubmit}>
                                 <div className="form-group row">
                                     <label className="col-form-label col-md-2"><strong>New Password:</strong></label>
-                                    <div className="col-md-4">
+                                    <div className="col-md-4 position-relative">
                                         <input
-                                            type="password"
-                                            className={`form-control ${errors.password ? "is-invalid" : ""}`}
+                                            type={showPassword ? "text" : "password"}
+                                            className={`form-control custom-input-edit-profile ${errors.password ? "is-invalid" : ""}`}
                                             value={password}
                                             onChange={(e) => setPassword(e.target.value)}
+                                            style={{ paddingRight: "35px" }} 
                                         />
+                                        <span
+                                            className="position-absolute top-50 end-0 translate-middle-y me-2"
+                                            style={{ cursor: "pointer", right: "10px" }}
+                                            onClick={() => setShowPassword(!showPassword)}
+                                        >
+                                            {showPassword ? <FaEyeSlash /> : <FaEye />}
+                                        </span>
                                         {errors.password && <div className="invalid-feedback">{errors.password}</div>}
                                     </div>
                                 </div>
                                 <div className="form-group row">
                                     <label className="col-form-label col-md-2"><strong>Confirm Password:</strong></label>
-                                    <div className="col-md-4">
+                                    <div className="col-md-4 position-relative">
                                         <input
-                                            type="password"
-                                            className={`form-control ${errors.confirmPassword ? "is-invalid" : ""}`}
+                                            type={showConfirmPassword ? "text" : "password"}
+                                            className={`form-control custom-input-edit-profile ${errors.confirmPassword ? "is-invalid" : ""}`}
                                             value={confirmPassword}
                                             onChange={(e) => setConfirmPassword(e.target.value)}
+                                            style={{ paddingRight: "35px" }} 
                                         />
+                                        <span
+                                            className="position-absolute top-50 end-0 translate-middle-y me-2"
+                                            style={{ cursor: "pointer", right: "10px" }}
+                                            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                        >
+                                            {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+                                        </span>
                                         {errors.confirmPassword && <div className="invalid-feedback">{errors.confirmPassword}</div>}
                                     </div>
                                 </div>
@@ -261,19 +279,27 @@ const EditProfile = () => {
                         <Modal.Title textCenter>Verify Old Password</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        <div className="form-group">
+                        <div className="form-group position-relative">
                             <label>Enter Old Password</label>
                             <input
-                                type="password"
-                                className="form-control"
+                                type={showOldPassword ? "text" : "password"}
+                                className="form-control form-control-md"
                                 value={oldPassword}
                                 onChange={(e) => setOldPassword(e.target.value)}
+                                style={{ paddingRight: "35px" }} 
                             />
+                            <span
+                                className="position-absolute top-50 end-0 translate-middle-y me-2"
+                                style={{ cursor: "pointer", right: "10px" }}
+                                onClick={() => setShowOldPassword(!showOldPassword)}
+                            >
+                                {showOldPassword ? <FaEyeSlash /> : <FaEye />}
+                            </span>
                         </div>
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button variant="secondary" onClick={() => setShowModal(false)}>Cancel</Button>
-                        <Button variant="primary" className="" onClick={handleVerifyAndUpdatePassword}>Verify & Update</Button>
+                        <Button variant="secondary" size="sm" onClick={() => setShowModal(false)}>Cancel</Button>
+                        <Button variant="primary" size="sm" onClick={handleVerifyAndUpdatePassword}>Verify & Update</Button>
                     </Modal.Footer>
                 </Modal>
             </div>
