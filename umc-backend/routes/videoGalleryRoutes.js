@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const db = require("../config/db.js");
 
+// Get all video categories
 router.get("/video-categories", (req, res) => {
     db.query("SELECT * FROM videocategories", (err, results) => {
         if (err) return res.status(500).json({ error: err.message });
@@ -9,6 +10,7 @@ router.get("/video-categories", (req, res) => {
     });
 });
 
+// Add a new video category
 router.post("/video-categories", (req, res) => {
     const { categoryName } = req.body;
     if (!categoryName) return res.status(400).json({ error: "Category name is required" });
@@ -19,6 +21,7 @@ router.post("/video-categories", (req, res) => {
     });
 });
 
+// Update a video category
 router.put("/video-categories/:id", (req, res) => {
     const { id } = req.params;
     const { name } = req.body;
@@ -33,6 +36,7 @@ router.put("/video-categories/:id", (req, res) => {
     });
 });
 
+// Delete a video category
 router.delete("/video-categories/:id", (req, res) => {
     const { id } = req.params;
 
@@ -42,6 +46,7 @@ router.delete("/video-categories/:id", (req, res) => {
     });
 });
 
+// Get videos by category ID
 router.get("/category-videos/:category_id", (req, res) => {
     const { category_id } = req.params;
 
@@ -51,6 +56,7 @@ router.get("/category-videos/:category_id", (req, res) => {
     });
 });
 
+// Add a new video to a category
 router.post("/category-videos", (req, res) => {
     const { category_id, link } = req.body;
 
@@ -58,29 +64,24 @@ router.post("/category-videos", (req, res) => {
         return res.status(400).json({ error: "Link is required" });
     }
 
-    db.query("SELECT COUNT(*) AS count FROM category_videos WHERE category_id = ?", [category_id], (err, results) => {
+    // Insert the video without checking for limits
+    db.query("INSERT INTO category_videos (category_id, video_url) VALUES (?, ?)", [category_id, link], (err, result) => {
         if (err) return res.status(500).json({ error: err.message });
-
-        if (results[0].count >= 8) {
-            return res.status(400).json({ error: "Maximum 8 images allowed per category" });
-        }
-
-        db.query("INSERT INTO category_videos (category_id, video_url) VALUES (?, ?)", [category_id, link], (err, result) => {
-            if (err) return res.status(500).json({ error: err.message });
-            res.json({ message: "Video uploaded successfully", id: result.insertId, link });
-        });
+        res.json({ message: "Video uploaded successfully", id: result.insertId, link });
     });
 });
 
+// Update a video in a category
 router.put("/category-videos/:id", (req, res) => {
     const { video_url } = req.body;
     const sql = "UPDATE category_videos SET video_url = ? WHERE id = ?";
     db.query(sql, [video_url, req.params.id], (err, result) => {
-        if (err) throw err;
+        if (err) return res.status(500).json({ error: err.message });
         res.json({ success: true });
     });
 });
 
+// Delete a video from a category
 router.delete("/category-videos/:id", (req, res) => {
     const { id } = req.params;
 
