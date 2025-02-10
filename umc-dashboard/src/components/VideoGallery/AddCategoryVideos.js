@@ -18,18 +18,7 @@ const AddCategoryVideos = () => {
       try {
         const categoryResponse = await api.get("/video-categories");
         const allCategories = categoryResponse.data;
-        const filteredCategories = [];
-
-        for (let category of allCategories) {
-          const videoResponse = await api.get(`/category-videos/${category.id}`);
-          const categoryVideos = videoResponse.data;
-
-          if (categoryVideos.length < 8) {
-            filteredCategories.push(category);
-          }
-        }
-
-        setCategories(filteredCategories);
+        setCategories(allCategories); // Set all categories without filtering
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -158,7 +147,7 @@ const AddCategoryVideos = () => {
                           <div className="invalid-feedback">{errors.link}</div>
                         )}
                         <small className="form-text text-muted">
-                          Note: A maximum of 8 videos can be added per category.
+                          Note: You can add as many videos as you want to a category.
                         </small>
                       </div>
                     </div>
