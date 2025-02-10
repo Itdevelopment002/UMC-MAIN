@@ -124,14 +124,6 @@ const Sidebar = ({ isOpen, closeSidebar, userDepartment }) => {
                         </Link>
                       </li>
                       <li
-                        className={activeItem === "/projects" ? "active" : ""}
-                        onClick={() => handleItemClick("/projects")}
-                      >
-                        <Link to="/projects">
-                          Upcoming Projects
-                        </Link>
-                      </li>
-                      <li
                         className={activeItem === "/citizen services" ? "active" : ""}
                         onClick={() => handleItemClick("/citizen services")}
                       >
@@ -476,6 +468,36 @@ const Sidebar = ({ isOpen, closeSidebar, userDepartment }) => {
                           Video Gallery
                         </Link>
                       </li>
+                    </ul>
+                  </li>
+                  <li className="submenu">
+                    <Link to="#." onClick={() => toggleSubmenu("projects")}>
+                      <i className="fa">
+                        <IoInformationCircle />
+                      </i>{" "}
+                      <span>Upcoming Project </span>{" "}
+                      <span
+                        className={`menu-arrow ${openSubmenu === "projects" ? "rotate" : ""
+                          }`}
+                      ></span>
+                    </Link>
+                    <ul className={openSubmenu === "projects" ? "open" : ""}>
+                      <li
+                        className={activeItem === "/home-projects" ? "active" : ""}
+                        onClick={() => handleItemClick("/home-projects")}
+                      >
+                        <Link to="/home-projects">
+                          Home Projects
+                        </Link>
+                      </li>
+                      {/* <li
+                        className={activeItem === "/project-details" ? "active" : ""}
+                        onClick={() => handleItemClick("/project-details")}
+                      >
+                        <Link to="/project-details">
+                          Project Details
+                        </Link>
+                      </li> */}
                     </ul>
                   </li>
                   <li className="submenu">

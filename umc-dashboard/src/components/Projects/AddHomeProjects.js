@@ -5,7 +5,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Link } from "react-router-dom";
 
-const AddProjects = () => {
+const AddHomeProjects = () => {
     const [heading, setHeading] = useState('');
     const [description, setDescription] = useState('');
     const [link, setLink] = useState('');
@@ -67,7 +67,7 @@ const AddProjects = () => {
             setLink('');
             setMainIcon(null);
             document.getElementById('mainIconInput').value = '';
-            navigate('/projects');
+            navigate('/home-projects');
         } catch (error) {
             console.error('Error uploading file:', error);
             toast.error('Failed to add project. Please try again.');
@@ -79,9 +79,9 @@ const AddProjects = () => {
             <div className="page-wrapper">
                 <div className="content">
                     <ol className="breadcrumb">
-                        <li className="breadcrumb-item"><Link to="#">Home</Link></li>
-                        <li className="breadcrumb-item"><Link to="/projects">Upcoming Projects</Link></li>
-                        <li className="breadcrumb-item active" aria-current="page">Add Upcoming Projects</li>
+                        <li className="breadcrumb-item"><Link to="#">Upcoming Projects</Link></li>
+                        <li className="breadcrumb-item"><Link to="/home-projects">Home Projects</Link></li>
+                        <li className="breadcrumb-item active" aria-current="page">Add Home Projects</li>
                     </ol>
                     <div className="row">
                         <div className="col-lg-12">
@@ -89,7 +89,7 @@ const AddProjects = () => {
                                 <div className="card-block">
                                     <div className="row">
                                         <div className="col-12">
-                                            <h4 className="page-title">Add Upcoming Projects</h4>
+                                            <h4 className="page-title">Add Home Projects</h4>
                                         </div>
                                     </div>
                                     <form onSubmit={handleSubmit}>
@@ -163,4 +163,4 @@ const AddProjects = () => {
     );
 };
 
-export default AddProjects;
+export default AddHomeProjects;

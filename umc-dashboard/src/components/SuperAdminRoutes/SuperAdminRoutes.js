@@ -34,8 +34,8 @@ import AddHelp from "../Footer/AddHelp";
 import AddOnlineServices from "../Footer/AddOnlineServices";
 import Information from "../Information/Information";
 import AddInformation from "../Information/AddInformation";
-import Projects from "../Projects/Projects";
-import AddProjects from "../Projects/AddProjects";
+import HomeProjects from "../Projects/HomeProjects";
+import AddHomeProjects from "../Projects/AddHomeProjects";
 import HomeService1 from "../HomeService1/HomeService1";
 import AddHomeService1 from "../HomeService1/AddHomeService1";
 import CitizenCommunication from "../CitizenCommunication/CitizenCommunication";
@@ -124,6 +124,9 @@ import ProactiveDisclosure from "../ProactiveDisclosure/ProactiveDisclosure";
 import AddProactiveDisclosure from "../ProactiveDisclosure/AddProactiveDisclosure";
 import SubRti from "../SubRti/SubRti";
 import AddSubRti from "../SubRti/AddSubRti";
+import AddProjectImages from "../ProjectDetails/AddProjectImages";
+import AddProjectCategory from "../ProjectDetails/AddProjectCategory";
+import ProjectGallery from "../ProjectDetails/ProjectGallery";
 
 
 function SuperAdminRoutes() {
@@ -196,8 +199,8 @@ function SuperAdminRoutes() {
       <Route path="/add-online-services" element={<AddOnlineServices />} />
       <Route path="/information" element={<Information />} />
       <Route path="/add-information" element={<AddInformation />} />
-      <Route path="/projects" element={<Projects />} />
-      <Route path="/add-projects" element={<AddProjects />} />
+      <Route path="/home-projects" element={<HomeProjects />} />
+      <Route path="/add-home-projects" element={<AddHomeProjects />} />
       <Route path="/home-services1" element={<HomeService1 />} />
       <Route path="/add-home-services1" element={<AddHomeService1 />} />
       <Route path="/citizen-communication" element={<CitizenCommunication />} />
@@ -289,6 +292,9 @@ function SuperAdminRoutes() {
       <Route path="/add-proactive-disclosure" element={<AddProactiveDisclosure />} />
       <Route path="/sub-rti" element={<SubRti />} />
       <Route path="/add-sub-rti" element={<AddSubRti />} />
+      <Route path="/project-details" element={<ProjectGallery />} />
+      <Route path="/add-project-images" element={<AddProjectImages />} />
+      <Route path="/add-project-category" element={<AddProjectCategory />} />
       <Route path="*" element={<Navigate to="/home" />} />
     </Routes>
   );
