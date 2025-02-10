@@ -28,7 +28,47 @@
   height: 180px;
 }
 
+#video-gallery-css .gallery-custom-btn {
+  background-color: #FBE9ED;
+  color: #df7791;
+  border: 0px solid #6e6e6e;
+  padding: 5px 15px;
+  font-size: 14px;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+#video-gallery-css .gallery-custom-btn i {
+  font-size: 15px;
+}
+
+#video-gallery-css .gallery-custom-btn:hover {
+  background-color: #F5507A;
+  color: #fff;
+}
+
+#video-gallery-css .slider-controls {
+  display: flex;
+  gap: 7px;
+}
+
 @media (max-width: 400px) {
+  #video-gallery-css .gallery-custom-btn {
+    padding: 5px 8px;
+    font-size: 12px;
+  }
+
+  #video-gallery-css .gallery-custom-btn i {
+    font-size: 12px;
+  }
+
+  #video-gallery-css .slider-controls {
+    display: flex;
+    gap: 4px;
+  }
+
   #video-gallery-css .img-styling-photo {
     width: 100%;
     height: 80px;
