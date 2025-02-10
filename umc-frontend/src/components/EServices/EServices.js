@@ -112,10 +112,10 @@ const EServices = () => {
       name: "e-Services",
       layout: true,
     },
-    {
-      id: "#election",
-      name: "Election",
-    },
+    // {
+    //   id: "#election",
+    //   name: "Election",
+    // },
   ];
 
   const scrollContainerRef = useRef(null);

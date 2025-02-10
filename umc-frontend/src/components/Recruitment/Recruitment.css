@@ -39,3 +39,15 @@
   font-size: 14px !important;
   line-height: 17.41px !important;
 }
+#rec-css .system-style-div {
+  display: flex;
+  background-color: #F3F3F3;
+  align-items: center;      
+  padding: 10px 20px;    
+}
+
+#rec-css .span-system1 {
+  font-family: 'Roboto';
+  font-weight: 500;
+  font-size: 20px;
+}
