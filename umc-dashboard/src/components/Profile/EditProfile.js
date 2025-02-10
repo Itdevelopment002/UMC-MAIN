@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
-import { FaPencilAlt, FaEye, FaEyeSlash } from "react-icons/fa"; 
+import { FaPencilAlt, FaEye, FaEyeSlash } from "react-icons/fa";
 import api, { baseURL } from "../api";
 import './EditProfile.css';
 import { ToastContainer, toast } from "react-toastify";
@@ -22,7 +22,7 @@ const EditProfile = () => {
     const [oldPassword, setOldPassword] = useState("");
     const [errors, setErrors] = useState({});
     const [showModal, setShowModal] = useState(false);
-    const [isChanged, setIsChanged] = useState(false); 
+    const [isChanged, setIsChanged] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [showOldPassword, setShowOldPassword] = useState(false);
@@ -42,7 +42,7 @@ const EditProfile = () => {
             setMobile(userData.mobile || "");
             setDesignation(userData.designation || "");
             setPreviewImage(userData.userImage ? `${baseURL}/${userData.userImage}` : "https://via.placeholder.com/150");
-            setIsChanged(false); 
+            setIsChanged(false);
         } catch (error) {
             console.error("Error fetching user data:", error);
         }
@@ -53,7 +53,7 @@ const EditProfile = () => {
         if (file) {
             setImage(file);
             setPreviewImage(URL.createObjectURL(file));
-            setIsChanged(true); 
+            setIsChanged(true);
         }
     };
 
@@ -130,7 +130,7 @@ const EditProfile = () => {
         if (field === "mobile") setMobile(value);
         if (field === "designation") setDesignation(value);
 
-        setIsChanged(true); 
+        setIsChanged(true);
     };
 
     return (
@@ -209,7 +209,7 @@ const EditProfile = () => {
                                 <button
                                     className="btn btn-success mx-2 btn-sm"
                                     onClick={handleSaveProfile}
-                                    disabled={!isChanged} 
+                                    disabled={!isChanged}
                                 >
                                     Save Changes
                                 </button>
@@ -237,11 +237,11 @@ const EditProfile = () => {
                                             className={`form-control custom-input-edit-profile ${errors.password ? "is-invalid" : ""}`}
                                             value={password}
                                             onChange={(e) => setPassword(e.target.value)}
-                                            style={{ paddingRight: "35px" }} 
+                                            style={{ paddingRight: "35px" }}
                                         />
                                         <span
-                                            className="position-absolute top-50 end-0 translate-middle-y me-2"
-                                            style={{ cursor: "pointer", right: "10px" }}
+                                            className="position-absolute end-0 translate-middle-y me-2"
+                                            style={{ cursor: "pointer", right: "20px", top: "12px" }}
                                             onClick={() => setShowPassword(!showPassword)}
                                         >
                                             {showPassword ? <FaEyeSlash /> : <FaEye />}
@@ -257,11 +257,11 @@ const EditProfile = () => {
                                             className={`form-control custom-input-edit-profile ${errors.confirmPassword ? "is-invalid" : ""}`}
                                             value={confirmPassword}
                                             onChange={(e) => setConfirmPassword(e.target.value)}
-                                            style={{ paddingRight: "35px" }} 
+                                            style={{ paddingRight: "35px" }}
                                         />
                                         <span
-                                            className="position-absolute top-50 end-0 translate-middle-y me-2"
-                                            style={{ cursor: "pointer", right: "10px" }}
+                                            className="position-absolute end-0 translate-middle-y me-2"
+                                            style={{ cursor: "pointer", right: "20px", top: "12px" }}
                                             onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                                         >
                                             {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
@@ -286,11 +286,11 @@ const EditProfile = () => {
                                 className="form-control form-control-md"
                                 value={oldPassword}
                                 onChange={(e) => setOldPassword(e.target.value)}
-                                style={{ paddingRight: "35px" }} 
+                                style={{ paddingRight: "35px" }}
                             />
                             <span
-                                className="position-absolute top-50 end-0 translate-middle-y me-2"
-                                style={{ cursor: "pointer", right: "10px" }}
+                                className="position-absolute end-0 translate-middle-y me-2"
+                                style={{ cursor: "pointer", right: "10px", top: "43px" }}
                                 onClick={() => setShowOldPassword(!showOldPassword)}
                             >
                                 {showOldPassword ? <FaEyeSlash /> : <FaEye />}
