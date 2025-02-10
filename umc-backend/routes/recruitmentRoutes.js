@@ -2,34 +2,27 @@ const express = require("express");
 const router = express.Router();
 const db = require("../config/db");
 
-const convertToMySQLDate = (dateString) => {
-  const [day, month, year] = dateString.split("-");
-  return `${year}-${month}-${day}`;
-};
-
 router.post("/recruitment", (req, res) => {
-  const { description, publishDate } = req.body;
+  const { heading, description, link } = req.body;
 
-  const formattedDate = convertToMySQLDate(publishDate);
-
-  if (!description || !publishDate) {
+  if (!heading || !description || !link) {
     return res
       .status(400)
       .json({
-        message: "Description and publish date are required",
+        message: "Heading, Description and Link are required",
       });
   }
 
   const sql =
-    "INSERT INTO recruitments (description, publish_date) VALUES (?, ?)";
-  db.query(sql, [description, formattedDate], (err, result) => {
+    "INSERT INTO recruitments (heading, description, link) VALUES (?, ?, ?)";
+  db.query(sql, [heading, description, link], (err, result) => {
     if (err) {
       console.error("Database error:", err);
       return res.status(500).json({ message: "Database error", error: err });
     }
     res
       .status(200)
-      .json({ message: "Recruitment added successfully", videoId: result.insertId });
+      .json({ message: "Recruitment added successfully", recruitmentId: result.insertId });
   });
 });
 
@@ -59,23 +52,32 @@ router.get("/recruitment/:id", (req, res) => {
 
 router.put("/recruitment/:id", (req, res) => {
   const { id } = req.params;
-  const { description, publish_date } = req.body;
+  const { heading, description, link } = req.body;
 
-  const formattedDate = publish_date ? convertToMySQLDate(publish_date) : null;
-
-  let updateSql = "UPDATE recruitments SET";
+  let updateSql = "UPDATE recruitments SET ";
   const updateParams = [];
+  const updateFields = [];
+
+  if (heading) {
+    updateFields.push("heading = ?");
+    updateParams.push(heading);
+  }
 
   if (description) {
-    updateSql += " description = ?";
+    updateFields.push("description = ?");
     updateParams.push(description);
   }
-  if (formattedDate) {
-    updateSql += ", publish_date = ?";
-    updateParams.push(formattedDate);
+
+  if (link) {
+    updateFields.push("link = ?");
+    updateParams.push(link);
   }
 
-  updateSql += " WHERE id = ?";
+  if (updateFields.length === 0) {
+    return res.status(400).json({ message: "No fields provided for update" });
+  }
+
+  updateSql += updateFields.join(", ") + " WHERE id = ?";
   updateParams.push(id);
 
   db.query(updateSql, updateParams, (err) => {
@@ -85,6 +87,7 @@ router.put("/recruitment/:id", (req, res) => {
     res.status(200).json({ message: "Recruitment updated successfully" });
   });
 });
+
 
 router.delete("/recruitment/:id", (req, res) => {
   const { id } = req.params;

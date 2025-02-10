@@ -206,11 +206,11 @@ const ENews = () => {
                                                     }}
                                                 >
                                                     <Link
-                                                        to={item.link}
+                                                        to={item.pdf_link}
                                                         className="text-decoration-none"
-                                                        target={item.link === "#" ? "" : "_blank"}
+                                                        target={item.pdf_link === "#" ? "" : "_blank"}
                                                         style={{ color: "#333333" }}
-                                                        onClick={(e) => handleClick(item.link, e)}
+                                                        onClick={(e) => handleClick(item.pdf_link, e)}
                                                     >
                                                         <img
                                                             src={pdficon}
@@ -222,7 +222,7 @@ const ENews = () => {
                                                                 verticalAlign: "middle",
                                                             }}
                                                         />
-                                                        {item.posting}
+                                                        View PDF
                                                     </Link>
                                                 </td>
                                             </tr>

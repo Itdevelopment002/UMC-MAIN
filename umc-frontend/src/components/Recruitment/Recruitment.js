@@ -2,11 +2,12 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./Recruitment.css";
 import api, { baseURL } from "../api"
+import pdficon from '../../assets/images/Departments/document 1.png';
+import Swal from 'sweetalert2';
 
 const Recruitment = () => {
   const [recruitment, setRecruitment] = useState([]);
   const [bgImage, setBgImage] = useState("");
-
 
   const fetchHeaderImage = async () => {
     try {
@@ -42,9 +43,28 @@ const Recruitment = () => {
     }
   };
 
+  const contractRecruitment = recruitment.filter(
+    (item) => item.heading === "Contract Basis Recruitment"
+  );
+  const oldRecruitment = recruitment.filter(
+    (item) => item.heading === "Old Recruitment"
+  );
+
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
+
+  const handleClick = (link, e) => {
+    if (link === "#") {
+      e.preventDefault();
+      Swal.fire({
+        title: 'Information',
+        text: 'The PDF for this department will be available soon.',
+        icon: 'info',
+        confirmButtonText: 'Ok'
+      });
+    }
+  };
 
   return (
     <>
@@ -69,7 +89,6 @@ const Recruitment = () => {
             <span className="highlighted-text"> @ UMC</span>
           </h2>
           <hr />
-
           <div className="row">
             <div className="col-12 col-xl-12 col-lg-12 col-md-12 col-sm-12">
               <div>
@@ -81,59 +100,170 @@ const Recruitment = () => {
                   </span>
                 </h2>
               </div>
-
+              <div className="row mt-4">
+                <div className="col-12 col-xl-9 col-lg-12 col-md-12 col-sm-12">
+                  <div className="system-style-div text-start">
+                    <p className="mb-0">
+                      <span className="span-system1">Contract basis Recruitment Advertisement</span>
+                    </p>
+                  </div>
+                </div>
+              </div>
               <table className="table table-bordered table-responsive shadow mt-4">
                 <thead className="bg-orange text-white">
                   <tr>
                     <th className="table-heading-styling" style={{ textAlign: "center" }}>Sr. No.</th>
                     <th className="table-heading-styling">Advertisement</th>
-                    <th className="table-heading-styling" style={{ textAlign: "center" }}>Posting Date</th>
+                    <th className="table-heading-styling" style={{ textAlign: "center" }}>Action</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {recruitment.map((item, index) => (
-                    <tr key={item.id}>
-                      <td
-                        className="font-large"
-                        width="8%"
-                        style={{
-                          paddingLeft: "10px",
-                          paddingRight: "10px",
-                          color: "#292D32",
-                          textAlign: "center"
-                        }}
-                      >
-                        {index + 1}
-                      </td>
-                      <td
-                        width="70%"
-                        style={{
-                          paddingLeft: "10px",
-                          paddingRight: "10px",
-                          color: "#000000",
-                        }}
-                      >
-                        {item.description}
-                      </td>
-                      <td
-                        width="20%"
-                        style={{
-                          paddingLeft: "10px",
-                          paddingRight: "10px",
-                          color: "#9D9D9D",
-                          textAlign: "center"
-                        }}
-                      >
-                        {new Date(item.publish_date)
-                          .toLocaleDateString("en-GB", {
-                            day: "2-digit",
-                            month: "2-digit",
-                            year: "numeric",
-                          })
-                          .replace(/\//g, "-")}
+                  {contractRecruitment.length > 0 ? (
+                    contractRecruitment.map((item, index) => (
+                      <tr key={item.id}>
+                        <td
+                          className="font-large"
+                          width="8%"
+                          style={{
+                            paddingLeft: "10px",
+                            paddingRight: "10px",
+                            color: "#292D32",
+                            textAlign: "center"
+                          }}
+                        >
+                          {index + 1}
+                        </td>
+                        <td
+                          width="70%"
+                          style={{
+                            paddingLeft: "10px",
+                            paddingRight: "10px",
+                            color: "#000000",
+                          }}
+                        >
+                          {item.description}
+                        </td>
+                        <td
+                          width="10%"
+                          style={{
+                            paddingLeft: "10px",
+                            paddingRight: "10px",
+                            color: "#333333",
+                            textAlign: "center",
+                          }}
+                        >
+                          <Link
+                            to={item.link}
+                            className="text-decoration-none"
+                            target={item.link === "#" ? "" : "_blank"}
+                            style={{ color: "#333333" }}
+                            onClick={(e) => handleClick(item.link, e)}
+                          >
+                            <img
+                              src={pdficon}
+                              alt="PDF Icon"
+                              style={{
+                                width: "18px",
+                                height: "18px",
+                                marginRight: "8px",
+                                verticalAlign: "middle",
+                              }}
+                            />
+                            View PDF
+                          </Link>
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan="3" style={{ textAlign: "center" }}>
+                        No Contract basis recruitment data available
                       </td>
                     </tr>
-                  ))}
+                  )}
+                </tbody>
+              </table>
+              <div className="row mt-5">
+                <div className="col-12 col-xl-9 col-lg-12 col-md-12 col-sm-12">
+                  <div className="system-style-div text-start">
+                    <p className="mb-0">
+                      <span className="span-system1">Old Recruitment Advertisement</span>
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <table className="table table-bordered table-responsive shadow mt-4">
+                <thead className="bg-orange text-white">
+                  <tr>
+                    <th className="table-heading-styling" style={{ textAlign: "center" }}>Sr. No.</th>
+                    <th className="table-heading-styling">Advertisement</th>
+                    <th className="table-heading-styling" style={{ textAlign: "center" }}>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {oldRecruitment.length > 0 ? (
+                    oldRecruitment.map((item, index) => (
+                      <tr key={item.id}>
+                        <td
+                          className="font-large"
+                          width="8%"
+                          style={{
+                            paddingLeft: "10px",
+                            paddingRight: "10px",
+                            color: "#292D32",
+                            textAlign: "center"
+                          }}
+                        >
+                          {index + 1}
+                        </td>
+                        <td
+                          width="70%"
+                          style={{
+                            paddingLeft: "10px",
+                            paddingRight: "10px",
+                            color: "#000000",
+                          }}
+                        >
+                          {item.description}
+                        </td>
+                        <td
+                          width="10%"
+                          style={{
+                            paddingLeft: "10px",
+                            paddingRight: "10px",
+                            color: "#333333",
+                            textAlign: "center",
+                          }}
+                        >
+                          <Link
+                            to={item.link}
+                            className="text-decoration-none"
+                            target={item.link === "#" ? "" : "_blank"}
+                            style={{ color: "#333333" }}
+                            onClick={(e) => handleClick(item.link, e)}
+                          >
+                            <img
+                              src={pdficon}
+                              alt="PDF Icon"
+                              style={{
+                                width: "18px",
+                                height: "18px",
+                                marginRight: "8px",
+                                verticalAlign: "middle",
+                              }}
+                            />
+                            View PDF
+                          </Link>
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan="3" style={{ textAlign: "center" }}>
+                        No Old recruitment data available
+                      </td>
+                    </tr>
+                  )}
                 </tbody>
               </table>
             </div>
