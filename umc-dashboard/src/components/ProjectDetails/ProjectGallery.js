@@ -1,460 +1,367 @@
-// import React, { useState, useEffect } from "react";
-// import { Link, useNavigate } from "react-router-dom";
-// import api, { baseURL } from "../api";
-// import { toast, ToastContainer } from "react-toastify";
-// import "react-toastify/dist/ReactToastify.css";
-// import GLightbox from "glightbox";
-// import "glightbox/dist/css/glightbox.min.css";
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import GLightbox from "glightbox";
+import "glightbox/dist/css/glightbox.min.css";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import api, { baseURL } from "../api";
 
-// const ProjectGallery = () => {
-//   const [categoryData, setCategoryData] = useState([]);
-//   const [categoryImageData, setCategoryImageData] = useState([]);
-//   const [images, setImages] = useState([]); 
-//   const [selectedCategory, setSelectedCategory] = useState(""); 
-//   const [showEditModal, setShowEditModal] = useState(false);
-//   const [showDeleteModal, setShowDeleteModal] = useState(false);
-//   const [modalType, setModalType] = useState("");
-//   const [selectedItem, setSelectedItem] = useState(null);
-//   const [editData, setEditData] = useState({});
-//   const [imagePreview, setImagePreview] = useState("");
-//   const navigate = useNavigate();
+const ProjectGallery = () => {
+  const [gardensData, setGardensData] = useState([]);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [selectedGarden, setSelectedGarden] = useState(null);
+  const [selectedFiles, setSelectedFiles] = useState([]);
+  const [currentImages, setCurrentImages] = useState([]);
+  const [removedImages, setRemovedImages] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
 
-//   useEffect(() => {
-//   }, []);
+  // Initialize GLightbox
+  useEffect(() => {
+    const lightbox = GLightbox({ selector: ".glightbox" });
+    return () => lightbox.destroy();
+  }, [gardensData]);
 
-//   useEffect(() => {
-//     const lightbox = GLightbox({
-//       selector: ".glightbox",
-//     });
-//     return () => {
-//       lightbox.destroy();
-//     };
-//   }, [images]);
+  // Fetch gardens data
+  useEffect(() => {
+    const fetchGardens = async () => {
+      try {
+        const response = await api.get("/project_images"); // Ensure this matches your backend route
+        setGardensData(response.data);
+      } catch (error) {
+        console.error("Error fetching gardens data:", error);
+      }
+    };
+    fetchGardens();
+  }, []);
+
+  // Handle delete action
+  const handleDelete = (garden) => {
+    setSelectedGarden(garden);
+    setShowDeleteModal(true);
+  };
+
+  // Handle edit action
+  const handleEdit = (garden) => {
+    setSelectedGarden(garden);
+    setCurrentImages(JSON.parse(garden.images));
+    setRemovedImages([]);
+    setSelectedFiles([]);
+    setShowEditModal(true);
+  };
+
+  // Close delete modal
+  const handleCloseDeleteModal = () => {
+    setShowDeleteModal(false);
+    setSelectedGarden(null);
+  };
+
+  // Close edit modal
+  const handleCloseEditModal = () => {
+    setShowEditModal(false);
+    setSelectedGarden(null);
+    setCurrentImages([]);
+    setRemovedImages([]);
+    setSelectedFiles([]);
+  };
+
+  // Save edited garden
+  const handleSaveEdit = async () => {
+    if (!selectedGarden) return;
+
+    try {
+      const formData = new FormData();
+      formData.append("heading", selectedGarden.heading);
+
+      // Append existing images (excluding removed ones)
+      currentImages.forEach((img) => {
+        if (!removedImages.includes(img)) {
+          formData.append("images", img);
+        }
+      });
+
+      // Append new files
+      selectedFiles.forEach((file) => {
+        formData.append("images", file);
+      });
+
+      await api.put(`/project_images/${selectedGarden.id}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      toast.success("Project updated successfully");
+
+      // Refresh data
+      const response = await api.get("/project_images");
+      setGardensData(response.data);
+      handleCloseEditModal();
+
+    } catch (error) {
+      console.error("Error saving garden changes:", error);
+    }
+  };
+
+  // Handle file input change
+  const handleFileChange = (e) => {
+    setSelectedFiles([...selectedFiles, ...Array.from(e.target.files)]);
+  };
 
 
-//   const fetchCategoryImageData = async () => {
-//     try {
-//       const response = await api.get("/categories");
-//       setCategoryImageData(response.data);
-//       const allCategories = response.data;
-//       const filteredCategories = [];
-//       for (const category of allCategories) {
-//         const imageResponse = await api.get(`/category-images/${category.id}`);
-//         if (imageResponse.data.length > 0) {
-//           filteredCategories.push(category);
-//         }
-//       }
-//       if (filteredCategories.length > 0) {
-//         setCategoryData(filteredCategories)
-//         setSelectedCategory(filteredCategories[0].id);
-//         handleCategoryChange(filteredCategories[0].id);
-//       }
-//     } catch (error) {
-//       toast.error("Failed to fetch Category data!");
-//     }
-//   };
+  // Handle delete confirmation
+  const handleDeleteConfirm = async () => {
+    if (!selectedGarden) return;
 
-//   useEffect(() => {
-//     fetchCategoryImageData();
-//   }, []);
+    try {
+      await api.delete(`/project_images/${selectedGarden.id}`);
+      setGardensData(
+        gardensData.filter((garden) => garden.id !== selectedGarden.id)
+      );
+      handleCloseDeleteModal();
+      toast.success("Project deletd successfully");
+    } catch (error) {
+      console.error("Error deleting garden:", error);
+    }
+  };
 
-//   const handleCategoryChange = (categoryId) => {
-//     setSelectedCategory(categoryId);
-//     api.get(`/category-images/${categoryId}`)
-//       .then((response) => setImages(response.data))
-//       .catch((error) => toast.error("Failed to fetch images!"));
-//   };
+  // Pagination logic
+  const totalPages = Math.ceil(gardensData.length / itemsPerPage);
+  const paginatedData = gardensData.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
-//   const handleDelete = async (id, type) => {
-//     try {
-//       if (type === "category") {
-//         await api.delete(`/categories/${id}`);
-//         setCategoryImageData((prevData) => prevData.filter((item) => item.id !== id));
-//         fetchCategoryImageData();
-//       }
-//       else if (type === "categoryImage") {
-//         await api.delete(`/category-images/${id}`);
-//         setImages(images.filter((img) => img.id !== id));
-//         handleCategoryChange(selectedCategory);
-//         fetchCategoryImageData()
-//       }
-//       toast.success(
-//         `${type === "category" ? "Category" : "Category Image"} data deleted successfully!`
-//       );
-//     } catch (error) {
-//       console.error(error);
-//       toast.error("Failed to delete the entry!");
-//     }
-//     closeModal();
-//   };
+  const handlePageChange = (page) => {
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page);
+    }
+  };
 
-//   const openEditModal = (item, type) => {
-//     setSelectedItem(item);
-//     setEditData(
-//       type === "category" ? { name: item.name } : { ...item }
-//     );
-//     setImagePreview(type === "categoryImage" ? `${baseURL}${item.image_url}` : "");
-//     setModalType(type);
-//     setShowEditModal(true);
-//   };
+  return (
+    <div className="page-wrapper">
+      <div className="content">
+        <nav aria-label="breadcrumb">
+          <ol className="breadcrumb">
+            <li className="breadcrumb-item">
+              <Link to="#">Upcoming Projects</Link>
+            </li>
+            <li className="breadcrumb-item active" aria-current="page">
+              Project Details
+            </li>
+          </ol>
+        </nav>
+        <div className="row">
+          <div className="col-lg-12">
+            <div className="card-box">
+              <div className="card-block">
+                <div className="row">
+                  <div className="col-sm-4 col-3">
+                    <h4 className="page-title">Project Category</h4>
+                  </div>
+                  <div className="col-sm-8 col-9 text-right m-b-20">
+                    <Link
+                      to="/add-project-category"
+                      className="btn btn-primary btn-rounded float-right"
+                    >
+                      <i className="fa fa-plus"></i> Add Category
+                    </Link>
+                  </div>
+                </div>
+                <div className="table-responsive">
+                  <table className="table table-bordered m-b-0">
+                    <thead>
+                      <tr>
+                        <th width="10%">Sr. No.</th>
+                        <th>Project Heading</th>
+                        <th>Project Images</th>
+                        <th width="15%">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {paginatedData.map((garden, index) => (
+                        <tr key={garden.id}>
+                          <td>{(currentPage - 1) * itemsPerPage + index + 1}</td>
+                          <td>{garden.heading}</td>
+                          <td>
+                            <div className="d-flex flex-wrap">
+                              {JSON.parse(garden.images).map((img, imgIndex) => (
+                                <div
+                                  key={imgIndex}
+                                  className="position-relative me-2"
+                                >
+                                  <img
+                                    src={`${baseURL}${img}`}
+                                    alt=""
+                                    className="glightbox"
+                                    style={{
+                                      width: "50px",
+                                      height: "50px",
+                                      marginRight: "5px",
+                                    }}
+                                  />
+                                </div>
+                              ))}
+                            </div>
+                          </td>
+                          <td>
+                            <button
+                              className="btn btn-sm btn-success"
+                              onClick={() => handleEdit(garden)}
+                            >
+                              Edit
+                            </button>
+                            <button
+                              className="btn btn-sm btn-danger mx-1"
+                              onClick={() => handleDelete(garden)}
+                            >
+                              Delete
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
-//   const closeModal = () => {
-//     setShowEditModal(false);
-//     setShowDeleteModal(false);
-//     setSelectedItem(null);
-//     setEditData({});
-//     setImagePreview("");
-//   };
+        {/* Pagination */}
+        <ul className="pagination">
+          <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
+            <Link
+              className="page-link"
+              to="#"
+              onClick={() => handlePageChange(currentPage - 1)}
+            >
+              Previous
+            </Link>
+          </li>
+          {Array.from({ length: totalPages }, (_, index) => (
+            <li
+              key={index + 1}
+              className={`page-item ${
+                currentPage === index + 1 ? "active" : ""
+              }`}
+            >
+              <Link
+                className="page-link"
+                to="#"
+                onClick={() => handlePageChange(index + 1)}
+              >
+                {index + 1}
+              </Link>
+            </li>
+          ))}
+          <li
+            className={`page-item ${
+              currentPage === totalPages ? "disabled" : ""
+            }`}
+          >
+            <Link
+              className="page-link"
+              to="#"
+              onClick={() => handlePageChange(currentPage + 1)}
+            >
+              Next
+            </Link>
+          </li>
+        </ul>
 
-//   const handleSaveChanges = async () => {
-//     try {
-//       if (modalType === "category") {
-//         await api.put(`/categories/${selectedItem.id}`, {
-//           name: editData.name,
-//         });
-//         setCategoryImageData(
-//           categoryImageData.map((item) =>
-//             item.id === selectedItem.id
-//               ? { ...item, name: editData.name }
-//               : item
-//           )
-//         );
-//         fetchCategoryImageData();
-//       }
-//       else if (modalType === "categoryImage") {
-//         const formData = new FormData();
+        {/* Delete Modal */}
+        {showDeleteModal && (
+          <div className="modal fade show" style={{ display: "block" }}>
+            <div className="modal-dialog modal-dialog-centered">
+              <div className="modal-content">
+                <div className="modal-body text-center">
+                  <h5>Are you sure you want to delete this item?</h5>
+                </div>
+                <div className="modal-footer">
+                  <button
+                    type="button"
+                    className="btn btn-sm btn-secondary"
+                    onClick={handleCloseDeleteModal}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn-sm btn-danger"
+                    onClick={handleDeleteConfirm}
+                  >
+                    Delete
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
 
-//         if (editData.imageFile) {
-//           formData.append("image", editData.imageFile);
-//         }
+        {/* Edit Modal */}
+        {showEditModal && selectedGarden && (
+          <div className="modal fade show" style={{ display: "block" }}>
+            <div className="modal-dialog modal-dialog-centered">
+              <div className="modal-content">
+                <div className="modal-header">
+                  <h4>Edit Garden</h4>
+                </div>
+                <div className="modal-body">
+                  <form>
+                    <div className="form-group">
+                      <label>
+                        Project Heading <span className="text-danger">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        value={selectedGarden.heading}
+                        onChange={(e) =>
+                          setSelectedGarden({
+                            ...selectedGarden,
+                            heading: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label>
+                      Project Images <span className="text-danger">*</span>
+                      </label>
+                      <input
+                        type="file"
+                        className="form-control"
+                        onChange={handleFileChange}
+                        multiple
+                      />
+                    </div>
+                  </form>
+                </div>
+                <div className="modal-footer">
+                  <button
+                    type="button"
+                    className="btn btn-sm btn-secondary"
+                    onClick={handleCloseEditModal}
+                  >
+                    Close
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn-sm btn-primary"
+                    onClick={handleSaveEdit}
+                  >
+                    Save changes
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+        <ToastContainer/>
+      </div>
+    </div>
+  );
+};
 
-//         await api.put(`/category-images/${selectedItem.id}`, formData, {
-//           headers: {
-//             "Content-Type": "multipart/form-data",
-//           },
-//         });
-//         setImages(
-//           images.map((item) =>
-//             item.id === selectedItem.id ? { ...item, ...editData } : item
-//           )
-//         );
-//         handleCategoryChange(selectedCategory);
-//       }
-//       toast.success(
-//         `${modalType === "category" ? "Category" : "Category Image"} data updated successfully!`
-//       );
-//       navigate("/photo-gallery");
-//     } catch (error) {
-//       console.error(error);
-//       toast.error("Failed to update the entry!");
-//     }
-//     closeModal();
-//   };
-
-//   const handleImageChange = (e) => {
-//     const file = e.target.files[0];
-//     if (file) {
-//       const reader = new FileReader();
-//       reader.onloadend = () => {
-//         setImagePreview(reader.result);
-//         setEditData({ ...editData, imageFile: file });
-//       };
-//       reader.readAsDataURL(file);
-//     }
-//   };
-
-//   return (
-//     <div>
-//       <div className="page-wrapper">
-//         <div className="content">
-//           <nav aria-label="breadcrumb">
-//             <ol className="breadcrumb">
-//               <li className="breadcrumb-item">
-//                 <Link to="#">Gallery</Link>
-//               </li>
-//               <li className="breadcrumb-item active" aria-current="page">
-//                 Photo Gallery
-//               </li>
-//             </ol>
-//           </nav>
-//           <div className="row">
-//             <div className="col-lg-12">
-//               <div className="card-box">
-//                 <div className="card-block">
-//                   <div className="row">
-//                     <div className="col-sm-4 col-3">
-//                       <h4 className="page-title">Category</h4>
-//                     </div>
-//                     <div className="col-sm-8 col-9 text-right m-b-20">
-//                       <Link
-//                         to="/add-project-category"
-//                         className="btn btn-primary btn-rounded float-right"
-//                       >
-//                         <i className="fa fa-plus"></i> Add Category
-//                       </Link>
-//                     </div>
-//                   </div>
-//                   <div className="table-responsive">
-//                     <table className="table table-bordered m-b-0">
-//                       <thead>
-//                         <tr>
-//                           <th width="10%" className="text-center">Sr. No.</th>
-//                           <th>Category Name</th>
-//                           <th width="15%" className="text-center">Action</th>
-//                         </tr>
-//                       </thead>
-//                       <tbody>
-//                         {categoryImageData.length > 0 ? (
-//                           categoryImageData.map((item, index) => (
-//                             <tr key={item.id}>
-//                               <td className="text-center">{index + 1}</td>
-//                               <td>{item.name}</td>
-//                               <td className="text-center">
-//                                 <button
-//                                   onClick={() => openEditModal(item, "category")}
-//                                   className="btn btn-success btn-sm m-t-10"
-//                                 >
-//                                   Edit
-//                                 </button>
-//                                 <button
-//                                   onClick={() => {
-//                                     setSelectedItem(item);
-//                                     setModalType("category");
-//                                     setShowDeleteModal(true);
-//                                   }}
-//                                   className="btn btn-danger btn-sm m-t-10"
-//                                 >
-//                                   Delete
-//                                 </button>
-//                               </td>
-//                             </tr>
-//                           ))
-//                         ) : (
-//                           <tr>
-//                             <td colSpan="3" className="text-center">No Category Data Available</td>
-//                           </tr>
-//                         )}
-//                       </tbody>
-//                     </table>
-//                   </div>
-//                 </div>
-//               </div>
-//             </div>
-//           </div>
-//           <div className="row">
-//             <div className="col-lg-12">
-//               <div className="card-box">
-//                 <div className="card-block">
-//                   <div className="row">
-//                     <div className="col-sm-4 col-3">
-//                       <h4 className="page-title">Category Images</h4>
-//                     </div>
-//                     <div className="col-sm-8 col-9 text-right m-b-20">
-//                       <Link
-//                         to="/add-project-images"
-//                         className="btn btn-primary btn-rounded float-right"
-//                       >
-//                         <i className="fa fa-plus"></i> Add Category Image
-//                       </Link>
-//                     </div>
-//                   </div>
-//                   <div className="row">
-//                     <div className="col-sm-4">
-//                       <select
-//                         className="form-control"
-//                         value={selectedCategory}
-//                         onChange={(e) => handleCategoryChange(e.target.value)}
-//                       >
-//                         {categoryData.map((category) => (
-//                           <option key={category.id} value={category.id}>
-//                             {category.name}
-//                           </option>
-//                         ))}
-//                       </select>
-//                     </div>
-//                   </div>
-//                   <div className="table-responsive m-t-20">
-//                     <table className="table table-bordered m-b-0">
-//                       <thead>
-//                         <tr>
-//                           <th width="10%" className="text-center">Sr. No.</th>
-//                           <th>Category Image</th>
-//                           <th width="15%" className="text-center">Action</th>
-//                         </tr>
-//                       </thead>
-//                       <tbody>
-//                         {selectedCategory && images.length > 0 ? (
-//                           images.map((item, index) => (
-//                             <tr key={item.id}>
-//                               <td className="text-center">{index + 1}</td>
-//                               <td>
-//                                 <Link
-//                                   className="glightbox"
-//                                   to={`${baseURL}${item.image_url}`}
-//                                 >
-//                                   <img
-//                                     src={`${baseURL}${item.image_url}`}
-//                                     alt={item.coName}
-//                                     style={{
-//                                       width: "100px",
-//                                     }}
-//                                   />
-//                                 </Link>
-//                               </td>
-//                               <td className="text-center">
-//                                 <button
-//                                   onClick={() => openEditModal(item, "categoryImage")}
-//                                   className="btn btn-success btn-sm m-t-10"
-//                                 >
-//                                   Edit
-//                                 </button>
-//                                 <button
-//                                   onClick={() => {
-//                                     setSelectedItem(item);
-//                                     setModalType("categoryImage");
-//                                     setShowDeleteModal(true);
-//                                   }}
-//                                   className="btn btn-danger btn-sm m-t-10"
-//                                 >
-//                                   Delete
-//                                 </button>
-//                               </td>
-//                             </tr>
-//                           ))
-//                         ) : (
-//                           <tr>
-//                             <td colSpan={3} className="text-center">No Category Image Data Available</td>
-//                           </tr>
-//                         )}
-//                       </tbody>
-//                     </table>
-//                   </div>
-//                 </div>
-//               </div>
-//             </div>
-//           </div>
-
-//           {showEditModal && (
-//             <div
-//               className="modal fade show"
-//               style={{
-//                 display: "block",
-//                 backgroundColor: "rgba(0,0,0,0.5)",
-//                 overflowY: "scroll",
-//                 scrollbarWidth: "none",
-//               }}
-//             >
-//               <div className="modal-dialog modal-dialog-centered">
-//                 <div className="modal-content">
-//                   <div className="modal-header">
-//                     <h5 className="modal-title">
-//                       {modalType === "category"
-//                         ? "Edit Category"
-//                         : "Edit Category Image"}
-//                     </h5>
-//                   </div>
-//                   <div className="modal-body">
-//                     {modalType === "category" ? (
-//                       <div className="form-group">
-//                         <label htmlFor="name">Category Name</label>
-//                         <input
-//                           className="form-control"
-//                           id="name"
-//                           value={editData.name}
-//                           onChange={(e) =>
-//                             setEditData({
-//                               ...editData,
-//                               name: e.target.value,
-//                             })
-//                           }
-//                         />
-//                       </div>
-//                     ) : (
-//                       <>
-//                         <div className="form-group">
-//                           <label htmlFor="coImage">Category Image</label>
-//                           <input
-//                             type="file"
-//                             className="form-control"
-//                             id="image"
-//                             onChange={handleImageChange}
-//                           />
-//                           {imagePreview && (
-//                             <img
-//                               src={imagePreview}
-//                               alt="Preview"
-//                               style={{
-//                                 width: "150px",
-//                                 height: "100px",
-//                                 marginTop: "10px",
-//                               }}
-//                             />
-//                           )}
-//                         </div>
-//                       </>
-//                     )}
-//                   </div>
-//                   <div className="modal-footer">
-//                     <button
-//                       type="button"
-//                       className="btn btn-secondary btn-sm"
-//                       onClick={closeModal}
-//                     >
-//                       Close
-//                     </button>
-//                     <button
-//                       type="button"
-//                       className="btn btn-primary btn-sm"
-//                       onClick={handleSaveChanges}
-//                     >
-//                       Save Changes
-//                     </button>
-//                   </div>
-//                 </div>
-//               </div>
-//             </div>
-//           )}
-
-//           {showDeleteModal && (
-//             <div
-//               className="modal fade show"
-//               style={{
-//                 display: "block",
-//                 backgroundColor: "rgba(0,0,0,0.5)",
-//                 overflowY: "scroll",
-//                 scrollbarWidth: "none",
-//               }}
-//             >
-//               <div className="modal-dialog modal-dialog-centered">
-//                 <div className="modal-content">
-//                   <div className="modal-body text-center">
-//                     <h5>Are you sure you want to delete this item?</h5>
-//                   </div>
-//                   <div className="modal-footer">
-//                     <button
-//                       type="button"
-//                       className="btn btn-secondary btn-sm"
-//                       onClick={closeModal}
-//                     >
-//                       Cancel
-//                     </button>
-//                     <button
-//                       type="button"
-//                       className="btn btn-danger btn-sm"
-//                       onClick={() => handleDelete(selectedItem.id, modalType)}
-//                     >
-//                       Delete
-//                     </button>
-//                   </div>
-//                 </div>
-//               </div>
-//             </div>
-//           )}
-//         </div>
-//       </div>
-//       <ToastContainer />
-//     </div>
-//   );
-// };
-
-// export default ProjectGallery;
+export default ProjectGallery;

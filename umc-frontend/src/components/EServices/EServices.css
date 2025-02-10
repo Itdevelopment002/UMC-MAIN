@@ -83,7 +83,7 @@
 
 @media (max-width: 376px) {
   .news-list {
-    max-height: 260px !important;
+    max-height: 280px !important;
   }
 }
 
@@ -113,7 +113,7 @@
   }
 
   .news-list {
-    max-height: 260px;
+    max-height: 310px;
   }
 
   .tabs-container .nav-tabs .nav-item .nav-link{
@@ -142,7 +142,7 @@
   }
 
   .news-list {
-    max-height: 270px;
+    max-height: 310px;
   }
 
   .e-services-margin {
@@ -165,7 +165,7 @@
   }
 
   .news-list {
-    max-height: 290px;
+    max-height: 310px;
   }
 
   .e-services-margin {
@@ -191,6 +191,7 @@
   .custom-icons {
     font-size: 20px;
   }
+
 
 }
 
@@ -309,6 +310,9 @@
 @media (min-width: 992px) and (max-width: 1200px) {
   .upcoming-projects{
     margin-top: 20px;
+  }
+  .news-list {
+    max-height: 340px !important;
   }
 }
 

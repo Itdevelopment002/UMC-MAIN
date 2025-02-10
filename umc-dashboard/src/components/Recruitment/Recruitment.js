@@ -3,8 +3,6 @@ import { Link } from "react-router-dom";
 import api from "../api";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Flatpickr from "react-flatpickr";
-import "flatpickr/dist/themes/material_blue.css";
 
 const Recruitment = () => {
   const [recruitment, setRecruitment] = useState([]);
@@ -12,7 +10,8 @@ const Recruitment = () => {
   const [showEditModal, setShowEditModal] = useState(false);
   const [selectedRecruitment, setSelectedRecruitment] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPageContract, setCurrentPageContract] = useState(1);
+  const [currentPageOld, setCurrentPageOld] = useState(1);
   const itemsPerPage = 5;
 
   useEffect(() => {
@@ -49,26 +48,15 @@ const Recruitment = () => {
     setSelectedRecruitment(null);
   };
 
-  const formatDate = (date) => {
-    const d = new Date(date);
-    const day = String(d.getDate()).padStart(2, "0");
-    const month = String(d.getMonth() + 1).padStart(2, "0");
-    const year = d.getFullYear();
-    return `${day}-${month}-${year}`;
-  };
-
   const handleSaveEdit = async () => {
     try {
       setIsLoading(true);
-      const { description } = selectedRecruitment;
-
-      const formattedPublishDate = selectedRecruitment.publish_date
-        ? formatDate(selectedRecruitment.publish_date)
-        : "";
+      const { heading, description, link } = selectedRecruitment;
 
       await api.put(`/recruitment/${selectedRecruitment.id}`, {
+        heading,
         description,
-        publish_date: formattedPublishDate,
+        link,
       });
       toast.success("Recruitment updated successfully");
       fetchRecruitment();
@@ -96,10 +84,23 @@ const Recruitment = () => {
     }
   };
 
-  const currentPageData = recruitment.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
+  const contractRecruitment = recruitment.filter(
+    (item) => item.heading === "Contract Basis Recruitment"
   );
+  const oldRecruitment = recruitment.filter(
+    (item) => item.heading === "Old Recruitment"
+  );
+
+  const currentPageDataContract = contractRecruitment.slice(
+    (currentPageContract - 1) * itemsPerPage,
+    currentPageContract * itemsPerPage
+  );
+
+  const currentPageDataOld = oldRecruitment.slice(
+    (currentPageOld - 1) * itemsPerPage,
+    currentPageOld * itemsPerPage
+  );
+
   return (
     <div>
       <div className="page-wrapper">
@@ -127,8 +128,13 @@ const Recruitment = () => {
                         to="/add-recruitment"
                         className="btn btn-primary btn-rounded float-right"
                       >
-                        <i className="fa fa-plus"></i> Add Info
+                        <i className="fa fa-plus"></i> Add Data
                       </Link>
+                    </div>
+                  </div>
+                  <div className="row">
+                    <div className="col-12">
+                      <h4 className="page-title">Contract Basis Recruitment Advertisement</h4>
                     </div>
                   </div>
                   <div className="table-responsive">
@@ -136,27 +142,28 @@ const Recruitment = () => {
                       <thead>
                         <tr>
                           <th width="10%" className="text-center">Sr. No.</th>
-                          <th>Job Description</th>
-                          <th className="text-center">Posting Date</th>
+                          <th width="35%">Job Description</th>
+                          <th width="35%">Job Link</th>
                           <th width="15%" className="text-center">Action</th>
                         </tr>
                       </thead>
                       <tbody>
-                        {currentPageData.length > 0 ? (
-                          currentPageData.map((recruitment, index) => (
+                        {currentPageDataContract.length > 0 ? (
+                          currentPageDataContract.map((recruitment, index) => (
                             <tr key={recruitment.id}>
                               <td className="text-center">
-                                {(currentPage - 1) * itemsPerPage + index + 1}
+                                {(currentPageContract - 1) * itemsPerPage + index + 1}
                               </td>
                               <td>{recruitment.description}</td>
-                              <td className="text-center">
-                                {new Date(recruitment.publish_date)
-                                  .toLocaleDateString("en-GB", {
-                                    day: "2-digit",
-                                    month: "2-digit",
-                                    year: "numeric",
-                                  })
-                                  .replace(/\//g, "-")}
+                              <td>
+                                <Link
+                                  to={recruitment.link === "#" || recruitment.link.startsWith("/") ? "#" : recruitment.link}
+                                  target={recruitment.link === "#" || recruitment.link.startsWith("/") ? "" : "_blank"}
+                                  className="text-decoration-none"
+                                  style={{ color: "#000" }}
+                                >
+                                  {recruitment.link}
+                                </Link>
                               </td>
                               <td className="text-center">
                                 <button
@@ -179,117 +186,156 @@ const Recruitment = () => {
                         ) : (
                           <tr>
                             <td colSpan="4" style={{ textAlign: "center" }}>
-                              No recruitment data available
+                              No Contract basis recruitment data available
                             </td>
                           </tr>
                         )}
                       </tbody>
                     </table>
                   </div>
-                </div>
-                <div className="mt-4">
-                  <ul className="pagination">
-                    <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
-                      <button
-                        className="page-link"
-                        onClick={() => setCurrentPage(currentPage - 1)}
-                      >
-                        Previous
-                      </button>
-                    </li>
-                    {currentPage > 2 && (
-                      <li className={`page-item ${currentPage === 1 ? "active" : ""}`}>
-                        <button className="page-link" onClick={() => setCurrentPage(1)}>
-                          1
+                  <div className="mt-4">
+                    <ul className="pagination">
+                      <li className={`page-item ${currentPageContract === 1 ? "disabled" : ""}`}>
+                        <button
+                          className="page-link"
+                          onClick={() => setCurrentPageContract(currentPageContract - 1)}
+                        >
+                          Previous
                         </button>
                       </li>
-                    )}
-                    {currentPage > 3 && (
-                      <li className={`page-item ${currentPage === 2 ? "active" : ""}`}>
-                        <button className="page-link" onClick={() => setCurrentPage(2)}>
-                          2
-                        </button>
-                      </li>
-                    )}
-                    {currentPage > 4 && (
-                      <li className="page-item disabled">
-                        <span className="page-link">...</span>
-                      </li>
-                    )}
-                    {Array.from(
-                      { length: Math.ceil(recruitment.length / itemsPerPage) },
-                      (_, i) => i + 1
-                    )
-                      .filter(
-                        (page) =>
-                          page >= currentPage - 1 && page <= currentPage + 1 // Show current page and its neighbors
-                      )
-                      .map((page) => (
+                      {Array.from(
+                        { length: Math.ceil(contractRecruitment.length / itemsPerPage) },
+                        (_, i) => i + 1
+                      ).map((page) => (
                         <li
-                          className={`page-item ${currentPage === page ? "active" : ""}`}
+                          className={`page-item ${currentPageContract === page ? "active" : ""}`}
                           key={page}
                         >
                           <button
                             className="page-link"
-                            onClick={() => setCurrentPage(page)}
+                            onClick={() => setCurrentPageContract(page)}
                           >
                             {page}
                           </button>
                         </li>
                       ))}
-                    {currentPage < Math.ceil(recruitment.length / itemsPerPage) - 3 && (
-                      <li className="page-item disabled">
-                        <span className="page-link">...</span>
-                      </li>
-                    )}
-                    {currentPage < Math.ceil(recruitment.length / itemsPerPage) - 2 && (
                       <li
-                        className={`page-item ${currentPage === Math.ceil(recruitment.length / itemsPerPage) - 1
-                          ? "active"
+                        className={`page-item ${currentPageContract === Math.ceil(contractRecruitment.length / itemsPerPage)
+                          ? "disabled"
                           : ""
                           }`}
                       >
                         <button
                           className="page-link"
-                          onClick={() =>
-                            setCurrentPage(Math.ceil(recruitment.length / itemsPerPage) - 1)
-                          }
+                          onClick={() => setCurrentPageContract(currentPageContract + 1)}
                         >
-                          {Math.ceil(recruitment.length / itemsPerPage) - 1}
+                          Next
                         </button>
                       </li>
-                    )}
-                    {currentPage < Math.ceil(recruitment.length / itemsPerPage) - 1 && (
+                    </ul>
+                  </div>
+                  <div className="row mt-5">
+                    <div className="col-12">
+                      <h4 className="page-title">Old Recruitment Advertisement</h4>
+                    </div>
+                  </div>
+                  <div className="table-responsive">
+                    <table className="table table-bordered m-b-0">
+                      <thead>
+                        <tr>
+                          <th width="10%" className="text-center">Sr. No.</th>
+                          <th width="35%">Job Description</th>
+                          <th width="35%">Job Link</th>
+                          <th width="15%" className="text-center">Action</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {currentPageDataOld.length > 0 ? (
+                          currentPageDataOld.map((recruitment, index) => (
+                            <tr key={recruitment.id}>
+                              <td className="text-center">
+                                {(currentPageOld - 1) * itemsPerPage + index + 1}
+                              </td>
+                              <td>{recruitment.description}</td>
+                              <td>
+                                <Link
+                                  to={recruitment.link === "#" || recruitment.link.startsWith("/") ? "#" : recruitment.link}
+                                  target={recruitment.link === "#" || recruitment.link.startsWith("/") ? "" : "_blank"}
+                                  className="text-decoration-none"
+                                  style={{ color: "#000" }}
+                                >
+                                  {recruitment.link}
+                                </Link>
+                              </td>
+                              <td className="text-center">
+                                <button
+                                  type="button"
+                                  className="btn btn-success btn-sm m-t-10"
+                                  onClick={() => handleEdit(recruitment)}
+                                >
+                                  Edit
+                                </button>
+                                <button
+                                  type="button"
+                                  className="btn btn-danger btn-sm m-t-10"
+                                  onClick={() => handleDelete(recruitment)}
+                                >
+                                  Delete
+                                </button>
+                              </td>
+                            </tr>
+                          ))
+                        ) : (
+                          <tr>
+                            <td colSpan="4" style={{ textAlign: "center" }}>
+                              No Old recruitment data available
+                            </td>
+                          </tr>
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
+                  <div className="mt-4">
+                    <ul className="pagination">
+                      <li className={`page-item ${currentPageOld === 1 ? "disabled" : ""}`}>
+                        <button
+                          className="page-link"
+                          onClick={() => setCurrentPageOld(currentPageOld - 1)}
+                        >
+                          Previous
+                        </button>
+                      </li>
+                      {Array.from(
+                        { length: Math.ceil(oldRecruitment.length / itemsPerPage) },
+                        (_, i) => i + 1
+                      ).map((page) => (
+                        <li
+                          className={`page-item ${currentPageOld === page ? "active" : ""}`}
+                          key={page}
+                        >
+                          <button
+                            className="page-link"
+                            onClick={() => setCurrentPageOld(page)}
+                          >
+                            {page}
+                          </button>
+                        </li>
+                      ))}
                       <li
-                        className={`page-item ${currentPage === Math.ceil(recruitment.length / itemsPerPage)
-                          ? "active"
+                        className={`page-item ${currentPageOld === Math.ceil(oldRecruitment.length / itemsPerPage)
+                          ? "disabled"
                           : ""
                           }`}
                       >
                         <button
                           className="page-link"
-                          onClick={() =>
-                            setCurrentPage(Math.ceil(recruitment.length / itemsPerPage))
-                          }
+                          onClick={() => setCurrentPageOld(currentPageOld + 1)}
                         >
-                          {Math.ceil(recruitment.length / itemsPerPage)}
+                          Next
                         </button>
                       </li>
-                    )}
-                    <li
-                      className={`page-item ${currentPage === Math.ceil(recruitment.length / itemsPerPage)
-                        ? "disabled"
-                        : ""
-                        }`}
-                    >
-                      <button
-                        className="page-link"
-                        onClick={() => setCurrentPage(currentPage + 1)}
-                      >
-                        Next
-                      </button>
-                    </li>
-                  </ul>
+                    </ul>
+                  </div>
                 </div>
               </div>
             </div>
@@ -347,6 +393,29 @@ const Recruitment = () => {
                   <div className="modal-body">
                     <form>
                       <div className="form-group">
+                        <label>Job Heading</label>
+                        <select
+                          className="form-control"
+                          value={selectedRecruitment?.heading || ""}
+                          onChange={(e) =>
+                            setSelectedRecruitment({
+                              ...selectedRecruitment,
+                              heading: e.target.value,
+                            })
+                          }
+                        >
+                          <option value="" disabled>
+                            Select Job Heading
+                          </option>
+                          <option value="Contract Basis Recruitment">
+                            Contract Basis Recruitment
+                          </option>
+                          <option value="Old Recruitment">
+                            Old Recruitment
+                          </option>
+                        </select>
+                      </div>
+                      <div className="form-group">
                         <label>Job Description</label>
                         <input
                           type="text"
@@ -361,17 +430,17 @@ const Recruitment = () => {
                         />
                       </div>
                       <div className="form-group">
-                        <label>Posting Date</label>
-                        <Flatpickr
-                          value={selectedRecruitment?.publish_date || ""}
-                          onChange={(date) =>
+                        <label>Job Link</label>
+                        <input
+                          type="text"
+                          className="form-control"
+                          value={selectedRecruitment?.link || ""}
+                          onChange={(e) =>
                             setSelectedRecruitment({
                               ...selectedRecruitment,
-                              publish_date: date[0],
+                              link: e.target.value,
                             })
                           }
-                          className="form-control"
-                          options={{ dateFormat: "d-m-Y" }}
                         />
                       </div>
                     </form>

@@ -77,7 +77,7 @@ const Info = () => {
                 className="profile-image"
               />
               <h5 className="custom-name">{coData[0]?.coName} </h5>
-              <p className="custom-title">Commissioner</p>
+              <p className="custom-title">{coData[0]?.designation}</p>
               <p className="organization">Ulhasnagar Municipal Corporation</p>
             </div>
           </div>

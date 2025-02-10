@@ -114,8 +114,9 @@ const Navbar = () => {
 
         const dropdownClass = generateDropdownClass(menu.mainMenu);
 
-        if (menu.mainMenu === "Departments" || menu.mainMenu === "Corporation") {
-            const columns = splitIntoColumns(menu.subMenus, 3);
+        if (menu.mainMenu === "Departments" || menu.mainMenu === "Corporation" || menu.mainMenu === "Online Services") {
+            const columnCount = menu.mainMenu === "Online Services" ? 2 : 3;
+            const columns = splitIntoColumns(menu.subMenus, columnCount);
             return (
                 <li className={`nav-item dropdown ${dropdownClass} ${activeLink === menu.mainMenu ? "active" : ""}`}>
                     <Link
