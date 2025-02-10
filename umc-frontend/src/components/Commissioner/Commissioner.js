@@ -126,7 +126,7 @@ const Commissioner = () => {
                         <strong className="label">Designation :</strong>
                         <span className="value">
                           {" "}
-                          {coData[0]?.designation}
+                          {coData[0]?.designation} of the Ulhasnagar Municipal Corporation 
                         </span>
                       </div>
                     </div>

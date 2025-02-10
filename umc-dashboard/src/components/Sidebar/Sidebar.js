@@ -490,14 +490,14 @@ const Sidebar = ({ isOpen, closeSidebar, userDepartment }) => {
                           Home Projects
                         </Link>
                       </li>
-                      {/* <li
+                      <li
                         className={activeItem === "/project-details" ? "active" : ""}
                         onClick={() => handleItemClick("/project-details")}
                       >
                         <Link to="/project-details">
                           Project Details
                         </Link>
-                      </li> */}
+                      </li>
                     </ul>
                   </li>
                   <li className="submenu">

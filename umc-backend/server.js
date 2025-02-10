@@ -125,6 +125,8 @@ const bannerRoutes = require('./routes/bannerRoutes');
 const screenReaderRoutes = require('./routes/screenReaderRoutes');
 const proactiveDisclosureRoutes = require('./routes/proactiveDisclosureRoutes');
 const subRtiRoutes = require('./routes/subRtiRoutes');
+const projectDetailsRoutes = require('./routes/projectDetailsRoutes');
+
 
 
 app.use('/api', sliderRoutes);
@@ -244,6 +246,8 @@ app.use('/api', bannerRoutes);
 app.use('/api', screenReaderRoutes);
 app.use('/api', proactiveDisclosureRoutes);
 app.use('/api', subRtiRoutes);
+app.use('/api', projectDetailsRoutes);
+
 
 
 const PORT = process.env.PORT || 5011;
