@@ -138,8 +138,6 @@ const Header = ({ onLogout, userDepartment }) => {
     return () => document.removeEventListener("mousedown", handleOutsideClick);
   }, []);
 
-  console.log(user)
-
   return (
     <>
       <Link

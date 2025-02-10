@@ -39,7 +39,6 @@ const Navbar = () => {
     }, []);
 
     const handleNavClick = (link) => {
-        console.log(`Navigating to ${link}`);
         const nonNavigableLinks = [
             "About UMC",
             "Corporation",
@@ -52,8 +51,6 @@ const Navbar = () => {
         if (!nonNavigableLinks.includes(link)) {
             setIsNavCollapsed(true);
             localStorage.setItem("activeLink", link);
-        } else {
-            console.log(`Dropdown opened for ${link}, navigation toggle remains open.`);
         }
         setActiveLink(link);
     };
@@ -74,7 +71,6 @@ const Navbar = () => {
 
     const handleClickOutside = (event) => {
         if (navRef.current && !navRef.current.contains(event.target)) {
-            console.log("Clicked outside the nav");
             setIsNavCollapsed(true);
         }
     };
