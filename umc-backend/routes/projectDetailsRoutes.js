@@ -6,141 +6,145 @@ const router = express.Router();
 const db = require("../config/db.js");
 
 const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, "uploads/");
-    },
-    filename: (req, file, cb) => {
-        cb(null, Date.now() + path.extname(file.originalname));
-    },
+  destination: (req, file, cb) => {
+    cb(null, "uploads/");
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + path.extname(file.originalname));
+  },
 });
 
-const upload = multer({
-    storage,
-    limits: { fileSize: 10 * 1024 * 1024 },
-});
+const upload = multer({ storage: storage });
 
-router.post("/project-categories", (req, res) => {
-    const { categoryName } = req.body;
-    if (!categoryName) return res.status(400).json({ error: "Project Heading is required" });
+// POST endpoint to add a new project with images
+router.post("/project_images", upload.array("images"), (req, res) => {
+  const { heading } = req.body;
 
-    db.query("INSERT INTO project_categories (name) VALUES (?)", [categoryName], (err, result) => {
-        if (err) return res.status(500).json({ error: err.message });
-        res.json({ message: "Project Category added successfully", id: result.insertId });
+  if (!heading) {
+    return res.status(400).json({ message: "Heading is required" });
+  }
+
+  if (!req.files || req.files.length === 0) {
+    return res.status(400).json({ message: "No images uploaded" });
+  }
+
+  const imagePaths = req.files.map((file) => `/uploads/${file.filename}`);
+
+  const query = "INSERT INTO project_images (heading, images) VALUES (?, ?)";
+  db.query(query, [heading, JSON.stringify(imagePaths)], (err, result) => {
+    if (err) {
+      return res.status(500).json({ message: "Error adding project", error: err });
+    }
+    res.status(201).json({
+      message: "Project added successfully",
+      projectId: result.insertId,
+      images: imagePaths,
     });
+  });
 });
 
-router.put("/project-categories/:id", (req, res) => {
-    const { id } = req.params;
-    const { name } = req.body;
-
-    if (!name) return res.status(400).json({ error: "Category name is required" });
-
-    db.query("UPDATE categories SET name = ? WHERE id = ?", [name, id], (err, result) => {
-        if (err) return res.status(500).json({ error: err.message });
-        if (result.affectedRows === 0) return res.status(404).json({ error: "Category not found" });
-
-        res.json({ message: "Category updated successfully" });
-    });
+// GET endpoint to retrieve all projects
+router.get("/project_images", (req, res) => {
+  const sql = "SELECT * FROM project_images";
+  db.query(sql, (err, results) => {
+    if (err) {
+      return res.status(500).json({ message: "Database error", error: err });
+    }
+    res.status(200).json(results);
+  });
 });
 
-router.post("/project-images", upload.single("image"), (req, res) => {
-    const { category_id } = req.body;
-    const image_url = req.file ? `/uploads/${req.file.filename}` : null;
+// GET endpoint to retrieve a project by heading
+router.get("/project_images/heading/:heading", (req, res) => {
+  const { heading } = req.params;
 
-    if (!image_url) {
-        return res.status(400).json({ error: "Image upload failed" });
+  const sql = "SELECT * FROM project_images WHERE heading = ?";
+  db.query(sql, [heading], (err, result) => {
+    if (err) {
+      return res.status(500).json({ message: "Database error", error: err });
     }
 
-    db.query("SELECT COUNT(*) AS count FROM project_images WHERE category_id = ?", [category_id], (err, results) => {
-        if (err) return res.status(500).json({ error: err.message });
+    if (result.length === 0) {
+      return res.status(404).json({ message: "Project not found" });
+    }
 
-        if (results[0].count >= 8) {
-            return res.status(400).json({ error: "Maximum 8 images allowed per category" });
-        }
+    const project = result[0];
+    res.status(200).json({
+      id: project.id,
+      heading: project.heading,
+      images: JSON.parse(project.images),
+    });
+  });
+});
 
-        db.query("INSERT INTO project_images (category_id, image_url) VALUES (?, ?)", [category_id, image_url], (err, result) => {
-            if (err) return res.status(500).json({ error: err.message });
-            res.json({ message: "Image uploaded successfully", id: result.insertId, image_url });
+// DELETE endpoint to remove a project by ID
+router.delete("/project_images/:id", (req, res) => {
+  const { id } = req.params;
+
+  const selectSql = "SELECT images FROM project_images WHERE id = ?";
+  db.query(selectSql, [id], (err, result) => {
+    if (err) {
+      return res.status(500).json({ message: "Database error", error: err });
+    }
+
+    if (result.length === 0) {
+      return res.status(404).json({ message: "Project not found" });
+    }
+
+    const images = JSON.parse(result[0].images);
+
+    const deleteSql = "DELETE FROM project_images WHERE id = ?";
+    db.query(deleteSql, [id], (err, deleteResult) => {
+      if (err) {
+        return res.status(500).json({ message: "Database error", error: err });
+      }
+
+      images.forEach((image) => {
+        const filePath = path.join(__dirname, "..", image);
+        fs.unlink(filePath, (fsErr) => {
+          if (fsErr) {
+            console.error("Error deleting image:", fsErr);
+          }
         });
+      });
+
+      res.status(200).json({ message: "Project deleted successfully" });
     });
+  });
 });
 
-router.put("/project-images/:id", upload.single("image"), (req, res) => {
-    const { id } = req.params;
+// PUT endpoint to update a project by ID
+router.put("/project_images/:id", upload.array("images"), (req, res) => {
+  const { id } = req.params;
+  const { heading } = req.body;
 
-    if (!req.file) return res.status(400).json({ error: "Image upload required" });
+  let updateSql = "UPDATE project_images SET";
+  const updateParams = [];
 
-    const newImageUrl = `/uploads/${req.file.filename}`;
-    db.query("SELECT image_url FROM project_images WHERE id = ?", [id], (err, results) => {
-        if (err) return res.status(500).json({ error: err.message });
+  if (heading) {
+    updateSql += " heading = ?";
+    updateParams.push(heading);
+  }
 
-        if (results.length === 0) {
-            return res.status(404).json({ error: "Image not found" });
-        }
+  if (req.files && req.files.length > 0) {
+    const newImagePaths = req.files.map((file) => `/uploads/${file.filename}`);
+    updateSql += updateParams.length > 0 ? ", images = ?" : " images = ?";
+    updateParams.push(JSON.stringify(newImagePaths));
+  }
 
-        const oldImagePath = `.${results[0].image_url}`;
+  if (updateParams.length === 0) {
+    return res.status(400).json({ message: "No fields to update" });
+  }
 
-        // Update the database with the new image
-        db.query("UPDATE project_images SET image_url = ? WHERE id = ?", [newImageUrl, id], (updateErr) => {
-            if (updateErr) return res.status(500).json({ error: updateErr.message });
+  updateSql += " WHERE id = ?";
+  updateParams.push(id);
 
-            // Delete the old image file from storage
-            fs.unlink(oldImagePath, (unlinkErr) => {
-                if (unlinkErr) console.error("Failed to delete old image:", unlinkErr);
-                res.json({ message: "Image updated successfully", image_url: newImageUrl });
-            });
-        });
-    });
-});
-
-
-router.get("/project-categories", (req, res) => {
-    db.query("SELECT * FROM project_categories", (err, results) => {
-        if (err) return res.status(500).json({ error: err.message });
-        res.json(results);
-    });
-});
-
-router.get("/project-images/:category_id", (req, res) => {
-    const { category_id } = req.params;
-
-    db.query("SELECT * FROM project_images WHERE category_id = ?", [category_id], (err, results) => {
-        if (err) return res.status(500).json({ error: err.message });
-        res.json(results);
-    });
-});
-
-router.delete("/project-categories/:id", (req, res) => {
-    const { id } = req.params;
-
-    db.query("DELETE FROM project_categories WHERE id = ?", [id], (err, result) => {
-        if (err) return res.status(500).json({ error: err.message });
-        res.json({ message: "Category deleted successfully" });
-    });
-});
-
-router.delete("/project-images/:id", (req, res) => {
-    const { id } = req.params;
-
-    db.query("SELECT image_url FROM project_images WHERE id = ?", [id], (err, results) => {
-        if (err) return res.status(500).json({ error: err.message });
-
-        if (results.length === 0) {
-            return res.status(404).json({ error: "Image not found" });
-        }
-
-        const imagePath = `.${results[0].image_url}`;
-
-        // Delete image file from uploads directory
-        fs.unlink(imagePath, (unlinkErr) => {
-            if (unlinkErr) console.error("Failed to delete file:", unlinkErr);
-
-            db.query("DELETE FROM project_images WHERE id = ?", [id], (deleteErr) => {
-                if (deleteErr) return res.status(500).json({ error: deleteErr.message });
-                res.json({ message: "Image deleted successfully" });
-            });
-        });
-    });
+  db.query(updateSql, updateParams, (err, updateResult) => {
+    if (err) {
+      return res.status(500).json({ message: "Database error", error: err });
+    }
+    res.status(200).json({ message: "Project updated successfully" });
+  });
 });
 
 module.exports = router;
