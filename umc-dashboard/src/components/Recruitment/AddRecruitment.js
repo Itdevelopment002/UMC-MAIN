@@ -4,34 +4,29 @@ import api from "../api";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
-import Flatpickr from "react-flatpickr";
-import "flatpickr/dist/themes/material_blue.css";
 import { Link } from "react-router-dom";
 
 const AddRecruitment = () => {
+  const [heading, setHeading] = useState("");
   const [description, setDescription] = useState("");
-  const [publishDate, setPublishDate] = useState("");
+  const [link, setLink] = useState("");
   const [errors, setErrors] = useState({
+    heading: "",
     description: "",
-    publishDate: "",
+    link: "",
   });
   const navigate = useNavigate();
 
-  const formatDate = (date) => {
-    const d = new Date(date);
-    const day = String(d.getDate()).padStart(2, "0");
-    const month = String(d.getMonth() + 1).padStart(2, "0");
-    const year = d.getFullYear();
-    return `${day}-${month}-${year}`;
-  };
-
   const validateForm = () => {
     const newErrors = {};
+    if (!heading) {
+      newErrors.heading = "Job Heading is required.";
+    }
     if (!description) {
       newErrors.description = "Job Description is required.";
     }
-    if (!publishDate) {
-      newErrors.publishDate = "Posting Date is required.";
+    if (!link) {
+      newErrors.link = "Job Link is required.";
     }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -44,20 +39,17 @@ const AddRecruitment = () => {
       return;
     }
 
-    const formattedDate = formatDate(publishDate);
-
     const videoData = {
+      heading,
       description,
-      publishDate: formattedDate,
+      link,
     };
 
     try {
       await api.post("/recruitment", videoData);
       toast.success("Recruitment added successfully!");
       setDescription("");
-      setErrors({ description: "", publishDate: "" });
-      setPublishDate("");
-
+      setErrors({ heading: "", description: "", link: "" });
       navigate("/recruitment");
     } catch (error) {
       toast.error("Failed to add recruitment data. Please try again.");
@@ -90,16 +82,48 @@ const AddRecruitment = () => {
                   <form onSubmit={handleSubmit}>
                     <div className="form-group row">
                       <label className="col-form-label col-md-2">
+                        Job Heading <span className="text-danger">*</span>
+                      </label>
+                      <div className="col-md-4">
+                        <select
+                          className={`form-control ${errors.heading ? "is-invalid" : ""
+                            }`}
+                          value={heading}
+                          onChange={(e) => {
+                            setHeading(e.target.value);
+                            if (errors.heading) {
+                              setErrors({ ...errors, heading: "" });
+                            }
+                          }}
+                        >
+                          <option value="" disabled>
+                            Select Job Heading
+                          </option>
+                          <option value="Contract Basis Recruitment">
+                            Contract Basis Recruitment
+                          </option>
+                          <option value="Old Recruitment">
+                            Old Recruitment
+                          </option>
+                        </select>
+                        {errors.heading && (
+                          <small className="invalid-feedback">
+                            {errors.heading}
+                          </small>
+                        )}
+                      </div>
+                    </div>
+                    <div className="form-group row">
+                      <label className="col-form-label col-md-2">
                         Job Description{" "}
                         <span className="text-danger">*</span>
                       </label>
                       <div className="col-md-4">
                         <input
                           type="text"
-                          className={`form-control ${
-                            errors.description ? "is-invalid" : ""
-                          }`}
-                          placeholder=""
+                          className={`form-control ${errors.description ? "is-invalid" : ""
+                            }`}
+                          placeholder="Enter Job Description"
                           value={description}
                           onChange={(e) => {
                             setDescription(e.target.value);
@@ -117,34 +141,26 @@ const AddRecruitment = () => {
                     </div>
                     <div className="form-group row">
                       <label className="col-form-label col-md-2">
-                        Posting Date <span className="text-danger">*</span>
+                        Job Link{" "}
+                        <span className="text-danger">*</span>
                       </label>
-                      <div className="cal-icon col-md-4">
-                        <Flatpickr
-                          id="startDatePicker"
-                          className={`form-control ${
-                            errors.publishDate ? "is-invalid" : ""
-                          }`}
-                          placeholder="Select Posting Date"
-                          value={publishDate}
-                          onChange={(date) => {
-                            setPublishDate(date[0]);
-                            if (errors.publishDate) {
-                              setErrors({ ...errors, publishDate: "" });
+                      <div className="col-md-4">
+                        <input
+                          type="text"
+                          className={`form-control ${errors.link ? "is-invalid" : ""
+                            }`}
+                          placeholder="Enter Job Link"
+                          value={link}
+                          onChange={(e) => {
+                            setLink(e.target.value);
+                            if (errors.link) {
+                              setErrors({ ...errors, link: "" });
                             }
                           }}
-                          options={{
-                            dateFormat: "d-m-Y",
-                            monthSelectorType: "dropdown",
-                            prevArrow:
-                              '<svg><path d="M10 5L5 10L10 15"></path></svg>',
-                            nextArrow:
-                              '<svg><path d="M5 5L10 10L5 15"></path></svg>',
-                          }}
                         />
-                        {errors.publishDate && (
+                        {errors.link && (
                           <small className="invalid-feedback">
-                            {errors.publishDate}
+                            {errors.link}
                           </small>
                         )}
                       </div>
