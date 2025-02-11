@@ -7,6 +7,10 @@ import img1 from "../../assets/images/project/img1.png";
 import img2 from "../../assets/images/project/img2.png";
 import img3 from "../../assets/images/project/img3.png";
 import img4 from "../../assets/images/project/img4.png";
+import img5 from "../../assets/images/project/img5.png";
+import img6 from "../../assets/images/project/img6.png";
+import img7 from "../../assets/images/project/img7.png";
+import img8 from "../../assets/images/project/img8.png";
 
 const UpcomingProjects = () => {
     const [bgImage, setBgImage] = useState([]);
@@ -151,21 +155,21 @@ const UpcomingProjects = () => {
                 <div className="row mb-4">
                     <div className="col-xl-3 col-lg-3 col-md-6 col-sm-6 sizing-image-col">
                         <div className="card2 rounded-2">
-                            <img src={img1} className="card-img-top" alt="" />
+                            <img src={img5} className="card-img-top" alt="" />
                         </div>
                     </div>
                     <div className="col-xl-3 col-lg-3 col-md-6 col-sm-6 sizing-image-col">
                         <div className="card2 rounded-2">
-                            <img src={img2} className="card-img-top" alt="" />
+                            <img src={img6} className="card-img-top" alt="" />
                         </div>
                     </div>
                     <div className="col-xl-3 col-lg-3 col-md-6 col-sm-6 sizing-image-col">
                         <div className="card2 rounded-2">
-                            <img src={img3} className="card-img-top" alt="" />
+                            <img src={img7} className="card-img-top" alt="" />
                         </div>
                     </div><div className="col-xl-3 col-lg-3 col-md-6 col-sm-6 sizing-image-col">
                         <div className="card2 rounded-2">
-                            <img src={img4} className="card-img-top" alt="" />
+                            <img src={img8} className="card-img-top" alt="" />
                         </div>
                     </div>
                 </div>

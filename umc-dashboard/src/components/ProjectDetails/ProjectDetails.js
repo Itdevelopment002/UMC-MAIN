@@ -6,7 +6,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import api, { baseURL } from "../api";
 
-const ProjectGallery = () => {
+const ProjectDetails = () => {
   const [gardensData, setGardensData] = useState([]);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -224,51 +224,124 @@ const ProjectGallery = () => {
                   </table>
                 </div>
               </div>
+              <ul className="pagination">
+                <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
+                  <Link
+                    className="page-link"
+                    to="#"
+                    onClick={() => handlePageChange(currentPage - 1)}
+                  >
+                    Previous
+                  </Link>
+                </li>
+                {Array.from({ length: totalPages }, (_, index) => (
+                  <li
+                    key={index + 1}
+                    className={`page-item ${currentPage === index + 1 ? "active" : ""
+                      }`}
+                  >
+                    <Link
+                      className="page-link"
+                      to="#"
+                      onClick={() => handlePageChange(index + 1)}
+                    >
+                      {index + 1}
+                    </Link>
+                  </li>
+                ))}
+                <li
+                  className={`page-item ${currentPage === totalPages ? "disabled" : ""
+                    }`}
+                >
+                  <Link
+                    className="page-link"
+                    to="#"
+                    onClick={() => handlePageChange(currentPage + 1)}
+                  >
+                    Next
+                  </Link>
+                </li>
+              </ul>
             </div>
           </div>
         </div>
 
-        {/* Pagination */}
-        <ul className="pagination">
-          <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
-            <Link
-              className="page-link"
-              to="#"
-              onClick={() => handlePageChange(currentPage - 1)}
-            >
-              Previous
-            </Link>
-          </li>
-          {Array.from({ length: totalPages }, (_, index) => (
-            <li
-              key={index + 1}
-              className={`page-item ${
-                currentPage === index + 1 ? "active" : ""
-              }`}
-            >
-              <Link
-                className="page-link"
-                to="#"
-                onClick={() => handlePageChange(index + 1)}
-              >
-                {index + 1}
-              </Link>
-            </li>
-          ))}
-          <li
-            className={`page-item ${
-              currentPage === totalPages ? "disabled" : ""
-            }`}
-          >
-            <Link
-              className="page-link"
-              to="#"
-              onClick={() => handlePageChange(currentPage + 1)}
-            >
-              Next
-            </Link>
-          </li>
-        </ul>
+        <div className="row">
+          <div className="col-lg-12">
+            <div className="card-box">
+              <div className="card-block">
+                <div className="row">
+                  <div className="col-sm-4 col-3">
+                    <h4 className="page-title">Project Category</h4>
+                  </div>
+                  <div className="col-sm-8 col-9 text-right m-b-20">
+                    <Link
+                      to="/add-project-category"
+                      className="btn btn-primary btn-rounded float-right"
+                    >
+                      <i className="fa fa-plus"></i> Add Category
+                    </Link>
+                  </div>
+                </div>
+                <div className="table-responsive">
+                  <table className="table table-bordered m-b-0">
+                    <thead>
+                      <tr>
+                        <th width="10%">Sr. No.</th>
+                        <th>Project Heading</th>
+                        <th>Project Images</th>
+                        <th width="15%">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {paginatedData.map((garden, index) => (
+                        <tr key={garden.id}>
+                          <td>{(currentPage - 1) * itemsPerPage + index + 1}</td>
+                          <td>{garden.heading}</td>
+                          <td>
+                            <div className="d-flex flex-wrap">
+                              {JSON.parse(garden.images).map((img, imgIndex) => (
+                                <div
+                                  key={imgIndex}
+                                  className="position-relative me-2"
+                                >
+                                  <img
+                                    src={`${baseURL}${img}`}
+                                    alt=""
+                                    className="glightbox"
+                                    style={{
+                                      width: "50px",
+                                      height: "50px",
+                                      marginRight: "5px",
+                                    }}
+                                  />
+                                </div>
+                              ))}
+                            </div>
+                          </td>
+                          <td>
+                            <button
+                              className="btn btn-sm btn-success"
+                              onClick={() => handleEdit(garden)}
+                            >
+                              Edit
+                            </button>
+                            <button
+                              className="btn btn-sm btn-danger mx-1"
+                              onClick={() => handleDelete(garden)}
+                            >
+                              Delete
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
         {/* Delete Modal */}
         {showDeleteModal && (
@@ -327,7 +400,7 @@ const ProjectGallery = () => {
                     </div>
                     <div className="form-group">
                       <label>
-                      Project Images <span className="text-danger">*</span>
+                        Project Images <span className="text-danger">*</span>
                       </label>
                       <input
                         type="file"
@@ -358,10 +431,10 @@ const ProjectGallery = () => {
             </div>
           </div>
         )}
-        <ToastContainer/>
+        <ToastContainer />
       </div>
     </div>
   );
 };
 
-export default ProjectGallery;
+export default ProjectDetails;

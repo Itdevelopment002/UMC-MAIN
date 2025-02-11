@@ -16,12 +16,12 @@ const AddProjectImages = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const categoryResponse = await api.get("/project-categories");
+        const categoryResponse = await api.get("/project_images");
         const allCategories = categoryResponse.data;
         const filteredCategories = [];
 
         for (let category of allCategories) {
-          const imageResponse = await api.get(`/project-images/${category.id}`);
+          const imageResponse = await api.get(`/project-description/${category.id}`);
           const categoryImages = imageResponse.data;
 
           if (categoryImages.length < 8) {
@@ -75,12 +75,12 @@ const AddProjectImages = () => {
     }
 
     try {
-      const response = await api.post("/project-images", data, {
+      const response = await api.post("/project-description", data, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
       if (response.status === 200) {
-        navigate(`/pproject-details`);
+        navigate(`/project-details`);
       }
     } catch (error) {
       console.error("Error uploading image:", error);
