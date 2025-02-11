@@ -25,7 +25,7 @@ const TopHeader = () => {
                 "//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
             document.body.appendChild(googleTranslateScript);
         }
-    
+
         window.googleTranslateElementInit = () => {
             new window.google.translate.TranslateElement(
                 {
@@ -35,13 +35,30 @@ const TopHeader = () => {
                 },
                 "google_translate_element"
             );
-    
+
             setTimeout(() => {
                 updateGoogleTranslate("mar");
             }, 1000);
         };
     }, []);
-    
+    useEffect(() => {
+        if (selectedLanguage === "mar") {
+            document.body.style.fontFamily = "Mukta, sans-serif !important";
+            document.documentElement.style.setProperty("--global-font-family", "Mukta, sans-serif !important");
+
+            document.querySelectorAll("*").forEach((el) => {
+                el.style.fontFamily = "Mukta, sans-serif";
+            });
+        } else {
+            document.body.style.fontFamily = "";
+            document.documentElement.style.setProperty("--global-font-family", "");
+
+            document.querySelectorAll("*").forEach((el) => {
+                el.style.fontFamily = "";
+            });
+        }
+    }, [selectedLanguage]);
+
 
     const handleLanguageChange = (language) => {
         setSelectedLanguage(language);
