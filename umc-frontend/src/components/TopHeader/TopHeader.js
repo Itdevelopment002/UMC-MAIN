@@ -41,24 +41,29 @@ const TopHeader = () => {
             }, 1000);
         };
     }, []);
+
     useEffect(() => {
-        if (selectedLanguage === "mar") {
-            document.body.style.fontFamily = "Mukta, sans-serif !important";
-            document.documentElement.style.setProperty("--global-font-family", "Mukta, sans-serif !important");
+        const observer = new MutationObserver(() => {
+            const translatedText = document.querySelector("html").lang;
+            if (translatedText === "mr") {
+                applyFontFamily("Mukta, sans-serif");
+            } else {
+                applyFontFamily("");
+            }
+        });
 
-            document.querySelectorAll("*").forEach((el) => {
-                el.style.fontFamily = "Mukta, sans-serif";
-            });
-        } else {
-            document.body.style.fontFamily = "";
-            document.documentElement.style.setProperty("--global-font-family", "");
+        observer.observe(document.documentElement, { attributes: true });
 
-            document.querySelectorAll("*").forEach((el) => {
-                el.style.fontFamily = "";
-            });
-        }
-    }, [selectedLanguage]);
+        return () => observer.disconnect();
+    }, []);
 
+    const applyFontFamily = (font) => {
+        document.body.style.fontFamily = font;
+        document.documentElement.style.setProperty("--global-font-family", font);
+        document.querySelectorAll("*").forEach((el) => {
+            el.style.fontFamily = font;
+        });
+    };
 
     const handleLanguageChange = (language) => {
         setSelectedLanguage(language);
@@ -67,10 +72,23 @@ const TopHeader = () => {
 
     const updateGoogleTranslate = (language) => {
         const googleTranslateDropdown = document.querySelector(".goog-te-combo");
+
         if (googleTranslateDropdown) {
             const langCode = language === "eng" ? "en" : language === "hin" ? "hi" : "mr";
             googleTranslateDropdown.value = langCode;
+
             googleTranslateDropdown.dispatchEvent(new Event("change"));
+
+            setTimeout(() => {
+                const iframe = document.querySelector("iframe.goog-te-menu-frame");
+                if (iframe) {
+                    const select = iframe.contentWindow.document.querySelector("select");
+                    if (select) {
+                        select.value = langCode;
+                        select.dispatchEvent(new Event("change"));
+                    }
+                }
+            }, 1000);
         }
     };
 
@@ -78,10 +96,8 @@ const TopHeader = () => {
         if (selectedLanguage === "eng") return "English";
         if (selectedLanguage === "hin") return "हिंदी";
         if (selectedLanguage === "mar") return "मराठी";
-
         return "मराठी";
     };
-
     const [defaultfontSize, setDefaultFontSize] = useState(16);
     const [fontSize, setFontSize] = useState({
         helpline: 14,
@@ -132,17 +148,6 @@ const TopHeader = () => {
                     <Link to="/rts-act-2015">
                         <button className="rts-act-button">RTS Act 2015</button>
                     </Link>
-                    <span
-                        onClick={() => {
-                            const mainContent = document.getElementById("main-content");
-                            if (mainContent) {
-                                mainContent.scrollIntoView({ behavior: "smooth" });
-                            }
-                        }}
-                        style={{ cursor: "pointer" }}
-                    >
-                        Skip to main content
-                    </span>
                     <span className="divider">|</span>
                     <Link to="/screen-reader-access" className='text-decoration-none' style={{ color: "#333" }}>
                         <span>Screen Reader Access</span>
@@ -154,18 +159,17 @@ const TopHeader = () => {
                     <span className="divider">|</span>
                     <div className="custom-dropdown">
                         <div className="selected-language">
-                            {/*<img
+                            {/* <img
                                 src={
                                     selectedLanguage === "eng"
-                                        ? flag1 
-                                        : selectedLanguage === "hin"
-                                            ? flag2 
-                                            : flag3 
+                                    ? flag1 
+                                    : selectedLanguage === "hin"
+                                    ? flag2 
+                                    : flag3 
                                 }
                                 alt={getLanguageText()}
                                 className="flag-icon"
-                            />
-                            */}
+                            /> */}
                             <span>{getLanguageText()}</span>
                             <RiArrowDropDownLine size={25} />
                         </div>
@@ -218,6 +222,6 @@ const TopHeader = () => {
             </div>
         </>
     );
-}
+};
 
 export default TopHeader;
