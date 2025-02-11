@@ -93,7 +93,10 @@ const WardOffice = () => {
                             {selectedWard && (
                                 <div className="row">
                                     <div className="col-md-7 ward-card">
-                                        <h5 className="ward-title">{selectedWard.ward_name} Office</h5>
+                                        <h5 className="ward-title">
+                                            {selectedWard.ward_name.replace(/(\w+)\s(\d+)/, "$1 Office $2")}
+                                        </h5>
+
                                         <p className="ward-text">
                                             <strong>Ward Officer Name:</strong> {selectedWard.officer_name}
                                         </p>
