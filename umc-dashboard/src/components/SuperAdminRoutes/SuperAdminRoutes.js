@@ -126,7 +126,7 @@ import SubRti from "../SubRti/SubRti";
 import AddSubRti from "../SubRti/AddSubRti";
 import AddProjectImages from "../ProjectDetails/AddProjectImages";
 import AddProjectCategory from "../ProjectDetails/AddProjectCategory";
-import ProjectGallery from "../ProjectDetails/ProjectGallery";
+import ProjectDetails from "../ProjectDetails/ProjectDetails";
 
 
 function SuperAdminRoutes() {
@@ -292,7 +292,7 @@ function SuperAdminRoutes() {
       <Route path="/add-proactive-disclosure" element={<AddProactiveDisclosure />} />
       <Route path="/sub-rti" element={<SubRti />} />
       <Route path="/add-sub-rti" element={<AddSubRti />} />
-      <Route path="/project-details" element={<ProjectGallery />} />
+      <Route path="/project-details" element={<ProjectDetails />} />
       <Route path="/add-project-images" element={<AddProjectImages />} />
       <Route path="/add-project-category" element={<AddProjectCategory />} />
       <Route path="*" element={<Navigate to="/home" />} />
