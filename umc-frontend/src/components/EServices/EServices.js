@@ -1,21 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./EServices.css";
 import { Link } from "react-router-dom";
-import img1 from "../../assets/images/project/img1 (1).png";
-import img2 from "../../assets/images/project/img1 (2).png";
-import img3 from "../../assets/images/project/img1 (3).png";
-import img4 from "../../assets/images/project/img1 (4).png";
 import tick from "../../assets/images/info/tick.png";
-import plasticWaste from "../../assets/images/e-services/waste 1.png";
-import swachhBharat from "../../assets/images/e-services/dustbin 1.png";
-import airQuality from "../../assets/images/e-services/air-quality 1.png";
-import rti from "../../assets/images/e-services/survey 2.png";
-import employeeInfo from "../../assets/images/e-services/personal 1.png";
 import api, { baseURL } from "../api";
 
 const EServices = () => {
   const [activeTab, setActiveTab] = useState("#umc-news");
   const [activeIndex, setActiveIndex] = useState(null);
+  //eslint-disable-next-line
   const [activeInfoIndex, setActiveInfoIndex] = useState(null);
   const [umcnews, setUmcNews] = useState([]);
   const [services, setServices] = useState([]);
@@ -31,6 +23,8 @@ const EServices = () => {
   const handleClick = (index) => {
     setActiveIndex(index);
   };
+
+  //eslint-disable-next-line
   const handleInfoClick = (index) => {
     setActiveInfoIndex(index);
   };
@@ -128,12 +122,14 @@ const EServices = () => {
     }
   }, [information]);
 
+  //eslint-disable-next-line
   const handleMouseEnter = () => {
     if (scrollContainerRef.current) {
       scrollContainerRef.current.style.animationPlayState = "paused";
     }
   };
 
+  //eslint-disable-next-line
   const handleMouseLeave = () => {
     if (scrollContainerRef.current) {
       scrollContainerRef.current.style.animationPlayState = "running";
@@ -149,12 +145,15 @@ const EServices = () => {
       projectscrollContainerRef.current.style.animation = "scroll-loop 15s linear infinite";
     }
   }, [projects]);
+
+  //eslint-disable-next-line
   const projectshandleMouseEnter = () => {
     if (projectscrollContainerRef.current) {
       projectscrollContainerRef.current.style.animationPlayState = "paused";
     }
   };
 
+  //eslint-disable-next-line
   const projectshandleMouseLeave = () => {
     if (projectscrollContainerRef.current) {
       projectscrollContainerRef.current.style.animationPlayState = "running";

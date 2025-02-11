@@ -30,7 +30,7 @@ const AddProjectCategory = () => {
     const formData = new FormData();
     formData.append("heading", heading);
     images.forEach((image) => {
-      formData.append("images", image); // Use "images" as the field name for multiple files
+      formData.append("images", image); 
     });
 
     try {
