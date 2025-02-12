@@ -13,6 +13,7 @@ router.get("/admin-notifications", (req, res) => {
   });
 });
 
+
 router.post("/admin-notifications", (req, res) => {
   const { new_id, description, role, name, date, time, remark } = req.body;
 
@@ -44,19 +45,6 @@ router.post("/admin-notifications", (req, res) => {
   );
 });
 
-router.delete("/admin-notifications/:id", (req, res) => {
-  const { id } = req.params;
-  const query = "DELETE FROM admin_notification WHERE id = ?";
-  db.query(query, [id], (err, results) => {
-    if (err) {
-      return res.status(500).json({ error: err.message });
-    }
-    if (results.affectedRows === 0) {
-      return res.status(404).json({ message: "Notification not found" });
-    }
-    res.json({ message: "Notification deleted successfully" });
-  });
-});
 
 router.put("/admin-notifications/:id", (req, res) => {
   const { id } = req.params;
@@ -77,5 +65,21 @@ router.put("/admin-notifications/:id", (req, res) => {
     res.json({ message: "Remark updated successfully" });
   });
 });
+
+
+router.delete("/admin-notifications/:id", (req, res) => {
+  const { id } = req.params;
+  const query = "DELETE FROM admin_notification WHERE id = ?";
+  db.query(query, [id], (err, results) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+    if (results.affectedRows === 0) {
+      return res.status(404).json({ message: "Notification not found" });
+    }
+    res.json({ message: "Notification deleted successfully" });
+  });
+});
+
 
 module.exports = router;

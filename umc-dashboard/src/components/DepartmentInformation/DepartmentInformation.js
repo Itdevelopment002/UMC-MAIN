@@ -243,7 +243,9 @@ const DepartmentInformation = () => {
         // eslint-disable-next-line
     }, [pdfData]);
 
-    const filteredPdfData = pdfData.filter((item) => item.department === selectedDepartmentPdf);
+    const filteredPdfData = pdfData
+        .filter((item) => item.department === selectedDepartmentPdf)
+        .sort((a, b) => b.heading.localeCompare(a.heading));
     const startPdfIndex = (pdfCurrentPage - 1) * itemsPerPage;
     const paginatedPdfData = filteredPdfData.slice(startPdfIndex, startPdfIndex + itemsPerPage);
 

@@ -2,6 +2,32 @@ const express = require("express");
 const router = express.Router();
 const db = require("../config/db.js");
 
+router.get("/commissioner-desc", (req, res) => {
+  const sql = "SELECT * FROM commissioner_desc";
+  db.query(sql, (err, results) => {
+    if (err) {
+      return res.status(500).json({ message: "Database error", error: err });
+    }
+    res.status(200).json(results);
+  });
+});
+
+
+router.get("/commissioner-desc/:id", (req, res) => {
+  const { id } = req.params;
+  const sql = "SELECT * FROM commissioner_desc WHERE id = ?";
+  db.query(sql, [id], (err, result) => {
+    if (err) {
+      return res.status(500).json({ message: "Database error", error: err });
+    }
+    if (result.length === 0) {
+      return res.status(404).json({ message: "Commissioner Description not found" });
+    }
+    res.status(200).json(result[0]);
+  });
+});
+
+
 router.post("/commissioner-desc", (req, res) => {
   const { description } = req.body;
   if (!description) {
@@ -21,29 +47,6 @@ router.post("/commissioner-desc", (req, res) => {
   });
 });
 
-router.get("/commissioner-desc", (req, res) => {
-  const sql = "SELECT * FROM commissioner_desc";
-  db.query(sql, (err, results) => {
-    if (err) {
-      return res.status(500).json({ message: "Database error", error: err });
-    }
-    res.status(200).json(results);
-  });
-});
-
-router.get("/commissioner-desc/:id", (req, res) => {
-  const { id } = req.params;
-  const sql = "SELECT * FROM commissioner_desc WHERE id = ?";
-  db.query(sql, [id], (err, result) => {
-    if (err) {
-      return res.status(500).json({ message: "Database error", error: err });
-    }
-    if (result.length === 0) {
-      return res.status(404).json({ message: "Commissioner Description not found" });
-    }
-    res.status(200).json(result[0]);
-  });
-});
 
 router.put("/commissioner-desc/:id", (req, res) => {
   const { id } = req.params;
@@ -63,6 +66,7 @@ router.put("/commissioner-desc/:id", (req, res) => {
   });
 });
 
+
 router.delete("/commissioner-desc/:id", (req, res) => {
   const { id } = req.params;
   const sql = "DELETE FROM commissioner_desc WHERE id = ?";
@@ -76,5 +80,6 @@ router.delete("/commissioner-desc/:id", (req, res) => {
     res.status(200).json({ message: "Commissioner Description deleted successfully" });
   });
 });
+
 
 module.exports = router;
