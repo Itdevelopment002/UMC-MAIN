@@ -126,6 +126,7 @@ const screenReaderRoutes = require('./routes/screenReaderRoutes');
 const proactiveDisclosureRoutes = require('./routes/proactiveDisclosureRoutes');
 const subRtiRoutes = require('./routes/subRtiRoutes');
 const projectDetailsRoutes = require('./routes/projectDetailsRoutes');
+const projectDescriptionRoutes = require('./routes/projectDescriptionRoutes');
 
 
 
@@ -247,6 +248,7 @@ app.use('/api', screenReaderRoutes);
 app.use('/api', proactiveDisclosureRoutes);
 app.use('/api', subRtiRoutes);
 app.use('/api', projectDetailsRoutes);
+app.use('/api', projectDescriptionRoutes);
 
 
 
