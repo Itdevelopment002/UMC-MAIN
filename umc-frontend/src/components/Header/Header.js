@@ -138,6 +138,8 @@ const Navbar = () => {
                                         <li key={subMenu.id}>
                                             <Link
                                                 to={subMenu.subLink}
+                                                target={subMenu.subLink.includes("http") ? "_blank" : "_self"}
+                                                rel={subMenu.subLink.includes("http") ? "noopener noreferrer" : ""}
                                                 className={`dropdown-item ${activeLink === subMenu.subMenu ? "active" : ""}`}
                                                 onClick={() => handleNavClick(subMenu.subMenu)}
                                             >
@@ -180,8 +182,9 @@ const Navbar = () => {
                         {menu.subMenus.map((subMenu) => (
                             <li key={subMenu.id}>
                                 <Link
-                                    to={subMenu.subLink.endsWith('pdf') ? `${baseURL}${subMenu.subLink}` : subMenu.subLink}
-                                    target={subMenu.subLink.endsWith("pdf") ? "_blank" : ""}
+                                    to={subMenu.subLink}
+                                    target={subMenu.subLink.includes("http") ? "_blank" : "_self"}
+                                    rel={subMenu.subLink.includes("http") ? "noopener noreferrer" : ""}
                                     className={`dropdown-item ${activeLink === subMenu.subMenu ? "active" : ""}`}
                                     onClick={() => handleNavClick(subMenu.subMenu)}
                                 >
@@ -250,8 +253,9 @@ const Navbar = () => {
                                     {menu.mainMenuLink.startsWith("/") ? (
                                         <li className={`nav-item ${activeLink === menu.mainMenu ? "active" : ""}`}>
                                             <Link
-                                                to={menu.mainMenuLink.endsWith('pdf') ? `${baseURL}${menu.mainMenuLink}` : menu.mainMenuLink}
-                                                target={menu.mainMenuLink.endsWith("pdf") ? "_blank" : ""}
+                                                to={menu.mainMenuLink}
+                                                target={menu.mainMenuLink.includes("http") ? "_blank" : "_self"}
+                                                rel={menu.mainMenuLink.includes("http") ? "noopener noreferrer" : ""}
                                                 className={`nav-link ${activeLink === menu.mainMenu ? "active" : ""}`}
                                                 onClick={() => handleNavClick(menu.mainMenu)}
                                             >
@@ -260,6 +264,18 @@ const Navbar = () => {
                                         </li>
                                     ) : menu.mainMenuLink.startsWith("#") ? (
                                         renderDropdown(menu)
+                                    ) : menu.mainMenuLink.includes("http") ? (
+                                        <li className={`nav-item ${activeLink === menu.mainMenu ? "active" : ""}`}>
+                                            <Link
+                                                to={menu.mainMenuLink}
+                                                target={menu.mainMenuLink.includes("http") ? "_blank" : "_self"}
+                                                rel={menu.mainMenuLink.includes("http") ? "noopener noreferrer" : ""}
+                                                className={`nav-link ${activeLink === menu.mainMenu ? "active" : ""}`}
+                                                onClick={() => handleNavClick(menu.mainMenu)}
+                                            >
+                                                {menu.mainMenu}
+                                            </Link>
+                                        </li>
                                     ) : null}
                                     <span className="nav-divider"></span>
                                 </React.Fragment>
