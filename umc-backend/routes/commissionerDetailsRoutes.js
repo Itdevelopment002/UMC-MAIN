@@ -19,9 +19,35 @@ const upload = multer({
   limits: { fileSize: 10 * 1024 * 1024 },
 });
 
+
+router.get("/commissioner-details", (req, res) => {
+  const sql = "SELECT * FROM commissioner_details";
+  db.query(sql, (err, results) => {
+    if (err) {
+      return res.status(500).json({ message: "Database error", error: err });
+    }
+    res.status(200).json(results);
+  });
+});
+
+
+router.get("/commissioner-details/:id", (req, res) => {
+  const { id } = req.params;
+  const sql = "SELECT * FROM commissioner_details WHERE id = ?";
+  db.query(sql, [id], (err, result) => {
+    if (err) {
+      return res.status(500).json({ message: "Database error", error: err });
+    }
+    if (result.length === 0) {
+      return res.status(404).json({ message: "Commissioner not found" });
+    }
+    res.status(200).json(result[0]);
+  });
+});
+
+
 router.post("/commissioner-details", upload.single("coImage"), (req, res) => {
   const { coName, designation, qualification, address, number, email } = req.body;
-
   if (!coName || !designation || !qualification || !address || !number || !email) {
     return res
       .status(400)
@@ -43,29 +69,6 @@ router.post("/commissioner-details", upload.single("coImage"), (req, res) => {
   });
 });
 
-router.get("/commissioner-details", (req, res) => {
-  const sql = "SELECT * FROM commissioner_details";
-  db.query(sql, (err, results) => {
-    if (err) {
-      return res.status(500).json({ message: "Database error", error: err });
-    }
-    res.status(200).json(results);
-  });
-});
-
-router.get("/commissioner-details/:id", (req, res) => {
-  const { id } = req.params;
-  const sql = "SELECT * FROM commissioner_details WHERE id = ?";
-  db.query(sql, [id], (err, result) => {
-    if (err) {
-      return res.status(500).json({ message: "Database error", error: err });
-    }
-    if (result.length === 0) {
-      return res.status(404).json({ message: "Commissioner not found" });
-    }
-    res.status(200).json(result[0]);
-  });
-});
 
 router.put("/commissioner-details/:id", upload.single("coImage"), (req, res) => {
   const { id } = req.params;
@@ -143,6 +146,7 @@ router.put("/commissioner-details/:id", upload.single("coImage"), (req, res) => 
   });
 });
 
+
 router.delete("/commissioner-details/:id", (req, res) => {
   const { id } = req.params;
 
@@ -175,5 +179,6 @@ router.delete("/commissioner-details/:id", (req, res) => {
     });
   });
 });
+
 
 module.exports = router;

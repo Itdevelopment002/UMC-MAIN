@@ -7,6 +7,33 @@ const convertToMySQLDate = (dateString) => {
   return `${year}-${month}-${day}`;
 };
 
+
+router.get("/circular-info", (req, res) => {
+  const sql = "SELECT * FROM circulars";
+  db.query(sql, (err, results) => {
+    if (err) {
+      return res.status(500).json({ message: "Database error", error: err });
+    }
+    res.status(200).json(results);
+  });
+});
+
+
+router.get("/circular-info/:id", (req, res) => {
+  const { id } = req.params;
+  const sql = "SELECT * FROM circulars WHERE id = ?";
+  db.query(sql, [id], (err, result) => {
+    if (err) {
+      return res.status(500).json({ message: "Database error", error: err });
+    }
+    if (result.length === 0) {
+      return res.status(404).json({ message: "Circular not found" });
+    }
+    res.status(200).json(result[0]);
+  });
+});
+
+
 router.post("/circular-info", (req, res) => {
   const { description, number, publishDate, link } = req.body;
 
@@ -33,29 +60,6 @@ router.post("/circular-info", (req, res) => {
   });
 });
 
-router.get("/circular-info", (req, res) => {
-  const sql = "SELECT * FROM circulars";
-  db.query(sql, (err, results) => {
-    if (err) {
-      return res.status(500).json({ message: "Database error", error: err });
-    }
-    res.status(200).json(results);
-  });
-});
-
-router.get("/circular-info/:id", (req, res) => {
-  const { id } = req.params;
-  const sql = "SELECT * FROM circulars WHERE id = ?";
-  db.query(sql, [id], (err, result) => {
-    if (err) {
-      return res.status(500).json({ message: "Database error", error: err });
-    }
-    if (result.length === 0) {
-      return res.status(404).json({ message: "Circular not found" });
-    }
-    res.status(200).json(result[0]);
-  });
-});
 
 router.put("/circular-info/:id", (req, res) => {
   const { id } = req.params;
@@ -116,5 +120,6 @@ router.delete("/circular-info/:id", (req, res) => {
     res.status(200).json({ message: "Circular deleted successfully" });
   });
 });
+
 
 module.exports = router;

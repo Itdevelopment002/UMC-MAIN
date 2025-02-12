@@ -14,32 +14,9 @@ const storage = multer.diskStorage({
   },
 });
 
-const upload = multer({ storage,
- limits: { fileSize: 10 * 1024 * 1024 },
-});
-
-router.post("/banner", upload.single("image"), (req, res) => {
-  if (!req.file) {
-    return res.status(400).json({ message: "No file uploaded" });
-  }
-
-  const filePath = `/uploads/${req.file.filename}`;
-  const bannerName = req.body.bannerName;
-
-  if (!bannerName) {
-    return res.status(400).json({ message: "Banner name is required" });
-  }
-
-  const sql = "INSERT INTO banner (banner_name, file_path) VALUES (?, ?)";
-  db.query(sql, [bannerName, filePath], (err, result) => {
-    if (err) {
-      return res.status(500).json({ message: "Database error", error: err });
-    }
-    res.status(201).json({
-      message: "Image and banner name uploaded successfully",
-      imageUrl: filePath,
-    });
-  });
+const upload = multer({
+  storage,
+  limits: { fileSize: 10 * 1024 * 1024 },
 });
 
 router.get("/banner", (req, res) => {
@@ -73,6 +50,7 @@ router.get("/banner", (req, res) => {
   });
 });
 
+
 router.get("/banner/:id", (req, res) => {
   const { id } = req.params;
 
@@ -96,37 +74,31 @@ router.get("/banner/:id", (req, res) => {
   });
 });
 
-router.delete("/banner/:id", (req, res) => {
-  const { id } = req.params;
 
-  const selectSql = "SELECT file_path FROM banner WHERE id = ?";
-  db.query(selectSql, [id], (err, result) => {
+router.post("/banner", upload.single("image"), (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ message: "No file uploaded" });
+  }
+
+  const filePath = `/uploads/${req.file.filename}`;
+  const bannerName = req.body.bannerName;
+
+  if (!bannerName) {
+    return res.status(400).json({ message: "Banner name is required" });
+  }
+
+  const sql = "INSERT INTO banner (banner_name, file_path) VALUES (?, ?)";
+  db.query(sql, [bannerName, filePath], (err, result) => {
     if (err) {
       return res.status(500).json({ message: "Database error", error: err });
     }
-
-    if (result.length === 0) {
-      return res.status(404).json({ message: "Banner not found" });
-    }
-
-    const filePath = result[0].file_path;
-
-    const deleteSql = "DELETE FROM banner WHERE id = ?";
-    db.query(deleteSql, [id], (err, deleteResult) => {
-      if (err) {
-        return res.status(500).json({ message: "Database error", error: err });
-      }
-
-      fs.unlink(path.join(__dirname, "..", filePath), (fsErr) => {
-        if (fsErr) {
-          console.error("Error deleting file:", fsErr);
-        }
-      });
-
-      res.status(200).json({ message: "Banner deleted successfully" });
+    res.status(201).json({
+      message: "Image and banner name uploaded successfully",
+      imageUrl: filePath,
     });
   });
 });
+
 
 router.put("/banner/:id", upload.single("image"), (req, res) => {
   const { id } = req.params;
@@ -182,5 +154,39 @@ router.put("/banner/:id", upload.single("image"), (req, res) => {
     });
   });
 });
+
+
+router.delete("/banner/:id", (req, res) => {
+  const { id } = req.params;
+
+  const selectSql = "SELECT file_path FROM banner WHERE id = ?";
+  db.query(selectSql, [id], (err, result) => {
+    if (err) {
+      return res.status(500).json({ message: "Database error", error: err });
+    }
+
+    if (result.length === 0) {
+      return res.status(404).json({ message: "Banner not found" });
+    }
+
+    const filePath = result[0].file_path;
+
+    const deleteSql = "DELETE FROM banner WHERE id = ?";
+    db.query(deleteSql, [id], (err, deleteResult) => {
+      if (err) {
+        return res.status(500).json({ message: "Database error", error: err });
+      }
+
+      fs.unlink(path.join(__dirname, "..", filePath), (fsErr) => {
+        if (fsErr) {
+          console.error("Error deleting file:", fsErr);
+        }
+      });
+
+      res.status(200).json({ message: "Banner deleted successfully" });
+    });
+  });
+});
+
 
 module.exports = router;
