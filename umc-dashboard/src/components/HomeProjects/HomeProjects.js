@@ -331,6 +331,12 @@ const HomeProjects = () => {
               tabIndex="-1"
               aria-hidden="true"
               role="dialog"
+              style={{
+                display: "block",
+                backgroundColor: "rgba(0,0,0,0.5)",
+                overflowY: "scroll",
+                scrollbarWidth: "none",
+              }}
             >
               <div className="modal-dialog modal-dialog-centered">
                 <div className="modal-content">

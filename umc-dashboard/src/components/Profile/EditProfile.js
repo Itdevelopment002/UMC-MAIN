@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { FaPencilAlt, FaEye, FaEyeSlash } from "react-icons/fa";
+import { FiEdit } from "react-icons/fi";
 import api, { baseURL } from "../api";
 import './EditProfile.css';
 import { ToastContainer, toast } from "react-toastify";
@@ -148,18 +149,20 @@ const EditProfile = () => {
                 </nav>
                 <div className="card mb-4 p-4">
                     <div className="row align-items-center">
-                        <div className="col-md-4 text-center position-relative">
-                            <img
-                                src={previewImage}
-                                alt="User Avatar"
-                                className="rounded-circle img-fluid"
-                                style={{ width: "150px", height: "150px", objectFit: "cover" }}
-                            />
-                            <label className="position-absolute top-50 start-50 translate-middle" style={{ cursor: "pointer" }}>
-                                <FaPencilAlt className="text-primary bg-white rounded-circle p-1 shadow" style={{ fontSize: "20px" }} />
-                                <input type="file" className="d-none" onChange={handleImageChange} />
-                            </label>
-                        </div>
+                    <div className="col-md-4 text-center position-relative">
+    <div className="position-relative" style={{ width: "150px", height: "150px", display: "inline-block" }}>
+        <img
+            src={previewImage}
+            alt="User Avatar"
+            className="rounded-circle img-fluid"
+            style={{ width: "100%", height: "100%", objectFit: "cover" }}
+        />
+        <label className="position-absolute" style={{ top: "10px", right: "10px", cursor: "pointer" }}>
+            <FiEdit className="bg-white shadow" style={{ fontSize: "25px", padding: "2px", borderRadius: "10px", color: "#E3435A" }} />
+            <input type="file" className="d-none" onChange={handleImageChange} />
+        </label>
+    </div>
+</div>
                         <div className="col-md-8">
                             <div className="row mb-3">
                                 <div className="col-sm-4"><strong>Full Name:</strong></div>
