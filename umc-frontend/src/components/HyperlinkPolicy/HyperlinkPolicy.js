@@ -73,7 +73,7 @@ const HyperlinkPolicy = () => {
                             <div>
                                 {policy.map((policy) => (
                                     <React.Fragment key={policy.id}>
-                                        <p>{policy.description}</p>
+                                        <p className="hyperpara">{policy.description}</p>
                                     </React.Fragment>
                                 ))}
                             </div>
