@@ -26,6 +26,75 @@ const deleteFileIfExists = async (filePath) => {
   }
 };
 
+
+router.get("/citizen-services", (req, res) => {
+  const sql = "SELECT * FROM citizen_services";
+  db.query(sql, (err, results) => {
+    if (err) {
+      return res.status(500).json({ message: "Database error", error: err });
+    }
+    res.status(200).json(results);
+  });
+});
+
+
+router.get("/citizen-services/:id", (req, res) => {
+  const { id } = req.params;
+  const sql = "SELECT * FROM citizen_services WHERE id = ?";
+  db.query(sql, [id], (err, result) => {
+    if (err) {
+      return res.status(500).json({ message: "Database error", error: err });
+    }
+
+    if (result.length === 0) {
+      return res.status(404).json({ message: "Citizen Service not found" });
+    }
+
+    res.status(200).json(result[0]);
+  });
+});
+
+
+router.post(
+  "/citizen-services",
+  upload.fields([{ name: "mainIcon" }]),
+  async (req, res) => {
+    const { serviceHeading, serviceLink } = req.body;
+    if (!serviceHeading || !serviceLink) {
+      return res
+        .status(400)
+        .json({ message: "Service heading and link are required" });
+    }
+
+    let mainIconPath = null;
+
+    if (req.files["mainIcon"]) {
+      mainIconPath = path.join("uploads", req.files["mainIcon"][0].filename);
+    }
+
+    const insertSql =
+      "INSERT INTO citizen_services (service_heading, service_link, main_icon_path) VALUES (?, ?, ?)";
+    const insertParams = [
+      serviceHeading,
+      serviceLink,
+      mainIconPath,
+    ];
+
+    db.query(insertSql, insertParams, (err, result) => {
+      if (err) {
+        return res.status(500).json({ message: "Database error", error: err });
+      }
+      res
+        .status(201)
+        .json({
+          message: "Citizen Service added successfully",
+          serviceId: result.insertId,
+        });
+    });
+  }
+);
+
+
 router.put(
   "/citizen-services/:id",
   upload.fields([{ name: "mainIcon" }]),
@@ -95,77 +164,12 @@ router.put(
             path.join(__dirname, "../", oldMainIconPath)
           );
         }
-
         res.status(200).json({ message: "Citizen Service updated successfully" });
       });
     });
   }
 );
 
-router.get("/citizen-services", (req, res) => {
-  const sql = "SELECT * FROM citizen_services";
-  db.query(sql, (err, results) => {
-    if (err) {
-      return res.status(500).json({ message: "Database error", error: err });
-    }
-    res.status(200).json(results);
-  });
-});
-
-router.get("/citizen-services/:id", (req, res) => {
-  const { id } = req.params;
-  const sql = "SELECT * FROM citizen_services WHERE id = ?";
-  db.query(sql, [id], (err, result) => {
-    if (err) {
-      return res.status(500).json({ message: "Database error", error: err });
-    }
-
-    if (result.length === 0) {
-      return res.status(404).json({ message: "Citizen Service not found" });
-    }
-
-    res.status(200).json(result[0]);
-  });
-});
-
-router.post(
-  "/citizen-services",
-  upload.fields([{ name: "mainIcon" }]),
-  async (req, res) => {
-    const { serviceHeading, serviceLink } = req.body;
-    if (!serviceHeading || !serviceLink) {
-      return res
-        .status(400)
-        .json({ message: "Service heading and link are required" });
-    }
-
-    let mainIconPath = null;
-
-    if (req.files["mainIcon"]) {
-      mainIconPath = path.join("uploads", req.files["mainIcon"][0].filename);
-    }
-
-    const insertSql =
-      "INSERT INTO citizen_services (service_heading, service_link, main_icon_path) VALUES (?, ?, ?)";
-    const insertParams = [
-      serviceHeading,
-      serviceLink,
-      mainIconPath,
-    ];
-
-    db.query(insertSql, insertParams, (err, result) => {
-      if (err) {
-        return res.status(500).json({ message: "Database error", error: err });
-      }
-      res
-        .status(201)
-        .json({
-          message: "Citizen Service added successfully",
-          serviceId: result.insertId,
-        });
-    });
-  }
-);
 
 router.delete("/citizen-services/:id", async (req, res) => {
   const { id } = req.params;
@@ -196,5 +200,6 @@ router.delete("/citizen-services/:id", async (req, res) => {
     });
   });
 });
+
 
 module.exports = router;

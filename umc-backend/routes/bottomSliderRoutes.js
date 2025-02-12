@@ -16,6 +16,40 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
+router.get("/bottom-sliders", (req, res) => {
+  const sql = "SELECT * FROM bottom_slider";
+  
+  db.query(sql, (err, results) => {
+    if (err) {
+      return res.status(500).json({ message: "Database error", error: err });
+    }
+    res.status(200).json(results);
+  });
+});
+
+
+router.get("/bottom-sliders/:id", (req, res) => {
+  const { id } = req.params;
+  const sql = "SELECT * FROM bottom_slider WHERE id = ?";
+
+  db.query(sql, [id], (err, result) => {
+    if (err) {
+      return res.status(500).json({ message: "Database error", error: err });
+    }
+    if (result.length === 0) {
+      return res.status(404).json({ message: "Slider link not found" });
+    }
+
+    const link = result[0];
+    res.status(200).json({
+      id: link.id,
+      websitelink: link.websitelink,
+      websitelogo: link.websitelogo,
+    });
+  });
+});
+
+
 router.post("/bottom-sliders", upload.single("websitelogo"), (req, res) => {
   const { websitelink } = req.body;
 
@@ -41,68 +75,6 @@ router.post("/bottom-sliders", upload.single("websitelogo"), (req, res) => {
   });
 });
 
-router.get("/bottom-sliders", (req, res) => {
-  const sql = "SELECT * FROM bottom_slider";
-
-  db.query(sql, (err, results) => {
-    if (err) {
-      return res.status(500).json({ message: "Database error", error: err });
-    }
-    res.status(200).json(results);
-  });
-});
-
-router.get("/bottom-sliders/:id", (req, res) => {
-  const { id } = req.params;
-  const sql = "SELECT * FROM bottom_slider WHERE id = ?";
-
-  db.query(sql, [id], (err, result) => {
-    if (err) {
-      return res.status(500).json({ message: "Database error", error: err });
-    }
-    if (result.length === 0) {
-      return res.status(404).json({ message: "Slider link not found" });
-    }
-
-    const link = result[0];
-    res.status(200).json({
-      id: link.id,
-      websitelink: link.websitelink,
-      websitelogo: link.websitelogo,
-    });
-  });
-});
-
-router.delete("/bottom-sliders/:id", (req, res) => {
-  const { id } = req.params;
-
-  const selectSql = "SELECT websitelogo FROM bottom_slider WHERE id = ?";
-  db.query(selectSql, [id], (err, result) => {
-    if (err) {
-      return res.status(500).json({ message: "Database error", error: err });
-    }
-    if (result.length === 0) {
-      return res.status(404).json({ message: "Slider link not found" });
-    }
-
-    const filePath = result[0].websitelogo;
-
-    const deleteSql = "DELETE FROM bottom_slider WHERE id = ?";
-    db.query(deleteSql, [id], (err) => {
-      if (err) {
-        return res.status(500).json({ message: "Database error", error: err });
-      }
-
-      fs.unlink(path.join(__dirname, "..", filePath), (fsErr) => {
-        if (fsErr) {
-          console.error("Error deleting file:", fsErr);
-        }
-      });
-
-      res.status(200).json({ message: "Slider link deleted successfully" });
-    });
-  });
-});
 
 router.put("/bottom-sliders/:id", upload.single("websitelogo"), (req, res) => {
   const { id } = req.params;
@@ -159,5 +131,38 @@ router.put("/bottom-sliders/:id", upload.single("websitelogo"), (req, res) => {
     });
   });
 });
+
+
+router.delete("/bottom-sliders/:id", (req, res) => {
+  const { id } = req.params;
+
+  const selectSql = "SELECT websitelogo FROM bottom_slider WHERE id = ?";
+  db.query(selectSql, [id], (err, result) => {
+    if (err) {
+      return res.status(500).json({ message: "Database error", error: err });
+    }
+    if (result.length === 0) {
+      return res.status(404).json({ message: "Slider link not found" });
+    }
+
+    const filePath = result[0].websitelogo;
+
+    const deleteSql = "DELETE FROM bottom_slider WHERE id = ?";
+    db.query(deleteSql, [id], (err) => {
+      if (err) {
+        return res.status(500).json({ message: "Database error", error: err });
+      }
+
+      fs.unlink(path.join(__dirname, "..", filePath), (fsErr) => {
+        if (fsErr) {
+          console.error("Error deleting file:", fsErr);
+        }
+      });
+
+      res.status(200).json({ message: "Slider link deleted successfully" });
+    });
+  });
+});
+
 
 module.exports = router;
