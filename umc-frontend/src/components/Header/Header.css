@@ -203,10 +203,12 @@ a {
 }
 
 .banner-img1 {
-    width: 299px;
-    height: 114px;
+    width: auto;
+    height: 100px;
     object-fit: cover;
+    margin-top: -47px !important;
 }
+
 
 .banner-img2 {
     width: 70px;
@@ -882,7 +884,7 @@ a {
     }
 
     .banner-img1 {
-        margin-top: 0px;
+        margin-top: -55px; 
     }
 
     .banner-img2 {
@@ -1164,6 +1166,15 @@ a {
     .brand-name {
         font-size: 18px;
         margin-top: 0px;
+    }
+}
+@media (max-width: 880px) and (min-width: 767px) {
+    .brand-name {
+        font-size: 17px;
+        margin-top: 0px;
+    }
+    .banner-img4{
+        display:none;
     }
 }
 
