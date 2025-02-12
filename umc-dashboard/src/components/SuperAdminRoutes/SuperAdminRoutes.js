@@ -34,8 +34,8 @@ import AddHelp from "../Footer/AddHelp";
 import AddOnlineServices from "../Footer/AddOnlineServices";
 import Information from "../Information/Information";
 import AddInformation from "../Information/AddInformation";
-import HomeProjects from "../Projects/HomeProjects";
-import AddHomeProjects from "../Projects/AddHomeProjects";
+import HomeProjects from "../HomeProjects/HomeProjects";
+import AddHomeProjects from "../HomeProjects/AddHomeProjects";
 import HomeService1 from "../HomeService1/HomeService1";
 import AddHomeService1 from "../HomeService1/AddHomeService1";
 import CitizenCommunication from "../CitizenCommunication/CitizenCommunication";
@@ -124,7 +124,7 @@ import ProactiveDisclosure from "../ProactiveDisclosure/ProactiveDisclosure";
 import AddProactiveDisclosure from "../ProactiveDisclosure/AddProactiveDisclosure";
 import SubRti from "../SubRti/SubRti";
 import AddSubRti from "../SubRti/AddSubRti";
-import AddProjectImages from "../ProjectDetails/AddProjectImages";
+import AddProjectDescription from "../ProjectDetails/AddProjectDescription";
 import AddProjectCategory from "../ProjectDetails/AddProjectCategory";
 import ProjectDetails from "../ProjectDetails/ProjectDetails";
 
@@ -293,7 +293,7 @@ function SuperAdminRoutes() {
       <Route path="/sub-rti" element={<SubRti />} />
       <Route path="/add-sub-rti" element={<AddSubRti />} />
       <Route path="/project-details" element={<ProjectDetails />} />
-      <Route path="/add-project-images" element={<AddProjectImages />} />
+      <Route path="/add-project-description" element={<AddProjectDescription />} />
       <Route path="/add-project-category" element={<AddProjectCategory />} />
       <Route path="*" element={<Navigate to="/home" />} />
     </Routes>

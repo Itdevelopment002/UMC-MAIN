@@ -17,6 +17,8 @@ import { BsPersonLinesFill } from "react-icons/bs";
 import { PiFlagBannerFoldFill } from "react-icons/pi";
 import { MdRecordVoiceOver } from "react-icons/md";
 import { IoInformationCircle } from "react-icons/io5";
+import { AiOutlineFundProjectionScreen } from "react-icons/ai";
+
 
 
 const Sidebar = ({ isOpen, closeSidebar, userDepartment }) => {
@@ -473,7 +475,7 @@ const Sidebar = ({ isOpen, closeSidebar, userDepartment }) => {
                   <li className="submenu">
                     <Link to="#." onClick={() => toggleSubmenu("projects")}>
                       <i className="fa">
-                        <IoInformationCircle />
+                        <AiOutlineFundProjectionScreen />
                       </i>{" "}
                       <span>Upcoming Project </span>{" "}
                       <span
