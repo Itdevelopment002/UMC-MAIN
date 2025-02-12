@@ -16,8 +16,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-// POST endpoint to add a new project with images
-router.post("/project_images", upload.array("images"), (req, res) => {
+router.post("/project-category", upload.array("images"), (req, res) => {
   const { heading } = req.body;
 
   if (!heading) {
@@ -44,7 +43,7 @@ router.post("/project_images", upload.array("images"), (req, res) => {
 });
 
 // GET endpoint to retrieve all projects
-router.get("/project_images", (req, res) => {
+router.get("/project-category", (req, res) => {
   const sql = "SELECT * FROM project_images";
   db.query(sql, (err, results) => {
     if (err) {
@@ -54,8 +53,7 @@ router.get("/project_images", (req, res) => {
   });
 });
 
-// GET endpoint to retrieve a project by heading
-router.get("/project_images/heading/:heading", (req, res) => {
+router.get("/project-category/heading/:heading", (req, res) => {
   const { heading } = req.params;
 
   const sql = "SELECT * FROM project_images WHERE heading = ?";
@@ -78,7 +76,7 @@ router.get("/project_images/heading/:heading", (req, res) => {
 });
 
 // DELETE endpoint to remove a project by ID
-router.delete("/project_images/:id", (req, res) => {
+router.delete("/project-category/:id", (req, res) => {
   const { id } = req.params;
 
   const selectSql = "SELECT images FROM project_images WHERE id = ?";
@@ -114,7 +112,7 @@ router.delete("/project_images/:id", (req, res) => {
 });
 
 // PUT endpoint to update a project by ID
-router.put("/project_images/:id", upload.array("images"), (req, res) => {
+router.put("/project-category/:id", upload.array("images"), (req, res) => {
   const { id } = req.params;
   const { heading } = req.body;
 
