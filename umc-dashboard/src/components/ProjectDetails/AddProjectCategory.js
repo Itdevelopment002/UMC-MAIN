@@ -12,10 +12,9 @@ const AddProjectCategory = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validation
     const validationErrors = {};
     if (!heading.trim()) {
-      validationErrors.heading = "Heading is required.";
+      validationErrors.heading = "Project Heading is required.";
     }
     if (images.length === 0) {
       validationErrors.images = "Please upload at least one image.";
@@ -26,7 +25,6 @@ const AddProjectCategory = () => {
       return;
     }
 
-    // Prepare FormData
     const formData = new FormData();
     formData.append("heading", heading);
     images.forEach((image) => {
@@ -34,7 +32,7 @@ const AddProjectCategory = () => {
     });
 
     try {
-      const response = await api.post("/project_images", formData, {
+      const response = await api.post("/project-category", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -81,7 +79,7 @@ const AddProjectCategory = () => {
               <Link to="#">Upcoming Projects</Link>
             </li>
             <li className="breadcrumb-item">
-              <Link to="/project-details">Project Categories</Link>
+              <Link to="/project-details">Project Details</Link>
             </li>
             <li className="breadcrumb-item active" aria-current="page">
               Add Project Category
@@ -109,7 +107,7 @@ const AddProjectCategory = () => {
                           }`}
                           value={heading}
                           onChange={handleHeadingChange}
-                          placeholder="Enter project heading"
+                          placeholder="Enter Project Heading"
                         />
                         {errors.heading && (
                           <div className="text-danger mt-1">
@@ -120,7 +118,7 @@ const AddProjectCategory = () => {
                     </div>
                     <div className="form-group row">
                       <label className="col-form-label col-md-2">
-                        Upload Images <span className="text-danger">*</span>
+                        Project Images <span className="text-danger">*</span>
                       </label>
                       <div className="col-md-4">
                         <div className="input-group mb-3">
