@@ -70,6 +70,7 @@ const Info = () => {
       ) : (
         <div className="row align-items-center">
           <div className="col-lg-3 col-md-12 profile-div" data-aos="fade-right">
+          
             <div className="profile-card">
               <img
                 src={`${baseURL}${coData[0]?.image_path}`}
@@ -77,7 +78,9 @@ const Info = () => {
                 className="profile-image"
               />
               <h5 className="custom-name">{coData[0]?.coName} </h5>
-              <p className="custom-title">{coData[0]?.designation}</p>
+            
+              <p className="custom-title"> {console.log("Designation:", coData[0]?.designation)}{coData[0]?.designation}</p>
+              
               <p className="organization">Ulhasnagar Municipal Corporation</p>
             </div>
           </div>
