@@ -145,9 +145,20 @@ const TopHeader = () => {
                 </div>
 
                 <div className="accessibility ">
-                    <Link to="/rts-act-2015">
+                    {/* <Link to="/rts-act-2015">
                         <button className="rts-act-button">RTS Act 2015</button>
-                    </Link>
+                    </Link> */}
+                    <span
+                        onClick={() => {
+                            const mainContent = document.getElementById("main-content");
+                            if (mainContent) {
+                                mainContent.scrollIntoView({ behavior: "smooth" });
+                            }
+                        }}
+                        style={{ cursor: "pointer" }}
+                    >
+                        Skip to main content
+                    </span>
                     <span className="divider">|</span>
                     <Link to="/screen-reader-access" className='text-decoration-none' style={{ color: "#333" }}>
                         <span>Screen Reader Access</span>
