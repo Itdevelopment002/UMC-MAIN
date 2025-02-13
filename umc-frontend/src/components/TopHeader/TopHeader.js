@@ -59,14 +59,13 @@ const TopHeader = () => {
     }, []);
     
     const fixAllTranslations = () => {
-        // Multiple retries for dynamically loaded content
         let attempts = 0;
     
         const interval = setInterval(() => {
             fixMarathiTranslation();
     
             attempts++;
-            if (attempts >= 10) clearInterval(interval); // Stop after 10 tries
+            if (attempts >= 10) clearInterval(interval); 
         }, 500);
     };
     
@@ -74,9 +73,11 @@ const TopHeader = () => {
         requestAnimationFrame(() => {
             replaceTextRecursively(document.body, "आयुक्त आणि प्रशासक", "प्रशासक तथा आयुक्त");
             replaceTextRecursively(document.body, "प्रचलित", "प्रशासक तथा आयुक्त");
-    
-            // Commissioner Name Fix
+            replaceTextRecursively(document.body, "कॉर्पोरेशन", "शासन");
+            replaceTextRecursively(document.body, "नगरपालिका बैठका", "महापालिका सभा");
+            replaceTextRecursively(document.body, "नगरपालिका बैठका", "उल्हासनगर हे एक महानगरपालिका शहर असून त्याच नावाच्या तालुक्याचे मुख्यालय आहे. हे मुंबई-पुणे मार्गावरील मध्य रेल्वेच्या मार्गावरील महत्त्वाचे रेल्वे स्थानक आहे. फाळणीनंतर स्थलांतरित झालेल्यांचे वसतीस्थान असलेले हे शहर ४३ वर्षे जुने आहे.मुंबईपासून ५८ कि.मी. अंतरावर वसलेले हे एकेकाळी ओसाड भूभाग होता, मात्र आता ते ठाणे जिल्ह्यातील एक समृद्ध शहर म्हणून विकसित झाले आहे. पूर्वी कल्याण मिलिटरी ट्रांझिट कॅम्प म्हणून ओळखले जाणारे हे ठिकाण दुसऱ्या महायुद्धाच्या काळात ६,००० सैनिक आणि ३०,००० नागरिकांसाठी तयार करण्यात आले होते. येथे २,१२६ छावण्या आणि १,१७३ घरे होती");
             replaceTextRecursively(document.body, /सुश्री\s?मनीषा\s?आव्हाळे\s?\(आयएएस\)/g, "श्रीम. मनिषा आव्हाळे (भा. प्र. से.)");
+            
         });
     };
     
