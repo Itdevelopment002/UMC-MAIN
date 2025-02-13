@@ -47,15 +47,49 @@ const TopHeader = () => {
             const translatedText = document.querySelector("html").lang;
             if (translatedText === "mr") {
                 applyFontFamily("Mukta, sans-serif");
+                fixAllTranslations();
             } else {
                 applyFontFamily("");
             }
         });
-
-        observer.observe(document.documentElement, { attributes: true });
-
+    
+        observer.observe(document.documentElement, { attributes: true, subtree: true, childList: true });
+    
         return () => observer.disconnect();
     }, []);
+    
+    const fixAllTranslations = () => {
+        // Multiple retries for dynamically loaded content
+        let attempts = 0;
+    
+        const interval = setInterval(() => {
+            fixMarathiTranslation();
+    
+            attempts++;
+            if (attempts >= 10) clearInterval(interval); // Stop after 10 tries
+        }, 500);
+    };
+    
+    const fixMarathiTranslation = () => {
+        requestAnimationFrame(() => {
+            replaceTextRecursively(document.body, "आयुक्त आणि प्रशासक", "प्रशासक तथा आयुक्त");
+            replaceTextRecursively(document.body, "प्रचलित", "प्रशासक तथा आयुक्त");
+    
+            // Commissioner Name Fix
+            replaceTextRecursively(document.body, /सुश्री\s?मनीषा\s?आव्हाळे\s?\(आयएएस\)/g, "श्रीम. मनिषा आव्हाळे (भा. प्र. से.)");
+        });
+    };
+    
+    const replaceTextRecursively = (node, searchRegex, replaceText) => {
+        if (node.nodeType === 3) { // Text node
+            node.nodeValue = node.nodeValue.replace(searchRegex, replaceText);
+        } else {
+            node.childNodes.forEach(child => replaceTextRecursively(child, searchRegex, replaceText));
+        }
+    };
+    
+    
+    
 
     const applyFontFamily = (font) => {
         document.body.style.fontFamily = font;
