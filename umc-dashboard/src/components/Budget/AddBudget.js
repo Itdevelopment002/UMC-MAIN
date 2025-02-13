@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../api";
 
@@ -6,8 +6,32 @@ const AddBudget = () => {
   const [heading, setHeading] = useState("");
   const [link, setLink] = useState("");
   const [year, setYear] = useState("");
+  const [newYear, setNewYear] = useState("");
+  const [years, setYears] = useState([]);
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
+
+  // Fetch distinct years from the database
+  useEffect(() => {
+    const fetchYears = async () => {
+      try {
+        const response = await api.get("/budgets_data"); // Fetch all budgets
+        const uniqueYears = [...new Set(response.data.map((item) => item.year))];
+
+        // Sorting by extracting the first year in the range (e.g., "2012-2013" -> 2012)
+        const sortedYears = uniqueYears.sort((a, b) => {
+          const yearA = parseInt(a.split("-")[0]); // Extract first part of the range
+          const yearB = parseInt(b.split("-")[0]);
+          return yearB - yearA; // Sort in descending order
+        });
+
+        setYears(sortedYears);
+      } catch (error) {
+        console.error("Error fetching years:", error);
+      }
+    };
+    fetchYears();
+  }, []);
 
   const validateForm = () => {
     const validationErrors = {};
@@ -36,18 +60,21 @@ const AddBudget = () => {
     }
 
     try {
-      //eslint-disable-next-line
-      const response = await api.post("/budgets_data", {
-        heading: heading,
-        link: link,
-        year: year,
-      });
+      await api.post("/budgets_data", { heading, link, year });
       setHeading("");
       setLink("");
       setYear("");
       navigate("/budget");
     } catch (error) {
       console.error("Error adding budget data:", error);
+    }
+  };
+
+  const handleAddYear = () => {
+    if (newYear && !years.includes(newYear)) {
+      setYears([...years, newYear]);
+      setYear(newYear);
+      setNewYear("");
     }
   };
 
@@ -80,11 +107,10 @@ const AddBudget = () => {
                       <label className="col-form-label col-md-2">
                         Year <span className="text-danger">*</span>
                       </label>
-                      <div className="col-md-4">
+                      <div className="col-md-3">
                         <select
-                          className={`form-control form-control-md ${
-                            errors.year ? "is-invalid" : ""
-                          }`}
+                          className={`form-control form-control-md ${errors.year ? "is-invalid" : ""
+                            }`}
                           value={year}
                           onChange={(e) => {
                             setYear(e.target.value);
@@ -93,19 +119,43 @@ const AddBudget = () => {
                             }
                           }}
                         >
-                          <option style={{backgroundColor:'#FBE9ED', color:'#E3435A'}} value="" disabled>Select Year</option>
-                          <option value="2020-2021">2020-2021</option>
-                          <option value="2019-2020">2019-2020</option>
-                          <option value="2018-2019">2018-2019</option>
-                          <option value="2017-2018">2017-2018</option>
-                          <option value="2015-2016">2015-2016</option>
-                          <option value="2014-2015">2014-2015</option>
+                          <option
+                            style={{ backgroundColor: "#FBE9ED", color: "#E3435A" }}
+                            value=""
+                            disabled
+                          >
+                            Select Year
+                          </option>
+                          {years.map((y) => (
+                            <option key={y} value={y}>
+                              {y}
+                            </option>
+                          ))}
                         </select>
                         {errors.year && (
                           <div className="invalid-feedback">{errors.year}</div>
                         )}
                       </div>
+                      <div className="col-md-3">
+                        <input
+                          type="text"
+                          className="form-control form-control-md"
+                          placeholder="Enter New Year"
+                          value={newYear}
+                          onChange={(e) => setNewYear(e.target.value)}
+                        />
+                      </div>
+                      <div className="col-md-2">
+                        <button
+                          type="button"
+                          className="btn btn-secondary btn-sm"
+                          onClick={handleAddYear}
+                        >
+                          Add Year
+                        </button>
+                      </div>
                     </div>
+
                     <div className="form-group row">
                       <label className="col-form-label col-md-2">
                         Heading <span className="text-danger">*</span>
@@ -113,9 +163,8 @@ const AddBudget = () => {
                       <div className="col-md-4">
                         <input
                           type="text"
-                          className={`form-control form-control-md ${
-                            errors.heading ? "is-invalid" : ""
-                          }`}
+                          className={`form-control form-control-md ${errors.heading ? "is-invalid" : ""
+                            }`}
                           placeholder="Enter Heading"
                           value={heading}
                           onChange={(e) => {
@@ -140,9 +189,8 @@ const AddBudget = () => {
                       <div className="col-md-4">
                         <input
                           type="text"
-                          className={`form-control form-control-md ${
-                            errors.link ? "is-invalid" : ""
-                          }`}
+                          className={`form-control form-control-md ${errors.link ? "is-invalid" : ""
+                            }`}
                           placeholder="Enter Link"
                           value={link}
                           onChange={(e) => {
