@@ -1,7 +1,10 @@
 import "./SocialMediaSection.css";
 import React, { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
 const SocialMedia = () => {
+  const { i18n, t } = useTranslation();
+
   useEffect(() => {
     const adjustFacebookWidth = () => {
       const fbPage = document.querySelector(".fb-page");
@@ -28,7 +31,7 @@ const SocialMedia = () => {
         <div className="vertical-line"></div>
         <div className="d-flex">
           <h2 className="section-title">
-            Connect <span className="subtitle">with us</span>
+            {t("home.connect")} <span className="subtitle">{t("home.withUs")}</span>
           </h2>
         </div>
       </div>
@@ -37,7 +40,7 @@ const SocialMedia = () => {
 
           {/* Facebook Section */}
           <div className="card-header fb text-white text-center">
-            UMC on Facebook
+          {t("home.facebook")}
           </div>
           <div>
             <div
@@ -57,7 +60,7 @@ const SocialMedia = () => {
         {/* Twitter Section */}
         <div className=" col-lg-4 col-md-6 col-sm-6 media-plugin">
           <div className="card-header text-white tw text-center">
-            UMC on Twitter
+          {t("home.twitter")}
           </div>
           <div>
             <div className="twitter-timeline twitter-timeline-rendered">
@@ -83,7 +86,7 @@ const SocialMedia = () => {
         {/* YouTube Section */}
         <div className="col-lg-4 col-md-6 col-sm-6 media-plugin">
           <div className="card-header text-white you text-center">
-            UMC on YouTube
+          {t("home.youTube")}
           </div>
           <div>
             <iframe

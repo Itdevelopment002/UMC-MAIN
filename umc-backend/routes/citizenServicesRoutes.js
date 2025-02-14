@@ -103,8 +103,16 @@ router.put(
 );
 
 router.get("/citizen-services", (req, res) => {
-  const sql = "SELECT * FROM citizen_services";
-  db.query(sql, (err, results) => {
+  const language = req.query.lang;
+  let query;
+  let params = [];
+  if (language) {
+    query = `SELECT * FROM citizen_services WHERE language_code = ?`;
+    params.push(language);
+  } else {
+    query = "SELECT * FROM citizen_services";
+  }
+  db.query(query, params, (err, results) => {
     if (err) {
       return res.status(500).json({ message: "Database error", error: err });
     }

@@ -3,7 +3,17 @@ const router = express.Router();
 const db = require("../config/db.js");
 
 router.get("/eservices", (req, res) => {
-  db.query("SELECT * FROM eservices", (err, results) => {
+  const language = req.query.lang;
+  let query;
+  let params = [];
+  if (language) {
+    query = `SELECT * FROM eservices WHERE language_code = ?`;
+    params.push(language);
+  } else {
+    query = "SELECT * FROM eservices";
+  }
+
+  db.query(query, params, (err, results) => {
     if (err) throw err;
     res.json(results);
   });

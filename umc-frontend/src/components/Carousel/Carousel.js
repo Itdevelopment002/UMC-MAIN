@@ -9,6 +9,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/effect-fade";
+import { useTranslation } from "react-i18next";
 
 const Carousel = () => {
   useEffect(() => {
@@ -18,6 +19,7 @@ const Carousel = () => {
   const backgroundColors = ["#E0F8F2", "#EEECFF", "#FAEDED"];
   const [sliders, setSliders] = useState([]);
   const [ministers, setMinisters] = useState([]);
+  const { i18n, t } = useTranslation();
 
   const fetchSliders = async () => {
     try {
@@ -30,7 +32,7 @@ const Carousel = () => {
 
   const fetchMinisters = async () => {
     try {
-      const response = await api.get("/minister-details");
+      const response = await api.get(`/minister-details?lang=${i18n.language}`);
       setMinisters(response.data);
     } catch (error) {
       console.error("Error fetching ministers:", error);
@@ -40,7 +42,7 @@ const Carousel = () => {
   useEffect(() => {
     fetchSliders();
     fetchMinisters();
-  }, []);
+  }, [i18n.language]);
 
   return (
     <div className="container-fluid">

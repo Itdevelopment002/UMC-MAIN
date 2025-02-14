@@ -103,8 +103,17 @@ router.put(
 );
 
 router.get("/home-services1", (req, res) => {
-  const sql = "SELECT * FROM home_services1";
-  db.query(sql, (err, results) => {
+  const language = req.query.lang;
+  let query;
+  let params = [];
+  if (language) {
+    query = `SELECT * FROM home_services1 WHERE language_code = ?`;
+    params.push(language);
+  } else {
+    query = "SELECT * FROM home_services1";
+  }
+  
+  db.query(query, params, (err, results) => {
     if (err) {
       return res.status(500).json({ message: "Database error", error: err });
     }

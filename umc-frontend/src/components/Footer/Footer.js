@@ -4,6 +4,7 @@ import "./Footer.css";
 import Logo from "../../assets/images/logo 1.png";
 import api, { baseURL } from "../api";
 import Cookies from "js-cookie";
+import { useTranslation } from "react-i18next";
 
 
 const Footer = () => {
@@ -14,6 +15,7 @@ const Footer = () => {
   const [visitorCount, setVisitorCount] = useState(null);
   const [error, setError] = useState(null);
   const hasRunOnce = useRef(false);
+  const { i18n, t } = useTranslation();
 
   useEffect(() => {
     if (hasRunOnce.current) return;
@@ -68,11 +70,11 @@ const Footer = () => {
     fetchContacts();
 
 
-  }, []);
+  }, [i18n.language]);
 
   const fetchQuickLinks = async () => {
     try {
-      const response = await api.get("/quick-link");
+      const response = await api.get(`/quick-link?lang=${i18n.language}`);
       setQuickLinks(response.data);
     } catch (error) {
       console.error("Error fetching services:", error);
@@ -80,7 +82,7 @@ const Footer = () => {
   };
   const fetchHelpLinks = async () => {
     try {
-      const response = await api.get("/helps");
+      const response = await api.get(`/helps?lang=${i18n.language}`);
       setHelpLinks(response.data);
     } catch (error) {
       console.error("Error fetching services:", error);
@@ -88,7 +90,7 @@ const Footer = () => {
   };
   const fetchOnlineServices = async () => {
     try {
-      const response = await api.get("/online_service");
+      const response = await api.get(`/online_service?lang=${i18n.language}`);
       setOnlineServices(response.data);
     } catch (error) {
       console.error("Error fetching services:", error);
@@ -96,7 +98,7 @@ const Footer = () => {
   };
   const fetchContacts = () => {
     api
-      .get("/contacts-info")
+      .get(`/contacts-info?lang=${i18n.language}`)
       .then((response) => setContacts(response.data))
       .catch((error) => {
         console.error("Error fetching contact info details!", error);
@@ -112,8 +114,8 @@ const Footer = () => {
             <div className="footer-logo-section">
               <img src={Logo} alt="Ulhasnagar Logo" className="footer-logo" />
               <div>
-                <h2 className="footer-title text-uppercase">Ulhasnagar</h2>
-                <p className="footer-subtitle">Municipal Corporation</p>
+                <h2 className="footer-title text-uppercase">{t("footer.title")}</h2>
+                <p className="footer-subtitle">{t("footer.subtitle")}</p>
               </div>
             </div>
             <ul className="contact-list">
@@ -138,7 +140,7 @@ const Footer = () => {
           </div>
 
           <div className="col-lg-2 col-md-4 col-sm-4 mb-4">
-            <h4 className="footer-heading">Quick Links</h4>
+            <h4 className="footer-heading">{t("footer.quickLinks")}</h4>
             <ul className="footer-links">
               {quicklinks.length > 0 ? (
                 quicklinks.map((data, index) => (
@@ -149,13 +151,13 @@ const Footer = () => {
                   </li>
                 ))
               ) : (
-                <li>Loading...</li>
+                <li>{t("footer.loading")}</li>
               )}
             </ul>
           </div>
 
           <div className="col-lg-2 col-md-8 col-sm-4 mb-4 mx-auto">
-            <h4 className="footer-heading">Help</h4>
+            <h4 className="footer-heading">{t("footer.help")}</h4>
             <ul className="footer-links">
               {helplinks.map((data, index) => (
                 <li key={index}>
@@ -167,7 +169,7 @@ const Footer = () => {
 
 
           <div className="col-lg-2 col-md-4 col-sm-4 mb-4">
-            <h4 className="footer-heading">Online Services</h4>
+            <h4 className="footer-heading">{t("footer.onlineServices")}</h4>
             <ul className="footer-links">
               {onlineservices.length > 0 ? (
                 onlineservices.map((data, index) => (
@@ -178,7 +180,7 @@ const Footer = () => {
                   </li>
                 ))
               ) : (
-                <li>Loading...</li>
+                <li>{t("footer.loading")}</li>
               )}
             </ul>
           </div>
@@ -187,17 +189,17 @@ const Footer = () => {
         <hr className="footer-divider" />
         <div className="footer-bottom p-0">
           <span className="footer-sapn1">
-            &copy; {new Date().getFullYear()} Ulhasnagar Municipal Corporation. All Rights Reserved.
+            &copy; {new Date().getFullYear()}  {t("footer.copyWrite")}
           </span>
-          <span className="fw-bold ">Total Visitors:{" "}
+          <span className="fw-bold ">{t("footer.totalVisitors")}:{" "}
             {visitorCount !== null ? (
               <Link to="#." className="count-style">{visitorCount}</Link>
             ) : error ? (
               <span>{error}</span>
             ) : (
-              "Loading..."
+              t("footer.loading")
             )}</span>
-          <span className="footer-sapn2">Design & Developed by Infoigy</span>
+          <span className="footer-sapn2">{t("footer.designBy")}</span>
         </div>
       </div>
     </footer>

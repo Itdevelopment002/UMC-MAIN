@@ -103,8 +103,17 @@ router.put(
 );
 
 router.get("/initiatives", (req, res) => {
-  const sql = "SELECT * FROM initiatives";
-  db.query(sql, (err, results) => {
+  const language = req.query.lang;
+  let query;
+  let params = [];
+  if (language) {
+    query = `SELECT * FROM initiatives WHERE language_code = ?`;
+    params.push(language);
+  } else {
+    query = "SELECT * FROM initiatives";
+  }
+
+  db.query(query, params, (err, results) => {
     if (err) {
       return res.status(500).json({ message: "Database error", error: err });
     }

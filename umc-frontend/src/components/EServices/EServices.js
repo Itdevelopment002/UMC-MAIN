@@ -3,6 +3,7 @@ import "./EServices.css";
 import { Link } from "react-router-dom";
 import tick from "../../assets/images/info/tick.png";
 import api, { baseURL } from "../api";
+import { useTranslation } from "react-i18next";
 
 const EServices = () => {
   const [activeTab, setActiveTab] = useState("#umc-news");
@@ -15,6 +16,7 @@ const EServices = () => {
   const [information, setInformation] = useState([]);
   const [projects, setProjects] = useState([]);
   const [citzenServices, setCitizenServices] = useState([]);
+  const { i18n, t } = useTranslation();
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
@@ -31,7 +33,7 @@ const EServices = () => {
 
   const fetchNews = async () => {
     try {
-      const response = await api.get("/umc-news");
+      const response = await api.get(`/umc-news?lang=${i18n.language}`);
       setUmcNews(response.data.reverse());
     } catch (error) {
       console.error("Error Fetching umc news!", error);
@@ -39,7 +41,7 @@ const EServices = () => {
   };
   const fetchcitizenServices = async () => {
     try {
-      const response = await api.get("/citizen-services");
+      const response = await api.get(`/citizen-services?lang=${i18n.language}`);
       setCitizenServices(response.data);
     } catch (error) {
       console.error("Error fetching services:", error);
@@ -47,7 +49,7 @@ const EServices = () => {
   };
   const fetchServices = async () => {
     try {
-      const response = await api.get("/eservices");
+      const response = await api.get(`/eservices?lang=${i18n.language}`);
       setServices(response.data);
     } catch (error) {
       console.error("Error Fetching services!", error);
@@ -56,7 +58,7 @@ const EServices = () => {
 
   const fetchInitiatives = async () => {
     try {
-      const response = await api.get("/initiatives");
+      const response = await api.get(`/initiatives?lang=${i18n.language}`);
       setInitiatives(response.data);
     } catch (error) {
       console.error("Error Fetching initiatives!", error);
@@ -65,7 +67,7 @@ const EServices = () => {
 
   const fetchInformation = async () => {
     try {
-      const response = await api.get("/information");
+      const response = await api.get(`/information?lang=${i18n.language}`);
       setInformation(response.data.reverse());
     } catch (error) {
       console.error("Error Fetching information!", error);
@@ -74,7 +76,7 @@ const EServices = () => {
 
   const fetchProjects = async () => {
     try {
-      const response = await api.get("/projects");
+      const response = await api.get(`/projects?lang=${i18n.language}`);
       setProjects(response.data.reverse());
     } catch (error) {
       console.error("Error Fetching projects!", error);
@@ -88,22 +90,22 @@ const EServices = () => {
     fetchInformation();
     fetchProjects();
     fetchcitizenServices();
-  }, []);
+  }, [i18n.language]);
 
   const tabData = [
     {
       id: "#umc-news",
-      name: "UMC News",
+      name: t("home.UMCNews"),
       items: umcnews,
     },
     {
       id: "#initiatives",
-      name: "Initiatives-Programme",
+      name: t("home.Initiatives-Programme"),
       layout: true,
     },
     {
       id: "#e-services",
-      name: "e-Services",
+      name: t("home.e-Services"),
       layout: true,
     },
     // {
@@ -280,7 +282,7 @@ const EServices = () => {
             <div className="vertical-line"></div>
             <div className="d-flex">
               <h2 className="section-title">
-                Citizen <span className="subtitle">Services</span>
+                {t("home.citizen")} <span className="subtitle">{t("home.services")}</span>
               </h2>
             </div>
           </div>
