@@ -103,9 +103,17 @@ const TopHeader = () => {
                         <button className="rts-act-button">{t("header.rtsAct")}</button>
                     </Link> 
                     <span className="divider">|</span>*/}
-                    <Link to="/screen-reader-access" className='text-decoration-none' style={{ color: "#333" }}>
-                        <span>Screen Reader Access</span>
-                    </Link>
+                    <span
+                        onClick={() => {
+                            const mainContent = document.getElementById("main-content");
+                            if (mainContent) {
+                                mainContent.scrollIntoView({ behavior: "smooth" });
+                            }
+                        }}
+                        style={{ cursor: "pointer" }}
+                    >
+                        Skip to main content
+                    </span>
                     <span className="divider">|</span>
                     <Link to="/screen-reader-access" className='text-decoration-none' style={{ color: "#333" }}>
                         <span>{t("header.screenReader")}</span>
