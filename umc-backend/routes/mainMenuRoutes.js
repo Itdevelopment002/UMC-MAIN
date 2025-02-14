@@ -3,15 +3,34 @@ const router = express.Router();
 const db = require("../config/db.js");
 
 router.get("/main-menus", (req, res) => {
-  const mainMenuQuery = "SELECT * FROM main_menu";
-  const subMenuQuery = "SELECT * FROM sub_menu WHERE mainMenuId = ?";
+  const language = req.query.lang;
+  
+  let mainMenuQuery;
+  let mainMenuParams = [];
 
-  db.query(mainMenuQuery, (err, mainMenus) => {
-    if (err) return res.status(500).send(err);
+  if (language) {
+    mainMenuQuery = "SELECT * FROM main_menu WHERE language_code = ?;";
+    mainMenuParams.push(language);
+  } else {
+    mainMenuQuery = "SELECT * FROM main_menu;";
+  }
+
+  db.query(mainMenuQuery, mainMenuParams, (err, mainMenus) => {
+    if (err) return res.status(500).json({ message: "Error fetching main menus", error: err });
 
     const menuPromises = mainMenus.map((menu) => {
       return new Promise((resolve, reject) => {
-        db.query(subMenuQuery, [menu.id], (err, subMenus) => {
+        let subMenuQuery;
+        let subMenuParams = [menu.id];
+
+        if (language) {
+          subMenuQuery = "SELECT * FROM sub_menu WHERE mainMenuId = ? AND language_code = ?;";
+          subMenuParams.push(language);
+        } else {
+          subMenuQuery = "SELECT * FROM sub_menu WHERE mainMenuId = ?;";
+        }
+
+        db.query(subMenuQuery, subMenuParams, (err, subMenus) => {
           if (err) reject(err);
           else {
             menu.subMenus = subMenus;
@@ -23,7 +42,7 @@ router.get("/main-menus", (req, res) => {
 
     Promise.all(menuPromises)
       .then(() => res.status(200).json(mainMenus))
-      .catch((error) => res.status(500).send(error));
+      .catch((error) => res.status(500).json({ message: "Error fetching sub menus", error }));
   });
 });
 

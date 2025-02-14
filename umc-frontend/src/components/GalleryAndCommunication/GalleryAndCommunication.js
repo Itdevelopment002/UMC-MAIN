@@ -4,15 +4,17 @@ import api, { baseURL } from "../api";
 import GLightbox from "glightbox";
 import "glightbox/dist/css/glightbox.min.css";
 import "./GalleryAndCommunication.css";
+import { useTranslation } from "react-i18next";
 
 const GalleryAndCommunication = () => {
   const [portal, setPortal] = useState([]);
   const [emergency, setEmergency] = useState([]);
   const [gallery, setGallery] = useState([]);
+  const { i18n, t } = useTranslation();
 
   const fetchPortal = async () => {
     try {
-      const response = await api.get("/portal-services");
+      const response = await api.get(`/portal-services?lang=${i18n.language}`);
       setPortal(response.data);
     } catch (error) {
       console.error("Error fetching portal services!", error);
@@ -21,7 +23,7 @@ const GalleryAndCommunication = () => {
 
   const fetchEmergency = async () => {
     try {
-      const response = await api.get("/emergency-services");
+      const response = await api.get(`/emergency-services?lang=${i18n.language}`);
       setEmergency(response.data);
     } catch (error) {
       console.error("Error fetching emergency services!", error);
@@ -46,7 +48,7 @@ const GalleryAndCommunication = () => {
     await fetchGallery();
   };
   fetchData();
-}, []);
+}, [i18n.language]);
 
 
   useEffect(() => {
@@ -67,10 +69,10 @@ const GalleryAndCommunication = () => {
             <div className="vertical-line"></div>
             <div className="title-container">
               <h2 className="section-title">
-                Photo <span className="subtitle">Gallery</span>
+              {t("home.photo")} <span className="subtitle">{t("home.gallery")}</span>
               </h2>
             </div>
-            <Link to="/photo-gallery" className="view-all-link">View All</Link>
+            <Link to="/photo-gallery" className="view-all-link">{t("home.viewAll")}</Link>
           </div>
 
           <div className="row">
@@ -95,7 +97,7 @@ const GalleryAndCommunication = () => {
             <div className="vertical-line"></div>
             <div className="d-flex">
               <h2 className="section-title">
-                Citizen <span className="subtitle">Communication</span>
+              {t("home.citizen")} <span className="subtitle">{t("home.communication")}</span>
               </h2>
             </div>
           </div>

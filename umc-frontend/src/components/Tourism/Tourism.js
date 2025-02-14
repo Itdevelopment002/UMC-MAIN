@@ -3,24 +3,25 @@ import { Link } from "react-router-dom";
 import './Tourism.css';
 import { GrLocation } from "react-icons/gr";
 import api, { baseURL } from "../api";
-
+import { useTranslation } from "react-i18next";
 
 
 const Tourism = () => {
     const [gardensData, setGardensData] = useState([]);
     const [bgImage, setBgImage] = useState("");
+    const { i18n, t } = useTranslation();
 
     useEffect(() => {
         const fetchGardens = async () => {
             try {
-                const response = await api.get("/tourism");
+                const response = await api.get(`/tourism?lang=${i18n.language}`);
                 setGardensData(response.data);
             } catch (error) {
                 console.error("Error fetching tourism data:", error);
             }
         };
         fetchGardens();
-    }, []);
+    }, [i18n.language]);
     useEffect(() => {
         fetchHeaderImage();
     }, []);
@@ -79,7 +80,7 @@ const Tourism = () => {
                                             <Link to={location.location_link} target="_blank" className="text-decoration-none">
                                                 <button className="btn btn-primary location-btn">
                                                     <GrLocation style={{ marginRight: '8px', verticalAlign: 'middle' }} />
-                                                    Click here for the location
+                                                    {t("btn-title")}
                                                 </button>
                                             </Link>
                                         </div>

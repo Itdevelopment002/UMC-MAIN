@@ -3,7 +3,16 @@ const router = express.Router();
 const db = require("../config/db.js");
 
 router.get("/umc-news", (req, res) => {
-  db.query("SELECT * FROM umcnews", (err, results) => {
+  const language = req.query.lang;
+  let query;
+  let params = [];
+  if (language) {
+    query = `SELECT * FROM umcnews WHERE language_code = ?`;
+    params.push(language);
+  } else {
+    query = "SELECT * FROM umcnews";
+  }
+  db.query(query, params, (err, results) => {
     if (err) throw err;
     res.json(results);
   });

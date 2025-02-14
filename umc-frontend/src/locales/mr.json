@@ -1,0 +1,51 @@
+{
+    "header": {
+        "helpline": "हेल्पलाइन क्रमांक: ०२५१ २७२०१५०",
+        "rtsAct" : "आरटीएस कायदा २०१५",
+        "screenReader": "स्क्रीन रीडर प्रवेश",
+        "aMinus": "अ-",
+        "aPlus": "अ+",
+        "logoTitle": "उल्हासनगर महानगरपालिका"
+    },
+    "footer": {
+        "title": "उल्हासनगर",
+        "subtitle": "महानगरपालिका",
+        "quickLinks": "जलद दुवे",
+        "help": "मदत",
+        "onlineServices": "ऑनलाइन सेवा",
+        "copyWrite": "उल्हासनगर महानगरपालिका. सर्व हक्क राखीव.",
+        "totalVisitors" : "एकूण भेटी",
+        "designBy":"डिझाइन व विकसित केलेले: Infoigy",
+        "loading": "लोड करीत आहे ..."
+    },
+    "home": {
+        "currentUpdates": "वर्तमान अद्यतने",
+        "organization": "उल्हासनगर महानगरपालिका",
+        "info-heading2": "उल्हासनगर महानगरपालिका",
+        "readLess": "कमी वाचा...",
+        "readMore": "अधिक वाचा...",
+        "citizen": "नागरिक",
+        "services": "सेवा",
+        "UMCNews": " उ.म.पा. बातम्या",
+        "Initiatives-Programme": "उपक्रम व कार्यक्रम",
+        "e-Services" : "ई-सेवा",
+        "information" : "माहिती",
+        "upcomingProjects": "आगामी प्रकल्प",
+        "video": "व्हिडिओ",
+        "gallery" : "गॅलरी",
+        "loadingVideos": "व्हिडिओ लोड करत आहे...",
+        "photo" : "फोटो",
+        "viewAll": "सर्व पहा",
+        "communication": "संवाद",
+        "connect" : "आमच्याशी",
+        "withUs": "संपर्क साधा",
+        "facebook": "फेसबुकवरील उल्हासनगर महानगरपालिका (UMC)",
+        "twitter": "ट्विटरवरील उल्हासनगर महानगरपालिका (UMC)",
+        "youTube": "यूट्यूबवरील उल्हासनगर महानगरपालिका (UMC)"
+
+    },
+    "history-title1":"यूएमसीचा",
+    "history-title2":" इतिहास",
+    "commisioner-overview": "आयुक्तांचा थोडक्यात आढावा",
+    "btn-title":"स्थानासाठी येथे क्लिक करा"
+}

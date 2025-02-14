@@ -44,8 +44,16 @@ router.post("/commissioner-details", upload.single("coImage"), (req, res) => {
 });
 
 router.get("/commissioner-details", (req, res) => {
-  const sql = "SELECT * FROM commissioner_details";
-  db.query(sql, (err, results) => {
+  const language = req.query.lang;
+  let query;
+  let params = [];
+  if (language) {
+    query = `SELECT * FROM commissioner_details WHERE language_code = ?`;
+    params.push(language);
+  } else {
+    query = "SELECT * FROM commissioner_details";
+  }
+  db.query(query,params, (err, results) => {
     if (err) {
       return res.status(500).json({ message: "Database error", error: err });
     }
