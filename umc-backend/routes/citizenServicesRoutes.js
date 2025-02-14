@@ -95,12 +95,12 @@ router.put(
             path.join(__dirname, "../", oldMainIconPath)
           );
         }
-
         res.status(200).json({ message: "Citizen Service updated successfully" });
       });
     });
   }
 );
+
 
 router.get("/citizen-services", (req, res) => {
   const language = req.query.lang;
@@ -175,6 +175,7 @@ router.post(
   }
 );
 
+
 router.delete("/citizen-services/:id", async (req, res) => {
   const { id } = req.params;
 
@@ -204,5 +205,6 @@ router.delete("/citizen-services/:id", async (req, res) => {
     });
   });
 });
+
 
 module.exports = router;

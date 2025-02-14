@@ -9,6 +9,7 @@ router.get("/annual-finance", (req, res) => {
   });
 });
 
+
 router.post("/annual-finance", (req, res) => {
   const { heading, link } = req.body;
   const sql = "INSERT INTO annualfinance (heading, link) VALUES (?, ?)";
@@ -17,6 +18,7 @@ router.post("/annual-finance", (req, res) => {
     res.json({ id: result.insertId, heading, link });
   });
 });
+
 
 router.put("/annual-finance/:id", (req, res) => {
   const { heading, link } = req.body;
@@ -27,6 +29,7 @@ router.put("/annual-finance/:id", (req, res) => {
   });
 });
 
+
 router.delete("/annual-finance/:id", (req, res) => {
   const sql = "DELETE FROM annualfinance WHERE id = ?";
   db.query(sql, [req.params.id], (err, result) => {
@@ -34,5 +37,6 @@ router.delete("/annual-finance/:id", (req, res) => {
     res.json({ success: true });
   });
 });
+
 
 module.exports = router;

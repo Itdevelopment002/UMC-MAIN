@@ -138,7 +138,7 @@ const Budget = () => {
 
     return (
         <>
-             <div
+            <div
                 className="history-header-image"
                 style={{
                     backgroundImage: `url(${bgImage})`,
@@ -167,15 +167,22 @@ const Budget = () => {
 
                             {/* Dynamic Year Buttons */}
                             <div className="button-group mb-4 d-flex justify-content-start">
-                                {uniqueYears.map((year) => (
-                                    <button
-                                        key={year}
-                                        className={`btn ${selectedButton === year ? "active" : ""}`}
-                                        onClick={() => handleButtonClick(year)}
-                                    >
-                                        {year}
-                                    </button>
-                                ))}
+                                {[...uniqueYears]
+                                    .sort((a, b) => {
+                                        const yearA = parseInt(a.split("-")[0], 10);
+                                        const yearB = parseInt(b.split("-")[0], 10);
+                                        return yearB - yearA; // Sort in descending order
+                                    })
+                                    .map((year) => (
+                                        <button
+                                            key={year}
+                                            className={`btn ${selectedButton === year ? "active" : ""}`}
+                                            onClick={() => handleButtonClick(year)}
+                                        >
+                                            {year}
+                                        </button>
+                                    ))}
+
                             </div>
 
                             <div className="circular-wrapper mt-5">
