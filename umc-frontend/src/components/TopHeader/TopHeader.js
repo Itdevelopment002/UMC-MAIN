@@ -112,7 +112,7 @@ const TopHeader = () => {
                         }}
                         style={{ cursor: "pointer" }}
                     >
-                        Skip to main content
+                        {t("header.skipContent")}
                     </span>
                     <span className="divider">|</span>
                     <Link to="/screen-reader-access" className='text-decoration-none' style={{ color: "#333" }}>
