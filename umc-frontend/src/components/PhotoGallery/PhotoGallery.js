@@ -50,7 +50,7 @@ const PhotoGallery = () => {
           .then((response) => {
             setImages((prevImages) => ({
               ...prevImages,
-              [category.id]: response.data.map(image => `${baseURL}${image.image_url}`),
+              [category.id]: [...response.data].reverse().map(image => `${baseURL}${image.image_url}`),
             }));
             setCurrentIndices((prevIndices) => ({
               ...prevIndices,
@@ -61,6 +61,7 @@ const PhotoGallery = () => {
       });
     }
   }, [categories]);
+  
 
   useEffect(() => {
     GLightbox({ selector: ".glightbox" });
