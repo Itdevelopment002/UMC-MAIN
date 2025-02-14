@@ -40,7 +40,7 @@ const VideoGallery = () => {
           .then((response) => {
             setVideos((prevVideos) => ({
               ...prevVideos,
-              [category.id]: response.data.map(video => video.video_url),
+              [category.id]: [...response.data].reverse().map(video => video.video_url),
             }));
             setCurrentIndices((prevIndices) => ({
               ...prevIndices,
@@ -51,6 +51,7 @@ const VideoGallery = () => {
       });
     }
   }, [categories]);
+  
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
