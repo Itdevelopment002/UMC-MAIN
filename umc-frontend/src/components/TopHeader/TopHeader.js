@@ -44,7 +44,7 @@ const TopHeader = () => {
         i18n.changeLanguage(language);
     };
 
-   
+
 
     const getLanguageText = () => {
         if (selectedLanguage === "en") return "English";
@@ -99,8 +99,12 @@ const TopHeader = () => {
                 </div>
 
                 <div className="accessibility ">
-                    <Link to="/rts-act-2015">
+                    {/* <Link to="/rts-act-2015">
                         <button className="rts-act-button">{t("header.rtsAct")}</button>
+                    </Link> 
+                    <span className="divider">|</span>*/}
+                    <Link to="/screen-reader-access" className='text-decoration-none' style={{ color: "#333" }}>
+                        <span>Screen Reader Access</span>
                     </Link>
                     <span className="divider">|</span>
                     <Link to="/screen-reader-access" className='text-decoration-none' style={{ color: "#333" }}>
