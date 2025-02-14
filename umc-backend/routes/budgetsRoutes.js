@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 const db = require("../config/db.js");
 
-// Get all budget records
 router.get("/budgets_data", (req, res) => {
   db.query("SELECT * FROM budgets", (err, results) => {
     if (err) throw err;
@@ -10,7 +9,7 @@ router.get("/budgets_data", (req, res) => {
   });
 });
 
-// Add a new budget record
+
 router.post("/budgets_data", (req, res) => {
   const { year, heading, link } = req.body;
   const sql = "INSERT INTO budgets (year, heading, link) VALUES (?, ?, ?)";
@@ -20,7 +19,7 @@ router.post("/budgets_data", (req, res) => {
   });
 });
 
-// Update a budget record
+
 router.put("/budgets_data/:id", (req, res) => {
   const { year, heading, link } = req.body;
   const sql = "UPDATE budgets SET year = ?, heading = ?, link = ? WHERE id = ?";
@@ -30,7 +29,7 @@ router.put("/budgets_data/:id", (req, res) => {
   });
 });
 
-// Delete a budget record
+
 router.delete("/budgets_data/:id", (req, res) => {
   const sql = "DELETE FROM budgets WHERE id = ?";
   db.query(sql, [req.params.id], (err, result) => {
@@ -38,5 +37,6 @@ router.delete("/budgets_data/:id", (req, res) => {
     res.json({ success: true });
   });
 });
+
 
 module.exports = router;

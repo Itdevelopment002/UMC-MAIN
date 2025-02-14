@@ -1,7 +1,8 @@
 import "./i18n"; // Ensure this is imported once
 import "./App.css";
 import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Route, Routes, useParams, Navigate } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes, useParams, Navigate, useLocation } from "react-router-dom";
+
 import AOS from "aos";
 import "aos/dist/aos.css";
 import Home from "./components/Home/Home";
@@ -40,13 +41,12 @@ import ETender from "./components/ETender/ETender";
 import loaderimage from "./assets/loader_trans.gif";
 import ContactUs from "./components/ContactUs/ContactUs";
 import Departments from "./components/Departments/Departments";
-// import ControllerDept from './components/ControllerDepartment/ControllerDept'
-import ElectricalDept from './components/ElectricalDept/ElectricalDept'
-import EducationDept from './components/EducationDept/EducationDept'
-import ElectionDept from './components/ElectionDept/ElectionDept'
-import GardenDept from './components/GardenDept/GardenDept'
-import LBTDept from './components/LBTDept/LBTDept'
-import LegalDept from './components/LegalDept/LegalDept'
+import ElectricalDept from './components/ElectricalDept/ElectricalDept';
+import EducationDept from './components/EducationDept/EducationDept';
+import ElectionDept from './components/ElectionDept/ElectionDept';
+import GardenDept from './components/GardenDept/GardenDept';
+import LBTDept from './components/LBTDept/LBTDept';
+import LegalDept from './components/LegalDept/LegalDept';
 import MarketLicensingDept from "./components/MarketLicensingDept/MarketLicensingDept";
 import MedicalHealthDept from "./components/MedicalHealthDept/MedicalHealthDept";
 import MunicipalSecretaryDept from "./components/MunicipalSecretaryDept/MunicipalSecretaryDept";
@@ -84,15 +84,13 @@ import MayorOffice from "./components/MayorOffice/MayorOffice";
 import Quotations from "./components/Quotations/Quotations";
 import StandingCommittee from "./components/StandingCommittee/StandingCommittee";
 import SubjectCommittee from "./components/SubjectCommittee/SubjectCommittee";
-import Authorities from "./components//Authorities/Authorities";
+import Authorities from "./components/Authorities/Authorities";
 import WardCommittee from "./components/WardCommittee/WardCommittee";
 import CustomerSupport from "./components/CustomerSupport/CustomerSupport";
 import ScreenReader from "./components/ScreenReader/ScreenReader";
 import ProactiveDisclosure from "./components/ProactiveDisclosure/ProactiveDisclosure";
 import SubRti from "./components/SubRti/SubRti";
 import { useTranslation } from "react-i18next";
-
-
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -117,6 +115,34 @@ function App() {
     return () => clearTimeout(timer);
   }, []);
 
+  const GlobalFontHandler = () => {
+    const location = useLocation();
+
+    useEffect(() => {
+      const applyFontBasedOnLanguage = () => {
+        const translatedText = document.querySelector("html").lang;
+        if (translatedText === "mr") {
+          applyFontFamily("Mukta, sans-serif");
+        } else {
+          applyFontFamily("");
+        }
+      };
+
+      // Apply font family on route change
+      applyFontBasedOnLanguage();
+    }, [location]);
+
+    return null; // This component doesn't render anything
+  };
+
+  const applyFontFamily = (font) => {
+    document.body.style.fontFamily = font;
+    document.documentElement.style.setProperty("--global-font-family", font);
+    document.querySelectorAll("*").forEach((el) => {
+      el.style.fontFamily = font;
+    });
+  };
+
   return (
     <>
       {loading ? (
@@ -130,10 +156,10 @@ function App() {
         </div>
       ) : (
         <>
+          <GlobalFontHandler /> {/* Add the GlobalFontHandler here */}
           <Header data-aos="fade-down" />
           <StickyFeedback data-aos="fade-right" />
           <Routes>
-
             {/* Home */}
             <Route path="/" element={<Home data-aos="fade-up" />} />
             <Route path="/screen-reader-access" element={<ScreenReader data-aos="fade-up" />} />
@@ -165,7 +191,6 @@ function App() {
             <Route path="/accounts-department" element={<AccountsDepartment data-aos="zoom-in-up" />} />
             <Route path="/audit-department" element={<AuditDepartment data-aos="fade-right" />} />
             <Route path="/computer-department" element={<ComputerIt data-aos="fade-left" />} />
-            {/* <Route path="/controller-department" element={<ControllerDept />} /> */}
             <Route path="/disaster-management-department" element={<DisasterManagement data-aos="fade-right" />} />
             <Route path="/education-department" element={<EducationDept />} />
             <Route path="/election-department" element={<ElectionDept />} />
@@ -173,7 +198,7 @@ function App() {
             <Route path="/encroachment-department" element={<EncroachmentDepartment data-aos="flip-right" />} />
             <Route path="/environment-department" element={<EnvironmentDepartment data-aos="zoom-in" />} />
             <Route path="/estate-department" element={<EstateDepartment data-aos="zoom-in" />} />
-            <Route path="garden-department" element={<GardenDept />} />
+            <Route path="/garden-department" element={<GardenDept />} />
             <Route path="/general-administrative-department" element={<GeneralAdminDept data-aos="zoom-in" />} />
             <Route path="/handicap-welfare-scheme" element={<HandicapWelfareScheme data-aos="fade-up" />} />
             <Route path="/lbt-department" element={<LBTDept />} />
@@ -244,7 +269,6 @@ function App() {
           <WhatsAppChat data-aos="fade-right" />
           <Footer data-aos="fade-down" />
         </>
-
       )}
     </>
   );

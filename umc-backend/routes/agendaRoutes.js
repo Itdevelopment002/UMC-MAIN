@@ -17,7 +17,7 @@ router.get("/agenda_data", (req, res) => {
   });
 });
 
-// Add a new agenda
+
 router.post("/agenda_data", (req, res) => {
   const { Department_Name, Agenda_No_Date, Schedule_Date_of_Meeting, Adjournment_Notice, pdf_link } = req.body;
   const formattedDate = convertToMySQLDate(Schedule_Date_of_Meeting);
@@ -40,7 +40,7 @@ router.post("/agenda_data", (req, res) => {
     });
 });
 
-// Update an existing agenda
+
 router.put("/agenda_data/:Sr_No", (req, res) => {
   const { Department_Name, Agenda_No_Date, Schedule_Date_of_Meeting, Adjournment_Notice, pdf_link } = req.body;
   const formattedDate = Schedule_Date_of_Meeting ? convertToMySQLDate(Schedule_Date_of_Meeting) : null;
@@ -62,7 +62,7 @@ router.put("/agenda_data/:Sr_No", (req, res) => {
   );
 });
 
-// Delete a agenda
+
 router.delete("/agenda_data/:Sr_No", (req, res) => {
   const sql = "DELETE FROM agenda WHERE Sr_No = ?";
   db.query(sql, [req.params.Sr_No], (err, result) => {
@@ -73,5 +73,6 @@ router.delete("/agenda_data/:Sr_No", (req, res) => {
     res.json({ success: true });
   });
 });
+
 
 module.exports = router;
