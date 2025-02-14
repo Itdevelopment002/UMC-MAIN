@@ -20,18 +20,18 @@ router.get("/information", (req, res) => {
 });
 
 router.post("/information", (req, res) => {
-  const { heading, link } = req.body;
-  const sql = "INSERT INTO information (heading, link) VALUES (?, ?)";
-  db.query(sql, [heading, link], (err, result) => {
+  const { heading, link, language_code } = req.body;
+  const sql = "INSERT INTO information (heading, link, language_code) VALUES (?, ?, ?)";
+  db.query(sql, [heading, link, language_code], (err, result) => {
     if (err) throw err;
     res.json({ id: result.insertId, heading, link });
   });
 });
 
 router.put("/information/:id", (req, res) => {
-  const { heading, link } = req.body;
-  const sql = "UPDATE information SET heading = ?, link = ? WHERE id = ?";
-  db.query(sql, [heading, link, req.params.id], (err, result) => {
+  const { heading, link, language_code } = req.body;
+  const sql = "UPDATE information SET heading = ?, link = ?, language_code= ? WHERE id = ?";
+  db.query(sql, [heading, link,language_code, req.params.id], (err, result) => {
     if (err) throw err;
     res.json({ success: true });
   });
