@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useTranslation } from "react-i18next";
 import "./Header.css";
-import { Link } from "react-router-dom";
+import { Link} from "react-router-dom";
 import Mainlogo from "../../assets/images/header-img/logo 1.png";
 import Headlogo1 from "../../assets/images/header-img/headerlogo1.png";
 import Headlogo2 from "../../assets/images/header-img/aaple-sarkar.jpg";
@@ -15,6 +16,7 @@ const Navbar = () => {
     const [isNavCollapsed, setIsNavCollapsed] = useState(true);
     const location = useLocation();
     const navRef = useRef(null);
+    const { i18n, t } = useTranslation();
 
 
     const toggleNav = () => {
@@ -27,7 +29,7 @@ const Navbar = () => {
 
     const fetchMenuData = async () => {
         try {
-            const response = await api.get("/main-menus");
+            const response = await api.get(`/main-menus?lang=${i18n.language}`);
             setMenuData(response.data);
         } catch (error) {
             console.error("Error fetching menu data:", error);
@@ -36,7 +38,7 @@ const Navbar = () => {
 
     useEffect(() => {
         fetchMenuData();
-    }, []);
+    }, [i18n.language]);
 
     const handleNavClick = (link) => {
         const nonNavigableLinks = [
@@ -111,10 +113,9 @@ const Navbar = () => {
 
 
     const renderDropdown = (menu) => {
-
         const dropdownClass = generateDropdownClass(menu.mainMenu);
 
-        if (menu.mainMenu === "Departments" || menu.mainMenu === "Corporation" || menu.mainMenu === "Online Services") {
+        if (menu.mainMenu === "Departments" || menu.mainMenu === "Corporation" || menu.mainMenu === "Online Services" || menu.mainMenu === "विभाग" || menu.mainMenu === "महानगरपालिका" || menu.mainMenu === "ऑनलाइन सेवा") {
             const columnCount = menu.mainMenu === "Online Services" ? 2 : 3;
             const columns = splitIntoColumns(menu.subMenus, columnCount);
             return (
@@ -207,7 +208,7 @@ const Navbar = () => {
                     <div className="logo d-flex">
                         <img src={Mainlogo} alt="Logo" className="logo-img" />
                         <div className="mt-2">
-                            <h1 className="brand-name">ULHASNAGAR MUNICIPAL CORPORATION</h1>
+                            <h1 className="brand-name">{t("header.logoTitle")}</h1>
                         </div>
                     </div>
                 </Link>

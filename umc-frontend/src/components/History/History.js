@@ -2,19 +2,21 @@ import React, { useEffect, useState } from "react";
 import "./History.css";
 import api, { baseURL } from "../api";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const History = () => {
   const [gallerys, setGallerys] = useState([]);
   const [firstTwo, setFirstTwo] = useState([]);
   const [remainingDesc, setRemainingDesc] = useState([]);
   const [bgImage, setBgImage] = useState("");
+  const { i18n, t } = useTranslation();
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
     fetchGallerys();
     fetchDesc();
     fetchHeaderImage();
-  }, []);
+  }, [i18n.language]);
 
   const fetchGallerys = async () => {
     try {
@@ -27,7 +29,7 @@ const History = () => {
 
   const fetchDesc = async () => {
     try {
-      const response = await api.get("/history_desc");
+      const response = await api.get(`/history_desc?lang=${i18n.language}`);
       setFirstTwo(response.data.slice(0, 2));
       setRemainingDesc(response.data.slice(2));
     } catch (error) {
@@ -90,8 +92,10 @@ const History = () => {
             <div className="col-lg-9 col-md-8 col-sm-12 col-12 content">
               <div className="history-section">
                 <h2 className="history-title">
-                  <span className="highlight">History</span>
-                  <span className="highlighted-text"> of UMC</span>
+                  {/* <span className="highlight">History</span>
+                  <span className="highlighted-text"> of UMC</span> */}
+                  <span className="highlight">{t("history-title1")}</span>
+                  <span className="highlighted-text"> {t("history-title2")}</span>
                 </h2>
                 {firstTwo.map((item, index) => (
                   <div key={index}>

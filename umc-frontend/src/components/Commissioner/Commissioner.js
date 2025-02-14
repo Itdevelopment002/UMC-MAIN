@@ -9,6 +9,7 @@ import cicon4 from "../../assets/images/commissioner/Vector (5).png";
 import cicon5 from "../../assets/images/commissioner/Vector (6).png";
 import cicon6 from "../../assets/images/commissioner/Vector (7).png";
 import api, { baseURL } from "../api";
+import { useTranslation } from "react-i18next";
 
 
 const Commissioner = () => {
@@ -16,17 +17,18 @@ const Commissioner = () => {
   const [coData, setCoData] = useState([]);
   const [descData, setDescData] = useState([]);
   const [bgImage, setBgImage] = useState("");
+  const { i18n, t } = useTranslation();
 
   useEffect(() => {
     fetchCoData();
     fetchDescData();
     fetchHeaderImage();
-  }, []);
+  }, [i18n.language]);
 
 
   const fetchCoData = async () => {
     try {
-      const response = await api.get("/commissioner-details");
+      const response = await api.get(`/commissioner-details?lang=${i18n.language}`);
       setCoData(response.data);
     } catch (error) {
       console.error("Failed to fetch Commissioner Details data!");
@@ -34,7 +36,7 @@ const Commissioner = () => {
   };
   const fetchDescData = async () => {
     try {
-      const response = await api.get("/commissioner-desc");
+      const response = await api.get(`/commissioner-desc?lang=${i18n.language}`);
       setDescData(response.data);
     } catch (error) {
       console.error("Failed to fetch Commissioner description data!");
@@ -183,7 +185,8 @@ const Commissioner = () => {
           <div className="row mt-4">
             <div className="col-lg-12 col-md-12 col-sm-12 col-12">
               <div className="commisioner-overview">
-                <h4>Brief Overview of the Commissioner</h4>
+               {/*  <h4>Brief Overview of the Commissioner</h4> */}
+                <h4>{t("commisioner-overview")}</h4>
               </div>
               {descData.length > 0 ? (
                 descData.map((item, index) => (

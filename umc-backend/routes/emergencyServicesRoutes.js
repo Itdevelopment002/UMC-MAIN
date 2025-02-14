@@ -27,8 +27,17 @@ const deleteFileIfExists = async (filePath) => {
 };
 
 router.get("/emergency-services", (req, res) => {
-  const sql = "SELECT * FROM emergencyservices";
-  db.query(sql, (err, results) => {
+  const language = req.query.lang;
+  let query;
+  let params = [];
+  if (language) {
+    query = `SELECT * FROM emergencyservices WHERE language_code = ?`;
+    params.push(language);
+  } else {
+    query = "SELECT * FROM emergencyservices";
+  }
+
+  db.query(query, params, (err, results) => {
     if (err) {
       return res.status(500).json({ message: "Database error", error: err });
     }

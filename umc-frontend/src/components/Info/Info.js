@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import api, { baseURL } from "../api"
+import { useTranslation } from "react-i18next";
 
 const Info = () => {
   const [activeButton, setActiveButton] = useState(1);
@@ -12,6 +13,7 @@ const Info = () => {
   const [desc, setDesc] = useState([]);
   const [expanded, setExpanded] = useState(false);
   const colors = ["#42B8F9", "#F8D05C", "#5FD35F", "#F5507A", "#A57BF6"];
+  const { i18n, t } = useTranslation();
 
   useEffect(() => {
     AOS.init({
@@ -22,7 +24,7 @@ const Info = () => {
 
   const fetchDesc = async () => {
     try {
-      const response = await api.get("/history_desc");
+      const response = await api.get(`/history_desc?lang=${i18n.language}`);
       setDesc(response.data);
     } catch (error) {
       console.error("Error fetching desc.");
@@ -31,7 +33,7 @@ const Info = () => {
 
   const fetchCoData = async () => {
     try {
-      const response = await api.get("/commissioner-details");
+      const response = await api.get(`/commissioner-details?lang=${i18n.language}`);
       setCoData(response.data);
     } catch (error) {
       console.error("Failed to fetch Commissioner Details data!", error);
@@ -40,7 +42,7 @@ const Info = () => {
 
   const fetchServices = async () => {
     try {
-      const response = await api.get("/home-services1");
+      const response = await api.get(`/home-services1?lang=${i18n.language}`);
       setServices(response.data);
     } catch (error) {
       console.error("Error fetching services", error);
@@ -51,7 +53,7 @@ const Info = () => {
     fetchServices();
     fetchDesc();
     fetchCoData();
-  }, []);
+  }, [i18n.language]);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -78,16 +80,15 @@ const Info = () => {
                 className="profile-image"
               />
               <h5 className="custom-name">{coData[0]?.coName} </h5>
-            
-              <p className="custom-title"> {console.log("Designation:", coData[0]?.designation)}{coData[0]?.designation}</p>
-              
-              <p className="organization">Ulhasnagar Municipal Corporation</p>
+              <p className="custom-title">{coData[0]?.designation}</p>
+              <p className="organization">{t('home.organization')}</p>
+
             </div>
           </div>
 
           <div className="col-lg-6 col-md-12 welcome-section" data-aos="fade-down">
             <div className="heading">
-              <h1 data-aos="fade-up" className="info-heading1"><span className="info-heading2 fw-bold">Ulhasnagar Municipal Corporation</span></h1>
+              <h1 data-aos="fade-up" className="info-heading1"><span className="info-heading2 fw-bold">{t('home.info-heading2')}</span></h1>
             </div>
             <div
               className="description-container"
@@ -114,7 +115,7 @@ const Info = () => {
             </div>
 
             <button className="see-more-btn" onClick={toggleDescription}>
-              {expanded ? "Read Less.." : "Read More..."}
+              {expanded ? t("home.readLess") : t("home.readMore")}
             </button>
 
 

@@ -1,6 +1,8 @@
+import "./i18n"; // Ensure this is imported once
 import "./App.css";
 import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Route, Routes, useLocation } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes, useParams, Navigate, useLocation } from "react-router-dom";
+
 import AOS from "aos";
 import "aos/dist/aos.css";
 import Home from "./components/Home/Home";
@@ -88,9 +90,15 @@ import CustomerSupport from "./components/CustomerSupport/CustomerSupport";
 import ScreenReader from "./components/ScreenReader/ScreenReader";
 import ProactiveDisclosure from "./components/ProactiveDisclosure/ProactiveDisclosure";
 import SubRti from "./components/SubRti/SubRti";
+import { useTranslation } from "react-i18next";
 
 function App() {
   const [loading, setLoading] = useState(true);
+  const { i18n, t } = useTranslation();
+
+  useEffect(() => {
+    i18n.changeLanguage(i18n.language);
+  }, [i18n]);
 
   useEffect(() => {
     AOS.init({
@@ -136,7 +144,7 @@ function App() {
   };
 
   return (
-    <Router>
+    <>
       {loading ? (
         <div className="loader-container d-flex items-center">
           <img
@@ -262,7 +270,7 @@ function App() {
           <Footer data-aos="fade-down" />
         </>
       )}
-    </Router>
+    </>
   );
 }
 

@@ -10,11 +10,37 @@ import twitter from '../../assets/images/header-img/twitter.png';
 import facebook from '../../assets/images/header-img/facebook.png';
 import instagram from '../../assets/images/header-img/instagram (2).png';
 import youtube from '../../assets/images/header-img/Youtube.png';
-import { useTranslation } from "react-i18next";
 
 const TopHeader = () => {
-    const [selectedLanguage, setSelectedLanguage] = useState("mr");
-    const { i18n, t } = useTranslation();
+    const [selectedLanguage, setSelectedLanguage] = useState("mar");
+
+    useEffect(() => {
+        if (
+            !document.querySelector(
+                'script[src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"]'
+            )
+        ) {
+            const googleTranslateScript = document.createElement("script");
+            googleTranslateScript.src =
+                "//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
+            document.body.appendChild(googleTranslateScript);
+        }
+
+        window.googleTranslateElementInit = () => {
+            new window.google.translate.TranslateElement(
+                {
+                    pageLanguage: "en",
+                    includedLanguages: "en,hi,mr",
+                    layout: window.google.translate.TranslateElement.InlineLayout.HORIZONTAL,
+                },
+                "google_translate_element"
+            );
+
+            setTimeout(() => {
+                updateGoogleTranslate("mar");
+            }, 1000);
+        };
+    }, []);
 
     useEffect(() => {
         const observer = new MutationObserver(() => {
@@ -41,16 +67,36 @@ const TopHeader = () => {
 
     const handleLanguageChange = (language) => {
         setSelectedLanguage(language);
-        i18n.changeLanguage(language);
+        updateGoogleTranslate(language);
     };
 
-   
+    const updateGoogleTranslate = (language) => {
+        const googleTranslateDropdown = document.querySelector(".goog-te-combo");
+
+        if (googleTranslateDropdown) {
+            const langCode = language === "eng" ? "en" : language === "hin" ? "hi" : "mr";
+            googleTranslateDropdown.value = langCode;
+
+            googleTranslateDropdown.dispatchEvent(new Event("change"));
+
+            setTimeout(() => {
+                const iframe = document.querySelector("iframe.goog-te-menu-frame");
+                if (iframe) {
+                    const select = iframe.contentWindow.document.querySelector("select");
+                    if (select) {
+                        select.value = langCode;
+                        select.dispatchEvent(new Event("change"));
+                    }
+                }
+            }, 1000);
+        }
+    };
 
     const getLanguageText = () => {
-        if (selectedLanguage === "en") return "English";
-        if (selectedLanguage === "hi") return "हिंदी";
-        if (selectedLanguage === "mr") return "मराठी";
-        return "English";
+        if (selectedLanguage === "eng") return "English";
+        if (selectedLanguage === "hin") return "हिंदी";
+        if (selectedLanguage === "mar") return "मराठी";
+        return "मराठी";
     };
     const [defaultfontSize, setDefaultFontSize] = useState(16);
     const [fontSize, setFontSize] = useState({
@@ -94,51 +140,66 @@ const TopHeader = () => {
                 <div className="helpline">
                     <Link to="tel:02512720150" className="helpline-link">
                         <img src={phoneicon} alt="Phone Icon" className="helpline-icon" />
-                        {t("header.helpline")}
+                        Helpline No: 0251 2720150
                     </Link>
                 </div>
 
                 <div className="accessibility ">
                     <Link to="/rts-act-2015">
-                        <button className="rts-act-button">{t("header.rtsAct")}</button>
+                        <button className="rts-act-button">RTS Act 2015</button>
                     </Link>
                     <span className="divider">|</span>
                     <Link to="/screen-reader-access" className='text-decoration-none' style={{ color: "#333" }}>
-                        <span>{t("header.screenReader")}</span>
+                        <span>Screen Reader Access</span>
                     </Link>
                     <span className="divider">|</span>
-                    <button onClick={handleDecreaseFontSize} className="text-size-btn">{t("header.aMinus")}</button>
+                    <button onClick={handleDecreaseFontSize} className="text-size-btn">A-</button>
                     <span className="divider">|</span>
-                    <button onClick={handleIncreaseFontSize} className="text-size-btn">{t("header.aPlus")}</button>
+                    <button onClick={handleIncreaseFontSize} className="text-size-btn">A+</button>
                     <span className="divider">|</span>
                     <div className="custom-dropdown">
                         <div className="selected-language">
+                            {/* <img
+                                src={
+                                    selectedLanguage === "eng"
+                                    ? flag1 
+                                    : selectedLanguage === "hin"
+                                    ? flag2 
+                                    : flag3 
+                                }
+                                alt={getLanguageText()}
+                                className="flag-icon"
+                            /> */}
                             <span>{getLanguageText()}</span>
                             <RiArrowDropDownLine size={25} />
                         </div>
 
                         <div className="dropdown-options">
                             <div
-                                className={`dropdown-option ${selectedLanguage === "en" ? "selected" : ""}`}
-                                onClick={() => handleLanguageChange("en")}
+                                className={`dropdown-option ${selectedLanguage === "eng" ? "selected" : ""}`}
+                                onClick={() => handleLanguageChange("eng")}
                             >
+                                {/* <img src={flag1} alt="English" className="flag-icon" /> */}
                                 English
                             </div>
-                            {/* <div
-                                className={`dropdown-option ${selectedLanguage === "hi" ? "selected" : ""}`}
-                                onClick={() => handleLanguageChange("hi")}
-                            >
-                                हिंदी
-                            </div> */}
                             <div
-                                className={`dropdown-option ${selectedLanguage === "mr" ? "selected" : ""}`}
-                                onClick={() => handleLanguageChange("mr")}
+                                className={`dropdown-option ${selectedLanguage === "hin" ? "selected" : ""}`}
+                                onClick={() => handleLanguageChange("hin")}
                             >
+                                {/* <img src={flag2} alt="Hindi" className="flag-icon" /> */}
+                                हिंदी
+                            </div>
+                            <div
+                                className={`dropdown-option ${selectedLanguage === "mar" ? "selected" : ""}`}
+                                onClick={() => handleLanguageChange("mar")}
+                            >
+                                {/* <img src={flag3} alt="Marathi" className="flag-icon" /> */}
                                 मराठी
                             </div>
                         </div>
                     </div>
 
+                    <div id="google_translate_element" style={{ display: "none" }}></div>
 
                     <div className="social-icons top-bar-social-media d-flex">
                         <Link to="https://twitter.com/my_umcofficial" target="_blank" className="social-link">

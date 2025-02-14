@@ -5,6 +5,7 @@ import vector from "../../assets/images/citizen-services/vector-1.png";
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import api, { baseURL } from "../api";
+import { useTranslation } from "react-i18next";
 
 
 const CitizenServices = () => {
@@ -14,13 +15,15 @@ const CitizenServices = () => {
   const [information, setInformation] = useState([]);
   const [projects, setProjects] = useState([]);
   const [activeInfoIndex, setActiveInfoIndex] = useState(null);
+  const { i18n, t } = useTranslation();
+
   useEffect(() => {
     fetchServices();
     fetchVideos();
     fetchHomeServices1();
     fetchInformation();
     fetchProjects();
-  }, []);
+  }, [i18n.language]);
 
   useEffect(() => {
     if (scrollContainerRef.current) {
@@ -70,7 +73,7 @@ const CitizenServices = () => {
   };
   const fetchInformation = async () => {
     try {
-      const response = await api.get("/information");
+      const response = await api.get(`/information?lang=${i18n.language}`);
       setInformation(response.data.reverse());
     } catch (error) {
       console.error("Error Fetching information!", error);
@@ -79,7 +82,7 @@ const CitizenServices = () => {
 
   const fetchProjects = async () => {
     try {
-      const response = await api.get("/projects");
+      const response = await api.get(`/projects?lang=${i18n.language}`);
       setProjects(response.data.reverse());
     } catch (error) {
       console.error("Error Fetching projects!", error);
@@ -107,7 +110,7 @@ const CitizenServices = () => {
 
   const fetchHomeServices1 = async () => {
     try {
-      const response = await api.get("/home-services2");
+      const response = await api.get(`/home-services2?lang=${i18n.language}`);
       setHomeServices1(response.data);
     } catch (error) {
       console.error("Error fetching services:", error);
@@ -142,7 +145,7 @@ const CitizenServices = () => {
         <div className="row py-2 d-flex flex-wrap justify-content-between" >
           <div className="col-xl-3 col-lg-6 col-md-6 col-sm-12 e-services-margin right-section-font">
             <div className="upcoming-projects bg-white p-2">
-              <h5 className="p-2 h5-styling-div">Information</h5>
+              <h5 className="p-2 h5-styling-div">{t("home.information")}</h5>
               <div className="scroll-wrapper">
                 <div
                   className="info-scroll-container"
@@ -191,7 +194,7 @@ const CitizenServices = () => {
 
           <div className="col-xl-3 col-lg-6 col-md-6 col-sm-12 e-services-margin right-section-font">
             <div className="upcoming-projects bg-white p-2">
-              <h5 className="p-2 h5-styling-5">Upcoming Projects</h5>
+              <h5 className="p-2 h5-styling-5">{t("home.upcomingProjects")}</h5>
               <div className="scroll-wrapper">
                 <div
                   className="scroll-container"
@@ -250,7 +253,7 @@ const CitizenServices = () => {
               <div className="vertical-line"></div>
               <div className="d-flex">
                 <h2 className="section-title">
-                  Video <span className="subtitle">Gallery</span>
+                {t("home.video")} <span className="subtitle">{t("home.gallery")}</span>
                 </h2>
               </div>
             </div>
@@ -275,7 +278,7 @@ const CitizenServices = () => {
                 ))
               ) : (
                 <div className="col-12">
-                  <p>Loading videos...</p>
+                  <p>{t("home.loadingVideos")}</p>
                 </div>
               )}
             </div>
