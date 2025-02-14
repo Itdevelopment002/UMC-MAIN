@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "server.js",
   "scripts": {
-    "start": "server.js"
+    "start": "nodemon server.js"
   },
   "keywords": [],
   "author": "",
@@ -19,7 +19,7 @@
     "mysql": "^2.18.1",
     "mysql2": "^3.11.3",
     "nodemailer": "^6.9.16",
-    "nodemon": "^3.1.7",
+    "nodemon": "^3.1.9",
     "uuid": "^11.0.2"
   }
 }

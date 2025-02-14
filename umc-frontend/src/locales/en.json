@@ -1,0 +1,51 @@
+{
+    "header": {
+        "helpline": "Helpline No: 0251 2720150",
+        "rtsAct" : "RTS Act 2015",
+        "screenReader": "Screen Reader Access",
+        "aMinus": "A-",
+        "aPlus": "A+",
+        "logoTitle": "ULHASNAGAR MUNICIPAL CORPORATION"
+    },
+    "footer": {
+        "title": "Ulhasnagar",
+        "subtitle": "Municipal Corporation",
+        "quickLinks": "Quick Links",
+        "help": "Help",
+        "onlineServices": "Online Services",
+        "copyWrite": "Ulhasnagar Municipal Corporation. All Rights Reserved.",
+        "totalVisitors" : "Total Visitors",
+        "designBy":"Design & Developed by Infoigy",
+        "loading": "Loading ..."
+    },
+    "home": {
+        "currentUpdates": "Current Updates",
+        "organization": "Ulhasnagar Municipal Corporation",
+        "info-heading2": "Ulhasnagar Municipal Corporation",
+        "readLess": "Read Less...",
+        "readMore": "Read More...",
+        "citizen": "Citizen",
+        "services": "Services",
+        "UMCNews": "UMC News",
+        "Initiatives-Programme": "Initiatives-Programme",
+        "e-Services" : "e-Services",
+        "information" : "Information",
+        "upcomingProjects": "Upcoming Projects",
+        "video": "Video",
+        "gallery" : "Gallery",
+        "loadingVideos": "Loading videos...",
+        "photo" : "Photo",
+        "viewAll": "View All",
+        "communication": "Communication",
+        "connect" : "Connect",
+        "withUs": "with us",
+        "facebook": "UMC on Facebook",
+        "twitter": "UMC on Twitter",
+        "youTube": " UMC on YouTube"
+
+    },
+    "history-title1":"History",
+    "history-title2":" of UMC",
+    "commisioner-overview": "Brief Overview of the Commissioner",
+    "btn-title":"Click here for the location"
+}

@@ -3,8 +3,9 @@ const router = express.Router();
 const db = require("../config/db.js");
 
 router.get("/commissioner-desc", (req, res) => {
-  const sql = "SELECT * FROM commissioner_desc";
-  db.query(sql, (err, results) => {
+  const language = req.query.lang || "en"; // Default to English
+  const sql = "SELECT * FROM commissioner_desc WHERE language_code = ?;";
+  db.query(sql,[language], (err, results) => {
     if (err) {
       return res.status(500).json({ message: "Database error", error: err });
     }

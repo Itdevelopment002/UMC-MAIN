@@ -41,8 +41,17 @@ router.post("/minister-details", upload.single("image"), (req, res) => {
 });
 
 router.get("/minister-details", (req, res) => {
+  const language = req.query.lang;
+  let query;
+  let params = [];
+  if (language) {
+    query = `SELECT * FROM minister WHERE language_code = ?`;
+    params.push(language);
+  } else {
+    query = "SELECT * FROM minister";
+  }
   const sql = "SELECT * FROM minister";
-  db.query(sql, (err, results) => {
+  db.query(query, params, (err, results) => {
     if (err) {
       return res.status(500).json({ message: "Database error", error: err });
     }

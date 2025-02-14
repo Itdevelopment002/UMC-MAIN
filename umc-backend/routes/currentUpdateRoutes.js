@@ -25,8 +25,16 @@ router.post("/current-update", (req, res) => {
 
 
 router.get("/current-update", (req, res) => {
-  const sql = "SELECT * FROM currentupdate";
-  db.query(sql, (err, results) => {
+  const language = req.query.lang;
+  let query;
+  let params = [];
+  if (language) {
+    query = `SELECT * FROM currentupdate WHERE language_code = ?`;
+    params.push(language);
+  } else {
+    query = "SELECT * FROM currentupdate";
+  }
+  db.query(query, params, (err, results) => {
     if (err) {
       return res.status(500).json({ message: "Database error", error: err });
     }

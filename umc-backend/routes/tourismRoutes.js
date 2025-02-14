@@ -58,8 +58,9 @@ router.post("/tourism", uploadFields, (req, res) => {
 
 // Fetch All Tourism Data
 router.get("/tourism", (req, res) => {
-  const sql = "SELECT * FROM ad_tourism";
-  db.query(sql, (err, results) => {
+  const language = req.query.lang || "en"; // Default to English
+  const sql = "SELECT * FROM ad_tourism WHERE language_code = ?;";
+  db.query(sql,[language], (err, results) => {
     if (err) {
       return res.status(500).json({ message: "Database error", error: err });
     }

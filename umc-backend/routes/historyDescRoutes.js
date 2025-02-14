@@ -3,7 +3,16 @@ const router = express.Router();
 const db = require("../config/db.js");
 
 router.get("/history_desc", (req, res) => {
-  db.query("SELECT * FROM history_desc", (err, results) => {
+  const language = req.query.lang;
+  let query;
+  let params = [];
+  if (language) {
+    query = `SELECT * FROM history_desc WHERE language_code = ?`;
+    params.push(language);
+  } else {
+    query = "SELECT * FROM history_desc";
+  }
+  db.query(query, params, (err, results) => {
     if (err) {
       return res.status(500).json({ message: "Error fetching descriptions" });
     }

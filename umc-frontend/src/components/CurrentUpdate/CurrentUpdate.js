@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import "./CurrentUpdate.css";
 import api from "../api"
+import { useTranslation } from "react-i18next";
 
 const CurrentUpdate = () => {
   const [animationState, setAnimationState] = useState({});
   const [updates, setUpdates] = useState([]);
+  const { i18n, t } = useTranslation();
 
   const handleMouseEnter = () => {
     const marquee = document.querySelector(".marquee-content");
@@ -37,7 +39,7 @@ const CurrentUpdate = () => {
 
   const fetchUpdates = async () => {
     try {
-      const response = await api.get("/current-update");
+      const response = await api.get(`/current-update?lang=${i18n.language}`);
       setUpdates(response.data);
     } catch (error) {
       console.error("Error Fetching updates!", error);
@@ -46,7 +48,7 @@ const CurrentUpdate = () => {
 
   useEffect(() => {
     fetchUpdates();
-  }, []);
+  }, [i18n.language]);
 
   return (
     <section className="update-section" id="main-content">
@@ -56,6 +58,7 @@ const CurrentUpdate = () => {
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
         >
+          <span className="marquee-label">{t("home.currentUpdates")}</span>
           <div
             className="marquee-content"
             style={{
