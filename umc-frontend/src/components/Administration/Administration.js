@@ -29,7 +29,7 @@ const Administration = () => {
     useEffect(() => {
         fetchAdministration();
         fetchHeaderImage();
-    }, []);
+    }, [i18n.language]);
 
     const handlePageChange = (pageNumber) => {
         if (pageNumber >= 1 && pageNumber <= totalPages) {
@@ -100,16 +100,16 @@ const Administration = () => {
                 <div className="container-fluid font-location mt-4 mb-5" id="accounts-css">
                     <nav className="breadcrumb">
                         <Link to="/" className="breadcrumb-item text-decoration-none">
-                            Home
+                        {t('corporation.home')}
                         </Link>
                         <Link to="#" className="breadcrumb-item text-decoration-none">
-                            Corporation
+                        {t('corporation.corporation')}
                         </Link>
-                        <span className="breadcrumb-item active1">Administration</span>
+                        <span className="breadcrumb-item active1">{t('corporation.heading')}</span>
                     </nav>
                     <h2 className="location-title">
-                        <span className="highlight">Administration</span>
-                        <span className="highlighted-text"> of UMC</span>
+                        <span className="highlight">{t('corporation.highlight')}</span>
+                        <span className="highlighted-text"> {t('corporation.highlight-text')}</span>
                         <hr />
                     </h2>
                     <div className="row mt-3 row-styling-3">
@@ -122,15 +122,15 @@ const Administration = () => {
                                                 className="table-heading-styling"
                                                 style={{ textAlign: "center" }}
                                             >
-                                                Sr. No.
+                                                {t('corporation.sno')}
                                             </th>
-                                            <th className="table-heading-styling">Name</th>
-                                            <th className="table-heading-styling">Designation</th>
+                                            <th className="table-heading-styling">{t('corporation.name')}</th>
+                                            <th className="table-heading-styling">{t('corporation.designation')}</th>
                                             <th
                                                 className="table-heading-styling"
                                                 style={{ textAlign: "center" }}
                                             >
-                                                Phone No.
+                                                {t('corporation.phoneNo')}
                                             </th>
                                         </tr>
                                     </thead>
@@ -186,20 +186,20 @@ const Administration = () => {
                                 </table>
                             </div>
                             <div class="last-updated-container">
-                                <p class="last-updated-text"><b>Last Updated :</b> 20-09-2024 01:00 pm</p>
+                                <p class="last-updated-text"><b>{t('corporation.update')} :</b> 20-09-2024 01:00 pm</p>
                             </div>
                         </div>
                         <nav aria-label="Page navigation" className="d-flex justify-content-start paginationtop">
                             <ul className="pagination custom-pagination">
                                 <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
                                     <button className="page-link" onClick={() => handlePageChange(currentPage - 1)}>
-                                        Previous
+                                    {t('corporation.previous')}
                                     </button>
                                 </li>
                                 {renderPageNumbers()}
                                 <li className={`page-item ${currentPage === totalPages ? "disabled" : ""}`}>
                                     <button className="page-link" onClick={() => handlePageChange(currentPage + 1)}>
-                                        Next
+                                    {t('corporation.next')}
                                     </button>
                                 </li>
                             </ul>

@@ -15,7 +15,7 @@ const ENews = () => {
     useEffect(() => {
         fetchEnews();
         fetchHeaderImage();
-    }, []);
+    }, [i18n.language]);
 
     const fetchEnews = async () => {
         try {

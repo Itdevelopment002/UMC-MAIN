@@ -21,7 +21,7 @@ const Committee = () => {
     }, []);
     const fetchHeaderImage = async () => {
         try {
-            const response = await api.get(`/banner?lang=${i18n.language}`);
+            const response = await api.get('/banner');
 
             if (response.data.length > 0) {
                 let selectedBanner = response.data.find(banner => banner.banner_name === "Committee");
@@ -43,9 +43,9 @@ const Committee = () => {
         const fetchData = async () => {
             try {
                 const [standingResponse, womenResponse, wardResponse] = await Promise.all([
-                    api.get("/standing-committee"),
-                    api.get("/women-committee"),
-                    api.get("/ward-committee")
+                    api.get(`/standing-committee?lang=${i18n.language}`),
+                    api.get(`/women-committee?lang=${i18n.language}`),
+                    api.get(`/ward-committee?lang=${i18n.language}`)
                 ]);
                 setStandingData(standingResponse.data);
                 setWomenData(womenResponse.data);
@@ -56,7 +56,7 @@ const Committee = () => {
             }
         };
         fetchData();
-    }, []);
+    }, [i18n.language]);
 
     const handleButtonClick = (buttonName) => {
         setSelectedButton(buttonName);

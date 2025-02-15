@@ -84,6 +84,7 @@
         "highlight1": "मालमत्ता",
         "highlight-text": "कर भरणा"
     },
+
     "home1": "मुख्यपृष्ठ",
     "onlineServices": "ऑनलाइन सेवा",
     "clickHere": "येथे क्लिक करा",
@@ -120,6 +121,8 @@
             "ई-टेंडर माहितीसाठी, कृपया या पृष्ठास भेट द्या."
         ]
     },
+
+    "viewallDepartment":"सर्व विभाग पहा",
     "history-title1": "यूएमसीचा",
     "history-title2": " इतिहास",
     "commisioner-overview": "आयुक्तांचा थोडक्यात आढावा",
@@ -149,7 +152,22 @@
         "noData": "करारावर आधारित भरती डेटा उपलब्ध नाही",
         "oldRecruitmentAdvertisement": "मागील भरती जाहिरात",
         "noOldDataAvailable": "कोणताही जुना भरती डेटा उपलब्ध नाही"
-    }
+    },
+
+    "corporation": {
+        "home": "मुखपृष्ठ",
+        "corporation": "महानगरपालिका",
+        "heading": "प्रशासन",
+        "highlight": "उल्हासनगर महानगरपालिकेचे ",
+        "highlight-text": "प्रशासन",
+        "sno":"अनुक्रमांक",
+        "name": "नाव",
+        "designation":"पदनाम",
+        "phoneNo":"दूरध्वनी क्रमांक.",
+        "update": "शेवटचे अद्यतन",
+        "previous": "मागचे",
+        "next": "पुढे"
+        }
 }
 
    

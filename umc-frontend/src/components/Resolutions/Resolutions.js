@@ -7,17 +7,21 @@ import Swal from 'sweetalert2';
 import { useTranslation } from "react-i18next";
 
 
+// const resolutions = [
+//     { name: "Resolutions 2022", number: "564", date: "2022-07-04", notice: "Resolutions 2022-07-19", link: "https://drive.google.com/file/d/1NN_wvF6A8nuP1rPGPSHx752L1f02dUJA/view?usp=drive_link", posting: "View PDF" },
+// ];
 
 const Resolutions = () => {
     const [resolutions, setResolutions] = useState([]);
     const [bgImage, setBgImage] = useState("");
-      const { i18n, t } = useTranslation();
+        const { i18n, t } = useTranslation();
     
 
     useEffect(() => {
         fetchResolutions();
         fetchHeaderImage();
-    }, []);
+    }, [i18n.language]);
+
     const fetchResolutions = async () => {
         try {
             const response = await api.get(`/resolution?lang=${i18n.language}`);

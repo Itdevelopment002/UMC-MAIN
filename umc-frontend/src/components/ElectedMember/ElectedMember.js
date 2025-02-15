@@ -18,7 +18,7 @@ const ElectedMember = () => {
     useEffect(() => {
         fetchElectedData();
         fetchHeaderImage();
-    }, []);
+    }, [i18n.language]);
 
     const fetchElectedData = async () => {
         try {
