@@ -9,6 +9,8 @@ const AddBudget = () => {
   const [newYear, setNewYear] = useState("");
   const [years, setYears] = useState([]);
   const [errors, setErrors] = useState({});
+  const [language, setLanguage] = useState("");
+
   const navigate = useNavigate();
 
   // Fetch distinct years from the database
@@ -35,7 +37,9 @@ const AddBudget = () => {
 
   const validateForm = () => {
     const validationErrors = {};
-
+    if (!language) {
+      validationErrors.language = "Language selection is required";
+    }
     if (!heading) {
       validationErrors.heading = "Heading is required.";
     }
@@ -60,7 +64,9 @@ const AddBudget = () => {
     }
 
     try {
-      await api.post("/budgets_data", { heading, link, year });
+      await api.post("/budgets_data", { heading, link, year, language_code: language, });
+      setLanguage("");
+
       setHeading("");
       setLink("");
       setYear("");
@@ -103,6 +109,28 @@ const AddBudget = () => {
                     </div>
                   </div>
                   <form onSubmit={handleSubmit}>
+                    <div className="form-group row">
+                      <label className="col-form-label col-md-2">
+                        Select Language <span className="text-danger">*</span>
+                      </label>
+                      <div className="col-md-3">
+                        <select
+                          className={`form-control form-control-md ${errors.language ? "is-invalid" : ""}`}
+                          value={language}
+                          onChange={(e) => {
+                            setLanguage(e.target.value);
+                            if (errors.language) {
+                              setErrors({ ...errors, language: "" });
+                            }
+                          }}
+                        >
+                          <option value="">Select Language</option>
+                          <option value="en">English</option>
+                          <option value="mr">Marathi</option>
+                        </select>
+                        {errors.language && <div className="invalid-feedback">{errors.language}</div>}
+                      </div>
+                    </div>
                     <div className="form-group row">
                       <label className="col-form-label col-md-2">
                         Year <span className="text-danger">*</span>

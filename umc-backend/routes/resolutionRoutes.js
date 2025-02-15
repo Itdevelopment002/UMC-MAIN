@@ -62,7 +62,7 @@ router.put("/resolution/:Sr_No", (req, res) => {
   const formattedDate = Schedule_Date_of_Meeting ? convertToMySQLDate(Schedule_Date_of_Meeting) : null;
   const sql = `
     UPDATE resolution 
-    SET Department_Name = ?, Resolutions_No_Date = ?, Schedule_Date_of_Meeting = ?, Adjournment_Notice = ?, pdf_link = ? language_code = ?
+    SET Department_Name = ?, Resolutions_No_Date = ?, Schedule_Date_of_Meeting = ?, Adjournment_Notice = ?, pdf_link = ?, language_code = ?
     WHERE Sr_No = ?
   `;
   db.query(

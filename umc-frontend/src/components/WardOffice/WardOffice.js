@@ -46,7 +46,7 @@ const WardOffice = () => {
             });
 
         window.scrollTo({ top: 0, behavior: 'smooth' });
-    }, []);
+    }, [i18n.language]);
 
     const handleWardClick = (ward) => {
         setSelectedWard(ward);

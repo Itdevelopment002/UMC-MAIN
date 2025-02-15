@@ -152,7 +152,7 @@ const Navbar = () => {
                                         <li>
                                             <div>
                                                 <Link to="/departments" className='view-departments'>
-                                                    View All Departments
+                                                {t('viewallDepartment')}
                                                 </Link>
                                             </div>
                                         </li>

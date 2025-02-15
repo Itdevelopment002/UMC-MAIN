@@ -18,7 +18,7 @@ const Agenda = () => {
         fetchAgenda();
         fetchHeaderImage();
 
-    }, []);
+    }, [i18n.language]);
 
     const fetchAgenda = async () => {
         try {
