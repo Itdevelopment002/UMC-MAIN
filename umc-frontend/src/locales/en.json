@@ -3,6 +3,7 @@
         "helpline": "Helpline No: 0251 2720150",
         "rtsAct": "RTS Act 2015",
         "screenReader": "Screen Reader Access",
+        "skipContent": "Skip to main content",
         "aMinus": "A-",
         "aPlus": "A+",
         "logoTitle": "ULHASNAGAR MUNICIPAL CORPORATION"
@@ -83,6 +84,7 @@
         "highlight1": "Property",
         "highlight-text": "Tax Payment"
     },
+
     "home1": "Home",
     "onlineServices": "Online Services",
     "clickHere": "clickHere",
@@ -119,7 +121,7 @@
             "For e-Tender information, visit this page."
         ]
     },
-    
+    "viewallDepartment":"View All Departments",
     "history-title1": "History",
     "history-title2": " of UMC",
     "commisioner-overview": "Brief Overview of the Commissioner",
@@ -149,7 +151,22 @@
         "noData": "No Contract basis recruitment data available",
         "oldRecruitmentAdvertisement": "Old Recruitment Advertisement",
         "noOldDataAvailable": "No Old recruitment data available"
-    }
+    },
+
+    "corporation": {
+        "home": "Home",
+        "corporation": "Corporation",
+        "heading": "Administration",
+        "highlight": "Administration",
+        "highlight-text": "of UMC",
+        "sno":"Sr. No.",
+        "name": "Name",
+        "designation":"Designation",
+        "phoneNo":"Phone No.",
+        "update": "Last Updated",
+        "previous": "Previous",
+        "next": "Next"
+        }
 
 }
 

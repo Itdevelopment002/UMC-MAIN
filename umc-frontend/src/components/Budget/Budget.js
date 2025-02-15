@@ -59,7 +59,7 @@ const Budget = () => {
         };
 
         fetchData();
-    }, []);
+    }, [i18n.language]);
 
     const handleClick = (link, e) => {
         if (link === "#") {
