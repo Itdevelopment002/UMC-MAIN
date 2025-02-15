@@ -6,6 +6,7 @@ import { FaTrash } from "react-icons/fa";
 const AddDeptDescription = () => {
     const [description, setDescription] = useState("");
     const [subDescriptions, setSubDescriptions] = useState([]);
+    const [language, setLanguage] = useState("");
     const [department, setDepartment] = useState("");
     const [departments, setDepartments] = useState([]);
     const [errors, setErrors] = useState({});
@@ -22,7 +23,10 @@ const AddDeptDescription = () => {
             validationErrors.department = "Department name is required.";
         }
 
-        // Check if any sub-description is empty
+        if (!language) {
+            validationErrors.language = "Language selection is required";
+        }
+
         subDescriptions.forEach((subDesc, index) => {
             if (!subDesc) {
                 validationErrors[`subDescription${index}`] = `Sub description ${index + 1} is required.`;
@@ -47,7 +51,6 @@ const AddDeptDescription = () => {
         fetchDepartments();
     }, []);
 
-    // Handle form submission
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -59,12 +62,13 @@ const AddDeptDescription = () => {
             await api.post("/department-description", {
                 department,
                 description,
-                subDescriptions, // Send array of sub descriptions
+                language_code: language,
+                subDescriptions,
             });
 
-            // Reset form fields
             setDepartment("");
             setDescription("");
+            setLanguage("");
             setSubDescriptions([]);
             navigate("/department-information");
         } catch (error) {
@@ -72,19 +76,16 @@ const AddDeptDescription = () => {
         }
     };
 
-    // Add a new sub-description field
     const handleAddSubDescription = () => {
         setSubDescriptions([...subDescriptions, ""]);
     };
 
-    // Update a specific sub-description
     const handleSubDescriptionChange = (index, value) => {
         const updatedSubDescriptions = [...subDescriptions];
         updatedSubDescriptions[index] = value;
         setSubDescriptions(updatedSubDescriptions);
     };
 
-    // Remove a sub-description field
     const handleRemoveSubDescription = (index) => {
         const updatedSubDescriptions = subDescriptions.filter((_, i) => i !== index);
         setSubDescriptions(updatedSubDescriptions);
@@ -115,7 +116,29 @@ const AddDeptDescription = () => {
                                         </div>
                                     </div>
                                     <form onSubmit={handleSubmit}>
-                                        {/* Department Name Dropdown */}
+                                        <div className="form-group row">
+                                            <label className="col-form-label col-md-3">
+                                                Select Language <span className="text-danger">*</span>
+                                            </label>
+                                            <div className="col-md-4">
+                                                <select
+                                                    className={`form-control form-control-md ${errors.language ? "is-invalid" : ""
+                                                        }`}
+                                                    value={language}
+                                                    onChange={(e) => {
+                                                        setLanguage(e.target.value);
+                                                        if (errors.language) {
+                                                            setErrors({ ...errors, language: "" });
+                                                        }
+                                                    }}
+                                                >
+                                                    <option value="">Select Language</option>
+                                                    <option value="en">English</option>
+                                                    <option value="mr">Marathi</option>
+                                                </select>
+                                                {errors.language && <div className="invalid-feedback">{errors.language}</div>}
+                                            </div>
+                                        </div>
                                         <div className="form-group row">
                                             <label className="col-form-label col-md-3">
                                                 Department Name <span className="text-danger">*</span>
