@@ -45,6 +45,7 @@ const DataTable1 = () => {
       await api.put(`/location-info/${selectedPolicy.id}`, {
         heading: selectedPolicy.heading,
         description: selectedPolicy.description,
+        language_code: selectedPolicy.language_code,
       });
 
       const updatedPolicy = policyData.map((policy) =>
@@ -74,7 +75,7 @@ const DataTable1 = () => {
   };
 
   const currentPageData = policyData
-    .filter((policy) => policy.type === "Table 1") // Filter for "Table 1" type
+    .filter((policy) => policy.type === "Table 1")
     .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   const totalPages = Math.ceil(
@@ -218,6 +219,22 @@ const DataTable1 = () => {
               </div>
               <div className="modal-body">
                 <form>
+                  <div className="mb-3">
+                    <label className="form-label">
+                      Select Language
+                    </label>
+
+                    <select
+                      className="form-control"
+                      value={selectedPolicy?.language_code || ""}
+                      onChange={handleEditChange}
+                      name="language_code"
+                    >
+                      <option value="">Select Language</option>
+                      <option value="en">English</option>
+                      <option value="mr">Marathi</option>
+                    </select>
+                  </div>
                   <div className="mb-3">
                     <label className="form-label">Title</label>
                     <input

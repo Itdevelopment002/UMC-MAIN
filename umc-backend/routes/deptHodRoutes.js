@@ -24,14 +24,14 @@ router.post("/hod-details", upload.single("hodImage"), (req, res) => {
   }
 
   const filePath = `/uploads/${req.file.filename}`;
-  const { hodName, designation, education, address, number, email } = req.body;
+  const { hodName, designation, education, address, number, email, language_code } = req.body;
 
-  if (!hodName || !designation || !education || !address || !number || !email) {
+  if (!hodName || !designation || !education || !address || !number || !email || !language_code) {
     return res.status(400).json({ message: "Hod name, designation, education, address, number and email are required" });
   }
 
-  const sql = "INSERT INTO depthod (name, designation, education, address, number, email, file_path) VALUES (?, ?, ?, ?, ?, ?, ?)";
-  db.query(sql, [hodName, designation, education, address, number, email, filePath], (err, result) => {
+  const sql = "INSERT INTO depthod (name, designation, education, address, number, email, language_code, file_path) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+  db.query(sql, [hodName, designation, education, address, number, email, language_code, filePath], (err, result) => {
     if (err) {
       return res.status(500).json({ message: "Database error", error: err });
     }
@@ -43,40 +43,59 @@ router.post("/hod-details", upload.single("hodImage"), (req, res) => {
 });
 
 router.get("/hod-details", (req, res) => {
-  const sql = "SELECT * FROM depthod";
+  const language = req.query.lang;
+  let query;
+  let params = [];
+  if (language) {
+    query = `SELECT * FROM depthod WHERE language_code = ?`;
+    params.push(language);
+  } else {
+    query = "SELECT * FROM depthod";
+  }
 
-  db.query(sql, (err, results) => {
-    if (err) {
-      return res.status(500).json({ message: "Database error", error: err });
-    }
-
-    res.status(200).json(results); 
+  db.query(query, params, (err, results) => {
+    if (err) throw err;
+    res.json(results);
   });
 });
 
 
-router.get("/hod-details/:id", (req, res) => {
+router.get("/hod-details/:id?", (req, res) => {
   const { id } = req.params;
+  const { lang } = req.query;
 
-  const sql = "SELECT * FROM depthod WHERE id = ?";
-  db.query(sql, [id], (err, result) => {
+  let query;
+  let params = [];
+
+  if (id) {
+    query = "SELECT * FROM depthod WHERE id = ?";
+    params.push(id);
+  } else if (lang) {
+    query = "SELECT * FROM depthod WHERE language_code = ?";
+    params.push(lang);
+  } else {
+    query = "SELECT * FROM depthod";
+  }
+
+  db.query(query, params, (err, results) => {
     if (err) {
       return res.status(500).json({ message: "Database error", error: err });
     }
-
-    if (result.length === 0) {
-      return res.status(404).json({ message: "Hod detail not found" });
+    if (id && results.length === 0) {
+      return res.status(404).json({ message: "HOD detail not found" });
     }
 
-    const slider = result[0];
-    res.status(200).json({
-      id: slider.id,
-      name: slider.name,
-      file_path: slider.file_path,
-      uploaded_at: slider.uploaded_at,
-    });
+    const responseData = results.map((hod) => ({
+      id: hod.id,
+      name: hod.name,
+      file_path: hod.file_path,
+      uploaded_at: hod.uploaded_at,
+    }));
+
+    res.status(200).json(id ? responseData[0] : responseData);
   });
 });
+
 
 router.delete("/hod-details/:id", (req, res) => {
   const { id } = req.params;
@@ -112,7 +131,7 @@ router.delete("/hod-details/:id", (req, res) => {
 
 router.put("/hod-details/:id", upload.single("hodImage"), (req, res) => {
   const { id } = req.params;
-  const { name, designation, education, address, number, email } = req.body;
+  const { name, designation, education, address, number, email, language_code } = req.body;
 
   let updateSql = "UPDATE depthod SET";
   const updateParams = [];
@@ -150,6 +169,12 @@ router.put("/hod-details/:id", upload.single("hodImage"), (req, res) => {
     updateSql +=
       updateParams.length > 0 ? ", email = ?" : " email = ?";
     updateParams.push(email);
+  }
+
+  if (language_code) {
+    updateSql +=
+      updateParams.length > 0 ? ", language_code = ?" : " language_code = ?";
+    updateParams.push(language_code);
   }
 
   if (req.file) {
