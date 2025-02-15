@@ -7,25 +7,22 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const HomeService1 = () => {
-  const [initiatives, setInitiatives] = useState([]);
+  const [info, setInfo] = useState([]);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [selectedInitiative, setSelectedInitiative] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
   const [imagePreview, setImagePreview] = useState(null);
+  const infoPerPage = 10;
 
   useEffect(() => {
     fetchInitiatives();
   }, []);
 
-  useEffect(() => {
-    const lightbox = GLightbox({ selector: ".glightbox" });
-    return () => lightbox.destroy();
-  }, [initiatives]);
-
   const fetchInitiatives = async () => {
     try {
       const response = await api.get("/home-services1");
-      setInitiatives(response.data);
+      setInfo(response.data);
     } catch (error) {
       console.error("Error fetching home services:", error);
     }
@@ -51,8 +48,8 @@ const HomeService1 = () => {
   const handleDelete = async () => {
     try {
       await api.delete(`/home-services1/${selectedInitiative.id}`);
-      setInitiatives(
-        initiatives.filter((initiative) => initiative.id !== selectedInitiative.id)
+      setInfo(
+        info.filter((initiative) => initiative.id !== selectedInitiative.id)
       );
       setShowDeleteModal(false);
       toast.success("Home Service deleted successfully");
@@ -78,6 +75,8 @@ const HomeService1 = () => {
       formData.append("heading", selectedInitiative.heading);
     if (selectedInitiative.link)
       formData.append("link", selectedInitiative.link);
+    if (selectedInitiative.language_code)
+      formData.append("language_code", selectedInitiative.language_code);
     if (selectedInitiative.mainIcon)
       formData.append("mainIcon", selectedInitiative.mainIcon);
 
@@ -99,6 +98,15 @@ const HomeService1 = () => {
       setImagePreview(URL.createObjectURL(file));
     }
   };
+
+  const indexOfLastServices = currentPage * infoPerPage;
+  const indexOfFirstServices = indexOfLastServices - infoPerPage;
+  const currentServices = info.slice(indexOfFirstServices, indexOfLastServices);
+
+  useEffect(() => {
+    const lightbox = GLightbox({ selector: ".glightbox" });
+    return () => lightbox.destroy();
+  }, [info, currentServices]);
 
   return (
     <>
@@ -143,9 +151,11 @@ const HomeService1 = () => {
                         </tr>
                       </thead>
                       <tbody>
-                        {initiatives.map((initiative, index) => (
+                        {currentServices.map((initiative, index) => (
                           <tr key={initiative.id}>
-                            <td className="text-center">{index + 1}</td>
+                            <td className="text-center">
+                              {index + 1 + (currentPage - 1) * infoPerPage}
+                            </td>
                             <td>{initiative.heading}</td>
                             <td>
                               <Link to={initiative.link.startsWith("/") ? "#" : `${initiative.link}`} className="text-decoration-none" target={initiative.link.startsWith("/") ? "" : "_blank"} style={{ color: "#000" }}>
@@ -184,6 +194,127 @@ const HomeService1 = () => {
                       </tbody>
                     </table>
                   </div>
+                </div>
+                <div className="mt-4">
+                  <ul className="pagination">
+                    {/* Previous Button */}
+                    <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
+                      <button
+                        className="page-link"
+                        onClick={() => setCurrentPage(currentPage - 1)}
+                      >
+                        Previous
+                      </button>
+                    </li>
+
+                    {/* Always show the first page */}
+                    {currentPage > 2 && (
+                      <li className={`page-item ${currentPage === 1 ? "active" : ""}`}>
+                        <button className="page-link" onClick={() => setCurrentPage(1)}>
+                          1
+                        </button>
+                      </li>
+                    )}
+
+                    {/* Show the second page if currentPage is greater than 2 */}
+                    {currentPage > 3 && (
+                      <li className={`page-item ${currentPage === 2 ? "active" : ""}`}>
+                        <button className="page-link" onClick={() => setCurrentPage(2)}>
+                          2
+                        </button>
+                      </li>
+                    )}
+
+                    {/* Show ellipsis if currentPage is far from the start */}
+                    {currentPage > 4 && (
+                      <li className="page-item disabled">
+                        <span className="page-link">...</span>
+                      </li>
+                    )}
+
+                    {/* Show currentPage and its neighbors */}
+                    {Array.from(
+                      { length: Math.ceil(info.length / infoPerPage) },
+                      (_, i) => i + 1
+                    )
+                      .filter(
+                        (page) =>
+                          page >= currentPage - 1 && page <= currentPage + 1 // Show current page and its neighbors
+                      )
+                      .map((page) => (
+                        <li
+                          className={`page-item ${currentPage === page ? "active" : ""}`}
+                          key={page}
+                        >
+                          <button
+                            className="page-link"
+                            onClick={() => setCurrentPage(page)}
+                          >
+                            {page}
+                          </button>
+                        </li>
+                      ))}
+
+                    {/* Show ellipsis if currentPage is far from the end */}
+                    {currentPage < Math.ceil(info.length / infoPerPage) - 3 && (
+                      <li className="page-item disabled">
+                        <span className="page-link">...</span>
+                      </li>
+                    )}
+
+                    {/* Show the second-to-last page if currentPage is not near the end */}
+                    {currentPage < Math.ceil(info.length / infoPerPage) - 2 && (
+                      <li
+                        className={`page-item ${currentPage === Math.ceil(info.length / infoPerPage) - 1
+                          ? "active"
+                          : ""
+                          }`}
+                      >
+                        <button
+                          className="page-link"
+                          onClick={() =>
+                            setCurrentPage(Math.ceil(info.length / infoPerPage) - 1)
+                          }
+                        >
+                          {Math.ceil(info.length / infoPerPage) - 1}
+                        </button>
+                      </li>
+                    )}
+
+                    {/* Always show the last page */}
+                    {currentPage < Math.ceil(info.length / infoPerPage) - 1 && (
+                      <li
+                        className={`page-item ${currentPage === Math.ceil(info.length / infoPerPage)
+                          ? "active"
+                          : ""
+                          }`}
+                      >
+                        <button
+                          className="page-link"
+                          onClick={() =>
+                            setCurrentPage(Math.ceil(info.length / infoPerPage))
+                          }
+                        >
+                          {Math.ceil(info.length / infoPerPage)}
+                        </button>
+                      </li>
+                    )}
+
+                    {/* Next Button */}
+                    <li
+                      className={`page-item ${currentPage === Math.ceil(info.length / infoPerPage)
+                        ? "disabled"
+                        : ""
+                        }`}
+                    >
+                      <button
+                        className="page-link"
+                        onClick={() => setCurrentPage(currentPage + 1)}
+                      >
+                        Next
+                      </button>
+                    </li>
+                  </ul>
                 </div>
               </div>
             </div>
@@ -236,6 +367,25 @@ const HomeService1 = () => {
                   </div>
                   <div className="modal-body">
                     <form>
+                      <div className="mb-3">
+                        <label className="form-label">
+                          Select Language
+                        </label>
+                        <select
+                          className="form-control"
+                          value={selectedInitiative?.language_code || ""}
+                          onChange={(e) =>
+                            setSelectedInitiative({
+                              ...selectedInitiative,
+                              language_code: e.target.value,
+                            })
+                          }
+                        >
+                          <option value="" disabled>Select Language</option>
+                          <option value="en">English</option>
+                          <option value="mr">Marathi</option>
+                        </select>
+                      </div>
                       <div className="mb-3">
                         <label className="form-label">Service Heading</label>
                         <input

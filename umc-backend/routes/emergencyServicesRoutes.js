@@ -26,6 +26,7 @@ const deleteFileIfExists = async (filePath) => {
   }
 };
 
+
 router.get("/emergency-services", (req, res) => {
   const language = req.query.lang;
   let query;
@@ -45,28 +46,83 @@ router.get("/emergency-services", (req, res) => {
   });
 });
 
-router.get("/emergency-services/:id", (req, res) => {
+
+router.get("/emergency-services/:id?", (req, res) => {
   const { id } = req.params;
-  const sql = "SELECT * FROM emergencyservices WHERE id = ?";
-  db.query(sql, [id], (err, result) => {
+  const { lang } = req.query;
+
+  let query;
+  let params = [];
+
+  if (id) {
+    query = "SELECT * FROM emergencyservices WHERE id = ?";
+    params.push(id);
+  } else if (lang) {
+    query = "SELECT * FROM emergencyservices WHERE language_code = ?";
+    params.push(lang);
+  } else {
+    query = "SELECT * FROM emergencyservices";
+  }
+
+  db.query(query, params, (err, results) => {
     if (err) {
       return res.status(500).json({ message: "Database error", error: err });
     }
-
-    if (result.length === 0) {
+    if (id && results.length === 0) {
       return res.status(404).json({ message: "Emergency Service not found" });
     }
-
-    res.status(200).json(result[0]);
+    res.status(200).json(id ? results[0] : results);
   });
 });
+
+
+router.post(
+  "/emergency-services",
+  upload.fields([{ name: "emergencyImage" }]),
+  async (req, res) => {
+    const { heading, number, language_code } = req.body;
+    if (!heading || !number || !language_code) {
+      return res
+        .status(400)
+        .json({ message: "Emergency Service heading, language code and number are required" });
+    }
+
+    let mainIconPath = null;
+
+    if (req.files["emergencyImage"]) {
+      mainIconPath = path.join("uploads", req.files["emergencyImage"][0].filename);
+    }
+
+    const insertSql =
+      "INSERT INTO emergencyservices (heading, number, language_code, main_icon_path) VALUES (?, ?, ?, ?)";
+    const insertParams = [
+      heading,
+      number,
+      language_code,
+      mainIconPath,
+    ];
+
+    db.query(insertSql, insertParams, (err, result) => {
+      if (err) {
+        return res.status(500).json({ message: "Database error", error: err });
+      }
+      res
+        .status(201)
+        .json({
+          message: "Emergency Service added successfully",
+          emergencyId: result.insertId,
+        });
+    });
+  }
+);
+
 
 router.put(
   "/emergency-services/:id",
   upload.fields([{ name: "emergencyImage" }]),
   async (req, res) => {
     const { id } = req.params;
-    const { heading, number } = req.body;
+    const { heading, number, language_code } = req.body;
 
     let updateSql = "UPDATE emergencyservices SET";
     const updateParams = [];
@@ -80,6 +136,12 @@ router.put(
       updateSql +=
         updateParams.length > 0 ? ", number = ?" : " number = ?";
       updateParams.push(number);
+    }
+
+    if (language_code) {
+      updateSql +=
+        updateParams.length > 0 ? ", language_code = ?" : " language_code = ?";
+      updateParams.push(language_code);
     }
 
     if (req.files["emergencyImage"]) {
@@ -137,44 +199,6 @@ router.put(
   }
 );
 
-router.post(
-  "/emergency-services",
-  upload.fields([{ name: "emergencyImage" }]),
-  async (req, res) => {
-    const { heading, number } = req.body;
-    if (!heading || !number) {
-      return res
-        .status(400)
-        .json({ message: "Emergency Service heading and number are required" });
-    }
-
-    let mainIconPath = null;
-
-    if (req.files["emergencyImage"]) {
-      mainIconPath = path.join("uploads", req.files["emergencyImage"][0].filename);
-    }
-
-    const insertSql =
-      "INSERT INTO emergencyservices (heading, number, main_icon_path) VALUES (?, ?, ?)";
-    const insertParams = [
-      heading,
-      number,
-      mainIconPath,
-    ];
-
-    db.query(insertSql, insertParams, (err, result) => {
-      if (err) {
-        return res.status(500).json({ message: "Database error", error: err });
-      }
-      res
-        .status(201)
-        .json({
-          message: "Emergency Service added successfully",
-          emergencyId: result.insertId,
-        });
-    });
-  }
-);
 
 router.delete("/emergency-services/:id", async (req, res) => {
   const { id } = req.params;
@@ -205,5 +229,6 @@ router.delete("/emergency-services/:id", async (req, res) => {
     });
   });
 });
+
 
 module.exports = router;
