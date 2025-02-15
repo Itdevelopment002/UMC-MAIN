@@ -123,5 +123,33 @@
     "history-title1": "यूएमसीचा",
     "history-title2": " इतिहास",
     "commisioner-overview": "आयुक्तांचा थोडक्यात आढावा",
-    "btn-title": "स्थानासाठी येथे क्लिक करा"
+
+    "btn-title":"स्थानासाठी येथे क्लिक करा",
+    
+    "breadcrumbHome": "मुखपृष्ठ",
+     "contactUs":{
+        "breadcrumb": "आमच्याशी संपर्क साधा",
+        "contact" : "आमच्याशी",
+        "us": "संपर्क साधा",
+        "wardOfficeNo": "वॉर्ड कार्यालय क्रमांक",
+        "address": "पत्ता.",
+        "phoneNo": "दूरध्वनी क्रमांक",
+        "emailId": "ईमेल आयडी"
+    },
+    "recruitment": {
+        "breadcrumb": "भरती",
+        "jobs": "उल्हासनगर महानगरपालिका ",
+        "umc": "मध्ये नोकऱ्या",
+        "post": "उल्हासनगर महानगरपालिका खालील पदांसाठी उमेदवारांची निवड करत आहे",
+        "recruitmentAdvertisement": "करार तत्त्वावर भरती जाहिरात",
+        "srNo": "अ. क्र.",
+        "advertisement": "जाहिरात",
+        "action": "कृती",
+        "viewPDF": "पीडीएफ पहा",
+        "noData": "करारावर आधारित भरती डेटा उपलब्ध नाही",
+        "oldRecruitmentAdvertisement": "मागील भरती जाहिरात",
+        "noOldDataAvailable": "कोणताही जुना भरती डेटा उपलब्ध नाही"
+    }
 }
+
+    "btn-title": "स्थानासाठी येथे क्लिक करा"

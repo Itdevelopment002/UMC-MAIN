@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./ContactUs.css";
-import api, { baseURL } from "../api"
+import api, { baseURL } from "../api";
+import { useTranslation } from "react-i18next";
 
 const ContactUs = () => {
     const [contact, setContact] = useState([]);
     const [ward, setWard] = useState([]);
     const [bgImage, setBgImage] = useState("");
+    const { i18n, t } = useTranslation();
+
      useEffect(() => {
             fetchHeaderImage();
         }, []);
@@ -31,7 +34,7 @@ const ContactUs = () => {
     };
     const fetchContact = async () => {
         try {
-            const response = await api.get("/contact-info");
+            const response = await api.get(`/contact-info?lang=${i18n.language}`);
             setContact(response.data);
         } catch (error) {
             console.error("Error fethcing contact data", error);
@@ -40,7 +43,7 @@ const ContactUs = () => {
 
     const fetchWard = async () => {
         try {
-            const response = await api.get("/ward-info");
+            const response = await api.get(`/ward-info?lang=${i18n.language}`);
             setWard(response.data);
         } catch (error) {
             console.error("Error fethcing ward data", error);
@@ -52,7 +55,7 @@ const ContactUs = () => {
         fetchContact();
         fetchWard();
         window.scrollTo({ top: 0, behavior: "smooth" });
-    }, []);
+    }, [i18n.language]);
 
     return (
         <>
@@ -68,13 +71,13 @@ const ContactUs = () => {
                 <div className="container-fluid font-location mt-4 mb-2" id="contact-css">
                     <nav className="breadcrumb">
                         <Link to="/" className="breadcrumb-item text-decoration-none">
-                            Home
+                            {t("breadcrumbHome")}
                         </Link>
-                        <span className="breadcrumb-item active1">Contact Us</span>
+                        <span className="breadcrumb-item active1">{t("contactUs.breadcrumb")}</span>
                     </nav>
                     <h2 className="location-title">
-                        <span className="highlight">Contact</span>
-                        <span className="highlighted-text"> Us</span>
+                        <span className="highlight">{t("contactUs.contact")}</span>
+                        <span className="highlighted-text"> {t("contactUs.us")}</span>
                         <hr />
                     </h2>
                     <div className="row mt-5 gap-3">
@@ -118,20 +121,20 @@ const ContactUs = () => {
                                     <div className="col-md-6 mb-3" key={ward}>
                                         <div className="card">
                                             <span className="card-header text-white bg-gradient">
-                                                Ward Office No. {ward.office}
+                                                {t("wardOfficeNo")} {ward.office}
                                             </span>
                                             <div className="card-body position-relative">
                                                 <span className="left-border"></span>
                                                 <p>
-                                                    <strong>Address:</strong>{" "}
+                                                    <strong>{t("address")}:</strong>{" "}
                                                     {ward.address}
                                                 </p>
                                                 <p>
-                                                    <strong>Phone No.:</strong>{" "}
+                                                    <strong>{t("phoneNo")}:</strong>{" "}
                                                     {ward.phone}
                                                 </p>
                                                 <p>
-                                                    <strong>Email Id:</strong> {ward.email}
+                                                    <strong>{t("emailId")}:</strong> {ward.email}
                                                 </p>
                                             </div>
                                         </div>

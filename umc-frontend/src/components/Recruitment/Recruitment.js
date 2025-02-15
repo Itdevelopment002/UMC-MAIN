@@ -4,10 +4,12 @@ import "./Recruitment.css";
 import api, { baseURL } from "../api"
 import pdficon from '../../assets/images/Departments/document 1.png';
 import Swal from 'sweetalert2';
+import { useTranslation } from "react-i18next";
 
 const Recruitment = () => {
   const [recruitment, setRecruitment] = useState([]);
   const [bgImage, setBgImage] = useState("");
+  const { i18n, t } = useTranslation();
 
   const fetchHeaderImage = async () => {
     try {
@@ -32,11 +34,11 @@ const Recruitment = () => {
   useEffect(() => {
     fetchRecruitment();
     fetchHeaderImage();
-  }, []);
+  }, [i18n.language]);
 
   const fetchRecruitment = async () => {
     try {
-      const response = await api.get("/recruitment");
+      const response = await api.get(`/recruitment?lang=${i18n.language}`);
       setRecruitment(response.data.reverse());
     } catch (error) {
       console.error("Error fetching recruitment:", error);
@@ -80,23 +82,23 @@ const Recruitment = () => {
         <div className="container-fluid font-location mt-4 mb-5" id="rec-css">
           <nav className="breadcrumb">
             <Link to="/" className="breadcrumb-item text-decoration-none">
-              Home
+            {t("breadcrumbHome")}
             </Link>
-            <span className="breadcrumb-item active1">Recruitment</span>
+            <span className="breadcrumb-item active1">{t("recruitment.breadcrumb")}</span>
           </nav>
           <h2 className="location-title">
-            <span className="highlight">Jobs</span>
-            <span className="highlighted-text"> @ UMC</span>
+            <span className="highlight">{t("recruitment.jobs")}</span>
+            <span className="highlighted-text"> {t("recruitment.umc")}</span>
           </h2>
           <hr />
           <div className="row">
             <div className="col-12 col-xl-12 col-lg-12 col-md-12 col-sm-12">
               <div>
                 <h2 className="new-location-title">
-                  <span className="new-highlight">UMC</span>
+                  <span className="new-highlight">{t("recruitment.umc")}</span>
                   <span className="new-highlighted-text">
                     {" "}
-                    is looking for candidates for following post's
+                    {t("recruitment.post")}
                   </span>
                 </h2>
               </div>
@@ -104,7 +106,7 @@ const Recruitment = () => {
                 <div className="col-12 col-xl-9 col-lg-12 col-md-12 col-sm-12">
                   <div className="system-style-div text-start">
                     <p className="mb-0">
-                      <span className="span-system1">Contract basis Recruitment Advertisement</span>
+                      <span className="span-system1">{t("recruitment.recruitmentAdvertisement")}</span>
                     </p>
                   </div>
                 </div>
@@ -112,9 +114,9 @@ const Recruitment = () => {
               <table className="table table-bordered table-responsive shadow mt-4">
                 <thead className="bg-orange text-white">
                   <tr>
-                    <th className="table-heading-styling" style={{ textAlign: "center" }}>Sr. No.</th>
-                    <th className="table-heading-styling">Advertisement</th>
-                    <th className="table-heading-styling" style={{ textAlign: "center" }}>Action</th>
+                    <th className="table-heading-styling" style={{ textAlign: "center" }}>{t("recruitment.srNo")}</th>
+                    <th className="table-heading-styling">{t("recruitment.advertisement")}</th>
+                    <th className="table-heading-styling" style={{ textAlign: "center" }}>{t("recruitment.action")}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -169,7 +171,7 @@ const Recruitment = () => {
                                 verticalAlign: "middle",
                               }}
                             />
-                            View PDF
+                            {t("recruitment.viewPDF")}
                           </Link>
                         </td>
                       </tr>
@@ -177,7 +179,7 @@ const Recruitment = () => {
                   ) : (
                     <tr>
                       <td colSpan="3" style={{ textAlign: "center" }}>
-                        No Contract basis recruitment data available
+                      {t("recruitment.noData")}
                       </td>
                     </tr>
                   )}
@@ -187,7 +189,7 @@ const Recruitment = () => {
                 <div className="col-12 col-xl-9 col-lg-12 col-md-12 col-sm-12">
                   <div className="system-style-div text-start">
                     <p className="mb-0">
-                      <span className="span-system1">Old Recruitment Advertisement</span>
+                      <span className="span-system1">{t("recruitment.oldRecruitmentAdvertisement")}</span>
                     </p>
                   </div>
                 </div>
@@ -195,9 +197,9 @@ const Recruitment = () => {
               <table className="table table-bordered table-responsive shadow mt-4">
                 <thead className="bg-orange text-white">
                   <tr>
-                    <th className="table-heading-styling" style={{ textAlign: "center" }}>Sr. No.</th>
-                    <th className="table-heading-styling">Advertisement</th>
-                    <th className="table-heading-styling" style={{ textAlign: "center" }}>Action</th>
+                    <th className="table-heading-styling" style={{ textAlign: "center" }}>{t("recruitment.srNo")}</th>
+                    <th className="table-heading-styling">{t("recruitment.advertisement")}</th>
+                    <th className="table-heading-styling" style={{ textAlign: "center" }}>{t("recruitment.action")}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -252,7 +254,7 @@ const Recruitment = () => {
                                 verticalAlign: "middle",
                               }}
                             />
-                            View PDF
+                            {t("recruitment.viewPDF")}
                           </Link>
                         </td>
                       </tr>
@@ -260,7 +262,7 @@ const Recruitment = () => {
                   ) : (
                     <tr>
                       <td colSpan="3" style={{ textAlign: "center" }}>
-                        No Old recruitment data available
+                      {t("recruitment.noOldDataAvailable")}
                       </td>
                     </tr>
                   )}
