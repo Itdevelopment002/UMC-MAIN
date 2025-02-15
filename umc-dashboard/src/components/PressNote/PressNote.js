@@ -43,6 +43,7 @@ const PressNote = () => {
       await api.put(`/press-note/${selectedNote.id}`, {
         description: selectedNote.description,
         link: selectedNote.link,
+        language_code: selectedNote.language_code,
       });
       const updatedNote = note.map((note) =>
         note.id === selectedNote.id ? selectedNote : note
@@ -285,6 +286,22 @@ const PressNote = () => {
                   </div>
                   <div className="modal-body">
                     <form>
+                      <div className="mb-3">
+                        <label className="form-label">
+                          Select Language
+                        </label>
+
+                        <select
+                          className="form-control"
+                          value={selectedNote?.language_code || ""}
+                          onChange={handleEditChange}
+                          name="language_code"
+                        >
+                          <option value="">Select Language</option>
+                          <option value="en">English</option>
+                          <option value="mr">Marathi</option>
+                        </select>
+                      </div>
                       <div className="mb-3">
                         <label className="form-label">Description</label>
                         <input
