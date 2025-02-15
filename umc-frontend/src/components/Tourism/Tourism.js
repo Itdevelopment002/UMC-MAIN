@@ -62,13 +62,13 @@ const Tourism = () => {
             <div id="main-content">
                 <div className="container-fluid font-location mt-4 mb-5" id="tourism-css">
                     <nav className="breadcrumb">
-                        <Link to="/" className="breadcrumb-item text-decoration-none">Home</Link>
-                        <Link to="#" className="breadcrumb-item text-decoration-none">About UMC</Link>
-                        <span className="breadcrumb-item active1">Tourism</span>
+                        <Link to="/" className="breadcrumb-item text-decoration-none">{t('location.home')}</Link>
+                        <Link to="#" className="breadcrumb-item text-decoration-none">{t('location.aboutumc')}</Link>
+                        <span className="breadcrumb-item active1">{t('tourism.tourismText')}</span>
                     </nav>
                     <h2 className="location-title">
-                        <span className="highlight">Tourism</span>
-                        <span className="highlighted-text"> of UMC</span>
+                        <span className="highlight">{t('tourism.highlight1')}</span>
+                        <span className="highlighted-text"> {t('tourism.highlight-text')}</span>
                     </h2>
 
                     {gardensData.map((location, index) => (
@@ -95,10 +95,10 @@ const Tourism = () => {
 
                                 <div className="col-12 col-xl-7 col-lg-7 col-md-7 col-sm-12">
                                     <h2 className="h2-styling-tourism">{location.name || "Unknown Location"}</h2>
-                                    <p><strong>Address:</strong> <span className="span-tourism">{location.address || "No Address Available"}</span></p>
+                                    <p><strong>{t('tourism.address')}:</strong> <span className="span-tourism">{location.address || "No Address Available"}</span></p>
                                     <hr />
                                     <p>
-                                        <strong>Hours: </strong>
+                                        <strong>{t('tourism.hour')}: </strong>
                                         <span
                                             className="span-tourism"
                                             dangerouslySetInnerHTML={{
@@ -109,7 +109,7 @@ const Tourism = () => {
                                         ></span>
                                     </p>
                                     <hr />
-                                    <p><strong>Description:</strong> <span className="span-tourism">{location.description || "No Description Available"}</span></p>
+                                    <p><strong>{t('tourism.description')}:</strong> <span className="span-tourism">{location.description || "No Description Available"}</span></p>
                                 </div>
                             </div>
 

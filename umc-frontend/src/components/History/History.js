@@ -73,12 +73,12 @@ const History = () => {
         <div className="container-fluid font-location mt-2 mb-5" id="history-css">
           <nav className="breadcrumb">
             <Link to="/" className="breadcrumb-item text-decoration-none">
-              Home
+            {t('location.home')}
             </Link>
             <Link to="#" className="breadcrumb-item text-decoration-none">
-              About UMC
+            {t('location.aboutumc')}
             </Link>
-            <span className="breadcrumb-item active1">History</span>
+            <span className="breadcrumb-item active1">{t("history-title2")}</span>
           </nav>
 
           <div className="row mt-5">

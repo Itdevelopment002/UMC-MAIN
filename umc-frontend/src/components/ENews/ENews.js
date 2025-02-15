@@ -1,12 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "./ENews.css";
-import api,{baseURL} from "../api";
+import api, { baseURL } from "../api";
 import pdficon from '../../assets/images/Departments/document 1.png';
 import Swal from 'sweetalert2';
+import { useTranslation } from "react-i18next";
+
 
 const ENews = () => {
     const [enewsList, setEnewsList] = useState([]);
+    const { i18n, t } = useTranslation();
+
+
     useEffect(() => {
         fetchEnews();
         fetchHeaderImage();
@@ -14,7 +19,7 @@ const ENews = () => {
 
     const fetchEnews = async () => {
         try {
-            const response = await api.get("/enews_data");
+            const response = await api.get(`/enews_data?lang=${i18n.language}`);
             setEnewsList(response.data);
         } catch (error) {
             console.error("Error fetching e-news:", error);
@@ -120,7 +125,7 @@ const ENews = () => {
                 className="history-header-image"
                 style={{
                     backgroundImage: `url(${bgImage})`,
-                    
+
                 }}
             ></div>
 

@@ -5,11 +5,16 @@ import api, { baseURL } from "../api";
 import pdficon from '../../assets/images/Departments/document 1.png'
 import "../TableCss/TableCss.css";
 import Swal from "sweetalert2";
+import { useTranslation } from "react-i18next";
+
+
 
 const ElectedMember = () => {
     const [electeddata, setElecteddata] = useState([]);
-        const [bgImage, setBgImage] = useState("");
-    
+    const [bgImage, setBgImage] = useState("");
+    const { i18n, t } = useTranslation();
+
+
     useEffect(() => {
         fetchElectedData();
         fetchHeaderImage();
@@ -17,7 +22,7 @@ const ElectedMember = () => {
 
     const fetchElectedData = async () => {
         try {
-            const response = await api.get("/elected_data");
+            const response = await api.get(`/elected_data?lang=${i18n.language}`);
             setElecteddata(response.data);
         } catch (error) {
             console.error("Error fetching elected member data:", error);
@@ -66,7 +71,7 @@ const ElectedMember = () => {
                 className="history-header-image"
                 style={{
                     backgroundImage: `url(${bgImage})`,
-                    
+
                 }}
             ></div>
 

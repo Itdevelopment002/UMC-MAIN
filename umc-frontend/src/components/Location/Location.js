@@ -2,12 +2,16 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom"
 import api, { baseURL } from "../api";
 import "./Location.css";
+import { useTranslation } from "react-i18next";
+
 
 const Location = () => {
 
 
   const [tableData, setTableData] = useState([]);
   const [bgImage, setBgImage] = useState("");
+    const { i18n, t } = useTranslation();
+  
 
 
   useEffect(() => {
@@ -17,7 +21,7 @@ const Location = () => {
 
   const fetchPolicy = async () => {
     try {
-      const response = await api.get("/location-info");
+      const response = await api.get(`/location-info?lang=${i18n.language}`);
       setTableData(response.data);
     } catch (error) {
       console.error("Failed to fetch privacy policy data!");
@@ -61,16 +65,16 @@ const Location = () => {
         <div className="container-fluid font-location mt-4 mb-5" id="location-css">
           <nav className="breadcrumb">
             <Link to="/" className="breadcrumb-item text-decoration-none">
-              Home
+             {t('location.home')}
             </Link>
             <Link to="#" className="breadcrumb-item text-decoration-none">
-              About UMC
+            {t('location.aboutumc')}
             </Link>
-            <span className="breadcrumb-item active1">Location</span>
+            <span className="breadcrumb-item active1">{t('location.location-title')}</span>
           </nav>
           <h2 className="location-title">
-            <span className="highlight">Location</span>
-            <span className="highlighted-text"> of UMC</span>
+            <span className="highlight">{t('location.highlight1')}</span>
+            <span className="highlighted-text"> {t('location.highlight-text')}</span>
           </h2>
           <div className="row mt-4 row-styling-3">
             <div className="col-xl-12 col-lg-12 col-md-12 col-sm-12 mx-auto location-styling">
@@ -87,7 +91,7 @@ const Location = () => {
           </div>
           <div className="mt-5 col-lg-4 col-md-5 col-sm-12">
             <h3 className="text-orange">
-              Location <span className="text-black">Information</span>
+            {t('location.location-title')} <span className="text-black">{t('location.information')}</span>
               <span className="divider"></span>
             </h3>
             <hr />
@@ -127,7 +131,7 @@ const Location = () => {
                   ) : (
                     <tr>
                       <td colSpan="4" className="text-center">
-                        No data available.
+                      {t('location.nodata')}
                       </td>
                     </tr>
                   )}
@@ -140,7 +144,7 @@ const Location = () => {
                 <thead className="bg-orange text-white">
                   <tr>
                     <th colSpan="2" className="table-heading-styling">
-                      NO. OF CORPN. EMPLOYEES.
+                    {t('location.emnumber')}
                     </th>
                   </tr>
                 </thead>
@@ -175,7 +179,7 @@ const Location = () => {
                   ) : (
                     <tr>
                       <td colSpan="4" className="text-center">
-                        No data available.
+                      {t('location.nodata')}
                       </td>
                     </tr>
                   )}
@@ -188,7 +192,7 @@ const Location = () => {
                 <thead className="bg-orange text-white">
                   <tr>
                     <th colSpan="2" className="table-heading-styling">
-                      NO. OF CORPN. EMPLOYEES.
+                    {t('location.emnumber')}
                     </th>
                   </tr>
                 </thead>
@@ -223,7 +227,7 @@ const Location = () => {
                   ) : (
                     <tr>
                       <td colSpan="4" className="text-center">
-                        No data available.
+                      {t('location.nodata')}
                       </td>
                     </tr>
                   )}
@@ -234,7 +238,7 @@ const Location = () => {
 
           <div className="mt-4 col-lg-4 col-md-5 col-sm-12">
             <h3 className="text-orange">
-              City <span className="text-black">Information</span>
+            {t('location.city')} <span className="text-black">{t('location.information')}</span>
               <span className="divider"></span>
             </h3>
             <hr />
@@ -246,7 +250,7 @@ const Location = () => {
                 <thead className="bg-orange text-white">
                   <tr>
                     <th colSpan="2" className="table-heading-styling">
-                      POPULATION AND AREA
+                    {t('location.populationandarea')}
                     </th>
                   </tr>
                 </thead>
@@ -281,7 +285,7 @@ const Location = () => {
                   ) : (
                     <tr>
                       <td colSpan="4" className="text-center">
-                        No data available.
+                      {t('location.nodata')}
                       </td>
                     </tr>
                   )}
