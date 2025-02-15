@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import "./Administration.css"
 import "../DepartmentCustomCss/DepartmentCustom.css";
 import api, { baseURL } from "../api"
+import { useTranslation } from "react-i18next";
 
 const ITEMS_PER_PAGE = 10;
 
@@ -13,10 +14,12 @@ const Administration = () => {
     const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
     const currentData = administration.slice(startIndex, startIndex + ITEMS_PER_PAGE);
     const [bgImage, setBgImage] = useState("");
+      const { i18n, t } = useTranslation();
+    
 
     const fetchAdministration = async () => {
         try {
-            const response = await api.get("/administration");
+            const response = await api.get(`/administration?lang=${i18n.language}`);
             setAdinistration(response.data);
         } catch (error) {
             console.error("Error fetching administration data", error);

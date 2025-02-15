@@ -10,6 +10,8 @@ import cicon5 from "../../assets/images/Departments/Vector (6).png";
 import cicon6 from "../../assets/images/Departments/Vector (7).png";
 import pdficon from '../../assets/images/Departments/document 1.png';
 import api, { baseURL } from "../api";
+import { useTranslation } from "react-i18next";
+
 
 const ITEMS_PER_PAGE = 10;
 
@@ -19,6 +21,8 @@ const AuditDepartment = () => {
   const [description, setDescription] = useState([]);
   const [hod, setHod] = useState([]);
   const [pdf, setPdf] = useState([]);
+  const { i18n, t } = useTranslation();
+
 
   const totalPages = Math.ceil(pdf.length / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
@@ -83,7 +87,7 @@ const AuditDepartment = () => {
 
   const fetchHod = async () => {
     try {
-      const response = await api.get("/hod-details");
+      const response = await api.get(`/hod-details${i18n.language}`);
       const filteredData = response.data.filter((item) => item.designation === department_name);
       setHod(filteredData);
     } catch (error) {
@@ -93,7 +97,7 @@ const AuditDepartment = () => {
 
   const fetchDescription = async () => {
     try {
-      const response = await api.get("/department-description");
+      const response = await api.get(`/department-description${i18n.language}`);
       const filteredData = response.data.filter((item) => item.department === department_name);
       setDescription(filteredData);
     } catch (error) {
@@ -103,7 +107,7 @@ const AuditDepartment = () => {
 
   const fetchPdf = async () => {
     try {
-      const response = await api.get("/department-pdfs");
+      const response = await api.get(`/department-pdfs${i18n.language}`);
       const filteredData = response.data.reverse().filter((item) => item.department === department_name);
       setPdf(filteredData);
     } catch (error) {
