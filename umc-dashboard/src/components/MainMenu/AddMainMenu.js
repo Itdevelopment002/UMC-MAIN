@@ -6,16 +6,20 @@ import { FaTrash } from "react-icons/fa";
 
 const AddMainMenu = () => {
   const initialMenuItems = [
-    { mainMenu: "", mainMenuLink: "", subMenus: [], errors: {} },
+    { mainMenu: "", mainMenuLink: "", language_code: "", subMenus: [], errors: {} },
   ];
   const [menuItems, setMenuItems] = useState(initialMenuItems);
   const [formErrors, setFormErrors] = useState({});
   const navigate = useNavigate();
+  const [language, setLanguage] = useState("");
 
   const validateForm = () => {
     const errors = {};
     menuItems.forEach((item, index) => {
       const itemErrors = {};
+      if (!item.language_code.trim()) {
+        itemErrors.language_code ="Language selection is required";
+      }
       if (!item.mainMenu.trim()) {
         itemErrors.mainMenu = "Main Menu name is required.";
       }
@@ -66,7 +70,7 @@ const AddMainMenu = () => {
     }
 
     const newMenuItems = [...menuItems];
-    newMenuItems[index].subMenus.push({ subMenu: "", subLink: "" });
+    newMenuItems[index].subMenus.push({ subMenu: "", subLink: "",language_code: "" });
     newMenuItems[index].mainMenuLink = "#";
     newMenuItems[index].isDisabled = true;
 
@@ -128,6 +132,35 @@ const AddMainMenu = () => {
                   <form onSubmit={handleSubmit}>
                     {menuItems.map((item, index) => (
                       <div key={index}>
+                        <div className="form-group row">
+                        <label className="col-form-label col-md-2">
+                          Select Language <span className="text-danger">*</span>
+                        </label>
+                        <div className="col-md-4">
+                          <select
+                            className={`form-control form-control-md m-t-10${
+                              formErrors[index]?.language_code ? "is-invalid" : ""
+                            }`}
+                            value={item.language_code}
+                            onChange={(e) =>
+                              handleInputChange(
+                                index,
+                                "language_code",
+                                e.target.value
+                              )
+                            }
+                          >
+                            <option value="">Select Language</option>
+                            <option value="en">English</option>
+                            <option value="mr">Marathi</option>
+                          </select>
+                          {formErrors[index]?.language_code && (
+                              <span className="text-danger">
+                                {formErrors[index].language_code}
+                              </span>
+                            )}
+                        </div>
+                      </div>
                         <div className="form-group row">
                           <label className="col-form-label col-md-2 m-t-10">
                             Main Menu <span className="text-danger">*</span>

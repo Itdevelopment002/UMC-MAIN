@@ -47,5 +47,30 @@
     "history-title1":"History",
     "history-title2":" of UMC",
     "commisioner-overview": "Brief Overview of the Commissioner",
-    "btn-title":"Click here for the location"
+    "btn-title":"Click here for the location",
+    "breadcrumbHome": "Home",
+
+    "contactUs":{
+        "breadcrumb": "Contact Us",
+        "contact" : "Contact",
+        "us": "Us",
+        "wardOfficeNo": "Ward Office No.",
+        "address": "Address.",
+        "phoneNo": "Phone No.",
+        "emailId": "Email Id"
+    },
+    "recruitment": {
+        "breadcrumb": "Recruitment",
+        "jobs": "Jobs",
+        "umc": "@ UMC",
+        "post": "is looking for candidates for following post's",
+        "recruitmentAdvertisement": "Contract basis Recruitment Advertisement",
+        "srNo": "Sr. No.",
+        "advertisement": "Advertisement",
+        "action": "Action",
+        "viewPDF": "View PDF",
+        "noData": "No Contract basis recruitment data available",
+        "oldRecruitmentAdvertisement": "Old Recruitment Advertisement",
+        "noOldDataAvailable": "No Old recruitment data available"
+    }
 }

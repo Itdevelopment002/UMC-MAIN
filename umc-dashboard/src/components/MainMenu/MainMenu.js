@@ -31,7 +31,7 @@ const MainMenu = () => {
   };
 
   const handleSaveChanges = async () => {
-    if (!selectedMenu.mainMenu || !selectedMenu.mainMenuLink) {
+    if (!selectedMenu.mainMenu || !selectedMenu.mainMenuLink ||!selectedMenu.language_code) {
       alert("Please fill in the Main Menu and Main Menu Link fields.");
       return;
     }
@@ -40,9 +40,11 @@ const MainMenu = () => {
       const payload = {
         mainMenu: selectedMenu.mainMenu,
         mainMenuLink: selectedMenu.mainMenuLink,
+        language_code: selectedMenu.language_code,
         subMenus: selectedMenu.subMenus.map((sub) => ({
           subMenu: sub.subMenu,
           subLink: sub.subLink,
+          language_code: selectedMenu.language_code,
         })),
       };
 
@@ -58,12 +60,12 @@ const MainMenu = () => {
   };
 
   const handleAddSubMenu = () => {
-    if (newSubMenu && newSubLink) {
+    if (newSubMenu && newSubLink && selectedMenu.language_code) {
       setSelectedMenu((prev) => ({
         ...prev,
         subMenus: [
           ...prev.subMenus,
-          { subMenu: newSubMenu, subLink: newSubLink },
+          { subMenu: newSubMenu, subLink: newSubLink,language_code: selectedMenu.language_code },
         ],
       }));
       setNewSubMenu("");
@@ -225,6 +227,23 @@ const MainMenu = () => {
                     <h5 className="modal-title">Edit Main Menu</h5>
                   </div>
                   <div className="modal-body">
+                    <div className="form-group">
+                    <label style={{ fontWeight: "bold" }}>Select Language</label>
+                        <select
+                        className="form-control"
+                          value={selectedMenu?.language_code || ""}
+                          onChange={(e) =>
+                            setSelectedMenu((prev) => ({
+                              ...prev,
+                              language_code: e.target.value,
+                            }))
+                          }
+                        >
+                          <option value="">Select Language</option>
+                          <option value="en">English</option>
+                          <option value="mr">Marathi</option>
+                        </select>
+                    </div>
                     <div className="form-group">
                       <label style={{ fontWeight: "bold" }}>Main Menu</label>
                       <input
