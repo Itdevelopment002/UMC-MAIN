@@ -199,7 +199,7 @@ const Footer = () => {
             ) : (
               t("footer.loading")
             )}</span>
-          <span className="footer-sapn2">{t("footer.designBy")}</span>
+          {/* <span className="footer-sapn2">{t("footer.designBy")}</span> */}
         </div>
       </div>
     </footer>
