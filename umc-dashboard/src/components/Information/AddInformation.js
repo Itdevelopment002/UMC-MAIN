@@ -14,6 +14,7 @@ const AddInformation = () => {
     if (!language) {
       validationErrors.language = "Language selection is required";
     }
+    
     if (!heading) {
       validationErrors.heading = "Information Heading is required.";
     }

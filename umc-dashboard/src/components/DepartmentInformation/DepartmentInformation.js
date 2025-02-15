@@ -60,6 +60,7 @@ const DepartmentInformation = () => {
             const response = await api.get("/department-description");
             const sortedData = response.data.sort((a, b) => a.department.localeCompare(b.department));
             setDescriptionData(sortedData);
+            console.log(sortedData)
         } catch (error) {
             toast.error("Failed to fetch description data!");
         }
@@ -162,6 +163,7 @@ const DepartmentInformation = () => {
                 await api.put(`/department-description/${selectedItem.id}`, {
                     department: editData.department,
                     description: editData.description,
+                    language_code: editData.language_code,
                     subDescriptions: Array.isArray(editData.subDescriptions) ? editData.subDescriptions : [],
                 });
 
@@ -181,6 +183,7 @@ const DepartmentInformation = () => {
                 formData.append("address", editData.address);
                 formData.append("number", editData.number);
                 formData.append("email", editData.email);
+                formData.append("language_code", editData.language_code);
                 if (editData.imageFile) {
                     formData.append("hodImage", editData.imageFile);
                 }
@@ -202,6 +205,7 @@ const DepartmentInformation = () => {
                     department: editData.department,
                     heading: editData.heading,
                     link: editData.link,
+                    language_code: editData.language_code,
                 });
                 setPdfData(
                     pdfData.map((item) =>
@@ -1157,6 +1161,23 @@ const DepartmentInformation = () => {
                                         {modalType === "description" && (
                                             <>
                                                 <div className="form-group">
+                                                    <label className="language_code">
+                                                        Select Language
+                                                    </label>
+                                                    <select
+                                                        className="form-control"
+                                                        name="language_code"
+                                                        value={editData.language_code}
+                                                        onChange={(e) =>
+                                                            setEditData({ ...editData, language_code: e.target.value })
+                                                        }
+                                                    >
+                                                        <option value="" disabled>Select Language</option>
+                                                        <option value="en">English</option>
+                                                        <option value="mr">Marathi</option>
+                                                    </select>
+                                                </div>
+                                                <div className="form-group">
                                                     <label htmlFor="heading">Department Name</label>
                                                     <select
                                                         className="form-control"
@@ -1174,7 +1195,6 @@ const DepartmentInformation = () => {
                                                         ))}
                                                     </select>
                                                 </div>
-
                                                 <div className="form-group">
                                                     <label htmlFor="description">Department Description</label>
                                                     <input
@@ -1227,6 +1247,24 @@ const DepartmentInformation = () => {
                                         )}
                                         {modalType === "hod" && (
                                             <>
+                                                <div className="form-group">
+                                                    <label className="language_code">
+                                                        Select Language
+                                                    </label>
+
+                                                    <select
+                                                        className="form-control"
+                                                        name="language_code"
+                                                        value={editData.language_code}
+                                                        onChange={(e) =>
+                                                            setEditData({ ...editData, language_code: e.target.value })
+                                                        }
+                                                    >
+                                                        <option value="" disabled>Select Language</option>
+                                                        <option value="en">English</option>
+                                                        <option value="mr">Marathi</option>
+                                                    </select>
+                                                </div>
                                                 <div className="form-group">
                                                     <label htmlFor="name">Hod Name</label>
                                                     <input
@@ -1327,6 +1365,24 @@ const DepartmentInformation = () => {
                                         )}
                                         {modalType === "pdf" && (
                                             <>
+                                                <div className="form-group">
+                                                    <label className="language_code">
+                                                        Select Language
+                                                    </label>
+
+                                                    <select
+                                                        className="form-control"
+                                                        name="language_code"
+                                                        value={editData.language_code}
+                                                        onChange={(e) =>
+                                                            setEditData({ ...editData, language_code: e.target.value })
+                                                        }
+                                                    >
+                                                        <option value="" disabled>Select Language</option>
+                                                        <option value="en">English</option>
+                                                        <option value="mr">Marathi</option>
+                                                    </select>
+                                                </div>
                                                 <div className="form-group">
                                                     <label htmlFor="heading">Department Name</label>
                                                     <select
