@@ -4,12 +4,14 @@ import GLightbox from "glightbox";
 import "glightbox/dist/css/glightbox.min.css";
 import "./PhotoGallery.css";
 import api, { baseURL } from "../api";
+import { useTranslation } from "react-i18next";
 
 const PhotoGallery = () => {
   const [categories, setCategories] = useState([]);
   const [images, setImages] = useState({});
   const [bgImage, setBgImage] = useState("");
   const [currentIndices, setCurrentIndices] = useState({});
+  const { i18n, t } = useTranslation();
 
   useEffect(() => {
     fetchHeaderImage();
@@ -36,12 +38,12 @@ const PhotoGallery = () => {
   };
 
   useEffect(() => {
-    api.get("/categories")
+    api.get(`/categories?lang=${i18n.language}`)
       .then((response) => {
         setCategories(response.data);
       })
       .catch((error) => console.error("Error fetching categories:", error));
-  }, []);
+  }, [i18n.language]);
 
   useEffect(() => {
     if (categories.length > 0) {
@@ -108,16 +110,16 @@ const PhotoGallery = () => {
         <div className="container-fluid font-location mt-2 mb-5" id="photo-gallery-css">
           <nav className="breadcrumb">
             <Link to="/" className="breadcrumb-item text-decoration-none">
-              Home
+            {t("breadcrumbHome")}
             </Link>
             <Link to="#" className="breadcrumb-item text-decoration-none">
-              Gallery
+            {t("gallery.breadcrumb")}
             </Link>
-            <span className="breadcrumb-item active1">Photo Gallery</span>
+            <span className="breadcrumb-item active1">{t("gallery.photoGallery")}</span>
           </nav>
           <h2 className="location-title">
-            <span className="highlight">Photo</span>
-            <span className="highlighted-text"> Gallery</span>
+            <span className="highlight">{t("gallery.photo")}</span>
+            <span className="highlighted-text"> {t("gallery.gallery")}</span>
           </h2>
           {categories.map((category) => (
             <div className="mt-4 image-section-div" key={category.id}>
