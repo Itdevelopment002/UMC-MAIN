@@ -4,7 +4,16 @@ const db = require("../config/db.js");
 
 // Get all video categories
 router.get("/video-categories", (req, res) => {
-    db.query("SELECT * FROM videocategories", (err, results) => {
+    const language = req.query.lang;
+    let query;
+    let params = [];
+    if (language) {
+        query = `SELECT * FROM videocategories WHERE language_code = ?`;
+        params.push(language);
+    } else {
+        query = "SELECT * FROM videocategories";
+    }
+    db.query(query, params,(err, results) => {
         if (err) return res.status(500).json({ error: err.message });
         res.json(results);
     });
