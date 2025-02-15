@@ -4,6 +4,8 @@ import "./AnnualFinancialStatement.css";
 import pdficon from '../../assets/images/Departments/document 1.png'
 import Swal from 'sweetalert2';
 import api, { baseURL } from "../api";
+import { useTranslation } from "react-i18next";
+
 
 const AnnualFinancialStatement = () => {
     const [itemsPerPage, setItemsPerPage] = useState(10);
@@ -11,6 +13,8 @@ const AnnualFinancialStatement = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [searchTerm, setSearchTerm] = useState("");
     const [bgImage, setBgImage] = useState("");
+      const { i18n, t } = useTranslation();
+    
 
     const totalEntries = annualData.length;
     const filteredData = annualData.filter((item) =>
@@ -24,7 +28,7 @@ const AnnualFinancialStatement = () => {
 
     const fetchAnnual = async () => {
         try {
-            const response = await api.get("/annual-finance");
+            const response = await api.get(`/annual-finance?lang=${i18n.language}`);
             setAnnualData(response.data);
         } catch (error) {
             console.error("Error fetching Annual:", error);

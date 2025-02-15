@@ -26,6 +26,7 @@ const deleteFileIfExists = async (filePath) => {
   }
 };
 
+
 router.get("/portal-services", (req, res) => {
   const language = req.query.lang;
   let query;
@@ -45,28 +46,84 @@ router.get("/portal-services", (req, res) => {
   });
 });
 
-router.get("/portal-services/:id", (req, res) => {
+
+router.get("/portal-services/:id?", (req, res) => {
   const { id } = req.params;
-  const sql = "SELECT * FROM portalservices WHERE id = ?";
-  db.query(sql, [id], (err, result) => {
+  const { lang } = req.query;
+
+  let query;
+  let params = [];
+
+  if (id) {
+    query = "SELECT * FROM portalservices WHERE id = ?";
+    params.push(id);
+  } else if (lang) {
+    query = "SELECT * FROM portalservices WHERE language_code = ?";
+    params.push(lang);
+  } else {
+    query = "SELECT * FROM portalservices";
+  }
+
+  db.query(query, params, (err, results) => {
     if (err) {
       return res.status(500).json({ message: "Database error", error: err });
     }
-
-    if (result.length === 0) {
+    if (id && results.length === 0) {
       return res.status(404).json({ message: "Portal Service not found" });
     }
-
-    res.status(200).json(result[0]);
+    res.status(200).json(id ? results[0] : results);
   });
 });
+
+
+router.post(
+  "/portal-services",
+  upload.fields([{ name: "portalImage" }]),
+  async (req, res) => {
+    const { heading, description, link, language_code } = req.body;
+    if (!heading || !description || !link || !language_code) {
+      return res
+        .status(400)
+        .json({ message: "Portal Service heading, description, language code and link are required" });
+    }
+
+    let mainIconPath = null;
+
+    if (req.files["portalImage"]) {
+      mainIconPath = path.join("uploads", req.files["portalImage"][0].filename);
+    }
+
+    const insertSql =
+      "INSERT INTO portalservices (heading, description, link, language_code, main_icon_path) VALUES (?, ?, ?, ?, ?)";
+    const insertParams = [
+      heading,
+      description,
+      link,
+      language_code,
+      mainIconPath,
+    ];
+
+    db.query(insertSql, insertParams, (err, result) => {
+      if (err) {
+        return res.status(500).json({ message: "Database error", error: err });
+      }
+      res
+        .status(201)
+        .json({
+          message: "Portal Service added successfully",
+          portalId: result.insertId,
+        });
+    });
+  }
+);
+
 
 router.put(
   "/portal-services/:id",
   upload.fields([{ name: "portalImage" }]),
   async (req, res) => {
     const { id } = req.params;
-    const { heading, description, link } = req.body;
+    const { heading, description, link, language_code } = req.body;
 
     let updateSql = "UPDATE portalservices SET";
     const updateParams = [];
@@ -86,6 +143,12 @@ router.put(
       updateSql +=
         updateParams.length > 0 ? ", link = ?" : " link = ?";
       updateParams.push(link);
+    }
+
+    if (language_code) {
+      updateSql +=
+        updateParams.length > 0 ? ", language_code = ?" : " language_code = ?";
+      updateParams.push(language_code);
     }
 
     if (req.files["portalImage"]) {
@@ -143,45 +206,6 @@ router.put(
   }
 );
 
-router.post(
-  "/portal-services",
-  upload.fields([{ name: "portalImage" }]),
-  async (req, res) => {
-    const { heading, description, link } = req.body;
-    if (!heading || !description || !link) {
-      return res
-        .status(400)
-        .json({ message: "Portal Service heading, description and link are required" });
-    }
-
-    let mainIconPath = null;
-
-    if (req.files["portalImage"]) {
-      mainIconPath = path.join("uploads", req.files["portalImage"][0].filename);
-    }
-
-    const insertSql =
-      "INSERT INTO portalservices (heading, description, link, main_icon_path) VALUES (?, ?, ?, ?)";
-    const insertParams = [
-      heading,
-      description,
-      link,
-      mainIconPath,
-    ];
-
-    db.query(insertSql, insertParams, (err, result) => {
-      if (err) {
-        return res.status(500).json({ message: "Database error", error: err });
-      }
-      res
-        .status(201)
-        .json({
-          message: "Portal Service added successfully",
-          portalId: result.insertId,
-        });
-    });
-  }
-);
 
 router.delete("/portal-services/:id", async (req, res) => {
   const { id } = req.params;
@@ -212,5 +236,6 @@ router.delete("/portal-services/:id", async (req, res) => {
     });
   });
 });
+
 
 module.exports = router;

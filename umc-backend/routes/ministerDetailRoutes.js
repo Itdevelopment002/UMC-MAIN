@@ -16,30 +16,6 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-router.post("/minister-details", upload.single("image"), (req, res) => {
-  const { name, designation } = req.body;
-
-  if (!name || !designation) {
-    return res
-      .status(400)
-      .json({ message: "Name and designation are required" });
-  }
-
-  const imagePath = req.file ? `/uploads/${req.file.filename}` : null;
-
-  const sql =
-    "INSERT INTO minister (name, designation, image_path) VALUES (?, ?, ?)";
-  db.query(sql, [name, designation, imagePath], (err, result) => {
-    if (err) {
-      return res.status(500).json({ message: "Database error", error: err });
-    }
-    res.status(200).json({
-      message: "Minister added successfully",
-      ministerId: result.insertId,
-    });
-  });
-});
-
 router.get("/minister-details", (req, res) => {
   const language = req.query.lang;
   let query;
@@ -50,7 +26,6 @@ router.get("/minister-details", (req, res) => {
   } else {
     query = "SELECT * FROM minister";
   }
-  const sql = "SELECT * FROM minister";
   db.query(query, params, (err, results) => {
     if (err) {
       return res.status(500).json({ message: "Database error", error: err });
@@ -59,23 +34,64 @@ router.get("/minister-details", (req, res) => {
   });
 });
 
-router.get("/minister-details/:id", (req, res) => {
+
+router.get("/minister-details/:id?", (req, res) => {
   const { id } = req.params;
-  const sql = "SELECT * FROM minister WHERE id = ?";
-  db.query(sql, [id], (err, result) => {
+  const { lang } = req.query;
+
+  let query;
+  let params = [];
+
+  if (id) {
+    query = "SELECT * FROM minister WHERE id = ?";
+    params.push(id);
+  } else if (lang) {
+    query = "SELECT * FROM minister WHERE language_code = ?";
+    params.push(lang);
+  } else {
+    query = "SELECT * FROM minister";
+  }
+
+  db.query(query, params, (err, results) => {
     if (err) {
       return res.status(500).json({ message: "Database error", error: err });
     }
-    if (result.length === 0) {
+    if (id && results.length === 0) {
       return res.status(404).json({ message: "Minister not found" });
     }
-    res.status(200).json(result[0]);
+    res.status(200).json(id ? results[0] : results);
   });
 });
 
+
+router.post("/minister-details", upload.single("image"), (req, res) => {
+  const { name, designation, language_code } = req.body;
+
+  if (!name || !designation || !language_code) {
+    return res
+      .status(400)
+      .json({ message: "Name and designation are required" });
+  }
+
+  const imagePath = req.file ? `/uploads/${req.file.filename}` : null;
+
+  const sql =
+    "INSERT INTO minister (name, designation, language_code, image_path) VALUES (?, ?, ?, ?)";
+  db.query(sql, [name, designation, language_code, imagePath], (err, result) => {
+    if (err) {
+      return res.status(500).json({ message: "Database error", error: err });
+    }
+    res.status(200).json({
+      message: "Minister added successfully",
+      ministerId: result.insertId,
+    });
+  });
+});
+
+
 router.put("/minister-details/:id", upload.single("image"), (req, res) => {
   const { id } = req.params;
-  const { name, designation } = req.body;
+  const { name, designation, language_code } = req.body;
 
   let updateSql = "UPDATE minister SET";
   const updateParams = [];
@@ -89,6 +105,12 @@ router.put("/minister-details/:id", upload.single("image"), (req, res) => {
     updateSql += updateParams.length > 0 ? ", designation = ?" : " designation = ?";
     updateParams.push(designation);
   }
+
+  if (language_code) {
+    updateSql += updateParams.length > 0 ? ", language_code = ?" : " language_code = ?";
+    updateParams.push(language_code);
+  }
+
 
   let imagePath;
   if (req.file) {

@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useTranslation } from 'react-i18next';
 import "./PropertyTax.css";
 import PropertyTaximg from "../../assets/images/online-services/property.png";
 import BirthCertificateimg from "../../assets/images/online-services/birth.png";
 import DeathCertificateimg from "../../assets/images/online-services/death.png";
 import eTenderimg from "../../assets/images/online-services/tender.png";
-import api, { baseURL } from "../api"
+import api, { baseURL } from "../api";
 
 const PropertyTax = () => {
+  const { t, i18n } = useTranslation(); // Added i18n to detect language changes
   const [bgImage, setBgImage] = useState("");
+  const [activeTab, setActiveTab] = useState("#property-tax-payment");
 
   const fetchHeaderImage = async () => {
     try {
@@ -30,55 +33,53 @@ const PropertyTax = () => {
     }
   };
 
-  const [activeTab, setActiveTab] = useState("#property-tax-payment");
-
   const handleTabClick = (tab) => {
     setActiveTab(tab);
   };
 
-  const [tabData, setTabData] = useState([
+  // Initialize tabData with translated strings
+  const initializeTabData = () => [
     {
       id: "#property-tax-payment",
       link: "/property-tax-payment",
-      name: "Property Tax Payment",
-      description: [
-        "Know and Pay Property Tax Online.",
-        "Read carefully terms and conditions displayed by bank before making payment."
-      ],
+      name: t('propertyTaxPayment.name'),
+      description: t('propertyTaxPayment.description', { returnObjects: true }),
       url: "",
       image: PropertyTaximg,
     },
     {
       id: "#birth-certificate",
       link: "/birth-certificate",
-      name: "Birth Certificate",
-      description: [
-        "For Birth Certificate, Please register here.",
-      ],
+      name: t('birthCertificate.name'),
+      description: t('birthCertificate.description', { returnObjects: true }),
       url: "",
       image: BirthCertificateimg,
     },
     {
       id: "#death-certificate",
       link: "/death-certificate",
-      name: "Death Certificate",
-      description: [
-        "For Death Certificate, Please contact our office.",
-      ],
+      name: t('deathCertificate.name'),
+      description: t('deathCertificate.description', { returnObjects: true }),
       url: "",
       image: DeathCertificateimg,
     },
     {
       id: "#e-tender",
       link: "/e-tender",
-      name: "e-Tender",
-      description: [
-        "For e-Tender information, visit this page.",
-      ],
+      name: t('eTender.name'),
+      description: t('eTender.description', { returnObjects: true }),
       url: "",
       image: eTenderimg,
     },
-  ]);
+  ];
+
+  // Use a state to store tabData
+  const [tabData, setTabData] = useState(initializeTabData());
+
+  // Re-initialize tabData whenever the language changes
+  useEffect(() => {
+    setTabData(initializeTabData()); // Update tabData when language changes
+  }, [i18n.language]); // Dependency on i18n.language to trigger re-render
 
   const fetchServices = async () => {
     try {
@@ -104,11 +105,11 @@ const PropertyTax = () => {
     fetchHeaderImage();
   }, []);
 
+  const activeTabData = tabData.find((tab) => tab.id === activeTab);
+
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
-
-  const activeTabData = tabData.find((tab) => tab.id === activeTab);
 
   return (
     <>
@@ -116,7 +117,6 @@ const PropertyTax = () => {
         className="history-header-image"
         style={{
           backgroundImage: `url(${bgImage})`,
-
         }}
       ></div>
 
@@ -127,17 +127,14 @@ const PropertyTax = () => {
         >
           <nav className="breadcrumb">
             <Link to="/" className="breadcrumb-item text-decoration-none">
-              Home
+              {t('home1')}
             </Link>
             <Link to="#" className="breadcrumb-item text-decoration-none">
-              Online Services
+              {t('onlineServices')}
             </Link>
-            <span className="breadcrumb-item active1">Property Tax Payment</span>
+            <span className="breadcrumb-item active1">{t('propertyTaxPayment.name')}</span>
           </nav>
-          <h2 className="location-title">
-            <span className="highlight">Property</span>
-            <span className="highlighted-text"> Tax Payment</span>
-          </h2>
+          <h2 class="location-title"><span class="highlight">{t('propertyTaxPayment.name1')}</span><span class="highlighted-text"> {t('propertyTaxPayment.name2')}</span></h2>
           <div className="row mt-4 row-styling-3">
             <div className="col-xl-9 col-lg-12 col-md-12 col-sm-12">
               <div className="e-services-container p-2">
@@ -164,7 +161,7 @@ const PropertyTax = () => {
                           <div className="tab-description">
                             {activeTabData.description.map((desc, index) => (
                               <p key={index}>
-                                {desc} {index === 0 && <Link to={activeTabData.url} target="_blank">Click here</Link>}
+                                {desc} {index === 0 && <Link to={activeTabData.url} target="_blank">{t('clickHere')}</Link>}
                               </p>
                             ))}
                           </div>

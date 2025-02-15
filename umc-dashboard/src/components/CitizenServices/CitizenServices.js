@@ -91,6 +91,8 @@ const CitizeServices = () => {
       formData.append("serviceHeading", selectedService.service_heading);
     if (selectedService.service_link)
       formData.append("serviceLink", selectedService.service_link);
+    if (selectedService.language_code)
+      formData.append("language_code", selectedService.language_code);
     if (selectedService.mainIcon)
       formData.append("mainIcon", selectedService.mainIcon);
     if (selectedService.hoverIcon)
@@ -341,6 +343,26 @@ const CitizeServices = () => {
                   <div className="modal-body">
                     <form>
                       <div className="mb-3">
+                        <label className="form-label">
+                          Select Language
+                        </label>
+
+                        <select
+                          className="form-control"
+                          value={selectedService?.language_code || ""}
+                          onChange={(e) =>
+                            setSelectedService({
+                              ...selectedService,
+                              language_code: e.target.value,
+                            })
+                          }
+                        >
+                          <option value="" disabled>Select Language</option>
+                          <option value="en">English</option>
+                          <option value="mr">Marathi</option>
+                        </select>
+                      </div>
+                      <div className="mb-3">
                         <label className="form-label">Service Heading</label>
                         <input
                           type="text"
@@ -401,7 +423,7 @@ const CitizeServices = () => {
                     </button>
                     <button
                       type="button"
-                      className="btn brn-sm btn-primary"
+                      className="btn btn-sm btn-primary"
                       onClick={handleSaveEdit}
                     >
                       Save changes

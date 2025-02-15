@@ -5,11 +5,16 @@ import api from "../api";
 const AddUMCNews = () => {
   const [heading, setHeading] = useState("");
   const [link, setLink] = useState("");
+  const [language, setLanguage] = useState("");
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
 
   const validateForm = () => {
     const validationErrors = {};
+
+    if (!language) {
+      validationErrors.language = "Language selection is required";
+    }
 
     if (!heading) {
       validationErrors.heading = "News Heading is required.";
@@ -35,9 +40,11 @@ const AddUMCNews = () => {
       const response = await api.post("/umc-news", {
         heading: heading,
         link: link,
+        language_code: language,
       });
       setHeading("");
       setLink("");
+      setLanguage("");
       navigate("/umc-news");
     } catch (error) {
       console.error("Error adding news:", error);
@@ -71,14 +78,35 @@ const AddUMCNews = () => {
                   <form onSubmit={handleSubmit}>
                     <div className="form-group row">
                       <label className="col-form-label col-md-2">
+                        Select Language <span className="text-danger">*</span>
+                      </label>
+                      <div className="col-md-4">
+                        <select
+                          className={`form-control form-control-md ${errors.language ? "is-invalid" : ""}`}
+                          value={language}
+                          onChange={(e) => {
+                            setLanguage(e.target.value);
+                            if (errors.language) {
+                              setErrors({ ...errors, language: "" });
+                            }
+                          }}
+                        >
+                          <option value="">Select Language</option>
+                          <option value="en">English</option>
+                          <option value="mr">Marathi</option>
+                        </select>
+                        {errors.language && <div className="invalid-feedback">{errors.language}</div>}
+                      </div>
+                    </div>
+                    <div className="form-group row">
+                      <label className="col-form-label col-md-2">
                         News Heading <span className="text-danger">*</span>
                       </label>
                       <div className="col-md-4">
                         <input
                           type="text"
-                          className={`form-control form-control-md ${
-                            errors.heading ? "is-invalid" : ""
-                          }`}
+                          className={`form-control form-control-md ${errors.heading ? "is-invalid" : ""
+                            }`}
                           placeholder="Enter News Heading"
                           value={heading}
                           onChange={(e) => {
@@ -103,9 +131,8 @@ const AddUMCNews = () => {
                       <div className="col-md-4">
                         <input
                           type="text"
-                          className={`form-control form-control-md ${
-                            errors.link ? "is-invalid" : ""
-                          }`}
+                          className={`form-control form-control-md ${errors.link ? "is-invalid" : ""
+                            }`}
                           placeholder="Enter News Link"
                           value={link}
                           onChange={(e) => {

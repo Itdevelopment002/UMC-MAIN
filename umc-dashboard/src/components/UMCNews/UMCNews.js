@@ -43,6 +43,7 @@ const UMCNews = () => {
       await api.put(`/umc-news/${selectedNews.id}`, {
         heading: selectedNews.heading,
         link: selectedNews.link,
+        language_code: selectedNews.language_code,
       });
       const updatedNews = news.map((news) =>
         news.id === selectedNews.id ? selectedNews : news
@@ -265,6 +266,22 @@ const UMCNews = () => {
                   </div>
                   <div className="modal-body">
                     <form>
+                      <div className="mb-3">
+                        <label className="form-label">
+                          Select Language
+                        </label>
+
+                        <select
+                          className="form-control"
+                          value={selectedNews?.language_code || ""}
+                          onChange={handleEditChange}
+                          name="language_code"
+                        >
+                          <option value="">Select Language</option>
+                          <option value="en">English</option>
+                          <option value="mr">Marathi</option>
+                        </select>
+                      </div>
                       <div className="mb-3">
                         <label className="form-label">Heading</label>
                         <input

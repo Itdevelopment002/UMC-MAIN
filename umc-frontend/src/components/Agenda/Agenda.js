@@ -4,11 +4,15 @@ import "./Agenda.css";
 import api, { baseURL } from "../api";
 import pdficon from '../../assets/images/Departments/document 1.png';
 import Swal from 'sweetalert2';
+import { useTranslation } from "react-i18next";
+
 
 
 const Agenda = () => {
     const [agenda, setAgenda] = useState([]);
     const [bgImage, setBgImage] = useState("");
+    const { i18n, t } = useTranslation();
+
 
     useEffect(() => {
         fetchAgenda();
@@ -18,7 +22,7 @@ const Agenda = () => {
 
     const fetchAgenda = async () => {
         try {
-            const response = await api.get("/agenda_data");
+            const response = await api.get(`/agenda_data?lang=${i18n.language}`);
             setAgenda(response.data);
         } catch (error) {
             console.error("Error fetching agenda:", error);
@@ -230,7 +234,7 @@ const Agenda = () => {
                                                         color: "#292D32",
                                                         textAlign: "center",
                                                     }}
-                                                    
+
                                                 >
                                                     <Link
                                                         to={item.pdf_link}

@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 const AddHomeService1 = () => {
     const [heading, setHeading] = useState('');
     const [link, setLink] = useState('');
+    const [language, setLanguage] = useState("");
     const [mainIcon, setMainIcon] = useState(null);
     const [errors, setErrors] = useState({});
     const navigate = useNavigate();
@@ -16,6 +17,7 @@ const AddHomeService1 = () => {
         const errors = {};
         if (!heading) errors.heading = "Service Heading is required.";
         if (!link) errors.link = "Service Link is required.";
+        if (!language) errors.language = "Language selection is required.";
         if (!mainIcon) errors.mainIcon = "Service Icon is required.";
         setErrors(errors);
         return Object.keys(errors).length === 0;
@@ -36,6 +38,7 @@ const AddHomeService1 = () => {
         setErrors((prev) => ({ ...prev, [name]: null }));
         if (name === "heading") setHeading(value);
         if (name === "link") setLink(value);
+        if (name === "language") setLanguage(value);
     };
 
     const handleSubmit = async (e) => {
@@ -48,6 +51,7 @@ const AddHomeService1 = () => {
         const formData = new FormData();
         formData.append('heading', heading);
         formData.append('link', link);
+        formData.append('language_code', language);
         if (mainIcon) formData.append('mainIcon', mainIcon);
 
         try {
@@ -60,6 +64,7 @@ const AddHomeService1 = () => {
             toast.success(response.data.message);
             setHeading('');
             setLink('');
+            setLanguage("");
             setMainIcon(null);
             document.getElementById('mainIconInput').value = '';
             navigate('/home-services1');
@@ -88,6 +93,24 @@ const AddHomeService1 = () => {
                                         </div>
                                     </div>
                                     <form onSubmit={handleSubmit}>
+                                        <div className="form-group row">
+                                            <label className="col-form-label col-md-2">
+                                                Select Language <span className="text-danger">*</span>
+                                            </label>
+                                            <div className="col-md-4">
+                                                <select
+                                                    className={`form-control form-control-md ${errors.language ? 'is-invalid' : ''}`}
+                                                    value={language}
+                                                    name="language"
+                                                    onChange={handleChange}
+                                                >
+                                                    <option value="">Select Language</option>
+                                                    <option value="en">English</option>
+                                                    <option value="mr">Marathi</option>
+                                                </select>
+                                                {errors.language && <div className="invalid-feedback">{errors.language}</div>}
+                                            </div>
+                                        </div>
                                         <div className="form-group row">
                                             <label className="col-form-label col-md-2">Service Heading <span className="text-danger">*</span></label>
                                             <div className="col-md-4">

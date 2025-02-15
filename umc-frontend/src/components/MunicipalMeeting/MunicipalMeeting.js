@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import "./MunicipalMeeting.css";
 import pdficon from '../../assets/images/Departments/document 1.png';
 import api, { baseURL } from "../api";
+import { useTranslation } from "react-i18next";
+
 
 const MunicipalMeeting = () => {
     const [selectedButton, setSelectedButton] = useState('');
@@ -12,11 +14,14 @@ const MunicipalMeeting = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const [availableButtons, setAvailableButtons] = useState([]);
     const [headersMap, setHeadersMap] = useState({});
-    const [bgImage, setBgImage] = useState("");
+    const [bgImage, setBgImage] = useState("");  
+    const { i18n, t } = useTranslation();
+    
+
 
     // Fetch data from the backend
     useEffect(() => {
-        api.get("/muncipal_meetings")
+        api.get(`/muncipal_meetings?lang=${i18n.language}`)
             .then((response) => {
                 setTableData(response.data);
                 const uniqueNames = [...new Set(response.data.map(item => item.name))];

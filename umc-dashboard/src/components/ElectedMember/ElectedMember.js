@@ -43,6 +43,7 @@ const ElectedMember = () => {
             await api.put(`/elected_data/${selectedServices.id}`, {
                 heading: selectedServices.heading,
                 link: selectedServices.link,
+                language_code: selectedServices.language_code,
             });
             const updatedServices = electeddata.map((services) =>
                 services.id === selectedServices.id ? selectedServices : services
@@ -220,6 +221,20 @@ const ElectedMember = () => {
                                     <div className="modal-body">
                                         <form>
                                             <div className="mb-3">
+                                                <label className="form-label">
+                                                    Select Language
+                                                </label>
+
+                                                <select
+                                                    className="form-control"
+                                                    value={selectedServices?.language_code || ""}
+                                                    onChange={handleEditChange}
+                                                    name="language_code"
+                                                >
+                                                    <option value="">Select Language</option>
+                                                    <option value="en">English</option>
+                                                    <option value="mr">Marathi</option>
+                                                </select>
                                                 <label className="form-label">Heading</label>
                                                 <input
                                                     type="text"
