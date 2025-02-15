@@ -14,7 +14,7 @@ const AddAdministration = () => {
   const validateForm = () => {
     const validationErrors = {};
     if (!language) {
-      validationErrors.language ="Language selection is required";
+      validationErrors.language = "Language selection is required";
     }
     if (!name) {
       validationErrors.name = "Name is required.";
@@ -81,27 +81,27 @@ const AddAdministration = () => {
                     </div>
                   </div>
                   <form onSubmit={handleSubmit}>
-                  <div className="form-group row">
-                    <label className="col-form-label col-md-2">
-                      Select Language <span className="text-danger">*</span>
-                    </label>
-                    <div className="col-md-4">
-                      <select
-                        className={`form-control form-control-md ${errors.language ? "is-invalid" : ""}`}
-                        value={language}
-                        onChange={(e) => {
-                          setLanguage(e.target.value);
-                          if (errors.language) {
-                            setErrors({ ...errors, language: "" });
-                          }
-                        }}
-                      >
-                        <option value="">Select Language</option>
-                        <option value="en">English</option>
-                        <option value="mr">Marathi</option>
-                      </select>
-                      {errors.language && <div className="invalid-feedback">{errors.language}</div>}
-                    </div>
+                    <div className="form-group row">
+                      <label className="col-form-label col-md-2">
+                        Select Language <span className="text-danger">*</span>
+                      </label>
+                      <div className="col-md-4">
+                        <select
+                          className={`form-control form-control-md ${errors.language ? "is-invalid" : ""}`}
+                          value={language}
+                          onChange={(e) => {
+                            setLanguage(e.target.value);
+                            if (errors.language) {
+                              setErrors({ ...errors, language: "" });
+                            }
+                          }}
+                        >
+                          <option value="">Select Language</option>
+                          <option value="en">English</option>
+                          <option value="mr">Marathi</option>
+                        </select>
+                        {errors.language && <div className="invalid-feedback">{errors.language}</div>}
+                      </div>
                     </div>
                     <div className="form-group row">
                       <label className="col-form-label col-md-2">

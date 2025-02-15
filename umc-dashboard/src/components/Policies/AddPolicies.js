@@ -7,10 +7,13 @@ const AddPolicies = () => {
   const [link, setLink] = useState("");
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
+  const [language, setLanguage] = useState("");
 
   const validateForm = () => {
     const validationErrors = {};
-
+    if (!language) {
+      validationErrors.language = "Language selection is required";
+    }
     if (!heading) {
       validationErrors.heading = "Heading is required.";
     }
@@ -35,7 +38,11 @@ const AddPolicies = () => {
       const response = await api.post("/policies_data", {
         heading: heading,
         link: link,
+        language_code: language,
+
       });
+      setLanguage("");
+
       setHeading("");
       setLink("");
       navigate("/policies");
@@ -71,14 +78,35 @@ const AddPolicies = () => {
                   <form onSubmit={handleSubmit}>
                     <div className="form-group row">
                       <label className="col-form-label col-md-2">
+                        Select Language <span className="text-danger">*</span>
+                      </label>
+                      <div className="col-md-4">
+                        <select
+                          className={`form-control form-control-md ${errors.language ? "is-invalid" : ""}`}
+                          value={language}
+                          onChange={(e) => {
+                            setLanguage(e.target.value);
+                            if (errors.language) {
+                              setErrors({ ...errors, language: "" });
+                            }
+                          }}
+                        >
+                          <option value="">Select Language</option>
+                          <option value="en">English</option>
+                          <option value="mr">Marathi</option>
+                        </select>
+                        {errors.language && <div className="invalid-feedback">{errors.language}</div>}
+                      </div>
+                    </div>
+                    <div className="form-group row">
+                      <label className="col-form-label col-md-2">
                         Heading <span className="text-danger">*</span>
                       </label>
                       <div className="col-md-4">
                         <input
                           type="text"
-                          className={`form-control form-control-md ${
-                            errors.heading ? "is-invalid" : ""
-                          }`}
+                          className={`form-control form-control-md ${errors.heading ? "is-invalid" : ""
+                            }`}
                           placeholder="Enter Heading"
                           value={heading}
                           onChange={(e) => {
@@ -98,14 +126,13 @@ const AddPolicies = () => {
 
                     <div className="form-group row mt-3">
                       <label className="col-form-label col-md-2">
-                    PDF Link <span className="text-danger">*</span>
+                        PDF Link <span className="text-danger">*</span>
                       </label>
                       <div className="col-md-4">
                         <input
                           type="text"
-                          className={`form-control form-control-md ${
-                            errors.link ? "is-invalid" : ""
-                          }`}
+                          className={`form-control form-control-md ${errors.link ? "is-invalid" : ""
+                            }`}
                           placeholder="Enter PDF Link"
                           value={link}
                           onChange={(e) => {
