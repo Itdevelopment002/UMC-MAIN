@@ -220,8 +220,8 @@ const Information = () => {
                     {currentPage < Math.ceil(info.length / infoPerPage) - 2 && (
                       <li
                         className={`page-item ${currentPage === Math.ceil(info.length / infoPerPage) - 1
-                            ? "active"
-                            : ""
+                          ? "active"
+                          : ""
                           }`}
                       >
                         <button
@@ -239,8 +239,8 @@ const Information = () => {
                     {currentPage < Math.ceil(info.length / infoPerPage) - 1 && (
                       <li
                         className={`page-item ${currentPage === Math.ceil(info.length / infoPerPage)
-                            ? "active"
-                            : ""
+                          ? "active"
+                          : ""
                           }`}
                       >
                         <button
@@ -257,8 +257,8 @@ const Information = () => {
                     {/* Next Button */}
                     <li
                       className={`page-item ${currentPage === Math.ceil(info.length / infoPerPage)
-                          ? "disabled"
-                          : ""
+                        ? "disabled"
+                        : ""
                         }`}
                     >
                       <button
@@ -291,22 +291,22 @@ const Information = () => {
                   </div>
                   <div className="modal-body">
                     <form>
-                    <div className="mb-3">
-                    <label className="form-label">
-                      Select Language
-                    </label>
-            
-                      <select
-                       className="form-control"
-                        value={selectedInfo?.language_code || ""}
-                        onChange={handleEditChange}
-                        name="language_code"
-                      >
-                        <option value="">Select Language</option>
-                        <option value="en">English</option>
-                        <option value="mr">Marathi</option>
-                      </select>
-                  </div>
+                      <div className="mb-3">
+                        <label className="form-label">
+                          Select Language
+                        </label>
+
+                        <select
+                          className="form-control"
+                          value={selectedInfo?.language_code || ""}
+                          onChange={handleEditChange}
+                          name="language_code"
+                        >
+                          <option value="">Select Language</option>
+                          <option value="en">English</option>
+                          <option value="mr">Marathi</option>
+                        </select>
+                      </div>
                       <div className="mb-3">
                         <label className="form-label">Heading</label>
                         <input

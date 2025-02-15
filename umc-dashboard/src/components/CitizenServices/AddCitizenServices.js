@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 const AddCitizeServices = () => {
     const [serviceHeading, setServiceHeading] = useState('');
     const [serviceLink, setServiceLink] = useState('');
+    const [language, setLanguage] = useState('');
     const [mainIcon, setMainIcon] = useState(null);
     const [errors, setErrors] = useState({});
     const navigate = useNavigate();
@@ -16,6 +17,7 @@ const AddCitizeServices = () => {
         const errors = {};
         if (!serviceHeading) errors.serviceHeading = "Service Heading is required.";
         if (!serviceLink) errors.serviceLink = "Service Link is required.";
+        if (!language) errors.language = "Language Selection is required.";
         if (!mainIcon) errors.mainIcon = "Service Icon is required.";
         setErrors(errors);
         return Object.keys(errors).length === 0;
@@ -36,6 +38,7 @@ const AddCitizeServices = () => {
         setErrors((prev) => ({ ...prev, [name]: null }));
         if (name === "serviceHeading") setServiceHeading(value);
         if (name === "serviceLink") setServiceLink(value);
+        if (name === "language") setLanguage(value);
     };
 
     const handleSubmit = async (e) => {
@@ -48,6 +51,7 @@ const AddCitizeServices = () => {
         const formData = new FormData();
         formData.append('serviceHeading', serviceHeading);
         formData.append('serviceLink', serviceLink);
+        formData.append('language_code', language);
         if (mainIcon) formData.append('mainIcon', mainIcon);
 
         try {
@@ -56,12 +60,10 @@ const AddCitizeServices = () => {
                     'Content-Type': 'multipart/form-data',
                 },
             });
-
             toast.success(response.data.message);
-
-            // Reset the form
             setServiceHeading('');
             setServiceLink('');
+            setLanguage("");
             setMainIcon(null);
             document.getElementById('mainIconInput').value = '';
             navigate('/citizen-services');
@@ -91,6 +93,24 @@ const AddCitizeServices = () => {
                                     </div>
                                     <form onSubmit={handleSubmit}>
                                         <div className="form-group row">
+                                            <label className="col-form-label col-md-3">
+                                                Select Language <span className="text-danger">*</span>
+                                            </label>
+                                            <div className="col-md-4">
+                                                <select
+                                                    className={`form-control form-control-md ${errors.language ? 'is-invalid' : ''}`}
+                                                    value={language}
+                                                    name="language"
+                                                    onChange={handleChange}
+                                                >
+                                                    <option value="">Select Language</option>
+                                                    <option value="en">English</option>
+                                                    <option value="mr">Marathi</option>
+                                                </select>
+                                                {errors.language && <div className="invalid-feedback">{errors.language}</div>}
+                                            </div>
+                                        </div>
+                                        <div className="form-group row">
                                             <label className="col-form-label col-md-3">Service Heading <span className="text-danger">*</span></label>
                                             <div className="col-md-4">
                                                 <input
@@ -101,7 +121,7 @@ const AddCitizeServices = () => {
                                                     placeholder='Enter Service Heading'
                                                     onChange={handleChange}
                                                 />
-                                                {errors.serviceHeading && <span className="text-danger">{errors.serviceHeading}</span>}
+                                                {errors.serviceHeading && <span className="invalid-feedback">{errors.serviceHeading}</span>}
                                             </div>
                                         </div>
                                         <div className="form-group row">
@@ -115,10 +135,9 @@ const AddCitizeServices = () => {
                                                     placeholder='Enter Service Link'
                                                     onChange={handleChange}
                                                 />
-                                                {errors.serviceLink && <span className="text-danger">{errors.serviceLink}</span>}
+                                                {errors.serviceLink && <span className="invalid-feedback">{errors.serviceLink}</span>}
                                             </div>
                                         </div>
-
                                         <div className="form-group row">
                                             <label className="col-form-label col-lg-3">Service Icon <span className="text-danger">*</span></label>
                                             <div className="col-md-4">
@@ -130,7 +149,7 @@ const AddCitizeServices = () => {
                                                     accept="image/*"
                                                     onChange={(e) => handleFileChange(e, setMainIcon, 'mainIcon')}
                                                 />
-                                                {errors.mainIcon && <span className="text-danger">{errors.mainIcon}</span>}
+                                                {errors.mainIcon && <span className="invalid-feedback">{errors.mainIcon}</span>}
                                             </div>
                                         </div>
                                         <input type="submit" className="btn btn-primary btn-sm" value="Submit" />
