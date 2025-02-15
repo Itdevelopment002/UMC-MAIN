@@ -7,28 +7,44 @@ const convertToMySQLDate = (dateString) => {
   return `${year}-${month}-${day}`;
 };
 
+// router.get("/agenda_data", (req, res) => {
+//   db.query("SELECT * FROM agenda", (err, results) => {
+//     if (err) {
+//       console.error(err);
+//       return res.status(500).json({ error: "Failed to fetch agenda." });
+//     }
+//     res.json(results);
+//   });
+// });
+
 router.get("/agenda_data", (req, res) => {
-  db.query("SELECT * FROM agenda", (err, results) => {
-    if (err) {
-      console.error(err);
-      return res.status(500).json({ error: "Failed to fetch agenda." });
-    }
+  const language = req.query.lang;
+  let query;
+  let params = [];
+  if (language) {
+    query = `SELECT * FROM agenda WHERE language_code = ?`;
+    params.push(language);
+  } else {
+    query = "SELECT * FROM agenda";
+  }
+
+  db.query(query, params, (err, results) => {
+    if (err) throw err;
     res.json(results);
   });
 });
 
-
 router.post("/agenda_data", (req, res) => {
-  const { Department_Name, Agenda_No_Date, Schedule_Date_of_Meeting, Adjournment_Notice, pdf_link } = req.body;
+  const { Department_Name, Agenda_No_Date, Schedule_Date_of_Meeting, Adjournment_Notice,language_code, pdf_link } = req.body;
   const formattedDate = convertToMySQLDate(Schedule_Date_of_Meeting);
   const sql = `
     INSERT INTO agenda 
-    (Department_Name, Agenda_No_Date, Schedule_Date_of_Meeting, Adjournment_Notice, pdf_link) 
-    VALUES (?, ?, ?, ?, ?)
+    (Department_Name, Agenda_No_Date, Schedule_Date_of_Meeting, Adjournment_Notice,language_code, pdf_link) 
+    VALUES (?, ?, ?, ?, ?,?)
   `;
   db.query(
     sql,
-    [Department_Name, Agenda_No_Date, formattedDate, Adjournment_Notice, pdf_link],
+    [Department_Name, Agenda_No_Date, formattedDate, Adjournment_Notice,language_code, pdf_link],
     (err, result) => {
       if (err) {
         console.error(err);
@@ -42,16 +58,16 @@ router.post("/agenda_data", (req, res) => {
 
 
 router.put("/agenda_data/:Sr_No", (req, res) => {
-  const { Department_Name, Agenda_No_Date, Schedule_Date_of_Meeting, Adjournment_Notice, pdf_link } = req.body;
+  const { Department_Name, Agenda_No_Date, Schedule_Date_of_Meeting, Adjournment_Notice, pdf_link,language_code } = req.body;
   const formattedDate = Schedule_Date_of_Meeting ? convertToMySQLDate(Schedule_Date_of_Meeting) : null;
   const sql = `
     UPDATE agenda 
-    SET Department_Name = ?, Agenda_No_Date = ?, Schedule_Date_of_Meeting = ?, Adjournment_Notice = ?, pdf_link = ? 
+    SET Department_Name = ?, Agenda_No_Date = ?, Schedule_Date_of_Meeting = ?, Adjournment_Notice = ?, pdf_link = ? ,language_code=?
     WHERE Sr_No = ?
   `;
   db.query(
     sql,
-    [Department_Name, Agenda_No_Date, formattedDate, Adjournment_Notice, pdf_link, req.params.Sr_No],
+    [Department_Name, Agenda_No_Date, formattedDate, Adjournment_Notice, pdf_link,language_code, req.params.Sr_No],
     (err, result) => {
       if (err) {
         console.error(err);

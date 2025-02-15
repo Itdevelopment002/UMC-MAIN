@@ -10,6 +10,7 @@ const AddeNews = () => {
   const [pdf_link, setPdfLink] = useState("");
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
+    const [language, setLanguage] = useState("");
 
   const formatDate = (date) => {
     const d = new Date(date);
@@ -21,7 +22,9 @@ const AddeNews = () => {
 
   const validateForm = () => {
     const validationErrors = {};
-
+    if (!language) {
+      validationErrors.language = "Language selection is required";
+    }
     if (!info) {
       validationErrors.info = "Information is required.";
     }
@@ -53,7 +56,10 @@ const AddeNews = () => {
         info,
         issue_date: formattedDate,
         pdf_link,
+        language_code: language,
+
       });
+      setLanguage("");
       setInfo("");
       setIssueDate("");
       setPdfLink("");
@@ -89,6 +95,26 @@ const AddeNews = () => {
                   </div>
                   <form onSubmit={handleSubmit}>
                     <div className="form-group row">
+                    <label className="col-form-label col-md-2">
+                      Select Language <span className="text-danger">*</span>
+                    </label>
+                    <div className="col-md-4">
+                      <select
+                        className={`form-control form-control-md ${errors.language ? "is-invalid" : ""}`}
+                        value={language}
+                        onChange={(e) => {
+                          setLanguage(e.target.value);
+                          if (errors.language) {
+                            setErrors({ ...errors, language: "" });
+                          }
+                        }}
+                      >
+                        <option value="">Select Language</option>
+                        <option value="en">English</option>
+                        <option value="mr">Marathi</option>
+                      </select>
+                      {errors.language && <div className="invalid-feedback">{errors.language}</div>}
+                    </div>
                       <label className="col-form-label col-md-2">
                         Information <span className="text-danger">*</span>
                       </label>
