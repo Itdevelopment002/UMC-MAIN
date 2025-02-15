@@ -53,6 +53,8 @@ const Agenda = () => {
                 Schedule_Date_of_Meeting: formattedPublishDate,
                 Adjournment_Notice: selectedResolution.Adjournment_Notice,
                 pdf_link: selectedResolution.pdf_link,
+                language_code: selectedResolution.language_code,
+
             });
             const updatedResolutions = resolutions.map((resolution) =>
                 resolution.Sr_No === selectedResolution.Sr_No
@@ -256,6 +258,20 @@ const Agenda = () => {
                                     <div className="modal-body">
                                         <form>
                                             <div className="mb-3">
+                                                <label className="form-label">
+                                                    Select Language
+                                                </label>
+
+                                                <select
+                                                    className="form-control"
+                                                    value={selectedResolution?.language_code || ""}
+                                                    onChange={handleEditChange}
+                                                    name="language_code"
+                                                >
+                                                    <option value="">Select Language</option>
+                                                    <option value="en">English</option>
+                                                    <option value="mr">Marathi</option>
+                                                </select>
                                                 <label className="form-label">Department Name</label>
                                                 <input
                                                     type="text"

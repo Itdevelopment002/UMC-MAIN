@@ -11,6 +11,8 @@ const AddAgenda = () => {
   const [Adjournment_Notice, setAdjournmentNotice] = useState("");
   const [pdf_link, setPdfLink] = useState("");
   const [errors, setErrors] = useState({});
+    const [language, setLanguage] = useState("");
+  
   const navigate = useNavigate();
 
   const formatDate = (date) => {
@@ -23,7 +25,9 @@ const AddAgenda = () => {
 
   const validateForm = () => {
     const validationErrors = {};
-
+    if (!language) {
+      validationErrors.language ="Language selection is required";
+    }
     if (!Department_Name) {
       validationErrors.Department_Name = "Department Name is required.";
     }
