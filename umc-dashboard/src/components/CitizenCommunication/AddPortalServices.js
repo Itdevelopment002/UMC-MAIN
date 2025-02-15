@@ -9,6 +9,7 @@ const AddPortalServices = () => {
     const [heading, setHeading] = useState('');
     const [description, setDescription] = useState('');
     const [link, setLink] = useState('');
+    const [language, setLanguage] = useState('');
     const [portalImage, setPortalImage] = useState(null);
     const [errors, setErrors] = useState({});
     const navigate = useNavigate();
@@ -18,6 +19,7 @@ const AddPortalServices = () => {
         if (!heading) errors.heading = "Service Heading is required.";
         if (!description) errors.description = "Service Description is required.";
         if (!link) errors.link = "Service Link is required.";
+        if (!language) errors.language = "Language Selection is required.";
         if (!portalImage) errors.portalImage = "Service Image is required.";
         setErrors(errors);
         return Object.keys(errors).length === 0;
@@ -39,6 +41,7 @@ const AddPortalServices = () => {
         if (name === "heading") setHeading(value);
         if (name === "description") setDescription(value);
         if (name === "link") setLink(value);
+        if (name === "language") setLanguage(value);
     };
 
     const handleSubmit = async (e) => {
@@ -52,6 +55,7 @@ const AddPortalServices = () => {
         formData.append('heading', heading);
         formData.append('description', description);
         formData.append('link', link);
+        formData.append('language_code', language);
         if (portalImage) formData.append('portalImage', portalImage);
 
         try {
@@ -65,6 +69,7 @@ const AddPortalServices = () => {
             setHeading('');
             setDescription('');
             setLink('');
+            setLanguage('');
             setPortalImage(null);
             document.getElementById('portalImageInput').value = '';
             navigate('/citizen-communication');
@@ -94,6 +99,24 @@ const AddPortalServices = () => {
                                     </div>
                                     <form onSubmit={handleSubmit}>
                                         <div className="form-group row">
+                                            <label className="col-form-label col-md-3">
+                                                Select Language <span className="text-danger">*</span>
+                                            </label>
+                                            <div className="col-md-4">
+                                                <select
+                                                    className={`form-control form-control-md ${errors.language ? 'is-invalid' : ''}`}
+                                                    value={language}
+                                                    name="language"
+                                                    onChange={handleChange}
+                                                >
+                                                    <option value="">Select Language</option>
+                                                    <option value="en">English</option>
+                                                    <option value="mr">Marathi</option>
+                                                </select>
+                                                {errors.language && <div className="invalid-feedback">{errors.language}</div>}
+                                            </div>
+                                        </div>
+                                        <div className="form-group row">
                                             <label className="col-form-label col-md-3">Service Heading <span className="text-danger">*</span></label>
                                             <div className="col-md-4">
                                                 <input
@@ -104,7 +127,7 @@ const AddPortalServices = () => {
                                                     placeholder='Enter Service Heading'
                                                     onChange={handleChange}
                                                 />
-                                                {errors.heading && <span className="text-danger">{errors.heading}</span>}
+                                                {errors.heading && <span className="invalid-feedback">{errors.heading}</span>}
                                             </div>
                                         </div>
                                         <div className="form-group row">
@@ -118,7 +141,7 @@ const AddPortalServices = () => {
                                                     placeholder='Enter Service Heading'
                                                     onChange={handleChange}
                                                 />
-                                                {errors.description && <span className="text-danger">{errors.description}</span>}
+                                                {errors.description && <span className="invalid-feedback">{errors.description}</span>}
                                             </div>
                                         </div>
                                         <div className="form-group row">
@@ -132,7 +155,7 @@ const AddPortalServices = () => {
                                                     placeholder='Enter Service Link'
                                                     onChange={handleChange}
                                                 />
-                                                {errors.link && <span className="text-danger">{errors.link}</span>}
+                                                {errors.link && <span className="invalid-feedback">{errors.link}</span>}
                                             </div>
                                         </div>
 
@@ -147,7 +170,7 @@ const AddPortalServices = () => {
                                                     accept="image/*"
                                                     onChange={(e) => handleFileChange(e, setPortalImage, 'portalImage')}
                                                 />
-                                                {errors.portalImage && <span className="text-danger">{errors.portalImage}</span>}
+                                                {errors.portalImage && <span className="invalid-feedback">{errors.portalImage}</span>}
                                             </div>
                                         </div>
                                         <input type="submit" className="btn btn-primary btn-sm" value="Submit" />

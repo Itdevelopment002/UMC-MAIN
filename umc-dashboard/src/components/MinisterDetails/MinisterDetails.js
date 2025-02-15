@@ -14,6 +14,7 @@ const MinisterDetails = () => {
   const [editData, setEditData] = useState({
     name: "",
     designation: "",
+    language_code: "",
     image: null,
   });
   const [imagePreview, setImagePreview] = useState(null);
@@ -78,6 +79,7 @@ const MinisterDetails = () => {
     const formData = new FormData();
     formData.append("name", editData.name);
     formData.append("designation", editData.designation);
+    formData.append("language_code", editData.language_code);
     if (editData.image) {
       formData.append("image", editData.image);
     }
@@ -331,6 +333,25 @@ const MinisterDetails = () => {
                   </div>
                   <div className="modal-body">
                     <form>
+                      <div className="form-group">
+                        <label>
+                          Select Language
+                        </label>
+                        <select
+                          className="form-control"
+                          value={editData.language_code}
+                          onChange={(e) =>
+                            setEditData({
+                              ...editData,
+                              language_code: e.target.value,
+                            })
+                          }
+                        >
+                          <option value="">Select Language</option>
+                          <option value="en">English</option>
+                          <option value="mr">Marathi</option>
+                        </select>
+                      </div>
                       <div className="form-group">
                         <label>Minister Name</label>
                         <input

@@ -6,6 +6,7 @@ import api from "../api";
 const AddHomeServices2 = () => {
   const [heading, setHeading] = useState("");
   const [link, setLink] = useState("");
+  const [language, setLanguage] = useState("");
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
 
@@ -18,6 +19,10 @@ const AddHomeServices2 = () => {
 
     if (!link) {
       validationErrors.link = "Service Link is required.";
+    }
+
+    if (!language) {
+      validationErrors.language = "Language selection is required";
     }
 
     setErrors(validationErrors);
@@ -36,10 +41,12 @@ const AddHomeServices2 = () => {
       const response = await api.post("/home-services2", {
         heading: heading,
         link: link,
+        language_code: language,
       });
       setHeading("");
       setLink("");
-      navigate("/home-service2");
+      setLanguage("");
+      navigate("/home-services2");
     } catch (error) {
       console.error('Error uploading file:', error);
       toast.error('Failed to add home service. Please try again.');
@@ -71,6 +78,29 @@ const AddHomeServices2 = () => {
                     </div>
                   </div>
                   <form onSubmit={handleSubmit}>
+                    <div className="form-group row">
+                      <label className="col-form-label col-md-2">
+                        Select Language <span className="text-danger">*</span>
+                      </label>
+                      <div className="col-md-4">
+                        <select
+                          className={`form-control form-control-md ${errors.language ? "is-invalid" : ""
+                            }`}
+                          value={language}
+                          onChange={(e) => {
+                            setLanguage(e.target.value);
+                            if (errors.language) {
+                              setErrors({ ...errors, language: "" });
+                            }
+                          }}
+                        >
+                          <option value="">Select Language</option>
+                          <option value="en">English</option>
+                          <option value="mr">Marathi</option>
+                        </select>
+                        {errors.language && <div className="invalid-feedback">{errors.language}</div>}
+                      </div>
+                    </div>
                     <div className="form-group row">
                       <label className="col-form-label col-md-2">
                         Service heading <span className="text-danger">*</span>

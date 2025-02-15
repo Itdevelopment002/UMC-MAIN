@@ -16,6 +16,33 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
+
+router.get("/sliders", (req, res) => {
+  const sql = "SELECT * FROM slider";
+  db.query(sql, (err, results) => {
+    if (err) {
+      return res.status(500).json({ message: "Database error", error: err });
+    }
+    res.status(200).json(results);
+  });
+});
+
+
+router.get("/sliders/:id", (req, res) => {
+  const { id } = req.params;
+  const sql = "SELECT * FROM slider WHERE id = ?";
+  db.query(sql, [id], (err, result) => {
+    if (err) {
+      return res.status(500).json({ message: "Database error", error: err });
+    }
+    if (result.length === 0) {
+      return res.status(404).json({ message: "Slider not found" });
+    }
+    res.status(200).json(result[0]);
+  });
+});
+
+
 router.post("/sliders", upload.single("image"), (req, res) => {
   const { sliderName } = req.body;
 
@@ -40,29 +67,6 @@ router.post("/sliders", upload.single("image"), (req, res) => {
   });
 });
 
-router.get("/sliders", (req, res) => {
-  const sql = "SELECT * FROM slider";
-  db.query(sql, (err, results) => {
-    if (err) {
-      return res.status(500).json({ message: "Database error", error: err });
-    }
-    res.status(200).json(results);
-  });
-});
-
-router.get("/sliders/:id", (req, res) => {
-  const { id } = req.params;
-  const sql = "SELECT * FROM slider WHERE id = ?";
-  db.query(sql, [id], (err, result) => {
-    if (err) {
-      return res.status(500).json({ message: "Database error", error: err });
-    }
-    if (result.length === 0) {
-      return res.status(404).json({ message: "Slider not found" });
-    }
-    res.status(200).json(result[0]);
-  });
-});
 
 router.put("/sliders/:id", upload.single("image"), (req, res) => {
   const { id } = req.params;
@@ -125,6 +129,7 @@ router.put("/sliders/:id", upload.single("image"), (req, res) => {
   });
 });
 
+
 router.delete("/sliders/:id", (req, res) => {
   const { id } = req.params;
 
@@ -157,5 +162,6 @@ router.delete("/sliders/:id", (req, res) => {
     });
   });
 });
+
 
 module.exports = router;
