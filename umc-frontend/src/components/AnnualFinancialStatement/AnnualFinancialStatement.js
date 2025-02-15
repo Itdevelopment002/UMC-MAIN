@@ -24,7 +24,7 @@ const AnnualFinancialStatement = () => {
     useEffect(() => {
         fetchAnnual();
         fetchHeaderImage();
-    }, []);
+    }, [i18n.language]);
 
     const fetchAnnual = async () => {
         try {
