@@ -43,6 +43,7 @@ const PropertyTaxDept = () => {
       await api.put(`/property-dept/${selectedTax.id}`, {
         description: selectedTax.description,
         link: selectedTax.link,
+        language_code: selectedTax.language_code,
       });
       const updatedTax = tax.map((tax) =>
         tax.id === selectedTax.id ? selectedTax : tax
@@ -284,6 +285,22 @@ const PropertyTaxDept = () => {
                   </div>
                   <div className="modal-body">
                     <form>
+                      <div className="mb-3">
+                        <label className="form-label">
+                          Select Language
+                        </label>
+
+                        <select
+                          className="form-control"
+                          value={selectedTax?.language_code || ""}
+                          onChange={handleEditChange}
+                          name="language_code"
+                        >
+                          <option value="" disabled>Select Language</option>
+                          <option value="en">English</option>
+                          <option value="mr">Marathi</option>
+                        </select>
+                      </div>
                       <div className="mb-3">
                         <label className="form-label">Description</label>
                         <input

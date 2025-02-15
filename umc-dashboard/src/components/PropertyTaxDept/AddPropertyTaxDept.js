@@ -5,6 +5,7 @@ import api from "../api";
 const AddPropertyTaxDept = () => {
   const [description, setDescription] = useState("");
   const [link, setLink] = useState("");
+  const [language, setLanguage] = useState("");
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
 
@@ -13,6 +14,10 @@ const AddPropertyTaxDept = () => {
 
     if (!description) {
       validationErrors.description = "Description is required.";
+    }
+
+    if (!language) {
+      validationErrors.language = "Language selection is required";
     }
 
     if (!link) {
@@ -25,19 +30,19 @@ const AddPropertyTaxDept = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (!validateForm()) {
       return;
     }
-
     try {
       //eslint-disable-next-line
       const response = await api.post("/property-dept", {
         description: description,
         link: link,
+        language_code: language,
       });
       setDescription("");
       setLink("");
+      setLanguage("");
       navigate("/property-tax-department");
     } catch (error) {
       console.error("Error adding property tax department data:", error);
@@ -71,14 +76,35 @@ const AddPropertyTaxDept = () => {
                   <form onSubmit={handleSubmit}>
                     <div className="form-group row">
                       <label className="col-form-label col-md-2">
+                        Select Language <span className="text-danger">*</span>
+                      </label>
+                      <div className="col-md-4">
+                        <select
+                          className={`form-control form-control-md ${errors.language ? "is-invalid" : ""}`}
+                          value={language}
+                          onChange={(e) => {
+                            setLanguage(e.target.value);
+                            if (errors.language) {
+                              setErrors({ ...errors, language: "" });
+                            }
+                          }}
+                        >
+                          <option value="" disabled>Select Language</option>
+                          <option value="en">English</option>
+                          <option value="mr">Marathi</option>
+                        </select>
+                        {errors.language && <div className="invalid-feedback">{errors.language}</div>}
+                      </div>
+                    </div>
+                    <div className="form-group row">
+                      <label className="col-form-label col-md-2">
                         Description <span className="text-danger">*</span>
                       </label>
                       <div className="col-md-4">
                         <input
                           type="text"
-                          className={`form-control form-control-md ${
-                            errors.description ? "is-invalid" : ""
-                          }`}
+                          className={`form-control form-control-md ${errors.description ? "is-invalid" : ""
+                            }`}
                           placeholder="Enter Description"
                           value={description}
                           onChange={(e) => {
@@ -103,9 +129,8 @@ const AddPropertyTaxDept = () => {
                       <div className="col-md-4">
                         <input
                           type="text"
-                          className={`form-control form-control-md ${
-                            errors.link ? "is-invalid" : ""
-                          }`}
+                          className={`form-control form-control-md ${errors.link ? "is-invalid" : ""
+                            }`}
                           placeholder="Enter Link"
                           value={link}
                           onChange={(e) => {

@@ -43,6 +43,7 @@ const SolidWasteSystem = () => {
       await api.put(`/swms/${selectedSwms.id}`, {
         description: selectedSwms.description,
         link: selectedSwms.link,
+        language_code: selectedSwms.language_code,
       });
       const updatedSwms = swms.map((swms) =>
         swms.id === selectedSwms.id ? selectedSwms : swms
@@ -285,6 +286,22 @@ const SolidWasteSystem = () => {
                   </div>
                   <div className="modal-body">
                     <form>
+                      <div className="mb-3">
+                        <label className="form-label">
+                          Select Language
+                        </label>
+
+                        <select
+                          className="form-control"
+                          name="language_code"
+                          value={selectedSwms?.language_code || ""}
+                          onChange={handleEditChange}
+                        >
+                          <option value="" disabled>Select Language</option>
+                          <option value="en">English</option>
+                          <option value="mr">Marathi</option>
+                        </select>
+                      </div>
                       <div className="mb-3">
                         <label className="form-label">Description</label>
                         <input
