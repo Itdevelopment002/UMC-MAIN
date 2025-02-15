@@ -26,12 +26,101 @@ const deleteFileIfExists = async (filePath) => {
   }
 };
 
+
+router.get("/department-info", (req, res) => {
+  const language = req.query.lang;
+  let query;
+  let params = [];
+  if (language) {
+    query = `SELECT * FROM departmentinfo WHERE language_code = ?`;
+    params.push(language);
+  } else {
+    query = "SELECT * FROM departmentinfo";
+  }
+
+  db.query(query, params, (err, results) => {
+    if (err) throw err;
+    res.json(results);
+  });
+});
+
+
+router.get("/department-info/:id?", (req, res) => {
+  const { id } = req.params;
+  const { lang } = req.query;
+
+  let query;
+  let params = [];
+
+  if (id) {
+    query = "SELECT * FROM departmentinfo WHERE id = ?";
+    params.push(id);
+  } else if (lang) {
+    query = "SELECT * FROM departmentinfo WHERE language_code = ?";
+    params.push(lang);
+  } else {
+    query = "SELECT * FROM departmentinfo";
+  }
+
+  db.query(query, params, (err, results) => {
+    if (err) {
+      return res.status(500).json({ message: "Database error", error: err });
+    }
+    if (id && results.length === 0) {
+      return res.status(404).json({ message: "Department Info not found" });
+    }
+    res.status(200).json(id ? results[0] : results);
+  });
+});
+
+
+router.post(
+  "/department-info",
+  upload.fields([{ name: "mainIcon" }]),
+  async (req, res) => {
+    const { heading, link, language_code } = req.body;
+    if (!heading || !link || !language_code) {
+      return res
+        .status(400)
+        .json({ message: "Department heading, language code and link are required" });
+    }
+
+    let mainIconPath = null;
+
+    if (req.files["mainIcon"]) {
+      mainIconPath = path.join("uploads", req.files["mainIcon"][0].filename);
+    }
+
+    const insertSql =
+      "INSERT INTO departmentinfo (heading, link, language_code, main_icon_path) VALUES (?, ?, ?, ?)";
+    const insertParams = [
+      heading,
+      link,
+      language_code,
+      mainIconPath,
+    ];
+
+    db.query(insertSql, insertParams, (err, result) => {
+      if (err) {
+        return res.status(500).json({ message: "Database error", error: err });
+      }
+      res
+        .status(201)
+        .json({
+          message: "Department added successfully",
+          initiativeId: result.insertId,
+        });
+    });
+  }
+);
+
+
 router.put(
   "/department-info/:id",
   upload.fields([{ name: "mainIcon" }]),
   async (req, res) => {
     const { id } = req.params;
-    const { heading, link } = req.body;
+    const { heading, link, language_code } = req.body;
 
     let updateSql = "UPDATE departmentinfo SET";
     const updateParams = [];
@@ -45,6 +134,12 @@ router.put(
       updateSql +=
         updateParams.length > 0 ? ", link = ?" : " link = ?";
       updateParams.push(link);
+    }
+
+    if (language_code) {
+      updateSql +=
+        updateParams.length > 0 ? ", language_code = ?" : " language_code = ?";
+      updateParams.push(language_code);
     }
 
     if (req.files["mainIcon"]) {
@@ -102,70 +197,6 @@ router.put(
   }
 );
 
-router.get("/department-info", (req, res) => {
-  const sql = "SELECT * FROM departmentinfo";
-  db.query(sql, (err, results) => {
-    if (err) {
-      return res.status(500).json({ message: "Database error", error: err });
-    }
-    res.status(200).json(results);
-  });
-});
-
-router.get("/department-info/:id", (req, res) => {
-  const { id } = req.params;
-  const sql = "SELECT * FROM departmentinfo WHERE id = ?";
-  db.query(sql, [id], (err, result) => {
-    if (err) {
-      return res.status(500).json({ message: "Database error", error: err });
-    }
-
-    if (result.length === 0) {
-      return res.status(404).json({ message: "Initiatives not found" });
-    }
-
-    res.status(200).json(result[0]);
-  });
-});
-
-router.post(
-  "/department-info",
-  upload.fields([{ name: "mainIcon" }]),
-  async (req, res) => {
-    const { heading, link } = req.body;
-    if (!heading || !link) {
-      return res
-        .status(400)
-        .json({ message: "Department heading and link are required" });
-    }
-
-    let mainIconPath = null;
-
-    if (req.files["mainIcon"]) {
-      mainIconPath = path.join("uploads", req.files["mainIcon"][0].filename);
-    }
-
-    const insertSql =
-      "INSERT INTO departmentinfo (heading, link, main_icon_path) VALUES (?, ?, ?)";
-    const insertParams = [
-      heading,
-      link,
-      mainIconPath,
-    ];
-
-    db.query(insertSql, insertParams, (err, result) => {
-      if (err) {
-        return res.status(500).json({ message: "Database error", error: err });
-      }
-      res
-        .status(201)
-        .json({
-          message: "Department added successfully",
-          initiativeId: result.insertId,
-        });
-    });
-  }
-);
 
 router.delete("/department-info/:id", async (req, res) => {
   const { id } = req.params;
@@ -196,5 +227,6 @@ router.delete("/department-info/:id", async (req, res) => {
     });
   });
 });
+
 
 module.exports = router;

@@ -89,6 +89,8 @@ const DepartmentPage = () => {
       formData.append("heading", selectedDepartment.heading);
     if (selectedDepartment.link)
       formData.append("link", selectedDepartment.link);
+    if (selectedDepartment.language_code)
+      formData.append("language_code", selectedDepartment.language_code);
     if (selectedDepartment.mainIcon)
       formData.append("mainIcon", selectedDepartment.mainIcon);
 
@@ -337,6 +339,26 @@ const DepartmentPage = () => {
                   <div className="modal-body">
                     <form>
                       <div className="mb-3">
+                        <label className="form-label">
+                          Select Language
+                        </label>
+
+                        <select
+                          className="form-control"
+                          value={selectedDepartment?.language_code || ""}
+                          onChange={(e) =>
+                            setSelectedDepartment({
+                              ...selectedDepartment,
+                              language_code: e.target.value,
+                            })
+                          }
+                        >
+                          <option value="" disabled>Select Language</option>
+                          <option value="en">English</option>
+                          <option value="mr">Marathi</option>
+                        </select>
+                      </div>
+                      <div className="mb-3">
                         <label className="form-label">Department Nmae</label>
                         <input
                           type="text"
@@ -397,7 +419,7 @@ const DepartmentPage = () => {
                     </button>
                     <button
                       type="button"
-                      className="btn brn-sm btn-primary"
+                      className="btn btn-sm btn-primary"
                       onClick={handleSaveEdit}
                     >
                       Save changes

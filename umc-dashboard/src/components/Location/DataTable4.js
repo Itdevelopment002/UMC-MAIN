@@ -45,6 +45,7 @@ const DataTable4 = () => {
       await api.put(`/location-info/${selectedPolicy.id}`, {
         heading: selectedPolicy.heading,
         description: selectedPolicy.description,
+        language_code: selectedPolicy.language_code,
       });
 
       const updatedPolicy = policyData.map((policy) =>
@@ -220,6 +221,22 @@ const DataTable4 = () => {
               </div>
               <div className="modal-body">
                 <form>
+                  <div className="mb-3">
+                    <label className="form-label">
+                      Select Language
+                    </label>
+
+                    <select
+                      className="form-control"
+                      value={selectedPolicy?.language_code || ""}
+                      onChange={handleEditChange}
+                      name="language_code"
+                    >
+                      <option value="">Select Language</option>
+                      <option value="en">English</option>
+                      <option value="mr">Marathi</option>
+                    </select>
+                  </div>
                   <div className="mb-3">
                     <label className="form-label">Title</label>
                     <input

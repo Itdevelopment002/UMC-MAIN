@@ -7,8 +7,9 @@ const AddDataTable4 = () => {
   const [formData, setFormData] = useState({
     heading: "",
     description: "",
+    language_code: "",
   });
-  const [errors, setErrors] = useState({ heading: "", description: "" });
+  const [errors, setErrors] = useState({ heading: "", description: "", language_code: "" });
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -29,6 +30,9 @@ const AddDataTable4 = () => {
     }
     if (!formData.description) {
       newErrors.description = "Description is required.";
+    }
+    if (!formData.language_code) {
+      newErrors.language_code = "Language selection is required.";
     }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -52,8 +56,8 @@ const AddDataTable4 = () => {
       });
 
       if (response.status === 201) {
-        setFormData({ heading: "", description: "" });
-        setErrors({ heading: "", description: "" });
+        setFormData({ heading: "", description: "", language_code: "" });
+        setErrors({ heading: "", description: "", language_code: "" });
         navigate("/location");
       } else {
         console.error("Failed to add table 4 data");
@@ -90,7 +94,26 @@ const AddDataTable4 = () => {
                   <form onSubmit={handleSubmit}>
                     <div className="form-group row">
                       <label className="col-form-label col-md-2">
-                      Title <span className="text-danger">*</span>
+                        Select Language <span className="text-danger">*</span>
+                      </label>
+                      <div className="col-md-4">
+                        <select
+                          name="language_code"
+                          className={`form-control ${errors.language ? "is-invalid" : ""
+                            }`}
+                          value={formData.language_code}
+                          onChange={handleChange}
+                        >
+                          <option value="">Select Language</option>
+                          <option value="en">English</option>
+                          <option value="mr">Marathi</option>
+                        </select>
+                        {errors.language_code && <div className="invalid-feedback">{errors.language_code}</div>}
+                      </div>
+                    </div>
+                    <div className="form-group row">
+                      <label className="col-form-label col-md-2">
+                        Title <span className="text-danger">*</span>
                       </label>
                       <div className="col-md-4">
                         <input
