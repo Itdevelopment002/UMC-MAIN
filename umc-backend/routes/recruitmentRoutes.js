@@ -27,8 +27,17 @@ router.post("/recruitment", (req, res) => {
 });
 
 router.get("/recruitment", (req, res) => {
-  const sql = "SELECT * FROM recruitments";
-  db.query(sql, (err, results) => {
+  const language = req.query.lang;
+  let query;
+  let params = [];
+  if (language) {
+    query = `SELECT * FROM recruitments WHERE language_code = ?`;
+    params.push(language);
+  } else {
+    query = "SELECT * FROM recruitments";
+  }
+  
+  db.query(query, params,(err, results) => {
     if (err) {
       return res.status(500).json({ message: "Database error", error: err });
     }
