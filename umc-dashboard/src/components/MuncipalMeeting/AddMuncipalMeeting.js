@@ -8,12 +8,16 @@ const AddMuncipalMeeting = () => {
   const [pdfLink1, setPdfLink1] = useState("");
   const [pdfLink2, setPdfLink2] = useState("");
   const [pdfLink3, setPdfLink3] = useState("");
+      const [language, setLanguage] = useState("");
+  
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
 
   const validateForm = () => {
     const validationErrors = {};
-
+    if (!language) {
+      validationErrors.language = "Language selection is required";
+    }
     if (!name) {
       validationErrors.name = "Meeting Name is required.";
     }
@@ -53,7 +57,10 @@ const AddMuncipalMeeting = () => {
         pdf_link1: pdfLink1,
         pdf_link2: pdfLink2,
         pdf_link3: pdfLink3,
+        language_code: language,
+
       });
+      setLanguage("");
       setName("");
       setYear("");
       setPdfLink1("");
@@ -91,6 +98,26 @@ const AddMuncipalMeeting = () => {
                   </div>
                   <form onSubmit={handleSubmit}>
                     <div className="form-group row">
+                    <label className="col-form-label col-md-2">
+                      Select Language <span className="text-danger">*</span>
+                    </label>
+                    <div className="col-md-4">
+                      <select
+                        className={`form-control form-control-md ${errors.language ? "is-invalid" : ""}`}
+                        value={language}
+                        onChange={(e) => {
+                          setLanguage(e.target.value);
+                          if (errors.language) {
+                            setErrors({ ...errors, language: "" });
+                          }
+                        }}
+                      >
+                        <option value="">Select Language</option>
+                        <option value="en">English</option>
+                        <option value="mr">Marathi</option>
+                      </select>
+                      {errors.language && <div className="invalid-feedback">{errors.language}</div>}
+                    </div>
                       <label className="col-form-label col-md-2">
                         Meeting Name <span className="text-danger">*</span>
                       </label>
