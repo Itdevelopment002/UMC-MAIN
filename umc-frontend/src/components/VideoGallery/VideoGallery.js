@@ -2,12 +2,14 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./VideoGallery.css";
 import api, { baseURL } from "../api";
+import { useTranslation } from "react-i18next";
 
 const VideoGallery = () => {
   const [categories, setCategories] = useState([]);
   const [videos, setVideos] = useState({});
   const [bgImage, setBgImage] = useState("");
   const [currentIndices, setCurrentIndices] = useState({});
+  const { i18n, t } = useTranslation();
 
   useEffect(() => {
     fetchHeaderImage();
@@ -26,12 +28,12 @@ const VideoGallery = () => {
   };
 
   useEffect(() => {
-    api.get("/video-categories")
+    api.get(`/video-categories?lang=${i18n.language}`)
       .then((response) => {
         setCategories(response.data);
       })
       .catch((error) => console.error("Error fetching categories:", error));
-  }, []);
+  }, [i18n.language]);
 
   useEffect(() => {
     if (categories.length > 0) {
@@ -88,13 +90,13 @@ const VideoGallery = () => {
       <div id="main-content">
         <div className="container-fluid font-location mt-2 mb-5" id="video-gallery-css">
           <nav className="breadcrumb">
-            <Link to="/" className="breadcrumb-item text-decoration-none">Home</Link>
-            <Link to="#" className="breadcrumb-item text-decoration-none">Gallery</Link>
-            <span className="breadcrumb-item active1">Video Gallery</span>
+            <Link to="/" className="breadcrumb-item text-decoration-none">{t("breadcrumbHome")}</Link>
+            <Link to="#" className="breadcrumb-item text-decoration-none">{t("gallery.breadcrumb")}</Link>
+            <span className="breadcrumb-item active1">{t("gallery.video")} {t("gallery.gallery")}</span>
           </nav>
           <h2 className="location-title">
-            <span className="highlight">Video</span>
-            <span className="highlighted-text"> Gallery</span>
+            <span className="highlight">{t("gallery.video")}</span>
+            <span className="highlighted-text"> {t("gallery.gallery")}</span>
           </h2>
           {categories.map((category) => (
             <div className="mt-4 image-section-div" key={category.id}>
