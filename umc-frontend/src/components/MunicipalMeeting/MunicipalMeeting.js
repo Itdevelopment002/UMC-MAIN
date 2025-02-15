@@ -44,7 +44,7 @@ const MunicipalMeeting = () => {
             .catch((error) => {
                 console.error("Error fetching data: ", error);
             });
-    }, []);
+    }, [i18n.language]);
 
     useEffect(() => {
         fetchHeaderImage();
