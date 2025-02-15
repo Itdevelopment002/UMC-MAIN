@@ -1,7 +1,7 @@
 {
     "header": {
         "helpline": "Helpline No: 0251 2720150",
-        "rtsAct" : "RTS Act 2015",
+        "rtsAct": "RTS Act 2015",
         "screenReader": "Screen Reader Access",
         "aMinus": "A-",
         "aPlus": "A+",
@@ -14,8 +14,8 @@
         "help": "Help",
         "onlineServices": "Online Services",
         "copyWrite": "Ulhasnagar Municipal Corporation. All Rights Reserved.",
-        "totalVisitors" : "Total Visitors",
-        "designBy":"Design & Developed by Infoigy",
+        "totalVisitors": "Total Visitors",
+        "designBy": "Design & Developed by Infoigy",
         "loading": "Loading ..."
     },
     "home": {
@@ -28,25 +28,101 @@
         "services": "Services",
         "UMCNews": "UMC News",
         "Initiatives-Programme": "Initiatives-Programme",
-        "e-Services" : "e-Services",
-        "information" : "Information",
+        "e-Services": "e-Services",
+        "information": "Information",
         "upcomingProjects": "Upcoming Projects",
         "video": "Video",
-        "gallery" : "Gallery",
+        "gallery": "Gallery",
         "loadingVideos": "Loading videos...",
-        "photo" : "Photo",
+        "photo": "Photo",
         "viewAll": "View All",
         "communication": "Communication",
-        "connect" : "Connect",
+        "connect": "Connect",
         "withUs": "with us",
         "facebook": "UMC on Facebook",
         "twitter": "UMC on Twitter",
         "youTube": " UMC on YouTube"
-
     },
-    "history-title1":"History",
-    "history-title2":" of UMC",
+    "location": {
+        "home": "Home",
+        "aboutumc": "About UMC",
+        "location-title": "Location",
+        "highlight1": "Location",
+        "highlight-text": "of UMC",
+        "information": "Information",
+        "nodata": "No data available.",
+        "emnumber": "NO. OF CORPN. EMPLOYEES.",
+        "city": "City",
+        "populationandarea": "POPULATION AND AREA"
+    },
+    "commissioner": {
+        "commissionerText": "Commissioner",
+        "highlight1": "Commissioner",
+        "highlight-text": "of UMC",
+        "name": "Commissioner Name",
+        "designation": "Designation",
+        "designationText": "of the Ulhasnagar Municipal Corporation",
+        "qualification": "Education Qualification",
+        "address": "Office Address",
+        "phoneNumber": "Phone Number",
+        "email": "Email Address",
+        "loading": "Loading data"
+    },
+    "tourism": {
+        "tourismText": "Tourism",
+        "highlight1": "Tourism",
+        "highlight-text": "of UMC",
+        "address": "Address",
+        "hour": "Hours",
+        "description": "Description"
+    },
+    "onlinesercies": {
+        "home": "Home",
+        "onlineservices": "Online Services",
+        "property": "Property Tax Payment",
+        "highlight1": "Property",
+        "highlight-text": "Tax Payment"
+    },
+    "home1": "Home",
+    "onlineServices": "Online Services",
+    "clickHere": "clickHere",
+    "propertyTaxPayment": {
+        "name": "Property Tax",
+        "name1": "Property",
+        "name2": "Tax",
+        "description": [
+            "Know and Pay Property Tax Online.",
+            "Read carefully terms and conditions displayed by bank before making payment."
+        ]
+    },
+    "birthCertificate": {
+        "name": "Birth Certificate",
+        "name1": "Birth",
+        "name2": "Certificate",
+        "description": [
+            "For Birth Certificate, Please register here."
+        ]
+    },
+    "deathCertificate": {
+        "name":"Death Certificate",
+        "name1": "Death",
+        "name2": "Certificate",
+        "description": [
+            "For Death Certificate, Please contact our office."
+        ]
+    },
+    "eTender": {
+        "name":"e-Tender",
+        "name1": "e-",
+        "name2": "Tender",
+        "description": [
+            "For e-Tender information, visit this page."
+        ]
+    },
+    "history-title1": "History",
+    "history-title2": " of UMC",
     "commisioner-overview": "Brief Overview of the Commissioner",
+
     "btn-title":"Click here for the location",
     "breadcrumbHome": "Home",
 
@@ -74,3 +150,7 @@
         "noOldDataAvailable": "No Old recruitment data available"
     }
 }
+
+    "btn-title": "Click here for the location"
+}
+

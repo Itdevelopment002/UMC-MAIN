@@ -4,6 +4,8 @@ import "./Budget.css";
 import pdficon from '../../assets/images/Departments/document 1.png';
 import Swal from 'sweetalert2';
 import api, { baseURL } from "../api";
+import { useTranslation } from "react-i18next";
+
 
 const Budget = () => {
     const [selectedButton, setSelectedButton] = useState('2020-2021');
@@ -12,6 +14,8 @@ const Budget = () => {
     const [error, setError] = useState(null);
     const [uniqueYears, setUniqueYears] = useState([]);
     const [bgImage, setBgImage] = useState("");
+    const { i18n, t } = useTranslation();
+
     useEffect(() => {
         fetchHeaderImage();
 
@@ -39,7 +43,7 @@ const Budget = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await api.get("/budgets_data");
+                const response = await api.get(`/budgets_data?lang=${i18n.language}`);
 
                 setBudgetData(response.data);
                 setLoading(false);

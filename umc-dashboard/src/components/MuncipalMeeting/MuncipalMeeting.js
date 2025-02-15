@@ -65,6 +65,8 @@ const MuncipalMeeting = () => {
                 pdf_link1: selectedMeeting.pdf_link1,
                 pdf_link2: selectedMeeting.pdf_link2,
                 pdf_link3: selectedMeeting.pdf_link3,
+                language_code: selectedMeeting.language_code,
+
             });
             const updatedMeetings = municipalMeetingsData.map((meeting) =>
                 meeting.id === selectedMeeting.id ? selectedMeeting : meeting
@@ -301,6 +303,20 @@ const MuncipalMeeting = () => {
                                                 />
                                             </div> */}
                                             <div className="mb-3">
+                                            <label className="form-label">
+                                                    Select Language
+                                                </label>
+
+                                                <select
+                                                    className="form-control"
+                                                    value={selectedMeeting?.language_code || ""}
+                                                    onChange={handleEditChange}
+                                                    name="language_code"
+                                                >
+                                                    <option value="">Select Language</option>
+                                                    <option value="en">English</option>
+                                                    <option value="mr">Marathi</option>
+                                                </select>
                                                 <label className="form-label">Year</label>
                                                 <input
                                                     type="text"

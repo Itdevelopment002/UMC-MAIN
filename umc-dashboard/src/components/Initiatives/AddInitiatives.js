@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 const AddServices = () => {
     const [heading, setHeading] = useState('');
     const [link, setLink] = useState('');
+    const [language, setLanguage] = useState("");
     const [mainIcon, setMainIcon] = useState(null);
     const [errors, setErrors] = useState({});
     const navigate = useNavigate();
@@ -16,6 +17,7 @@ const AddServices = () => {
         const errors = {};
         if (!heading) errors.heading = "Initiative Heading is required.";
         if (!link) errors.link = "Initiative Link is required.";
+        if (!language) errors.language = "Language selection is required.";
         if (!mainIcon) errors.mainIcon = "Initiative Icon is required.";
         setErrors(errors);
         return Object.keys(errors).length === 0;
@@ -36,6 +38,7 @@ const AddServices = () => {
         setErrors((prev) => ({ ...prev, [name]: null }));
         if (name === "heading") setHeading(value);
         if (name === "link") setLink(value);
+        if (name === "language") setLanguage(value);
     };
 
     const handleSubmit = async (e) => {
@@ -48,6 +51,7 @@ const AddServices = () => {
         const formData = new FormData();
         formData.append('heading', heading);
         formData.append('link', link);
+        formData.append('language_code', language);
         if (mainIcon) formData.append('mainIcon', mainIcon);
 
         try {
@@ -60,6 +64,7 @@ const AddServices = () => {
             toast.success(response.data.message);
             setHeading('');
             setLink('');
+            setLanguage('');
             setMainIcon(null);
             document.getElementById('mainIconInput').value = '';
             navigate('/initiatives');
@@ -89,6 +94,24 @@ const AddServices = () => {
                                     </div>
                                     <form onSubmit={handleSubmit}>
                                         <div className="form-group row">
+                                            <label className="col-form-label col-md-3">
+                                                Select Language <span className="text-danger">*</span>
+                                            </label>
+                                            <div className="col-md-4">
+                                                <select
+                                                    className={`form-control form-control-md ${errors.language ? 'is-invalid' : ''}`}
+                                                    value={language}
+                                                    name="language"
+                                                    onChange={handleChange}
+                                                >
+                                                    <option value="">Select Language</option>
+                                                    <option value="en">English</option>
+                                                    <option value="mr">Marathi</option>
+                                                </select>
+                                                {errors.language && <div className="invalid-feedback">{errors.language}</div>}
+                                            </div>
+                                        </div>
+                                        <div className="form-group row">
                                             <label className="col-form-label col-md-3">Initiative Heading <span className="text-danger">*</span></label>
                                             <div className="col-md-4">
                                                 <input
@@ -99,7 +122,7 @@ const AddServices = () => {
                                                     placeholder='Enter Initiative Heading'
                                                     onChange={handleChange}
                                                 />
-                                                {errors.heading && <span className="text-danger">{errors.heading}</span>}
+                                                {errors.heading && <span className="invalid-feedback">{errors.heading}</span>}
                                             </div>
                                         </div>
                                         <div className="form-group row">
@@ -113,7 +136,7 @@ const AddServices = () => {
                                                     placeholder='Enter Initiative Link'
                                                     onChange={handleChange}
                                                 />
-                                                {errors.link && <span className="text-danger">{errors.link}</span>}
+                                                {errors.link && <span className="invalid-feedback">{errors.link}</span>}
                                             </div>
                                         </div>
 
@@ -128,7 +151,7 @@ const AddServices = () => {
                                                     accept="image/*"
                                                     onChange={(e) => handleFileChange(e, setMainIcon, 'mainIcon')}
                                                 />
-                                                {errors.mainIcon && <span className="text-danger">{errors.mainIcon}</span>}
+                                                {errors.mainIcon && <span className="invalid-feedback">{errors.mainIcon}</span>}
                                             </div>
                                         </div>
                                         <input type="submit" className="btn btn-primary btn-sm" value="Submit" />

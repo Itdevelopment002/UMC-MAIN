@@ -26,12 +26,102 @@ const deleteFileIfExists = async (filePath) => {
   }
 };
 
+
+router.get("/citizen-services", (req, res) => {
+  const language = req.query.lang;
+  let query;
+  let params = [];
+  if (language) {
+    query = `SELECT * FROM citizen_services WHERE language_code = ?`;
+    params.push(language);
+  } else {
+    query = "SELECT * FROM citizen_services";
+  }
+  db.query(query, params, (err, results) => {
+    if (err) {
+      return res.status(500).json({ message: "Database error", error: err });
+    }
+    res.status(200).json(results);
+  });
+});
+
+
+router.get("/citizen-services/:id?", (req, res) => {
+  const { id } = req.params;
+  const { lang } = req.query;
+
+  let query;
+  let params = [];
+
+  if (id) {
+    query = "SELECT * FROM citizen_services WHERE id = ?";
+    params.push(id);
+  } else if (lang) {
+    query = "SELECT * FROM citizen_services WHERE language_code = ?";
+    params.push(lang);
+  } else {
+    query = "SELECT * FROM citizen_services";
+  }
+
+  db.query(query, params, (err, results) => {
+    if (err) {
+      return res.status(500).json({ message: "Database error", error: err });
+    }
+    if (id && results.length === 0) {
+      return res.status(404).json({ message: "Citizen Service not found" });
+    }
+    res.status(200).json(id ? results[0] : results);
+  });
+});
+
+
+router.post(
+  "/citizen-services",
+  upload.fields([{ name: "mainIcon" }]),
+  async (req, res) => {
+    const { serviceHeading, serviceLink, language_code } = req.body;
+    if (!serviceHeading || !serviceLink || !language_code) {
+      return res
+        .status(400)
+        .json({ message: "Service heading and link are required" });
+    }
+
+    let mainIconPath = null;
+
+    if (req.files["mainIcon"]) {
+      mainIconPath = path.join("uploads", req.files["mainIcon"][0].filename);
+    }
+
+    const insertSql =
+      "INSERT INTO citizen_services (service_heading, service_link, language_code, main_icon_path) VALUES (?, ?, ?, ?)";
+    const insertParams = [
+      serviceHeading,
+      serviceLink,
+      language_code,
+      mainIconPath,
+    ];
+
+    db.query(insertSql, insertParams, (err, result) => {
+      if (err) {
+        return res.status(500).json({ message: "Database error", error: err });
+      }
+      res
+        .status(201)
+        .json({
+          message: "Citizen Service added successfully",
+          serviceId: result.insertId,
+        });
+    });
+  }
+);
+
+
 router.put(
   "/citizen-services/:id",
   upload.fields([{ name: "mainIcon" }]),
   async (req, res) => {
     const { id } = req.params;
-    const { serviceHeading, serviceLink } = req.body;
+    const { serviceHeading, serviceLink, language_code } = req.body;
 
     let updateSql = "UPDATE citizen_services SET";
     const updateParams = [];
@@ -45,6 +135,12 @@ router.put(
       updateSql +=
         updateParams.length > 0 ? ", service_link = ?" : " service_link = ?";
       updateParams.push(serviceLink);
+    }
+
+    if (language_code) {
+      updateSql +=
+        updateParams.length > 0 ? ", language_code = ?" : " language_code = ?";
+      updateParams.push(language_code);
     }
 
     if (req.files["mainIcon"]) {
@@ -97,80 +193,6 @@ router.put(
         }
         res.status(200).json({ message: "Citizen Service updated successfully" });
       });
-    });
-  }
-);
-
-
-router.get("/citizen-services", (req, res) => {
-  const language = req.query.lang;
-  let query;
-  let params = [];
-  if (language) {
-    query = `SELECT * FROM citizen_services WHERE language_code = ?`;
-    params.push(language);
-  } else {
-    query = "SELECT * FROM citizen_services";
-  }
-  db.query(query, params, (err, results) => {
-    if (err) {
-      return res.status(500).json({ message: "Database error", error: err });
-    }
-    res.status(200).json(results);
-  });
-});
-
-router.get("/citizen-services/:id", (req, res) => {
-  const { id } = req.params;
-  const sql = "SELECT * FROM citizen_services WHERE id = ?";
-  db.query(sql, [id], (err, result) => {
-    if (err) {
-      return res.status(500).json({ message: "Database error", error: err });
-    }
-
-    if (result.length === 0) {
-      return res.status(404).json({ message: "Citizen Service not found" });
-    }
-
-    res.status(200).json(result[0]);
-  });
-});
-
-router.post(
-  "/citizen-services",
-  upload.fields([{ name: "mainIcon" }]),
-  async (req, res) => {
-    const { serviceHeading, serviceLink } = req.body;
-    if (!serviceHeading || !serviceLink) {
-      return res
-        .status(400)
-        .json({ message: "Service heading and link are required" });
-    }
-
-    let mainIconPath = null;
-
-    if (req.files["mainIcon"]) {
-      mainIconPath = path.join("uploads", req.files["mainIcon"][0].filename);
-    }
-
-    const insertSql =
-      "INSERT INTO citizen_services (service_heading, service_link, main_icon_path) VALUES (?, ?, ?)";
-    const insertParams = [
-      serviceHeading,
-      serviceLink,
-      mainIconPath,
-    ];
-
-    db.query(insertSql, insertParams, (err, result) => {
-      if (err) {
-        return res.status(500).json({ message: "Database error", error: err });
-      }
-      res
-        .status(201)
-        .json({
-          message: "Citizen Service added successfully",
-          serviceId: result.insertId,
-        });
     });
   }
 );

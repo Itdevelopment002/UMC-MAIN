@@ -1,9 +1,6 @@
 import React, { useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../api";
-// eslint-disable-next-line
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
 const AddMinisterDetails = () => {
   const navigate = useNavigate();
@@ -11,12 +8,14 @@ const AddMinisterDetails = () => {
   const [formData, setFormData] = useState({
     name: "",
     designation: "",
+    language_code: "",
     image: null,
   });
 
   const [errors, setErrors] = useState({
     name: "",
     designation: "",
+    language_code: "",
     image: "",
   });
 
@@ -41,6 +40,9 @@ const AddMinisterDetails = () => {
     if (!formData.designation) {
       newErrors.designation = "Designation is required";
     }
+    if (!formData.language_code) {
+      newErrors.language_code = "Language selection is required";
+    }
     if (!formData.image) {
       newErrors.image = "Minister Image is required";
     }
@@ -58,6 +60,7 @@ const AddMinisterDetails = () => {
     const formDataToSend = new FormData();
     formDataToSend.append("name", formData.name);
     formDataToSend.append("designation", formData.designation);
+    formDataToSend.append("language_code", formData.language_code);
     if (formData.image) {
       formDataToSend.append("image", formData.image);
     }
@@ -70,11 +73,10 @@ const AddMinisterDetails = () => {
       });
 
       if (response.status === 200) {
-        toast.success("Minister added successfully!");
-
         setFormData({
           name: "",
           designation: "",
+          language_code: "",
           image: null,
         });
 
@@ -86,7 +88,6 @@ const AddMinisterDetails = () => {
       }
     } catch (error) {
       console.error("Error adding minister:", error);
-      toast.error("Error adding minister. Please try again.");
     }
   };
 
@@ -117,9 +118,31 @@ const AddMinisterDetails = () => {
                   <form onSubmit={handleSubmit}>
                     <div className="form-group row">
                       <label className="col-form-label col-md-2">
+                        Select Language <span className="text-danger">*</span>
+                      </label>
+                      <div className="col-md-4">
+                        <select
+                          className={`form-control form-control-md ${errors.language_code ? "is-invalid" : ""}`}
+                          name="language_code"
+                          value={formData.language_code}
+                          onChange={handleChange}
+                        >
+                          <option value="">Select Language</option>
+                          <option value="en">English</option>
+                          <option value="mr">Marathi</option>
+                        </select>
+                        {errors.language_code && (
+                          <small className="text-danger">
+                            {errors.language_code}
+                          </small>
+                        )}
+                      </div>
+                    </div>
+                    <div className="form-group row">
+                      <label className="col-form-label col-md-2">
                         Minister Name <span className="text-danger">*</span>
                       </label>
-                      <div className="col-md-5">
+                      <div className="col-md-4">
                         <input
                           type="text"
                           className={`form-control  ${errors.name ? "is-invalid" : ""
@@ -140,7 +163,7 @@ const AddMinisterDetails = () => {
                       <label className="col-form-label col-md-2">
                         Designation <span className="text-danger">*</span>
                       </label>
-                      <div className="col-md-5">
+                      <div className="col-md-4">
                         <input
                           type="text"
                           className={`form-control  ${errors.designation ? "is-invalid" : ""
@@ -162,7 +185,7 @@ const AddMinisterDetails = () => {
                         Minister Image
                         <span className="text-danger">*</span>
                       </label>
-                      <div className="col-md-5">
+                      <div className="col-md-4">
                         <div className="input-group">
                           <input
                             type="file"

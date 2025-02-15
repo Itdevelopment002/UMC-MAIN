@@ -89,9 +89,10 @@ const Initiatives = () => {
       formData.append("heading", selectedInitiative.heading);
     if (selectedInitiative.link)
       formData.append("link", selectedInitiative.link);
+    if (selectedInitiative.language_code)
+      formData.append("language_code", selectedInitiative.language_code);
     if (selectedInitiative.mainIcon)
       formData.append("mainIcon", selectedInitiative.mainIcon);
-
     try {
       await api.put(`/initiatives/${selectedInitiative.id}`, formData);
       fetchInitiatives();
@@ -337,6 +338,25 @@ const Initiatives = () => {
                   <div className="modal-body">
                     <form>
                       <div className="mb-3">
+                        <label className="form-label">
+                          Select Language
+                        </label>
+                        <select
+                          className="form-control"
+                          value={selectedInitiative?.language_code || ""}
+                          onChange={(e) =>
+                            setSelectedInitiative({
+                              ...selectedInitiative,
+                              language_code: e.target.value,
+                            })
+                          }
+                        >
+                          <option value="" disabled>Select Language</option>
+                          <option value="en">English</option>
+                          <option value="mr">Marathi</option>
+                        </select>
+                      </div>
+                      <div className="mb-3">
                         <label className="form-label">Initiative Heading</label>
                         <input
                           type="text"
@@ -389,7 +409,7 @@ const Initiatives = () => {
                     </button>
                     <button
                       type="button"
-                      className="btn brn-sm btn-primary"
+                      className="btn btn-sm btn-primary"
                       onClick={handleSaveEdit}
                     >
                       Save changes

@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 const AddEmergencyServices = () => {
     const [heading, setHeading] = useState('');
     const [number, setNumber] = useState('');
+    const [language, setLanguage] = useState('');
     const [emergencyImage, setEmergencyImage] = useState(null);
     const [errors, setErrors] = useState({});
     const navigate = useNavigate();
@@ -16,6 +17,7 @@ const AddEmergencyServices = () => {
         const errors = {};
         if (!heading) errors.heading = "Service Heading is required.";
         if (!number) errors.number = "Service Number is required.";
+        if (!language) errors.language = "Language Selection is required.";
         if (!emergencyImage) errors.emergencyImage = "Service Image is required.";
         setErrors(errors);
         return Object.keys(errors).length === 0;
@@ -36,6 +38,7 @@ const AddEmergencyServices = () => {
         setErrors((prev) => ({ ...prev, [name]: null }));
         if (name === "heading") setHeading(value);
         if (name === "number") setNumber(value);
+        if (name === "language") setLanguage(value);
     };
 
     const handleSubmit = async (e) => {
@@ -48,6 +51,7 @@ const AddEmergencyServices = () => {
         const formData = new FormData();
         formData.append('heading', heading);
         formData.append('number', number);
+        formData.append('language_code', language);
         if (emergencyImage) formData.append('emergencyImage', emergencyImage);
 
         try {
@@ -60,6 +64,7 @@ const AddEmergencyServices = () => {
             toast.success(response.data.message);
             setHeading('');
             setNumber('');
+            setLanguage('');
             setEmergencyImage(null);
             document.getElementById('emergencyImageInput').value = '';
             navigate('/citizen-communication');
@@ -88,6 +93,24 @@ const AddEmergencyServices = () => {
                                         </div>
                                     </div>
                                     <form onSubmit={handleSubmit}>
+                                        <div className="form-group row">
+                                            <label className="col-form-label col-md-3">
+                                                Select Language <span className="text-danger">*</span>
+                                            </label>
+                                            <div className="col-md-4">
+                                                <select
+                                                    className={`form-control form-control-md ${errors.language ? 'is-invalid' : ''}`}
+                                                    value={language}
+                                                    name="language"
+                                                    onChange={handleChange}
+                                                >
+                                                    <option value="">Select Language</option>
+                                                    <option value="en">English</option>
+                                                    <option value="mr">Marathi</option>
+                                                </select>
+                                                {errors.language && <div className="invalid-feedback">{errors.language}</div>}
+                                            </div>
+                                        </div>
                                         <div className="form-group row">
                                             <label className="col-form-label col-md-3">Service Heading <span className="text-danger">*</span></label>
                                             <div className="col-md-4">

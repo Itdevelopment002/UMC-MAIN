@@ -3,29 +3,45 @@ const router = express.Router();
 const db = require("../config/db.js");
 
 // Get all ward offices
+// router.get("/ward-offices", (req, res) => {
+//   db.query("SELECT * FROM WardOffices", (err, results) => {
+//     if (err) {
+//       console.error(err);
+//       res.status(500).json({ error: "Database query error" });
+//     } else {
+//       res.json(results);
+//     }
+//   });
+// });
 router.get("/ward-offices", (req, res) => {
-  db.query("SELECT * FROM WardOffices", (err, results) => {
-    if (err) {
-      console.error(err);
-      res.status(500).json({ error: "Database query error" });
-    } else {
-      res.json(results);
-    }
+  const language = req.query.lang;
+  let query;
+  let params = [];
+  if (language) {
+    query = `SELECT * FROM WardOffices WHERE language_code = ?`;
+    params.push(language);
+  } else {
+    query = "SELECT * FROM WardOffices";
+  }
+
+  db.query(query, params, (err, results) => {
+    if (err) throw err;
+    res.json(results);
   });
 });
 
 // Add a new ward office
 router.post("/ward-offices", (req, res) => {
-  const { ward_no, ward_name, officer_name, address, email, mobile, landline, areas, map_url } = req.body;
+  const { ward_no, ward_name, officer_name, address, email, mobile, landline, areas, map_url,language_code } = req.body;
 
   const sql = `
-    INSERT INTO WardOffices (ward_no, ward_name, officer_name, address, email, mobile, landline, areas, map_url)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+    INSERT INTO WardOffices (ward_no, ward_name, officer_name, address, email, mobile, landline, areas, map_url,language_code)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `;
 
   db.query(
     sql,
-    [ward_no, ward_name, officer_name, address, email, mobile, landline, areas, map_url],
+    [ward_no, ward_name, officer_name, address, email, mobile, landline, areas,language_code, map_url],
     (err, result) => {
       if (err) {
         console.error(err);
@@ -42,6 +58,7 @@ router.post("/ward-offices", (req, res) => {
           landline,
           areas,
           map_url,
+          language_code
         });
       }
     }
@@ -50,17 +67,17 @@ router.post("/ward-offices", (req, res) => {
 
 // Update a ward office by ID
 router.put("/ward-offices/:id", (req, res) => {
-  const { ward_no, ward_name, officer_name, address, email, mobile, landline, areas, map_url } = req.body;
+  const { ward_no, ward_name, officer_name, address, email, mobile, landline, areas, map_url,language_code } = req.body;
 
   const sql = `
     UPDATE WardOffices 
-    SET ward_no = ?, ward_name = ?, officer_name = ?, address = ?, email = ?, mobile = ?, landline = ?, areas = ?, map_url = ?
+    SET ward_no = ?, ward_name = ?, officer_name = ?, address = ?, email = ?, mobile = ?, landline = ?, areas = ?, map_url = ? ,language_code = ?
     WHERE id = ?
   `;
 
   db.query(
     sql,
-    [ward_no, ward_name, officer_name, address, email, mobile, landline, areas, map_url, req.params.id],
+    [ward_no, ward_name, officer_name, address, email, mobile, landline, areas, map_url,language_code, req.params.id],
     (err, result) => {
       if (err) {
         console.error(err);
