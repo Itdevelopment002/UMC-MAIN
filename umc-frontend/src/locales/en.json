@@ -119,6 +119,7 @@
             "For e-Tender information, visit this page."
         ]
     },
+    
     "history-title1": "History",
     "history-title2": " of UMC",
     "commisioner-overview": "Brief Overview of the Commissioner",
@@ -149,8 +150,8 @@
         "oldRecruitmentAdvertisement": "Old Recruitment Advertisement",
         "noOldDataAvailable": "No Old recruitment data available"
     }
+
 }
 
-    "btn-title": "Click here for the location"
-}
+
 
