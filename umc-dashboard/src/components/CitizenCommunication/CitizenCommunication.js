@@ -93,6 +93,7 @@ const CitizenCommunication = () => {
                 formData.append("heading", editData.heading);
                 formData.append("description", editData.description);
                 formData.append("link", editData.link);
+                formData.append("language_code", editData.language_code);
                 if (editData.imageFile) {
                     formData.append("portalImage", editData.imageFile);
                 }
@@ -113,6 +114,7 @@ const CitizenCommunication = () => {
                 const formData = new FormData();
                 formData.append("heading", editData.heading);
                 formData.append("number", editData.number);
+                formData.append("language_code", editData.language_code);
                 if (editData.imageFile) {
                     formData.append("emergencyImage", editData.imageFile);
                 }
@@ -364,6 +366,26 @@ const CitizenCommunication = () => {
                                         {modalType === "portal" ? (
                                             <>
                                                 <div className="form-group">
+                                                    <label htmlFor="language_code">
+                                                        Select Language
+                                                    </label>
+                                                    <select
+                                                        className="form-control"
+                                                        id="language_code"
+                                                        value={editData.language_code}
+                                                        onChange={(e) =>
+                                                            setEditData({
+                                                                ...editData,
+                                                                language_code: e.target.value,
+                                                            })
+                                                        }
+                                                    >
+                                                        <option value="">Select Language</option>
+                                                        <option value="en">English</option>
+                                                        <option value="mr">Marathi</option>
+                                                    </select>
+                                                </div>
+                                                <div className="form-group">
                                                     <label htmlFor="heading">Service Heading</label>
                                                     <input
                                                         type="text"
@@ -430,6 +452,26 @@ const CitizenCommunication = () => {
                                             </>
                                         ) : (
                                             <>
+                                                <div className="form-group">
+                                                    <label htmlFor="language_code">
+                                                        Select Language
+                                                    </label>
+                                                    <select
+                                                        className="form-control"
+                                                        id="language_code"
+                                                        value={editData.language_code}
+                                                        onChange={(e) =>
+                                                            setEditData({
+                                                                ...editData,
+                                                                language_code: e.target.value,
+                                                            })
+                                                        }
+                                                    >
+                                                        <option value="">Select Language</option>
+                                                        <option value="en">English</option>
+                                                        <option value="mr">Marathi</option>
+                                                    </select>
+                                                </div>
                                                 <div className="form-group">
                                                     <label htmlFor="heading">Service Heading</label>
                                                     <input

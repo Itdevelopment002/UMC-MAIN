@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import api from "../api";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const CurrentUpdate = () => {
   const [updates, setUpdates] = useState([]);
@@ -16,6 +18,7 @@ const CurrentUpdate = () => {
       setUpdates(response.data);
     } catch (error) {
       console.error("Error fetching updates:", error);
+      toast.error("Failed to fetch updates!");
     }
   };
 
@@ -34,8 +37,10 @@ const CurrentUpdate = () => {
       setUpdates(updates.filter((item) => item.id !== selectedUpdates));
       setModalType(null);
       setSelectedUpdates(null);
+      toast.success("Current Update deleted successfully!");
     } catch (error) {
       console.error("Error deleting updates:", error);
+      toast.error("Failed to delete the updates!");
     }
   };
 
@@ -56,8 +61,10 @@ const CurrentUpdate = () => {
       setModalType(null);
       setSelectedUpdates(null);
       setEditedData({});
+      toast.success("Current Update updated successfully")
     } catch (error) {
       console.error("Error updating current update:", error);
+      toast.error("Failed to update the updates!");
     }
   };
 
@@ -283,15 +290,33 @@ const CurrentUpdate = () => {
                         <h4>Edit Current Update</h4>
                       </div>
                       <div className="modal-body">
-                        <label>Description</label>
-                        <textarea
-                          name="description"
-                          value={editedData.description || ""}
-                          onChange={handleInputChange}
-                          className="form-control"
-                          rows="3"
-                          placeholder="Description"
-                        ></textarea>
+                        <div className="mb-3">
+                          <label className="form-label">
+                            Select Language
+                          </label>
+
+                          <select
+                            className="form-control"
+                            value={editedData?.language_code || ""}
+                            onChange={handleInputChange}
+                            name="language_code"
+                          >
+                            <option value="" disabled>Select Language</option>
+                            <option value="en">English</option>
+                            <option value="mr">Marathi</option>
+                          </select>
+                        </div>
+                        <div className="mb-3">
+                          <label>Description</label>
+                          <textarea
+                            name="description"
+                            value={editedData.description || ""}
+                            onChange={handleInputChange}
+                            className="form-control"
+                            rows="3"
+                            placeholder="Description"
+                          ></textarea>
+                        </div>
                       </div>
                       <div className="modal-footer text-center">
                         <button
@@ -317,6 +342,7 @@ const CurrentUpdate = () => {
           )}
         </div>
       </div>
+      <ToastContainer />
     </>
   );
 };

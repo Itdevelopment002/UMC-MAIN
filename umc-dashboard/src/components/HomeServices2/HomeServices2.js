@@ -4,13 +4,13 @@ import api from "../api";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const HomeServices1 = () => {
-  const [services, setServices] = useState([]);
+const HomeServices2 = () => {
+  const [info, setInfo] = useState([]);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [selectedServices, setSelectedServices] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const servicesPerPage = 10;
+  const infoPerPage = 10;
 
   useEffect(() => {
     fetchServices();
@@ -19,7 +19,7 @@ const HomeServices1 = () => {
   const fetchServices = async () => {
     try {
       const response = await api.get("/home-services2");
-      setServices(response.data);
+      setInfo(response.data);
     } catch (error) {
       console.error("Error fetching home services:", error);
       toast.error("Failed to fetch home services details!");
@@ -29,7 +29,7 @@ const HomeServices1 = () => {
   const handleDelete = async () => {
     try {
       await api.delete(`/home-services2/${selectedServices.id}`);
-      setServices(services.filter((w) => w.id !== selectedServices.id));
+      setInfo(info.filter((w) => w.id !== selectedServices.id));
       setShowDeleteModal(false);
       toast.success("Home services deleted successfully!");
     } catch (error) {
@@ -43,11 +43,12 @@ const HomeServices1 = () => {
       await api.put(`/home-services2/${selectedServices.id}`, {
         heading: selectedServices.heading,
         link: selectedServices.link,
+        language_code: selectedServices.language_code,
       });
-      const updatedServices = services.map((services) =>
+      const updatedServices = info.map((services) =>
         services.id === selectedServices.id ? selectedServices : services
       );
-      setServices(updatedServices);
+      setInfo(updatedServices);
       setShowEditModal(false);
       toast.success("Home services updated successfully!");
     } catch (error) {
@@ -71,9 +72,9 @@ const HomeServices1 = () => {
     setSelectedServices({ ...selectedServices, [name]: value });
   };
 
-  const indexOfLastServices = currentPage * servicesPerPage;
-  const indexOfFirstServices = indexOfLastServices - servicesPerPage;
-  const currentServices = services.slice(indexOfFirstServices, indexOfLastServices);
+  const indexOfLastServices = currentPage * infoPerPage;
+  const indexOfFirstServices = indexOfLastServices - infoPerPage;
+  const currentServices = info.slice(indexOfFirstServices, indexOfLastServices);
 
   return (
     <div>
@@ -120,7 +121,7 @@ const HomeServices1 = () => {
                         {currentServices.map((service, index) => (
                           <tr key={service.id}>
                             <td className="text-center">
-                              {index + 1 + (currentPage - 1) * servicesPerPage}
+                              {index + 1 + (currentPage - 1) * infoPerPage}
                             </td>
                             <td>{service.heading}</td>
                             <td>
@@ -148,6 +149,127 @@ const HomeServices1 = () => {
                     </table>
                   </div>
                 </div>
+                <div className="mt-4">
+                  <ul className="pagination">
+                    {/* Previous Button */}
+                    <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
+                      <button
+                        className="page-link"
+                        onClick={() => setCurrentPage(currentPage - 1)}
+                      >
+                        Previous
+                      </button>
+                    </li>
+
+                    {/* Always show the first page */}
+                    {currentPage > 2 && (
+                      <li className={`page-item ${currentPage === 1 ? "active" : ""}`}>
+                        <button className="page-link" onClick={() => setCurrentPage(1)}>
+                          1
+                        </button>
+                      </li>
+                    )}
+
+                    {/* Show the second page if currentPage is greater than 2 */}
+                    {currentPage > 3 && (
+                      <li className={`page-item ${currentPage === 2 ? "active" : ""}`}>
+                        <button className="page-link" onClick={() => setCurrentPage(2)}>
+                          2
+                        </button>
+                      </li>
+                    )}
+
+                    {/* Show ellipsis if currentPage is far from the start */}
+                    {currentPage > 4 && (
+                      <li className="page-item disabled">
+                        <span className="page-link">...</span>
+                      </li>
+                    )}
+
+                    {/* Show currentPage and its neighbors */}
+                    {Array.from(
+                      { length: Math.ceil(info.length / infoPerPage) },
+                      (_, i) => i + 1
+                    )
+                      .filter(
+                        (page) =>
+                          page >= currentPage - 1 && page <= currentPage + 1 // Show current page and its neighbors
+                      )
+                      .map((page) => (
+                        <li
+                          className={`page-item ${currentPage === page ? "active" : ""}`}
+                          key={page}
+                        >
+                          <button
+                            className="page-link"
+                            onClick={() => setCurrentPage(page)}
+                          >
+                            {page}
+                          </button>
+                        </li>
+                      ))}
+
+                    {/* Show ellipsis if currentPage is far from the end */}
+                    {currentPage < Math.ceil(info.length / infoPerPage) - 3 && (
+                      <li className="page-item disabled">
+                        <span className="page-link">...</span>
+                      </li>
+                    )}
+
+                    {/* Show the second-to-last page if currentPage is not near the end */}
+                    {currentPage < Math.ceil(info.length / infoPerPage) - 2 && (
+                      <li
+                        className={`page-item ${currentPage === Math.ceil(info.length / infoPerPage) - 1
+                          ? "active"
+                          : ""
+                          }`}
+                      >
+                        <button
+                          className="page-link"
+                          onClick={() =>
+                            setCurrentPage(Math.ceil(info.length / infoPerPage) - 1)
+                          }
+                        >
+                          {Math.ceil(info.length / infoPerPage) - 1}
+                        </button>
+                      </li>
+                    )}
+
+                    {/* Always show the last page */}
+                    {currentPage < Math.ceil(info.length / infoPerPage) - 1 && (
+                      <li
+                        className={`page-item ${currentPage === Math.ceil(info.length / infoPerPage)
+                          ? "active"
+                          : ""
+                          }`}
+                      >
+                        <button
+                          className="page-link"
+                          onClick={() =>
+                            setCurrentPage(Math.ceil(info.length / infoPerPage))
+                          }
+                        >
+                          {Math.ceil(info.length / infoPerPage)}
+                        </button>
+                      </li>
+                    )}
+
+                    {/* Next Button */}
+                    <li
+                      className={`page-item ${currentPage === Math.ceil(info.length / infoPerPage)
+                        ? "disabled"
+                        : ""
+                        }`}
+                    >
+                      <button
+                        className="page-link"
+                        onClick={() => setCurrentPage(currentPage + 1)}
+                      >
+                        Next
+                      </button>
+                    </li>
+                  </ul>
+                </div>
               </div>
             </div>
           </div>
@@ -169,6 +291,22 @@ const HomeServices1 = () => {
                   </div>
                   <div className="modal-body">
                     <form>
+                      <div className="mb-3">
+                        <label className="form-label">
+                          Select Language
+                        </label>
+
+                        <select
+                          className="form-control"
+                          name="language_code"
+                          value={selectedServices?.language_code || ""}
+                          onChange={handleEditChange}
+                        >
+                          <option value="" disabled>Select Language</option>
+                          <option value="en">English</option>
+                          <option value="mr">Marathi</option>
+                        </select>
+                      </div>
                       <div className="mb-3">
                         <label className="form-label">Service Heading</label>
                         <input
@@ -254,4 +392,4 @@ const HomeServices1 = () => {
   );
 };
 
-export default HomeServices1;
+export default HomeServices2;
