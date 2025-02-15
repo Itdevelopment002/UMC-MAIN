@@ -121,20 +121,20 @@ const ContactUs = () => {
                                     <div className="col-md-6 mb-3" key={ward}>
                                         <div className="card">
                                             <span className="card-header text-white bg-gradient">
-                                                {t("wardOfficeNo")} {ward.office}
+                                                {t("contactUs.wardOfficeNo")} {ward.office}
                                             </span>
                                             <div className="card-body position-relative">
                                                 <span className="left-border"></span>
                                                 <p>
-                                                    <strong>{t("address")}:</strong>{" "}
+                                                    <strong>{t("contactUs.address")}:</strong>{" "}
                                                     {ward.address}
                                                 </p>
                                                 <p>
-                                                    <strong>{t("phoneNo")}:</strong>{" "}
+                                                    <strong>{t("contactUs.phoneNo")}:</strong>{" "}
                                                     {ward.phone}
                                                 </p>
                                                 <p>
-                                                    <strong>{t("emailId")}:</strong> {ward.email}
+                                                    <strong>{t("contactUs.emailId")}:</strong> {ward.email}
                                                 </p>
                                             </div>
                                         </div>
