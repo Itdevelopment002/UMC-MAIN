@@ -44,6 +44,7 @@ const Administration = () => {
         name: selectedAdministration.name,
         designation: selectedAdministration.designation,
         phone: selectedAdministration.phone,
+        language_code: selectedAdministration.language_code,
       });
       const updatedadministration = administration.map((administration) =>
         administration.id === selectedAdministration.id ? selectedAdministration : administration
@@ -178,8 +179,8 @@ const Administration = () => {
                     )}
                     <li
                       className={`page-item ${currentPage === Math.ceil(administration.length / administrationPerPage)
-                          ? "disabled"
-                          : ""
+                        ? "disabled"
+                        : ""
                         }`}
                     >
                       <button
@@ -213,6 +214,20 @@ const Administration = () => {
                   <div className="modal-body">
                     <form>
                       <div className="mb-3">
+                        <label className="form-label">
+                          Select Language
+                        </label>
+
+                        <select
+                          className="form-control"
+                          value={selectedAdministration?.language_code || ""}
+                          onChange={handleEditChange}
+                          name="language_code"
+                        >
+                          <option value="">Select Language</option>
+                          <option value="en">English</option>
+                          <option value="mr">Marathi</option>
+                        </select>
                         <label className="form-label">Name</label>
                         <input
                           type="text"

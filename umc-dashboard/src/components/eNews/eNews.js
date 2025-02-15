@@ -51,6 +51,8 @@ const ENews = () => {
                 info: selectedAgenda.info,
                 issue_date: formattedPublishDate,
                 pdf_link: selectedAgenda.pdf_link,
+                language_code: selectedAgenda.language_code,
+
             });
             const updatedAgendaList = enewsList.map((agenda) =>
                 agenda.id === selectedAgenda.id ? selectedAgenda : agenda
@@ -245,6 +247,20 @@ const ENews = () => {
                                     <div className="modal-body">
                                         <form>
                                             <div className="mb-3">
+                                                <label className="form-label">
+                                                    Select Language
+                                                </label>
+
+                                                <select
+                                                    className="form-control"
+                                                    value={selectedAgenda?.language_code || ""}
+                                                    onChange={handleEditChange}
+                                                    name="language_code"
+                                                >
+                                                    <option value="">Select Language</option>
+                                                    <option value="en">English</option>
+                                                    <option value="mr">Marathi</option>
+                                                </select>
                                                 <label className="form-label">Information</label>
                                                 <input
                                                     type="text"
