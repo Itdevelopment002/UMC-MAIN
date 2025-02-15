@@ -13,7 +13,9 @@ const AddWardOffice = () => {
     ward_no: "",
     areas: "",
     map_url: "",
+    language_code: "", // Added language_code field
   });
+
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
 
@@ -55,6 +57,7 @@ const AddWardOffice = () => {
         ward_no: "",
         areas: "",
         map_url: "",
+        language_code: "",
       });
       navigate("/ward-office");
     } catch (error) {
@@ -87,6 +90,33 @@ const AddWardOffice = () => {
                     </div>
                   </div>
                   <form onSubmit={handleSubmit}>
+                    {/* Language Selection Dropdown */}
+                    <div className="form-group row">
+                      <label className="col-form-label col-md-2">
+                        Select Language <span className="text-danger">*</span>
+                      </label>
+                      <div className="col-md-4">
+                        <select
+                          className={`form-control form-control-md ${
+                            errors.language_code ? "is-invalid" : ""
+                          }`}
+                          name="language_code"
+                          value={formData.language_code}
+                          onChange={handleChange}
+                        >
+                          <option value="">Select Language</option>
+                          <option value="en">English</option>
+                          <option value="mr">Marathi</option>
+                        </select>
+                        {errors.language_code && (
+                          <div className="invalid-feedback">
+                            {errors.language_code}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Other Fields */}
                     {[
                       { label: "Ward Name", name: "ward_name" },
                       { label: "Officer Name", name: "officer_name" },
@@ -121,6 +151,7 @@ const AddWardOffice = () => {
                         </div>
                       </div>
                     ))}
+
                     <input
                       type="submit"
                       className="btn btn-primary btn-sm"
