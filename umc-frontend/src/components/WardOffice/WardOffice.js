@@ -2,11 +2,15 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import api, { baseURL } from "../api";
 import "./WardOffice.css";
+import { useTranslation } from "react-i18next";
+
 
 const WardOffice = () => {
     const [wardData, setWardData] = useState([]);
     const [selectedWard, setSelectedWard] = useState(null);
     const [bgImage, setBgImage] = useState("");
+      const { i18n, t } = useTranslation();
+    
     useEffect(() => {
         fetchHeaderImage();
     }, []);
@@ -30,7 +34,7 @@ const WardOffice = () => {
         }
     };
     useEffect(() => {
-        api.get('/ward-offices')
+        api.get(`/ward-offices?lang=${i18n.language}`)
             .then((response) => {
                 setWardData(response.data);
                 if (response.data.length > 0) {
