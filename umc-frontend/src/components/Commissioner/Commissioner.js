@@ -83,16 +83,16 @@ const Commissioner = () => {
         >
           <nav className="breadcrumb">
             <Link to="/" className="breadcrumb-item text-decoration-none">
-              Home
+            {t('location.home')}
             </Link>
             <Link to="#" className="breadcrumb-item text-decoration-none">
-              About UMC
+            {t('location.aboutumc')}
             </Link>
-            <span className="breadcrumb-item active1">Commissioner</span>
+            <span className="breadcrumb-item active1">{t('commissioner.commissionerText')}</span>
           </nav>
           <h2 className="location-title">
-            <span className="highlight">Commissioner</span>
-            <span className="highlighted-text"> of UMC</span>
+            <span className="highlight">{t('commissioner.highlight1')}</span>
+            <span className="highlighted-text"> {t('commissioner.highlight-text')}</span>
           </h2>
 
           <div className="row mt-4">
@@ -116,7 +116,7 @@ const Commissioner = () => {
                         <img src={cicon1} alt="icon" className="icon-image" />
                       </div>
                       <div className="text-box">
-                        <strong className="label">Commissioner Name :</strong>
+                        <strong className="label">{t('commissioner.name')} :</strong>
                         <span className="value"> {coData[0]?.coName}</span>
                       </div>
                     </div>
@@ -125,10 +125,10 @@ const Commissioner = () => {
                         <img src={cicon2} alt="icon" className="icon-image" />
                       </div>
                       <div className="text-box">
-                        <strong className="label">Designation :</strong>
+                        <strong className="label">{t('commissioner.designation')} :</strong>
                         <span className="value">
                           {" "}
-                          {coData[0]?.designation} of the Ulhasnagar Municipal Corporation 
+                          {coData[0]?.designation}{t('commissioner.designationText')}
                         </span>
                       </div>
                     </div>
@@ -138,7 +138,7 @@ const Commissioner = () => {
                       </div>
                       <div className="text-box">
                         <strong className="label">
-                          Education Qualification :
+                        {t('commissioner.qualification')} :
                         </strong>
                         <span className="value">
                           {" "}
@@ -151,7 +151,7 @@ const Commissioner = () => {
                         <img src={cicon4} alt="icon" className="icon-image" />
                       </div>
                       <div className="text-box">
-                        <strong className="label">Office Address :</strong>
+                        <strong className="label">{t('commissioner.address')} :</strong>
                         <span className="value">
                           {" "}
                           {coData[0]?.address}
@@ -163,7 +163,7 @@ const Commissioner = () => {
                         <img src={cicon5} alt="icon" className="icon-image" />
                       </div>
                       <div className="text-box">
-                        <strong className="label">Phone Number :</strong>
+                        <strong className="label">{t('commissioner.phoneNumber')} :</strong>
                         <span className="value"> {coData[0]?.number}</span>
                       </div>
                     </div>
@@ -172,7 +172,7 @@ const Commissioner = () => {
                         <img src={cicon6} alt="icon" className="icon-image" />
                       </div>
                       <div className="text-box">
-                        <strong className="label">Email Address :</strong>
+                        <strong className="label">{t('commissioner.email')} :</strong>
                         <span className="value"> {coData[0]?.email}</span>
                       </div>
                     </div>

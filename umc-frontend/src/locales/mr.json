@@ -1,7 +1,7 @@
 {
     "header": {
         "helpline": "हेल्पलाइन क्रमांक: ०२५१ २७२०१५०",
-        "rtsAct" : "आरटीएस कायदा २०१५",
+        "rtsAct": "आरटीएस कायदा २०१५",
         "screenReader": "स्क्रीन रीडर अ‍ॅक्सेस",
         "skipContent": "मुख्य मजकुरावर जा",
         "aMinus": "अ-",
@@ -15,8 +15,8 @@
         "help": "मदत",
         "onlineServices": "ऑनलाइन सेवा",
         "copyWrite": "उल्हासनगर महानगरपालिका. सर्व हक्क राखीव.",
-        "totalVisitors" : "एकूण भेटी",
-        "designBy":"डिझाइन व विकसित केलेले: Infoigy",
+        "totalVisitors": "एकूण भेटी",
+        "designBy": "डिझाइन व विकसित केलेले: Infoigy",
         "loading": "लोड करीत आहे ..."
     },
     "home": {
@@ -29,24 +29,99 @@
         "services": "सेवा",
         "UMCNews": " उ.म.पा. बातम्या",
         "Initiatives-Programme": "उपक्रम व कार्यक्रम",
-        "e-Services" : "ई-सेवा",
-        "information" : "माहिती",
+        "e-Services": "ई-सेवा",
+        "information": "माहिती",
         "upcomingProjects": "आगामी प्रकल्प",
         "video": "व्हिडिओ",
-        "gallery" : "गॅलरी",
+        "gallery": "गॅलरी",
         "loadingVideos": "व्हिडिओ लोड करत आहे...",
-        "photo" : "फोटो",
+        "photo": "फोटो",
         "viewAll": "सर्व पहा",
         "communication": "संवाद",
-        "connect" : "आमच्याशी",
+        "connect": "आमच्याशी",
         "withUs": "संपर्क साधा",
         "facebook": "फेसबुकवरील उल्हासनगर महानगरपालिका (UMC)",
         "twitter": "ट्विटरवरील उल्हासनगर महानगरपालिका (UMC)",
         "youTube": "यूट्यूबवरील उल्हासनगर महानगरपालिका (UMC)"
-
     },
-    "history-title1":"यूएमसीचा",
-    "history-title2":" इतिहास",
+    "location": {
+        "home": "मुखपृष्ठ",
+        "aboutumc": "उ.म.पा. बद्दल",
+        "location-title": "स्थान",
+        "highlight1": "यूएमसीचे",
+        "highlight-text": "स्थान",
+        "information": "माहिती",
+        "nodata": "कोणताही डेटा उपलब्ध नाही.",
+        "emnumber": "महापालिकेच्या कर्मचाऱ्यांची संख्या",
+        "city": "उद्योग",
+        "populationandarea": "लोकसंख्या आणि क्षेत्रफळ"
+    },
+    "commissioner": {
+        "commissionerText": "आयुक्त",
+        "highlight1": "यूएमसीचे",
+        "highlight-text": "आयुक्त",
+        "name": "आयुक्ताचे नाव",
+        "designation": "पद",
+        "designationText": ", उल्हासनगर महापालिका",
+        "qualification": "शैक्षणिक पात्रता",
+        "address": "कार्यालयाचा पत्ता",
+        "phoneNumber": "दूरध्वनी क्रमांक",
+        "email": "ईमेल पत्ता",
+        "loading": "Loading data"
+    },
+    "tourism": {
+        "tourismText": "पर्यटन",
+        "highlight1": "उल्हासनगर महानगरपालिकेतील",
+        "highlight-text": "पर्यटन",
+        "address": "पत्ता",
+        "hour": "वेळ",
+        "description": "वर्णन"
+    },
+    "onlinesercies": {
+        "home": "मुखपृष्ठ",
+        "onlineservices": "ऑनलाइन सेवा",
+        "property": "मालमत्ता कर भरणा",
+        "highlight1": "मालमत्ता",
+        "highlight-text": "कर भरणा"
+    },
+    "home1": "मुख्यपृष्ठ",
+    "onlineServices": "ऑनलाइन सेवा",
+    "clickHere": "येथे क्लिक करा",
+    "propertyTaxPayment": {
+        "name":"मालमत्ता कर",
+        "name1": "मालमत्ता",
+        "name2": "कर",
+        "description": [
+            "मालमत्ता कर जाणून घ्या आणि ऑनलाइन भरा.",
+            "भरणा करण्यापूर्वी बँकेने दर्शवलेल्या अटी आणि शर्ती काळजीपूर्वक वाचा."
+        ]
+    },
+    "birthCertificate": {
+        "name":"जन्माचा प्रमाणपत्र",
+        "name1": "जन्माचा",
+        "name2": "प्रमाणपत्र",
+        "description": [
+            "जन्म प्रमाणपत्रासाठी कृपया येथे नोंदणी करा."
+        ]
+    },
+    "deathCertificate": {
+        "name":"मृत्यू प्रमाणपत्र",
+        "name1": "मृत्यू",
+        "name2": "प्रमाणपत्र",
+        "description": [
+            "मृत्यू प्रमाणपत्रासाठी कृपया आमच्या कार्यालयाशी संपर्क साधा."
+        ]
+    },
+    "eTender": {
+        "name":"ई-निविदा",
+        "name1": "ई-",
+        "name2": "निविदा",
+        "description": [
+            "ई-टेंडर माहितीसाठी, कृपया या पृष्ठास भेट द्या."
+        ]
+    },
+    "history-title1": "यूएमसीचा",
+    "history-title2": " इतिहास",
     "commisioner-overview": "आयुक्तांचा थोडक्यात आढावा",
-    "btn-title":"स्थानासाठी येथे क्लिक करा"
+    "btn-title": "स्थानासाठी येथे क्लिक करा"
 }
