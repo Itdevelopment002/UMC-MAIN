@@ -145,16 +145,16 @@ const EstateDepartment = () => {
         <div className="container-fluid font-location mt-4 mb-2" id="environment-css">
           <nav className="breadcrumb">
             <Link to="/" className="breadcrumb-item text-decoration-none">
-              Home
+            {t('departments.home')}
             </Link>
             <Link to="/departments" className="breadcrumb-item text-decoration-none">
-              Department
+            {t('departments.department')}
             </Link>
-            <span className="breadcrumb-item active1">Estate Department</span>
+            <span className="breadcrumb-item active1">{t('estateDept.title')}</span>
           </nav>
           <h2 className="location-title">
-            <span className="highlight">Estate</span>
-            <span className="highlighted-text"> Department</span>
+            <span className="highlight">{t('estateDept.highlight')}</span>
+            <span className="highlighted-text"> {t('estateDept.highlight-text')}</span>
             <hr />
           </h2>
 
@@ -204,8 +204,8 @@ const EstateDepartment = () => {
                         <img src={cicon2} alt="icon" className="dept-icon-image" />
                       </div>
                       <div className="dept-text-box">
-                        <strong className="dept-label">Designation :</strong>
-                        <span className="dept-value"> Head of {hod[0]?.designation}</span>
+                        <strong className="dept-label">{t('departments.designation')} :</strong>
+                        <span className="dept-value"> {hod[0]?.designation}</span>
                       </div>
                     </div>
                     <div className="dept-item">
@@ -214,7 +214,7 @@ const EstateDepartment = () => {
                       </div>
                       <div className="dept-text-box">
                         <strong className="dept-label">
-                          Education Qualification :
+                        {t('departments.qualification')} :
                         </strong>
                         <span className="dept-value"> {hod[0]?.education}</span>
                       </div>
@@ -224,7 +224,7 @@ const EstateDepartment = () => {
                         <img src={cicon4} alt="icon" className="dept-icon-image" />
                       </div>
                       <div className="dept-text-box">
-                        <strong className="dept-label">Office Address :</strong>
+                        <strong className="dept-label">{t('departments.address')} :</strong>
                         <span className="dept-value">
                           {" "}{hod[0]?.address}
                         </span>
@@ -235,7 +235,7 @@ const EstateDepartment = () => {
                         <img src={cicon5} alt="icon" className="dept-icon-image" />
                       </div>
                       <div className="dept-text-box">
-                        <strong className="dept-label">Phone Number : </strong>
+                        <strong className="dept-label">{t('departments.phoneNo')} : </strong>
                         <span className="dept-value">{hod[0]?.number}</span>
                       </div>
                     </div>
@@ -244,7 +244,7 @@ const EstateDepartment = () => {
                         <img src={cicon6} alt="icon" className="dept-icon-image" />
                       </div>
                       <div className="dept-text-box">
-                        <strong className="dept-label">Email Address :</strong>
+                        <strong className="dept-label">{t('departments.email')} :</strong>
                         <span className="dept-value"> {hod[0]?.email}</span>
                       </div>
                     </div>
@@ -264,14 +264,14 @@ const EstateDepartment = () => {
                         className="table-heading-styling"
                         style={{ textAlign: "center" }}
                       >
-                        Sr. No.
+                         {t('departments.sno')}
                       </th>
-                      <th className="table-heading-styling">Details / Information</th>
+                      <th className="table-heading-styling">{t('departments.heading')}</th>
                       <th
                         className="table-heading-styling"
                         style={{ textAlign: "center" }}
                       >
-                        Action
+                        {t('departments.action')}
                       </th>
                     </tr>
                   </thead>
@@ -327,7 +327,7 @@ const EstateDepartment = () => {
                                   verticalAlign: "middle",
                                 }}
                               />
-                              View PDF
+                              {t('departments.view')}
                             </Link>
                           </td>
                         </tr>
@@ -335,7 +335,7 @@ const EstateDepartment = () => {
                     ) : (
                       <tr>
                         <td colSpan="3" style={{ textAlign: "center", color: "#333333" }}>
-                          No data available
+                        {t('departments.nodata')}
                         </td>
                       </tr>
                     )}
@@ -347,13 +347,13 @@ const EstateDepartment = () => {
               <ul className="pagination custom-pagination">
                 <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
                   <button className="page-link" onClick={() => handlePageChange(currentPage - 1)}>
-                    Previous
+                  {t('departments.previous')}
                   </button>
                 </li>
                 {renderPageNumbers()}
                 <li className={`page-item ${currentPage === totalPages ? "disabled" : ""}`}>
                   <button className="page-link" onClick={() => handlePageChange(currentPage + 1)}>
-                    Next
+                  {t('departments.next')}
                   </button>
                 </li>
               </ul>
