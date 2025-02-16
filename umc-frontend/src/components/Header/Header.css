@@ -1157,9 +1157,21 @@ a {
     }
 }
 
-@media (max-width: 1448px) {
+@media (max-width: 1484px) {
     .brand-name {
         font-size: 29px;
+    }
+}
+@media (max-width: 1448px) {
+    .brand-name {
+        font-size: 28px;
+    }
+}
+
+@media (max-width: 1352px) {
+    .brand-name {
+        font-size: 26px;
+        margin-top: 7px;
     }
 }
 
