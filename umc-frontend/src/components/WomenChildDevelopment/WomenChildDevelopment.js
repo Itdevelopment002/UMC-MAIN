@@ -73,7 +73,7 @@ const WomenChildDevelopment = () => {
     return pageNumbers;
   };
 
-  const department_name = "Women & child Development Department"
+  const department_name = (i18n.language === 'en') ? "Women & child Development Department": "महिला आणि बाल विकास"
 
   const fetchBanner = async () => {
     try {

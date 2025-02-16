@@ -73,7 +73,7 @@ const AuditDepartment = () => {
     return pageNumbers;
   };
 
-  const department_name = "Audit Department"
+  const department_name = (i18n.language === 'en')?"Audit Department": "लेखापरीक्षण विभाग"
 
   const fetchBanner = async () => {
     try {

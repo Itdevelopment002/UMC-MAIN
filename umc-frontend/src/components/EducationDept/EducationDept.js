@@ -74,7 +74,7 @@ const EducationDepartment = () => {
     return pageNumbers;
   };
 
-  const department_name = "Education Department"
+  const department_name = (i18n.language === 'en') ? "Education Department": "शिक्षण विभाग"
 
   const fetchBanner = async () => {
     try {
