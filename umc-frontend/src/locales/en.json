@@ -248,7 +248,13 @@
         "highlight-text": "Committee",
         "standingcommittee": "Standing Committee",
         "womenCommittee": "Women and child Welfare Committee",
-        "wardCommitte":"Ward Committee"
+        "wardCommitte":"Ward Committee",
+        "name":"Standing Committee Name",
+        "cname":"Women and child Welfare Committee Name",
+        "wardCommitteA":"Ward Committee A",
+        "wardCommitteB":"Ward Committee B",
+        "wardCommitteC":"Ward Committee C",
+        "wardCommitteD":"Ward Committee D"
     },
     "resolution": {
         "heading": "Resolutions",
