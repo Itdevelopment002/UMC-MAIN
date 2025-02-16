@@ -358,5 +358,47 @@
         "propertyTaxDepartment": "Property Tax Department",
         "property": "Property",
         "taxDepartment": "Tax Department"
+    },
+    "diasterDept": {
+        "title": "Disaster Management",
+        "highlight": "Disaster",
+        "highlight-text": "Management"
+    },
+    "electionDept":{
+        "title": "Election Department",
+        "highlight": "Election",
+        "highlight-text": "Department"
+    },
+    "encroachmentDept":{
+        "title": "Encroachment Department",
+        "highlight": "Encroachment",
+        "highlight-text": "Department"
+    },
+    "environmentDept":{
+        "title": "Environment Department",
+        "highlight": "Environment",
+        "highlight-text": "Department"
+    },
+    "estateDept":{
+        "title": "Estate Department",
+        "highlight": "Estate",
+        "highlight-text": "Department"
+    },
+    "gardenDept":{
+        "title": "Garden Department",
+        "highlight": "Garden",
+        "highlight-text": "Department"
+    },
+    "generalAdDept":{
+        "title": "General Administrative Department",
+        "highlight": "General",
+        "highlight-text": "Administrative Department"
+    },
+    "handicapDept":{
+        "title": "Handicap Welfare Scheme",
+        "highlight": "Handicap",
+        "highlight-text": "Welfare Scheme"
     }
+    
+    
 }
