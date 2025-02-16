@@ -20,19 +20,19 @@ const upload = multer({
 });
 
 router.post("/contact-info", upload.single("contactIcon"), (req, res) => {
-  const { heading, description } = req.body;
+  const { heading, description, language_code } = req.body;
 
-  if (!heading || !description) {
+  if (!heading || !description || !language_code) {
     return res
       .status(400)
-      .json({ message: "Heading and description are required" });
+      .json({ message: "Heading, language code and description are required" });
   }
 
   const imagePath = req.file ? `/uploads/${req.file.filename}` : null;
 
   const sql =
-    "INSERT INTO contactinfo (heading, description, image_path) VALUES (?, ?, ?)";
-  db.query(sql, [heading, description, imagePath], (err, result) => {
+    "INSERT INTO contactinfo (heading, description, language_code, image_path) VALUES (?, ?, ?, ?)";
+  db.query(sql, [heading, description, language_code, imagePath], (err, result) => {
     if (err) {
       return res.status(500).json({ message: "Database error", error: err });
     }
@@ -76,7 +76,7 @@ router.get("/contact-info/:id", (req, res) => {
 
 router.put("/contact-info/:id", upload.single("contactIcon"), (req, res) => {
   const { id } = req.params;
-  const { heading, description } = req.body;
+  const { heading, description, language_code } = req.body;
 
   let updateSql = "UPDATE contactinfo SET";
   const updateParams = [];
@@ -90,6 +90,12 @@ router.put("/contact-info/:id", upload.single("contactIcon"), (req, res) => {
     updateSql +=
       updateParams.length > 0 ? ", description = ?" : " description = ?";
     updateParams.push(description);
+  }
+
+  if (language_code) {
+    updateSql +=
+      updateParams.length > 0 ? ", language_code = ?" : " language_code = ?";
+    updateParams.push(language_code);
   }
 
   let imagePath;

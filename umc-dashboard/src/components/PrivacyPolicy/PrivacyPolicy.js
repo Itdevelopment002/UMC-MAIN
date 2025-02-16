@@ -44,6 +44,7 @@ const PrivacyPolicy = () => {
       await api.put(`/privacy-policy/${selectedPolicy.id}`, {
         heading: selectedPolicy.heading,
         description: selectedPolicy.description,
+        language_code: selectedPolicy.language_code,
       });
 
       const updatedPolicy = policyData.map((policy) =>
@@ -268,6 +269,22 @@ const PrivacyPolicy = () => {
                   </div>
                   <div className="modal-body">
                     <form>
+                      <div className="mb-3">
+                        <label className="form-label">
+                          Select Language
+                        </label>
+
+                        <select
+                          className="form-control"
+                          value={selectedPolicy?.language_code || ""}
+                          onChange={handleEditChange}
+                          name="language_code"
+                        >
+                          <option value="">Select Language</option>
+                          <option value="en">English</option>
+                          <option value="mr">Marathi</option>
+                        </select>
+                      </div>
                       <div className="mb-3">
                         <label className="form-label">Policy Heading</label>
                         <input

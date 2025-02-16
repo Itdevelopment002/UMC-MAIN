@@ -3,12 +3,12 @@ const router = express.Router();
 const db = require("../config/db.js");
 
 router.post("/ward-info", (req, res) => {
-  const { office, address, phone, email } = req.body;
-  if (!office || !address || !phone || !email) {
+  const { office, address, phone, email, language_code } = req.body;
+  if (!office || !address || !phone || !email || !language_code) {
     return res.status(400).json({ message: "Office, Address, Phone and email are required" });
   }
-  const sql = "INSERT INTO wardinfo (office, address, phone, email) VALUES (?, ?, ?, ?)";
-  db.query(sql, [office, address, phone, email], (err, result) => {
+  const sql = "INSERT INTO wardinfo (office, address, phone, email, language_code) VALUES (?, ?, ?, ?, ?)";
+  db.query(sql, [office, address, phone, email, language_code], (err, result) => {
     if (err) {
       return res.status(500).json({ message: "Database error", error: err });
     }
@@ -56,12 +56,12 @@ router.get("/ward-info/:id", (req, res) => {
 
 router.put("/ward-info/:id", (req, res) => {
   const { id } = req.params;
-  const { office, address, phone, email } = req.body;
-  if (!office || !address || !phone || !email) {
+  const { office, address, phone, email, language_code } = req.body;
+  if (!office || !address || !phone || !email || !language_code) {
     return res.status(400).json({ message: "Office, Address, Phone and email are required" });
   }
-  const sql = "UPDATE wardinfo SET office = ?, address = ?, phone = ?, email = ? WHERE id = ?";
-  db.query(sql, [office, address, phone, email, id], (err, result) => {
+  const sql = "UPDATE wardinfo SET office = ?, address = ?, phone = ?, email = ?, language_code = ? WHERE id = ?";
+  db.query(sql, [office, address, phone, email, language_code, id], (err, result) => {
     if (err) {
       return res.status(500).json({ message: "Database error", error: err });
     }

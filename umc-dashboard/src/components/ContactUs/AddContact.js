@@ -7,6 +7,7 @@ const AddContact = () => {
   const [formData, setFormData] = useState({
     heading: "",
     description: "",
+    language: "",
     contactIcon: null,
   });
 
@@ -28,6 +29,10 @@ const AddContact = () => {
     const newErrors = {};
     if (!formData.heading.trim()) {
       newErrors.heading = "Heading is required.";
+    }
+
+    if (!formData.language.trim()) {
+      newErrors.language = "Language selection is required";
     }
 
     if (!formData.description.trim()) {
@@ -53,6 +58,7 @@ const AddContact = () => {
     const data = new FormData();
     data.append("heading", formData.heading);
     data.append("description", formData.description);
+    data.append("language_code", formData.language);
     if (formData.contactIcon) {
       data.append("contactIcon", formData.contactIcon);
     }
@@ -97,14 +103,32 @@ const AddContact = () => {
                   <form onSubmit={handleSubmit}>
                     <div className="form-group row">
                       <label className="col-form-label col-md-2">
+                        Select Language <span className="text-danger">*</span>
+                      </label>
+                      <div className="col-md-4">
+                        <select
+                          className={`form-control form-control-md ${errors.language ? "is-invalid" : ""
+                            }`}
+                          name="language"
+                          value={formData.language}
+                          onChange={handleChange}
+                        >
+                          <option value="">Select Language</option>
+                          <option value="en">English</option>
+                          <option value="mr">Marathi</option>
+                        </select>
+                        {errors.language && <div className="invalid-feedback">{errors.language}</div>}
+                      </div>
+                    </div>
+                    <div className="form-group row">
+                      <label className="col-form-label col-md-2">
                         Heading <span className="text-danger">*</span>
                       </label>
                       <div className="col-md-4">
                         <input
                           type="text"
-                          className={`form-control form-control-md ${
-                            errors.heading ? "is-invalid" : ""
-                          }`}
+                          className={`form-control form-control-md ${errors.heading ? "is-invalid" : ""
+                            }`}
                           name="heading"
                           value={formData.heading}
                           onChange={handleChange}
@@ -124,9 +148,8 @@ const AddContact = () => {
                       <div className="col-md-4">
                         <input
                           type="text"
-                          className={`form-control form-control-md ${
-                            errors.description ? "is-invalid" : ""
-                          }`}
+                          className={`form-control form-control-md ${errors.description ? "is-invalid" : ""
+                            }`}
                           name="description"
                           value={formData.description}
                           onChange={handleChange}
@@ -148,9 +171,8 @@ const AddContact = () => {
                           type="file"
                           id="userfile"
                           name="contactIcon"
-                          className={`form-control form-control-md ${
-                            errors.contactIcon ? "is-invalid" : ""
-                          }`}
+                          className={`form-control form-control-md ${errors.contactIcon ? "is-invalid" : ""
+                            }`}
                           onChange={handleFileChange}
                         />
                         {errors.contactIcon && (

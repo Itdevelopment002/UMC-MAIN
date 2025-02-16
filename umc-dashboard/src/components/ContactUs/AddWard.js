@@ -12,6 +12,7 @@ const AddWard = () => {
     address: "",
     phone: "",
     email: "",
+    language: "",
   });
 
   const handleChange = (e) => {
@@ -39,6 +40,10 @@ const AddWard = () => {
       newErrors.email = "Email Id is required.";
     }
 
+    if (!formData.language) {
+      newErrors.language = "Language selection is required";
+    }
+
     return newErrors;
   };
 
@@ -57,7 +62,8 @@ const AddWard = () => {
         office: formData.office,
         address: formData.address,
         phone: formData.phone,
-        email: formData.email
+        email: formData.email,
+        language_code: formData.language
       });
 
       if (response.status === 201) {
@@ -67,7 +73,6 @@ const AddWard = () => {
       console.error("Error submitting form:", error);
     }
   };
-
 
   return (
     <div>
@@ -94,6 +99,25 @@ const AddWard = () => {
                     </div>
                   </div>
                   <form onSubmit={handleSubmit}>
+                    <div className="form-group row">
+                      <label className="col-form-label col-md-2">
+                        Select Language <span className="text-danger">*</span>
+                      </label>
+                      <div className="col-md-4">
+                        <select
+                          className={`form-control form-control-md ${errors.language ? "is-invalid" : ""
+                            }`}
+                          name="language"
+                          value={formData.language}
+                          onChange={handleChange}
+                        >
+                          <option value="">Select Language</option>
+                          <option value="en">English</option>
+                          <option value="mr">Marathi</option>
+                        </select>
+                        {errors.language && <div className="invalid-feedback">{errors.language}</div>}
+                      </div>
+                    </div>
                     <div className="form-group row">
                       <label className="col-form-label col-md-2">
                         Ward Office No. <span className="text-danger">*</span>
