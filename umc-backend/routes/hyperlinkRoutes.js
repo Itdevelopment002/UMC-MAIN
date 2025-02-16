@@ -3,29 +3,33 @@ const router = express.Router();
 const db = require("../config/db.js");
 
 router.post("/hyperlink-policy", (req, res) => {
-  const { description } = req.body;
+  const { description, language_code } = req.body;
 
-  const sql = "INSERT INTO hyperlinkpolicy (description) VALUES (?)";
-  db.query(sql, [description], (err, result) => {
+  const sql = "INSERT INTO hyperlinkpolicy (description, language_code) VALUES (?, ?)";
+  db.query(sql, [description, language_code], (err, result) => {
     if (err) {
       console.error("Error inserting data:", err);
       return res
         .status(500)
         .json({ error: "Failed to add hyperlink policy" });
     }
-    res.status(201).json({ id: result.insertId, description });
+    res.status(201).json({ id: result.insertId, description, language_code });
   });
 });
 
 router.get("/hyperlink-policy", (req, res) => {
-  const sql = "SELECT * FROM hyperlinkpolicy";
-  db.query(sql, (err, results) => {
-    if (err) {
-      console.error("Error fetching data:", err);
-      return res
-        .status(500)
-        .json({ error: "Failed to fetch hyperlink policy" });
-    }
+  const language = req.query.lang;
+  let query;
+  let params = [];
+  if (language) {
+    query = `SELECT * FROM hyperlinkpolicy WHERE language_code = ?`;
+    params.push(language);
+  } else {
+    query = "SELECT * FROM hyperlinkpolicy";
+  }
+
+  db.query(query, params, (err, results) => {
+    if (err) throw err;
     res.json(results);
   });
 });
@@ -46,9 +50,9 @@ router.delete("/hyperlink-policy/:id", (req, res) => {
 
 router.put("/hyperlink-policy/:id", (req, res) => {
   const { id } = req.params;
-  const { description } = req.body;
-  const sql = "UPDATE hyperlinkpolicy SET description = ? WHERE id = ?";
-  db.query(sql, [description, id], (err, result) => {
+  const { description, language_code } = req.body;
+  const sql = "UPDATE hyperlinkpolicy SET description = ?, language_code = ? WHERE id = ?";
+  db.query(sql, [description, language_code, id], (err, result) => {
     if (err) {
       console.error("Error updating data:", err);
       return res
