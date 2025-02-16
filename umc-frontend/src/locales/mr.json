@@ -250,7 +250,13 @@
         "highlight-text": "समिती",
         "standingcommittee": "स्थायी समितीचे",
         "womenCommittee": "महिला व बालकल्याण समितीचे",
-        "wardCommitte":"प्रभाग समिती"
+        "wardCommitte":"प्रभाग समिती",
+        "name":"स्थायी समितीचे नाव",
+        "cname":"महिला व बालकल्याण समितीचे नाव",
+        "wardCommitteA":"प्रभाग समिती अ",
+        "wardCommitteB":"प्रभाग समिती ब",
+        "wardCommitteC":"प्रभाग समिती क",
+        "wardCommitteD":"प्रभाग समिती डी"
     },
     "resolution": {
         "heading": "ठराव",
