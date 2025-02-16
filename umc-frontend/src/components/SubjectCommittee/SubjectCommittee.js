@@ -4,9 +4,12 @@ import "../CommingSoon/CommingSoon.css";
 import "./SubjectCommittee.css"
 import comingsoon from '../../assets/newcomingsoon.png'
 import api, { baseURL } from "../api";
+import { useTranslation } from "react-i18next";
 
-const SubjectCommittee = () => {
+
+const MayorOffice = () => {
     const [bgImage, setBgImage] = useState("");
+    const { i18n, t } = useTranslation();
 
     useEffect(() => {
         fetchHeaderImage();
@@ -16,7 +19,7 @@ const SubjectCommittee = () => {
             const response = await api.get("/banner");
 
             if (response.data.length > 0) {
-                let selectedBanner = response.data.find(banner => banner.banner_name === "Subject-committee");
+                let selectedBanner = response.data.find(banner => banner.banner_name === "Mayor-office");
 
                 if (selectedBanner) {
                     setBgImage(`${baseURL}${selectedBanner.file_path}`);
@@ -36,6 +39,7 @@ const SubjectCommittee = () => {
 
     return (
         <>
+
             <div
                 className="history-header-image"
                 style={{
@@ -48,16 +52,16 @@ const SubjectCommittee = () => {
                 <div className="container-fluid font-location mt-2 mb-5" id="deputy-css">
                     <nav className="breadcrumb">
                         <Link to="/" className="breadcrumb-item text-decoration-none">
-                            Home
+                            {t('corporation.home')}
                         </Link>
                         <Link to="#" className="breadcrumb-item text-decoration-none">
-                            Corporation
+                            {t('corporation.corporation')}
                         </Link>
-                        <span className="breadcrumb-item active1">Subject Committee</span>
+                        <span className="breadcrumb-item active1">{t('subjectCommittee.title')}</span>
                     </nav>
                     <h2 className="location-title">
-                        <span className="highlight">Subject</span>
-                        <span className="highlighted-text"> Committee</span>
+                        <span className="highlight">{t('subjectCommittee.highlight')}</span>
+                        <span className="highlighted-text"> {t('subjectCommittee.highlight-text')}</span>
                         <hr />
                     </h2>
 
@@ -66,9 +70,10 @@ const SubjectCommittee = () => {
                             src={comingsoon}
                             alt="Coming Soon"
                             className="coming-soon-gif"
+
                         />
                         <p className="coming-soon-message">
-                            This page is under development and will be available soon.
+                            {t('commingsoon.text')}
                         </p>
                     </div>
 
@@ -78,4 +83,4 @@ const SubjectCommittee = () => {
     );
 };
 
-export default SubjectCommittee;
+export default MayorOffice;

@@ -284,18 +284,16 @@ const Committee = () => {
                         </div>
                     </div> */}
                     <div className="coming-soon-section text-center mt-4">
-                                            <img
-                                                src={comingsoon}
-                                                alt="Coming Soon"
-                                                className="coming-soon-gif"
-                    
-                                            />
-                                            <p className="coming-soon-message">
-                                                This page is under development and will be available soon.
-                                            </p>
-                                        </div>
-                   
+                        <img
+                            src={comingsoon}
+                            alt="Coming Soon"
+                            className="coming-soon-gif"
 
+                        />
+                        <p className="coming-soon-message">
+                            {t('commingsoon.text')}
+                        </p>
+                    </div>
                 </div>
             </div>
         </>

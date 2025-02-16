@@ -3,14 +3,18 @@ import { Link } from "react-router-dom";
 import './ScreenReader.css';
 import "../TableCss/TableCss.css";
 import api, { baseURL } from "../api";
+import { useTranslation } from "react-i18next";
+
 
 const ScreenReader = () => {
     const [reader, setReader] = useState([]);
     const [bgImage, setBgImage] = useState("");
+    const { i18n, t } = useTranslation();
+
 
     const fetchReader = async () => {
         try {
-            const response = await api.get("/screen-reader");
+            const response = await api.get(`/screen-reader?lang=${i18n.language}`);
             setReader(response.data);
         } catch (error) {
             console.error("Error fetching reader data");
@@ -42,7 +46,7 @@ const ScreenReader = () => {
         fetchReader();
         fetchHeaderImage();
         window.scrollTo({ top: 0, behavior: 'smooth' });
-    }, []);
+    },[i18n.language]);
 
     return (
         <>
@@ -51,20 +55,20 @@ const ScreenReader = () => {
                 <div className="container-fluid font-location mt-4 mb-2" id="reader-css">
                     <nav className="breadcrumb">
                         <Link to="/" className="breadcrumb-item text-decoration-none">
-                            Home
+                        {t('corporation.home')}
                         </Link>
-                        <span className="breadcrumb-item active1">Screen Reader Access</span>
+                        <span className="breadcrumb-item active1">{t('reader.title')}</span>
                     </nav>
                     <h2 className="location-title">
-                        <span className="highlight">Screen</span>
-                        <span className="highlighted-text"> Reader Access</span>
+                        <span className="highlight">{t('reader.highlight')}</span>
+                        <span className="highlighted-text"> {t('reader.highlight-text')}</span>
                         <hr />
                     </h2>
                     <div className="row mt-4">
                         <div className="col-12 col-xl-9 col-lg-12 col-md-12 col-sm-12">
                             <div className="system-style-div text-start">
                                 <p className="mb-0">
-                                    <span className="span-system1">Below are the various screen readers to choose from</span>
+                                    <span className="span-system1">{t('reader.text')}</span>
                                 </p>
                             </div>
                         </div>
@@ -76,16 +80,16 @@ const ScreenReader = () => {
                                     <thead className="bg-orange text-white">
                                         <tr>
                                             <th className="table-heading-styling text-center" >
-                                                Sr. No.
+                                            {t('departments.sno')}
                                             </th>
                                             <th className="table-heading-styling">
-                                                Screen Reader Name
+                                            {t('reader.name')}
                                             </th>
                                             <th className="table-heading-styling">
-                                                Website
+                                            {t('reader.website')}
                                             </th>
                                             <th className="table-heading-styling text-center" >
-                                                Free / Commercial
+                                            {t('reader.commercial')}
                                             </th>
                                         </tr>
                                     </thead>

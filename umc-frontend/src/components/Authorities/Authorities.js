@@ -4,20 +4,22 @@ import "../CommingSoon/CommingSoon.css";
 import "./Authorities.css"
 import comingsoon from '../../assets/newcomingsoon.png'
 import api, { baseURL } from "../api";
+import { useTranslation } from "react-i18next";
 
-const Authorities = () => {
+
+const MayorOffice = () => {
     const [bgImage, setBgImage] = useState("");
+    const { i18n, t } = useTranslation();
 
-     useEffect(() => {
-            fetchHeaderImage();
-    
-        }, []);
+    useEffect(() => {
+        fetchHeaderImage();
+    }, []);
     const fetchHeaderImage = async () => {
         try {
             const response = await api.get("/banner");
 
             if (response.data.length > 0) {
-                let selectedBanner = response.data.find(banner => banner.banner_name === "Authorities");
+                let selectedBanner = response.data.find(banner => banner.banner_name === "Mayor-office");
 
                 if (selectedBanner) {
                     setBgImage(`${baseURL}${selectedBanner.file_path}`);
@@ -37,7 +39,8 @@ const Authorities = () => {
 
     return (
         <>
-             <div
+
+            <div
                 className="history-header-image"
                 style={{
                     backgroundImage: `url(${bgImage})`,
@@ -49,16 +52,16 @@ const Authorities = () => {
                 <div className="container-fluid font-location mt-2 mb-5" id="deputy-css">
                     <nav className="breadcrumb">
                         <Link to="/" className="breadcrumb-item text-decoration-none">
-                            Home
+                            {t('corporation.home')}
                         </Link>
                         <Link to="#" className="breadcrumb-item text-decoration-none">
-                            Corporation
+                            {t('corporation.corporation')}
                         </Link>
-                        <span className="breadcrumb-item active1">Authorities</span>
+                        <span className="breadcrumb-item active1">{t('authorities.title')}</span>
                     </nav>
                     <h2 className="location-title">
-                        <span className="highlight">Authorities</span>
-                        <span className="highlighted-text"> of UMC</span>
+                        <span className="highlight">{t('authorities.highlight')}</span>
+                        <span className="highlighted-text"> {t('authorities.highlight-text')}</span>
                         <hr />
                     </h2>
 
@@ -67,9 +70,10 @@ const Authorities = () => {
                             src={comingsoon}
                             alt="Coming Soon"
                             className="coming-soon-gif"
+
                         />
                         <p className="coming-soon-message">
-                            This page is under development and will be available soon.
+                            {t('commingsoon.text')}
                         </p>
                     </div>
 
@@ -79,4 +83,4 @@ const Authorities = () => {
     );
 };
 
-export default Authorities;
+export default MayorOffice;
