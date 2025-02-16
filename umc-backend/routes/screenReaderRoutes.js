@@ -3,35 +3,41 @@ const router = express.Router();
 const db = require("../config/db.js");
 
 router.get("/screen-reader", (req, res) => {
-    const sql = "SELECT * FROM screen_reader";
-    db.query(sql, (err, results) => {
-        if (err) {
-            console.error("Error fetching data:", err);
-            return res.status(500).json({ error: "Failed to fetch screen reader access" });
-        }
+    const language = req.query.lang;
+    let query;
+    let params = [];
+    if (language) {
+        query = `SELECT * FROM screen_reader WHERE language_code = ?`;
+        params.push(language);
+    } else {
+        query = "SELECT * FROM screen_reader";
+    }
+
+    db.query(query, params, (err, results) => {
+        if (err) throw err;
         res.json(results);
     });
 });
 
 router.post("/screen-reader", (req, res) => {
-    const { name, website, available } = req.body;
+    const { name, website, available, language_code } = req.body;
 
-    const sql = "INSERT INTO screen_reader (name, website, available) VALUES (?, ?, ?)";
-    db.query(sql, [name, website, available], (err, result) => {
+    const sql = "INSERT INTO screen_reader (name, website, available, language_code) VALUES (?, ?, ?, ?)";
+    db.query(sql, [name, website, available, language_code], (err, result) => {
         if (err) {
             console.error("Error inserting data:", err);
             return res.status(500).json({ error: "Failed to add screen reader access" });
         }
-        res.status(201).json({ id: result.insertId, name, website, available });
+        res.status(201).json({ id: result.insertId, name, website, available, language_code });
     });
 });
 
 
 router.put("/screen-reader/:id", (req, res) => {
     const { id } = req.params;
-    const { name, website, available } = req.body;
-    const sql = "UPDATE screen_reader SET name = ?, website = ?, available = ? WHERE id = ?";
-    db.query(sql, [name, website, available, id], (err, result) => {
+    const { name, website, available, language_code } = req.body;
+    const sql = "UPDATE screen_reader SET name = ?, website = ?, available = ?, language_code = ? WHERE id = ?";
+    db.query(sql, [name, website, available, language_code, id], (err, result) => {
         if (err) {
             console.error("Error updating data:", err);
             return res.status(500).json({ error: "Failed to update screen reader access" });

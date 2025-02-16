@@ -71,7 +71,7 @@ const ContactUs = () => {
   const openEditModal = (item, type) => {
     setSelectedItem(item);
     setEditData(
-      type === "ward" ? { office: item.office, address: item.address, phone: item.phone, email: item.email } : { ...item }
+      type === "ward" ? { office: item.office, address: item.address, phone: item.phone, email: item.email, language_code: item.language_code } : { ...item }
     );
     setImagePreview(type === "contact" ? `${baseURL}${item.image_path}` : "");
     setModalType(type);
@@ -93,7 +93,8 @@ const ContactUs = () => {
           office: editData.office,
           address: editData.address,
           phone: editData.phone,
-          email: editData.email
+          email: editData.email,
+          language_code: editData.language_code
         });
         setWardData(
           wardData.map((item) =>
@@ -107,6 +108,7 @@ const ContactUs = () => {
         const formData = new FormData();
         formData.append("heading", editData.heading);
         formData.append("description", editData.description);
+        formData.append("language_code", editData.language_code);
 
         if (editData.imageFile) {
           formData.append("contactIcon", editData.imageFile);
@@ -337,6 +339,26 @@ const ContactUs = () => {
                     {modalType === "contact" ? (
                       <>
                         <div className="form-group">
+                          <label htmlFor="language_code">
+                            Select Language
+                          </label>
+                          <select
+                            className="form-control"
+                            name="language_code"
+                            value={editData.language_code}
+                            onChange={(e) =>
+                              setEditData({
+                                ...editData,
+                                language_code: e.target.value,
+                              })
+                            }
+                          >
+                            <option value="" disabled>Select Language</option>
+                            <option value="en">English</option>
+                            <option value="mr">Marathi</option>
+                          </select>
+                        </div>
+                        <div className="form-group">
                           <label htmlFor="heading">Heading</label>
                           <input
                             type="text"
@@ -390,6 +412,26 @@ const ContactUs = () => {
                       </>
                     ) : (
                       <>
+                        <div className="form-group">
+                          <label htmlFor="language_code">
+                            Select Language
+                          </label>
+                          <select
+                            className="form-control"
+                            name="language_code"
+                            value={editData.language_code}
+                            onChange={(e) =>
+                              setEditData({
+                                ...editData,
+                                language_code: e.target.value,
+                              })
+                            }
+                          >
+                            <option value="" disabled>Select Language</option>
+                            <option value="en">English</option>
+                            <option value="mr">Marathi</option>
+                          </select>
+                        </div>
                         <div className="form-group">
                           <label htmlFor="office">Ward Office no.</label>
                           <input

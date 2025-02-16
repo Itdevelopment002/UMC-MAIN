@@ -5,13 +5,17 @@ import { Link } from "react-router-dom";
 
 const AddHyperlinkPolicy = () => {
   const [description, setDescription] = useState("");
-  const [errors, setErrors] = useState({ description: "" });
+  const [language, setLanguage] = useState("");
+  const [errors, setErrors] = useState({ description: "", language: "" });
   const navigate = useNavigate();
 
   const validateForm = () => {
     const newErrors = {};
     if (!description) {
       newErrors.description = "Policy Description is required.";
+    }
+    if (!language) {
+      newErrors.language = "Language selection is required";
     }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -26,6 +30,7 @@ const AddHyperlinkPolicy = () => {
 
     const formData = {
       description,
+      language_code: language,
     };
 
     try {
@@ -37,7 +42,8 @@ const AddHyperlinkPolicy = () => {
 
       if (response.status === 201) {
         setDescription("");
-        setErrors({ description: "" });
+        setLanguage("");
+        setErrors({ description: "", language: "" });
         navigate("/hyperlink-policy");
       }
     } catch (error) {
@@ -71,14 +77,35 @@ const AddHyperlinkPolicy = () => {
                   </div>
                   <form onSubmit={handleSubmit}>
                     <div className="form-group row">
+                      <label className="col-form-label col-md-2">
+                        Select Language <span className="text-danger">*</span>
+                      </label>
+                      <div className="col-md-4">
+                        <select
+                          className={`form-control form-control-md ${errors.language ? "is-invalid" : ""}`}
+                          value={language}
+                          onChange={(e) => {
+                            setLanguage(e.target.value);
+                            if (errors.language) {
+                              setErrors({ ...errors, language: "" });
+                            }
+                          }}
+                        >
+                          <option value="">Select Language</option>
+                          <option value="en">English</option>
+                          <option value="mr">Marathi</option>
+                        </select>
+                        {errors.language && <div className="invalid-feedback">{errors.language}</div>}
+                      </div>
+                    </div>
+                    <div className="form-group row">
                       <label className="col-form-label col-lg-2">
                         Policy Description <span className="text-danger">*</span>
                       </label>
                       <div className="col-md-4">
                         <textarea
-                          className={`form-control ${
-                            errors.description ? "is-invalid" : ""
-                          }`}
+                          className={`form-control ${errors.description ? "is-invalid" : ""
+                            }`}
                           placeholder="Enter Policy description"
                           value={description}
                           onChange={(e) => {
