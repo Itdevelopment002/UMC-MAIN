@@ -9,8 +9,8 @@ const WardOffice = () => {
     const [wardData, setWardData] = useState([]);
     const [selectedWard, setSelectedWard] = useState(null);
     const [bgImage, setBgImage] = useState("");
-      const { i18n, t } = useTranslation();
-    
+    const { i18n, t } = useTranslation();
+
     useEffect(() => {
         fetchHeaderImage();
     }, []);
@@ -66,16 +66,16 @@ const WardOffice = () => {
                 <div className="container-fluid font-location mt-4 mb-2" id="ward-css">
                     <nav className="breadcrumb">
                         <Link to="/" className="breadcrumb-item text-decoration-none">
-                            Home
+                            {t('corporation.home')}
                         </Link>
                         <Link to="#" className="breadcrumb-item text-decoration-none">
-                            Corporation
+                            {t('corporation.corporation')}
                         </Link>
-                        <span className="breadcrumb-item active1">Ward Office</span>
+                        <span className="breadcrumb-item active1">{t('ward.heading')}</span>
                     </nav>
                     <h2 className="location-title">
-                        <span className="highlight">Ward</span>
-                        <span className="highlighted-text"> Office</span>
+                        <span className="highlight">{t('ward.highlight')}</span>
+                        <span className="highlighted-text"> {t('ward.highlight-text')}</span>
                         <hr />
                     </h2>
 
@@ -102,33 +102,33 @@ const WardOffice = () => {
                                         </h5>
 
                                         <p className="ward-text">
-                                            <strong>Ward Officer Name:</strong> {selectedWard.officer_name}
+                                            <strong>{t('corporation.wardname')}:</strong> {selectedWard.officer_name}
                                         </p>
                                         <p className="ward-text">
-                                            <strong>Ward Officer Address:</strong> {selectedWard.address}
+                                            <strong>{t('corporation.wardaddress')}:</strong> {selectedWard.address}
                                         </p>
                                         <p className="ward-text">
-                                            <strong>Email Id:</strong> {selectedWard.email || '-'}
+                                            <strong>{t('corporation.wardId')}:</strong> {selectedWard.email || '-'}
                                         </p>
                                         <p className="ward-text">
-                                            <strong>Mobile Number:</strong> {selectedWard.mobile}
+                                            <strong>{t('corporation.wardphNo')}:</strong> {selectedWard.mobile}
                                         </p>
                                         <p className="ward-text">
-                                            <strong>Landline Number:</strong> {selectedWard.landline || '-'}
+                                            <strong>{t('corporation.landline')}:</strong> {selectedWard.landline || '-'}
                                         </p>
 
                                         <table className="table table-bordered table-responsive mt-4">
                                             <thead className="theadcolor">
                                                 <tr>
-                                                    <th width='30%' className="table-heading-styling" style={{ textAlign: 'center' }}>Ward No.</th>
-                                                    <th width='70%' className="table-heading-styling px-5">Area in Ward</th>
+                                                    <th width='30%' className="table-heading-styling" style={{ textAlign: 'center' }}>{t('corporation.wardNo')}</th>
+                                                    <th width='70%' className="table-heading-styling px-5">{t('corporation.wardarea')}</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 {/* Check if 'areas' is an array before mapping */}
 
                                                 <tr>
-                                                    <td style={{ textAlign: 'center', height: '100px' }}>{selectedWard.ward_no}</td>
+                                                    <td style={{ textAlign: 'center', height: '100px' }}>{selectedWard.ward_name}</td>
                                                     <td className="areapadding">{selectedWard.areas}</td>
                                                 </tr>
 
@@ -136,7 +136,7 @@ const WardOffice = () => {
                                         </table>
                                     </div>
                                     <div className="col-md-5 map-container">
-                                        <h5 className="ward-location-title">Location</h5>
+                                        <h5 className="ward-location-title">{t('location.location-title')}</h5>
                                         <div className="map-wrapper">
                                             {/* Example map, replace with dynamic URL if necessary */}
                                             <iframe
