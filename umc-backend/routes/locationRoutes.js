@@ -2,16 +2,34 @@ const express = require("express");
 const router = express.Router();
 const db = require("../config/db.js");
 
-// Insert location info with dynamic type
-router.post("/location-info", (req, res) => {
-  const { heading, description, type } = req.body;  // Now expecting dynamic 'type' from request body
 
-  if (!type || !heading || !description) {
-    return res.status(400).json({ error: "Heading, description, and type are required." });
+router.get("/location-info", (req, res) => {
+  const language = req.query.lang;
+  let query;
+  let params = [];
+  if (language) {
+    query = `SELECT * FROM location_info WHERE language_code = ?`;
+    params.push(language);
+  } else {
+    query = "SELECT * FROM location_info";
   }
 
-  const sql = "INSERT INTO location_info (type, heading, description) VALUES (?, ?, ?)";
-  db.query(sql, [type, heading, description], (err, result) => {
+  db.query(query, params, (err, results) => {
+    if (err) throw err;
+    res.json(results);
+  });
+});
+
+
+router.post("/location-info", (req, res) => {
+  const { heading, description, type, language_code } = req.body;
+
+  if (!type || !heading || !description || !language_code) {
+    return res.status(400).json({ error: "Heading, description, language code and type are required." });
+  }
+
+  const sql = "INSERT INTO location_info (type, heading, description, language_code) VALUES (?, ?, ?, ?)";
+  db.query(sql, [type, heading, description, language_code], (err, result) => {
     if (err) {
       console.error("Error inserting data:", err);
       return res.status(500).json({ error: "Failed to add location info" });
@@ -20,28 +38,21 @@ router.post("/location-info", (req, res) => {
   });
 });
 
-// Fetch location info with dynamic type filtering (optional if needed)
-router.get("/location-info", (req, res) => {
-  const { type } = req.query; // Optional query parameter for filtering by type
 
-  let sql = "SELECT * FROM location_info";
-  const queryParams = [];
-
-  if (type) {
-    sql += " WHERE type = ?";
-    queryParams.push(type);
-  }
-
-  db.query(sql, queryParams, (err, results) => {
+router.put("/location-info/:id", (req, res) => {
+  const { id } = req.params;
+  const { heading, description, language_code } = req.body;
+  const sql = "UPDATE location_info SET heading = ?, description = ?, language_code = ? WHERE id = ?";
+  db.query(sql, [heading, description, language_code, id], (err, result) => {
     if (err) {
-      console.error("Error fetching data:", err);
-      return res.status(500).json({ error: "Failed to fetch location info" });
+      console.error("Error updating data:", err);
+      return res.status(500).json({ error: "Failed to update location Data" });
     }
-    res.json(results);
+    res.json({ message: "Location Data updated successfully" });
   });
 });
 
-// Delete location info by ID
+
 router.delete("/location-info/:id", (req, res) => {
   const { id } = req.params;
   const sql = "DELETE FROM location_info WHERE id = ?";
@@ -54,18 +65,5 @@ router.delete("/location-info/:id", (req, res) => {
   });
 });
 
-// Update location info by ID, with dynamic type handling
-router.put("/location-info/:id", (req, res) => {
-  const { id } = req.params;
-  const { heading, description } = req.body;
-  const sql = "UPDATE location_info SET heading = ?, description = ? WHERE id = ?";
-  db.query(sql, [heading, description, id], (err, result) => {
-    if (err) {
-      console.error("Error updating data:", err);
-      return res.status(500).json({ error: "Failed to update location Data" });
-    }
-    res.json({ message: "Location Data updated successfully" });
-  });
-});
 
 module.exports = router;

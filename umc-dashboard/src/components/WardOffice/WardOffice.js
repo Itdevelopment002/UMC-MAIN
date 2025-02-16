@@ -50,6 +50,8 @@ const WardOffice = () => {
         landline: selectedWardOffice.landline,
         areas: selectedWardOffice.areas,
         map_url: selectedWardOffice.map_url,
+        language_code: selectedWardOffice.language_code,
+
       });
       const updatedWardOffices = wardOffices.map((wardOffice) =>
         wardOffice.id === selectedWardOffice.id ? selectedWardOffice : wardOffice
@@ -235,6 +237,20 @@ const WardOffice = () => {
               <div className="modal-body">
                 <form>
                   <div className="mb-3">
+                    <label className="form-label">
+                      Select Language
+                    </label>
+
+                    <select
+                      className="form-control"
+                      value={selectedWardOffice?.language_code || ""}
+                      onChange={handleEditChange}
+                      name="language_code"
+                    >
+                      <option value="">Select Language</option>
+                      <option value="en">English</option>
+                      <option value="mr">Marathi</option>
+                    </select>
                     <label className="form-label">Ward No</label>
                     <input
                       type="text"
