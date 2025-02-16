@@ -352,5 +352,11 @@
         "title": "Women and Child Development",
         "highlight": "Women and Child",
         "highlight-text": "Development"
+    },
+    "propertyTaxDept": {
+        "department": "Department",
+        "propertyTaxDepartment": "Property Tax Department",
+        "property": "Property",
+        "taxDepartment": "Tax Department"
     }
 }
