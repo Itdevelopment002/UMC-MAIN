@@ -358,5 +358,90 @@
         "propertyTaxDepartment": "Property Tax Department",
         "property": "Property",
         "taxDepartment": "Tax Department"
+    },
+    "lbtDept": {
+        "title": "LBT Department",
+        "highlight": "LBT",
+        "highlight-text": "Department"
+    },
+    "legalDept": {
+        "title": "Legal Department",
+        "highlight": "Legal",
+        "highlight-text": "Department"
+    },
+    "marketDept": {
+        "title": "Market and Licensing Department",
+        "highlight": "Market",
+        "highlight-text": "and Licensing Department"
+    },
+    "medicalDept": {
+        "title": "Medical Health Department",
+        "highlight": "Medical",
+        "highlight-text": "Health Department"
+    },
+    "secretaryDept": {
+        "title": "Office of the Secretary",
+        "highlight": "Office",
+        "highlight-text": "of the Secretary"
+    },
+    "nulmDept": {
+        "title": "NULM Department",
+        "highlight": "NULM",
+        "highlight-text": "Department"
+    },
+    "publicHealthDept": {
+        "title": "Public Health Department",
+        "highlight": "Public",
+        "highlight-text": "Health Department"
+    },
+    "relationshipDept": {
+        "title": "Public Relationship Department",
+        "highlight": "Public",
+        "highlight-text": "Relationship Department"
+    },
+    "worksDept": {
+        "title": "Public Works Department",
+        "highlight": "Public",
+        "highlight-text": "Works Department"
+    },
+    "securityDept": {
+        "title": "Security Department",
+        "highlight": "Security",
+        "highlight-text": "Department"
+    },
+    "swmDept": {
+        "title": "Solid Waste Management Department",
+        "highlight": "Solid",
+        "highlight-text": "Waste Management Department"
+    },
+    "sportsDept": {
+        "title": "Sports Department",
+        "highlight": "Sports",
+        "highlight-text": "Department"
+    },
+    "recordsDept": {
+        "title": "Records Department",
+        "highlight": "Records",
+        "highlight-text": "Department"
+    },
+    "townDept": {
+        "title": "Town Planning Department",
+        "highlight": "Town",
+        "highlight-text": "Planning Department"
+    },
+    "storeDept": {
+        "title": "Store Department",
+        "highlight": "Store",
+        "highlight-text": "Department"
+    },
+    "waterDept": {
+        "title": "Water Supply Department",
+        "highlight": "Water",
+        "highlight-text": "Supply Department"
+    },
+    "vehicleDept": {
+        "title": "Vehicle Department",
+        "highlight": "Vehicle",
+        "highlight-text": "Department"
     }
 }

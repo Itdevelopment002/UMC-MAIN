@@ -362,6 +362,85 @@
         "propertyTaxDepartment": "मालमत्ता कर विभाग",
         "property": "मालमत्ता",
         "taxDepartment": "कर विभाग"
-
+    },
+    "lbtDept": {
+        "title": "एलबीटी विभाग",
+        "highlight": "एलबीटी",
+        "highlight-text": "विभाग"
+    },
+    "legalDept": {
+        "title": "कायदा विभाग",
+        "highlight": "कायदा",
+        "highlight-text": "विभाग"
+    },
+    "marketDept": {
+        "title": "बाजार आणि परवाना विभाग",
+        "highlight": "बाजार",
+        "highlight-text": "आणि परवाना विभाग"
+    },
+    "medicalDept": {
+        "title": "वैद्यकीय आरोग्य विभाग",
+        "highlight": "वैद्यकीय",
+        "highlight-text": "आरोग्य विभाग"
+    },
+    "secretaryDept": {
+        "title": "सचिव कार्यालय",
+        "highlight": "सचिव",
+        "highlight-text": "कार्यालय"
+    },
+    "nulmDept": {
+        "title": "एनयूएलएम विभाग",
+        "highlight": "एनयूएलएम",
+        "highlight-text": "विभाग"
+    },
+    "relationshipDept": {
+        "title": "जनसंपर्क विभाग",
+        "highlight": "जनसंपर्क",
+        "highlight-text": "विभाग"
+    },
+    "worksDept": {
+        "title": "सार्वजनिक बांधकाम विभाग",
+        "highlight": "सार्वजनिक",
+        "highlight-text": "बांधकाम विभाग"
+    },
+    "securityDept": {
+        "title": "सुरक्षा विभाग",
+        "highlight": "सुरक्षा",
+        "highlight-text": "विभाग"
+    },
+    "swmDept": {
+        "title": "घनकचरा व्यवस्थापन विभाग",
+        "highlight": "घनकचरा",
+        "highlight-text": "व्यवस्थापन विभाग"
+    },
+    "sportsDept": {
+        "title": "क्रीडा विभाग",
+        "highlight": "क्रीडा",
+        "highlight-text": "विभाग"
+    },
+    "recordsDept": {
+        "title": "रेकॉर्ड विभाग",
+        "highlight": "रेकॉर्ड",
+        "highlight-text": "विभाग"
+    },
+    "townDept": {
+        "title": "नगररचना विभाग",
+        "highlight": "नगररचना",
+        "highlight-text": "विभाग"
+    },
+    "storeDept": {
+        "title": "भांडार विभाग",
+        "highlight": "भांडार",
+        "highlight-text": "विभाग"
+    },
+    "waterDept": {
+        "title": "पाणीपुरवठा विभाग",
+        "highlight": "पाणीपुरवठा",
+        "highlight-text": "विभाग"
+    },
+    "vehicleDept": {
+        "title": "वाहन विभाग",
+        "highlight": "वाहन",
+        "highlight-text": "विभाग"
     }
 }
