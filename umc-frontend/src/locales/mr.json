@@ -48,7 +48,7 @@
         "home": "मुखपृष्ठ",
         "aboutumc": "उ.म.पा. बद्दल",
         "location-title": "स्थान",
-        "highlight1": "यूएमसीचे",
+        "highlight1": "उ.म.पा.",
         "highlight-text": "स्थान",
         "information": "माहिती",
         "nodata": "कोणताही डेटा उपलब्ध नाही.",
@@ -58,7 +58,7 @@
     },
     "commissioner": {
         "commissionerText": "आयुक्त",
-        "highlight1": "यूएमसीचे",
+        "highlight1": "उ.म.पा.",
         "highlight-text": "आयुक्त",
         "name": "आयुक्ताचे नाव",
         "designation": "पद",
@@ -121,7 +121,7 @@
         ]
     },
     "viewallDepartment": "सर्व विभाग पहा",
-    "history-title1": "यूएमसीचा",
+    "history-title1": "उ.म.पा.",
     "history-title2": " इतिहास",
     "commisioner-overview": "आयुक्तांचा थोडक्यात आढावा",
     "btn-title": "स्थानासाठी येथे क्लिक करा",
