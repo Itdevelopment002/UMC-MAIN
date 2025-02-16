@@ -101,11 +101,12 @@ const UmcCommittee = () => {
       if (modalType === "standing") {
         await api.put(`/standing-committee/${selectedItem.id}`, {
           heading: editData.heading,
+          language_code: editData.language_code,
         });
         setStandingData(
           standingData.map((item) =>
             item.id === selectedItem.id
-              ? { ...item, heading: editData.heading }
+              ? { ...item, heading: editData.heading, language_code: editData.language_code }
               : item
           )
         );
@@ -113,11 +114,12 @@ const UmcCommittee = () => {
       } else if (modalType === "women") {
         await api.put(`/women-committee/${selectedItem.id}`, {
           heading: editData.heading,
+          language_code: editData.language_code,
         });
         setWomenData(
           womenData.map((item) =>
             item.id === selectedItem.id
-              ? { ...item, heading: editData.heading }
+              ? { ...item, heading: editData.heading, language_code: editData.language_code }
               : item
           )
         );
@@ -126,11 +128,12 @@ const UmcCommittee = () => {
         await api.put(`/ward-committee/${selectedItem.id}`, {
           ward: editData.ward,
           heading: editData.heading,
+          language_code: editData.language_code,
         });
         setWardData(
           wardData.map((item) =>
             item.id === selectedItem.id
-              ? { ...item, ward: editData.ward, heading: editData.heading }
+              ? { ...item, ward: editData.ward, heading: editData.heading, language_code: editData.language_code }
               : item
           )
         );
@@ -503,6 +506,23 @@ const UmcCommittee = () => {
                     {modalType === "standing" && (
                       <>
                         <div className="form-group">
+                          <label htmlFor="language_code">
+                            Select Language
+                          </label>
+                          <select
+                            className="form-control"
+                            name="language_code"
+                            value={editData.language_code}
+                            onChange={(e) =>
+                              setEditData({ ...editData, language_code: e.target.value })
+                            }
+                          >
+                            <option value="">Select Language</option>
+                            <option value="en">English</option>
+                            <option value="mr">Marathi</option>
+                          </select>
+                        </div>
+                        <div className="form-group">
                           <label htmlFor="description">Member Name</label>
                           <input
                             type="text"
@@ -518,6 +538,23 @@ const UmcCommittee = () => {
                     )}
                     {modalType === "ward" && (
                       <>
+                        <div className="form-group">
+                          <label htmlFor="language_code">
+                            Select Language
+                          </label>
+                          <select
+                            className="form-control"
+                            name="language_code"
+                            value={editData.language_code}
+                            onChange={(e) =>
+                              setEditData({ ...editData, language_code: e.target.value })
+                            }
+                          >
+                            <option value="">Select Language</option>
+                            <option value="en">English</option>
+                            <option value="mr">Marathi</option>
+                          </select>
+                        </div>
                         <div className="form-group">
                           <label htmlFor="heading">Ward Name</label>
                           <select
@@ -551,6 +588,23 @@ const UmcCommittee = () => {
                     )}
                     {modalType === "women" && (
                       <>
+                        <div className="form-group">
+                          <label htmlFor="language_code">
+                            Select Language
+                          </label>
+                          <select
+                            className="form-control"
+                            name="language_code"
+                            value={editData.language_code}
+                            onChange={(e) =>
+                              setEditData({ ...editData, language_code: e.target.value })
+                            }
+                          >
+                            <option value="">Select Language</option>
+                            <option value="en">English</option>
+                            <option value="mr">Marathi</option>
+                          </select>
+                        </div>
                         <div className="form-group">
                           <label htmlFor="description">Member Name</label>
                           <input

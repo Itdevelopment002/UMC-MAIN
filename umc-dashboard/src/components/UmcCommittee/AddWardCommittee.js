@@ -6,36 +6,51 @@ import { useNavigate } from "react-router-dom";
 const AddWardCommittee = () => {
   const [ward, setWard] = useState("");
   const [heading, setHeading] = useState("");
+  const [language, setLanguage] = useState("");
+  const [errors, setErrors] = useState({});
   const navigate = useNavigate();
-  const [error, setError] = useState("")
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    if (name === "ward") setWard(value);
-    if (name === "heading") setHeading(value);
-    setError("");
+  const validateForm = () => {
+    const validationErrors = {};
+    if (!language) {
+      validationErrors.language = "Language selection is required";
+    }
+    
+    if (!heading) {
+      validationErrors.heading = "Member Name is required.";
+    }
+
+    if (!ward) {
+      validationErrors.ward = "Ward Name is required.";
+    }
+
+    setErrors(validationErrors);
+    return Object.keys(validationErrors).length === 0;
   };
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!ward.trim()) {
-      setError("Ward Name is required.");
-      return;
-    }
-    if (!heading.trim()) {
-      setError("Member name is required.");
+    if (!validateForm()) {
       return;
     }
 
     try {
-      await api.post("/ward-committee", { ward, heading });
+      //eslint-disable-next-line
+      const response = await api.post("/ward-committee", {
+        ward: ward,
+        heading: heading,
+        language_code: language,
+      });
+      setHeading("");
+      setWard("");
+      setLanguage("");
       navigate("/umc-committee");
     } catch (error) {
-      console.error("Error submitting ward committee:", error);
+      console.error("Error adding information:", error);
     }
   };
+
   return (
     <div>
       <div className="page-wrapper">
@@ -63,14 +78,40 @@ const AddWardCommittee = () => {
                   <form onSubmit={handleSubmit}>
                     <div className="form-group row">
                       <label className="col-form-label col-md-2">
+                        Select Language <span className="text-danger">*</span>
+                      </label>
+                      <div className="col-md-4">
+                        <select
+                          className={`form-control form-control-md ${errors.language ? "is-invalid" : ""}`}
+                          value={language}
+                          onChange={(e) => {
+                            setLanguage(e.target.value);
+                            if (errors.language) {
+                              setErrors({ ...errors, language: "" });
+                            }
+                          }}
+                        >
+                          <option value="" disabled>Select Language</option>
+                          <option value="en">English</option>
+                          <option value="mr">Marathi</option>
+                        </select>
+                        {errors.language && <div className="invalid-feedback">{errors.language}</div>}
+                      </div>
+                    </div>
+                    <div className="form-group row">
+                      <label className="col-form-label col-md-2">
                         Ward Name <span className="text-danger">*</span>
                       </label>
                       <div className="col-md-4">
                         <select
-                          className={`form-control form-control-md ${error ? "is-invalid" : ""}`}
-                          name="ward"
+                          className={`form-control form-control-md ${errors.ward ? "is-invalid" : ""}`}
                           value={ward}
-                          onChange={handleChange}
+                          onChange={(e) => {
+                            setWard(e.target.value);
+                            if (errors.ward) {
+                              setErrors({ ...errors, ward: "" });
+                            }
+                          }}
                         >
                           <option value="" disabled>Select Ward Name</option>
                           <option value="Ward Committee A">Ward Committee A</option>
@@ -78,7 +119,7 @@ const AddWardCommittee = () => {
                           <option value="Ward Committee C">Ward Committee C</option>
                           <option value="Ward Committee D">Ward Committee D</option>
                         </select>
-                        {error && <div className="invalid-feedback">{error}</div>}
+                        {errors.ward && <div className="invalid-feedback">{errors.ward}</div>}
                       </div>
                     </div>
                     <div className="form-group row">
@@ -87,15 +128,17 @@ const AddWardCommittee = () => {
                       </label>
                       <div className="col-md-4">
                         <input
-                          type="text"
-                          className={`form-control form-control-md ${error ? "is-invalid" : ""
-                            }`}
-                          name="heading"
+                          className={`form-control form-control-md ${errors.heading ? "is-invalid" : ""}`}
                           value={heading}
-                          onChange={handleChange}
-                          placeholder="Enter Member Name"
+                          onChange={(e) => {
+                            setHeading(e.target.value);
+                            if (errors.heading) {
+                              setErrors({ ...errors, heading: "" });
+                            }
+                          }}
+                          placeholder="Enter Member name"
                         />
-                        {error && <div className="invalid-feedback">{error}</div>}
+                        {errors.heading && <div className="invalid-feedback">{errors.heading}</div>}
                       </div>
                     </div>
                     <input
