@@ -255,9 +255,9 @@ const Location = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {tableData.filter(item => item.type === "Table 3").length > 0 ? (
+                  {tableData.filter(item => item.type === "Table 4").length > 0 ? (
                     tableData
-                      .filter(item => item.type === "Table 3")
+                      .filter(item => item.type === "Table 4")
                       .map((item, index) => (
                         <tr key={index}>
                           <td

@@ -278,6 +278,12 @@
         "previous": "Previous",
         "next": "Next"
     },
+    "department": {
+        "home": "Home",
+        "department": "Departments",
+        "highlight": "Departments",
+        "highlight-text": "of UMC"
+    },
     "accountDept": {
         "title": "Accounts Department",
         "highlight": "Accounts",
