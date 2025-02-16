@@ -281,6 +281,12 @@
         "previous": "मागील",
         "next": "पुढील"
     },
+    "department": {
+        "home": "मुखपृष्ठ",
+        "department": "विभाग",
+        "highlight": "उल्हासनगर महानगरपालिकेचे",
+        "highlight-text": "प्रशासन"
+    },
     "accountDept": {
         "title": "लेखा विभाग",
         "highlight": "लेखा",
