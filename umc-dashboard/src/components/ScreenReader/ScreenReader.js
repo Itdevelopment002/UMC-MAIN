@@ -45,6 +45,7 @@ const ScreenReader = () => {
         name: selectedReader.name,
         website: selectedReader.website,
         available: selectedReader.available,
+        language_code: selectedReader.language_code,
       });
 
       const updatedReader = readerData.map((reader) =>
@@ -280,6 +281,22 @@ const ScreenReader = () => {
                   </div>
                   <div className="modal-body">
                     <form>
+                    <div className="mb-3">
+                        <label className="form-label">
+                          Select Language
+                        </label>
+
+                        <select
+                          className="form-control form-control-md"
+                          name="language_code"
+                          value={selectedReader?.language_code || ""}
+                          onChange={handleEditChange}
+                        >
+                          <option value="" disabled>Select Language</option>
+                          <option value="en">English</option>
+                          <option value="mr">Marathi</option>
+                        </select>
+                      </div>
                       <div className="mb-3">
                         <label className="form-label">Reader Name</label>
                         <input

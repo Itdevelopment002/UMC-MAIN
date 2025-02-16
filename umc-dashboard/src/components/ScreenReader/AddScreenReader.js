@@ -7,6 +7,7 @@ const AddScreenReader = () => {
   const [name, setName] = useState("");
   const [website, setWebsite] = useState("");
   const [available, setAvailable] = useState("");
+  const [language, setLanguage] = useState("");
   const [errors, setErrors] = useState({ name: "", website: "", available: "" });
   const navigate = useNavigate();
 
@@ -25,6 +26,10 @@ const AddScreenReader = () => {
       newErrors.available = "Reader Availability is required.";
     }
 
+    if (!language) {
+      newErrors.language = "Language selection is required";
+    }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -40,6 +45,7 @@ const AddScreenReader = () => {
       name,
       website,
       available,
+      language_code: language,
     };
 
     try {
@@ -53,7 +59,8 @@ const AddScreenReader = () => {
         setName("");
         setWebsite("");
         setAvailable("");
-        setErrors({ name: "", website: "", available: "" });
+        setLanguage("");
+        setErrors({ name: "", website: "", available: "", language: "" });
         navigate("/screen-reader-access");
       } else {
         console.error("Failed to add screen reader data");
@@ -88,6 +95,29 @@ const AddScreenReader = () => {
                     </div>
                   </div>
                   <form onSubmit={handleSubmit}>
+                    <div className="form-group row">
+                      <label className="col-form-label col-md-2">
+                        Select Language <span className="text-danger">*</span>
+                      </label>
+                      <div className="col-md-4">
+                        <select
+                          className={`form-control ${errors.language ? "is-invalid" : ""
+                          }`}
+                        value={language}
+                        onChange={(e) => {
+                          setLanguage(e.target.value);
+                          if (errors.language) {
+                            setErrors({ ...errors, language: "" });
+                          }
+                        }}
+                        >
+                          <option value="" disabled>Select Language</option>
+                          <option value="en">English</option>
+                          <option value="mr">Marathi</option>
+                        </select>
+                        {errors.language && <div className="invalid-feedback">{errors.language}</div>}
+                      </div>
+                    </div>
                     <div className="form-group row">
                       <label className="col-form-label col-md-2">
                         Reader Name <span className="text-danger">*</span>
@@ -155,7 +185,9 @@ const AddScreenReader = () => {
                         >
                           <option value="" disabled>Select Availability</option>
                           <option value="Free">Free</option>
+                          <option value="मुक्त">मुक्त</option>
                           <option value="Commercial">Commercial</option>
+                          <option value="व्यावसायिक">व्यावसायिक</option>
                         </select>
                         {errors.available && <small className="text-danger">{errors.available}</small>}
                       </div>

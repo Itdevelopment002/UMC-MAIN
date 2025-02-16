@@ -6,11 +6,16 @@ import { Link } from "react-router-dom";
 const AddPrivacyPolicy = () => {
   const [heading, setHeading] = useState("");
   const [description, setDescription] = useState("");
+  const [language, setLanguage] = useState("");
   const [errors, setErrors] = useState({ heading: "", description: "" });
   const navigate = useNavigate();
 
   const validateForm = () => {
     const newErrors = {};
+
+    if (!language) {
+      newErrors.language = "Language selection is required";
+    }
     if (!heading) {
       newErrors.heading = "Policy Heading is required.";
     }
@@ -31,6 +36,7 @@ const AddPrivacyPolicy = () => {
     const formData = {
       heading,
       description,
+      language_code: language,
     };
 
     try {
@@ -43,7 +49,8 @@ const AddPrivacyPolicy = () => {
       if (response.status === 201) {
         setHeading("");
         setDescription("");
-        setErrors({ heading: "", description: "" });
+        setLanguage("");
+        setErrors({ heading: "", description: "", language: "" });
         navigate("/privacy-policy");
       } else {
         console.error("Failed to add privacy policy");
@@ -80,14 +87,36 @@ const AddPrivacyPolicy = () => {
                   <form onSubmit={handleSubmit}>
                     <div className="form-group row">
                       <label className="col-form-label col-md-2">
+                        Select Language <span className="text-danger">*</span>
+                      </label>
+                      <div className="col-md-4">
+                        <select
+                          className={`form-control ${errors.language ? "is-invalid" : ""
+                            }`}
+                          value={language}
+                          onChange={(e) => {
+                            setLanguage(e.target.value);
+                            if (errors.language) {
+                              setErrors({ ...errors, language: "" });
+                            }
+                          }}
+                        >
+                          <option value="">Select Language</option>
+                          <option value="en">English</option>
+                          <option value="mr">Marathi</option>
+                        </select>
+                        {errors.language && <div className="invalid-feedback">{errors.language}</div>}
+                      </div>
+                    </div>
+                    <div className="form-group row">
+                      <label className="col-form-label col-md-2">
                         Policy Heading <span className="text-danger">*</span>
                       </label>
                       <div className="col-md-4">
                         <input
                           type="text"
-                          className={`form-control ${
-                            errors.heading ? "is-invalid" : ""
-                          }`}
+                          className={`form-control ${errors.heading ? "is-invalid" : ""
+                            }`}
                           placeholder="Enter Policy heading"
                           value={heading}
                           onChange={(e) => {
@@ -110,9 +139,8 @@ const AddPrivacyPolicy = () => {
                       </label>
                       <div className="col-md-4">
                         <textarea
-                          className={`form-control ${
-                            errors.description ? "is-invalid" : ""
-                          }`}
+                          className={`form-control ${errors.description ? "is-invalid" : ""
+                            }`}
                           placeholder="Enter Policy description"
                           value={description}
                           onChange={(e) => {

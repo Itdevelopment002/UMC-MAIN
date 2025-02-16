@@ -43,6 +43,7 @@ const HyperlinkPolicy = () => {
     try {
       await api.put(`/hyperlink-policy/${selectedCondition.id}`, {
         description: selectedCondition.description,
+        language_code: selectedCondition.language_code,
       });
 
       const updatedFunctions = conditionsData.map((func) =>
@@ -265,6 +266,22 @@ const HyperlinkPolicy = () => {
                   </div>
                   <div className="modal-body">
                     <form>
+                      <div className="mb-3">
+                        <label className="form-label">
+                          Select Language
+                        </label>
+
+                        <select
+                          className="form-control form-control-md"
+                          value={selectedCondition?.language_code || ""}
+                          onChange={handleEditChange}
+                          name="language_code"
+                        >
+                          <option value="">Select Language</option>
+                          <option value="en">English</option>
+                          <option value="mr">Marathi</option>
+                        </select>
+                      </div>
                       <div className="mb-3">
                         <label className="form-label">Policy Description</label>
                         <textarea
