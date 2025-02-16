@@ -90,6 +90,7 @@ import CustomerSupport from "./components/CustomerSupport/CustomerSupport";
 import ScreenReader from "./components/ScreenReader/ScreenReader";
 import ProactiveDisclosure from "./components/ProactiveDisclosure/ProactiveDisclosure";
 import SubRti from "./components/SubRti/SubRti";
+import RecordsDepartment from "./components/RecordsDepartment/RecordsDepartment"
 import { useTranslation } from "react-i18next";
 
 function App() {
@@ -219,6 +220,8 @@ function App() {
             <Route path="/vehicle-department" element={<VehicleDepartment data-aos="flip-left" />} />
             <Route path="/water-supply-department" element={<WaterSupplyDept />} />
             <Route path="/women-and-child-department" element={<WomenChildDevelopment />} />
+            <Route path="/records-department" element={<RecordsDepartment />} />
+
 
             {/* Circular */}
             <Route path="/circular" element={<Circular data-aos="flip-down" />} />

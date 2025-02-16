@@ -10,6 +10,7 @@ const AddHodDetails = () => {
     const [address, setAddress] = useState("");
     const [number, setNumber] = useState("");
     const [email, setEmail] = useState("");
+    const [language, setLanguage] = useState("");
     const [selectedFile, setSelectedFile] = useState(null);
     const [errors, setErrors] = useState({});
     const navigate = useNavigate();
@@ -56,6 +57,10 @@ const AddHodDetails = () => {
             newErrors.email = "Email address is required.";
         }
 
+        if (!language) {
+            newErrors.language = "Language selection is required";
+          }
+
         if (!selectedFile) {
             newErrors.selectedFile = "Hod Image is required.";
         }
@@ -73,6 +78,7 @@ const AddHodDetails = () => {
         formData.append("address", address);
         formData.append("number", number);
         formData.append("email", email);
+        formData.append("language_code", language);
 
         try {
             // eslint-disable-next-line
@@ -87,6 +93,7 @@ const AddHodDetails = () => {
             setAddress("");
             setNumber("");
             setEmail("");
+            setLanguage("");
             setSelectedFile(null);
             document.getElementById("hodImage").value = "";
             navigate("/department-information");
@@ -120,6 +127,27 @@ const AddHodDetails = () => {
                                         </div>
                                     </div>
                                     <form onSubmit={handleSubmit}>
+                                        <div className="form-group row">
+                                            <label className="col-form-label col-md-3">
+                                                Select Language <span className="text-danger">*</span>
+                                            </label>
+                                            <div className="col-md-4">
+                                                <select
+                                                    className={`form-control form-control-md ${errors.language ? 'is-invalid' : ''}`}
+                                                    value={language}
+                                                    name="language"
+                                                    onChange={(e) => {
+                                                        setLanguage(e.target.value);
+                                                        setErrors((prev) => ({ ...prev, language: "" }));
+                                                    }}
+                                                >
+                                                    <option value="" disabled>Select Language</option>
+                                                    <option value="en">English</option>
+                                                    <option value="mr">Marathi</option>
+                                                </select>
+                                                {errors.language && <div className="invalid-feedback">{errors.language}</div>}
+                                            </div>
+                                        </div>
                                         <div className="form-group row">
                                             <label className="col-form-label col-md-3">Hod Name <span className="text-danger">*</span></label>
                                             <div className="col-md-4">

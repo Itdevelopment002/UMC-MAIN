@@ -86,7 +86,16 @@ router.put("/category-images/:id", upload.single("image"), (req, res) => {
 });
 
 router.get("/categories", (req, res) => {
-  db.query("SELECT * FROM categories", (err, results) => {
+  const language = req.query.lang;
+  let query;
+  let params = [];
+  if (language) {
+    query = `SELECT * FROM categories WHERE language_code = ?`;
+    params.push(language);
+  } else {
+    query = "SELECT * FROM categories";
+  }
+  db.query(query, params, (err, results) => {
     if (err) return res.status(500).json({ error: err.message });
     res.json(results);
   });

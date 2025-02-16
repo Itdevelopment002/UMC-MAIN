@@ -149,6 +149,25 @@
         "oldRecruitmentAdvertisement": "Old Recruitment Advertisement",
         "noOldDataAvailable": "No Old recruitment data available"
     },
+
+    "gallery": {
+        "breadcrumb": "Gallery",
+        "photoGallery": "Photo Gallery",
+        "photo": "Photo",
+        "gallery": "Gallery",
+        "video": "Video"
+    },
+    "rts": {
+        "breadcrumb": "Right to Service Act 2015",
+        "rightToService": "Right to Service",
+        "act": "Act 2015",
+        "content": "The Maharashtra Right to Public Services Act, 2015 has been passed to provide the notified services provided by the government and all public authorities under the government to the citizens of the state of Maharashtra in a transparent, dynamic and prescribed time frame and it has come into force from 28.04.2015. Its objective is to provide services to the citizens in an easy and time-bound manner. To monitor, coordinate, and monitor whether the notified services are being provided to the citizens or not and to suggest improvements in this regard, the Maharashtra State Right to Public Services Commission has been constituted under the above Act and there is a Chief Commissioner and six Commissioners working in the Commission. The headquarters of the Commission is at New Administrative Building, opposite the Ministry, Mumbai and there are offices of the Commissioners at the headquarters of the six divisions. If the eligible citizens do not get the service within the prescribed time or if it is denied without proper reason, the concerned can file a first and second appeal against such decision with their superiors and if still not satisfied, a third appeal can be filed with the Commission. The guilty officer will be charged a counter-charge of Rs. A fine of up to Rs. 5000/- may be imposed. The list of notified services provided by this department is given in the attached form. The website of Maharashtra State Right to Services Commission is as follows",
+        "srNo": "Sr. No.",
+        "action": "Action",
+        "viewPDF": "View PDF",
+        "openLink": "Open Link"
+    },
+
     "corporation": {
         "home": "Home",
         "corporation": "Corporation",
@@ -288,4 +307,7 @@
     }
     
     
+        "next": "Next"
+    }
+
 }
