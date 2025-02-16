@@ -28,13 +28,15 @@ const MunicipalMeeting = () => {
                 setAvailableButtons(uniqueNames);
 
                 const dynamicHeadersMap = {};
+                
                 uniqueNames.forEach(name => {
                     dynamicHeadersMap[name] = [
-                        `${name} Agenda`,
-                        `${name} Minutes`,
-                        `${name} Resolution`,
+                        `${name} ${t('muncipal.agenda')}`,
+                        `${name} ${t('muncipal.minutes')}`,
+                        `${name} ${t('muncipal.resolution')}`,
                     ];
                 });
+                
                 setHeadersMap(dynamicHeadersMap);
 
                 if (uniqueNames.length > 0) {

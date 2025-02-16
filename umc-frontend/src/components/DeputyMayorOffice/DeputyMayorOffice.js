@@ -4,8 +4,12 @@ import "../CommingSoon/CommingSoon.css";
 import "./DeputyMayorOffice.css"
 import comingsoon from '../../assets/newcomingsoon.png'
 import api, { baseURL } from "../api";
+import { useTranslation } from "react-i18next";
+
 const DeputyMayorOffice = () => {
     const [bgImage, setBgImage] = useState("");
+    const { i18n, t } = useTranslation();
+
 
 
     useEffect(() => {
@@ -41,7 +45,7 @@ const DeputyMayorOffice = () => {
                 className="history-header-image"
                 style={{
                     backgroundImage: `url(${bgImage})`,
-                   
+
                 }}
             ></div>
 
@@ -49,16 +53,16 @@ const DeputyMayorOffice = () => {
                 <div className="container-fluid font-location mt-2 mb-5" id="deputy-css">
                     <nav className="breadcrumb">
                         <Link to="/" className="breadcrumb-item text-decoration-none">
-                            Home
+                        {t('corporation.home')}
                         </Link>
                         <Link to="#" className="breadcrumb-item text-decoration-none">
-                            Corporation
+                        {t('corporation.corporation')}
                         </Link>
-                        <span className="breadcrumb-item active1">Dy. Mayor Office</span>
+                        <span className="breadcrumb-item active1">{t('dymayorOffice.title')}</span>
                     </nav>
                     <h2 className="location-title">
-                        <span className="highlight">Dy. Mayor</span>
-                        <span className="highlighted-text"> Office</span>
+                        <span className="highlight">{t('dymayorOffice.highlight')}</span>
+                        <span className="highlighted-text"> {t('dymayorOffice.highlight-text')}</span>
                         <hr />
                     </h2>
 
@@ -70,7 +74,7 @@ const DeputyMayorOffice = () => {
 
                         />
                         <p className="coming-soon-message">
-                            This page is under development and will be available soon.
+                        {t('commingsoon.text')} 
                         </p>
                     </div>
 
