@@ -246,8 +246,11 @@
     },
     "committee": {
         "heading": "समिती",
-        "highlight": "यूएमसी",
-        "highlight-text": "समिती"
+        "highlight": "उ.म.पा.",
+        "highlight-text": "समिती",
+        "standingcommittee": "स्थायी समितीचे",
+        "womenCommittee": "महिला व बालकल्याण समितीचे",
+        "wardCommitte":"प्रभाग समिती"
     },
     "resolution": {
         "heading": "ठराव",
