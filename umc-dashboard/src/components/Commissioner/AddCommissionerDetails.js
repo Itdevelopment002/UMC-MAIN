@@ -10,6 +10,7 @@ const AddCommissionerDetails = () => {
     address: "",
     number: "",
     email: "",
+    language_code: "",
     coImage: null,
   });
 
@@ -36,6 +37,7 @@ const AddCommissionerDetails = () => {
       newErrors.qualification = "Education Qualification is required.";
     if (!formData.address.trim()) newErrors.address = "Office Address is required.";
     if (!formData.number.trim()) newErrors.number = "Phone Number is required.";
+    if (!formData.language_code.trim()) newErrors.language_code = "Language Selection is required.";
     if (!formData.email.trim()) {
       newErrors.email = "Email Id is required.";
     } else if (
@@ -63,6 +65,7 @@ const AddCommissionerDetails = () => {
     data.append("address", formData.address);
     data.append("number", formData.number);
     data.append("email", formData.email);
+    data.append("language_code", formData.language_code);
     if (formData.coImage) data.append("coImage", formData.coImage);
 
     try {
@@ -97,14 +100,32 @@ const AddCommissionerDetails = () => {
                 <form onSubmit={handleSubmit}>
                   <div className="form-group row">
                     <label className="col-form-label col-md-3">
+                      Select Language <span className="text-danger">*</span>
+                    </label>
+                    <div className="col-md-4">
+                      <select
+                        className={`form-control ${errors.language_code ? "is-invalid" : ""
+                          }`}
+                        name="language_code"
+                        value={formData.language_code}
+                        onChange={handleChange}
+                      >
+                        <option value="" disabled>Select Language</option>
+                        <option value="en">English</option>
+                        <option value="mr">Marathi</option>
+                      </select>
+                      {errors.language && <div className="invalid-feedback">{errors.language}</div>}
+                    </div>
+                  </div>
+                  <div className="form-group row">
+                    <label className="col-form-label col-md-3">
                       Commissioner Name <span className="text-danger">*</span>
                     </label>
                     <div className="col-md-4">
                       <input
                         type="text"
-                        className={`form-control ${
-                          errors.coName ? "is-invalid" : ""
-                        }`}
+                        className={`form-control ${errors.coName ? "is-invalid" : ""
+                          }`}
                         name="coName"
                         value={formData.coName}
                         onChange={handleChange}
@@ -123,9 +144,8 @@ const AddCommissionerDetails = () => {
                     <div className="col-md-4">
                       <input
                         type="text"
-                        className={`form-control ${
-                          errors.designation ? "is-invalid" : ""
-                        }`}
+                        className={`form-control ${errors.designation ? "is-invalid" : ""
+                          }`}
                         name="designation"
                         value={formData.designation}
                         onChange={handleChange}
@@ -141,14 +161,13 @@ const AddCommissionerDetails = () => {
 
                   <div className="form-group row">
                     <label className="col-form-label col-md-3">
-                    Education Qualification <span className="text-danger">*</span>
+                      Education Qualification <span className="text-danger">*</span>
                     </label>
                     <div className="col-md-4">
                       <input
                         type="text"
-                        className={`form-control ${
-                          errors.qualification ? "is-invalid" : ""
-                        }`}
+                        className={`form-control ${errors.qualification ? "is-invalid" : ""
+                          }`}
                         name="qualification"
                         value={formData.qualification}
                         onChange={handleChange}
@@ -164,14 +183,13 @@ const AddCommissionerDetails = () => {
 
                   <div className="form-group row">
                     <label className="col-form-label col-md-3">
-                    Office Address <span className="text-danger">*</span>
+                      Office Address <span className="text-danger">*</span>
                     </label>
                     <div className="col-md-4">
                       <input
                         type="text"
-                        className={`form-control ${
-                          errors.address ? "is-invalid" : ""
-                        }`}
+                        className={`form-control ${errors.address ? "is-invalid" : ""
+                          }`}
                         name="address"
                         value={formData.address}
                         onChange={handleChange}
@@ -190,9 +208,8 @@ const AddCommissionerDetails = () => {
                     <div className="col-md-4">
                       <input
                         type="text"
-                        className={`form-control ${
-                          errors.number ? "is-invalid" : ""
-                        }`}
+                        className={`form-control ${errors.number ? "is-invalid" : ""
+                          }`}
                         name="number"
                         value={formData.number}
                         onChange={handleChange}
@@ -211,9 +228,8 @@ const AddCommissionerDetails = () => {
                     <div className="col-md-4">
                       <input
                         type="email"
-                        className={`form-control ${
-                          errors.email ? "is-invalid" : ""
-                        }`}
+                        className={`form-control ${errors.email ? "is-invalid" : ""
+                          }`}
                         name="email"
                         value={formData.email}
                         onChange={handleChange}
@@ -232,9 +248,8 @@ const AddCommissionerDetails = () => {
                     <div className="col-md-4">
                       <input
                         type="file"
-                        className={`form-control ${
-                          errors.coImage ? "is-invalid" : ""
-                        }`}
+                        className={`form-control ${errors.coImage ? "is-invalid" : ""
+                          }`}
                         name="coImage"
                         onChange={handleFileChange}
                       />

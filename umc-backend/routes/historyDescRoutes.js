@@ -21,14 +21,9 @@ router.get("/history_desc", (req, res) => {
 });
 
 router.post("/history_desc", (req, res) => {
-  const { description } = req.body;
-
-  if (!description) {
-    return res.status(400).json({ message: "Description is required" });
-  }
-
-  const query = "INSERT INTO history_desc (description) VALUES (?)";
-  db.query(query, [description], (err, result) => {
+  const { description, language_code } = req.body;
+  const query = "INSERT INTO history_desc (description, language_code) VALUES (?, ?)";
+  db.query(query, [description, language_code], (err, result) => {
     if (err) {
       console.error("Error inserting data:", err);
       return res.status(500).json({ message: "Error adding description" });
@@ -53,25 +48,11 @@ router.delete("/history_desc/:id", (req, res) => {
 });
 
 router.put("/history_desc/:id", (req, res) => {
-  const { id } = req.params;
-  const { description } = req.body;
-
-  if (!description) {
-    return res.status(400).json({ message: "Description is required" });
-  }
-
-  const query = "UPDATE history_desc SET description = ? WHERE id = ?";
-  db.query(query, [description, id], (err, result) => {
-    if (err) {
-      console.error("Error updating description:", err);
-      return res.status(500).json({ message: "Error updating description" });
-    }
-
-    if (result.affectedRows === 0) {
-      return res.status(404).json({ message: "Description not found" });
-    }
-
-    res.status(200).json({ id, description });
+  const { description, language_code } = req.body;
+  const sql = "UPDATE history_desc SET description = ?, language_code= ? WHERE id = ?";
+  db.query(sql, [description, language_code, req.params.id], (err, result) => {
+    if (err) throw err;
+    res.json({ success: true });
   });
 });
 

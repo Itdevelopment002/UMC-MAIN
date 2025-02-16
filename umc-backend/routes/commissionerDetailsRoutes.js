@@ -55,8 +55,8 @@ router.get("/commissioner-details/:id", (req, res) => {
 
 
 router.post("/commissioner-details", upload.single("coImage"), (req, res) => {
-  const { coName, designation, qualification, address, number, email } = req.body;
-  if (!coName || !designation || !qualification || !address || !number || !email) {
+  const { coName, designation, qualification, address, number, email, language_code } = req.body;
+  if (!coName || !designation || !qualification || !address || !number || !email || !language_code) {
     return res
       .status(400)
       .json({ message: "All fields are required" });
@@ -66,10 +66,10 @@ router.post("/commissioner-details", upload.single("coImage"), (req, res) => {
 
   const sql = `
     INSERT INTO commissioner_details 
-    (coName, designation, qualification, address, number, email, image_path) 
-    VALUES (?, ?, ?, ?, ?, ?, ?)
+    (coName, designation, qualification, address, number, email, language_code, image_path) 
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
   `;
-  db.query(sql, [coName, designation, qualification, address, number, email, imagePath], (err, result) => {
+  db.query(sql, [coName, designation, qualification, address, number, email, language_code, imagePath], (err, result) => {
     if (err) {
       return res.status(500).json({ message: "Database error", error: err });
     }
@@ -80,7 +80,7 @@ router.post("/commissioner-details", upload.single("coImage"), (req, res) => {
 
 router.put("/commissioner-details/:id", upload.single("coImage"), (req, res) => {
   const { id } = req.params;
-  const { coName, designation, qualification, address, number, email } = req.body;
+  const { coName, designation, qualification, address, number, email, language_code } = req.body;
 
   let updateSql = "UPDATE commissioner_details SET";
   const updateParams = [];
@@ -108,6 +108,10 @@ router.put("/commissioner-details/:id", upload.single("coImage"), (req, res) => 
   if (email) {
     updateSql += updateParams.length > 0 ? ", email = ?" : " email = ?";
     updateParams.push(email);
+  }
+  if (language_code) {
+    updateSql += updateParams.length > 0 ? ", language_code = ?" : " language_code = ?";
+    updateParams.push(language_code);
   }
 
   let imagePath;

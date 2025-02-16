@@ -1,33 +1,51 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import api from "../api";
-import { useNavigate } from "react-router-dom";
 
-const AddCommissionerInfo = () => {
-  const [description, setDescription] = useState("");
+const AddCommissionerDesc = () => {
+  const [formData, setFormData] = useState({
+    description: "",
+    language_code: "",
+  });
+
+  const [errors, setErrors] = useState({});
   const navigate = useNavigate();
-  const [error, setError] = useState("")
 
   const handleChange = (e) => {
-    setDescription(e.target.value);
-    setError("");
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+    setErrors({ ...errors, [name]: "" });
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+    if (!formData.description.trim()) newErrors.description = "Description is required.";
+    if (!formData.language_code.trim()) newErrors.language_code = "Language Selection is required.";
+    return newErrors;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!description.trim()) {
-      setError("Description is required.");
+    const validationErrors = validateForm();
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
       return;
     }
 
     try {
-      await api.post("/commissioner-desc", { description });
-      navigate("/commissioner");
+      const response = await api.post("/commissioner-desc", formData, {
+        headers: { "Content-Type": "application/json" },
+      });
+
+      if (response.status === 201) {
+        navigate("/commissioner");
+      }
     } catch (error) {
       console.error("Error submitting description:", error);
     }
   };
+
   return (
     <div>
       <div className="page-wrapper">
@@ -39,45 +57,59 @@ const AddCommissionerInfo = () => {
             <li className="breadcrumb-item">
               <Link to="/commissioner">Commissioner</Link>
             </li>
-            <li className="breadcrumb-item active" aria-current="page">
-              Add Commissioner Description
-            </li>
+            <li className="breadcrumb-item active">Add Commissioner Description</li>
           </ol>
           <div className="row">
             <div className="col-lg-12">
               <div className="card-box">
-                <div className="card-block">
-                  <div className="row">
-                    <div className="col-12">
-                      <h4 className="page-title">Add Commissioner Description</h4>
+                <h4 className="page-title">Add Commissioner Details</h4>
+                <form onSubmit={handleSubmit}>
+                  <div className="form-group row">
+                    <label className="col-form-label col-md-3">
+                      Select Language <span className="text-danger">*</span>
+                    </label>
+                    <div className="col-md-4">
+                      <select
+                        className={`form-control ${errors.language_code ? "is-invalid" : ""}`}
+                        name="language_code"
+                        value={formData.language_code}
+                        onChange={handleChange}
+                      >
+                        <option value="" disabled>Select Language</option>
+                        <option value="en">English</option>
+                        <option value="mr">Marathi</option>
+                      </select>
+                      {errors.language_code && (
+                        <div className="invalid-feedback">{errors.language_code}</div>
+                      )}
                     </div>
                   </div>
-                  <form onSubmit={handleSubmit}>
-                    <div className="form-group row">
-                      <label className="col-form-label col-md-2">
-                        Description <span className="text-danger">*</span>
-                      </label>
-                      <div className="col-md-4">
-                       <input
-                          type="text"
-                          className={`form-control form-control-md ${
-                            error ? "is-invalid" : ""
-                          }`}
-                          name="description"
-                          value={description}
-                          onChange={handleChange}
-                          placeholder="Enter Description"
-                        />
-                        {error && <div className="invalid-feedback">{error}</div>}
-                      </div>
+                  <div className="form-group row">
+                    <label className="col-form-label col-md-3">
+                      Description <span className="text-danger">*</span>
+                    </label>
+                    <div className="col-md-4">
+                      <textarea
+                        rows={3}
+                        className={`form-control ${errors.description ? "is-invalid" : ""}`}
+                        name="description"
+                        value={formData.description}
+                        onChange={handleChange}
+                        placeholder="Enter Description"
+                      />
+                      {errors.description && (
+                        <div className="invalid-feedback">{errors.description}</div>
+                      )}
                     </div>
-                    <input
-                      type="submit"
-                      className="btn btn-primary btn-sm"
-                      value="Submit"
-                    />
-                  </form>
-                </div>
+                  </div>
+                  <div className="form-group row">
+                    <div className="col-md-4">
+                      <button type="submit" className="btn btn-primary">
+                        Submit
+                      </button>
+                    </div>
+                  </div>
+                </form>
               </div>
             </div>
           </div>
@@ -87,4 +119,4 @@ const AddCommissionerInfo = () => {
   );
 };
 
-export default AddCommissionerInfo;
+export default AddCommissionerDesc;
