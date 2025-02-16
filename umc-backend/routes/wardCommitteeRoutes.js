@@ -2,12 +2,6 @@ const express = require("express");
 const router = express.Router();
 const db = require("../config/db.js");
 
-// router.get("/ward-committee", (req, res) => {
-//   db.query("SELECT * FROM wardcommittee", (err, results) => {
-//     if (err) throw err;
-//     res.json(results);
-//   });
-// });
 
 router.get("/ward-committee", (req, res) => {
   const language = req.query.lang;
@@ -27,17 +21,17 @@ router.get("/ward-committee", (req, res) => {
 });
 
 router.post("/ward-committee", (req, res) => {
-  const { ward, heading ,language_code} = req.body;
-  const sql = "INSERT INTO wardcommittee (ward, heading,language_code) VALUES (?,?,?)";
-  db.query(sql, [ward, heading,language_code], (err, result) => {
+  const { ward, heading , language_code} = req.body;
+  const sql = "INSERT INTO wardcommittee (ward, heading, language_code) VALUES (?, ?, ?)";
+  db.query(sql, [ward, heading, language_code], (err, result) => {
     if (err) throw err;
-    res.json({ id: result.insertId, ward, heading,language_code });
+    res.json({ id: result.insertId, ward, heading, language_code });
   });
 });
 
 router.put("/ward-committee/:id", (req, res) => {
-  const { ward, heading,language_code } = req.body;
-  const sql = "UPDATE wardcommittee SET ward = ?, heading = ?,language_code = ? WHERE id = ?";
+  const { ward, heading, language_code } = req.body;
+  const sql = "UPDATE wardcommittee SET ward = ?, heading = ?, language_code = ? WHERE id = ?";
   db.query(sql, [ward, heading, language_code, req.params.id], (err, result) => {
     if (err) throw err;
     res.json({ success: true });
