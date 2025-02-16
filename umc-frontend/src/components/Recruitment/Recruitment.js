@@ -46,10 +46,10 @@ const Recruitment = () => {
   };
 
   const contractRecruitment = recruitment.filter(
-    (item) => item.heading === "Contract Basis Recruitment"
+    (item) => (item.heading === "Contract Basis Recruitment" || item.heading === "करार तत्त्वावर भरती जाहिरात")
   );
   const oldRecruitment = recruitment.filter(
-    (item) => item.heading === "Old Recruitment"
+    (item) => (item.heading === "Old Recruitment" || item.heading === "मागील भरती जाहिरात")
   );
 
   useEffect(() => {
