@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import "./Header.css";
-import { Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import Mainlogo from "../../assets/images/header-img/logo 1.png";
 import Headlogo1 from "../../assets/images/header-img/headerlogo1.png";
 import Headlogo2 from "../../assets/images/header-img/aaple-sarkar.jpg";
@@ -109,7 +109,7 @@ const Navbar = () => {
         const firstWord = mainMenu.split(' ')[0]; // Extract the first word
         return firstWord.toLowerCase() + '-dropdown'; // Convert to lowercase and append "-dropdown"
     };
-    
+
 
     const splitIntoColumns = (subMenus, columns = 3) => {
         const columnSize = Math.ceil(subMenus.length / columns);
@@ -158,15 +158,16 @@ const Navbar = () => {
                                             </Link>
                                         </li>
                                     ))}
-                                    {menu.mainMenu === "Departments" && columnIndex === columns.length - 1 && (
+                                    {(menu.mainMenu === "Departments" || menu.mainMenu === "विभाग") && columnIndex === columns.length - 1 && (
                                         <li>
                                             <div>
-                                                <Link to="/departments" className='view-departments'>
-                                                {t('viewallDepartment')}
+                                                <Link to="/departments" className="view-departments">
+                                                    {t('viewallDepartment')}
                                                 </Link>
                                             </div>
                                         </li>
                                     )}
+
 
                                 </div>
                             ))}
