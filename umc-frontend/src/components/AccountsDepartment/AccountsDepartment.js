@@ -73,7 +73,7 @@ const AccountsDepartment = () => {
     return pageNumbers;
   };
 
-  const department_name = "Accounts Department"
+  const department_name = (i18n.language === 'en')? "Accounts Department": "लेखा विभाग"
 
   const fetchBanner = async () => {
     try {
