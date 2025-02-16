@@ -2,10 +2,16 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./Departments.css";
 import api, { baseURL } from "../api";
+import { useTranslation } from "react-i18next";
+
 
 const Departments = () => {
     const [departments, setDepartments] = useState([]);
     const [bgImage, setBgImage] = useState("");
+        const { i18n, t } = useTranslation();
+    
+
+
 
     const fetchHeaderImage = async () => {
         try {
@@ -28,7 +34,7 @@ const Departments = () => {
     };
     const fetchDepartments = async () => {
         try {
-            const response = await api.get("/department-info");
+            const response = await api.get(`/department-info?lang=${i18n.language}`);
             const sortedData = response.data.sort((a, b) => a.heading.localeCompare(b.heading));
             setDepartments(sortedData);
         } catch (error) {
@@ -40,7 +46,7 @@ const Departments = () => {
         fetchHeaderImage();
         fetchDepartments();
         window.scrollTo({ top: 0, behavior: "smooth" });
-    }, []);
+    }, [i18n.language]);
 
     return (
         <>
@@ -55,13 +61,13 @@ const Departments = () => {
                 <div className="container-fluid font-location mt-4 mb-2" id="contact-css">
                     <nav className="breadcrumb">
                         <Link to="/" className="breadcrumb-item text-decoration-none">
-                            Home
+                        {t('department.home')}
                         </Link>
-                        <span className="breadcrumb-item active1">Departments</span>
+                        <span className="breadcrumb-item active1">{t('department.department')}</span>
                     </nav>
                     <h2 className="location-title">
-                        <span className="highlight">Departments</span>
-                        <span className="highlighted-text"> of UMC</span>
+                        <span className="highlight">{t('department.highlight')}</span>
+                        <span className="highlighted-text"> {t('department.highlight-text')}</span>
                         <hr />
                     </h2>
                     <div className="row mt-5">
