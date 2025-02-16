@@ -81,7 +81,7 @@ const ContactUs = () => {
                         <hr />
                     </h2>
                     <div className="row mt-5 gap-3">
-                        <div className="col-xl-5 col-lg-5 col-md-6 col-12 col-sm-12 left_section">
+                        <div className="col-xl-5 col-lg-5 col-md-12 col-12 col-sm-12 left_section">
                             {contact.map((item, index) => (
                                 <div className="d-flex items-content" key={index}>
                                     <div className="icon-container">
@@ -115,10 +115,10 @@ const ContactUs = () => {
 
                         <span className="divider"></span>
 
-                        <div className="col-xl-6 col-lg-6 col-md-6 col-12 col-sm-12">
+                        <div className="col-xl-6 col-lg-6 col-md-12 col-12 col-sm-12">
                             <div className="row">
                                 {ward.map((ward) => (
-                                    <div className="col-md-6 mb-3" key={ward}>
+                                    <div className="col-sm-6 mb-3" key={ward}>
                                         <div className="card">
                                             <span className="card-header text-white bg-gradient">
                                                 {t("contactUs.wardOfficeNo")} {ward.office}
