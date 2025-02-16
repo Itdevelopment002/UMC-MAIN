@@ -128,16 +128,16 @@ const AnnualFinancialStatement = () => {
                 <div className="container-fluid font-location mt-4 mb-5" id="accounts-css">
                     <nav className="breadcrumb">
                         <Link to="/" className="breadcrumb-item text-decoration-none">
-                            Home
+                        {t('corporation.home')}
                         </Link>
                         <Link to="#" className="breadcrumb-item text-decoration-none">
-                            Corporation
+                        {t('corporation.corporation')}
                         </Link>
-                        <span className="breadcrumb-item active1">Annual Financial Statement</span>
+                        <span className="breadcrumb-item active1">{t('financialstatement.heading')}</span>
                     </nav>
                     <h2 className="location-title">
-                        <span className="highlight">Annual</span>
-                        <span className="highlighted-text"> Financial Statement</span>
+                        <span className="highlight">{t('financialstatement.highlight')}</span>
+                        <span className="highlighted-text"> {t('financialstatement.highlight-text')}</span>
                         <hr />
                     </h2>
 
@@ -146,7 +146,7 @@ const AnnualFinancialStatement = () => {
                             <div className="d-flex  justify-content-between align-items-center mb-3">
                                 <div className="entries-wrapper">
                                     <label htmlFor="entries" className="entries-label">
-                                        Show
+                                    {t('corporation.show')}
                                     </label>
                                     <select
                                         id="entries"
@@ -159,7 +159,7 @@ const AnnualFinancialStatement = () => {
                                         <option value="50">50</option>
                                         <option value="100">100</option>
                                     </select>
-                                    <span className="entries-text">entries</span>
+                                    <span className="entries-text">{t('corporation.entries')}</span>
                                 </div>
 
 
@@ -171,7 +171,7 @@ const AnnualFinancialStatement = () => {
                                             whiteSpace: "nowrap",
                                         }}
                                     >
-                                        Search
+                                        {t('corporation.search')}
                                     </label>
                                     <input
                                         type="text"
@@ -187,9 +187,9 @@ const AnnualFinancialStatement = () => {
                                 <table className="table table-bordered shadow table-responsive">
                                     <thead className="bg-orange text-white">
                                         <tr>
-                                            <th className="table-heading-styling text-center" width='10%'>Sr. No.</th>
-                                            <th className="table-heading-styling">Annual Financial Statement</th>
-                                            <th className="table-heading-styling text-center" width='10%'>Action</th>
+                                            <th className="table-heading-styling text-center" width='10%'>{t('departments.sno')}</th>
+                                            <th className="table-heading-styling">{t('financialstatement.heading')}</th>
+                                            <th className="table-heading-styling text-center" width='10%'>{t('departments.action')}</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -222,7 +222,7 @@ const AnnualFinancialStatement = () => {
                                                                 verticalAlign: "middle",
                                                             }}
                                                         />
-                                                        View PDF
+                                                        {t('departments.view')}
                                                     </Link>
                                                 </td>
                                             </tr>
@@ -238,7 +238,7 @@ const AnnualFinancialStatement = () => {
                                                 className="page-link"
                                                 onClick={() => handlePageChange(currentPage - 1)}
                                             >
-                                                Previous
+                                                {t('departments.previous')}
                                             </button>
                                         </li>
                                         {renderPageNumbers()}
@@ -247,7 +247,7 @@ const AnnualFinancialStatement = () => {
                                                 className="page-link"
                                                 onClick={() => handlePageChange(currentPage + 1)}
                                             >
-                                                Next
+                                               {t('departments.next')}
                                             </button>
                                         </li>
                                     </ul>
@@ -255,7 +255,7 @@ const AnnualFinancialStatement = () => {
 
                                 <div class="last-updated-container">
                                     <p className="last-updated-text">
-                                        <b>Showing {startEntry} to {endEntry} of {totalEntries} entries</b>
+                                        <b>{t('corporation.showing')} {startEntry} {t('corporation.to')} {endEntry} {t('corporation.of')} {totalEntries} {t('corporation.entries')}</b>
                                     </p>
                                 </div>
                             </div>

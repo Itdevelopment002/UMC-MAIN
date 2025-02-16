@@ -84,12 +84,11 @@
         "highlight1": "मालमत्ता",
         "highlight-text": "कर भरणा"
     },
-
     "home1": "मुख्यपृष्ठ",
     "onlineServices": "ऑनलाइन सेवा",
     "clickHere": "येथे क्लिक करा",
     "propertyTaxPayment": {
-        "name":"मालमत्ता कर",
+        "name": "मालमत्ता कर",
         "name1": "मालमत्ता",
         "name2": "कर",
         "description": [
@@ -98,7 +97,7 @@
         ]
     },
     "birthCertificate": {
-        "name":"जन्माचा प्रमाणपत्र",
+        "name": "जन्माचा प्रमाणपत्र",
         "name1": "जन्माचा",
         "name2": "प्रमाणपत्र",
         "description": [
@@ -106,7 +105,7 @@
         ]
     },
     "deathCertificate": {
-        "name":"मृत्यू प्रमाणपत्र",
+        "name": "मृत्यू प्रमाणपत्र",
         "name1": "मृत्यू",
         "name2": "प्रमाणपत्र",
         "description": [
@@ -114,25 +113,22 @@
         ]
     },
     "eTender": {
-        "name":"ई-निविदा",
+        "name": "ई-निविदा",
         "name1": "ई-",
         "name2": "निविदा",
         "description": [
             "ई-टेंडर माहितीसाठी, कृपया या पृष्ठास भेट द्या."
         ]
     },
-
-    "viewallDepartment":"सर्व विभाग पहा",
+    "viewallDepartment": "सर्व विभाग पहा",
     "history-title1": "यूएमसीचा",
     "history-title2": " इतिहास",
     "commisioner-overview": "आयुक्तांचा थोडक्यात आढावा",
-
-    "btn-title":"स्थानासाठी येथे क्लिक करा",
-    
+    "btn-title": "स्थानासाठी येथे क्लिक करा",
     "breadcrumbHome": "मुखपृष्ठ",
-     "contactUs":{
+    "contactUs": {
         "breadcrumb": "आमच्याशी संपर्क साधा",
-        "contact" : "आमच्याशी",
+        "contact": "आमच्याशी",
         "us": "संपर्क साधा",
         "wardOfficeNo": "वॉर्ड कार्यालय क्रमांक",
         "address": "पत्ता.",
@@ -153,21 +149,141 @@
         "oldRecruitmentAdvertisement": "मागील भरती जाहिरात",
         "noOldDataAvailable": "कोणताही जुना भरती डेटा उपलब्ध नाही"
     },
-
     "corporation": {
         "home": "मुखपृष्ठ",
         "corporation": "महानगरपालिका",
         "heading": "प्रशासन",
-        "highlight": "उल्हासनगर महानगरपालिकेचे ",
+        "highlight": "उल्हासनगर महानगरपालिकेचे",
         "highlight-text": "प्रशासन",
-        "sno":"अनुक्रमांक",
+        "sno": "अनुक्रमांक",
         "name": "नाव",
-        "designation":"पदनाम",
-        "phoneNo":"दूरध्वनी क्रमांक.",
-        "update": "शेवटचे अद्यतन",
-        "previous": "मागचे",
-        "next": "पुढे"
-        }
-}
+        "designation": "पदनाम",
+        "phoneNo": "दूरध्वनी क्रमांक.",
+        "update": "शेवटचे अपडेट केलेले",
+        "previous": "मागील",
+        "next": "पुढील",
+        "show": "दाखवा",
+        "entries": "नोंदी",
+        "search": "शोधा",
+        "showing": "दर्शवित आहे",
+        "to": "कडे",
+        "of": "चे",
+        "etitle": "तपशील/माहिती ",
+        "issueDate": "प्रकाशन दिनांक",
+        "year":"वर्ष",
+        "deptname":"विभागाचे नाव",
+        "agendano":"कार्यसूची क्रमांक व तारीख",
+        "resolutionno":"ठराव क्रमांक व दिनांक",
+        "schedule":"बैठकीची नियोजित तारीख",
+        "resolutionText":"मा. महासभा व विविध समित्यांचे नियमपुस्तक तसेच मा. महापौर व उपमहापौर निवडणूक नियम.",
+        "adjournment":"तहकूब नोटीस (असल्यास)",
+        "budget":"अंदाजपत्रकाचे नाव",
+        "wardname":"प्रभाग अधिकारीचे नाव",
+        "wardaddress":"प्रभाग अधिकारीचा पत्ता",
+        "wardId":"ई-मेल आयडी",
+        "wardphNo":"मोबाईल क्रमांक",
+        "landline":"लँडलाइन क्रमांक",
+        "wardarea":"प्रभागातील क्षेत्र",
+        "wardNo":"प्रभाग क्रमांक."
 
-   
+
+
+    },
+    "administration": {
+        "heading": "प्रशासन",
+        "highlight": "उल्हासनगर महानगरपालिकेचे",
+        "highlight-text": "प्रशासन"
+    },
+    "financialstatement": {
+        "heading": "वार्षिक आर्थिक विवरण",
+        "highlight": "वार्षिक",
+        "highlight-text": "आर्थिक विवरण"
+    },
+    "enews": {
+        "heading": "ई-वृत्त पत्र",
+        "highlight": "ई-वृत्त",
+        "highlight-text": "पत्र"
+    },
+    "electedmember": {
+        "heading": "निवडून आलेले सदस्य",
+        "highlight": "निवडून",
+        "highlight-text": "आलेले सदस्य"
+    },
+    "muncipal": {
+        "heading": "महापालिका सभा",
+        "highlight": "महापालिका",
+        "highlight-text": "सभा"
+    },
+    "agenda": {
+        "heading": "कार्यसूची",
+        "highlight": "उल्हासनगर",
+        "highlight-text": "महानगरपालिकेचे कार्यसूची"
+    },
+    "budget": {
+        "heading": "अर्थसंकल्प",
+        "highlight": "उल्हासनगर",
+        "highlight-text": "महानगरपालिकेचे अंदाजपत्रक"
+    },
+    "committee": {
+        "heading": "समिती",
+        "highlight": "यूएमसी",
+        "highlight-text": "समिती"
+    },
+    "resolution": {
+        "heading": "ठराव",
+        "highlight": "उल्हासनगर",
+        "highlight-text": "महानगरपालिकेचे ठराव"
+    },
+    "ward": {
+        "heading": "प्रभाग कार्यालय",
+        "highlight": "प्रभाग",
+        "highlight-text": "कार्यालय"
+    },
+
+
+    "departments": {
+        "home": "मुखपृष्ठ",
+        "department": "विभाग",
+        "title": "लेखा विभाग",
+        "highlight": "लेखा",
+        "highlight-text": "विभाग",
+        "designation": "पदनाम",
+        "designationText2": "प्रमुख",
+        "qualification": "शैक्षणिक पात्रता",
+        "address": "कार्यालयाचा पत्ता",
+        "phoneNo": "दूरध्वनी क्रमांक",
+        "email": "ई-मेल पत्ता",
+        "sno": "अ. क्र.",
+        "heading": "तपशील / माहिती",
+        "action": "कृती",
+        "view": "पीडीएफ पहा",
+        "nodata": "कोणताही डेटा उपलब्ध नाही.",
+        "previous": "मागील",
+        "next": "पुढील"
+    },
+    "accountDept": {
+        "title": "लेखा विभाग",
+        "highlight": "लेखा",
+        "highlight-text": "विभाग"
+    },
+    "auditDept": {
+        "title": "लेखा परीक्षण विभाग",
+        "highlight": "लेखा परीक्षण",
+        "highlight-text": "विभाग"
+    },
+    "educationDept": {
+        "title": "शिक्षण विभाग",
+        "highlight": "शिक्षण",
+        "highlight-text": "विभाग"
+    },
+    "itDept": {
+        "title": "संगणक विभाग",
+        "highlight": "संगणक",
+        "highlight-text": "विभाग"
+    },
+    "womenDept": {
+        "title": "महिला व बाल विकास विभाग",
+        "highlight": "महिला व बाल",
+        "highlight-text": "विकास विभाग"
+    }
+}

@@ -10,6 +10,8 @@ import cicon5 from "../../assets/images/Departments/Vector (6).png";
 import cicon6 from "../../assets/images/Departments/Vector (7).png";
 import pdficon from '../../assets/images/Departments/document 1.png';
 import api, { baseURL } from "../api";
+import { useTranslation } from "react-i18next";
+
 
 const ITEMS_PER_PAGE = 10;
 
@@ -19,6 +21,8 @@ const WomenChildDevelopment = () => {
   const [description, setDescription] = useState([]);
   const [hod, setHod] = useState([]);
   const [pdf, setPdf] = useState([]);
+    const { i18n, t } = useTranslation();
+  
 
   const totalPages = Math.ceil(pdf.length / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
@@ -83,7 +87,7 @@ const WomenChildDevelopment = () => {
 
   const fetchHod = async () => {
     try {
-      const response = await api.get("/hod-details");
+      const response = await api.get(`/hod-details?lang=${i18n.language}`);
       const filteredData = response.data.filter((item) => item.designation === department_name);
       setHod(filteredData);
     } catch (error) {
@@ -93,7 +97,7 @@ const WomenChildDevelopment = () => {
 
   const fetchDescription = async () => {
     try {
-      const response = await api.get("/department-description");
+      const response = await api.get(`/department-description?lang=${i18n.language}`);
       const filteredData = response.data.filter((item) => item.department === department_name);
       setDescription(filteredData);
     } catch (error) {
@@ -103,7 +107,7 @@ const WomenChildDevelopment = () => {
 
   const fetchPdf = async () => {
     try {
-      const response = await api.get("/department-pdfs");
+      const response = await api.get(`/department-pdfs?lang=${i18n.language}`);
       const filteredData = response.data.reverse().filter((item) => item.department === department_name);
       setPdf(filteredData);
     } catch (error) {
@@ -116,7 +120,7 @@ const WomenChildDevelopment = () => {
     fetchHod();
     fetchDescription();
     fetchPdf();
-  }, []);
+  }, [i18n.language]);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -143,16 +147,16 @@ const WomenChildDevelopment = () => {
         <div className="container-fluid font-location mt-4 mb-2" id="environment-css">
           <nav className="breadcrumb">
             <Link to="/" className="breadcrumb-item text-decoration-none">
-              Home
+            {t('departments.home')}
             </Link>
             <Link to="/departments" className="breadcrumb-item text-decoration-none">
-              Department
+            {t('departments.department')}
             </Link>
-            <span className="breadcrumb-item active1">Women and Child Development</span>
+            <span className="breadcrumb-item active1">{t('womenDept.title')}</span>
           </nav>
           <h2 className="location-title">
-            <span className="highlight">Women</span>
-            <span className="highlighted-text"> and Child Development</span>
+            <span className="highlight">{t('womenDept.highlight')}</span>
+            <span className="highlighted-text"> {t('womenDept.highlight-text')}</span>
             <hr />
           </h2>
 
@@ -202,8 +206,8 @@ const WomenChildDevelopment = () => {
                         <img src={cicon2} alt="icon" className="dept-icon-image" />
                       </div>
                       <div className="dept-text-box">
-                        <strong className="dept-label">Designation :</strong>
-                        <span className="dept-value"> Head of {hod[0]?.designation}</span>
+                        <strong className="dept-label">{t('departments.designation')} :</strong>
+                        <span className="dept-value"> {hod[0]?.designation}</span>
                       </div>
                     </div>
                     <div className="dept-item">
@@ -212,7 +216,7 @@ const WomenChildDevelopment = () => {
                       </div>
                       <div className="dept-text-box">
                         <strong className="dept-label">
-                          Education Qualification :
+                        {t('departments.qualification')} :
                         </strong>
                         <span className="dept-value"> {hod[0]?.education}</span>
                       </div>
@@ -222,7 +226,7 @@ const WomenChildDevelopment = () => {
                         <img src={cicon4} alt="icon" className="dept-icon-image" />
                       </div>
                       <div className="dept-text-box">
-                        <strong className="dept-label">Office Address :</strong>
+                        <strong className="dept-label">{t('departments.address')} :</strong>
                         <span className="dept-value">
                           {" "}{hod[0]?.address}
                         </span>
@@ -233,7 +237,7 @@ const WomenChildDevelopment = () => {
                         <img src={cicon5} alt="icon" className="dept-icon-image" />
                       </div>
                       <div className="dept-text-box">
-                        <strong className="dept-label">Phone Number : </strong>
+                        <strong className="dept-label">{t('departments.phoneNo')} : </strong>
                         <span className="dept-value">{hod[0]?.number}</span>
                       </div>
                     </div>
@@ -242,7 +246,7 @@ const WomenChildDevelopment = () => {
                         <img src={cicon6} alt="icon" className="dept-icon-image" />
                       </div>
                       <div className="dept-text-box">
-                        <strong className="dept-label">Email Address :</strong>
+                        <strong className="dept-label">{t('departments.email')} :</strong>
                         <span className="dept-value"> {hod[0]?.email}</span>
                       </div>
                     </div>
@@ -262,14 +266,14 @@ const WomenChildDevelopment = () => {
                         className="table-heading-styling"
                         style={{ textAlign: "center" }}
                       >
-                        Sr. No.
+                        {t('departments.sno')}
                       </th>
-                      <th className="table-heading-styling">Details / Information</th>
+                      <th className="table-heading-styling">{t('departments.heading')}</th>
                       <th
                         className="table-heading-styling"
                         style={{ textAlign: "center" }}
                       >
-                        Action
+                        {t('departments.action')}
                       </th>
                     </tr>
                   </thead>
@@ -325,7 +329,7 @@ const WomenChildDevelopment = () => {
                                   verticalAlign: "middle",
                                 }}
                               />
-                              View PDF
+                              {t('departments.view')}
                             </Link>
                           </td>
                         </tr>
@@ -333,7 +337,7 @@ const WomenChildDevelopment = () => {
                     ) : (
                       <tr>
                         <td colSpan="3" style={{ textAlign: "center", color: "#333333" }}>
-                          No data available
+                        {t('departments.nodata')}
                         </td>
                       </tr>
                     )}
@@ -345,13 +349,13 @@ const WomenChildDevelopment = () => {
               <ul className="pagination custom-pagination">
                 <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
                   <button className="page-link" onClick={() => handlePageChange(currentPage - 1)}>
-                    Previous
+                  {t('departments.previous')}
                   </button>
                 </li>
                 {renderPageNumbers()}
                 <li className={`page-item ${currentPage === totalPages ? "disabled" : ""}`}>
                   <button className="page-link" onClick={() => handlePageChange(currentPage + 1)}>
-                    Next
+                  {t('departments.next')}
                   </button>
                 </li>
               </ul>

@@ -48,6 +48,12 @@ const Navbar = () => {
             "Departments",
             "Online Services",
             "Gallery",
+            "उ. म. पा. बद्दल",
+            "प्रशासकीय शाखा",
+            "महानगरपालिका",
+            "विभाग",
+            "ऑनलाइन सेवा",
+            "गॅलरी"
         ];
 
         if (!nonNavigableLinks.includes(link)) {
@@ -97,9 +103,13 @@ const Navbar = () => {
 
 
     const generateDropdownClass = (mainMenu) => {
+        if (mainMenu === "उ. म. पा. बद्दल") {
+            return "बद्दल-dropdown";
+        }
         const firstWord = mainMenu.split(' ')[0]; // Extract the first word
         return firstWord.toLowerCase() + '-dropdown'; // Convert to lowercase and append "-dropdown"
     };
+    
 
     const splitIntoColumns = (subMenus, columns = 3) => {
         const columnSize = Math.ceil(subMenus.length / columns);

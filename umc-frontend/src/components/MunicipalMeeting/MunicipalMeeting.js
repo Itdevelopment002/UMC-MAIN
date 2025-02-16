@@ -14,9 +14,9 @@ const MunicipalMeeting = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const [availableButtons, setAvailableButtons] = useState([]);
     const [headersMap, setHeadersMap] = useState({});
-    const [bgImage, setBgImage] = useState("");  
+    const [bgImage, setBgImage] = useState("");
     const { i18n, t } = useTranslation();
-    
+
 
 
     // Fetch data from the backend
@@ -147,16 +147,16 @@ const MunicipalMeeting = () => {
                 <div className="container-fluid font-location mt-4 mb-5" id="accounts-css">
                     <nav className="breadcrumb">
                         <Link to="/" className="breadcrumb-item text-decoration-none">
-                            Home
+                            {t('corporation.home')}
                         </Link>
                         <Link to="#" className="breadcrumb-item text-decoration-none">
-                            Corporation
+                            {t('corporation.corporation')}
                         </Link>
-                        <span className="breadcrumb-item active1">Municipal Meeting</span>
+                        <span className="breadcrumb-item active1">{t('muncipal.heading')}</span>
                     </nav>
                     <h2 className="location-title">
-                        <span className="highlight">Municipal</span>
-                        <span className="highlighted-text"> Meeting</span>
+                        <span className="highlight">{t('muncipal.highlight')}</span>
+                        <span className="highlighted-text"> {t('muncipal.highlight-text')}</span>
                         <hr />
                     </h2>
                     <div className="row mt-4 row-styling-3" id='municipal-css'>
@@ -175,7 +175,7 @@ const MunicipalMeeting = () => {
 
                             <div className="d-flex justify-content-between align-items-center mb-3">
                                 <div className="entries-wrapper">
-                                    <label htmlFor="entries" className="entries-label">Show</label>
+                                    <label htmlFor="entries" className="entries-label">{t('corporation.show')}</label>
                                     <select
                                         id="entries"
                                         className="entries-select"
@@ -187,12 +187,12 @@ const MunicipalMeeting = () => {
                                         <option value="50">50</option>
                                         <option value="100">100</option>
                                     </select>
-                                    <span className="entries-text">entries</span>
+                                    <span className="entries-text">{t('corporation.entries')}</span>
                                 </div>
 
                                 <div className="input-group d-flex align-items-center" style={{ width: "270px" }}>
                                     <label htmlFor="searchInput" className="search-label" style={{ whiteSpace: "nowrap" }}>
-                                        Search
+                                    {t('corporation.search')}
                                     </label>
                                     <input
                                         type="text"
@@ -210,8 +210,8 @@ const MunicipalMeeting = () => {
                                 <table className="table table-bordered shadow table-responsive">
                                     <thead className="bg-orange text-white">
                                         <tr>
-                                            <th className="table-heading-styling text-center" width="8%">Sr. No.</th>
-                                            <th className="table-heading-styling" width="50%">Year</th>
+                                            <th className="table-heading-styling text-center" width="8%">{t('departments.sno')}</th>
+                                            <th className="table-heading-styling" width="50%">{t('corporation.year')}</th>
                                             {tableHeaders.map((header, index) => (
                                                 <th className="table-heading-styling text-center" key={index}>{header}</th>
                                             ))}
@@ -292,7 +292,7 @@ const MunicipalMeeting = () => {
                             </div>
                             <div className="last-updated-container">
                                 <p className="last-updated-text">
-                                    <b>Showing {startEntry} to {endEntry} of {updatedTotalEntries} entries</b>
+                                    <b>{t('corporation.showing')} {startEntry} {t('corporation.to')} {endEntry} {t('corporation.of')} {updatedTotalEntries} {t('corporation.entries')}</b>
                                 </p>
                             </div>
                         </div>
@@ -304,7 +304,7 @@ const MunicipalMeeting = () => {
                                         className="page-link"
                                         onClick={() => handlePageChange(currentPage - 1)}
                                     >
-                                        Previous
+                                        {t('departments.previous')}
                                     </button>
                                 </li>
                                 {renderPageNumbers()}
@@ -313,7 +313,7 @@ const MunicipalMeeting = () => {
                                         className="page-link"
                                         onClick={() => handlePageChange(currentPage + 1)}
                                     >
-                                        Next
+                                        {t('departments.next')}
                                     </button>
                                 </li>
                             </ul>
