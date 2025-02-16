@@ -133,16 +133,16 @@ const ENews = () => {
                 <div className="container-fluid font-location mt-4 mb-5" id="resolution-css">
                     <nav className="breadcrumb">
                         <Link to="/" className="breadcrumb-item text-decoration-none">
-                            Home
+                            {t('corporation.home')}
                         </Link>
                         <Link to="#" className="breadcrumb-item text-decoration-none">
-                            Corporation
+                            {t('corporation.corporation')}
                         </Link>
-                        <span className="breadcrumb-item active1">e-News Letter</span>
+                        <span className="breadcrumb-item active1">{t('enews.heading')}</span>
                     </nav>
                     <h2 className="location-title">
-                        <span className="highlight">e-News</span>
-                        <span className="highlighted-text"> Letter</span>
+                        <span className="highlight">{t('enews.highlight')}</span>
+                        <span className="highlighted-text"> {t('enews.highlight-text')}</span>
                         <hr />
                     </h2>
                     <div className="row mt-4 row-styling-3">
@@ -152,16 +152,16 @@ const ENews = () => {
                                     <thead className="bg-orange text-white">
                                         <tr>
                                             <th className="table-heading-styling" style={{ textAlign: "center" }}>
-                                                Sr. No.
+                                                {t('departments.sno')}
                                             </th>
                                             <th className="table-heading-styling">
-                                                Detail's/Information
+                                                {t('corporation.etitle')}
                                             </th>
                                             <th className="table-heading-styling" style={{ textAlign: "center" }}>
-                                                Issue Date
+                                                {t('corporation.issueDate')}
                                             </th>
                                             <th className="table-heading-styling" style={{ textAlign: "center" }}>
-                                                Action
+                                                {t('departments.action')}
                                             </th>
                                         </tr>
                                     </thead>
@@ -227,7 +227,7 @@ const ENews = () => {
                                                                 verticalAlign: "middle",
                                                             }}
                                                         />
-                                                        View PDF
+                                                        {t('departments.view')}
                                                     </Link>
                                                 </td>
                                             </tr>
@@ -243,7 +243,7 @@ const ENews = () => {
                                                 className="page-link"
                                                 onClick={() => handlePageChange(currentPage - 1)}
                                             >
-                                                Previous
+                                                {t('departments.previous')}
                                             </button>
                                         </li>
                                         {renderPageNumbers()}
@@ -252,7 +252,7 @@ const ENews = () => {
                                                 className="page-link"
                                                 onClick={() => handlePageChange(currentPage + 1)}
                                             >
-                                                Next
+                                                {t('departments.next')}
                                             </button>
                                         </li>
                                     </ul>
@@ -260,8 +260,7 @@ const ENews = () => {
 
                                 <div class="last-updated-container">
                                     <p className="last-updated-text">
-                                        <b>Showing {startEntry} to {endEntry} of {totalEntries} entries</b>
-                                    </p>
+                                        <b>{t('corporation.showing')} {startEntry} {t('corporation.to')} {endEntry} {t('corporation.of')} {totalEntries} {t('corporation.entries')}</b>                                    </p>
                                 </div>
                             </div>
                         </div>

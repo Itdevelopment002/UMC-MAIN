@@ -149,6 +149,7 @@
         "oldRecruitmentAdvertisement": "Old Recruitment Advertisement",
         "noOldDataAvailable": "No Old recruitment data available"
     },
+
     "gallery": {
         "breadcrumb": "Gallery",
         "photoGallery": "Photo Gallery",
@@ -166,6 +167,7 @@
         "viewPDF": "View PDF",
         "openLink": "Open Link"
     },
+
     "corporation": {
         "home": "Home",
         "corporation": "Corporation",
@@ -178,6 +180,134 @@
         "phoneNo": "Phone No.",
         "update": "Last Updated",
         "previous": "Previous",
+        "next": "Next",
+        "show": "Show",
+        "entries": "entries",
+        "search": "Search",
+        "showing": "showing",
+        "to": "to",
+        "of": "of",
+        "etitle": "Detail's/Information",
+        "issueDate": "Issue Date",
+        "year":"Year",
+        "deptname":"Department Name",
+        "agendano":"Agenda No & Date",
+        "resolutionno":"Resolutions No & Date",
+        "resolutionText":"Rule book of Hon. General Body and various committees and Hon. Mayor and deputy mayor’s election rules.",
+        "schedule":"Schedue Date of Meeting",
+        "adjournment":"Adjournment Notice (if any)",
+        "budget": "Budget Name",
+        "wardname":"Ward Officer Name",
+        "wardaddress":"Ward Officer Address",
+        "wardId":"Email Id",
+        "wardphNo":"Mobile Number",
+        "landline":"Landline Number",
+        "wardarea":"Area in Ward",
+        "wardNo":"Ward No."
+
+        
+    },
+    "administration": {
+        "heading": "Administration",
+        "highlight": "Administration",
+        "highlight-text": "of UMC"
+    },
+    "financialstatement": {
+        "heading": "Annual Financial Statement",
+        "highlight": "Annual",
+        "highlight-text": "Financial Statement"
+    },
+    "enews": {
+        "heading": "e-News Letter",
+        "highlight": "e-News",
+        "highlight-text": "Letter"
+    },
+    "electedmember": {
+        "heading": "Elected Members",
+        "highlight": "Elected",
+        "highlight-text": "Members"
+    },
+    "muncipal": {
+        "heading": "Municipal Meeting",
+        "highlight": "Municipal",
+        "highlight-text": "Meeting"
+    },
+    "agenda": {
+        "heading": "Agenda",
+        "highlight": "Agenda",
+        "highlight-text": "of UMC"
+    },
+    "budget": {
+        "heading": "Budget",
+        "highlight": "Budget",
+        "highlight-text": "of UMC"
+    },
+    "committee": {
+        "heading": "Committee",
+        "highlight": "UMC",
+        "highlight-text": "Committee"
+    },
+    "resolution": {
+        "heading": "Resolutions",
+        "highlight": "Resolutions",
+        "highlight-text": "of UMC"
+    },
+    "ward": {
+        "heading": "Ward Office",
+        "highlight": "Ward",
+        "highlight-text": "Office"
+    },
+    
+    "departments": {
+        "home": "Home",
+        "department": "Department",
+        "title": "Accounts Department",
+        "highlight": "Accounts",
+        "highlight-text": "Department",
+        "designation": "Designation",
+        "designationText1": "Head of",
+        "qualification": "Education Qualification",
+        "address": "Office Address",
+        "phoneNo": "Phone Number",
+        "email": "Email Address",
+        "sno": "Sr. No.",
+        "heading": "Details / Information",
+        "action": "Action",
+        "view": "View PDF",
+        "nodata": "No data available.",
+        "previous": "Previous",
+        "next": "Next"
+    },
+    "accountDept": {
+        "title": "Accounts Department",
+        "highlight": "Accounts",
+        "highlight-text": "Department"
+    },
+    
+    "auditDept": {
+        "title": "Audit Department",
+        "highlight": "Audit",
+        "highlight-text": "Department"
+    },
+    "educationDept": {
+        "title": "Education Department",
+        "highlight": "Education",
+        "highlight-text": "Department"
+    },
+    "itDept": {
+        "title": "Computer Department",
+        "highlight": "Computer",
+        "highlight-text": "Department"
+    },
+    
+    "womenDept": {
+        "title": "Women and Child Development",
+        "highlight": "Women and Child",
+        "highlight-text": "Development"
+    }
+    
+    
         "next": "Next"
     }
+
 }

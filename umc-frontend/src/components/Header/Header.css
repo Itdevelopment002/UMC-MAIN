@@ -750,6 +750,28 @@ a {
       .nav-item.gallery-dropdown:hover{
         height: 110px;
       }
+
+
+
+      .nav-item.बद्दल-dropdown:hover{
+        height: 180px;
+      }
+      .nav-item.प्रशासकीय-dropdown:hover{
+        height: 110px;
+      }
+      .nav-item.महानगरपालिका-dropdown:hover{
+        height: 200px;
+      }
+      .nav-item.विभाग-dropdown:hover{
+        height: 200px;
+      }
+      .nav-item.ऑनलाइन-dropdown:hover{
+        height: 170px;
+      }
+      .nav-item.गॅलरी-dropdown:hover{
+        height: 110px;
+      }
+
       
       .nav-item.dropdown .dropdown-menu {
         width: 252px;

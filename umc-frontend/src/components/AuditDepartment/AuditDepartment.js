@@ -87,7 +87,7 @@ const AuditDepartment = () => {
 
   const fetchHod = async () => {
     try {
-      const response = await api.get(`/hod-details${i18n.language}`);
+      const response = await api.get(`/hod-details?lang=${i18n.language}`);
       const filteredData = response.data.filter((item) => item.designation === department_name);
       setHod(filteredData);
     } catch (error) {
@@ -97,7 +97,7 @@ const AuditDepartment = () => {
 
   const fetchDescription = async () => {
     try {
-      const response = await api.get(`/department-description${i18n.language}`);
+      const response = await api.get(`/department-description?lang=${i18n.language}`);
       const filteredData = response.data.filter((item) => item.department === department_name);
       setDescription(filteredData);
     } catch (error) {
@@ -107,7 +107,7 @@ const AuditDepartment = () => {
 
   const fetchPdf = async () => {
     try {
-      const response = await api.get(`/department-pdfs${i18n.language}`);
+      const response = await api.get(`/department-pdfs?lang=${i18n.language}`);
       const filteredData = response.data.reverse().filter((item) => item.department === department_name);
       setPdf(filteredData);
     } catch (error) {
@@ -120,7 +120,7 @@ const AuditDepartment = () => {
     fetchHod();
     fetchDescription();
     fetchPdf();
-  }, []);
+  }, [i18n.language]);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -147,16 +147,16 @@ const AuditDepartment = () => {
         <div className="container-fluid font-location mt-4 mb-2" id="audit-css">
           <nav className="breadcrumb">
             <Link to="/" className="breadcrumb-item text-decoration-none">
-              Home
+            {t('departments.home')}
             </Link>
             <Link to="/departments" className="breadcrumb-item text-decoration-none">
-              Department
+            {t('departments.department')}
             </Link>
-            <span className="breadcrumb-item active1">Audit Department</span>
+            <span className="breadcrumb-item active1">{t('auditDept.title')}</span>
           </nav>
           <h2 className="location-title">
-            <span className="highlight">Audit</span>
-            <span className="highlighted-text"> Department</span>
+            <span className="highlight">{t('auditDept.highlight')}</span>
+            <span className="highlighted-text"> {t('auditDept.highlight-text')}</span>
             <hr />
           </h2>
           <div className="row mt-4">
@@ -205,8 +205,8 @@ const AuditDepartment = () => {
                         <img src={cicon2} alt="icon" className="dept-icon-image" />
                       </div>
                       <div className="dept-text-box">
-                        <strong className="dept-label">Designation :</strong>
-                        <span className="dept-value"> Head of {hod[0]?.designation}</span>
+                        <strong className="dept-label">{t('departments.designation')} :</strong>
+                        <span className="dept-value"> {hod[0]?.designation}</span>
                       </div>
                     </div>
                     <div className="dept-item">
@@ -215,7 +215,7 @@ const AuditDepartment = () => {
                       </div>
                       <div className="dept-text-box">
                         <strong className="dept-label">
-                          Education Qualification :
+                        {t('departments.qualification')} :
                         </strong>
                         <span className="dept-value"> {hod[0]?.education}</span>
                       </div>
@@ -225,7 +225,7 @@ const AuditDepartment = () => {
                         <img src={cicon4} alt="icon" className="dept-icon-image" />
                       </div>
                       <div className="dept-text-box">
-                        <strong className="dept-label">Office Address :</strong>
+                        <strong className="dept-label">{t('departments.address')} :</strong>
                         <span className="dept-value">
                           {" "}{hod[0]?.address}
                         </span>
@@ -236,7 +236,7 @@ const AuditDepartment = () => {
                         <img src={cicon5} alt="icon" className="dept-icon-image" />
                       </div>
                       <div className="dept-text-box">
-                        <strong className="dept-label">Phone Number : </strong>
+                        <strong className="dept-label">{t('departments.phoneNo')} : </strong>
                         <span className="dept-value">{hod[0]?.number}</span>
                       </div>
                     </div>
@@ -245,7 +245,7 @@ const AuditDepartment = () => {
                         <img src={cicon6} alt="icon" className="dept-icon-image" />
                       </div>
                       <div className="dept-text-box">
-                        <strong className="dept-label">Email Address :</strong>
+                        <strong className="dept-label">{t('departments.email')} :</strong>
                         <span className="dept-value"> {hod[0]?.email}</span>
                       </div>
                     </div>
@@ -265,14 +265,14 @@ const AuditDepartment = () => {
                         className="table-heading-styling"
                         style={{ textAlign: "center" }}
                       >
-                        Sr. No.
+                       {t('departments.sno')}
                       </th>
-                      <th className="table-heading-styling">Details / Information</th>
+                      <th className="table-heading-styling">{t('departments.heading')}</th>
                       <th
                         className="table-heading-styling"
                         style={{ textAlign: "center" }}
                       >
-                        Action
+                        {t('departments.action')}
                       </th>
                     </tr>
                   </thead>
@@ -328,7 +328,7 @@ const AuditDepartment = () => {
                                   verticalAlign: "middle",
                                 }}
                               />
-                              View PDF
+                              {t('departments.view')}
                             </Link>
                           </td>
                         </tr>
@@ -336,7 +336,7 @@ const AuditDepartment = () => {
                     ) : (
                       <tr>
                         <td colSpan="3" style={{ textAlign: "center", color: "#333333" }}>
-                          No data available
+                        {t('departments.nodata')}
                         </td>
                       </tr>
                     )}
@@ -348,13 +348,13 @@ const AuditDepartment = () => {
               <ul className="pagination custom-pagination">
                 <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
                   <button className="page-link" onClick={() => handlePageChange(currentPage - 1)}>
-                    Previous
+                  {t('departments.previous')}
                   </button>
                 </li>
                 {renderPageNumbers()}
                 <li className={`page-item ${currentPage === totalPages ? "disabled" : ""}`}>
                   <button className="page-link" onClick={() => handlePageChange(currentPage + 1)}>
-                    Next
+                  {t('departments.next')}
                   </button>
                 </li>
               </ul>

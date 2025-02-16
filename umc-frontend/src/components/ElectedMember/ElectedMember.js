@@ -79,16 +79,16 @@ const ElectedMember = () => {
                 <div className="container-fluid font-location mt-4 mb-2" id="elected-css">
                     <nav className="breadcrumb">
                         <Link to="/" className="breadcrumb-item text-decoration-none">
-                            Home
+                            {t('corporation.home')}
                         </Link>
                         <Link to="#" className="breadcrumb-item text-decoration-none">
-                            Corporation
+                            {t('corporation.corporation')}
                         </Link>
-                        <span className="breadcrumb-item active1">Elected Members</span>
+                        <span className="breadcrumb-item active1">{t('electedmember.heading')}</span>
                     </nav>
                     <h2 className="location-title">
-                        <span className="highlight">Elected</span>
-                        <span className="highlighted-text"> Members</span>
+                        <span className="highlight">{t('electedmember.highlight')}</span>
+                        <span className="highlighted-text"> {t('electedmember.highlight-text')}</span>
                         <hr />
                     </h2>
 
@@ -99,13 +99,13 @@ const ElectedMember = () => {
                                     <thead className="bg-orange text-white">
                                         <tr>
                                             <th className="table-heading-styling" style={{ textAlign: "center" }}>
-                                                Sr. No.
+                                            {t('departments.sno')}
                                             </th>
                                             <th className="table-heading-styling">
-                                                Name
+                                            {t('corporation.name')}
                                             </th>
                                             <th className="table-heading-styling" style={{ textAlign: "center" }}>
-                                                Action
+                                            {t('departments.action')}
                                             </th>
                                         </tr>
                                     </thead>
@@ -160,7 +160,7 @@ const ElectedMember = () => {
                                                                 verticalAlign: "middle",
                                                             }}
                                                         />
-                                                        View PDF
+                                                        {t('departments.view')}
                                                     </Link>
                                                 </td>
                                             </tr>
