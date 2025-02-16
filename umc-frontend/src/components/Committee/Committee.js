@@ -151,9 +151,9 @@ const Committee = () => {
                     <div className="row mt-4 row-styling-3" id="municipal-css">
                         <div className="col-xl-9 col-lg-12 col-md-12 col-sm-12 col-12 ">
                             <div className="button-group mb-4 d-flex justify-content-start">
-                                <button className={`btn ${selectedButton === 'Standing Committee' ? "active" : ""}`} onClick={() => handleButtonClick('Standing Committee')}>Standing Committee</button>
-                                <button className={`btn ${selectedButton === 'Women and child Welfare Committee' ? "active" : ""}`} onClick={() => handleButtonClick('Women and child Welfare Committee')}>Women and child Welfare Committee</button>
-                                <button className={`btn ${selectedButton === 'Ward Committee' ? "active" : ""}`} onClick={() => handleButtonClick('Ward Committee')}>Ward Committee</button>
+                                <button className={`btn ${selectedButton === 'Standing Committee' ? "active" : ""}`} onClick={() => handleButtonClick('Standing Committee')}>{t('committee.standingcommittee')}</button>
+                                <button className={`btn ${selectedButton === 'Women and child Welfare Committee' ? "active" : ""}`} onClick={() => handleButtonClick('Women and child Welfare Committee')}>{t('committee.womenCommittee')}</button>
+                                <button className={`btn ${selectedButton === 'Ward Committee' ? "active" : ""}`} onClick={() => handleButtonClick('Ward Committee')}>{t('committee.wardCommitte')}</button>
                             </div>
 
                             {selectedButton === "Standing Committee" && (

@@ -245,7 +245,10 @@
     "committee": {
         "heading": "Committee",
         "highlight": "UMC",
-        "highlight-text": "Committee"
+        "highlight-text": "Committee",
+        "standingcommittee": "Standing Committee",
+        "womenCommittee": "Women and child Welfare Committee",
+        "wardCommitte":"Ward Committee"
     },
     "resolution": {
         "heading": "Resolutions",
