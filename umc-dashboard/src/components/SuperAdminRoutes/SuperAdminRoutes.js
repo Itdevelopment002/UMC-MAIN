@@ -47,8 +47,6 @@ import AddDataTable3 from "../Location/AddDataTable3";
 import AddDataTable4 from "../Location/AddDataTable4";
 import Location from "../Location/Location";
 import Commissioner from "../Commissioner/Commissioner";
-import AddCommissionerDetails from "../Commissioner/AddCommissionerDetails";
-import AddCommissionerDesc from "../Commissioner/AddCommissionerDesc";
 import UmcHistory from "../UmcHistory/UmcHistory";
 import AddHistoryImage from "../UmcHistory/AddHistoryImage";
 import Tourism from "../Tourism/Tourism";
@@ -127,6 +125,8 @@ import AddSubRti from "../SubRti/AddSubRti";
 import AddProjectDescription from "../ProjectDetails/AddProjectDescription";
 import AddProjectCategory from "../ProjectDetails/AddProjectCategory";
 import ProjectDetails from "../ProjectDetails/ProjectDetails";
+import AddCommissionerDetails from "../Commissioner/AddCommissionerDetails";
+import AddCommissionerDesc from "../Commissioner/AddCommissionerDesc";
 
 
 function SuperAdminRoutes() {

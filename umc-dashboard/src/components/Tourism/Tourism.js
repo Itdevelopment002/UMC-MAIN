@@ -142,6 +142,7 @@ const Tourism = () => {
             formData.append("hours", selectedGarden.hours);
             formData.append("description", selectedGarden.description);
             formData.append("locationLink", selectedGarden.location_link);
+            formData.append("language_code", selectedGarden.language_code);
 
             // Handle main image
             if (selectedGarden?.main_image) {
@@ -397,6 +398,25 @@ const Tourism = () => {
                                     }}
                                 >
                                     <div className="form-group">
+                                        <label>
+                                            Select Language
+                                        </label>
+                                        <select
+                                            className="form-control"
+                                            value={selectedGarden?.language_code || ""}
+                                            onChange={(e) =>
+                                                setSelectedGarden({
+                                                    ...selectedGarden,
+                                                    language_code: e.target.value,
+                                                })
+                                            }
+                                        >
+                                            <option value="" disabled>Select Language</option>
+                                            <option value="en">English</option>
+                                            <option value="mr">Marathi</option>
+                                        </select>
+                                    </div>
+                                    <div className="form-group">
                                         <label>Name</label>
                                         <input
                                             type="text"
@@ -533,14 +553,14 @@ const Tourism = () => {
                                 <div className="modal-footer">
                                     <button
                                         type="button"
-                                        className="btn btn-secondary"
+                                        className="btn btn-sm btn-secondary"
                                         onClick={handleCloseEditModal}
                                     >
                                         Close
                                     </button>
                                     <button
                                         type="button"
-                                        className="btn btn-primary"
+                                        className="btn btn-sm btn-primary"
                                         onClick={handleSaveEdit}
                                     >
                                         Save Changes
