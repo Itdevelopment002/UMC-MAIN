@@ -3,25 +3,35 @@ const router = express.Router();
 const db = require("../config/db.js");
 
 router.get("/standing-committee", (req, res) => {
-  db.query("SELECT * FROM standingcommittee", (err, results) => {
+  const language = req.query.lang;
+  let query;
+  let params = [];
+  if (language) {
+    query = `SELECT * FROM standingcommittee WHERE language_code = ?`;
+    params.push(language);
+  } else {
+    query = "SELECT * FROM standingcommittee";
+  }
+
+  db.query(query, params, (err, results) => {
     if (err) throw err;
     res.json(results);
   });
 });
 
 router.post("/standing-committee", (req, res) => {
-  const { heading } = req.body;
-  const sql = "INSERT INTO standingcommittee (heading) VALUES (?)";
-  db.query(sql, [heading], (err, result) => {
+  const { heading, language_code } = req.body;
+  const sql = "INSERT INTO standingcommittee (heading, language_code) VALUES (?, ?)";
+  db.query(sql, [heading, language_code], (err, result) => {
     if (err) throw err;
     res.json({ id: result.insertId, heading });
   });
 });
 
 router.put("/standing-committee/:id", (req, res) => {
-  const { heading } = req.body;
-  const sql = "UPDATE standingcommittee SET heading = ? WHERE id = ?";
-  db.query(sql, [heading, req.params.id], (err, result) => {
+  const { heading, language_code } = req.body;
+  const sql = "UPDATE standingcommittee SET heading = ?, language_code = ? WHERE id = ?";
+  db.query(sql, [heading, language_code, req.params.id], (err, result) => {
     if (err) throw err;
     res.json({ success: true });
   });
