@@ -11,6 +11,7 @@ import cicon5 from "../../assets/images/Departments/Vector (6).png";
 import cicon6 from "../../assets/images/Departments/Vector (7).png";
 import pdficon from '../../assets/images/Departments/document 1.png';
 import api, { baseURL } from "../api";
+import { useTranslation } from "react-i18next";
 
 const ITEMS_PER_PAGE = 10;
 
@@ -20,6 +21,7 @@ const ElectionDepartment = () => {
   const [description, setDescription] = useState([]);
   const [hod, setHod] = useState([]);
   const [pdf, setPdf] = useState([]);
+  const { i18n, t } = useTranslation();
 
   const totalPages = Math.ceil(pdf.length / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
@@ -70,7 +72,7 @@ const ElectionDepartment = () => {
     return pageNumbers;
   };
 
-  const department_name = "Election Department"
+  const department_name = (i18n.language === 'en') ? "Election Department": "निवडणूक विभाग"
 
   const fetchBanner = async () => {
     try {
@@ -84,7 +86,7 @@ const ElectionDepartment = () => {
 
   const fetchHod = async () => {
     try {
-      const response = await api.get("/hod-details");
+      const response = await api.get(`/hod-details?lang=${i18n.language}`);
       const filteredData = response.data.filter((item) => item.designation === department_name);
       setHod(filteredData);
     } catch (error) {
@@ -94,7 +96,7 @@ const ElectionDepartment = () => {
 
   const fetchDescription = async () => {
     try {
-      const response = await api.get("/department-description");
+      const response = await api.get(`/department-description?lang=${i18n.language}`);
       const filteredData = response.data.filter((item) => item.department === department_name);
       setDescription(filteredData);
     } catch (error) {
@@ -104,7 +106,7 @@ const ElectionDepartment = () => {
 
   const fetchPdf = async () => {
     try {
-      const response = await api.get("/department-pdfs");
+      const response = await api.get(`/department-pdfs?lang=${i18n.language}`);
       const filteredData = response.data.reverse().filter((item) => item.department === department_name);
       setPdf(filteredData);
     } catch (error) {
@@ -117,7 +119,7 @@ const ElectionDepartment = () => {
     fetchHod();
     fetchDescription();
     fetchPdf();
-  }, []);
+  }, [i18n.language]);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
