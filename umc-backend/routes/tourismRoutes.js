@@ -23,10 +23,10 @@ const uploadFields = upload.fields([
 ]);
 
 router.post("/tourism", uploadFields, (req, res) => {
-  const { name, address, hours, description, locationLink } = req.body;
+  const { name, address, hours, description, locationLink, language_code } = req.body;
 
   // Validation
-  if (!name || !address || !hours || !description || !locationLink || !req.files.main_image) {
+  if (!name || !address || !hours || !description || !locationLink || !language_code || !req.files.main_image) {
     return res.status(400).json({ message: "All fields are required" });
   }
 
@@ -36,12 +36,12 @@ router.post("/tourism", uploadFields, (req, res) => {
     : [];
 
   const query = `
-    INSERT INTO ad_tourism (name, address, hours, description, main_image, location_link, gallery)
-    VALUES (?, ?, ?, ?, ?, ?, ?)
+    INSERT INTO ad_tourism (name, address, hours, description, main_image, location_link, language_code, gallery)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
   `;
   db.query(
     query,
-    [name, address, hours, description, mainImagePath, locationLink, JSON.stringify(imagePaths)],
+    [name, address, hours, description, mainImagePath, locationLink, language_code, JSON.stringify(imagePaths)],
     (err, result) => {
       if (err) {
         return res.status(500).json({ message: "Error adding tourism site", error: err });
@@ -58,17 +58,23 @@ router.post("/tourism", uploadFields, (req, res) => {
 
 // Fetch All Tourism Data
 router.get("/tourism", (req, res) => {
-  const language = req.query.lang || "en"; // Default to English
-  const sql = "SELECT * FROM ad_tourism WHERE language_code = ?;";
-  db.query(sql,[language], (err, results) => {
-    if (err) {
-      return res.status(500).json({ message: "Database error", error: err });
-    }
-    res.status(200).json(results);
+  const language = req.query.lang;
+  let query;
+  let params = [];
+  if (language) {
+    query = `SELECT * FROM ad_tourism WHERE language_code = ?`;
+    params.push(language);
+  } else {
+    query = "SELECT * FROM ad_tourism";
+  }
+
+  db.query(query, params, (err, results) => {
+    if (err) throw err;
+    res.json(results);
   });
 });
 
-// Fetch Tourism Data by Name
+
 router.get("/tourism/name/:name", (req, res) => {
   const { name } = req.params;
 
@@ -91,6 +97,7 @@ router.get("/tourism/name/:name", (req, res) => {
       description: tourism.description,
       main_image: tourism.main_image,
       location_link: tourism.location_link,
+      language_code: tourism.language_code,
       gallery: JSON.parse(tourism.gallery),
     });
   });
@@ -138,7 +145,7 @@ router.delete("/tourism/:id", (req, res) => {
 // Update Tourism Data
 router.put("/tourism/:id", uploadFields, (req, res) => {
   const { id } = req.params;
-  const { name, address, hours, description, locationLink } = req.body;
+  const { name, address, hours, description, locationLink, language_code } = req.body;
 
   let updateSql = "UPDATE ad_tourism SET";
   const updateParams = [];
@@ -166,6 +173,11 @@ router.put("/tourism/:id", uploadFields, (req, res) => {
   if (locationLink) {
     updateSql += updateParams.length > 0 ? ", location_link = ?" : " location_link = ?";
     updateParams.push(locationLink);
+  }
+
+  if (language_code) {
+    updateSql += updateParams.length > 0 ? ", language_code = ?" : " language_code = ?";
+    updateParams.push(language_code);
   }
 
   if (req.files.main_image) {

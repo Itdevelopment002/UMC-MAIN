@@ -7,11 +7,12 @@ import "react-toastify/dist/ReactToastify.css";
 const HistoryContent = () => {
     const [desc, setDesc] = useState([]);
     const [description, setDescription] = useState("");
+    const [languageCode, setLanguageCode] = useState("");
     const [showAddNewModal, setShowAddNewModal] = useState(false);
     const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
     const [selectedWork, setSelectedWork] = useState(null);
-    const [editData, setEditData] = useState({ id: "", description: "" });
+    const [editData, setEditData] = useState({ id: "", description: "", language_code: "" });
     const [errors, setErrors] = useState({});
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 5;
@@ -20,6 +21,9 @@ const HistoryContent = () => {
         const newErrors = {};
         if (!description.trim()) {
             newErrors.description = "Description is required.";
+        }
+        if (!languageCode.trim()) {
+            newErrors.languageCode = "Language is required.";
         }
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
@@ -40,11 +44,13 @@ const HistoryContent = () => {
 
     const handleAddWork = async () => {
         if (!validateAddForm()) return;
-        const newWork = { description };
+        const newWork = { description, language_code: languageCode };
         try {
             const response = await api.post("/history_desc", newWork);
             setDesc([...desc, response.data]);
+            fetchDesc();
             setDescription("");
+            setLanguageCode("");
             setShowAddNewModal(false);
             toast.success("History Description added successfully!");
         } catch (error) {
@@ -73,16 +79,19 @@ const HistoryContent = () => {
         setEditData(work);
         setShowEditModal(true);
     };
+
     const handleEditSubmit = async () => {
         try {
             const response = await api.put(`/history_desc/${editData.id}`, {
                 description: editData.description,
+                language_code: editData.language_code,
             });
 
             if (response.status === 200) {
                 setDesc(
                     desc.map((work) => (work.id === editData.id ? response.data : work))
                 );
+                fetchDesc();
                 toast.success("History Description updated successfully!");
             } else {
                 toast.error("Failed to update Description.");
@@ -99,6 +108,13 @@ const HistoryContent = () => {
         setDescription(value);
         if (errors.description) {
             setErrors((prevErrors) => ({ ...prevErrors, description: "" }));
+        }
+    };
+
+    const handleLanguageChange = (value) => {
+        setLanguageCode(value);
+        if (errors.languageCode) {
+            setErrors((prevErrors) => ({ ...prevErrors, languageCode: "" }));
         }
     };
 
@@ -141,6 +157,7 @@ const HistoryContent = () => {
                                         <tr>
                                             <th width="10%" className="text-center">Sr. No.</th>
                                             <th>Description</th>
+                                            <th>Language</th>
                                             <th width="15%" className="text-center">Action</th>
                                         </tr>
                                     </thead>
@@ -149,6 +166,7 @@ const HistoryContent = () => {
                                             <tr key={item.id}>
                                                 <td className="text-center">{((currentPage - 1) * itemsPerPage) + (index + 1)}</td>
                                                 <td>{item.description}</td>
+                                                <td>{item.language_code}</td>
                                                 <td className="text-center">
                                                     <button
                                                         className="btn btn-success btn-sm m-t-10"
@@ -226,6 +244,26 @@ const HistoryContent = () => {
                                         {errors.description && (
                                             <div className="invalid-feedback">
                                                 {errors.description}
+                                            </div>
+                                        )}
+                                    </div>
+                                    <div className="mb-3">
+                                        <label className="form-label">
+                                            Select Language
+                                        </label>
+                                        <select
+                                            className={`form-control ${errors.languageCode ? "is-invalid" : ""}`}
+                                            value={languageCode}
+                                            onChange={(e) => handleLanguageChange(e.target.value)}
+                                            name="language_code"
+                                        >
+                                            <option value="">Select Language</option>
+                                            <option value="en">English</option>
+                                            <option value="mr">Marathi</option>
+                                        </select>
+                                        {errors.languageCode && (
+                                            <div className="invalid-feedback">
+                                                {errors.languageCode}
                                             </div>
                                         )}
                                     </div>
@@ -318,6 +356,26 @@ const HistoryContent = () => {
                                                 })
                                             }
                                         />
+                                    </div>
+                                    <div className="mb-3">
+                                        <label className="form-label">
+                                            Select Language
+                                        </label>
+                                        <select
+                                            className="form-control"
+                                            value={editData.language_code || ""}
+                                            onChange={(e) =>
+                                                setEditData({
+                                                    ...editData,
+                                                    language_code: e.target.value,
+                                                })
+                                            }
+                                            name="language_code"
+                                        >
+                                            <option value="">Select Language</option>
+                                            <option value="en">English</option>
+                                            <option value="mr">Marathi</option>
+                                        </select>
                                     </div>
                                 </form>
                             </div>

@@ -51,6 +51,8 @@ const Commissioner = () => {
         }
     };
 
+    console.log(descData);
+
     const handleDelete = async (id, type) => {
         try {
             if (type === "history") {
@@ -73,7 +75,7 @@ const Commissioner = () => {
     const openEditModal = (item, type) => {
         setSelectedItem(item);
         setEditData(
-            type === "history" ? { description: item.description } : { ...item }
+            type === "history" ? { description: item.description, language_code: item.language_code } : { ...item }
         );
         setImagePreview(type === "co" ? `${baseURL}${item.image_path}` : "");
         setModalType(type);
@@ -94,11 +96,12 @@ const Commissioner = () => {
                 // Update history data
                 await api.put(`/commissioner-desc/${selectedItem.id}`, {
                     description: editData.description,
+                    language_code: editData.language_code,
                 });
                 setDescData(
                     descData.map((item) =>
                         item.id === selectedItem.id
-                            ? { ...item, description: editData.description }
+                            ? { ...item, description: editData.description, language_code: editData.language_code, }
                             : item
                     )
                 );
@@ -112,6 +115,7 @@ const Commissioner = () => {
                 formData.append("address", editData.address);
                 formData.append("number", editData.number);
                 formData.append("email", editData.email);
+                formData.append("language_code", editData.language_code);
 
                 if (editData.imageFile) {
                     formData.append("coImage", editData.imageFile);
@@ -315,7 +319,7 @@ const Commissioner = () => {
                                                 {currentPageData.length > 0 ? (
                                                     currentPageData.map((item, index) => (
                                                         <tr key={item.id}>
-                                                            <td className="text-center">{index + 1}</td>
+                                                            <td className="text-center">{index + 1 + (currentPage - 1) * itemsPerPage}</td>
                                                             <td>{item.description}</td>
                                                             <td className="text-center">
                                                                 <button
@@ -394,22 +398,66 @@ const Commissioner = () => {
                                     </div>
                                     <div className="modal-body">
                                         {modalType === "history" ? (
-                                            <div className="form-group">
-                                                <label htmlFor="description">Description</label>
-                                                <textarea
-                                                    className="form-control"
-                                                    id="description"
-                                                    value={editData.description}
-                                                    onChange={(e) =>
-                                                        setEditData({
-                                                            ...editData,
-                                                            description: e.target.value,
-                                                        })
-                                                    }
-                                                />
-                                            </div>
+                                            <>
+                                                <div className="form-group">
+                                                    <label htmlFor="language_code">
+                                                        Select Language
+                                                    </label>
+
+                                                    <select
+                                                        className="form-control"
+                                                        name="language_code"
+                                                        value={editData.language_code}
+                                                        onChange={(e) =>
+                                                            setEditData({
+                                                                ...editData,
+                                                                language_code: e.target.value,
+                                                            })
+                                                        }
+                                                    >
+                                                        <option value="" disabled>Select Language</option>
+                                                        <option value="en">English</option>
+                                                        <option value="mr">Marathi</option>
+                                                    </select>
+                                                </div>
+                                                <div className="form-group">
+                                                    <label htmlFor="description">Description</label>
+                                                    <textarea
+                                                        className="form-control"
+                                                        id="description"
+                                                        value={editData.description}
+                                                        onChange={(e) =>
+                                                            setEditData({
+                                                                ...editData,
+                                                                description: e.target.value,
+                                                            })
+                                                        }
+                                                    />
+                                                </div>
+                                            </>
                                         ) : (
                                             <>
+                                                <div className="form-group">
+                                                    <label htmlFor="language_code">
+                                                        Select Language
+                                                    </label>
+
+                                                    <select
+                                                        className="form-control"
+                                                        name="language_code"
+                                                        value={editData.language_code}
+                                                        onChange={(e) =>
+                                                            setEditData({
+                                                                ...editData,
+                                                                language_code: e.target.value,
+                                                            })
+                                                        }
+                                                    >
+                                                        <option value="" disabled>Select Language</option>
+                                                        <option value="en">English</option>
+                                                        <option value="mr">Marathi</option>
+                                                    </select>
+                                                </div>
                                                 <div className="form-group">
                                                     <label htmlFor="coName">Commissioner Name</label>
                                                     <input
