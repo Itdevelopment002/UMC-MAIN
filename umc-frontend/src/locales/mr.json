@@ -269,6 +269,7 @@
         "highlight-text": "विभाग",
         "designation": "पदनाम",
         "designationText2": "प्रमुख",
+        "designationText1": "प्रमुख",
         "qualification": "शैक्षणिक पात्रता",
         "address": "कार्यालयाचा पत्ता",
         "phoneNo": "दूरध्वनी क्रमांक",
@@ -315,5 +316,11 @@
         "previous": "मागचे",
         "next": "पुढे"
 
+    },
+    "propertyTaxDept": {
+        "department": "विभाग",
+        "propertyTaxDepartment": "मालमत्ता कर विभाग",
+        "property": "मालमत्ता",
+        "taxDepartment": "कर विभाग"
     }
 }
