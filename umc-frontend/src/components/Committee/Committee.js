@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./Committee.css";
 import api, { baseURL } from "../api";
+import "../CommingSoon/CommingSoon.css";
+import comingsoon from '../../assets/newcomingsoon.png'
 import { useTranslation } from "react-i18next";
 
 
@@ -148,7 +150,7 @@ const Committee = () => {
                         <hr />
                     </h2>
 
-                    <div className="row mt-4 row-styling-3" id="municipal-css">
+                    {/* <div className="row mt-4 row-styling-3" id="municipal-css">
                         <div className="col-xl-9 col-lg-12 col-md-12 col-sm-12 col-12 ">
                             <div className="button-group mb-4 d-flex justify-content-start">
                                 <button className={`btn ${selectedButton === 'Standing Committee' ? "active" : ""}`} onClick={() => handleButtonClick('Standing Committee')}>{t('committee.standingcommittee')}</button>
@@ -280,7 +282,20 @@ const Committee = () => {
                                 </ul>
                             </nav>
                         </div>
-                    </div>
+                    </div> */}
+                    <div className="coming-soon-section text-center mt-4">
+                                            <img
+                                                src={comingsoon}
+                                                alt="Coming Soon"
+                                                className="coming-soon-gif"
+                    
+                                            />
+                                            <p className="coming-soon-message">
+                                                This page is under development and will be available soon.
+                                            </p>
+                                        </div>
+                   
+
                 </div>
             </div>
         </>

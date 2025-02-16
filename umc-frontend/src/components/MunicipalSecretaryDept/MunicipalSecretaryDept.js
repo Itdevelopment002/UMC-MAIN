@@ -148,11 +148,11 @@ const MunicipalSecretaryDept = () => {
             <Link to="/departments" className="breadcrumb-item text-decoration-none">
               Department
             </Link>
-            <span className="breadcrumb-item active1">Municipal Secretary Department</span>
+            <span className="breadcrumb-item active1">Office of the Secretary</span>
           </nav>
           <h2 className="location-title">
-            <span className="highlight">Municipal</span>
-            <span className="highlighted-text"> Secretary Department</span>
+            <span className="highlight">Office</span>
+            <span className="highlighted-text"> of the Secretary</span>
             <hr />
           </h2>
 
