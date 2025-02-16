@@ -8,7 +8,7 @@ import { useTranslation } from "react-i18next";
 
 
 const Budget = () => {
-    const [selectedButton, setSelectedButton] = useState('2020-2021');
+    const [selectedButton, setSelectedButton] = useState();
     const [budgetData, setBudgetData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -44,22 +44,30 @@ const Budget = () => {
         const fetchData = async () => {
             try {
                 const response = await api.get(`/budgets_data?lang=${i18n.language}`);
-
+    
                 setBudgetData(response.data);
                 setLoading(false);
-
-                // Extracting unique years from the budget data
-                const years = [...new Set(response.data.map(item => item.year))];
+    
+                // Extract unique years and sort them in descending order
+                const years = [...new Set(response.data.map(item => item.year))]
+                    .sort((a, b) => b.localeCompare(a, undefined, { numeric: true }));
+    
                 setUniqueYears(years);
-
+    
+                // Set the largest year as the active year
+                if (years.length > 0) {
+                    setSelectedButton(years[0]);
+                }
+    
             } catch (err) {
                 setError("Failed to fetch data.");
                 setLoading(false);
             }
         };
-
+    
         fetchData();
     }, [i18n.language]);
+    
 
     const handleClick = (link, e) => {
         if (link === "#") {
