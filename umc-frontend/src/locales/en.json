@@ -149,7 +149,6 @@
         "oldRecruitmentAdvertisement": "Old Recruitment Advertisement",
         "noOldDataAvailable": "No Old recruitment data available"
     },
-
     "gallery": {
         "breadcrumb": "Gallery",
         "photoGallery": "Photo Gallery",
@@ -167,7 +166,6 @@
         "viewPDF": "View PDF",
         "openLink": "Open Link"
     },
-
     "corporation": {
         "home": "Home",
         "corporation": "Corporation",
@@ -189,23 +187,21 @@
         "of": "of",
         "etitle": "Detail's/Information",
         "issueDate": "Issue Date",
-        "year":"Year",
-        "deptname":"Department Name",
-        "agendano":"Agenda No & Date",
-        "resolutionno":"Resolutions No & Date",
-        "resolutionText":"Rule book of Hon. General Body and various committees and Hon. Mayor and deputy mayor’s election rules.",
-        "schedule":"Schedue Date of Meeting",
-        "adjournment":"Adjournment Notice (if any)",
+        "year": "Year",
+        "deptname": "Department Name",
+        "agendano": "Agenda No & Date",
+        "resolutionno": "Resolutions No & Date",
+        "resolutionText": "Rule book of Hon. General Body and various committees and Hon. Mayor and deputy mayor’s election rules.",
+        "schedule": "Schedue Date of Meeting",
+        "adjournment": "Adjournment Notice (if any)",
         "budget": "Budget Name",
-        "wardname":"Ward Officer Name",
-        "wardaddress":"Ward Officer Address",
-        "wardId":"Email Id",
-        "wardphNo":"Mobile Number",
-        "landline":"Landline Number",
-        "wardarea":"Area in Ward",
-        "wardNo":"Ward No."
-
-        
+        "wardname": "Ward Officer Name",
+        "wardaddress": "Ward Officer Address",
+        "wardId": "Email Id",
+        "wardphNo": "Mobile Number",
+        "landline": "Landline Number",
+        "wardarea": "Area in Ward",
+        "wardNo": "Ward No."
     },
     "administration": {
         "heading": "Administration",
@@ -230,7 +226,10 @@
     "muncipal": {
         "heading": "Municipal Meeting",
         "highlight": "Municipal",
-        "highlight-text": "Meeting"
+        "highlight-text": "Meeting",
+        "agenda": "Agenda",
+        "minutes": "Minutes",
+        "resolution": "Resolution"
     },
     "agenda": {
         "heading": "Agenda",
@@ -248,13 +247,13 @@
         "highlight-text": "Committee",
         "standingcommittee": "Standing Committee",
         "womenCommittee": "Women and child Welfare Committee",
-        "wardCommitte":"Ward Committee",
-        "name":"Standing Committee Name",
-        "cname":"Women and child Welfare Committee Name",
-        "wardCommitteA":"Ward Committee A",
-        "wardCommitteB":"Ward Committee B",
-        "wardCommitteC":"Ward Committee C",
-        "wardCommitteD":"Ward Committee D"
+        "wardCommitte": "Ward Committee",
+        "name": "Standing Committee Name",
+        "cname": "Women and child Welfare Committee Name",
+        "wardCommitteA": "Ward Committee A",
+        "wardCommitteB": "Ward Committee B",
+        "wardCommitteC": "Ward Committee C",
+        "wardCommitteD": "Ward Committee D"
     },
     "resolution": {
         "heading": "Resolutions",
@@ -266,7 +265,43 @@
         "highlight": "Ward",
         "highlight-text": "Office"
     },
-    
+    "mayorOffice": {
+        "title": "Mayor Office",
+        "highlight": "Mayor",
+        "highlight-text": "Office"
+    },
+    "dymayorOffice": {
+        "title": "Dy. Mayor Office",
+        "highlight": "Dy. Mayor",
+        "highlight-text": "Office"
+    },
+    "standingCommittee": {
+        "title": "Standing Committee",
+        "highlight": "Standing",
+        "highlight-text": "Committee"
+    },
+    "subjectCommittee": {
+        "title": "Subject Committee",
+        "highlight": "Subject",
+        "highlight-text": "Committee"
+    },
+    "authorities": {
+        "title": "UMC Authorities",
+        "highlight": "Authorities",
+        "highlight-text": "of UMC"
+    },
+    "reader": {
+        "title": "Screen Reader Access",
+        "highlight": "Screen",
+        "highlight-text": "Reader Access",
+        "text": "Below are the various screen readers to choose from",
+        "name": "Screen Reader Name",
+        "website": "Website",
+        "commercial": "Free / Commercial"
+    },
+    "commingsoon": {
+        "text": "This page is under development and will be available soon."
+    },
     "departments": {
         "home": "Home",
         "department": "Department",
@@ -298,7 +333,6 @@
         "highlight": "Accounts",
         "highlight-text": "Department"
     },
-    
     "auditDept": {
         "title": "Audit Department",
         "highlight": "Audit",
@@ -314,7 +348,6 @@
         "highlight": "Computer",
         "highlight-text": "Department"
     },
-    
     "womenDept": {
         "title": "Women and Child Development",
         "highlight": "Women and Child",
@@ -326,7 +359,4 @@
         "property": "Property",
         "taxDepartment": "Tax Department"
     }
-    
-    
-
 }

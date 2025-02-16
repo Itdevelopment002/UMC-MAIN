@@ -149,7 +149,6 @@
         "oldRecruitmentAdvertisement": "मागील भरती जाहिरात",
         "noOldDataAvailable": "कोणताही जुना भरती डेटा उपलब्ध नाही"
     },
-
     "gallery": {
         "breadcrumb": "गॅलरी",
         "photoGallery": "फोटो गॅलरी",
@@ -167,7 +166,6 @@
         "viewPDF": "पीडीएफ पहा",
         "openLink": "लिंक उघडा"
     },
-
     "corporation": {
         "home": "मुखपृष्ठ",
         "corporation": "महानगरपालिका",
@@ -178,7 +176,6 @@
         "name": "नाव",
         "designation": "पदनाम",
         "phoneNo": "दूरध्वनी क्रमांक.",
-
         "update": "शेवटचे अपडेट केलेले",
         "previous": "मागील",
         "next": "पुढील",
@@ -190,24 +187,21 @@
         "of": "चे",
         "etitle": "तपशील/माहिती ",
         "issueDate": "प्रकाशन दिनांक",
-        "year":"वर्ष",
-        "deptname":"विभागाचे नाव",
-        "agendano":"कार्यसूची क्रमांक व तारीख",
-        "resolutionno":"ठराव क्रमांक व दिनांक",
-        "schedule":"बैठकीची नियोजित तारीख",
-        "resolutionText":"मा. महासभा व विविध समित्यांचे नियमपुस्तक तसेच मा. महापौर व उपमहापौर निवडणूक नियम.",
-        "adjournment":"तहकूब नोटीस (असल्यास)",
-        "budget":"अंदाजपत्रकाचे नाव",
-        "wardname":"प्रभाग अधिकारीचे नाव",
-        "wardaddress":"प्रभाग अधिकारीचा पत्ता",
-        "wardId":"ई-मेल आयडी",
-        "wardphNo":"मोबाईल क्रमांक",
-        "landline":"लँडलाइन क्रमांक",
-        "wardarea":"प्रभागातील क्षेत्र",
-        "wardNo":"प्रभाग क्रमांक."
-
-
-
+        "year": "वर्ष",
+        "deptname": "विभागाचे नाव",
+        "agendano": "कार्यसूची क्रमांक व तारीख",
+        "resolutionno": "ठराव क्रमांक व दिनांक",
+        "schedule": "बैठकीची नियोजित तारीख",
+        "resolutionText": "मा. महासभा व विविध समित्यांचे नियमपुस्तक तसेच मा. महापौर व उपमहापौर निवडणूक नियम.",
+        "adjournment": "तहकूब नोटीस (असल्यास)",
+        "budget": "अंदाजपत्रकाचे नाव",
+        "wardname": "प्रभाग अधिकारीचे नाव",
+        "wardaddress": "प्रभाग अधिकारीचा पत्ता",
+        "wardId": "ई-मेल आयडी",
+        "wardphNo": "मोबाईल क्रमांक",
+        "landline": "लँडलाइन क्रमांक",
+        "wardarea": "प्रभागातील क्षेत्र",
+        "wardNo": "प्रभाग क्रमांक."
     },
     "administration": {
         "heading": "प्रशासन",
@@ -232,7 +226,10 @@
     "muncipal": {
         "heading": "महापालिका सभा",
         "highlight": "महापालिका",
-        "highlight-text": "सभा"
+        "highlight-text": "सभा",
+        "agenda": "कार्यसूची",
+        "minutes": "मिनिट्स",
+        "resolution": "ठराव"
     },
     "agenda": {
         "heading": "कार्यसूची",
@@ -250,13 +247,13 @@
         "highlight-text": "समिती",
         "standingcommittee": "स्थायी समितीचे",
         "womenCommittee": "महिला व बालकल्याण समितीचे",
-        "wardCommitte":"प्रभाग समिती",
-        "name":"स्थायी समितीचे नाव",
-        "cname":"महिला व बालकल्याण समितीचे नाव",
-        "wardCommitteA":"प्रभाग समिती अ",
-        "wardCommitteB":"प्रभाग समिती ब",
-        "wardCommitteC":"प्रभाग समिती क",
-        "wardCommitteD":"प्रभाग समिती डी"
+        "wardCommitte": "प्रभाग समिती",
+        "name": "स्थायी समितीचे नाव",
+        "cname": "महिला व बालकल्याण समितीचे नाव",
+        "wardCommitteA": "प्रभाग समिती अ",
+        "wardCommitteB": "प्रभाग समिती ब",
+        "wardCommitteC": "प्रभाग समिती क",
+        "wardCommitteD": "प्रभाग समिती डी"
     },
     "resolution": {
         "heading": "ठराव",
@@ -268,8 +265,43 @@
         "highlight": "प्रभाग",
         "highlight-text": "कार्यालय"
     },
-
-
+    "mayorOffice": {
+        "title": "महापौर कार्यालय",
+        "highlight": "महापौर",
+        "highlight-text": "कार्यालय"
+    },
+    "dymayorOffice": {
+        "title": "उपमहापौर कार्यालय",
+        "highlight": "उपमहापौर",
+        "highlight-text": "कार्यालय"
+    },
+    "standingCommittee": {
+        "title": "स्थायी समिती",
+        "highlight": "स्थायी",
+        "highlight-text": "समिती"
+    },
+    "subjectCommittee": {
+        "title": "विषय समिती",
+        "highlight": "विषय",
+        "highlight-text": "समिती"
+    },
+    "authorities": {
+        "title": "उ.म.पा. प्राधिकरण",
+        "highlight": "उ.म.पा.",
+        "highlight-text": "प्राधिकरण"
+    },
+    "commingsoon": {
+        "text": "ही पृष्ठ विकसित करण्याच्या प्रक्रियेत आहे आणि लवकरच उपलब्ध होईल."
+    },
+    "reader": {
+        "title": "Screen Reader Access",
+        "highlight": "Screen",
+        "highlight-text": "Reader Access",
+        "text": "Below are the various screen readers to choose from",
+        "name": "Screen Reader Name",
+        "website": "Website",
+        "commercial": "Free / Commercial"
+    },
     "departments": {
         "home": "मुखपृष्ठ",
         "department": "विभाग",
@@ -324,12 +356,12 @@
         "update": "शेवटचे अद्यतन",
         "previous": "मागचे",
         "next": "पुढे"
-
     },
     "propertyTaxDept": {
         "department": "विभाग",
         "propertyTaxDepartment": "मालमत्ता कर विभाग",
         "property": "मालमत्ता",
         "taxDepartment": "कर विभाग"
+
     }
 }

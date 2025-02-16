@@ -4,9 +4,13 @@ import "../CommingSoon/CommingSoon.css";
 import "./StandingCommittee.css"
 import comingsoon from '../../assets/newcomingsoon.png'
 import api, { baseURL } from "../api";
+import { useTranslation } from "react-i18next";
+
 
 const StandingCommittee = () => {
     const [bgImage, setBgImage] = useState("");
+        const { i18n, t } = useTranslation();
+    
     useEffect(() => {
         fetchHeaderImage();
     }, []);
@@ -48,16 +52,16 @@ const StandingCommittee = () => {
                 <div className="container-fluid font-location mt-2 mb-5" id="deputy-css">
                     <nav className="breadcrumb">
                         <Link to="/" className="breadcrumb-item text-decoration-none">
-                            Home
+                        {t('corporation.home')}
                         </Link>
                         <Link to="#" className="breadcrumb-item text-decoration-none">
-                            Corporation
+                        {t('corporation.corporation')}
                         </Link>
-                        <span className="breadcrumb-item active1">Standing Committee</span>
+                        <span className="breadcrumb-item active1">{t('standingCommittee.title')}</span>
                     </nav>
                     <h2 className="location-title">
-                        <span className="highlight">Standing</span>
-                        <span className="highlighted-text"> Committee</span>
+                        <span className="highlight">{t('standingCommittee.highlight')}</span>
+                        <span className="highlighted-text"> {t('standingCommittee.highlight-text')}</span>
                         <hr />
                     </h2>
 
@@ -69,7 +73,7 @@ const StandingCommittee = () => {
 
                         />
                         <p className="coming-soon-message">
-                            This page is under development and will be available soon.
+                        {t('commingsoon.text')}
                         </p>
                     </div>
 
