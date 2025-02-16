@@ -10,14 +10,14 @@ const Location = () => {
 
   const [tableData, setTableData] = useState([]);
   const [bgImage, setBgImage] = useState("");
-    const { i18n, t } = useTranslation();
+  const { i18n, t } = useTranslation();
   
 
 
   useEffect(() => {
     fetchPolicy();
     fetchHeaderImage();
-  }, []);
+  }, [i18n.language]);
 
   const fetchPolicy = async () => {
     try {
