@@ -153,7 +153,7 @@ const Committee = () => {
                             <div className="button-group mb-4 d-flex justify-content-start">
                                 <button className={`btn ${selectedButton === 'Standing Committee' ? "active" : ""}`} onClick={() => handleButtonClick('Standing Committee')}>{t('committee.standingcommittee')}</button>
                                 <button className={`btn ${selectedButton === 'Women and child Welfare Committee' ? "active" : ""}`} onClick={() => handleButtonClick('Women and child Welfare Committee')}>{t('committee.womenCommittee')}</button>
-                                <button className={`btn ${selectedButton === 'Ward Committee' ? "active" : ""}`} onClick={() => handleButtonClick('Ward Committee')}>{t('committee.wardCommitte')}</button>
+                                <button className={`btn ${selectedButton === 'Ward Committee' ? "active" : ""}`} onClick={() => handleButtonClick('Ward Committee')}>{t('committee.highlight-text')}</button>
                             </div>
 
                             {selectedButton === "Standing Committee" && (
@@ -161,8 +161,8 @@ const Committee = () => {
                                     <table className="table table-bordered shadow table-responsive">
                                         <thead className="bg-orange text-white">
                                             <tr>
-                                                <th className="text-center table-heading-styling" width="8%">Sr No.</th>
-                                                <th className="table-heading-styling text-start">Standing Committee Name</th>
+                                                <th className="text-center table-heading-styling" width="8%">{t('departments.sno')}</th>
+                                                <th className="table-heading-styling text-start">{t('committee.name')}</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -181,7 +181,7 @@ const Committee = () => {
                                             ) : (
                                                 <tr>
                                                     <td colSpan="100%" className="text-center">
-                                                        No data available
+                                                    {t('location.nodata')}
                                                     </td>
                                                 </tr>
                                             )}
@@ -195,8 +195,8 @@ const Committee = () => {
                                     <table className="table table-bordered shadow table-responsive">
                                         <thead className="bg-orange text-white">
                                             <tr>
-                                                <th className="text-center table-heading-styling" width="8%">Sr No.</th>
-                                                <th className="table-heading-styling text-start">Women and child Welfare Committee Name</th>
+                                                <th className="text-center table-heading-styling" width="8%">{t('departments.sno')}</th>
+                                                <th className="table-heading-styling text-start">{t('committee.cname')}</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -215,7 +215,7 @@ const Committee = () => {
                                             ) : (
                                                 <tr>
                                                     <td colSpan="100%" className="text-center">
-                                                        No data available
+                                                    {t('location.nodata')}
                                                     </td>
                                                 </tr>
                                             )}
@@ -229,11 +229,11 @@ const Committee = () => {
                                     <table className="table table-bordered shadow table-responsive">
                                         <thead className="bg-orange text-white">
                                             <tr>
-                                                <th className="text-center table-heading-styling" width="8%">Sr No.</th>
-                                                <th className="table-heading-styling text-start">Ward Committee A</th>
-                                                <th className="table-heading-styling text-start">Ward Committee B</th>
-                                                <th className="table-heading-styling text-start">Ward Committee C</th>
-                                                <th className="table-heading-styling text-start">Ward Committee D</th>
+                                                <th className="text-center table-heading-styling" width="8%">{t('departments.sno')}</th>
+                                                <th className="table-heading-styling text-start">{t('committee.wardCommitteA')}</th>
+                                                <th className="table-heading-styling text-start">{t('committee.wardCommitteB')}</th>
+                                                <th className="table-heading-styling text-start">{t('committee.wardCommitteC')}</th>
+                                                <th className="table-heading-styling text-start">{t('committee.wardCommitteD')}</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -249,7 +249,7 @@ const Committee = () => {
                                                 ))
                                             ) : (
                                                 <tr>
-                                                    <td colSpan="5" className="text-center">No data available</td>
+                                                    <td colSpan="5" className="text-center">{t('location.nodata')}</td>
                                                 </tr>
                                             )}
                                         </tbody>
@@ -260,14 +260,14 @@ const Committee = () => {
 
                             <div className="last-updated-container">
                                 <p className="last-updated-text">
-                                    <b>Showing {startEntry} to {endEntry} of {totalEntries} entries</b>
+                                <b>{t('corporation.showing')} {startEntry} {t('corporation.to')} {endEntry} {t('corporation.of')} {totalEntries} {t('corporation.entries')}</b>
                                 </p>
                             </div>
 
                             <nav aria-label="Page navigation" className="d-flex justify-content-start">
                                 <ul className="pagination custom-pagination">
                                     <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
-                                        <button className="page-link" onClick={() => handlePageChange(currentPage - 1)}>Previous</button>
+                                        <button className="page-link" onClick={() => handlePageChange(currentPage - 1)}>{t('departments.previous')}</button>
                                     </li>
                                     {Array.from({ length: totalPages }, (_, i) => i + 1).map(pageNumber => (
                                         <li key={pageNumber} className={`page-item ${currentPage === pageNumber ? "active" : ""}`}>
@@ -275,7 +275,7 @@ const Committee = () => {
                                         </li>
                                     ))}
                                     <li className={`page-item ${currentPage === totalPages ? "disabled" : ""}`}>
-                                        <button className="page-link" onClick={() => handlePageChange(currentPage + 1)}>Next</button>
+                                        <button className="page-link" onClick={() => handlePageChange(currentPage + 1)}>{t('departments.next')}</button>
                                     </li>
                                 </ul>
                             </nav>
