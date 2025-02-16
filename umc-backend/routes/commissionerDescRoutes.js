@@ -3,16 +3,21 @@ const router = express.Router();
 const db = require("../config/db.js");
 
 router.get("/commissioner-desc", (req, res) => {
-  const language = req.query.lang || "en"; // Default to English
-  const sql = "SELECT * FROM commissioner_desc WHERE language_code = ?;";
-  db.query(sql,[language], (err, results) => {
-    if (err) {
-      return res.status(500).json({ message: "Database error", error: err });
-    }
-    res.status(200).json(results);
+  const language = req.query.lang;
+  let query;
+  let params = [];
+  if (language) {
+    query = `SELECT * FROM commissioner_desc WHERE language_code = ?`;
+    params.push(language);
+  } else {
+    query = "SELECT * FROM commissioner_desc";
+  }
+
+  db.query(query, params, (err, results) => {
+    if (err) throw err;
+    res.json(results);
   });
 });
-
 
 router.get("/commissioner-desc/:id", (req, res) => {
   const { id } = req.params;
@@ -30,12 +35,12 @@ router.get("/commissioner-desc/:id", (req, res) => {
 
 
 router.post("/commissioner-desc", (req, res) => {
-  const { description } = req.body;
-  if (!description) {
+  const { description, language_code } = req.body;
+  if (!description || !language_code) {
     return res.status(400).json({ message: "Description is required" });
   }
-  const sql = "INSERT INTO commissioner_desc (description) VALUES (?)";
-  db.query(sql, [description], (err, result) => {
+  const sql = "INSERT INTO commissioner_desc (description, language_code) VALUES (?, ?)";
+  db.query(sql, [description, language_code], (err, result) => {
     if (err) {
       return res.status(500).json({ message: "Database error", error: err });
     }
@@ -51,12 +56,9 @@ router.post("/commissioner-desc", (req, res) => {
 
 router.put("/commissioner-desc/:id", (req, res) => {
   const { id } = req.params;
-  const { description } = req.body;
-  if (!description) {
-    return res.status(400).json({ message: "Description is required" });
-  }
-  const sql = "UPDATE commissioner_desc SET description = ? WHERE id = ?";
-  db.query(sql, [description, id], (err, result) => {
+  const { description, language_code } = req.body;
+  const sql = "UPDATE commissioner_desc SET description = ?, language_code = ? WHERE id = ?";
+  db.query(sql, [description, language_code, id], (err, result) => {
     if (err) {
       return res.status(500).json({ message: "Database error", error: err });
     }
