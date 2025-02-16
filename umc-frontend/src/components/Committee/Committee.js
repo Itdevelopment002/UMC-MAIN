@@ -14,7 +14,7 @@ const Committee = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [bgImage, setBgImage] = useState("");
     const { i18n, t } = useTranslation();
-    
+
 
     useEffect(() => {
         fetchHeaderImage();
@@ -135,16 +135,16 @@ const Committee = () => {
                 <div className="container-fluid font-location mt-4 mb-5" id="committee-css">
                     <nav className="breadcrumb">
                         <Link to="/" className="breadcrumb-item text-decoration-none">
-                            Home
+                            {t('corporation.home')}
                         </Link>
                         <Link to="#" className="breadcrumb-item text-decoration-none">
-                            Corporation
+                            {t('corporation.corporation')}
                         </Link>
-                        <span className="breadcrumb-item active1">Committee</span>
+                        <span className="breadcrumb-item active1">{t('committee.heading')}</span>
                     </nav>
                     <h2 className="location-title">
-                        <span className="highlight">UMC</span>
-                        <span className="highlighted-text"> Committee</span>
+                        <span className="highlight">{t('committee.highlight')}</span>
+                        <span className="highlighted-text"> {t('committee.highlight-text')}</span>
                         <hr />
                     </h2>
 

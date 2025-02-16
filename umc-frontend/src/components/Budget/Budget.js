@@ -153,16 +153,16 @@ const Budget = () => {
                 <div className="container-fluid font-location mt-4 mb-5" id="budget-css">
                     <nav className="breadcrumb">
                         <Link to="/" className="breadcrumb-item text-decoration-none">
-                            Home
+                            {t('corporation.home')}
                         </Link>
                         <Link to="#" className="breadcrumb-item text-decoration-none">
-                            Corporation
+                            {t('corporation.corporation')}
                         </Link>
-                        <span className="breadcrumb-item active1">Budget</span>
+                        <span className="breadcrumb-item active1">{t('budget.heading')}</span>
                     </nav>
                     <h2 className="location-title">
-                        <span className="highlight">Budget</span>
-                        <span className="highlighted-text"> of UMC</span>
+                        <span className="highlight">{t('budget.highlight')}</span>
+                        <span className="highlighted-text"> {t('budget.highlight-text')}</span>
                         <hr />
                     </h2>
 
@@ -193,9 +193,9 @@ const Budget = () => {
                                 <table className="table table-bordered shadow table-responsive">
                                     <thead className="bg-orange text-white">
                                         <tr>
-                                            <th className="table-heading-styling text-center" width="8%">Sr. No.</th>
-                                            <th className="table-heading-styling text-start">Budget Name</th>
-                                            <th className="table-heading-styling text-center" width="10%">Action</th>
+                                            <th className="table-heading-styling text-center" width="8%">{t('departments.sno')}</th>
+                                            <th className="table-heading-styling text-start">{t('corporation.budget')}</th>
+                                            <th className="table-heading-styling text-center" width="10%">{t('departments.action')}</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -209,7 +209,7 @@ const Budget = () => {
                                             </tr>
                                         ) : currentData.length === 0 ? (
                                             <tr>
-                                                <td colSpan={3} className="text-center">No Data Available</td>
+                                                <td colSpan={3} className="text-center">{t('departments.nodata')}</td>
                                             </tr>
                                         ) : (
                                             currentData.map((item, index) => (
@@ -236,7 +236,8 @@ const Budget = () => {
                                                                     verticalAlign: "middle",
                                                                 }}
                                                             />
-                                                            View PDF
+                                                            {t('departments.view')}
+
                                                         </Link>
                                                     </td>
                                                 </tr>

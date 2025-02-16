@@ -105,11 +105,11 @@ const Administration = () => {
                         <Link to="#" className="breadcrumb-item text-decoration-none">
                         {t('corporation.corporation')}
                         </Link>
-                        <span className="breadcrumb-item active1">{t('corporation.heading')}</span>
+                        <span className="breadcrumb-item active1">{t('administration.heading')}</span>
                     </nav>
                     <h2 className="location-title">
-                        <span className="highlight">{t('corporation.highlight')}</span>
-                        <span className="highlighted-text"> {t('corporation.highlight-text')}</span>
+                        <span className="highlight">{t('administration.highlight')}</span>
+                        <span className="highlighted-text"> {t('administration.highlight-text')}</span>
                         <hr />
                     </h2>
                     <div className="row mt-3 row-styling-3">
@@ -122,7 +122,7 @@ const Administration = () => {
                                                 className="table-heading-styling"
                                                 style={{ textAlign: "center" }}
                                             >
-                                                {t('corporation.sno')}
+                                                {t('departments.sno')}
                                             </th>
                                             <th className="table-heading-styling">{t('corporation.name')}</th>
                                             <th className="table-heading-styling">{t('corporation.designation')}</th>
