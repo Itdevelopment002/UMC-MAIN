@@ -320,7 +320,9 @@
         "view": "View PDF",
         "nodata": "No data available.",
         "previous": "Previous",
-        "next": "Next"
+        "next": "Next",
+        "head1": "Head Of",
+        "head2": ""
     },
     "department": {
         "home": "Home",
@@ -359,43 +361,42 @@
         "property": "Property",
         "taxDepartment": "Tax Department"
     },
-
     "diasterDept": {
         "title": "Disaster Management",
         "highlight": "Disaster",
         "highlight-text": "Management"
     },
-    "electionDept":{
+    "electionDept": {
         "title": "Election Department",
         "highlight": "Election",
         "highlight-text": "Department"
     },
-    "encroachmentDept":{
+    "encroachmentDept": {
         "title": "Encroachment Department",
         "highlight": "Encroachment",
         "highlight-text": "Department"
     },
-    "environmentDept":{
+    "environmentDept": {
         "title": "Environment Department",
         "highlight": "Environment",
         "highlight-text": "Department"
     },
-    "estateDept":{
+    "estateDept": {
         "title": "Estate Department",
         "highlight": "Estate",
         "highlight-text": "Department"
     },
-    "gardenDept":{
+    "gardenDept": {
         "title": "Garden Department",
         "highlight": "Garden",
         "highlight-text": "Department"
     },
-    "generalAdDept":{
+    "generalAdDept": {
         "title": "General Administrative Department",
         "highlight": "General",
         "highlight-text": "Administrative Department"
     },
-    "handicapDept":{
+    "handicapDept": {
         "title": "Handicap Welfare Scheme",
         "highlight": "Handicap",
         "highlight-text": "Welfare Scheme"
@@ -484,8 +485,5 @@
         "title": "Vehicle Department",
         "highlight": "Vehicle",
         "highlight-text": "Department"
-
     }
-    
-    
 }
