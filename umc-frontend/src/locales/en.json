@@ -371,13 +371,11 @@
         "highlight": "Election",
         "highlight-text": "Department"
     },
-
-    "electricalDept":{
+    "electricalDept": {
         "title": "Electrical Engineering Department",
         "highlight": "Electrical Engineering",
         "highlight-text": "Department"
     },
-
     "encroachmentDept": {
         "title": "Encroachment Department",
         "highlight": "Encroachment",
@@ -492,62 +490,57 @@
         "title": "Vehicle Department",
         "highlight": "Vehicle",
         "highlight-text": "Department"
-
     },
-    "fireDept":{
+    "fireDept": {
         "title": "Fire Department",
         "highlight": "Fire",
         "highlight-text": "Department"
     },
-    "privacy":{
+    "privacy": {
         "title": "Privacy Policy",
         "highlight": "Privacy",
         "highlight-text": "Policy"
     },
-    "hyperlink":{
+    "hyperlink": {
         "title": "Hyperlink Policy",
         "highlight": "Hyperlink",
         "highlight-text": "Policy"
     },
-    "accessbility":{
+    "accessbility": {
         "title": "Accessibility Statement",
         "highlight": "Accessibility",
         "highlight-text": "Statement"
     },
-    "term":{
+    "term": {
         "title": "Terms & Conditions",
         "highlight": "Terms",
         "highlight-text": "& Conditions"
     },
-    "support":{
+    "support": {
         "title": "Customer Support",
         "highlight": "Customer",
         "highlight-text": "Support"
     },
-    "solidWaste":{
+    "solidWaste": {
         "title": "Solid Waste Management System",
         "highlight": "Solid Waste",
         "highlight-text": "Management System"
     },
-    "pressNote":{
+    "pressNote": {
         "title": "Press Note",
         "highlight": "Press",
         "highlight-text": "Note"
     },
-    "tender":{
-        "name":"Citizen Services",
+    "tender": {
+        "name": "Citizen Services",
         "title": "Tenders & Quotations",
         "highlight": "Tenders",
         "highlight-text": "& Quotations",
         "tender": "Quotations / Tenders Details"
     },
-    "rti":{
+    "rti": {
         "title": "Right to Information",
         "highlight": "Right",
         "highlight-text": "to Information"
     }
-    
-
-    }
-
 }
