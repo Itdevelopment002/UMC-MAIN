@@ -321,7 +321,9 @@
         "view": "पीडीएफ पहा",
         "nodata": "कोणताही डेटा उपलब्ध नाही.",
         "previous": "मागील",
-        "next": "पुढील"
+        "next": "पुढील",
+        "head1": "",
+        "head2": "प्रमुख"
     },
     "department": {
         "home": "मुखपृष्ठ",
@@ -368,46 +370,47 @@
         "highlight": "आपत्ती",
         "highlight-text": "व्यवस्थापन"
     },
-    "electionDept":{
+    "electionDept": {
         "title": "निवडणूक विभाग",
         "highlight": "निवडणूक",
         "highlight-text": "विभाग"
     },
+
     "encroachmentDept":{
         "title": "अतिक्रमण विभाग",
         "highlight": "अतिक्रमण",
         "highlight-text": "विभाग"
     },
-    "electricalDept":{
+ 
+    "electricalDept": {
         "title": "विद्युत अभियांत्रिकी विभाग",
         "highlight": "विद्युत",
         "highlight-text": "अभियांत्रिकी विभाग"
     },
-    "environmentDept":{
+    "environmentDept": {
         "title": "पर्यावरण विभाग",
         "highlight": "पर्यावरण",
         "highlight-text": "विभाग"
     },
-    "estateDept":{
+    "estateDept": {
         "title": "संपत्ती विभाग",
         "highlight": "संपत्ती",
         "highlight-text": "विभाग"
     },
-    "gardenDept":{
+    "gardenDept": {
         "title": "उद्यान विभाग",
         "highlight": "उद्यान",
         "highlight-text": "विभाग"
     },
-    "generalAdDept":{
+    "generalAdDept": {
         "title": "सामान्य प्रशासन विभाग",
         "highlight": "सामान्य",
         "highlight-text": "प्रशासन विभाग"
     },
-    "handicapDept":{
+    "handicapDept": {
         "title": "दिव्यांग कल्याणकारी योजना",
         "highlight": "दिव्यांग",
         "highlight-text": "कल्याणकारी योजना"
-
     },
     "lbtDept": {
         "title": "एलबीटी विभाग",
@@ -550,3 +553,7 @@
     
    
 }
+
+    }
+}
+
