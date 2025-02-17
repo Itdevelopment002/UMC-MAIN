@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./HyperlinkPolicy.css";
-import api,{baseURL} from "../api";
+import api, { baseURL } from "../api";
+import { useTranslation } from "react-i18next";
+
 
 const HyperlinkPolicy = () => {
     const [policy, setPolicy] = useState([]);
     const [bgImage, setBgImage] = useState("");
+    const { i18n, t } = useTranslation();
+
 
     const fetchHeaderImage = async () => {
         try {
@@ -29,11 +33,11 @@ const HyperlinkPolicy = () => {
     useEffect(() => {
         fetchPolicy();
         fetchHeaderImage();
-    }, []);
+    }, [i18n.language]);
 
     const fetchPolicy = async () => {
         try {
-            const response = await api.get("/hyperlink-policy");
+            const response = await api.get(`/hyperlink-policy?lang=${i18n.language}`);
             setPolicy(response.data);
         } catch (error) {
             console.error(error);
@@ -59,13 +63,13 @@ const HyperlinkPolicy = () => {
                 <div className="container-fluid font-location mt-4 mb-2" id="hyperlink-css">
                     <nav className="breadcrumb">
                         <Link to="/" className="breadcrumb-item text-decoration-none">
-                            Home
+                        {t('departments.home')}
                         </Link>
-                        <span className="breadcrumb-item active1">Hyperlink Policy</span>
+                        <span className="breadcrumb-item active1">{t('hyperlink.title')}</span>
                     </nav>
                     <h2 className="location-title">
-                        <span className="highlight">Hyperlink</span>
-                        <span className="highlighted-text"> Policy</span>
+                        <span className="highlight">{t('hyperlink.highlight')}</span>
+                        <span className="highlighted-text"> {t('hyperlink.highlight-text')}</span>
                         <hr />
                     </h2>
                     <div className="row mt-4">

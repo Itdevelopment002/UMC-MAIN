@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import "./MunicipalSecretaryDept.css";
+import "./FireDept";
 import "../DepartmentCustomCss/DepartmentCustom.css"
 import Swal from 'sweetalert2';
 import cicon2 from "../../assets/images/Departments/Vector (1).png";
@@ -14,7 +14,7 @@ import { useTranslation } from "react-i18next";
 
 const ITEMS_PER_PAGE = 10;
 
-const MunicipalSecretaryDept = () => {
+const FireDept = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [banner, setBanner] = useState([]);
   const [description, setDescription] = useState([]);
@@ -71,7 +71,7 @@ const MunicipalSecretaryDept = () => {
     return pageNumbers;
   };
 
-  const department_name = (i18n.language === 'en') ? "Office of the Secretary" : "सचिव कार्यालय"
+  const department_name = (i18n.language === 'en') ? "Fire Department" : "अग्निशमन विभाग"
 
   const fetchBanner = async () => {
     try {
@@ -151,11 +151,11 @@ const MunicipalSecretaryDept = () => {
             <Link to="/departments" className="breadcrumb-item text-decoration-none">
               {t('departments.department')}
             </Link>
-            <span className="breadcrumb-item active1">{t('secretaryDept.title')}</span>
+            <span className="breadcrumb-item active1">{t('fireDept.title')}</span>
           </nav>
           <h2 className="location-title">
-            <span className="highlight">{t('secretaryDept.highlight')}</span>
-            <span className="highlighted-text"> {t('secretaryDept.highlight-text')}</span>
+            <span className="highlight">{t('fireDept.highlight')}</span>
+            <span className="highlighted-text"> {t('fireDept.highlight-text')}</span>
             <hr />
           </h2>
           <div className="row mt-4">
@@ -205,13 +205,7 @@ const MunicipalSecretaryDept = () => {
                       </div>
                       <div className="dept-text-box">
                         <strong className="dept-label">{t('departments.designation')} :</strong>
-                           <span className="dept-value">
-                          {hod[0]?.designation
-                            ? i18n.language === 'en'
-                              ? ` ${t('departments.head1')} ${hod[0].designation}`
-                              : ` ${hod[0].designation} ${t('departments.head2')}`
-                            : ''}
-                        </span>
+                        <span className="dept-value"> {hod[0]?.designation}</span>
                       </div>
                     </div>
                     <div className="dept-item">
@@ -372,4 +366,4 @@ const MunicipalSecretaryDept = () => {
   );
 };
 
-export default MunicipalSecretaryDept;
+export default FireDept;

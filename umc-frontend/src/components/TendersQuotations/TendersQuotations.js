@@ -5,7 +5,8 @@ import "../DepartmentCustomCss/DepartmentCustom.css";
 import pdficon from '../../assets/images/Departments/document 1.png';
 import Swal from 'sweetalert2';
 import "../TableCss/TableCss.css"
-import api,{baseURL} from "../api"
+import api, { baseURL } from "../api"
+import { useTranslation } from "react-i18next";
 
 const TendersQuotations = () => {
     const [itemsPerPage, setItemsPerPage] = useState(10);
@@ -13,27 +14,29 @@ const TendersQuotations = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const [tenders, setTenders] = useState([]);
     const [bgImage, setBgImage] = useState("");
+    const { i18n, t } = useTranslation();
+
 
     const fetchHeaderImage = async () => {
-      try {
-        const response = await api.get("/banner");
-  
-        if (response.data.length > 0) {
-          let selectedBanner = response.data.find(banner => banner.banner_name === "Tenders-and-Quotations");
-  
-          if (selectedBanner) {
-            setBgImage(`${baseURL}${selectedBanner.file_path}`);
-          } else {
-            console.error("Banner with specified name not found.");
-          }
-        } else {
-          console.error("No banner image found.");
+        try {
+            const response = await api.get("/banner");
+
+            if (response.data.length > 0) {
+                let selectedBanner = response.data.find(banner => banner.banner_name === "Tenders-and-Quotations");
+
+                if (selectedBanner) {
+                    setBgImage(`${baseURL}${selectedBanner.file_path}`);
+                } else {
+                    console.error("Banner with specified name not found.");
+                }
+            } else {
+                console.error("No banner image found.");
+            }
+        } catch (error) {
+            console.error("Error fetching header image:", error);
         }
-      } catch (error) {
-        console.error("Error fetching header image:", error);
-      }
     };
-  
+
     const filteredData = tenders.filter((item) =>
         item.heading.toLowerCase().includes(searchTerm.toLowerCase()) ||
         item.department.toLowerCase().includes(searchTerm.toLowerCase())
@@ -50,7 +53,7 @@ const TendersQuotations = () => {
 
     const fetchTenders = async () => {
         try {
-            const response = await api.get("/tenders-quotations");
+            const response = await api.get(`/tenders-quotations?lang=${i18n.language}`);
             setTenders(response.data.reverse());
         } catch (error) {
             console.error("Error fetching tender data", error);
@@ -60,7 +63,7 @@ const TendersQuotations = () => {
     useEffect(() => {
         fetchTenders();
         fetchHeaderImage();
-    }, []);
+    }, [i18n.language]);
 
     const handleItemsPerPageChange = (e) => {
         setItemsPerPage(parseInt(e.target.value));
@@ -124,23 +127,23 @@ const TendersQuotations = () => {
                 <div className="container-fluid font-location mt-4 mb-5" id="tender-css">
                     <nav className="breadcrumb">
                         <Link to="/" className="breadcrumb-item text-decoration-none">
-                            Home
+                        {t('departments.home')}
                         </Link>
                         <Link to="#" className="breadcrumb-item text-decoration-none">
-                            Citizen Services
+                        {t('tender.name')}
                         </Link>
-                        <span className="breadcrumb-item active1">Tenders & Quotations</span>
+                        <span className="breadcrumb-item active1">{t('tender.title')}</span>
                     </nav>
                     <h2 className="location-title">
-                        <span className="highlight">Tenders</span>
-                        <span className="highlighted-text"> and Quotations</span>
+                        <span className="highlight">{t('tender.highlight')}</span>
+                        <span className="highlighted-text"> {t('tender.highlight-text')}</span>
                         <hr />
                     </h2>
 
                     <div className="d-flex justify-content-between align-items-center mb-3">
                         <div className="entries-wrapper">
                             <label htmlFor="entries" className="entries-label">
-                                Show
+                            {t('corporation.show')}
                             </label>
                             <select
                                 id="entries"
@@ -153,7 +156,7 @@ const TendersQuotations = () => {
                                 <option value="50">50</option>
                                 <option value="100">100</option>
                             </select>
-                            <span className="entries-text">entries</span>
+                            <span className="entries-text">{t('corporation.entries')}</span>
                         </div>
 
                         <div className="input-group d-flex align-items-center" style={{ width: "270px" }}>
@@ -164,7 +167,7 @@ const TendersQuotations = () => {
                                     whiteSpace: "nowrap",
                                 }}
                             >
-                                Search
+                                {t('corporation.search')}
                             </label>
                             <input
                                 type="text"
@@ -183,10 +186,10 @@ const TendersQuotations = () => {
                                 <table className="table table-bordered shadow table-responsive">
                                     <thead className="bg-orange text-white">
                                         <tr>
-                                            <th className="table-heading-styling text-center" width='8%'>Sr. No.</th>
-                                            <th className="table-heading-styling" width='60%'>Quotations / Tenders Details</th>
-                                            <th className="table-heading-styling">Department</th>
-                                            <th className="table-heading-styling text-center">Action</th>
+                                            <th className="table-heading-styling text-center" width='8%'>{t('departments.sno')}</th>
+                                            <th className="table-heading-styling" width='60%'>{t('tender.tendername')}</th>
+                                            <th className="table-heading-styling">{t("propertyTaxDept.department")}</th>
+                                            <th className="table-heading-styling text-center">{t('departments.action')}</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -215,7 +218,7 @@ const TendersQuotations = () => {
                                                                 verticalAlign: "middle",
                                                             }}
                                                         />
-                                                        View PDF
+                                                       {t('departments.view')}
                                                     </Link>
                                                 </td>
                                             </tr>
@@ -232,7 +235,7 @@ const TendersQuotations = () => {
                                         className="page-link"
                                         onClick={() => handlePageChange(currentPage - 1)}
                                     >
-                                        Previous
+                                      {t('departments.previous')}
                                     </button>
                                 </li>
                                 {renderPageNumbers()}
@@ -241,7 +244,7 @@ const TendersQuotations = () => {
                                         className="page-link"
                                         onClick={() => handlePageChange(currentPage + 1)}
                                     >
-                                        Next
+                                        {t('departments.next')}
                                     </button>
                                 </li>
                             </ul>
