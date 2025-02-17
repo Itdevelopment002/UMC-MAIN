@@ -2,7 +2,7 @@
     "header": {
         "helpline": "हेल्पलाइन क्रमांक: ०२५१ २७२०१५०",
         "rtsAct": "आरटीएस कायदा २०१५",
-        "screenReader": "स्क्रीन रीडर अ‍ॅक्सेस",
+        "screenReader": "स्क्रीन वाचक प्रवेश",
         "skipContent": "मुख्य मजकुरावर जा",
         "aMinus": "अ-",
         "aPlus": "अ+",
@@ -294,13 +294,13 @@
         "text": "ही पृष्ठ विकसित करण्याच्या प्रक्रियेत आहे आणि लवकरच उपलब्ध होईल."
     },
     "reader": {
-        "title": "Screen Reader Access",
-        "highlight": "Screen",
-        "highlight-text": "Reader Access",
-        "text": "Below are the various screen readers to choose from",
-        "name": "Screen Reader Name",
-        "website": "Website",
-        "commercial": "Free / Commercial"
+        "title": "स्क्रीन वाचक प्रवेश",
+        "highlight": "स्क्रीन",
+        "highlight-text": "वाचक प्रवेश",
+        "text": "खाली विविध स्क्रीन रीडर्सची निवड करण्यासाठी पर्याय दिले आहेत.",
+        "name": "स्क्रीन वाचक नाव",
+        "website": "वेबसाइट",
+        "commercial": "विनामूल्य / व्यावसायिक"
     },
     "departments": {
         "home": "मुखपृष्ठ",
@@ -375,6 +375,13 @@
         "highlight": "निवडणूक",
         "highlight-text": "विभाग"
     },
+
+    "encroachmentDept":{
+        "title": "अतिक्रमण विभाग",
+        "highlight": "अतिक्रमण",
+        "highlight-text": "विभाग"
+    },
+ 
     "electricalDept": {
         "title": "विद्युत अभियांत्रिकी विभाग",
         "highlight": "विद्युत",
@@ -435,6 +442,11 @@
         "highlight": "एनयूएलएम",
         "highlight-text": "विभाग"
     },
+    "publicHealthDept": {
+        "title": "सार्वजनिक आरोग्य विभाग",
+        "highlight": "सार्वजनिक",
+        "highlight-text": "आरोग्य विभाग"
+    },
     "relationshipDept": {
         "title": "जनसंपर्क विभाग",
         "highlight": "जनसंपर्क",
@@ -484,5 +496,64 @@
         "title": "वाहन विभाग",
         "highlight": "वाहन",
         "highlight-text": "विभाग"
+
+    },
+    "fireDept":{
+        "title": "अग्निशमन विभाग",
+        "highlight": "अग्निशमन",
+        "highlight-text": "विभाग"
+    },
+    "privacy":{
+        "title": "गोपनीयता धोरण ",
+        "highlight": "गोपनीयता",
+        "highlight-text": "धोरण"
+    },
+    "hyperlink":{
+        "title": "हायपरलिंक  धोरण ",
+        "highlight": "हायपरलिंक ",
+        "highlight-text": "धोरण"
+    },
+    "accessbility":{
+        "title": "सुलभता विधान",
+        "highlight": "सुलभता",
+        "highlight-text": "विधान"
+    },
+    "term":{
+        "title": "अटी व शर्ती",
+        "highlight": "अटी",
+        "highlight-text": "व शर्ती"
+    },
+    "support":{
+        "title": "ग्राहक समर्थन",
+        "highlight": "ग्राहक",
+        "highlight-text": "समर्थन"
+    },
+    "solidWaste":{
+        "title": "घनकचरा व्यवस्थापन प्रणाली",
+        "highlight": "घनकचरा",
+        "highlight-text": "व्यवस्थापन प्रणाली"
+    },
+    "pressNote":{
+        "title": "प्रेस नोट",
+        "highlight": "प्रेस",
+        "highlight-text": "नोट"
+    },
+    "tender":{
+        "name":"नागरिक सेवा",
+        "title": "निविदा आणि कोटेशन",
+        "highlight": "निविदा",
+        "highlight-text": "आणि कोटेशन",
+        "tendername": "निविदा आणि कोटेशन तपशील"
+    },
+    "rti":{
+        "title": "माहितीचा अधिकार",
+        "highlight": "माहितीचा",
+        "highlight-text": "अधिकार"
+    }
+    
+   
+}
+
     }
 }
+

@@ -4,9 +4,13 @@ import "./AccessibilityStatement.css";
 import "../CommingSoon/CommingSoon.css";
 import comingsoon from '../../assets/newcomingsoon.png'
 import api,{baseURL} from "../api";
+import { useTranslation } from "react-i18next";
+
 
 const AccessibilityStatement = () => {
     const [bgImage, setBgImage] = useState("");
+    const { i18n, t } = useTranslation();
+    
 
     const fetchHeaderImage = async () => {
         try {
@@ -48,13 +52,13 @@ const AccessibilityStatement = () => {
                 <div className="container-fluid font-location mt-4 mb-2" id="accessibility-css">
                     <nav className="breadcrumb">
                         <Link to="/" className="breadcrumb-item text-decoration-none">
-                            Home
+                        {t('departments.home')}
                         </Link>
-                        <span className="breadcrumb-item active1">Accessibility Statement</span>
+                        <span className="breadcrumb-item active1">{t('accessbility.title')}</span>
                     </nav>
                     <h2 className="location-title">
-                        <span className="highlight">Accessibility</span>
-                        <span className="highlighted-text"> Statement</span>
+                        <span className="highlight">{t('accessbility.highlight')}</span>
+                        <span className="highlighted-text"> {t('accessbility.highlight-text')}</span>
                         <hr />
                     </h2>
                     <div className="coming-soon-section text-center mt-4">
@@ -65,7 +69,7 @@ const AccessibilityStatement = () => {
                             
                         />
                         <p className="coming-soon-message">
-                            This page is under development and will be available soon.
+                        {t('commingsoon.text')}
                         </p>
                     </div>
                 </div>
