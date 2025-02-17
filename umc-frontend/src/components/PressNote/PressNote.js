@@ -6,6 +6,8 @@ import "../TableCss/TableCss.css";
 import pdficon from '../../assets/images/Departments/document 1.png';
 import Swal from "sweetalert2";
 import api,{baseURL} from "../api"
+import { useTranslation } from "react-i18next";
+
 
 const ITEMS_PER_PAGE = 20;
 
@@ -13,6 +15,8 @@ const PressNote = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [notes, setNotes] = useState([]);
     const [bgImage, setBgImage] = useState("");
+      const { i18n, t } = useTranslation();
+    
 
     const fetchHeaderImage = async () => {
         try {
@@ -38,7 +42,7 @@ const PressNote = () => {
 
     const fetchNotes = async()=>{
         try{
-            const response = await api.get("/press-note");
+            const response = await api.get(`/press-note?lang=${i18n.language}`);
             setNotes(response.data.reverse());
         } catch(error){
             console.error("Error fetching press notes", error);
@@ -48,7 +52,7 @@ const PressNote = () => {
     useEffect(()=>{
         fetchNotes();
         fetchHeaderImage();
-    },[]);
+    },[i18n.language]);
 
     const totalPages = Math.ceil(notes.length / ITEMS_PER_PAGE);
     const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
@@ -117,13 +121,13 @@ const PressNote = () => {
                 <div className="container-fluid font-location mt-4 mb-2" id="press-css">
                     <nav className="breadcrumb">
                         <Link to="/" className="breadcrumb-item text-decoration-none">
-                            Home
+                        {t('departments.home')}
                         </Link>
-                        <span className="breadcrumb-item active1">Press Note</span>
+                        <span className="breadcrumb-item active1">{t('pressNote.title')}</span>
                     </nav>
                     <h2 className="location-title">
-                        <span className="highlight">Press</span>
-                        <span className="highlighted-text"> Note</span>
+                        <span className="highlight">{t('pressNote.highlight')}</span>
+                        <span className="highlighted-text"> {t('pressNote.highlight-text')}</span>
                         <hr />
                     </h2>
 
@@ -137,14 +141,14 @@ const PressNote = () => {
                                                 className="table-heading-styling"
                                                 style={{ textAlign: "center" }}
                                             >
-                                                Sr. No.
+                                                {t('departments.sno')}
                                             </th>
-                                            <th className="table-heading-styling">Description</th>
+                                            <th className="table-heading-styling">{t('tourism.description')}</th>
                                             <th
                                                 className="table-heading-styling"
                                                 style={{ textAlign: "center" }}
                                             >
-                                                Action
+                                                {t('departments.action')}
                                             </th>
                                         </tr>
                                     </thead>
@@ -200,7 +204,7 @@ const PressNote = () => {
                                                                 verticalAlign: "middle",
                                                             }}
                                                         />
-                                                        View PDF
+                                                        {t('departments.view')}
                                                     </Link>
                                                 </td>
                                             </tr>
@@ -213,13 +217,13 @@ const PressNote = () => {
                             <ul className="pagination custom-pagination">
                                 <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
                                     <button className="page-link" onClick={() => handlePageChange(currentPage - 1)}>
-                                        Previous
+                                    {t('departments.previous')}
                                     </button>
                                 </li>
                                 {renderPageNumbers()}
                                 <li className={`page-item ${currentPage === totalPages ? "disabled" : ""}`}>
                                     <button className="page-link" onClick={() => handlePageChange(currentPage + 1)}>
-                                        Next
+                                    {t('departments.next')}
                                     </button>
                                 </li>
                             </ul>

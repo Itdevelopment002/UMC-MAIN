@@ -2,10 +2,14 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./PrivacyPolicy.css";
 import api, { baseURL } from "../api";
+import { useTranslation } from "react-i18next";
+
 
 const PrivacyPolicy = () => {
     const [policy, setPolicy] = useState([]);
     const [bgImage, setBgImage] = useState("");
+    const { i18n, t } = useTranslation();
+    
 
     const fetchHeaderImage = async () => {
         try {
@@ -29,11 +33,11 @@ const PrivacyPolicy = () => {
     useEffect(() => {
         fetchPolicy();
         fetchHeaderImage();
-    }, []);
+    }, [i18n.language]);
 
     const fetchPolicy = async () => {
         try {
-            const response = await api.get("/privacy-policy");
+            const response = await api.get(`/privacy-policy?lang=${i18n.language}`);
             setPolicy(response.data);
         } catch (error) {
             console.error(error);
@@ -68,13 +72,13 @@ const PrivacyPolicy = () => {
                 <div className="container-fluid font-location mt-4 mb-2" id="privacy-css">
                     <nav className="breadcrumb">
                         <Link to="/" className="breadcrumb-item text-decoration-none">
-                            Home
+                        {t('departments.home')}
                         </Link>
-                        <span className="breadcrumb-item active1">Privacy Policy</span>
+                        <span className="breadcrumb-item active1">{t('privacy.title')}</span>
                     </nav>
                     <h2 className="location-title">
-                        <span className="highlight">Privacy</span>
-                        <span className="highlighted-text"> Policy</span>
+                        <span className="highlight">{t('privacy.highlight')}</span>
+                        <span className="highlighted-text"> {t('privacy.highlight-text')}</span>
                         <hr />
                     </h2>
 

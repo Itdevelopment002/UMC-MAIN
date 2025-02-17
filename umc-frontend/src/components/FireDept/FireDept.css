@@ -1,0 +1,35 @@
+#secretary-css p {
+  font-size: 16px;
+  font-weight: 400;
+  text-align: justify;
+  color: #000000;
+  letter-spacing: -0.32px;
+}
+
+#secretary-css .table-bordered td,
+.table-bordered th {
+  vertical-align: middle;
+}
+
+#secretary-css .bg-orange {
+  background-color: #f57c00 !important;
+}
+
+#secretary-css .table-heading-styling {
+  background: #f37f1a !important;
+  color: #ffffff !important;
+  font-size: 15px !important;
+  font-weight: 500 !important;
+  line-height: 16.41px !important;
+  padding: 10px 10px !important;
+}
+
+#secretary-css .table-bordered tbody tr:nth-child(even) td {
+  background-color: #fff7e2;
+}
+
+#secretary-css td {
+  font-weight: 500 !important;
+  font-size: 14px !important;
+  line-height: 17.41px !important;
+}

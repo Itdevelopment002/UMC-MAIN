@@ -92,6 +92,7 @@ import ProactiveDisclosure from "./components/ProactiveDisclosure/ProactiveDiscl
 import SubRti from "./components/SubRti/SubRti";
 import RecordsDepartment from "./components/RecordsDepartment/RecordsDepartment"
 import { useTranslation } from "react-i18next";
+import FireDept from "./components/FireDept/FireDept";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -221,6 +222,8 @@ function App() {
             <Route path="/water-supply-department" element={<WaterSupplyDept />} />
             <Route path="/women-and-child-department" element={<WomenChildDevelopment />} />
             <Route path="/records-department" element={<RecordsDepartment />} />
+            <Route path="/fire-department" element={<FireDept />} />
+
 
 
             {/* Circular */}
