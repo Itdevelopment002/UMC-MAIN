@@ -43,6 +43,7 @@ const OnlineServices = () => {
             await api.put(`/online_service/${selectedServices.id}`, {
                 heading: selectedServices.heading,
                 link: selectedServices.link,
+                language_code: selectedServices.language_code,
             });
             const updatedServices = onlineservices.map((services) =>
                 services.id === selectedServices.id ? selectedServices : services
@@ -77,7 +78,6 @@ const OnlineServices = () => {
 
     return (
         <div>
-
             <div className="row">
                 <div className="col-lg-12">
                     <div className="card-box">
@@ -258,6 +258,22 @@ const OnlineServices = () => {
                             </div>
                             <div className="modal-body">
                                 <form>
+                                    <div className="mb-3">
+                                        <label className="form-label">
+                                            Select Language
+                                        </label>
+
+                                        <select
+                                            className="form-control"
+                                            name="language_code"
+                                            value={selectedServices?.language_code || ""}
+                                            onChange={handleEditChange}
+                                        >
+                                            <option value="" disabled>Select Language</option>
+                                            <option value="en">English</option>
+                                            <option value="mr">Marathi</option>
+                                        </select>
+                                    </div>
                                     <div className="mb-3">
                                         <label className="form-label">Service Heading</label>
                                         <input

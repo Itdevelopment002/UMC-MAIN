@@ -51,12 +51,13 @@ const Recruitment = () => {
   const handleSaveEdit = async () => {
     try {
       setIsLoading(true);
-      const { heading, description, link } = selectedRecruitment;
+      const { heading, description, link, language_code } = selectedRecruitment;
 
       await api.put(`/recruitment/${selectedRecruitment.id}`, {
         heading,
         description,
         link,
+        language_code,
       });
       toast.success("Recruitment updated successfully");
       fetchRecruitment();
@@ -392,6 +393,25 @@ const Recruitment = () => {
                   </div>
                   <div className="modal-body">
                     <form>
+                      <div className="form-group">
+                        <label>
+                          Select Language
+                        </label>
+                        <select
+                          className="form-control"
+                          value={selectedRecruitment?.language_code || ""}
+                          onChange={(e) =>
+                            setSelectedRecruitment({
+                              ...selectedRecruitment,
+                              language_code: e.target.value,
+                            })
+                          }
+                        >
+                          <option value="">Select Language</option>
+                          <option value="en">English</option>
+                          <option value="mr">Marathi</option>
+                        </select>
+                      </div>
                       <div className="form-group">
                         <label>Job Heading</label>
                         <select

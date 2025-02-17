@@ -56,6 +56,7 @@ const Tenders = () => {
         heading: selectedTender.heading,
         department: selectedTender.department,
         link: selectedTender.link,
+        language_code: selectedTender.language_code,
       });
       const updatedTender = tender.map((tender) =>
         tender.id === selectedTender.id ? selectedTender : tender
@@ -301,6 +302,21 @@ const Tenders = () => {
                   </div>
                   <div className="modal-body">
                     <form>
+                      <div className="mb-3">
+                        <label className="form-label">
+                          Select Language
+                        </label>
+                        <select
+                          className="form-control"
+                          name="language_code"
+                          value={selectedTender?.language_code || ""}
+                          onChange={handleEditChange}
+                        >
+                          <option value="" disabled>Select Language</option>
+                          <option value="en">English</option>
+                          <option value="mr">Marathi</option>
+                        </select>
+                      </div>
                       <div className="mb-3">
                         <label className="form-label">Tender Heading</label>
                         <input

@@ -93,6 +93,8 @@ const HomeProjects = () => {
       formData.append("description", selectedProject.description);
     if (selectedProject.link)
       formData.append("link", selectedProject.link);
+    if (selectedProject.language_code)
+      formData.append("language_code", selectedProject.language_code);
     if (selectedProject.mainIcon)
       formData.append("mainIcon", selectedProject.mainIcon);
 
@@ -345,6 +347,26 @@ const HomeProjects = () => {
                   </div>
                   <div className="modal-body">
                     <form>
+                      <div className="mb-3">
+                        <label className="form-label">
+                          Select Language
+                        </label>
+
+                        <select
+                          className="form-control"
+                          value={selectedProject?.language_code || ""}
+                          onChange={(e) =>
+                            setSelectedProject({
+                              ...selectedProject,
+                              language_code: e.target.value,
+                            })
+                          }
+                        >
+                          <option value="" disabled>Select Language</option>
+                          <option value="en">English</option>
+                          <option value="mr">Marathi</option>
+                        </select>
+                      </div>
                       <div className="mb-3">
                         <label className="form-label">Project Heading</label>
                         <input

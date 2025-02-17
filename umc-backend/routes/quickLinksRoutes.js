@@ -19,18 +19,18 @@ router.get("/quick-link", (req, res) => {
 });
 
 router.post("/quick-link", (req, res) => {
-  const { heading, link } = req.body;
-  const sql = "INSERT INTO quick_links (heading, link) VALUES (?, ?)";
-  db.query(sql, [heading, link], (err, result) => {
+  const { heading, link, language_code } = req.body;
+  const sql = "INSERT INTO quick_links (heading, link, language_code) VALUES (?, ?, ?)";
+  db.query(sql, [heading, link, language_code], (err, result) => {
     if (err) throw err;
-    res.json({ id: result.insertId, heading, link });
+    res.json({ id: result.insertId, heading, link, language_code });
   });
 });
 
 router.put("/quick-link/:id", (req, res) => {
-  const { heading, link } = req.body;
-  const sql = "UPDATE quick_links SET heading = ?, link = ? WHERE id = ?";
-  db.query(sql, [heading, link, req.params.id], (err, result) => {
+  const { heading, link, language_code } = req.body;
+  const sql = "UPDATE quick_links SET heading = ?, link = ?, language_code = ? WHERE id = ?";
+  db.query(sql, [heading, link, language_code, req.params.id], (err, result) => {
     if (err) throw err;
     res.json({ success: true });
   });

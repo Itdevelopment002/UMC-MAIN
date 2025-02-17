@@ -9,6 +9,7 @@ const AddHomeProjects = () => {
     const [heading, setHeading] = useState('');
     const [description, setDescription] = useState('');
     const [link, setLink] = useState('');
+    const [language, setLanguage] = useState('');
     const [mainIcon, setMainIcon] = useState(null);
     const [errors, setErrors] = useState({});
     const navigate = useNavigate();
@@ -18,6 +19,7 @@ const AddHomeProjects = () => {
         if (!heading) errors.heading = "Project Heading is required.";
         if (!description) errors.description = "Project Description is required.";
         if (!link) errors.link = "Project Link is required.";
+        if (!language) errors.language = "Language Selection is required.";
         if (!mainIcon) errors.mainIcon = "Project Image is required.";
         setErrors(errors);
         return Object.keys(errors).length === 0;
@@ -39,6 +41,7 @@ const AddHomeProjects = () => {
         if (name === "heading") setHeading(value);
         if (name === "description") setDescription(value);
         if (name === "link") setLink(value);
+        if (name === "language") setLanguage(value);
     };
 
     const handleSubmit = async (e) => {
@@ -52,6 +55,7 @@ const AddHomeProjects = () => {
         formData.append('heading', heading);
         formData.append('description', description);
         formData.append('link', link);
+        formData.append('language_code', language);
         if (mainIcon) formData.append('mainIcon', mainIcon);
 
         try {
@@ -65,6 +69,7 @@ const AddHomeProjects = () => {
             setHeading('');
             setDescription('');
             setLink('');
+            setLanguage('');
             setMainIcon(null);
             document.getElementById('mainIconInput').value = '';
             navigate('/home-projects');
@@ -93,6 +98,24 @@ const AddHomeProjects = () => {
                                         </div>
                                     </div>
                                     <form onSubmit={handleSubmit}>
+                                        <div className="form-group row">
+                                            <label className="col-form-label col-md-3">
+                                                Select Language <span className="text-danger">*</span>
+                                            </label>
+                                            <div className="col-md-4">
+                                                <select
+                                                    className={`form-control form-control-md ${errors.language ? 'is-invalid' : ''}`}
+                                                    value={language}
+                                                    name="language"
+                                                    onChange={handleChange}
+                                                >
+                                                    <option value="" disabled>Select Language</option>
+                                                    <option value="en">English</option>
+                                                    <option value="mr">Marathi</option>
+                                                </select>
+                                                {errors.language && <div className="invalid-feedback">{errors.language}</div>}
+                                            </div>
+                                        </div>
                                         <div className="form-group row">
                                             <label className="col-form-label col-md-3">Project Heading <span className="text-danger">*</span></label>
                                             <div className="col-md-4">

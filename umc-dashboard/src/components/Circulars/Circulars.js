@@ -60,7 +60,7 @@ const Circulars = () => {
   const handleSaveEdit = async () => {
     try {
       setIsLoading(true);
-      const { description, number, link } = selectedCircular;
+      const { description, number, link, language_code } = selectedCircular;
 
       const formattedPublishDate = selectedCircular.publish_date
         ? formatDate(selectedCircular.publish_date)
@@ -70,6 +70,7 @@ const Circulars = () => {
         description,
         number,
         publish_date: formattedPublishDate,
+        language_code,
         link
       });
       toast.success("Circular updated successfully");
@@ -102,6 +103,7 @@ const Circulars = () => {
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
+
   return (
     <div>
       <div className="page-wrapper">
@@ -361,6 +363,26 @@ const Circulars = () => {
                   </div>
                   <div className="modal-body">
                     <form>
+                      <div className="form-group">
+                        <label>
+                          Select Language
+                        </label>
+
+                        <select
+                          className="form-control"
+                          value={selectedCircular?.language_code || ""}
+                          onChange={(e) =>
+                            setSelectedCircular({
+                              ...selectedCircular,
+                              language_code: e.target.value,
+                            })
+                          }
+                        >
+                          <option value="" disabled>Select Language</option>
+                          <option value="en">English</option>
+                          <option value="mr">Marathi</option>
+                        </select>
+                      </div>
                       <div className="form-group">
                         <label>Circular Title</label>
                         <input
