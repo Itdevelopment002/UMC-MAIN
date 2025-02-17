@@ -205,7 +205,13 @@ const PublicWorksDept = () => {
                       </div>
                       <div className="dept-text-box">
                         <strong className="dept-label">{t('departments.designation')} :</strong>
-                        <span className="dept-value"> {hod[0]?.designation}</span>
+                           <span className="dept-value">
+                          {hod[0]?.designation
+                            ? i18n.language === 'en'
+                              ? ` ${t('departments.head1')} ${hod[0].designation}`
+                              : ` ${hod[0].designation} ${t('departments.head2')}`
+                            : ''}
+                        </span>
                       </div>
                     </div>
                     <div className="dept-item">
