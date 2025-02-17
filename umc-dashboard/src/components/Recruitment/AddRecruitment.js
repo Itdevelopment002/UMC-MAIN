@@ -10,10 +10,12 @@ const AddRecruitment = () => {
   const [heading, setHeading] = useState("");
   const [description, setDescription] = useState("");
   const [link, setLink] = useState("");
+  const [language, setLanguage] = useState("");
   const [errors, setErrors] = useState({
     heading: "",
     description: "",
     link: "",
+    language: "",
   });
   const navigate = useNavigate();
 
@@ -21,6 +23,9 @@ const AddRecruitment = () => {
     const newErrors = {};
     if (!heading) {
       newErrors.heading = "Job Heading is required.";
+    }
+    if (!language) {
+      newErrors.language = "Language Selection is required.";
     }
     if (!description) {
       newErrors.description = "Job Description is required.";
@@ -43,13 +48,17 @@ const AddRecruitment = () => {
       heading,
       description,
       link,
+      language_code: language,
     };
 
     try {
       await api.post("/recruitment", videoData);
       toast.success("Recruitment added successfully!");
       setDescription("");
-      setErrors({ heading: "", description: "", link: "" });
+      setHeading("");
+      setLink("");
+      setLanguage("");
+      setErrors({ heading: "", description: "", link: "", language: "" });
       navigate("/recruitment");
     } catch (error) {
       toast.error("Failed to add recruitment data. Please try again.");
@@ -80,6 +89,29 @@ const AddRecruitment = () => {
                     </div>
                   </div>
                   <form onSubmit={handleSubmit}>
+                    <div className="form-group row">
+                      <label className="col-form-label col-md-2">
+                        Select Language <span className="text-danger">*</span>
+                      </label>
+                      <div className="col-md-4">
+                        <select
+                          className={`form-control ${errors.language ? "is-invalid" : ""
+                            }`}
+                          value={language}
+                          onChange={(e) => {
+                            setLanguage(e.target.value);
+                            if (errors.language) {
+                              setErrors({ ...errors, language: "" });
+                            }
+                          }}
+                        >
+                          <option value="" disabled>Select Language</option>
+                          <option value="en">English</option>
+                          <option value="mr">Marathi</option>
+                        </select>
+                        {errors.language && <div className="invalid-feedback">{errors.language}</div>}
+                      </div>
+                    </div>
                     <div className="form-group row">
                       <label className="col-form-label col-md-2">
                         Job Heading <span className="text-danger">*</span>

@@ -2,46 +2,74 @@ const express = require("express");
 const router = express.Router();
 const db = require("../config/db.js");
 
-// Get all department descriptions along with sub-descriptions
+
 router.get("/project-description", (req, res) => {
-  const sql = `
+  const language = req.query.lang;
+  let sql = `
     SELECT 
       d.id, 
       d.heading, 
       d.description, 
+      d.language_code,
       GROUP_CONCAT(s.sub_description) AS subDescriptions
     FROM descriptions d
     LEFT JOIN sub_descriptions s ON d.id = s.dept_id
-    GROUP BY d.id, d.heading, d.description
   `;
-  
-  db.query(sql, (err, results) => {
-    if (err) throw err;
+
+  const params = [];
+
+  if (language) {
+    sql += ` WHERE d.language_code = ?`;
+    params.push(language);
+  }
+
+  sql += ` GROUP BY d.id, d.heading, d.description`;
+
+  db.query(sql, params, (err, results) => {
+    if (err) {
+      console.error("Database error:", err);
+      return res.status(500).json({ error: "Internal Server Error" });
+    }
+
     const processedResults = results.map(item => ({
       ...item,
-      subDescriptions: item.subDescriptions ? item.subDescriptions.split(',') : [] // Split string into an array, or default to empty array
+      subDescriptions: item.subDescriptions ? item.subDescriptions.split(',') : [] 
     }));
+
     res.json(processedResults);
   });
 });
 
+
 router.get("/project-description/:id/sub-descriptions", (req, res) => {
-  const sql = "SELECT * FROM sub_descriptions WHERE dept_id = ?";
-  db.query(sql, [req.params.id], (err, results) => {
-    if (err) throw err;
+  const { id } = req.params;
+  const language = req.query.lang;
+
+  let sql = "SELECT * FROM sub_descriptions WHERE dept_id = ?";
+  const params = [id];
+
+  if (language) {
+    sql += " AND language_code = ?";
+    params.push(language);
+  }
+
+  db.query(sql, params, (err, results) => {
+    if (err) {
+      console.error("Database error:", err);
+      return res.status(500).json({ error: "Internal Server Error" });
+    }
     res.json(results);
   });
 });
 
-// Add new department description with sub-descriptions
+
 router.post("/project-description", (req, res) => {
-  const { department, description, subDescriptions } = req.body;
-  const sql = "INSERT INTO descriptions (heading, description) VALUES (?, ?)";
-  
-  db.query(sql, [department, description], (err, result) => {
+  const { department, description, language_code, subDescriptions } = req.body;
+  const sql = "INSERT INTO descriptions (heading, description, language_code) VALUES (?, ?, ?)";
+
+  db.query(sql, [department, description, language_code], (err, result) => {
     if (err) throw err;
 
-    // Insert sub-descriptions if they exist
     if (subDescriptions && subDescriptions.length > 0) {
       const deptId = result.insertId;
       const subDescriptionSql = "INSERT INTO sub_descriptions (dept_id, sub_description) VALUES ?";
@@ -49,28 +77,26 @@ router.post("/project-description", (req, res) => {
 
       db.query(subDescriptionSql, [subDescriptionValues], (err) => {
         if (err) throw err;
-        res.json({ id: deptId, department, description, subDescriptions });
+        res.json({ id: deptId, department, description, language_code, subDescriptions });
       });
     } else {
-      res.json({ id: result.insertId, department, description });
+      res.json({ id: result.insertId, department, description, language_code });
     }
   });
 });
 
-// Update department description with sub-descriptions
+
 router.put("/project-description/:id", (req, res) => {
-  const { heading, description, subDescriptions } = req.body;
-  const sql = "UPDATE descriptions SET heading = ?, description = ? WHERE id = ?";
-  
-  db.query(sql, [heading, description, req.params.id], (err, result) => {
+  const { heading, description, language_code, subDescriptions } = req.body;
+  const sql = "UPDATE descriptions SET heading = ?, description = ?, language_code = ? WHERE id = ?";
+
+  db.query(sql, [heading, description, language_code, req.params.id], (err, result) => {
     if (err) throw err;
 
-    // Delete existing sub-descriptions
     const deleteSubDescriptionsSql = "DELETE FROM sub_descriptions WHERE dept_id = ?";
     db.query(deleteSubDescriptionsSql, [req.params.id], (err) => {
       if (err) throw err;
 
-      // Insert updated sub-descriptions
       if (subDescriptions && subDescriptions.length > 0) {
         const subDescriptionSql = "INSERT INTO sub_descriptions (dept_id, sub_description) VALUES ?";
         const subDescriptionValues = subDescriptions.map(subDesc => [req.params.id, subDesc]);
@@ -86,14 +112,12 @@ router.put("/project-description/:id", (req, res) => {
   });
 });
 
-// Delete a department description and its sub-descriptions
+
 router.delete("/project-description/:id", (req, res) => {
-  // First, delete sub-descriptions
   const deleteSubDescriptionsSql = "DELETE FROM sub_descriptions WHERE dept_id = ?";
   db.query(deleteSubDescriptionsSql, [req.params.id], (err) => {
     if (err) throw err;
 
-    // Then delete the department description
     const sql = "DELETE FROM descriptions WHERE id = ?";
     db.query(sql, [req.params.id], (err, result) => {
       if (err) throw err;
@@ -101,5 +125,6 @@ router.delete("/project-description/:id", (req, res) => {
     });
   });
 });
+
 
 module.exports = router;

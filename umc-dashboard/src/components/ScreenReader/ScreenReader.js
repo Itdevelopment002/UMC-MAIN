@@ -281,7 +281,7 @@ const ScreenReader = () => {
                   </div>
                   <div className="modal-body">
                     <form>
-                    <div className="mb-3">
+                      <div className="mb-3">
                         <label className="form-label">
                           Select Language
                         </label>
@@ -327,7 +327,9 @@ const ScreenReader = () => {
                         >
                           <option value="" disabled>Select Availability</option>
                           <option value="Free">Free</option>
+                          <option value="मुफ़्त">मुफ़्त</option>
                           <option value="Commercial">Commercial</option>
+                          <option value="व्यावसायिक">व्यावसायिक</option>
                         </select>
                       </div>
 

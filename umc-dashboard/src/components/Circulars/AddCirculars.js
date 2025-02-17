@@ -11,6 +11,7 @@ import { Link } from "react-router-dom";
 const AddCirculars = () => {
   const [description, setDescription] = useState("");
   const [number, setNumber] = useState("");
+  const [language, setLanguage] = useState("");
   const [publishDate, setPublishDate] = useState("");
   const [link, setLink] = useState("");
   const [errors, setErrors] = useState({
@@ -18,6 +19,7 @@ const AddCirculars = () => {
     number: "",
     publishDate: "",
     link: "",
+    language: "",
   });
   const navigate = useNavigate();
 
@@ -36,6 +38,9 @@ const AddCirculars = () => {
     }
     if (!number) {
       newErrors.number = "Circular Number is required.";
+    }
+    if (!language) {
+      newErrors.language = "Language Selection is required.";
     }
     if (!publishDate) {
       newErrors.publishDate = "Circular Date is required.";
@@ -61,6 +66,7 @@ const AddCirculars = () => {
       number,
       publishDate: formattedDate,
       link,
+      language_code: language,
     };
 
     try {
@@ -69,7 +75,8 @@ const AddCirculars = () => {
       setDescription("");
       setNumber("");
       setLink("");
-      setErrors({ description: "", number: "", publishDate: "", link: "" });
+      setLanguage("");
+      setErrors({ description: "", number: "", publishDate: "", link: "", language: "" });
       setPublishDate("");
 
       navigate("/circulars");
@@ -104,15 +111,37 @@ const AddCirculars = () => {
                   <form onSubmit={handleSubmit}>
                     <div className="form-group row">
                       <label className="col-form-label col-md-2">
+                        Select Language <span className="text-danger">*</span>
+                      </label>
+                      <div className="col-md-4">
+                        <select
+                          className={`form-control ${errors.language ? "is-invalid" : ""
+                          }`}
+                        value={language}
+                        onChange={(e) => {
+                          setLanguage(e.target.value);
+                          if (errors.language) {
+                            setErrors({ ...errors, language: "" });
+                          }
+                        }}
+                        >
+                          <option value="">Select Language</option>
+                          <option value="en">English</option>
+                          <option value="mr">Marathi</option>
+                        </select>
+                        {errors.language && <div className="invalid-feedback">{errors.language}</div>}
+                      </div>
+                    </div>
+                    <div className="form-group row">
+                      <label className="col-form-label col-md-2">
                         Circular Title{" "}
                         <span className="text-danger">*</span>
                       </label>
                       <div className="col-md-4">
                         <input
                           type="text"
-                          className={`form-control ${
-                            errors.description ? "is-invalid" : ""
-                          }`}
+                          className={`form-control ${errors.description ? "is-invalid" : ""
+                            }`}
                           placeholder="Enter Circular Title"
                           value={description}
                           onChange={(e) => {
@@ -137,9 +166,8 @@ const AddCirculars = () => {
                       <div className="col-md-4">
                         <input
                           type="text"
-                          className={`form-control ${
-                            errors.number ? "is-invalid" : ""
-                          }`}
+                          className={`form-control ${errors.number ? "is-invalid" : ""
+                            }`}
                           placeholder="Enter Circular Number"
                           value={number}
                           onChange={(e) => {
@@ -163,9 +191,8 @@ const AddCirculars = () => {
                       <div className="cal-icon col-md-4">
                         <Flatpickr
                           id="startDatePicker"
-                          className={`form-control ${
-                            errors.publishDate ? "is-invalid" : ""
-                          }`}
+                          className={`form-control ${errors.publishDate ? "is-invalid" : ""
+                            }`}
                           placeholder="Select Circular Date"
                           value={publishDate}
                           onChange={(date) => {
@@ -198,9 +225,8 @@ const AddCirculars = () => {
                       <div className="col-md-4">
                         <input
                           type="text"
-                          className={`form-control ${
-                            errors.link ? "is-invalid" : ""
-                          }`}
+                          className={`form-control ${errors.link ? "is-invalid" : ""
+                            }`}
                           placeholder="Enter Circular Link"
                           value={link}
                           onChange={(e) => {

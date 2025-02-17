@@ -5,11 +5,16 @@ import api from "../api";
 const AddSubRti = () => {
   const [description, setDescription] = useState("");
   const [link, setLink] = useState("");
+  const [language, setLanguage] = useState("");
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
 
   const validateForm = () => {
     const validationErrors = {};
+
+    if (!language) {
+      validationErrors.language = "Language selection is required";
+    }
 
     if (!description) {
       validationErrors.description = "Description is required.";
@@ -35,9 +40,11 @@ const AddSubRti = () => {
       const response = await api.post("/sub-rti", {
         description: description,
         link: link,
+        language_code: language,
       });
       setDescription("");
       setLink("");
+      setLanguage("");
       navigate("/sub-rti");
     } catch (error) {
       console.error("Error adding sub rti data:", error);
@@ -69,6 +76,28 @@ const AddSubRti = () => {
                     </div>
                   </div>
                   <form onSubmit={handleSubmit}>
+                    <div className="form-group row">
+                      <label className="col-form-label col-md-2">
+                        Select Language <span className="text-danger">*</span>
+                      </label>
+                      <div className="col-md-4">
+                        <select
+                          className={`form-control form-control-md ${errors.language ? "is-invalid" : ""}`}
+                          value={language}
+                          onChange={(e) => {
+                            setLanguage(e.target.value);
+                            if (errors.language) {
+                              setErrors({ ...errors, language: "" });
+                            }
+                          }}
+                        >
+                          <option value="" disabled>Select Language</option>
+                          <option value="en">English</option>
+                          <option value="mr">Marathi</option>
+                        </select>
+                        {errors.language && <div className="invalid-feedback">{errors.language}</div>}
+                      </div>
+                    </div>
                     <div className="form-group row">
                       <label className="col-form-label col-md-2">
                         Description <span className="text-danger">*</span>

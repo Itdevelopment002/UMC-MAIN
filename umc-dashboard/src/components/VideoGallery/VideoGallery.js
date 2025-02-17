@@ -65,14 +65,14 @@ const VideoGallery = () => {
       console.error(error);
       toast.error("Failed to delete the entry!");
     } finally {
-      closeModal(); 
+      closeModal();
     }
   };
 
   const openEditModal = (item, type) => {
     setSelectedItem(item);
     setEditData(
-      type === "category" ? { name: item.name } : { video_url: item.video_url }
+      type === "category" ? { name: item.name, language_code: item.language_code } : { video_url: item.video_url }
     );
     setModalType(type);
     setShowEditModal(true);
@@ -90,6 +90,7 @@ const VideoGallery = () => {
       if (modalType === "category") {
         await api.put(`/video-categories/${selectedItem.id}`, {
           name: editData.name,
+          language_code: editData.language_code,
         });
         setCategoryVideoData(
           categoryVideoData.map((item) =>
@@ -101,7 +102,7 @@ const VideoGallery = () => {
         fetchCategoryVideoData();
       }
       else if (modalType === "categoryVideo") {
-        await api.put(`/category-videos/${selectedItem.id}`, {video_url: editData.video_url});
+        await api.put(`/category-videos/${selectedItem.id}`, { video_url: editData.video_url });
         setVideos(
           videos.map((item) =>
             item.id === selectedItem.id ? { ...item, video_url: editData.video_url } : item
@@ -308,36 +309,59 @@ const VideoGallery = () => {
                   </div>
                   <div className="modal-body">
                     {modalType === "category" ? (
-                      <div className="form-group">
-                        <label htmlFor="name">Category Name</label>
-                        <input
-                          className="form-control"
-                          id="name"
-                          value={editData.name}
-                          onChange={(e) =>
-                            setEditData({
-                              ...editData,
-                              name: e.target.value,
-                            })
-                          }
-                        />
-                      </div>
+                      <>
+                        <div className="form-group">
+                          <label htmlFor="language_code">
+                            Select Language
+                          </label>
+
+                          <select
+                            className="form-control"
+                            name="language_code"
+                            value={editData.language_code}
+                            onChange={(e) =>
+                              setEditData({
+                                ...editData,
+                                language_code: e.target.value,
+                              })
+                            }
+                          >
+                            <option value="" disabled>Select Language</option>
+                            <option value="en">English</option>
+                            <option value="mr">Marathi</option>
+                          </select>
+                        </div>
+                        <div className="form-group">
+                          <label htmlFor="name">Category Name</label>
+                          <input
+                            className="form-control"
+                            id="name"
+                            value={editData.name}
+                            onChange={(e) =>
+                              setEditData({
+                                ...editData,
+                                name: e.target.value,
+                              })
+                            }
+                          />
+                        </div>
+                      </>
                     ) : (
                       <>
                         <div className="form-group">
-                        <label htmlFor="video_url">Category Name</label>
-                        <input
-                          className="form-control"
-                          id="video_url"
-                          value={editData.video_url}
-                          onChange={(e) =>
-                            setEditData({
-                              ...editData,
-                              video_url: e.target.value,
-                            })
-                          }
-                        />
-                      </div>
+                          <label htmlFor="video_url">Category Name</label>
+                          <input
+                            className="form-control"
+                            id="video_url"
+                            value={editData.video_url}
+                            onChange={(e) =>
+                              setEditData({
+                                ...editData,
+                                video_url: e.target.value,
+                              })
+                            }
+                          />
+                        </div>
                       </>
                     )}
                   </div>

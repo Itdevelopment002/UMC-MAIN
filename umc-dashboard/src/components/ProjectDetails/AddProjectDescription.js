@@ -6,6 +6,7 @@ import { FaTrash } from "react-icons/fa";
 const AddProjectDescription = () => {
     const [description, setDescription] = useState("");
     const [subDescriptions, setSubDescriptions] = useState([]);
+    const [language, setLanguage] = useState("");
     const [department, setDepartment] = useState("");
     const [departments, setDepartments] = useState([]);
     const [errors, setErrors] = useState({});
@@ -18,11 +19,14 @@ const AddProjectDescription = () => {
             validationErrors.description = "Project description is required.";
         }
 
+        if (!language) {
+            validationErrors.language = "Language selection is required";
+        }
+
         if (!department) {
             validationErrors.department = "Project Heading is required.";
         }
 
-        // Check if any sub-description is empty
         subDescriptions.forEach((subDesc, index) => {
             if (!subDesc) {
                 validationErrors[`subDescription${index}`] = `Sub description ${index + 1} is required.`;
@@ -59,12 +63,13 @@ const AddProjectDescription = () => {
             await api.post("/project-description", {
                 department,
                 description,
-                subDescriptions, 
+                language_code: language,
+                subDescriptions,
             });
 
-            // Reset form fields
             setDepartment("");
             setDescription("");
+            setLanguage("");
             setSubDescriptions([]);
             navigate("/project-details");
         } catch (error) {
@@ -72,19 +77,16 @@ const AddProjectDescription = () => {
         }
     };
 
-    // Add a new sub-description field
     const handleAddSubDescription = () => {
         setSubDescriptions([...subDescriptions, ""]);
     };
 
-    // Update a specific sub-description
     const handleSubDescriptionChange = (index, value) => {
         const updatedSubDescriptions = [...subDescriptions];
         updatedSubDescriptions[index] = value;
         setSubDescriptions(updatedSubDescriptions);
     };
 
-    // Remove a sub-description field
     const handleRemoveSubDescription = (index) => {
         const updatedSubDescriptions = subDescriptions.filter((_, i) => i !== index);
         setSubDescriptions(updatedSubDescriptions);
@@ -115,7 +117,27 @@ const AddProjectDescription = () => {
                                         </div>
                                     </div>
                                     <form onSubmit={handleSubmit}>
-                                        {/* Department Name Dropdown */}
+                                        <div className="form-group row">
+                                            <label className="col-form-label col-md-2">
+                                                Select Language <span className="text-danger">*</span>
+                                            </label>
+                                            <div className="col-md-4">
+                                                <select
+                                                    className={`form-control ${errors.language ? "is-invalid" : ""}`}
+                                                    name="language"
+                                                    value={language}
+                                                    onChange={(e) => {
+                                                        setLanguage(e.target.value);
+                                                        setErrors((prev) => ({ ...prev, language: "" }));
+                                                    }}
+                                                >
+                                                    <option value="" disabled>Select Language</option>
+                                                    <option value="en">English</option>
+                                                    <option value="mr">Marathi</option>
+                                                </select>
+                                                {errors.language && <div className="invalid-feedback">{errors.language}</div>}
+                                            </div>
+                                        </div>
                                         <div className="form-group row">
                                             <label className="col-form-label col-md-2">
                                                 Project Heading <span className="text-danger">*</span>

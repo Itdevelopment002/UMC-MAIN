@@ -17,10 +17,10 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 router.post("/project-category", upload.array("images"), (req, res) => {
-  const { heading } = req.body;
+  const { heading, language_code } = req.body;
 
-  if (!heading) {
-    return res.status(400).json({ message: "Heading is required" });
+  if (!heading || !language_code) {
+    return res.status(400).json({ message: "Heading and language code are required" });
   }
 
   if (!req.files || req.files.length === 0) {
@@ -29,8 +29,8 @@ router.post("/project-category", upload.array("images"), (req, res) => {
 
   const imagePaths = req.files.map((file) => `/uploads/${file.filename}`);
 
-  const query = "INSERT INTO project_images (heading, images) VALUES (?, ?)";
-  db.query(query, [heading, JSON.stringify(imagePaths)], (err, result) => {
+  const query = "INSERT INTO project_images (heading, language_code, images) VALUES (?, ?, ?)";
+  db.query(query, [heading, language_code, JSON.stringify(imagePaths)], (err, result) => {
     if (err) {
       return res.status(500).json({ message: "Error adding project", error: err });
     }
@@ -44,12 +44,19 @@ router.post("/project-category", upload.array("images"), (req, res) => {
 
 // GET endpoint to retrieve all projects
 router.get("/project-category", (req, res) => {
-  const sql = "SELECT * FROM project_images";
-  db.query(sql, (err, results) => {
-    if (err) {
-      return res.status(500).json({ message: "Database error", error: err });
-    }
-    res.status(200).json(results);
+  const language = req.query.lang;
+  let query;
+  let params = [];
+  if (language) {
+    query = `SELECT * FROM project_images WHERE language_code = ?`;
+    params.push(language);
+  } else {
+    query = "SELECT * FROM project_images";
+  }
+
+  db.query(query, params, (err, results) => {
+    if (err) throw err;
+    res.json(results);
   });
 });
 
@@ -114,27 +121,33 @@ router.delete("/project-category/:id", (req, res) => {
 // PUT endpoint to update a project by ID
 router.put("/project-category/:id", upload.array("images"), (req, res) => {
   const { id } = req.params;
-  const { heading } = req.body;
+  const { heading, language_code } = req.body;
 
   let updateSql = "UPDATE project_images SET";
   const updateParams = [];
+  const updateFields = [];
 
   if (heading) {
-    updateSql += " heading = ?";
+    updateFields.push(" heading = ?");
     updateParams.push(heading);
+  }
+
+  if (language_code) {
+    updateFields.push(" language_code = ?");
+    updateParams.push(language_code);
   }
 
   if (req.files && req.files.length > 0) {
     const newImagePaths = req.files.map((file) => `/uploads/${file.filename}`);
-    updateSql += updateParams.length > 0 ? ", images = ?" : " images = ?";
+    updateFields.push(" images = ?");
     updateParams.push(JSON.stringify(newImagePaths));
   }
 
-  if (updateParams.length === 0) {
+  if (updateFields.length === 0) {
     return res.status(400).json({ message: "No fields to update" });
   }
 
-  updateSql += " WHERE id = ?";
+  updateSql += updateFields.join(",") + " WHERE id = ?";
   updateParams.push(id);
 
   db.query(updateSql, updateParams, (err, updateResult) => {
@@ -144,5 +157,6 @@ router.put("/project-category/:id", upload.array("images"), (req, res) => {
     res.status(200).json({ message: "Project updated successfully" });
   });
 });
+
 
 module.exports = router;

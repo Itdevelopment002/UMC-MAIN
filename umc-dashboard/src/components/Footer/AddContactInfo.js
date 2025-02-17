@@ -11,12 +11,14 @@ const AddContactInfo = () => {
   const [formData, setFormData] = useState({
     name: "",
     designation: "",
+    language: "",
     image: null,
   });
 
   const [errors, setErrors] = useState({
     name: "",
     designation: "",
+    language: "",
     image: "",
   });
 
@@ -38,6 +40,9 @@ const AddContactInfo = () => {
     if (!formData.name) {
       newErrors.name = "Contact Title is required";
     }
+    if (!formData.language) {
+      newErrors.language = "Language Selection is required";
+    }
     if (!formData.designation) {
       newErrors.designation = "Contact Description is required";
     }
@@ -58,6 +63,7 @@ const AddContactInfo = () => {
     const formDataToSend = new FormData();
     formDataToSend.append("name", formData.name);
     formDataToSend.append("designation", formData.designation);
+    formDataToSend.append("language_code", formData.language);
     if (formData.image) {
       formDataToSend.append("image", formData.image);
     }
@@ -75,6 +81,7 @@ const AddContactInfo = () => {
         setFormData({
           name: "",
           designation: "",
+          language: "",
           image: null,
         });
 
@@ -115,6 +122,25 @@ const AddContactInfo = () => {
                     </div>
                   </div>
                   <form onSubmit={handleSubmit}>
+                    <div className="form-group row">
+                      <label className="col-form-label col-md-2">
+                        Select Language <span className="text-danger">*</span>
+                      </label>
+                      <div className="col-md-5">
+                        <select
+                          className={`form-control  ${errors.language ? "is-invalid" : ""
+                            }`}
+                          name="language"
+                          value={formData.language}
+                          onChange={handleChange}
+                        >
+                          <option value="" disabled>Select Language</option>
+                          <option value="en">English</option>
+                          <option value="mr">Marathi</option>
+                        </select>
+                        {errors.language && <div className="invalid-feedback">{errors.language}</div>}
+                      </div>
+                    </div>
                     <div className="form-group row">
                       <label className="col-form-label col-lg-2">
                         Contact Title <span className="text-danger">*</span>
@@ -192,7 +218,7 @@ const AddContactInfo = () => {
         </div>
       </div>
     </>
-    
+
   );
 };
 

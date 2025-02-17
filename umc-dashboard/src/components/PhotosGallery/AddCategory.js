@@ -5,29 +5,46 @@ import { useNavigate } from "react-router-dom";
 
 const AddCategory = () => {
   const [categoryName, setCategoryName] = useState("");
+  const [language, setLanguage] = useState("");
   const navigate = useNavigate();
-  const [error, setError] = useState("")
+  const [errors, setErrors] = useState({ categoryName: "", language: "" });
 
   const handleChange = (e) => {
-    setCategoryName(e.target.value);
-    setError("");
+    const { name, value } = e.target;  
+
+    if (name === "categoryName") setCategoryName(value);
+    if (name === "language") setLanguage(value); 
+
+    setErrors({ categoryName: "", language: "" });
   };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
+    let newErrors = {};
+  
     if (!categoryName.trim()) {
-      setError("Category Name is required.");
+      newErrors.categoryName = "Category Name is required.";
+    }
+  
+    if (!language.trim()) {
+      newErrors.language = "Language Selection is required.";
+    }
+  
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
       return;
     }
-
+  
     try {
-      await api.post("/categories", { categoryName });
+      await api.post("/categories", { categoryName, language_code: language });
       navigate("/photo-gallery");
     } catch (error) {
       console.error("Error submitting category data:", error);
     }
   };
+  
   return (
     <div>
       <div className="page-wrapper">
@@ -55,20 +72,38 @@ const AddCategory = () => {
                   <form onSubmit={handleSubmit}>
                     <div className="form-group row">
                       <label className="col-form-label col-md-2">
+                        Select Language <span className="text-danger">*</span>
+                      </label>
+                      <div className="col-md-4">
+                        <select
+                          className={`form-control form-control-md ${errors.language ? "is-invalid" : ""
+                            }`}
+                          name="language"
+                          value={language}
+                          onChange={handleChange}
+                        >
+                          <option value="" disabled>Select Language</option>
+                          <option value="en">English</option>
+                          <option value="mr">Marathi</option>
+                        </select>
+                        {errors.language && <div className="invalid-feedback">{errors.language}</div>}
+                      </div>
+                    </div>
+                    <div className="form-group row">
+                      <label className="col-form-label col-md-2">
                         Category Name <span className="text-danger">*</span>
                       </label>
                       <div className="col-md-4">
-                       <input
+                        <input
                           type="text"
-                          className={`form-control form-control-md ${
-                            error ? "is-invalid" : ""
-                          }`}
+                          className={`form-control form-control-md ${errors.categoryName ? "is-invalid" : ""
+                            }`}
                           name="categoryName"
                           value={categoryName}
                           onChange={handleChange}
                           placeholder="Enter Category Name"
                         />
-                        {error && <div className="invalid-feedback">{error}</div>}
+                        {errors.categoryName && <div className="invalid-feedback">{errors.categoryName}</div>}
                       </div>
                     </div>
                     <input

@@ -9,8 +9,8 @@ import "glightbox/dist/css/glightbox.min.css";
 const PhotosGallery = () => {
   const [categoryData, setCategoryData] = useState([]);
   const [categoryImageData, setCategoryImageData] = useState([]);
-  const [images, setImages] = useState([]); 
-  const [selectedCategory, setSelectedCategory] = useState(""); 
+  const [images, setImages] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("");
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [modalType, setModalType] = useState("");
@@ -91,7 +91,7 @@ const PhotosGallery = () => {
   const openEditModal = (item, type) => {
     setSelectedItem(item);
     setEditData(
-      type === "category" ? { name: item.name } : { ...item }
+      type === "category" ? { name: item.name, language_code: item.language_code } : { ...item }
     );
     setImagePreview(type === "categoryImage" ? `${baseURL}${item.image_url}` : "");
     setModalType(type);
@@ -111,6 +111,7 @@ const PhotosGallery = () => {
       if (modalType === "category") {
         await api.put(`/categories/${selectedItem.id}`, {
           name: editData.name,
+          language_code: editData.language_code,
         });
         setCategoryImageData(
           categoryImageData.map((item) =>
@@ -355,20 +356,43 @@ const PhotosGallery = () => {
                   </div>
                   <div className="modal-body">
                     {modalType === "category" ? (
-                      <div className="form-group">
-                        <label htmlFor="name">Category Name</label>
-                        <input
-                          className="form-control"
-                          id="name"
-                          value={editData.name}
-                          onChange={(e) =>
-                            setEditData({
-                              ...editData,
-                              name: e.target.value,
-                            })
-                          }
-                        />
-                      </div>
+                      <>
+                        <div className="form-group">
+                          <label htmlFor="language_code">
+                            Select Language
+                          </label>
+
+                          <select
+                            className="form-control"
+                            name="language_code"
+                            value={editData.language_code}
+                            onChange={(e) =>
+                              setEditData({
+                                ...editData,
+                                language_code: e.target.value,
+                              })
+                            }
+                          >
+                            <option value="" disabled>Select Language</option>
+                            <option value="en">English</option>
+                            <option value="mr">Marathi</option>
+                          </select>
+                        </div>
+                        <div className="form-group">
+                          <label htmlFor="name">Category Name</label>
+                          <input
+                            className="form-control"
+                            id="name"
+                            value={editData.name}
+                            onChange={(e) =>
+                              setEditData({
+                                ...editData,
+                                name: e.target.value,
+                              })
+                            }
+                          />
+                        </div>
+                      </>
                     ) : (
                       <>
                         <div className="form-group">
