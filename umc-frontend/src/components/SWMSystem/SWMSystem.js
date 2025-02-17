@@ -5,10 +5,14 @@ import './SWMSystem.css';
 import "../TableCss/TableCss.css"
 import Swal from 'sweetalert2';
 import api, { baseURL } from "../api"
+import { useTranslation } from "react-i18next";
+
 
 const SWMSystem = () => {
     const [swms, setSwms] = useState([]);
     const [bgImage, setBgImage] = useState("");
+        const { i18n, t } = useTranslation();
+    
 
     const fetchHeaderImage = async () => {
         try {
@@ -33,19 +37,18 @@ const SWMSystem = () => {
 
     const fetchSWMS = async () => {
         try {
-            const response = await api.get("/swms");
+            const response = await api.get(`/swms?lang=${i18n.language}`);
             setSwms(response.data)
         } catch (error) {
             console.error("Error fetching swms data", error);
         }
     };
+
     useEffect(() => {
         fetchHeaderImage();
-    }, []);
-    useEffect(() => {
         fetchSWMS();
         window.scrollTo({ top: 0, behavior: 'smooth' });
-    }, []);
+    }, [i18n.language]);
 
     const handleClick = (link, e) => {
         if (link === "#") {
@@ -73,13 +76,13 @@ const SWMSystem = () => {
                 <div className="container-fluid font-location mt-4 mb-2" id="solid-system-css">
                     <nav className="breadcrumb">
                         <Link to="/" className="breadcrumb-item text-decoration-none">
-                            Home
+                        {t('departments.home')}
                         </Link>
-                        <span className="breadcrumb-item active1">Solid Waste Management System</span>
+                        <span className="breadcrumb-item active1">{t('solidWaste.title')}</span>
                     </nav>
                     <h2 className="location-title">
-                        <span className="highlight">Solid Waste</span>
-                        <span className="highlighted-text"> Management System</span>
+                        <span className="highlight">{t('solidWaste.highlight')}</span>
+                        <span className="highlighted-text"> {t('solidWaste.highlight-text')}</span>
                         <hr />
                     </h2>
 
@@ -90,13 +93,13 @@ const SWMSystem = () => {
                                     <thead className="bg-orange text-white">
                                         <tr>
                                             <th className="table-heading-styling" style={{ textAlign: "center" }}>
-                                                Sr. No.
+                                            {t('departments.sno')}
                                             </th>
                                             <th className="table-heading-styling">
-                                                Description
+                                            {t('tourism.description')}
                                             </th>
                                             <th className="table-heading-styling" style={{ textAlign: "center" }}>
-                                                Action
+                                            {t('departments.action')}
                                             </th>
                                         </tr>
                                     </thead>
@@ -151,7 +154,7 @@ const SWMSystem = () => {
                                                                 verticalAlign: "middle",
                                                             }}
                                                         />
-                                                        View PDF
+                                                        {t('departments.view')}
                                                     </Link>
                                                 </td>
                                             </tr>

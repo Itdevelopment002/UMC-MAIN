@@ -154,7 +154,7 @@ const EncroachmentDepartment = () => {
           </nav>
           <h2 className="location-title">
             <span className="highlight">{t('encroachmentDept.highlight')}</span>
-            <span className="highlighted-text"> {t('encroachmentDept.highlight')}</span>
+            <span className="highlighted-text"> {t('encroachmentDept.highlight-text')}</span>
             <hr />
           </h2>
           <div className="row mt-4">

@@ -4,9 +4,13 @@ import "../CommingSoon/CommingSoon.css";
 import "./CustomerSupport.css"
 import comingsoon from '../../assets/newcomingsoon.png'
 import api, { baseURL } from "../api"
+import { useTranslation } from "react-i18next";
+
 
 const CustomerSupport = () => {
     const [bgImage, setBgImage] = useState("");
+    const { i18n, t } = useTranslation();
+
     useEffect(() => {
         fetchHeaderImage();
     }, []);
@@ -48,13 +52,13 @@ const CustomerSupport = () => {
                 <div className="container-fluid font-location mt-2 mb-5" id="deputy-css">
                     <nav className="breadcrumb">
                         <Link to="/" className="breadcrumb-item text-decoration-none">
-                            Home
+                            {t('departments.home')}
                         </Link>
-                        <span className="breadcrumb-item active1">Customer Support</span>
+                        <span className="breadcrumb-item active1">{t('support.title')}</span>
                     </nav>
                     <h2 className="location-title">
-                        <span className="highlight">Customer</span>
-                        <span className="highlighted-text"> Support</span>
+                        <span className="highlight">{t('support.highlight')}</span>
+                        <span className="highlighted-text"> {t('support.highlight-text')}</span>
                         <hr />
                     </h2>
 
@@ -65,7 +69,7 @@ const CustomerSupport = () => {
                             className="coming-soon-gif"
                         />
                         <p className="coming-soon-message">
-                            This page is under development and will be available soon.
+                            {t('commingsoon.text')}
                         </p>
                     </div>
 
