@@ -185,7 +185,7 @@ const AddScreenReader = () => {
                         >
                           <option value="" disabled>Select Availability</option>
                           <option value="Free">Free</option>
-                          <option value="मुक्त">मुक्त</option>
+                          <option value="मुफ़्त">मुफ़्त</option>
                           <option value="Commercial">Commercial</option>
                           <option value="व्यावसायिक">व्यावसायिक</option>
                         </select>

@@ -9,12 +9,19 @@ const convertToMySQLDate = (dateString) => {
 
 
 router.get("/circular-info", (req, res) => {
-  const sql = "SELECT * FROM circulars";
-  db.query(sql, (err, results) => {
-    if (err) {
-      return res.status(500).json({ message: "Database error", error: err });
-    }
-    res.status(200).json(results);
+  const language = req.query.lang;
+  let query;
+  let params = [];
+  if (language) {
+    query = `SELECT * FROM circulars WHERE language_code = ?`;
+    params.push(language);
+  } else {
+    query = "SELECT * FROM circulars";
+  }
+
+  db.query(query, params, (err, results) => {
+    if (err) throw err;
+    res.json(results);
   });
 });
 
@@ -35,11 +42,11 @@ router.get("/circular-info/:id", (req, res) => {
 
 
 router.post("/circular-info", (req, res) => {
-  const { description, number, publishDate, link } = req.body;
+  const { description, number, publishDate, link, language_code } = req.body;
 
   const formattedDate = convertToMySQLDate(publishDate);
 
-  if (!description || !number || !publishDate || !link) {
+  if (!description || !number || !publishDate || !link || !language_code) {
     return res
       .status(400)
       .json({
@@ -48,8 +55,8 @@ router.post("/circular-info", (req, res) => {
   }
 
   const sql =
-    "INSERT INTO circulars (description, number, publish_date, link) VALUES (?, ?, ?, ?)";
-  db.query(sql, [description, number, formattedDate, link], (err, result) => {
+    "INSERT INTO circulars (description, number, publish_date, link, language_code) VALUES (?, ?, ?, ?, ?)";
+  db.query(sql, [description, number, formattedDate, link, language_code], (err, result) => {
     if (err) {
       console.error("Database error:", err);
       return res.status(500).json({ message: "Database error", error: err });
@@ -63,7 +70,7 @@ router.post("/circular-info", (req, res) => {
 
 router.put("/circular-info/:id", (req, res) => {
   const { id } = req.params;
-  const { description, number, publish_date, link } = req.body;
+  const { description, number, publish_date, link, language_code } = req.body;
 
   const formattedDate = publish_date ? convertToMySQLDate(publish_date) : null;
 
@@ -88,6 +95,11 @@ router.put("/circular-info/:id", (req, res) => {
   if (link) {
     updateFields.push("link = ?");
     updateParams.push(link);
+  }
+
+  if (language_code) {
+    updateFields.push("language_code = ?");
+    updateParams.push(language_code);
   }
 
   if (updateFields.length === 0) {

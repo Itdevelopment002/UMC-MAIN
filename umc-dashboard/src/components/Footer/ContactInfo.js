@@ -14,6 +14,7 @@ const ContactInfo = () => {
   const [editData, setEditData] = useState({
     heading: "",
     description: "",
+    language_code: "",
     image: null,
   });
   const [imagePreview, setImagePreview] = useState(null);
@@ -77,6 +78,7 @@ const ContactInfo = () => {
     const formData = new FormData();
     formData.append("heading", editData.heading);
     formData.append("description", editData.description);
+    formData.append("language_code", editData.language_code);
     if (editData.image) {
       formData.append("image", editData.image);
     }
@@ -98,7 +100,7 @@ const ContactInfo = () => {
   const handleCloseDeleteModal = () => setShowDeleteModal(false);
   const handleCloseEditModal = () => {
     setShowEditModal(false);
-    setEditData({ heading: "", description: "", image: null });
+    setEditData({ heading: "", description: "", language_code: "", image: null });
     setImagePreview(null);
   };
 
@@ -333,6 +335,26 @@ const ContactInfo = () => {
               </div>
               <div className="modal-body">
                 <form>
+                  <div className="form-group">
+                    <label>
+                      Select Language
+                    </label>
+
+                    <select
+                      className="form-control"
+                      value={editData.language_code}
+                      onChange={(e) =>
+                        setEditData({
+                          ...editData,
+                          language_code: e.target.value,
+                        })
+                      }
+                    >
+                      <option value="" disabled>Select Language</option>
+                      <option value="en">English</option>
+                      <option value="mr">Marathi</option>
+                    </select>
+                  </div>
                   <div className="form-group">
                     <label>Contact Title</label>
                     <input
