@@ -154,6 +154,7 @@ const ProjectDetails = () => {
         await api.put(`/project-description/${selectedItem.id}`, {
           heading: editData.heading,
           description: editData.description,
+          language_code: editData.language_code,
           subDescriptions: Array.isArray(editData.subDescriptions) ? editData.subDescriptions : [],
         });
 
@@ -161,6 +162,7 @@ const ProjectDetails = () => {
       } else if (modalType === "category") {
         const formData = new FormData();
         formData.append("heading", editData.heading);
+        formData.append("language_code", editData.language_code);
 
         currentImages.forEach((img) => {
           if (!removedImages.includes(img)) {
@@ -579,6 +581,24 @@ const ProjectDetails = () => {
                     {modalType === "category" && (
                       <>
                         <div className="form-group">
+                          <label htmlFor="language_code">
+                            Select Language
+                          </label>
+
+                          <select
+                            className="form-control"
+                            name="language_code"
+                            value={editData.language_code}
+                            onChange={(e) =>
+                              setEditData({ ...editData, language_code: e.target.value })
+                            }
+                          >
+                            <option value="" disabled>Select Language</option>
+                            <option value="en">English</option>
+                            <option value="mr">Marathi</option>
+                          </select>
+                        </div>
+                        <div className="form-group">
                           <label htmlFor="description">Project Heading</label>
                           <input
                             type="text"
@@ -625,6 +645,24 @@ const ProjectDetails = () => {
                     )}
                     {modalType === "description" && (
                       <>
+                        <div className="form-group">
+                          <label htmlFor="language_code">
+                            Select Language
+                          </label>
+
+                          <select
+                            className="form-control"
+                            name="language_code"
+                            value={editData.language_code}
+                            onChange={(e) =>
+                              setEditData({ ...editData, language_code: e.target.value })
+                            }
+                          >
+                            <option value="" disabled>Select Language</option>
+                            <option value="en">English</option>
+                            <option value="mr">Marathi</option>
+                          </select>
+                        </div>
                         <div className="form-group">
                           <label htmlFor="heading">Department Name</label>
                           <select

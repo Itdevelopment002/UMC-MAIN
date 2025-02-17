@@ -43,6 +43,7 @@ const ProactiveDisclosure = () => {
       await api.put(`/proactive-disclosure/${selectedRti.id}`, {
         description: selectedRti.description,
         link: selectedRti.link,
+        language_code: selectedRti.language_code,
       });
       const updatedRti = rti.map((rti) =>
         rti.id === selectedRti.id ? selectedRti : rti
@@ -284,6 +285,22 @@ const ProactiveDisclosure = () => {
                   </div>
                   <div className="modal-body">
                     <form>
+                      <div className="mb-3">
+                        <label className="form-label">
+                          Select Language
+                        </label>
+
+                        <select
+                          className="form-control"
+                          value={selectedRti?.language_code || ""}
+                          onChange={handleEditChange}
+                          name="language_code"
+                        >
+                          <option value="" disabled>Select Language</option>
+                          <option value="en">English</option>
+                          <option value="mr">Marathi</option>
+                        </select>
+                      </div>
                       <div className="mb-3">
                         <label className="form-label">Description</label>
                         <input

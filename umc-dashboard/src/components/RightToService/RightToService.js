@@ -43,6 +43,7 @@ const RightToService = () => {
       await api.put(`/rts/${selectedRts.id}`, {
         heading: selectedRts.heading,
         link: selectedRts.link,
+        language_code: selectedRts.language_code,
       });
       const updatedRts = rts.map((rts) =>
         rts.id === selectedRts.id ? selectedRts : rts
@@ -217,8 +218,8 @@ const RightToService = () => {
                     {currentPage < Math.ceil(rts.length / rtsPerPage) - 2 && (
                       <li
                         className={`page-item ${currentPage === Math.ceil(rts.length / rtsPerPage) - 1
-                            ? "active"
-                            : ""
+                          ? "active"
+                          : ""
                           }`}
                       >
                         <button
@@ -234,8 +235,8 @@ const RightToService = () => {
                     {currentPage < Math.ceil(rts.length / rtsPerPage) - 1 && (
                       <li
                         className={`page-item ${currentPage === Math.ceil(rts.length / rtsPerPage)
-                            ? "active"
-                            : ""
+                          ? "active"
+                          : ""
                           }`}
                       >
                         <button
@@ -250,8 +251,8 @@ const RightToService = () => {
                     )}
                     <li
                       className={`page-item ${currentPage === Math.ceil(rts.length / rtsPerPage)
-                          ? "disabled"
-                          : ""
+                        ? "disabled"
+                        : ""
                         }`}
                     >
                       <button
@@ -284,6 +285,22 @@ const RightToService = () => {
                   </div>
                   <div className="modal-body">
                     <form>
+                      <div className="mb-3">
+                        <label className="form-label">
+                          Select Language
+                        </label>
+
+                        <select
+                          className="form-control"
+                          name="language_code"
+                          value={selectedRts?.language_code || ""}
+                          onChange={handleEditChange}
+                        >
+                          <option value="">Select Language</option>
+                          <option value="en">English</option>
+                          <option value="mr">Marathi</option>
+                        </select>
+                      </div>
                       <div className="mb-3">
                         <label className="form-label">Heading</label>
                         <input

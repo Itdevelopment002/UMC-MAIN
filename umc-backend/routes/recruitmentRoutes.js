@@ -3,19 +3,19 @@ const router = express.Router();
 const db = require("../config/db");
 
 router.post("/recruitment", (req, res) => {
-  const { heading, description, link } = req.body;
+  const { heading, description, link, language_code } = req.body;
 
-  if (!heading || !description || !link) {
+  if (!heading || !description || !link || !language_code) {
     return res
       .status(400)
       .json({
-        message: "Heading, Description and Link are required",
+        message: "Heading, Language code, Description and Link are required",
       });
   }
 
   const sql =
-    "INSERT INTO recruitments (heading, description, link) VALUES (?, ?, ?)";
-  db.query(sql, [heading, description, link], (err, result) => {
+    "INSERT INTO recruitments (heading, description, link, language_code) VALUES (?, ?, ?, ?)";
+  db.query(sql, [heading, description, link, language_code], (err, result) => {
     if (err) {
       console.error("Database error:", err);
       return res.status(500).json({ message: "Database error", error: err });
@@ -61,7 +61,7 @@ router.get("/recruitment/:id", (req, res) => {
 
 router.put("/recruitment/:id", (req, res) => {
   const { id } = req.params;
-  const { heading, description, link } = req.body;
+  const { heading, description, link, language_code } = req.body;
 
   let updateSql = "UPDATE recruitments SET ";
   const updateParams = [];
@@ -80,6 +80,11 @@ router.put("/recruitment/:id", (req, res) => {
   if (link) {
     updateFields.push("link = ?");
     updateParams.push(link);
+  }
+
+  if (language_code) {
+    updateFields.push("language_code = ?");
+    updateParams.push(language_code);
   }
 
   if (updateFields.length === 0) {

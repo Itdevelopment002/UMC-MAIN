@@ -7,6 +7,7 @@ const AddTenders = () => {
   const [heading, setHeading] = useState("");
   const [department, setDepartment] = useState("");
   const [link, setLink] = useState("");
+  const [language, setLanguage] = useState("");
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
 
@@ -26,6 +27,10 @@ const AddTenders = () => {
 
   const validateForm = () => {
     const validationErrors = {};
+
+    if (!language) {
+      validationErrors.language = "Language selection is required";
+    }
 
     if (!heading) {
       validationErrors.heading = "Tender Heading is required.";
@@ -56,10 +61,12 @@ const AddTenders = () => {
         heading: heading,
         department: department,
         link: link,
+        language_code: language,
       });
       setHeading("");
       setDepartment("");
       setLink("");
+      setLanguage("");
       navigate("/tenders-quotations");
     } catch (error) {
       console.error("Error adding tender data:", error);
@@ -91,6 +98,29 @@ const AddTenders = () => {
                     </div>
                   </div>
                   <form onSubmit={handleSubmit}>
+                    <div className="form-group row">
+                      <label className="col-form-label col-md-2">
+                        Select Language <span className="text-danger">*</span>
+                      </label>
+                      <div className="col-md-4">
+                        <select
+                          className={`form-control form-control-md ${errors.language ? "is-invalid" : ""
+                            }`}
+                          value={language}
+                          onChange={(e) => {
+                            setLanguage(e.target.value);
+                            if (errors.language) {
+                              setErrors({ ...errors, language: "" });
+                            }
+                          }}
+                        >
+                          <option value="" disabled>Select Language</option>
+                          <option value="en">English</option>
+                          <option value="mr">Marathi</option>
+                        </select>
+                        {errors.language && <div className="invalid-feedback">{errors.language}</div>}
+                      </div>
+                    </div>
                     <div className="form-group row">
                       <label className="col-form-label col-md-2">
                         Tender Heading <span className="text-danger">*</span>

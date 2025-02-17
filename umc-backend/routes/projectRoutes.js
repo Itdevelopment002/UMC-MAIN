@@ -66,7 +66,7 @@ router.put(
   upload.fields([{ name: "mainIcon" }]),
   async (req, res) => {
     const { id } = req.params;
-    const { heading, description, link } = req.body;
+    const { heading, description, link, language_code } = req.body;
 
     let updateSql = "UPDATE projects SET";
     const updateParams = [];
@@ -86,6 +86,12 @@ router.put(
       updateSql +=
         updateParams.length > 0 ? ", link = ?" : " link = ?";
       updateParams.push(link);
+    }
+
+    if (language_code) {
+      updateSql +=
+        updateParams.length > 0 ? ", language_code = ?" : " language_code = ?";
+      updateParams.push(language_code);
     }
 
     if (req.files["mainIcon"]) {
@@ -147,11 +153,11 @@ router.post(
   "/projects",
   upload.fields([{ name: "mainIcon" }]),
   async (req, res) => {
-    const { heading, description, link } = req.body;
-    if (!heading || !description || !link) {
+    const { heading, description, link, language_code } = req.body;
+    if (!heading || !description || !link || !language_code) {
       return res
         .status(400)
-        .json({ message: "Project heading, description and link are required" });
+        .json({ message: "Project heading, Language code, description and link are required" });
     }
 
     let mainIconPath = null;
@@ -161,11 +167,12 @@ router.post(
     }
 
     const insertSql =
-      "INSERT INTO projects (heading, description, link, main_icon_path) VALUES (?, ?, ?, ?)";
+      "INSERT INTO projects (heading, description, link, language_code, main_icon_path) VALUES (?, ?, ?, ?, ?)";
     const insertParams = [
       heading,
       description,
       link,
+      language_code,
       mainIconPath,
     ];
 

@@ -20,10 +20,10 @@ const upload = multer({
 });
 
 router.post("/categories", (req, res) => {
-  const { categoryName } = req.body;
-  if (!categoryName) return res.status(400).json({ error: "Category name is required" });
+  const { categoryName, language_code } = req.body;
+  if (!categoryName || !language_code) return res.status(400).json({ error: "Category name is required" });
 
-  db.query("INSERT INTO categories (name) VALUES (?)", [categoryName], (err, result) => {
+  db.query("INSERT INTO categories (name, language_code) VALUES (?, ?)", [categoryName, language_code], (err, result) => {
     if (err) return res.status(500).json({ error: err.message });
     res.json({ message: "Category added successfully", id: result.insertId });
   });
@@ -31,11 +31,11 @@ router.post("/categories", (req, res) => {
 
 router.put("/categories/:id", (req, res) => {
   const { id } = req.params;
-  const { name } = req.body;
+  const { name, language_code } = req.body;
 
-  if (!name) return res.status(400).json({ error: "Category name is required" });
+  if (!name || !language_code) return res.status(400).json({ error: "Category name and language code are required" });
 
-  db.query("UPDATE categories SET name = ? WHERE id = ?", [name, id], (err, result) => {
+  db.query("UPDATE categories SET name = ?, language_code = ? WHERE id = ?", [name, language_code, id], (err, result) => {
     if (err) return res.status(500).json({ error: err.message });
     if (result.affectedRows === 0) return res.status(404).json({ error: "Category not found" });
 
@@ -122,7 +122,6 @@ router.delete("/categories/:id", (req, res) => {
 router.delete("/category-images/:id", (req, res) => {
   const { id } = req.params;
 
-  // Get image path before deleting
   db.query("SELECT image_url FROM category_images WHERE id = ?", [id], (err, results) => {
     if (err) return res.status(500).json({ error: err.message });
 
@@ -132,7 +131,6 @@ router.delete("/category-images/:id", (req, res) => {
 
     const imagePath = `.${results[0].image_url}`;
 
-    // Delete image file from uploads directory
     fs.unlink(imagePath, (unlinkErr) => {
       if (unlinkErr) console.error("Failed to delete file:", unlinkErr);
 

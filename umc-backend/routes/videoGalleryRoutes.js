@@ -21,10 +21,10 @@ router.get("/video-categories", (req, res) => {
 
 // Add a new video category
 router.post("/video-categories", (req, res) => {
-    const { categoryName } = req.body;
-    if (!categoryName) return res.status(400).json({ error: "Category name is required" });
+    const { categoryName, language_code } = req.body;
+    if (!categoryName || !language_code) return res.status(400).json({ error: "Category name and language code are required" });
 
-    db.query("INSERT INTO videocategories (name) VALUES (?)", [categoryName], (err, result) => {
+    db.query("INSERT INTO videocategories (name, language_code) VALUES (?, ?)", [categoryName, language_code], (err, result) => {
         if (err) return res.status(500).json({ error: err.message });
         res.json({ message: "Category added successfully", id: result.insertId });
     });
@@ -33,11 +33,11 @@ router.post("/video-categories", (req, res) => {
 // Update a video category
 router.put("/video-categories/:id", (req, res) => {
     const { id } = req.params;
-    const { name } = req.body;
+    const { name, language_code } = req.body;
 
-    if (!name) return res.status(400).json({ error: "Category name is required" });
+    if (!name || !language_code) return res.status(400).json({ error: "Category name and language code are required" });
 
-    db.query("UPDATE videocategories SET name = ? WHERE id = ?", [name, id], (err, result) => {
+    db.query("UPDATE videocategories SET name = ?, language_code = ? WHERE id = ?", [name, language_code, id], (err, result) => {
         if (err) return res.status(500).json({ error: err.message });
         if (result.affectedRows === 0) return res.status(404).json({ error: "Category not found" });
 
