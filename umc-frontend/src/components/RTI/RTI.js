@@ -157,7 +157,7 @@ const RTI = () => {
                                                             </>
                                                         ) : (
                                                             <>
-                                                                Open Link
+                                                                {t('rts.openLink')}
                                                                 <img
                                                                     src={exticon}
                                                                     alt="External Link Icon"
