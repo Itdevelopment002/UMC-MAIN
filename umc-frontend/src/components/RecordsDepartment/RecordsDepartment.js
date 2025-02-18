@@ -71,7 +71,7 @@ const RecordsDepartment = () => {
     return pageNumbers;
   };
 
-  const department_name = (i18n.language === 'en') ? "Records Department" : "रेकॉर्ड विभाग"
+  const department_name = (i18n.language === 'en') ? "Records Department" : "अभिलेखा विभाग"
 
   const fetchBanner = async () => {
     try {
