@@ -318,6 +318,33 @@
     font-size: 16px;
   }
 }
+@media (min-width: 992px) and (max-width: 1104px) {
+  .custom-name {
+    font-size:1rem;
+  }
+
+  .custom-title {
+    font-size: 0.8rem; 
+  }
+  
+  .organization {
+    font-size: 0.8rem;
+  }
+}
+@media (min-width: 1400px) and (max-width: 1450px) {
+  .custom-name {
+    font-size:1.2rem;
+  }
+
+  .custom-title {
+    font-size: 0.9rem;
+  }
+  
+  .organization {
+    font-size: 0.9rem;
+  }
+}
+
 
 @media (min-width: 1025px) {
   .description-container {
