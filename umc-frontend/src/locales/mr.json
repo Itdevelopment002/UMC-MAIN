@@ -471,8 +471,8 @@
         "highlight-text": "विभाग"
     },
     "recordsDept": {
-        "title": "रेकॉर्ड विभाग",
-        "highlight": "रेकॉर्ड",
+        "title": "अभिलेखा विभाग",
+        "highlight": "अभिलेखा",
         "highlight-text": "विभाग"
     },
     "townDept": {
@@ -528,7 +528,11 @@
     "solidWaste": {
         "title": "घनकचरा व्यवस्थापन प्रणाली",
         "highlight": "घनकचरा",
-        "highlight-text": "व्यवस्थापन प्रणाली"
+        "highlight-text": "व्यवस्थापन प्रणाली",
+        "gps": "GPS लाइव्ह ट्रॅकिंग",
+        "garbage": "कचरा वाहन",
+        "click": "लाइव्ह दृश्य पाहण्यासाठी येथे क्लिक करा ",
+        "username": "| वापरकर्ता नाव: user | पासवर्ड: १२३४५६"
     },
     "pressNote": {
         "title": "प्रेस नोट",
@@ -546,5 +550,12 @@
         "title": "माहितीचा अधिकार",
         "highlight": "माहितीचा",
         "highlight-text": "अधिकार"
+    },
+    "upcoming":{
+        "title": "आगामी प्रकल्प",
+        "highlight": "आगामी",
+        "highlight-text": "प्रकल्प",
+        "workdetail": "कामांची माहिती",
+        "noimage": "कोणतीही प्रतिमा उपलब्ध नाही"
     }
 }

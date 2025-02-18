@@ -71,7 +71,7 @@ const Info = () => {
         <div>Loading data...</div>
       ) : (
         <div className="row align-items-center">
-          <div className="col-lg-3 col-md-12 profile-div" data-aos="fade-right">
+          <div className="col-xxl-3 col-xl-4 col-lg-4 col-md-12 profile-div" data-aos="fade-right">
           
             <div className="profile-card">
               <img
@@ -86,7 +86,7 @@ const Info = () => {
             </div>
           </div>
 
-          <div className="col-lg-6 col-md-12 welcome-section" data-aos="fade-down">
+          <div className="col-xxl-6 col-xl-5 col-lg-5 col-md-12 welcome-section" data-aos="fade-down">
             <div className="heading">
               <h1 data-aos="fade-up" className="info-heading1"><span className="info-heading2 fw-bold">{t('home.info-heading2')}</span></h1>
             </div>
@@ -121,7 +121,7 @@ const Info = () => {
 
           </div>
 
-          <div className="col-lg-3 col-md-12" id="info-section" data-aos="fade-top">
+          <div className="col-xxl-3 col-xl-3 col-lg-3 col-md-12" id="info-section" data-aos="fade-top">
             {services.map((service, index) => (
               <Link
                 to={service.link}

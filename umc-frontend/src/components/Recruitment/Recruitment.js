@@ -45,12 +45,16 @@ const Recruitment = () => {
     }
   };
 
-  const contractRecruitment = recruitment.filter(
-    (item) => (item.heading === "Contract Basis Recruitment" || item.heading === "करार तत्त्वावर भरती जाहिरात")
-  );
-  const oldRecruitment = recruitment.filter(
-    (item) => (item.heading === "Old Recruitment" || item.heading === "मागील भरती जाहिरात")
-  );
+const contractRecruitment = recruitment.filter(
+  (item) => 
+    item.heading === "Contract Basis Recruitment"
+);
+
+const oldRecruitment = recruitment.filter(
+  (item) => 
+    item.heading === "Old Recruitment"
+);
+
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });

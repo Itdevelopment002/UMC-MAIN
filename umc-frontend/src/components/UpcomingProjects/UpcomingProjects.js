@@ -219,10 +219,13 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./UpcomingProjects.css";
 import api, { baseURL } from "../api";
+import { useTranslation } from "react-i18next";
+
 
 const UpcomingProjects = () => {
     const [projects, setProjects] = useState([]);
     const [bgImage, setBgImage] = useState("");
+    const { i18n, t } = useTranslation();
 
     const fetchHeaderImage = async () => {
         try {
@@ -244,7 +247,7 @@ const UpcomingProjects = () => {
 
     const fetchProjectCategories = async () => {
         try {
-            const response = await api.get("/project-category");
+            const response = await api.get(`/project-category?lang=${i18n.language}`);
             return response.data;
         } catch (error) {
             console.error("Error fetching project categories:", error);
@@ -254,7 +257,7 @@ const UpcomingProjects = () => {
 
     const fetchProjectDescriptions = async () => {
         try {
-            const response = await api.get("/project-description");
+            const response = await api.get(`/project-description?lang=${i18n.language}`);
             return response.data;
         } catch (error) {
             console.error("Error fetching project descriptions:", error);
@@ -306,7 +309,7 @@ const UpcomingProjects = () => {
         fetchProjects();
         fetchHeaderImage();
         window.scrollTo({ top: 0, behavior: "smooth" });
-    }, []);
+    }, [i18n.language]);
 
     return (
         <>
@@ -318,19 +321,19 @@ const UpcomingProjects = () => {
             ></div>
             <div className="container-fluid font-location mt-4 mb-2" id="project-css">
                 <nav className="breadcrumb">
-                    <Link to="/" className="breadcrumb-item text-decoration-none">Home</Link>
-                    <span className="breadcrumb-item active1">Upcoming Projects</span>
+                    <Link to="/" className="breadcrumb-item text-decoration-none">{t('departments.home')}</Link>
+                    <span className="breadcrumb-item active1">{t('upcoming.title')}</span>
                 </nav>
                 <h2 className="location-title">
-                    <span className="highlight">Upcoming</span>
-                    <span className="highlighted-text"> Projects</span>
+                    <span className="highlight">{t('upcoming.highlight')}</span>
+                    <span className="highlighted-text"> {t('upcoming.highlight-text')}</span>
                 </h2>
                 {projects.map((project, index) => (
                     <div key={index} className="project-section">
                         <h3 className="text-danger mb-4">{project.heading}</h3>
                         <hr />
                         <div className="work-details mb-4">
-                            <h5 className="project-work-style-h5">Work Details:</h5>
+                            <h5 className="project-work-style-h5">{t('upcoming.workdetail')}</h5>
                             <ul className="project-work-style">
                                 {project.descriptions.map((desc, i) => (
                                     <React.Fragment key={i}>
@@ -357,7 +360,7 @@ const UpcomingProjects = () => {
                                     </div>
                                 ))
                             ) : (
-                                <p>No images available</p>
+                                <p>{t('upcoming.noimage')}</p>
                             )}
                         </div>
 
