@@ -14,8 +14,8 @@ const Administration = () => {
     const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
     const currentData = administration.slice(startIndex, startIndex + ITEMS_PER_PAGE);
     const [bgImage, setBgImage] = useState("");
-      const { i18n, t } = useTranslation();
-    
+    const { i18n, t } = useTranslation();
+
 
     const fetchAdministration = async () => {
         try {
@@ -92,7 +92,7 @@ const Administration = () => {
                 className="history-header-image"
                 style={{
                     backgroundImage: `url(${bgImage})`,
-                    
+
                 }}
             ></div>
 
@@ -100,10 +100,10 @@ const Administration = () => {
                 <div className="container-fluid font-location mt-4 mb-5" id="accounts-css">
                     <nav className="breadcrumb">
                         <Link to="/" className="breadcrumb-item text-decoration-none">
-                        {t('corporation.home')}
+                            {t('corporation.home')}
                         </Link>
                         <Link to="#" className="breadcrumb-item text-decoration-none">
-                        {t('corporation.corporation')}
+                            {t('corporation.corporation')}
                         </Link>
                         <span className="breadcrumb-item active1">{t('administration.heading')}</span>
                     </nav>
@@ -147,7 +147,21 @@ const Administration = () => {
                                                         textAlign: "center",
                                                     }}
                                                 >
-                                                    {startIndex + index + 1}
+                                                    {(() => {
+                                                        const language = i18n.language;
+
+                                                        const toMarathiNumbers = (num) => {
+                                                            const marathiDigits = ["०", "१", "२", "३", "४", "५", "६", "७", "८", "९"];
+                                                            return num
+                                                                .toString()
+                                                                .split("")
+                                                                .map((digit) => marathiDigits[parseInt(digit, 10)])
+                                                                .join("");
+                                                        };
+
+                                                        const number = startIndex + index + 1;
+                                                        return language === "mr" ? toMarathiNumbers(number) : number;
+                                                    })()}
                                                 </td>
                                                 <td
                                                     width="55%"
@@ -193,13 +207,13 @@ const Administration = () => {
                             <ul className="pagination custom-pagination">
                                 <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
                                     <button className="page-link" onClick={() => handlePageChange(currentPage - 1)}>
-                                    {t('corporation.previous')}
+                                        {t('corporation.previous')}
                                     </button>
                                 </li>
                                 {renderPageNumbers()}
                                 <li className={`page-item ${currentPage === totalPages ? "disabled" : ""}`}>
                                     <button className="page-link" onClick={() => handlePageChange(currentPage + 1)}>
-                                    {t('corporation.next')}
+                                        {t('corporation.next')}
                                     </button>
                                 </li>
                             </ul>

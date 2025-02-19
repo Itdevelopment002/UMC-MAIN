@@ -5,15 +5,19 @@ import './Policies.css';
 import "../TableCss/TableCss.css"
 import Swal from 'sweetalert2';
 import api, { baseURL } from "../api";
+import { useTranslation } from "react-i18next";
+
 
 
 const Policies = () => {
     const [policiesdata, setPoliciesdata] = useState([]);
     const [bgImage, setBgImage] = useState("");
+        const { i18n, t } = useTranslation();
+    
     useEffect(() => {
         fetchPoliciesData();
         fetchHeaderImage();
-    }, []);
+    }, [i18n.language]);
     const fetchHeaderImage = async () => {
         try {
             const response = await api.get("/banner");
@@ -38,7 +42,7 @@ const Policies = () => {
 
     const fetchPoliciesData = async () => {
         try {
-            const response = await api.get("/policies_data");
+            const response = await api.get(`/policies_data?lang=${i18n.language}`);
             setPoliciesdata(response.data);
         } catch (error) {
             console.error("Error fetching quick links:", error);
@@ -116,10 +120,24 @@ const Policies = () => {
                                                         paddingLeft: "10px",
                                                         paddingRight: "10px",
                                                         color: "#292D32",
-                                                        textAlign: "center"
+                                                        textAlign: "center",
                                                     }}
                                                 >
-                                                    {index + 1}
+                                                    {(() => {
+                                                        const language = i18n.language;
+
+                                                        const toMarathiNumbers = (num) => {
+                                                            const marathiDigits = ["०", "१", "२", "३", "४", "५", "६", "७", "८", "९"];
+                                                            return num
+                                                                .toString()
+                                                                .split("")
+                                                                .map((digit) => marathiDigits[parseInt(digit, 10)])
+                                                                .join("");
+                                                        };
+
+                                                        const number = index + 1;
+                                                        return language === "mr" ? toMarathiNumbers(number) : number;
+                                                    })()}
                                                 </td>
                                                 <td
                                                     style={{

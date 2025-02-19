@@ -296,7 +296,21 @@ const AuditDepartment = () => {
                               textAlign: "center",
                             }}
                           >
-                            {startIndex + index + 1}
+                            {(() => {
+                              const language = i18n.language;
+
+                              const toMarathiNumbers = (num) => {
+                                const marathiDigits = ["०", "१", "२", "३", "४", "५", "६", "७", "८", "९"];
+                                return num
+                                  .toString()
+                                  .split("")
+                                  .map((digit) => marathiDigits[parseInt(digit, 10)])
+                                  .join("");
+                              };
+
+                              const number = startIndex + index + 1;
+                              return language === "mr" ? toMarathiNumbers(number) : number;
+                            })()}
                           </td>
                           <td
                             width="80%"
