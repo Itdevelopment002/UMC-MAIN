@@ -45,12 +45,16 @@ const Recruitment = () => {
     }
   };
 
-  const contractRecruitment = recruitment.filter(
-    (item) => (item.heading === "Contract Basis Recruitment" || item.heading === "करार तत्त्वावर भरती जाहिरात")
-  );
-  const oldRecruitment = recruitment.filter(
-    (item) => (item.heading === "Old Recruitment" || item.heading === "मागील भरती जाहिरात")
-  );
+const contractRecruitment = recruitment.filter(
+  (item) => 
+    item.heading === "Contract Basis Recruitment"
+);
+
+const oldRecruitment = recruitment.filter(
+  (item) => 
+    item.heading === "Old Recruitment"
+);
+
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -133,7 +137,21 @@ const Recruitment = () => {
                             textAlign: "center"
                           }}
                         >
-                          {index + 1}
+                          {(() => {
+    const language = i18n.language;
+
+    const toMarathiNumbers = (num) => {
+      const marathiDigits = ["०", "१", "२", "३", "४", "५", "६", "७", "८", "९"];
+      return num
+        .toString()
+        .split("")
+        .map((digit) => marathiDigits[parseInt(digit, 10)])
+        .join("");
+    };
+
+    const number = index + 1;
+    return language === "mr" ? toMarathiNumbers(number) : number;
+  })()}
                         </td>
                         <td
                           width="70%"
@@ -216,7 +234,21 @@ const Recruitment = () => {
                             textAlign: "center"
                           }}
                         >
-                          {index + 1}
+                          {(() => {
+    const language = i18n.language;
+
+    const toMarathiNumbers = (num) => {
+      const marathiDigits = ["०", "१", "२", "३", "४", "५", "६", "७", "८", "९"];
+      return num
+        .toString()
+        .split("")
+        .map((digit) => marathiDigits[parseInt(digit, 10)])
+        .join("");
+    };
+
+    const number = index + 1;
+    return language === "mr" ? toMarathiNumbers(number) : number;
+  })()}
                         </td>
                         <td
                           width="70%"

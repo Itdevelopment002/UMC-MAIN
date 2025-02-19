@@ -524,7 +524,11 @@
     "solidWaste": {
         "title": "Solid Waste Management System",
         "highlight": "Solid Waste",
-        "highlight-text": "Management System"
+        "highlight-text": "Management System",
+        "gps": "GPS Live Tracking",
+        "garbage": "Garbage Vehicle",
+        "click": "Click Here for Live View",
+        "username": "| Username : user | Password: 123456"
     },
     "pressNote": {
         "title": "Press Note",
@@ -536,13 +540,14 @@
         "title": "Tenders & Quotations",
         "highlight": "Tenders",
         "highlight-text": "& Quotations",
-        "tender": "Quotations / Tenders Details"
+        "tendername": "Quotations / Tenders Details"
     },
     "rti": {
         "title": "Right to Information",
         "highlight": "Right",
         "highlight-text": "to Information"
     },
+
     "administrative": {
         "wings": "Administrative Wings",
         "breadcrumb": "Administrative Structure",
@@ -565,5 +570,13 @@
         "table3_4": "Mr. Vishal Kadam, Assistant Commissioner",
         "table4_1": "Ward Committee No.",
         "table4_2": "Name of Assistant Commissioner Officer"
+
+    "upcoming":{
+        "title": "Upcoming Projects",
+        "highlight": "Upcoming",
+        "highlight-text": "Projects",
+        "workdetail": "Work Details",
+        "noimage": "No images available"
+
     }
 }
