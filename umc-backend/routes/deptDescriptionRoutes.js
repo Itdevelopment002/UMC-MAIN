@@ -11,7 +11,7 @@ router.get("/department-description", (req, res) => {
       d.department, 
       d.description, 
       d.language_code,
-      GROUP_CONCAT(s.sub_description) AS subDescriptions
+      s.sub_description AS subDescriptions
     FROM deptdescription d
     LEFT JOIN dept_subdescription s ON d.id = s.dept_id
   `;
