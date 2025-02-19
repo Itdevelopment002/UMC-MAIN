@@ -11,8 +11,8 @@ import { useTranslation } from "react-i18next";
 const RTI = () => {
     const [rti, setRti] = useState([]);
     const [bgImage, setBgImage] = useState("");
-          const { i18n, t } = useTranslation();
-    
+    const { i18n, t } = useTranslation();
+
 
     const fetchHeaderImage = async () => {
         try {
@@ -74,7 +74,7 @@ const RTI = () => {
                 <div className="container-fluid font-location mt-4 mb-2" id="rti-css">
                     <nav className="breadcrumb">
                         <Link to="/" className="breadcrumb-item text-decoration-none">
-                        {t('departments.home')}
+                            {t('departments.home')}
                         </Link>
                         <span className="breadcrumb-item active1">{t('rti.title')}</span>
                     </nav>
@@ -90,13 +90,13 @@ const RTI = () => {
                                     <thead className="bg-orange text-white">
                                         <tr>
                                             <th className="table-heading-styling" style={{ textAlign: "center" }}>
-                                            {t('departments.sno')}
+                                                {t('departments.sno')}
                                             </th>
                                             <th className="table-heading-styling">
-                                            {t('tourism.description')}
+                                                {t('tourism.description')}
                                             </th>
                                             <th className="table-heading-styling" style={{ textAlign: "center" }}>
-                                            {t('departments.action')}
+                                                {t('departments.action')}
                                             </th>
                                         </tr>
                                     </thead>
@@ -114,20 +114,20 @@ const RTI = () => {
                                                     }}
                                                 >
                                                     {(() => {
-    const language = i18n.language;
+                                                        const language = i18n.language;
 
-    const toMarathiNumbers = (num) => {
-      const marathiDigits = ["०", "१", "२", "३", "४", "५", "६", "७", "८", "९"];
-      return num
-        .toString()
-        .split("")
-        .map((digit) => marathiDigits[parseInt(digit, 10)])
-        .join("");
-    };
+                                                        const toMarathiNumbers = (num) => {
+                                                            const marathiDigits = ["०", "१", "२", "३", "४", "५", "६", "७", "८", "९"];
+                                                            return num
+                                                                .toString()
+                                                                .split("")
+                                                                .map((digit) => marathiDigits[parseInt(digit, 10)])
+                                                                .join("");
+                                                        };
 
-    const number = index + 1;
-    return language === "mr" ? toMarathiNumbers(number) : number;
-  })()}
+                                                        const number = index + 1;
+                                                        return language === "mr" ? toMarathiNumbers(number) : number;
+                                                    })()}
                                                 </td>
                                                 <td
                                                     width="70%"

@@ -94,6 +94,7 @@ import RecordsDepartment from "./components/RecordsDepartment/RecordsDepartment"
 import { useTranslation } from "react-i18next";
 import FireDept from "./components/FireDept/FireDept";
 import AdministrativeStructure from "./components/AdministrativeStructure/AdministrativeStructure";
+import CensusDepartment from "./components/CensusDepartment/CensusDepartment";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -227,6 +228,8 @@ function App() {
             <Route path="/women-and-child-department" element={<WomenChildDevelopment />} />
             <Route path="/records-department" element={<RecordsDepartment />} />
             <Route path="/fire-department" element={<FireDept />} />
+            <Route path="/census-aadhar-center" element={<CensusDepartment />} />
+
 
 
 
@@ -274,6 +277,7 @@ function App() {
             <Route path="/customer-support" element={<CustomerSupport />} />
             <Route path="/proactive-disclosure" element={<ProactiveDisclosure />} />
             <Route path="/sub-rti" element={<SubRti />} />
+            
           </Routes>
           <BottomSlider data-aos="fade-up" />
           <WhatsAppChat data-aos="fade-right" />
