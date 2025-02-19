@@ -71,7 +71,8 @@ const StoreDept = () => {
     return pageNumbers;
   };
 
-  const department_name = (i18n.language === 'en') ? "Store Department" : "स्टोअर विभाग"
+  const department_name = (i18n.language === 'en') ? "Store Department" : "भांडार विभाग"
+
 
   const fetchBanner = async () => {
     try {
