@@ -582,5 +582,22 @@
         "workdetail": "कामांची माहिती",
         "noimage": "कोणतीही प्रतिमा उपलब्ध नाही"
 
+    },
+    "census":{
+        "title": "जनगणना आणि आधार केंद्र",
+        "highlight": "जनगणना आणि",
+        "highlight-text": "आधार केंद्र"
+    },
+    "proactive":{
+        "rti": "आरटीआय",
+        "title": "सक्रिय प्रकटीकरण (कलम ४)",
+        "highlight": "सक्रिय",
+        "highlight-text": "प्रकटीकरण (कलम ४)"
+    },
+    "subrti":{
+        "name": "सक्रिय प्रकटीकरण",
+        "title": "सब RTI",
+        "highlight": "सब",
+        "highlight-text": "RTI"
     }
 }

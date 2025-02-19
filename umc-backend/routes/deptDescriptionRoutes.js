@@ -33,8 +33,6 @@ router.get("/department-description", (req, res) => {
         return res.status(500).json({ error: "Internal Server Error" });
       }
 
-      console.log("API Response:", results);
-
       const processedResults = results.map(item => ({
         ...item,
         subDescriptions: item.subDescriptions ? item.subDescriptions.split("||") : []
