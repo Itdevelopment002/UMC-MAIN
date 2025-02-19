@@ -547,11 +547,36 @@
         "highlight": "Right",
         "highlight-text": "to Information"
     },
+
+    "administrative": {
+        "wings": "Administrative Wings",
+        "breadcrumb": "Administrative Structure",
+        "administrative": "Administrative",
+        "structure": "Structure",
+        "thead1": "Departments entrusted to Additional Commissioners",
+        "thead2": "Departments entrusted to the Deputy Commissioner",
+        "thead3": "Departments assigned to Assistant Commissioner",
+        "thead4": "Assistant Commissioner Ward Committee",
+        "srNo": "Sr. No.",
+        "noData": "No data available",
+        "table1_1": "Additional Commissioner (1)",
+        "table1_2": "Shri. Kishore Gavas, Additional Commissioner (2)",
+        "table2_1": "Dr. Vijay Khedkar Deputy Commissioner",
+        "table2_2": "Shri. Vishakha Motghare Deputy Commissioner",
+        "table2_3": "Shri. Ajay Sable Deputy Commissioner (Property)",
+        "table3_1": "Mr. Ajay Sable, Assistant Commissioner",
+        "table3_2": "Mr. Suninil Londhe, Assistant Commissioner",
+        "table3_3": "Mrs. Mayuri Kadam, Assistant Commissioner",
+        "table3_4": "Mr. Vishal Kadam, Assistant Commissioner",
+        "table4_1": "Ward Committee No.",
+        "table4_2": "Name of Assistant Commissioner Officer"
+
     "upcoming":{
         "title": "Upcoming Projects",
         "highlight": "Upcoming",
         "highlight-text": "Projects",
         "workdetail": "Work Details",
         "noimage": "No images available"
+
     }
 }

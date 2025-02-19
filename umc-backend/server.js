@@ -120,7 +120,10 @@ const proactiveDisclosureRoutes = require('./routes/proactiveDisclosureRoutes');
 const subRtiRoutes = require('./routes/subRtiRoutes');
 const projectDetailsRoutes = require('./routes/projectDetailsRoutes');
 const projectDescriptionRoutes = require('./routes/projectDescriptionRoutes');
-
+const structureTab1Routes = require('./routes/structureTab1Routes');
+const structureTab2Routes = require('./routes/structureTab2Routes');
+const structureTab3Routes = require('./routes/structureTab3Routes');
+const structureTab4Routes = require('./routes/structureTab4Routes');
 
 
 app.use('/api', sliderRoutes);
@@ -235,6 +238,10 @@ app.use('/api', proactiveDisclosureRoutes);
 app.use('/api', subRtiRoutes);
 app.use('/api', projectDetailsRoutes);
 app.use('/api', projectDescriptionRoutes);
+app.use('/api', structureTab1Routes);
+app.use('/api', structureTab2Routes);
+app.use('/api', structureTab3Routes);
+app.use('/api', structureTab4Routes);
 
 
 
