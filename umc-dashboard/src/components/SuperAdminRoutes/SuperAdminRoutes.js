@@ -127,6 +127,11 @@ import AddProjectCategory from "../ProjectDetails/AddProjectCategory";
 import ProjectDetails from "../ProjectDetails/ProjectDetails";
 import AddCommissionerDetails from "../Commissioner/AddCommissionerDetails";
 import AddCommissionerDesc from "../Commissioner/AddCommissionerDesc";
+import AdministrativeStructure from "../AdministrativeStructure/AdministrativeStructure";
+import AddStructureTab1 from "../AdministrativeStructure/AddStructureTab1";
+import AddStructureTab2 from "../AdministrativeStructure/AddStructureTab2";
+import AddStructureTab3 from "../AdministrativeStructure/AddStructureTab3";
+import AddStructureTab4 from "../AdministrativeStructure/AddStructureTab4";
 
 
 function SuperAdminRoutes() {
@@ -295,6 +300,11 @@ function SuperAdminRoutes() {
       <Route path="/project-details" element={<ProjectDetails />} />
       <Route path="/add-project-description" element={<AddProjectDescription />} />
       <Route path="/add-project-category" element={<AddProjectCategory />} />
+      <Route path="/add-structure-tab1" element={<AddStructureTab1 />} />
+      <Route path="/add-structure-tab2" element={<AddStructureTab2 />} />
+      <Route path="/add-structure-tab3" element={<AddStructureTab3 />} />
+      <Route path="/add-structure-tab4" element={<AddStructureTab4 />} />
+      <Route path="/administrative-structure" element={<AdministrativeStructure />} />
       <Route path="*" element={<Navigate to="/home" />} />
     </Routes>
   );

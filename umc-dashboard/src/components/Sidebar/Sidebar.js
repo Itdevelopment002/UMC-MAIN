@@ -256,6 +256,28 @@ const Sidebar = ({ isOpen, closeSidebar, userDepartment }) => {
                     </ul>
                   </li>
                   <li className="submenu">
+                    <Link to="#." onClick={() => toggleSubmenu("administrative-wings")}>
+                      <i className="fa">
+                        <BsFillMenuButtonWideFill />
+                      </i>{" "}
+                      <span>Admin. Wings </span>{" "}
+                      <span
+                        className={`menu-arrow ${openSubmenu === "administrative-wings" ? "rotate" : ""
+                          }`}
+                      ></span>
+                    </Link>
+                    <ul className={openSubmenu === "administrative-wings" ? "open" : ""}>
+                      <li
+                        className={activeItem === "/administrative-structure" ? "active" : ""}
+                        onClick={() => handleItemClick("/administrative-structure")}
+                      >
+                        <Link to="/administrative-structure">
+                          Administrative Structure
+                        </Link>
+                      </li>
+                    </ul>
+                  </li>
+                  <li className="submenu">
                     <Link to="#." onClick={() => toggleSubmenu("corporation")}>
                       <i className="fa">
                         <MdOutlineCorporateFare />
