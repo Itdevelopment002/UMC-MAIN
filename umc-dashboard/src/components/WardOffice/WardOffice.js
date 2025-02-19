@@ -141,13 +141,13 @@ const WardOffice = () => {
                             <td className="text-center">
                               {index + 1 + (currentPage - 1) * wardOfficesPerPage}
                             </td>
-                            <td>{wardOffice.ward_no}</td>
+                            <td>{wardOffice.ward_name}</td>
                             <td>{wardOffice.officer_name}</td>
                             <td>{wardOffice.address}</td>
                             <td>{wardOffice.email}</td>
                             <td>{wardOffice.mobile}</td>
                             <td>{wardOffice.landline}</td>
-                            <td>{wardOffice.ward_name}</td>
+                            <td>{wardOffice.ward_no}</td>
                             <td>{wardOffice.areas}</td>
                             <td style={{ textWrap: "pretty", overflow: "hidden", whiteSpace: "nowrap" }}>
                               {wardOffice.map_url.length > 15 ? `${wardOffice.map_url.slice(0, 30)}...` : wardOffice.map_url}
