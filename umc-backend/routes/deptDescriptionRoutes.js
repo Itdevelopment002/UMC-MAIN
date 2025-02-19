@@ -30,13 +30,14 @@ router.get("/department-description", (req, res) => {
       console.error("Database error:", err);
       return res.status(500).json({ error: "Internal Server Error" });
     }
-
+console.log(processedResults)
     const processedResults = results.map(item => ({
       ...item,
-      subDescriptions: item.subDescriptions ? item.subDescriptions.split(',') : [] // Convert to an array
+      subDescriptions: item.subDescriptions ? item.subDescriptions.split(',') : [] 
     }));
 
     res.json(processedResults);
+
   });
 });
 
