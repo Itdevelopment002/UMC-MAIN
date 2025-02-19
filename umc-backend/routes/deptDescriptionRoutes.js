@@ -3,6 +3,44 @@ const router = express.Router();
 const db = require("../config/db.js");
 
 
+// router.get("/department-description", (req, res) => {
+//   const language = req.query.lang;
+//   let sql = `
+//     SELECT 
+//       d.id, 
+//       d.department, 
+//       d.description, 
+//       d.language_code,
+//       GROUP_CONCAT(s.sub_description) AS subDescriptions
+//     FROM deptdescription d
+//     LEFT JOIN dept_subdescription s ON d.id = s.dept_id
+//   `;
+
+//   const params = [];
+
+//   if (language) {
+//     sql += ` WHERE d.language_code = ?`; 
+//     params.push(language);
+//   }
+
+//   sql += ` GROUP BY d.id, d.department, d.description`;
+
+//   db.query(sql, params, (err, results) => {
+//     if (err) {
+//       console.error("Database error:", err);
+//       return res.status(500).json({ error: "Internal Server Error" });
+//     }
+
+//     const processedResults = results.map(item => ({
+//       ...item,
+//       subDescriptions: item.subDescriptions ? item.subDescriptions.split(',') : [] // Convert to an array
+//     }));
+
+//     res.json(processedResults);
+//   });
+// });
+
+
 router.get("/department-description", (req, res) => {
   const language = req.query.lang;
   let sql = `
@@ -11,7 +49,7 @@ router.get("/department-description", (req, res) => {
       d.department, 
       d.description, 
       d.language_code,
-      GROUP_CONCAT(s.sub_description) AS subDescriptions
+      IFNULL(GROUP_CONCAT(s.sub_description), '') AS subDescriptions
     FROM deptdescription d
     LEFT JOIN dept_subdescription s ON d.id = s.dept_id
   `;
@@ -39,7 +77,6 @@ router.get("/department-description", (req, res) => {
     res.json(processedResults);
   });
 });
-
 
 router.get("/department-description/:id/sub-descriptions", (req, res) => {
   const { id } = req.params;
