@@ -19,7 +19,7 @@ router.get("/department-description", (req, res) => {
   const params = [];
 
   if (language) {
-    sql += ` WHERE d.language_code = ?`; 
+    sql += ` WHERE d.language_code = ?`;
     params.push(language);
   }
 
@@ -30,10 +30,9 @@ router.get("/department-description", (req, res) => {
       console.error("Database error:", err);
       return res.status(500).json({ error: "Internal Server Error" });
     }
-console.log(processedResults)
     const processedResults = results.map(item => ({
       ...item,
-      subDescriptions: item.subDescriptions ? item.subDescriptions.split(',') : [] 
+      subDescriptions: item.subDescriptions ? item.subDescriptions.split(',') : []
     }));
 
     res.json(processedResults);
@@ -67,7 +66,7 @@ router.get("/department-description/:id/sub-descriptions", (req, res) => {
 router.post("/department-description", (req, res) => {
   const { department, description, subDescriptions, language_code } = req.body;
   const sql = "INSERT INTO deptdescription (department, description, language_code) VALUES (?, ?, ?)";
-  
+
   db.query(sql, [department, description, language_code], (err, result) => {
     if (err) throw err;
 
@@ -90,7 +89,7 @@ router.post("/department-description", (req, res) => {
 router.put("/department-description/:id", (req, res) => {
   const { department, description, subDescriptions, language_code } = req.body;
   const sql = "UPDATE deptdescription SET department = ?, description = ?, language_code = ? WHERE id = ?";
-  
+
   db.query(sql, [department, description, language_code, req.params.id], (err, result) => {
     if (err) throw err;
 
