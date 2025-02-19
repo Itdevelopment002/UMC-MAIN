@@ -116,7 +116,21 @@ const SWMSystem = () => {
                                                         textAlign: "center"
                                                     }}
                                                 >
-                                                    {index + 1}
+                                                    {(() => {
+    const language = i18n.language;
+
+    const toMarathiNumbers = (num) => {
+      const marathiDigits = ["०", "१", "२", "३", "४", "५", "६", "७", "८", "९"];
+      return num
+        .toString()
+        .split("")
+        .map((digit) => marathiDigits[parseInt(digit, 10)])
+        .join("");
+    };
+
+    const number = index + 1;
+    return language === "mr" ? toMarathiNumbers(number) : number;
+  })()}
                                                 </td>
                                                 <td
                                                     width="70%"
@@ -168,8 +182,8 @@ const SWMSystem = () => {
                         <div className="col-12 col-xl-9 col-lg-12 col-md-12 col-sm-12">
                             <div className="system-style-div text-start">
                                 <p className="mb-0">
-                                    <span className="span-system1">GPS Live Tracking</span><span className='mx-1 span-system1'>-</span>
-                                    <span className="span-system2"> Garbage Vehicle <Link to="http://maptronicz.in/jsp/login.jsp" target="_blank">Click Here for Live View</Link> | Username : user | Password: 123456</span>
+                                    <span className="span-system1">{t('solidWaste.gps')}</span><span className='mx-1 span-system1'>-</span>
+                                    <span className="span-system2"> {t('solidWaste.garbage')} <Link to="http://maptronicz.in/jsp/login.jsp" target="_blank">{t('solidWaste.click')}</Link> {t('solidWaste.username')}</span>
                                 </p>
                             </div>
                         </div>

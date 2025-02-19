@@ -99,13 +99,13 @@ const ElectedMember = () => {
                                     <thead className="bg-orange text-white">
                                         <tr>
                                             <th className="table-heading-styling" style={{ textAlign: "center" }}>
-                                            {t('departments.sno')}
+                                                {t('departments.sno')}
                                             </th>
                                             <th className="table-heading-styling">
-                                            {t('corporation.name')}
+                                                {t('corporation.name')}
                                             </th>
                                             <th className="table-heading-styling" style={{ textAlign: "center" }}>
-                                            {t('departments.action')}
+                                                {t('departments.action')}
                                             </th>
                                         </tr>
                                     </thead>
@@ -122,7 +122,22 @@ const ElectedMember = () => {
                                                         textAlign: "center"
                                                     }}
                                                 >
-                                                    {index + 1}
+                                                    {(() => {
+
+                                                        const language = i18n.language;
+
+                                                        const toMarathiNumbers = (num) => {
+                                                            const marathiDigits = ["०", "१", "२", "३", "४", "५", "६", "७", "८", "९"];
+                                                            return num
+                                                                .toString()
+                                                                .split("")
+                                                                .map((digit) => marathiDigits[parseInt(digit, 10)])
+                                                                .join("");
+                                                        };
+
+                                                        const number = index + 1;
+                                                        return language === "mr" ? toMarathiNumbers(number) : number;
+                                                    })()}
                                                 </td>
                                                 <td
                                                     width="70%"

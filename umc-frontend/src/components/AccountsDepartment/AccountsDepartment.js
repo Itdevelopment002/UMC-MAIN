@@ -208,7 +208,7 @@ const AccountsDepartment = () => {
                       <div className="dept-text-box">
                         <strong className="dept-label">{t('departments.designation')} :</strong>
 
-                      
+
                         <span className="dept-value">
                           {hod[0]?.designation
                             ? i18n.language === 'en'
@@ -217,7 +217,7 @@ const AccountsDepartment = () => {
                             : ''}
                         </span>
 
-                     
+
                       </div>
                     </div>
                     <div className="dept-item">
@@ -301,7 +301,21 @@ const AccountsDepartment = () => {
                               textAlign: "center",
                             }}
                           >
-                            {startIndex + index + 1}
+                            {(() => {
+                              const language = i18n.language;
+
+                              const toMarathiNumbers = (num) => {
+                                const marathiDigits = ["०", "१", "२", "३", "४", "५", "६", "७", "८", "९"];
+                                return num
+                                  .toString()
+                                  .split("")
+                                  .map((digit) => marathiDigits[parseInt(digit, 10)])
+                                  .join("");
+                              };
+
+                              const number = startIndex + index + 1;
+                              return language === "mr" ? toMarathiNumbers(number) : number;
+                            })()}
                           </td>
                           <td
                             width="80%"
