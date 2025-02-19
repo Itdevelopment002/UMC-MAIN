@@ -88,7 +88,7 @@ const WardOffice = () => {
                                     className={`btn ${selectedWard && selectedWard.id === ward.id ? "active" : ""}`}
                                     onClick={() => handleWardClick(ward)}
                                 >
-                                    {ward.ward_name}
+                                    {ward.ward_no}
                                 </button>
                             ))}
                         </div>
@@ -98,7 +98,7 @@ const WardOffice = () => {
                                 <div className="row">
                                     <div className="col-md-7 ward-card">
                                         <h5 className="ward-title">
-                                            {selectedWard.ward_name.replace(/(\w+)\s(\d+)/, "$1 Office $2")}
+                                            {selectedWard.ward_name}
                                         </h5>
 
                                         <p className="ward-text">
@@ -128,7 +128,7 @@ const WardOffice = () => {
                                                 {/* Check if 'areas' is an array before mapping */}
 
                                                 <tr>
-                                                    <td style={{ textAlign: 'center', height: '100px' }}>{selectedWard.ward_name}</td>
+                                                    <td style={{ textAlign: 'center', height: '100px' }}>{selectedWard.ward_no}</td>
                                                     <td className="areapadding">{selectedWard.areas}</td>
                                                 </tr>
 
