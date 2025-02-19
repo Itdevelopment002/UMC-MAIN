@@ -5,13 +5,14 @@ const db = require("../config/db.js");
 
 router.get("/department-description", (req, res) => {
   const language = req.query.lang;
+  
   let sql = `
     SELECT 
       d.id, 
       d.department, 
       d.description, 
       d.language_code,
-      s.sub_description AS subDescriptions
+      IFNULL(GROUP_CONCAT(s.sub_description ORDER BY s.id SEPARATOR '||'), '') AS subDescriptions
     FROM deptdescription d
     LEFT JOIN dept_subdescription s ON d.id = s.dept_id
   `;
@@ -19,24 +20,28 @@ router.get("/department-description", (req, res) => {
   const params = [];
 
   if (language) {
-    sql += ` WHERE d.language_code = ?`;
+    sql += ` WHERE d.language_code = ?`; 
     params.push(language);
   }
 
-  sql += ` GROUP BY d.id, d.department, d.description`;
+  sql += ` GROUP BY d.id, d.department, d.description, d.language_code`;
 
-  db.query(sql, params, (err, results) => {
-    if (err) {
-      console.error("Database error:", err);
-      return res.status(500).json({ error: "Internal Server Error" });
-    }
-    const processedResults = results.map(item => ({
-      ...item,
-      subDescriptions: item.subDescriptions ? item.subDescriptions.split(',') : []
-    }));
+  db.query("SET SESSION group_concat_max_len = 100000", () => {
+    db.query(sql, params, (err, results) => {
+      if (err) {
+        console.error("Database error:", err);
+        return res.status(500).json({ error: "Internal Server Error" });
+      }
 
-    res.json(processedResults);
+      console.log("API Response:", results);
 
+      const processedResults = results.map(item => ({
+        ...item,
+        subDescriptions: item.subDescriptions ? item.subDescriptions.split("||") : []
+      }));
+
+      res.json(processedResults);
+    });
   });
 });
 
