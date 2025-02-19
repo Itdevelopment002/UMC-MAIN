@@ -93,6 +93,7 @@ import SubRti from "./components/SubRti/SubRti";
 import RecordsDepartment from "./components/RecordsDepartment/RecordsDepartment"
 import { useTranslation } from "react-i18next";
 import FireDept from "./components/FireDept/FireDept";
+import AdministrativeStructure from "./components/AdministrativeStructure/AdministrativeStructure";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -174,6 +175,9 @@ function App() {
             <Route path="/history" element={<History data-aos="zoom-in" />} />
             <Route path="/commissioner" element={<Commissioner data-aos="fade-up" />} />
             <Route path="/tourism" element={<Tourism data-aos="fade-up" />} />
+
+            {/* About UMC */}
+            <Route path="/administrative-structure" element={<AdministrativeStructure data-aos="fade-up" />} />
 
             {/* Corporation */}
             <Route path="/administration" element={<Administration data-aos="fade-right" />} />
