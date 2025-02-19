@@ -46,7 +46,7 @@ const ScreenReader = () => {
         fetchReader();
         fetchHeaderImage();
         window.scrollTo({ top: 0, behavior: 'smooth' });
-    },[i18n.language]);
+    }, [i18n.language]);
 
     return (
         <>
@@ -55,7 +55,7 @@ const ScreenReader = () => {
                 <div className="container-fluid font-location mt-4 mb-2" id="reader-css">
                     <nav className="breadcrumb">
                         <Link to="/" className="breadcrumb-item text-decoration-none">
-                        {t('corporation.home')}
+                            {t('corporation.home')}
                         </Link>
                         <span className="breadcrumb-item active1">{t('reader.title')}</span>
                     </nav>
@@ -80,16 +80,16 @@ const ScreenReader = () => {
                                     <thead className="bg-orange text-white">
                                         <tr>
                                             <th className="table-heading-styling text-center" >
-                                            {t('departments.sno')}
+                                                {t('departments.sno')}
                                             </th>
                                             <th className="table-heading-styling">
-                                            {t('reader.name')}
+                                                {t('reader.name')}
                                             </th>
                                             <th className="table-heading-styling">
-                                            {t('reader.website')}
+                                                {t('reader.website')}
                                             </th>
                                             <th className="table-heading-styling text-center" >
-                                            {t('reader.commercial')}
+                                                {t('reader.commercial')}
                                             </th>
                                         </tr>
                                     </thead>
@@ -103,11 +103,26 @@ const ScreenReader = () => {
                                                         paddingLeft: "10px",
                                                         paddingRight: "10px",
                                                         color: "#292D32",
-                                                        textAlign: "center"
+                                                        textAlign: "center",
                                                     }}
                                                 >
-                                                    {index + 1}
+                                                    {(() => {
+                                                        const language = i18n.language;
+
+                                                        const toMarathiNumbers = (num) => {
+                                                            const marathiDigits = ["०", "१", "२", "३", "४", "५", "६", "७", "८", "९"];
+                                                            return num
+                                                                .toString()
+                                                                .split("")
+                                                                .map((digit) => marathiDigits[parseInt(digit, 10)])
+                                                                .join("");
+                                                        };
+
+                                                        const number = index + 1;
+                                                        return language === "mr" ? toMarathiNumbers(number) : number;
+                                                    })()}
                                                 </td>
+
                                                 <td
                                                     width="35%"
                                                     style={{

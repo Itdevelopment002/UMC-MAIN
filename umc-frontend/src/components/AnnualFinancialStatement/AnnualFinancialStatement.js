@@ -13,8 +13,8 @@ const AnnualFinancialStatement = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [searchTerm, setSearchTerm] = useState("");
     const [bgImage, setBgImage] = useState("");
-      const { i18n, t } = useTranslation();
-    
+    const { i18n, t } = useTranslation();
+
 
     const totalEntries = annualData.length;
     const filteredData = annualData.filter((item) =>
@@ -121,17 +121,17 @@ const AnnualFinancialStatement = () => {
                 className="history-header-image"
                 style={{
                     backgroundImage: `url(${bgImage})`,
-                   
+
                 }}
             ></div>
             <div id="main-content">
                 <div className="container-fluid font-location mt-4 mb-5" id="accounts-css">
                     <nav className="breadcrumb">
                         <Link to="/" className="breadcrumb-item text-decoration-none">
-                        {t('corporation.home')}
+                            {t('corporation.home')}
                         </Link>
                         <Link to="#" className="breadcrumb-item text-decoration-none">
-                        {t('corporation.corporation')}
+                            {t('corporation.corporation')}
                         </Link>
                         <span className="breadcrumb-item active1">{t('financialstatement.heading')}</span>
                     </nav>
@@ -146,7 +146,7 @@ const AnnualFinancialStatement = () => {
                             <div className="d-flex  justify-content-between align-items-center mb-3">
                                 <div className="entries-wrapper">
                                     <label htmlFor="entries" className="entries-label">
-                                    {t('corporation.show')}
+                                        {t('corporation.show')}
                                     </label>
                                     <select
                                         id="entries"
@@ -196,7 +196,21 @@ const AnnualFinancialStatement = () => {
                                         {currentData.map((item, index) => (
                                             <tr key={index}>
                                                 <td className="font-large text-center">
-                                                    {startIndex + index + 1}
+                                                    {(() => {
+                                                        const language = i18n.language;
+
+                                                        const toMarathiNumbers = (num) => {
+                                                            const marathiDigits = ["०", "१", "२", "३", "४", "५", "६", "७", "८", "९"];
+                                                            return num
+                                                                .toString()
+                                                                .split("")
+                                                                .map((digit) => marathiDigits[parseInt(digit, 10)])
+                                                                .join("");
+                                                        };
+
+                                                        const number = startIndex + index + 1;
+                                                        return language === "mr" ? toMarathiNumbers(number) : number;
+                                                    })()}
                                                 </td>
                                                 <td>{item.heading}</td>
                                                 <td
@@ -247,7 +261,7 @@ const AnnualFinancialStatement = () => {
                                                 className="page-link"
                                                 onClick={() => handlePageChange(currentPage + 1)}
                                             >
-                                               {t('departments.next')}
+                                                {t('departments.next')}
                                             </button>
                                         </li>
                                     </ul>
