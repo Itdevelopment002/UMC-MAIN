@@ -578,5 +578,22 @@
         "workdetail": "Work Details",
         "noimage": "No images available"
 
+    },
+    "census":{
+        "title": "Census & Aadhar Center",
+        "highlight": "Census &",
+        "highlight-text": "Aadhar Center"
+    },
+    "proactive":{
+        "rti": "RTI",
+        "title": "Proactive Disclosure (section 4)",
+        "highlight": "Proactive",
+        "highlight-text": "Disclosure (section 4)"
+    },
+    "subrti":{
+        "name": "Proactive Disclosure",
+        "title": "Sub RTI",
+        "highlight": "Sub",
+        "highlight-text": "RTI"
     }
 }
