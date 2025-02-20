@@ -71,7 +71,7 @@ const NulmDepartment = () => {
     return pageNumbers;
   };
 
-  const department_name = (i18n.language === 'en') ? "NULM Department" : "एनयूएलएम विभाग"
+  const department_name = (i18n.language === 'en') ? "NULM Department" : "राष्ट्रीय नागरी उपजीवीका अभियान विभाग"
 
   const fetchBanner = async () => {
     try {

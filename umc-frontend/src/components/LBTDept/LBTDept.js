@@ -71,7 +71,7 @@ const LBTDepartment = () => {
     return pageNumbers;
   };
 
-  const department_name = (i18n.language === 'en') ? "LBT Department" : "एलबीटी विभाग"
+  const department_name = (i18n.language === 'en') ? "LBT Department" : "स्थानिक स्वराज्य संस्था विभाग"
 
   const fetchBanner = async () => {
     try {
