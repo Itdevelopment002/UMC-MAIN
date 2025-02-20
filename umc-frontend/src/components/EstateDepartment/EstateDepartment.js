@@ -71,7 +71,7 @@ const EstateDepartment = () => {
     return pageNumbers;
   };
 
-  const department_name = (i18n.language === 'en') ? "Estate Department": "संपत्ती विभाग"
+  const department_name = (i18n.language === 'en') ? "Estate Department": "मालमत्ता विभाग"
 
   const fetchBanner = async () => {
     try {

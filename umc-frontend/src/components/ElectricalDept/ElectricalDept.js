@@ -72,7 +72,7 @@ const ElectricalEngineeringDepartment = () => {
     return pageNumbers;
   };
 
-  const department_name = (i18n.language === 'en') ? "Electrical Engineering Department": "विद्युत अभियांत्रिकी विभाग"
+  const department_name = (i18n.language === 'en') ? "Electrical Engineering Department": "विद्युत विभाग"
 
   const fetchBanner = async () => {
     try {
