@@ -87,7 +87,7 @@ const PTDept = () => {
                         <div className="col-12 col-xl-9 col-lg-12 col-md-12 col-sm-12">
                             <div className="system-style-div text-start">
                                 <p className="mb-0">
-                                    <span className="span-system1">List of property tax areas of more than one lakh</span>
+                                    <span className="span-system1">{t("propertyTaxDept.text")}</span>
                                 </p>
                             </div>
                         </div>
