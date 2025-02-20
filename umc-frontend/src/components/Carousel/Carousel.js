@@ -16,7 +16,7 @@ const Carousel = () => {
     AOS.init({ duration: 350, delay: 100, once: true });
   }, []);
 
-  const backgroundColors = ["#E0F8F2", "#EEECFF", "#FAEDED"];
+  const backgroundColors = ["#ddecf5", "#E0F8F2", "#EEECFF", "#FAEDED"];
   const [sliders, setSliders] = useState([]);
   const [ministers, setMinisters] = useState([]);
   const { i18n, t } = useTranslation();
@@ -47,23 +47,24 @@ const Carousel = () => {
   return (
     <div className="container-fluid">
       <div className="row home-carousel-section">
-        <div className="col-md-12 col-lg-4 col-xl-4 col-xxl-3 col-12 custom-profile-card1">
-          {ministers.map((minister, index) => (
-            <div
-              key={minister.id}
-              data-aos={index % 2 === 0 ? "fade-right" : "fade-left"}
-            >
-              <ProfileCard
-                name={minister.name}
-                position={minister.designation}
-                image={`${baseURL}/${minister.image_path}`}
-                bgColor={backgroundColors[index % backgroundColors.length]}
-              />
-            </div>
-          ))}
+        <div className="col-md-12 col-lg-12 col-xl-5 col-xxl-3 col-12 custom-profile-card1">
+          <div className="row">
+            {ministers.map((minister, index) => (
+              <div key={minister.id} className="col-12 col-md-6 col-lg-6 col-xl-6 col-xxl-12">
+                <div data-aos={index % 2 === 0 ? "fade-right" : "fade-left"}>
+                  <ProfileCard
+                    name={minister.name}
+                    position={minister.designation}
+                    image={`${baseURL}/${minister.image_path}`}
+                    bgColor={backgroundColors[index % backgroundColors.length]}
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
 
-        <div className="col-md-12 col-lg-8 col-xl-8 col-xxl-9 col-12">
+        <div className="col-md-12 col-lg-12 col-xl-7 col-xxl-9 col-12">
           <Swiper
             modules={[Navigation, Pagination, Autoplay, EffectFade]}
             navigation
@@ -93,7 +94,7 @@ const Carousel = () => {
 const ProfileCard = ({ name, position, image, bgColor }) => {
   return (
     <div className="custom-profile-card" style={{ backgroundColor: bgColor }}>
-      <div className="d-flex align-items-center">
+      <div className="align-items-center custom-flex">
         <img src={image} alt={name} className="me-3 image" />
         <div>
           <h6 className="mb-0 name-color">{name}</h6>
