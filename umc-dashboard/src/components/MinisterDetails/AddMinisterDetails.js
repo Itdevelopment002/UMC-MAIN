@@ -147,7 +147,7 @@ const AddMinisterDetails = () => {
                           type="text"
                           className={`form-control  ${errors.name ? "is-invalid" : ""
                             }`}
-                          placeholder=""
+                          placeholder="Enter Minister Name"
                           name="name"
                           value={formData.name}
                           onChange={handleChange}
@@ -168,7 +168,7 @@ const AddMinisterDetails = () => {
                           type="text"
                           className={`form-control  ${errors.designation ? "is-invalid" : ""
                             }`}
-                          placeholder=""
+                          placeholder="Enter Minister Designation"
                           name="designation"
                           value={formData.designation}
                           onChange={handleChange}
