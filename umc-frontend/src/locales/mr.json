@@ -354,7 +354,7 @@
     "womenDept": {
         "title": "महिला व बाल कल्याण विभाग",
         "highlight": "महिला व बाल",
-        "highlight-text": "विकास विभाग",
+        "highlight-text": "कल्याण विभाग",
         "update": "शेवटचे अद्यतन",
         "previous": "मागचे",
         "next": "पुढे"
@@ -385,7 +385,7 @@
     "electricalDept": {
         "title": "विद्युत विभाग",
         "highlight": "विद्युत",
-        "highlight-text": "अभियांत्रिकी विभाग"
+        "highlight-text": "विभाग"
     },
     "environmentDept": {
         "title": "पर्यावरण विभाग",
@@ -394,7 +394,7 @@
     },
     "estateDept": {
         "title": "मालमत्ता विभाग",
-        "highlight": "संपत्ती",
+        "highlight": "मालमत्ता",
         "highlight-text": "विभाग"
     },
     "gardenDept": {
@@ -410,12 +410,12 @@
     "handicapDept": {
         "title": "दिव्यांग कल्याणकारी विभाग",
         "highlight": "दिव्यांग",
-        "highlight-text": "कल्याणकारी योजना"
+        "highlight-text": "कल्याणकारी विभाग"
     },
     "lbtDept": {
         "title": "स्थानिक स्वराज्य संस्था विभाग",
-        "highlight": "एलबीटी",
-        "highlight-text": "विभाग"
+        "highlight": "स्थानिक",
+        "highlight-text": "स्वराज्य संस्था विभाग"
     },
     "legalDept": {
         "title": "विधी विभाग",
@@ -439,8 +439,8 @@
     },
     "nulmDept": {
         "title": "राष्ट्रीय नागरी उपजीवीका अभियान विभाग",
-        "highlight": "एनयूएलएम",
-        "highlight-text": "विभाग"
+        "highlight": "राष्ट्रीय नागरी",
+        "highlight-text": "उपजीवीका अभियान विभाग"
     },
     "publicHealthDept": {
         "title": "सार्वजनिक आरोग्य विभाग",
