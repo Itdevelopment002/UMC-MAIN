@@ -16,7 +16,6 @@ const TendersQuotations = () => {
     const [bgImage, setBgImage] = useState("");
     const { i18n, t } = useTranslation();
 
-
     const fetchHeaderImage = async () => {
         try {
             const response = await api.get("/banner");
@@ -37,24 +36,15 @@ const TendersQuotations = () => {
         }
     };
 
-    const filteredData = tenders.filter((item) =>
-        item.heading.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.department.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-    const totalPages = Math.ceil(filteredData.length / itemsPerPage);
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const currentData = filteredData.slice(startIndex, startIndex + itemsPerPage);
-
-    const handlePageChange = (pageNumber) => {
-        if (pageNumber >= 1 && pageNumber <= totalPages) {
-            setCurrentPage(pageNumber);
-        }
-    };
-
     const fetchTenders = async () => {
         try {
             const response = await api.get(`/tenders-quotations?lang=${i18n.language}`);
-            setTenders(response.data.reverse());
+            const sortedTenders = response.data.sort((a, b) => {
+                const dateA = a.issue_date ? new Date(a.issue_date) : new Date(0);
+                const dateB = b.issue_date ? new Date(b.issue_date) : new Date(0);
+                return dateB - dateA;
+            });
+            setTenders(sortedTenders);
         } catch (error) {
             console.error("Error fetching tender data", error);
         }
@@ -64,6 +54,21 @@ const TendersQuotations = () => {
         fetchTenders();
         fetchHeaderImage();
     }, [i18n.language]);
+
+    const filteredData = tenders.filter((item) =>
+        item.heading.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.department.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const currentData = filteredData.slice(startIndex, startIndex + itemsPerPage);
+
+    const handlePageChange = (pageNumber) => {
+        if (pageNumber >= 1 && pageNumber <= totalPages) {
+            setCurrentPage(pageNumber);
+        }
+    };
 
     const handleItemsPerPageChange = (e) => {
         setItemsPerPage(parseInt(e.target.value));
@@ -119,7 +124,6 @@ const TendersQuotations = () => {
                 className="history-header-image"
                 style={{
                     backgroundImage: `url(${bgImage})`,
-
                 }}
             ></div>
 
@@ -127,10 +131,10 @@ const TendersQuotations = () => {
                 <div className="container-fluid font-location mt-4 mb-5" id="tender-css">
                     <nav className="breadcrumb">
                         <Link to="/" className="breadcrumb-item text-decoration-none">
-                        {t('departments.home')}
+                            {t('departments.home')}
                         </Link>
                         <Link to="#" className="breadcrumb-item text-decoration-none">
-                        {t('tender.name')}
+                            {t('tender.name')}
                         </Link>
                         <span className="breadcrumb-item active1">{t('tender.title')}</span>
                     </nav>
@@ -143,7 +147,7 @@ const TendersQuotations = () => {
                     <div className="d-flex justify-content-between align-items-center mb-3">
                         <div className="entries-wrapper">
                             <label htmlFor="entries" className="entries-label">
-                            {t('corporation.show')}
+                                {t('corporation.show')}
                             </label>
                             <select
                                 id="entries"
@@ -232,7 +236,7 @@ const TendersQuotations = () => {
                                                                 verticalAlign: "middle",
                                                             }}
                                                         />
-                                                       {t('departments.view')}
+                                                        {t('departments.view')}
                                                     </Link>
                                                 </td>
                                             </tr>
@@ -249,7 +253,7 @@ const TendersQuotations = () => {
                                         className="page-link"
                                         onClick={() => handlePageChange(currentPage - 1)}
                                     >
-                                      {t('departments.previous')}
+                                        {t('departments.previous')}
                                     </button>
                                 </li>
                                 {renderPageNumbers()}
@@ -264,7 +268,6 @@ const TendersQuotations = () => {
                             </ul>
                         </nav>
                     </div>
-
                 </div>
             </div>
         </>
