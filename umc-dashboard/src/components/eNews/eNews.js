@@ -21,7 +21,7 @@ const ENews = () => {
     const fetchEnews = async () => {
         try {
             const response = await api.get("/enews_data");
-            setEnewsList(response.data);
+            setEnewsList(response.data.reverse());
         } catch (error) {
             console.error("Error fetching e-news:", error);
             toast.error("Failed to fetch e-news!");

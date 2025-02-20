@@ -11,14 +11,13 @@ const AddMainMenu = () => {
   const [menuItems, setMenuItems] = useState(initialMenuItems);
   const [formErrors, setFormErrors] = useState({});
   const navigate = useNavigate();
-  const [language, setLanguage] = useState("");
 
   const validateForm = () => {
     const errors = {};
     menuItems.forEach((item, index) => {
       const itemErrors = {};
       if (!item.language_code.trim()) {
-        itemErrors.language_code ="Language selection is required";
+        itemErrors.language_code = "Language selection is required";
       }
       if (!item.mainMenu.trim()) {
         itemErrors.mainMenu = "Main Menu name is required.";
@@ -70,7 +69,7 @@ const AddMainMenu = () => {
     }
 
     const newMenuItems = [...menuItems];
-    newMenuItems[index].subMenus.push({ subMenu: "", subLink: "",language_code: "" });
+    newMenuItems[index].subMenus.push({ subMenu: "", subLink: "", language_code: "" });
     newMenuItems[index].mainMenuLink = "#";
     newMenuItems[index].isDisabled = true;
 
@@ -133,34 +132,33 @@ const AddMainMenu = () => {
                     {menuItems.map((item, index) => (
                       <div key={index}>
                         <div className="form-group row">
-                        <label className="col-form-label col-md-2">
-                          Select Language <span className="text-danger">*</span>
-                        </label>
-                        <div className="col-md-4">
-                          <select
-                            className={`form-control form-control-md m-t-10${
-                              formErrors[index]?.language_code ? "is-invalid" : ""
-                            }`}
-                            value={item.language_code}
-                            onChange={(e) =>
-                              handleInputChange(
-                                index,
-                                "language_code",
-                                e.target.value
-                              )
-                            }
-                          >
-                            <option value="">Select Language</option>
-                            <option value="en">English</option>
-                            <option value="mr">Marathi</option>
-                          </select>
-                          {formErrors[index]?.language_code && (
-                              <span className="text-danger">
+                          <label className="col-form-label col-md-2">
+                            Select Language <span className="text-danger">*</span>
+                          </label>
+                          <div className="col-md-4">
+                            <select
+                              className={`form-control form-control-md m-t-10${formErrors[index]?.language_code ? "is-invalid" : ""
+                                }`}
+                              value={item.language_code}
+                              onChange={(e) =>
+                                handleInputChange(
+                                  index,
+                                  "language_code",
+                                  e.target.value
+                                )
+                              }
+                            >
+                              <option value="">Select Language</option>
+                              <option value="en">English</option>
+                              <option value="mr">Marathi</option>
+                            </select>
+                            {formErrors[index]?.language_code && (
+                              <small className="text-danger">
                                 {formErrors[index].language_code}
-                              </span>
+                              </small>
                             )}
+                          </div>
                         </div>
-                      </div>
                         <div className="form-group row">
                           <label className="col-form-label col-md-2 m-t-10">
                             Main Menu <span className="text-danger">*</span>
@@ -169,9 +167,8 @@ const AddMainMenu = () => {
                             <input
                               type="text"
                               placeholder="Enter Main menu name"
-                              className={`form-control form-control-md m-t-10${
-                                formErrors[index]?.mainMenu ? "is-invalid" : ""
-                              }`}
+                              className={`form-control form-control-md m-t-10${formErrors[index]?.mainMenu ? "is-invalid" : ""
+                                }`}
                               value={item.mainMenu}
                               onChange={(e) =>
                                 handleInputChange(
@@ -182,20 +179,19 @@ const AddMainMenu = () => {
                               }
                             />
                             {formErrors[index]?.mainMenu && (
-                              <span className="text-danger">
+                              <small className="text-danger">
                                 {formErrors[index].mainMenu}
-                              </span>
+                              </small>
                             )}
                           </div>
                           <div className="col-md-3">
                             <input
                               type="text"
                               placeholder="Enter Main menu link"
-                              className={`form-control form-control-md m-t-10${
-                                formErrors[index]?.mainMenuLink
+                              className={`form-control form-control-md m-t-10${formErrors[index]?.mainMenuLink
                                   ? "is-invalid"
                                   : ""
-                              }`}
+                                }`}
                               value={item.mainMenuLink}
                               onChange={(e) =>
                                 handleInputChange(
@@ -207,9 +203,9 @@ const AddMainMenu = () => {
                               disabled={item.isDisabled}
                             />
                             {formErrors[index]?.mainMenuLink && (
-                              <span className="text-danger">
+                              <small className="text-danger">
                                 {formErrors[index].mainMenuLink}
-                              </span>
+                              </small>
                             )}
                           </div>
                         </div>
@@ -222,11 +218,10 @@ const AddMainMenu = () => {
                               <input
                                 type="text"
                                 placeholder="Enter Sub menu name"
-                                className={`form-control m-t-10 ${
-                                  formErrors[index]?.subMenus[subIndex]?.subMenu
+                                className={`form-control m-t-10 ${formErrors[index]?.subMenus[subIndex]?.subMenu
                                     ? "is-invalid"
                                     : ""
-                                }`}
+                                  }`}
                                 value={subMenu.subMenu}
                                 onChange={(e) =>
                                   handleSubMenuChange(
@@ -239,20 +234,19 @@ const AddMainMenu = () => {
                               />
                               {formErrors[index]?.subMenus?.[subIndex]
                                 ?.subMenu && (
-                                <span className="text-danger">
-                                  {formErrors[index].subMenus[subIndex].subMenu}
-                                </span>
-                              )}
+                                  <small className="text-danger">
+                                    {formErrors[index].subMenus[subIndex].subMenu}
+                                  </small>
+                                )}
                             </div>
                             <div className="col-md-3">
                               <input
                                 type="text"
                                 placeholder="Enter Sub menu link"
-                                className={`form-control m-t-10 ${
-                                  formErrors[index]?.subMenus[subIndex]?.subLink
+                                className={`form-control m-t-10 ${formErrors[index]?.subMenus[subIndex]?.subLink
                                     ? "is-invalid"
                                     : ""
-                                }`}
+                                  }`}
                                 value={subMenu.subLink}
                                 onChange={(e) =>
                                   handleSubMenuChange(
@@ -265,10 +259,10 @@ const AddMainMenu = () => {
                               />
                               {formErrors[index]?.subMenus?.[subIndex]
                                 ?.subLink && (
-                                <span className="text-danger">
-                                  {formErrors[index].subMenus[subIndex].subLink}
-                                </span>
-                              )}
+                                  <small className="text-danger">
+                                    {formErrors[index].subMenus[subIndex].subLink}
+                                  </small>
+                                )}
                             </div>
                             <div className="col-md-1">
                               <button
@@ -289,7 +283,7 @@ const AddMainMenu = () => {
                           <div className="col-md-4">
                             <button
                               type="button"
-                              className="btn btn-success"
+                              className="btn btn-success btn-sm"
                               onClick={() => handleAddMoreSubMenu(index)}
                               disabled={
                                 !item.mainMenu.trim() ||

@@ -1,8 +1,7 @@
-import "./i18n"; // Ensure this is imported once
+import "./i18n";
 import "./App.css";
 import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Route, Routes, useParams, Navigate, useLocation } from "react-router-dom";
-
 import AOS from "aos";
 import "aos/dist/aos.css";
 import Home from "./components/Home/Home";
@@ -277,7 +276,7 @@ function App() {
             <Route path="/customer-support" element={<CustomerSupport />} />
             <Route path="/proactive-disclosure" element={<ProactiveDisclosure />} />
             <Route path="/sub-rti" element={<SubRti />} />
-            
+
           </Routes>
           <BottomSlider data-aos="fade-up" />
           <WhatsAppChat data-aos="fade-right" />
