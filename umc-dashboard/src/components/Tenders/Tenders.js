@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import api from "../api";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Flatpickr from "react-flatpickr";
+import "flatpickr/dist/themes/material_blue.css";
 
 const Tenders = () => {
   const [tender, setTender] = useState([]);
@@ -31,8 +33,12 @@ const Tenders = () => {
   const fetchDepartments = async () => {
     try {
       const response = await api.get("/department-info");
-      const sortedData = response.data.sort((a, b) => a.heading.localeCompare(b.heading));
-      setDepartments(sortedData);
+      const sortedTenders = response.data.sort((a, b) => {
+        const dateA = a.issue_date ? new Date(a.issue_date) : new Date(0);
+        const dateB = b.issue_date ? new Date(b.issue_date) : new Date(0);
+        return dateB - dateA;
+      });
+      setDepartments(sortedTenders);
     } catch (error) {
       console.error("Error fetching departments:", error);
     }
@@ -51,11 +57,15 @@ const Tenders = () => {
   };
 
   const handleEditSave = async () => {
+    const formattedIssueDate = selectedTender.issue_date
+      ? formatDate(selectedTender.issue_date)
+      : "";
     try {
       await api.put(`/tenders-quotations/${selectedTender.id}`, {
         heading: selectedTender.heading,
         department: selectedTender.department,
         link: selectedTender.link,
+        issue_date: formattedIssueDate,
         language_code: selectedTender.language_code,
       });
       const updatedTender = tender.map((tender) =>
@@ -88,6 +98,14 @@ const Tenders = () => {
   const indexOfLastTender = currentPage * tenderPerPage;
   const indexOfFirstTender = indexOfLastTender - tenderPerPage;
   const currentTender = tender.slice(indexOfFirstTender, indexOfLastTender);
+
+  const formatDate = (date) => {
+    const d = new Date(date);
+    const day = String(d.getDate()).padStart(2, "0");
+    const month = String(d.getMonth() + 1).padStart(2, "0");
+    const year = d.getFullYear();
+    return `${day}-${month}-${year}`;
+  };
 
   return (
     <div>
@@ -124,7 +142,7 @@ const Tenders = () => {
                     <table className="table table-bordered m-b-0">
                       <thead>
                         <tr>
-                          <th width="10%" className="text-center">Sr. No.</th>
+                          <th width="10%" className="text-center">Issue Date</th>
                           <th>Tender Heading</th>
                           <th width="25%">Department Name</th>
                           <th>Tender Link</th>
@@ -136,7 +154,13 @@ const Tenders = () => {
                           currentTender.map((tender, index) => (
                             <tr key={tender.id}>
                               <td className="text-center">
-                                {index + 1 + (currentPage - 1) * tenderPerPage}
+                                {new Date(tender.issue_date)
+                                  .toLocaleDateString("en-GB", {
+                                    day: "2-digit",
+                                    month: "2-digit",
+                                    year: "numeric",
+                                  })
+                                  .replace(/\//g, "-")}
                               </td>
                               <td>{tender.heading}</td>
                               <td>{tender.department}</td>
@@ -353,6 +377,20 @@ const Tenders = () => {
                           name="link"
                           value={selectedTender?.link || ""}
                           onChange={handleEditChange}
+                        />
+                      </div>
+                      <div className="mb-3">
+                        <label className="form-label">Issue Date</label>
+                        <Flatpickr
+                          value={selectedTender?.issue_date || ""}
+                          onChange={(date) =>
+                            setSelectedTender({
+                              ...selectedTender,
+                              issue_date: date[0],
+                            })
+                          }
+                          className="form-control"
+                          options={{ dateFormat: "d-m-Y" }}
                         />
                       </div>
                     </form>

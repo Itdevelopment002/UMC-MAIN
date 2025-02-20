@@ -157,13 +157,13 @@ const Agenda = () => {
                                             <th className="table-heading-styling">
                                                 {t('corporation.deptname')}
                                             </th>
-                                            <th className="table-heading-styling">
+                                            <th className="table-heading-styling" style={{ textAlign: "center" }}>
                                                 {t('corporation.agendano')}
                                             </th>
-                                            <th className="table-heading-styling">
+                                            <th className="table-heading-styling" style={{ textAlign: "center" }}>
                                                 {t('corporation.schedule')}
                                             </th>
-                                            <th className="table-heading-styling">
+                                            <th className="table-heading-styling" style={{ textAlign: "center" }}>
                                                 {t('corporation.adjournment')}
                                             </th>
                                             <th className="table-heading-styling" style={{ textAlign: "center" }}>
@@ -216,6 +216,7 @@ const Agenda = () => {
                                                         paddingLeft: "10px",
                                                         paddingRight: "10px",
                                                         color: "#292D32",
+                                                        textAlign: "center",
                                                     }}
                                                 >
                                                     {item.Agenda_No_Date}
@@ -226,9 +227,16 @@ const Agenda = () => {
                                                         paddingLeft: "10px",
                                                         paddingRight: "10px",
                                                         color: "#292D32",
+                                                        textAlign: "center",
                                                     }}
                                                 >
-                                                    {new Date(item.Schedule_Date_of_Meeting).toLocaleDateString('en-CA')}
+                                                    {new Date(item.Schedule_Date_of_Meeting)
+                                                        .toLocaleDateString("en-GB", {
+                                                            day: "2-digit",
+                                                            month: "2-digit",
+                                                            year: "numeric",
+                                                        })
+                                                        .replace(/\//g, "-")}
                                                 </td>
                                                 <td
                                                     width="20%"
@@ -236,6 +244,7 @@ const Agenda = () => {
                                                         paddingLeft: "10px",
                                                         paddingRight: "10px",
                                                         color: "#292D32",
+                                                        textAlign: "center",
                                                     }}
                                                 >
                                                     {item.Adjournment_Notice}
