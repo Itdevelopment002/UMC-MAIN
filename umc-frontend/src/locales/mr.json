@@ -363,7 +363,9 @@
         "department": "विभाग",
         "propertyTaxDepartment": "मालमत्ता कर विभाग",
         "property": "मालमत्ता",
-        "taxDepartment": "कर विभाग"
+        "taxDepartment": "कर विभाग",
+        "text":"एक लाखाहून अधिक मालमत्ता कर क्षेत्रांची यादी"
+
     },
     "diasterDept": {
         "title": "आपत्ती व्यवस्थापन",

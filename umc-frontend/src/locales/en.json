@@ -359,7 +359,8 @@
         "department": "Department",
         "propertyTaxDepartment": "Property Tax Department",
         "property": "Property",
-        "taxDepartment": "Tax Department"
+        "taxDepartment": "Tax Department",
+        "text":"List of property tax areas of more than one lakh"
     },
     "diasterDept": {
         "title": "Disaster Management",
