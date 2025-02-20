@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./AdministrativeStructure.css";
 import api, { baseURL } from "../api"
-import pdficon from '../../assets/images/Departments/document 1.png';
-import Swal from 'sweetalert2';
+import "../TableCss/TableCss.css";
 import { useTranslation } from "react-i18next";
 
 const AdministrativeStructure = () => {
@@ -93,7 +92,7 @@ const AdministrativeStructure = () => {
       ></div>
 
       <div id="main-content">
-        <div className="container-fluid font-location mt-4 mb-5" id="rec-css">
+        <div className="container-fluid font-location mt-4 mb-5" id="administrative-css">
           <nav className="breadcrumb">
             <Link to="/" className="breadcrumb-item text-decoration-none">
               {t("breadcrumbHome")}
@@ -114,12 +113,12 @@ const AdministrativeStructure = () => {
                 <div className="col-12 col-xl-6 col-lg-6 col-md-12 col-sm-12">
                   <div className="system-style-div text-start">
                     <p className="mb-0">
-                      <span className="span-system1">{t("administrative.thead1")}</span>
+                      <span>{t("administrative.thead1")}</span>
                     </p>
                   </div>
                 </div>
               </div>
-              <div className="col-12 col-xl-9 col-lg-9 col-md-12 col-sm-12">
+              <div className="col-12">
                 <div className="circular-wrapper">
                   <table className="table table-bordered table-responsive shadow mt-4">
                     <thead className="bg-orange text-white">
@@ -198,12 +197,12 @@ const AdministrativeStructure = () => {
                 <div className="col-12 col-xl-6 col-lg-6 col-md-12 col-sm-12">
                   <div className="system-style-div text-start">
                     <p className="mb-0">
-                      <span className="span-system1">{t("administrative.thead2")}</span>
+                      <span>{t("administrative.thead2")}</span>
                     </p>
                   </div>
                 </div>
               </div>
-              <div className="col-12 col-xl-9 col-lg-9 col-md-12 col-sm-12">
+              <div className="col-12">
                 <div className="circular-wrapper">
                   <table className="table table-bordered table-responsive shadow mt-4">
                     <thead className="bg-orange text-white">
@@ -294,7 +293,7 @@ const AdministrativeStructure = () => {
                 <div className="col-12 col-xl-6 col-lg-6 col-md-12 col-sm-12">
                   <div className="system-style-div text-start">
                     <p className="mb-0">
-                      <span className="span-system1">{t("administrative.thead3")}</span>
+                      <span>{t("administrative.thead3")}</span>
                     </p>
                   </div>
                 </div>
@@ -402,12 +401,12 @@ const AdministrativeStructure = () => {
                 <div className="col-12 col-xl-6 col-lg-6 col-md-12 col-sm-12">
                   <div className="system-style-div text-start">
                     <p className="mb-0">
-                      <span className="span-system1">{t("administrative.thead4")}</span>
+                      <span>{t("administrative.thead4")}</span>
                     </p>
                   </div>
                 </div>
               </div>
-              <div className="col-12 col-xl-6 col-lg-6 col-md-12 col-sm-12">
+              <div className="col-12">
                 <div className="circular-wrapper">
                   <table className="table table-bordered table-responsive shadow mt-4">
                     <thead className="bg-orange text-white">

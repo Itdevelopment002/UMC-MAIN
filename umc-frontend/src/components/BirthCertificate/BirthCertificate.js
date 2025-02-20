@@ -37,7 +37,6 @@ const BirthCertificate = () => {
     setActiveTab(tab);
   };
 
-  // Initialize tabData with translated strings
   const initializeTabData = () => [
     {
       id: "#property-tax-payment",
@@ -73,17 +72,15 @@ const BirthCertificate = () => {
     },
   ];
 
-  // Use a state to store tabData
   const [tabData, setTabData] = useState(initializeTabData());
 
-  // Re-initialize tabData whenever the language changes
   useEffect(() => {
-    setTabData(initializeTabData()); // Update tabData when language changes
-  }, [i18n.language]); // Dependency on i18n.language to trigger re-render
+    setTabData(initializeTabData()); 
+  }, [i18n.language]); 
 
   const fetchServices = async () => {
     try {
-      const response = await api.get("/online-services-home");
+      const response = await api.get(`/online-services-home?lang=${i18n.language}`);
       const serviceData = response.data;
       const updatedTabData = tabData.map((tab) => {
         const matchingService = serviceData.find(
