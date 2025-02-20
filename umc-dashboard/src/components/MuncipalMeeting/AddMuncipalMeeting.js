@@ -143,7 +143,7 @@ const AddMuncipalMeeting = () => {
                           <option value="Standing Committee">Standing Committee</option>
                           <option value="Tree Committee">Tree Committee</option>
                           <option value="Transport Committee">Transport Committee</option>
-                          <option value="सर्वसाधारण सभेचा">सर्वसाधारण सभेचा</option>
+                          <option value="सर्वसाधारण सभा">सर्वसाधारण सभा</option>
                           <option value="विशेष सर्वसाधारण मंडळाचा">विशेष सर्वसाधारण मंडळाचा</option>
                           <option value="स्थायी समितीचा">स्थायी समितीचा</option>
                           <option value="वृक्ष समितीचा">वृक्ष समितीचा</option>
