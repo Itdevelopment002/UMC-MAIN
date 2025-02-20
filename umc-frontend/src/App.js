@@ -229,9 +229,6 @@ function App() {
             <Route path="/fire-department" element={<FireDept />} />
             <Route path="/census-aadhar-center" element={<CensusDepartment />} />
 
-
-
-
             {/* Circular */}
             <Route path="/circular" element={<Circular data-aos="flip-down" />} />
 
@@ -279,7 +276,7 @@ function App() {
 
           </Routes>
           <BottomSlider data-aos="fade-up" />
-          <WhatsAppChat data-aos="fade-right" />
+          {/* <WhatsAppChat data-aos="fade-right" /> */}
           <Footer data-aos="fade-down" />
         </>
       )}

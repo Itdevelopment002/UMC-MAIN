@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import Flatpickr from "react-flatpickr";
+import "flatpickr/dist/themes/material_blue.css";
 import api from "../api";
 
 const AddTenders = () => {
   const [departments, setDepartments] = useState([]);
   const [heading, setHeading] = useState("");
   const [department, setDepartment] = useState("");
+  const [issueDate, setIssueDate] = useState("");
   const [link, setLink] = useState("");
   const [language, setLanguage] = useState("");
   const [errors, setErrors] = useState({});
@@ -21,6 +24,14 @@ const AddTenders = () => {
     }
   };
 
+  const formatDate = (date) => {
+    const d = new Date(date);
+    const day = String(d.getDate()).padStart(2, "0");
+    const month = String(d.getMonth() + 1).padStart(2, "0");
+    const year = d.getFullYear();
+    return `${day}-${month}-${year}`;
+  };
+
   useEffect(() => {
     fetchDepartments();
   }, []);
@@ -34,6 +45,10 @@ const AddTenders = () => {
 
     if (!heading) {
       validationErrors.heading = "Tender Heading is required.";
+    }
+
+    if (!issueDate) {
+      validationErrors.issueDate = "Issue Date is required.";
     }
 
     if (!department) {
@@ -55,16 +70,20 @@ const AddTenders = () => {
       return;
     }
 
+    const formattedDate = formatDate(issueDate);
+
     try {
       //eslint-disable-next-line
       const response = await api.post("/tenders-quotations", {
         heading: heading,
         department: department,
+        issue_date: formattedDate,
         link: link,
         language_code: language,
       });
       setHeading("");
       setDepartment("");
+      setIssueDate("");
       setLink("");
       setLanguage("");
       navigate("/tenders-quotations");
@@ -196,6 +215,40 @@ const AddTenders = () => {
                           <div className="invalid-feedback">
                             {errors.link}
                           </div>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="form-group row">
+                      <label className="col-form-label col-md-2">
+                        Issue Date <span className="text-danger">*</span>
+                      </label>
+                      <div className="cal-icon col-md-4">
+                        <Flatpickr
+                          id="startDatePicker"
+                          className={`form-control ${errors.issueDate ? "is-invalid" : ""
+                            }`}
+                          placeholder="Select Issue Date"
+                          value={issueDate}
+                          onChange={(date) => {
+                            setIssueDate(date[0]);
+                            if (issueDate) {
+                              setErrors({ ...errors, issueDate: "" });
+                            }
+                          }}
+                          options={{
+                            dateFormat: "d-m-Y",
+                            monthSelectorType: "dropdown",
+                            prevArrow:
+                              '<svg><path d="M10 5L5 10L10 15"></path></svg>',
+                            nextArrow:
+                              '<svg><path d="M5 5L10 10L5 15"></path></svg>',
+                          }}
+                        />
+                        {errors.issueDate && (
+                          <small className="invalid-feedback">
+                            {errors.issueDate}
+                          </small>
                         )}
                       </div>
                     </div>

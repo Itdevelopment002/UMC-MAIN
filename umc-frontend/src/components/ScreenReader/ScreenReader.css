@@ -2,12 +2,13 @@
     display: flex;
     background-color: #F3F3F3;
     align-items: center;
+    font-weight: 700;
+    font-size: 16px;
     padding: 10px 20px;
-}
+  }
 
 #reader-css .span-system1 {
     font-family: 'Roboto';
-    font-weight: 500;
     font-size: 16px;
 }
 

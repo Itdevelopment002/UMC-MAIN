@@ -178,7 +178,7 @@ const ENews = () => {
                                                         textAlign: "center"
                                                     }}
                                                 >
-                                                    
+
                                                     {(() => {
                                                         const language = i18n.language;
 
@@ -214,7 +214,13 @@ const ENews = () => {
                                                         textAlign: "center",
                                                     }}
                                                 >
-                                                    {new Date(item.issue_date).toLocaleDateString('en-CA')}
+                                                    {new Date(item.issue_date)
+                                                        .toLocaleDateString("en-GB", {
+                                                            day: "2-digit",
+                                                            month: "2-digit",
+                                                            year: "numeric",
+                                                        })
+                                                        .replace(/\//g, "-")}
                                                 </td>
                                                 <td
                                                     width="10%"

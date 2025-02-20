@@ -248,8 +248,7 @@ const DepartmentInformation = () => {
     }, [pdfData]);
 
     const filteredPdfData = pdfData
-        .filter((item) => item.department === selectedDepartmentPdf)
-        .sort((a, b) => b.heading.localeCompare(a.heading));
+        .filter((item) => item.department === selectedDepartmentPdf);
     const startPdfIndex = (pdfCurrentPage - 1) * itemsPerPage;
     const paginatedPdfData = filteredPdfData.slice(startPdfIndex, startPdfIndex + itemsPerPage);
 
@@ -936,8 +935,8 @@ const DepartmentInformation = () => {
                                             <thead>
                                                 <tr>
                                                     <th width="10%" className="text-center">Sr. No.</th>
-                                                    <th>PDF Heading</th>
-                                                    <th>PDF Link</th>
+                                                    <th width="35">PDF Heading</th>
+                                                    <th width="35">PDF Link</th>
                                                     <th width="15%" className="text-center">Action</th>
                                                 </tr>
                                             </thead>
@@ -946,8 +945,8 @@ const DepartmentInformation = () => {
                                                     paginatedPdfData.map((item, index) => (
                                                         <tr key={item.id}>
                                                             <td className="text-center">{startPdfIndex + index + 1}</td>
-                                                            <td>{item.heading}</td>
-                                                            <td>
+                                                            <td style={{wordBreak: "break-word", whiteSpace: "normal"}}>{item.heading}</td>
+                                                            <td style={{wordBreak: "break-word", whiteSpace: "normal"}}>
                                                                 <Link
                                                                     className="text-decoration-none"
                                                                     target="_blank"
