@@ -45,15 +45,15 @@ const Recruitment = () => {
     }
   };
 
-const contractRecruitment = recruitment.filter(
-  (item) => 
-    item.heading === "Contract Basis Recruitment"
-);
+  const contractRecruitment = recruitment.filter(
+    (item) =>
+      item.heading === "Contract Basis Recruitment"
+  );
 
-const oldRecruitment = recruitment.filter(
-  (item) => 
-    item.heading === "Old Recruitment"
-);
+  const oldRecruitment = recruitment.filter(
+    (item) =>
+      item.heading === "Old Recruitment"
+  );
 
 
   useEffect(() => {
@@ -86,7 +86,7 @@ const oldRecruitment = recruitment.filter(
         <div className="container-fluid font-location mt-4 mb-5" id="rec-css">
           <nav className="breadcrumb">
             <Link to="/" className="breadcrumb-item text-decoration-none">
-            {t("breadcrumbHome")}
+              {t("breadcrumbHome")}
             </Link>
             <span className="breadcrumb-item active1">{t("recruitment.breadcrumb")}</span>
           </nav>
@@ -110,7 +110,7 @@ const oldRecruitment = recruitment.filter(
                 <div className="col-12 col-xl-9 col-lg-12 col-md-12 col-sm-12">
                   <div className="system-style-div text-start">
                     <p className="mb-0">
-                      <span className="span-system1">{t("recruitment.recruitmentAdvertisement")}</span>
+                      <span>{t("recruitment.recruitmentAdvertisement")}</span>
                     </p>
                   </div>
                 </div>
@@ -138,20 +138,20 @@ const oldRecruitment = recruitment.filter(
                           }}
                         >
                           {(() => {
-    const language = i18n.language;
+                            const language = i18n.language;
 
-    const toMarathiNumbers = (num) => {
-      const marathiDigits = ["०", "१", "२", "३", "४", "५", "६", "७", "८", "९"];
-      return num
-        .toString()
-        .split("")
-        .map((digit) => marathiDigits[parseInt(digit, 10)])
-        .join("");
-    };
+                            const toMarathiNumbers = (num) => {
+                              const marathiDigits = ["०", "१", "२", "३", "४", "५", "६", "७", "८", "९"];
+                              return num
+                                .toString()
+                                .split("")
+                                .map((digit) => marathiDigits[parseInt(digit, 10)])
+                                .join("");
+                            };
 
-    const number = index + 1;
-    return language === "mr" ? toMarathiNumbers(number) : number;
-  })()}
+                            const number = index + 1;
+                            return language === "mr" ? toMarathiNumbers(number) : number;
+                          })()}
                         </td>
                         <td
                           width="70%"
@@ -197,7 +197,7 @@ const oldRecruitment = recruitment.filter(
                   ) : (
                     <tr>
                       <td colSpan="3" style={{ textAlign: "center" }}>
-                      {t("recruitment.noData")}
+                        {t("recruitment.noData")}
                       </td>
                     </tr>
                   )}
@@ -207,7 +207,7 @@ const oldRecruitment = recruitment.filter(
                 <div className="col-12 col-xl-9 col-lg-12 col-md-12 col-sm-12">
                   <div className="system-style-div text-start">
                     <p className="mb-0">
-                      <span className="span-system1">{t("recruitment.oldRecruitmentAdvertisement")}</span>
+                      <span>{t("recruitment.oldRecruitmentAdvertisement")}</span>
                     </p>
                   </div>
                 </div>
@@ -235,20 +235,20 @@ const oldRecruitment = recruitment.filter(
                           }}
                         >
                           {(() => {
-    const language = i18n.language;
+                            const language = i18n.language;
 
-    const toMarathiNumbers = (num) => {
-      const marathiDigits = ["०", "१", "२", "३", "४", "५", "६", "७", "८", "९"];
-      return num
-        .toString()
-        .split("")
-        .map((digit) => marathiDigits[parseInt(digit, 10)])
-        .join("");
-    };
+                            const toMarathiNumbers = (num) => {
+                              const marathiDigits = ["०", "१", "२", "३", "४", "५", "६", "७", "८", "९"];
+                              return num
+                                .toString()
+                                .split("")
+                                .map((digit) => marathiDigits[parseInt(digit, 10)])
+                                .join("");
+                            };
 
-    const number = index + 1;
-    return language === "mr" ? toMarathiNumbers(number) : number;
-  })()}
+                            const number = index + 1;
+                            return language === "mr" ? toMarathiNumbers(number) : number;
+                          })()}
                         </td>
                         <td
                           width="70%"
@@ -294,7 +294,7 @@ const oldRecruitment = recruitment.filter(
                   ) : (
                     <tr>
                       <td colSpan="3" style={{ textAlign: "center" }}>
-                      {t("recruitment.noOldDataAvailable")}
+                        {t("recruitment.noOldDataAvailable")}
                       </td>
                     </tr>
                   )}

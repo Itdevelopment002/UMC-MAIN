@@ -18,8 +18,7 @@ import { PiFlagBannerFoldFill } from "react-icons/pi";
 import { MdRecordVoiceOver } from "react-icons/md";
 import { IoInformationCircle } from "react-icons/io5";
 import { AiOutlineFundProjectionScreen } from "react-icons/ai";
-
-
+import { PiTreeStructureBold } from "react-icons/pi";
 
 const Sidebar = ({ isOpen, closeSidebar, userDepartment }) => {
   const [openSubmenu, setOpenSubmenu] = useState(null);
@@ -258,7 +257,7 @@ const Sidebar = ({ isOpen, closeSidebar, userDepartment }) => {
                   <li className="submenu">
                     <Link to="#." onClick={() => toggleSubmenu("administrative-wings")}>
                       <i className="fa">
-                        <BsFillMenuButtonWideFill />
+                        <PiTreeStructureBold />
                       </i>{" "}
                       <span>Admin. Wings </span>{" "}
                       <span

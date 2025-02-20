@@ -4,15 +4,15 @@ import pdficon from '../../assets/images/Departments/document 1.png';
 import './PTDept.css';
 import "../TableCss/TableCss.css";
 import Swal from "sweetalert2";
-import api,{baseURL} from "../api";
+import api, { baseURL } from "../api";
 import { useTranslation } from "react-i18next";
 
 
 const PTDept = () => {
     const [tax, setTax] = useState([]);
     const [bgImage, setBgImage] = useState("");
-      const { i18n, t } = useTranslation();
-    
+    const { i18n, t } = useTranslation();
+
 
     const fetchHeaderImage = async () => {
         try {
@@ -33,11 +33,11 @@ const PTDept = () => {
             console.error("Error fetching header image:", error);
         }
     };
-    const fetchTax = async()=>{
-        try{
+    const fetchTax = async () => {
+        try {
             const response = await api.get(`/property-dept?lang=${i18n.language}`);
             setTax(response.data.reverse());
-        } catch(error){
+        } catch (error) {
             console.error("Error fetching property tax data", error);
         }
     };
@@ -62,7 +62,7 @@ const PTDept = () => {
 
     return (
         <>
-             <div
+            <div
                 className="history-header-image"
                 style={{
                     backgroundImage: `url(${bgImage})`,
@@ -74,7 +74,7 @@ const PTDept = () => {
                 <div className="container-fluid font-location mt-4 mb-2" id="pt-css">
                     <nav className="breadcrumb">
                         <Link to="/" className="breadcrumb-item text-decoration-none">
-                        {t("breadcrumbHome")}
+                            {t("breadcrumbHome")}
                         </Link>
                         <span className="breadcrumb-item active1">{t("propertyTaxDept.propertyTaxDepartment")}</span>
                     </nav>
@@ -99,13 +99,13 @@ const PTDept = () => {
                                     <thead className="bg-orange text-white">
                                         <tr>
                                             <th className="table-heading-styling" style={{ textAlign: "center" }}>
-                                            {t('departments.sno')}
+                                                {t('departments.sno')}
                                             </th>
                                             <th className="table-heading-styling">
-                                            {t('tourism.description')}
+                                                {t('tourism.description')}
                                             </th>
                                             <th className="table-heading-styling" style={{ textAlign: "center" }}>
-                                            {t('departments.action')}
+                                                {t('departments.action')}
                                             </th>
                                         </tr>
                                     </thead>

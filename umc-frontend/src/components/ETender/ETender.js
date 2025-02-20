@@ -83,7 +83,7 @@ const ETender = () => {
 
   const fetchServices = async () => {
     try {
-      const response = await api.get("/online-services-home");
+      const response = await api.get(`/online-services-home?lang=${i18n.language}`);
       const serviceData = response.data;
       const updatedTabData = tabData.map((tab) => {
         const matchingService = serviceData.find(
