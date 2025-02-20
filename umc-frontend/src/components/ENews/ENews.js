@@ -20,7 +20,7 @@ const ENews = () => {
     const fetchEnews = async () => {
         try {
             const response = await api.get(`/enews_data?lang=${i18n.language}`);
-            setEnewsList(response.data);
+            setEnewsList(response.data.reverse());
         } catch (error) {
             console.error("Error fetching e-news:", error);
         }

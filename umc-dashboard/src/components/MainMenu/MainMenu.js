@@ -10,6 +10,8 @@ const MainMenu = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [newSubMenu, setNewSubMenu] = useState("");
   const [newSubLink, setNewSubLink] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(10);
 
   const fetchMenuData = async () => {
     try {
@@ -25,13 +27,23 @@ const MainMenu = () => {
     fetchMenuData();
   }, []);
 
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = menuData.slice(indexOfFirstItem, indexOfLastItem);
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  const totalPages = Math.ceil(menuData.length / itemsPerPage);
+
   const handleEditClick = (menu) => {
     setSelectedMenu({ ...menu, subMenus: [...menu.subMenus] });
     setShowEditModal(true);
   };
 
   const handleSaveChanges = async () => {
-    if (!selectedMenu.mainMenu || !selectedMenu.mainMenuLink ||!selectedMenu.language_code) {
+    if (!selectedMenu.mainMenu || !selectedMenu.mainMenuLink || !selectedMenu.language_code) {
       alert("Please fill in the Main Menu and Main Menu Link fields.");
       return;
     }
@@ -65,7 +77,7 @@ const MainMenu = () => {
         ...prev,
         subMenus: [
           ...prev.subMenus,
-          { subMenu: newSubMenu, subLink: newSubLink,language_code: selectedMenu.language_code },
+          { subMenu: newSubMenu, subLink: newSubLink, language_code: selectedMenu.language_code },
         ],
       }));
       setNewSubMenu("");
@@ -138,30 +150,40 @@ const MainMenu = () => {
                     </div>
                   </div>
                   <div className="table-responsive">
-                    <table className="table table-bordered m-b-0">
+                    <table className="table table-bordered m-b-0" style={{ tableLayout: "fixed" }}>
+                      <colgroup>
+                        <col style={{ width: "10%" }} />
+                        <col style={{ width: "20%" }} />
+                        <col style={{ width: "20%" }} />
+                        <col style={{ width: "20%" }} />
+                        <col style={{ width: "20%" }} />
+                        <col style={{ width: "10%" }} />
+                      </colgroup>
                       <thead>
                         <tr>
-                          <th width="10%" className="text-center">Sr. No.</th>
+                          <th className="text-center">Sr. No.</th>
                           <th>Main Menu</th>
                           <th>Main Menu Link</th>
                           <th>Sub Menu</th>
                           <th>Sub Menu Link</th>
-                          <th width="15%" className="text-center">Action</th>
+                          <th className="text-center">Action</th>
                         </tr>
                       </thead>
                       <tbody>
-                        {menuData.map((item, index) => (
+                        {currentItems.map((item, index) => (
                           <React.Fragment key={item.mainMenuId}>
                             <tr>
-                              <td className="text-center">{index + 1}</td>
-                              <td>{item.mainMenu}</td>
-                              <td>{item.mainMenuLink}</td>
-                              <td>
+                              <td className="text-center">{indexOfFirstItem + index + 1}</td>
+                              <td style={{ wordBreak: "break-word", whiteSpace: "normal" }}>{item.mainMenu}</td>
+                              <td style={{ wordBreak: "break-word", whiteSpace: "normal" }}>
+                                {item.mainMenuLink}
+                              </td>
+                              <td style={{ wordBreak: "break-word", whiteSpace: "normal" }}>
                                 {item.subMenus && item.subMenus.length > 0
                                   ? item.subMenus[0].subMenu
                                   : "-"}
                               </td>
-                              <td>
+                              <td style={{ wordBreak: "break-word", whiteSpace: "normal" }}>
                                 {item.subMenus && item.subMenus.length > 0
                                   ? item.subMenus[0].subLink
                                   : "-"}
@@ -197,8 +219,8 @@ const MainMenu = () => {
                                   <td></td>
                                   <td></td>
                                   <td></td>
-                                  <td>{sub.subMenu}</td>
-                                  <td>{sub.subLink}</td>
+                                  <td style={{ wordBreak: "break-word", whiteSpace: "normal" }}>{sub.subMenu}</td>
+                                  <td style={{ wordBreak: "break-word", whiteSpace: "normal" }}>{sub.subLink}</td>
                                 </tr>
                               ))}
                           </React.Fragment>
@@ -206,11 +228,46 @@ const MainMenu = () => {
                       </tbody>
                     </table>
                   </div>
+
+                  <ul className="pagination mt-4">
+                    <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
+                      <button
+                        className="page-link"
+                        onClick={() => handlePageChange(currentPage - 1)}
+                      >
+                        Previous
+                      </button>
+                    </li>
+                    {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                      <li
+                        className={`page-item ${currentPage === page ? "active" : ""}`}
+                        key={page}
+                      >
+                        <button
+                          className="page-link"
+                          onClick={() => handlePageChange(page)}
+                        >
+                          {page}
+                        </button>
+                      </li>
+                    ))}
+                    <li
+                      className={`page-item ${currentPage === totalPages ? "disabled" : ""}`}
+                    >
+                      <button
+                        className="page-link"
+                        onClick={() => handlePageChange(currentPage + 1)}
+                      >
+                        Next
+                      </button>
+                    </li>
+                  </ul>
                 </div>
               </div>
             </div>
           </div>
 
+          {/* Edit Modal */}
           {showEditModal && (
             <div
               className="modal fade show"
@@ -228,21 +285,21 @@ const MainMenu = () => {
                   </div>
                   <div className="modal-body">
                     <div className="form-group">
-                    <label style={{ fontWeight: "bold" }}>Select Language</label>
-                        <select
+                      <label style={{ fontWeight: "bold" }}>Select Language</label>
+                      <select
                         className="form-control"
-                          value={selectedMenu?.language_code || ""}
-                          onChange={(e) =>
-                            setSelectedMenu((prev) => ({
-                              ...prev,
-                              language_code: e.target.value,
-                            }))
-                          }
-                        >
-                          <option value="">Select Language</option>
-                          <option value="en">English</option>
-                          <option value="mr">Marathi</option>
-                        </select>
+                        value={selectedMenu?.language_code || ""}
+                        onChange={(e) =>
+                          setSelectedMenu((prev) => ({
+                            ...prev,
+                            language_code: e.target.value,
+                          }))
+                        }
+                      >
+                        <option value="">Select Language</option>
+                        <option value="en">English</option>
+                        <option value="mr">Marathi</option>
+                      </select>
                     </div>
                     <div className="form-group">
                       <label style={{ fontWeight: "bold" }}>Main Menu</label>
@@ -357,6 +414,7 @@ const MainMenu = () => {
             </div>
           )}
 
+          {/* Delete Modal */}
           {showDeleteModal && (
             <div
               className="modal fade show"
