@@ -43,6 +43,7 @@ const OnlineHomeServices = () => {
       await api.put(`/online-services-home/${selectedService.id}`, {
         heading: selectedService.heading,
         link: selectedService.link,
+        language_code: selectedService.language_code,
       });
       const updatedService = service.map((service) =>
         service.id === selectedService.id ? selectedService : service
@@ -110,16 +111,16 @@ const OnlineHomeServices = () => {
                     <table className="table table-bordered m-b-0">
                       <thead>
                         <tr>
-                          <th width="10%">Sr. No.</th>
+                          <th width="10%" className="text-center">Sr. No.</th>
                           <th>Service Name</th>
                           <th>Service Link</th>
-                          <th width="15%">Action</th>
+                          <th width="15%" className="text-center">Action</th>
                         </tr>
                       </thead>
                       <tbody>
                         {currentService.map((service, index) => (
                           <tr key={service.id}>
-                            <td>
+                            <td className="text-center">
                               {index + 1 + (currentPage - 1) * servicePerPage}
                             </td>
                             <td>{service.heading}</td>
@@ -133,7 +134,7 @@ const OnlineHomeServices = () => {
                                 {service.link}
                               </Link>
                             </td>
-                            <td>
+                            <td className="text-center">
                               <button
                                 onClick={() => handleEditClick(service)}
                                 className="btn btn-success btn-sm m-t-10"
@@ -278,6 +279,22 @@ const OnlineHomeServices = () => {
                   </div>
                   <div className="modal-body">
                     <form>
+                      <div className="mb-3">
+                        <label className="form-label">
+                          Select Language
+                        </label>
+
+                        <select
+                          className="form-control"
+                          name="language_code"
+                          value={selectedService?.language_code || ""}
+                          onChange={handleEditChange}
+                        >
+                          <option value="" disabled>Select Language</option>
+                          <option value="en">English</option>
+                          <option value="mr">Marathi</option>
+                        </select>
+                      </div>
                       <div className="mb-3">
                         <label className="form-label">Service Name</label>
                         <input
