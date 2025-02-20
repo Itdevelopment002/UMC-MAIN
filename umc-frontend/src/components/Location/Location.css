@@ -48,7 +48,7 @@
 .list-group-item {
   background-color: #fff7e2 !important;
   border-bottom: 2px solid #c6cab2 !important;
-  font-weight: 500 !important;
+  font-weight: 700 !important;
   border-radius: 0 !important;
   color: #000000 !important;
   font-size: 17px !important;
@@ -82,6 +82,21 @@
   padding: 0px !important;
   width: 98%;
   height: 320px;
+}
+
+#location-css .system-style-div {
+  display: flex;
+  background-color: #F3F3F3;
+  align-items: center;
+  font-weight: 700;
+  font-size: 16px;
+  padding: 10px 20px;
+}
+
+#location-css .span-system1 {
+  font-family: 'Roboto';
+  font-weight: 500;
+  font-size: 16px;
 }
 
 @media (max-width: 1470px) {
@@ -180,7 +195,6 @@
   background: #EDEDED !important;
   color: #000000 !important;
   font-size: 14px !important;
-  font-weight: 500 !important;
   line-height: 16.41px !important;
   padding: 10px 10px !important;
 }
