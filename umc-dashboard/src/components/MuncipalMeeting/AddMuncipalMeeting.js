@@ -144,10 +144,10 @@ const AddMuncipalMeeting = () => {
                           <option value="Tree Committee">Tree Committee</option>
                           <option value="Transport Committee">Transport Committee</option>
                           <option value="सर्वसाधारण सभा">सर्वसाधारण सभा</option>
-                          <option value="विशेष सर्वसाधारण मंडळाचा">विशेष सर्वसाधारण मंडळाचा</option>
-                          <option value="स्थायी समितीचा">स्थायी समितीचा</option>
-                          <option value="वृक्ष समितीचा">वृक्ष समितीचा</option>
-                          <option value="वाहतूक समितीचा">वाहतूक समितीचा</option>
+                          <option value="विशेष सर्वसाधारण सभा">विशेष सर्वसाधारण सभा</option>
+                          <option value="स्थायी समिती">स्थायी समिती</option>
+                          <option value="वृक्ष समिती">वृक्ष समिती</option>
+                          <option value="वाहतूक समिती">वाहतूक समिती</option>
                         </select>
                         {errors.name && (
                           <div className="invalid-feedback">{errors.name}</div>
