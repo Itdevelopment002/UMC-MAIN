@@ -19,7 +19,7 @@ const AddCommissionerDesc = () => {
 
   const validateForm = () => {
     const newErrors = {};
-    if (!formData.description.trim()) newErrors.description = "Description is required.";
+    if (!formData.description.trim()) newErrors.description = "Commissioner Description is required.";
     if (!formData.language_code.trim()) newErrors.language_code = "Language Selection is required.";
     return newErrors;
   };
@@ -86,7 +86,7 @@ const AddCommissionerDesc = () => {
                   </div>
                   <div className="form-group row">
                     <label className="col-form-label col-md-3">
-                      Description <span className="text-danger">*</span>
+                      Commissioner Description <span className="text-danger">*</span>
                     </label>
                     <div className="col-md-4">
                       <textarea
@@ -95,7 +95,7 @@ const AddCommissionerDesc = () => {
                         name="description"
                         value={formData.description}
                         onChange={handleChange}
-                        placeholder="Enter Description"
+                        placeholder="Enter Commissioner Description"
                       />
                       {errors.description && (
                         <div className="invalid-feedback">{errors.description}</div>
@@ -104,7 +104,7 @@ const AddCommissionerDesc = () => {
                   </div>
                   <div className="form-group row">
                     <div className="col-md-4">
-                      <button type="submit" className="btn btn-primary">
+                      <button type="submit" className="btn btn-sm btn-primary">
                         Submit
                       </button>
                     </div>

@@ -90,9 +90,8 @@ const AddHistoryImage = () => {
                       <div className="col-md-4">
                         <input
                           type="text"
-                          className={`form-control form-control-md ${
-                            errors.photoName ? "is-invalid" : ""
-                          }`}
+                          className={`form-control form-control-md ${errors.photoName ? "is-invalid" : ""
+                            }`}
                           placeholder=""
                           value={photoName}
                           onChange={(e) => {
@@ -121,9 +120,8 @@ const AddHistoryImage = () => {
                             type="file"
                             id="image"
                             name="image"
-                            className={`form-control col-md-12 col-xs-12 userfile ${
-                              errors.selectedFile ? "is-invalid" : ""
-                            }`}
+                            className={`form-control col-md-12 col-xs-12 userfile ${errors.selectedFile ? "is-invalid" : ""
+                              }`}
                             onChange={(e) => {
                               handleFileChange(e);
                               if (e.target.files[0]) {

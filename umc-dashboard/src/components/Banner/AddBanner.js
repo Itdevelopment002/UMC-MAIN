@@ -82,9 +82,8 @@ const AddBanner = () => {
                       <div className="col-md-4">
                         <input
                           type="text"
-                          className={`form-control ${
-                            errors.bannerName ? "is-invalid" : ""
-                          }`}
+                          className={`form-control ${errors.bannerName ? "is-invalid" : ""
+                            }`}
                           value={bannerName}
                           onChange={(e) => {
                             setBannerName(e.target.value);
@@ -108,9 +107,8 @@ const AddBanner = () => {
                             type="file"
                             id="image"
                             name="image"
-                            className={`form-control ${
-                              errors.selectedFile ? "is-invalid" : ""
-                            }`}
+                            className={`form-control ${errors.selectedFile ? "is-invalid" : ""
+                              }`}
                             onChange={handleFileChange}
                           />
                           {errors.selectedFile && (

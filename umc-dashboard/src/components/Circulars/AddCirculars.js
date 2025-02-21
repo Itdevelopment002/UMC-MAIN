@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import api from "../api";
-//eslint-disable-next-line
-import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 import Flatpickr from "react-flatpickr";
@@ -71,7 +69,6 @@ const AddCirculars = () => {
 
     try {
       await api.post("/circular-info", videoData);
-      toast.success("Circular added successfully!");
       setDescription("");
       setNumber("");
       setLink("");
@@ -81,7 +78,7 @@ const AddCirculars = () => {
 
       navigate("/circulars");
     } catch (error) {
-      toast.error("Failed to add recruitment data. Please try again.");
+      console.error("Failed to add recruitment data. Please try again.");
     }
   };
   return (
@@ -116,14 +113,14 @@ const AddCirculars = () => {
                       <div className="col-md-4">
                         <select
                           className={`form-control ${errors.language ? "is-invalid" : ""
-                          }`}
-                        value={language}
-                        onChange={(e) => {
-                          setLanguage(e.target.value);
-                          if (errors.language) {
-                            setErrors({ ...errors, language: "" });
-                          }
-                        }}
+                            }`}
+                          value={language}
+                          onChange={(e) => {
+                            setLanguage(e.target.value);
+                            if (errors.language) {
+                              setErrors({ ...errors, language: "" });
+                            }
+                          }}
                         >
                           <option value="">Select Language</option>
                           <option value="en">English</option>

@@ -11,7 +11,7 @@ const Budget = () => {
     const [showEditModal, setShowEditModal] = useState(false);
     const [selectedBudget, setSelectedBudget] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
-    const [selectedYear, setSelectedYear] = useState(null); // Initialize as null
+    const [selectedYear, setSelectedYear] = useState(null);
     const budgetsPerPage = 10;
 
     useEffect(() => {
@@ -24,7 +24,7 @@ const Budget = () => {
                 budgetsData.filter((budget) => budget.year === selectedYear)
             );
         } else {
-            setFilteredBudgets(budgetsData); // Show all if no year is selected
+            setFilteredBudgets(budgetsData);
         }
     }, [selectedYear, budgetsData]);
 
@@ -32,17 +32,13 @@ const Budget = () => {
         try {
             const response = await api.get("/budgets_data");
             setBudgetsData(response.data);
-            setFilteredBudgets(response.data); // Initially show all data
-
-            // Extract unique years and sort them in descending order
+            setFilteredBudgets(response.data);
             const uniqueYears = [...new Set(response.data.map((budget) => budget.year))];
             const sortedUniqueYears = uniqueYears.sort((a, b) => {
                 const yearA = parseInt(a.split("-")[0], 10);
                 const yearB = parseInt(b.split("-")[0], 10);
-                return yearB - yearA; // Sort in descending order
+                return yearB - yearA;
             });
-
-            // Set the selectedYear to the first year in the sorted array
             if (sortedUniqueYears.length > 0) {
                 setSelectedYear(sortedUniqueYears[0]);
             }

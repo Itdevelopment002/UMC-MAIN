@@ -19,7 +19,7 @@ const ElectedMember = () => {
     const fetchElectedData = async () => {
         try {
             const response = await api.get("/elected_data");
-            setElecteddata(response.data);
+            setElecteddata(response.data.reverse());
         } catch (error) {
             console.error("Error fetching elected member data:", error);
             toast.error("Failed to fetch elected member data!");

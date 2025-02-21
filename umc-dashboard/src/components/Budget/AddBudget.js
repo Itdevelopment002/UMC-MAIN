@@ -13,18 +13,15 @@ const AddBudget = () => {
 
   const navigate = useNavigate();
 
-  // Fetch distinct years from the database
   useEffect(() => {
     const fetchYears = async () => {
       try {
-        const response = await api.get("/budgets_data"); // Fetch all budgets
+        const response = await api.get("/budgets_data");
         const uniqueYears = [...new Set(response.data.map((item) => item.year))];
-
-        // Sorting by extracting the first year in the range (e.g., "2012-2013" -> 2012)
         const sortedYears = uniqueYears.sort((a, b) => {
-          const yearA = parseInt(a.split("-")[0]); // Extract first part of the range
+          const yearA = parseInt(a.split("-")[0]);
           const yearB = parseInt(b.split("-")[0]);
-          return yearB - yearA; // Sort in descending order
+          return yearB - yearA;
         });
 
         setYears(sortedYears);

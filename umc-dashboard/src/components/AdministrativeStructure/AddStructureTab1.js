@@ -88,7 +88,7 @@ const AddStructureTab1 = () => {
                                         </div>
                                         <div className="form-group row">
                                             <label className="col-form-label col-md-2">
-                                                heading 1 <span className="text-danger">*</span>
+                                                Heading 1 <span className="text-danger">*</span>
                                             </label>
                                             <div className="col-md-4">
                                                 <input
@@ -104,7 +104,7 @@ const AddStructureTab1 = () => {
                                         </div>
                                         <div className="form-group row">
                                             <label className="col-form-label col-md-2">
-                                                heading 2 <span className="text-danger">*</span>
+                                                Heading 2 <span className="text-danger">*</span>
                                             </label>
                                             <div className="col-md-4">
                                                 <input
@@ -120,13 +120,13 @@ const AddStructureTab1 = () => {
                                         </div>
                                         <button type="submit" className="btn btn-primary btn-sm">Submit</button>
                                     </form>
-                                    <ToastContainer />
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <ToastContainer />
         </>
     );
 };

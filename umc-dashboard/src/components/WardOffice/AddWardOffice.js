@@ -13,7 +13,7 @@ const AddWardOffice = () => {
     ward_no: "",
     areas: "",
     map_url: "",
-    language_code: "", // Added language_code field
+    language_code: "",
   });
 
   const [errors, setErrors] = useState({});
@@ -90,16 +90,14 @@ const AddWardOffice = () => {
                     </div>
                   </div>
                   <form onSubmit={handleSubmit}>
-                    {/* Language Selection Dropdown */}
                     <div className="form-group row">
                       <label className="col-form-label col-md-2">
                         Select Language <span className="text-danger">*</span>
                       </label>
                       <div className="col-md-4">
                         <select
-                          className={`form-control form-control-md ${
-                            errors.language_code ? "is-invalid" : ""
-                          }`}
+                          className={`form-control form-control-md ${errors.language_code ? "is-invalid" : ""
+                            }`}
                           name="language_code"
                           value={formData.language_code}
                           onChange={handleChange}
@@ -116,7 +114,6 @@ const AddWardOffice = () => {
                       </div>
                     </div>
 
-                    {/* Other Fields */}
                     {[
                       { label: "Ward Name", name: "ward_name" },
                       { label: "Officer Name", name: "officer_name" },
@@ -135,9 +132,8 @@ const AddWardOffice = () => {
                         <div className="col-md-4">
                           <input
                             type={type}
-                            className={`form-control form-control-md ${
-                              errors[name] ? "is-invalid" : ""
-                            }`}
+                            className={`form-control form-control-md ${errors[name] ? "is-invalid" : ""
+                              }`}
                             placeholder={`Enter ${label}`}
                             name={name}
                             value={formData[name]}
