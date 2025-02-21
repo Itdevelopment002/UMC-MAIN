@@ -104,7 +104,7 @@ const AddEServices = () => {
                     </div>
                     <div className="form-group row">
                       <label className="col-form-label col-md-2">
-                        Service heading <span className="text-danger">*</span>
+                        Service Heading <span className="text-danger">*</span>
                       </label>
                       <div className="col-md-4">
                         <input
@@ -129,7 +129,7 @@ const AddEServices = () => {
                     </div>
                     <div className="form-group row mt-3">
                       <label className="col-form-label col-md-2">
-                        Service link <span className="text-danger">*</span>
+                        Service Link <span className="text-danger">*</span>
                       </label>
                       <div className="col-md-4">
                         <input

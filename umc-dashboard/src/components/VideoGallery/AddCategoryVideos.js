@@ -18,7 +18,7 @@ const AddCategoryVideos = () => {
       try {
         const categoryResponse = await api.get("/video-categories");
         const allCategories = categoryResponse.data;
-        setCategories(allCategories); // Set all categories without filtering
+        setCategories(allCategories);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -105,9 +105,8 @@ const AddCategoryVideos = () => {
                       </label>
                       <div className="col-md-4">
                         <select
-                          className={`form-control form-control-md ${
-                            errors.category_id ? "is-invalid" : ""
-                          }`}
+                          className={`form-control form-control-md ${errors.category_id ? "is-invalid" : ""
+                            }`}
                           name="category_id"
                           value={formData.category_id}
                           onChange={handleChange}
@@ -137,18 +136,14 @@ const AddCategoryVideos = () => {
                           type="text"
                           name="link"
                           value={formData.link}
-                          className={`form-control form-control-md ${
-                            errors.link ? "is-invalid" : ""
-                          }`}
+                          className={`form-control form-control-md ${errors.link ? "is-invalid" : ""
+                            }`}
                           onChange={handleChange}
                           placeholder="Enter Video Link"
                         />
                         {errors.link && (
                           <div className="invalid-feedback">{errors.link}</div>
                         )}
-                        <small className="form-text text-muted">
-                          Note: You can add as many videos as you want to a category.
-                        </small>
                       </div>
                     </div>
                     <input
