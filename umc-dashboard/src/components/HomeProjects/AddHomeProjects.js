@@ -127,7 +127,7 @@ const AddHomeProjects = () => {
                                                     placeholder='Enter Project Heading'
                                                     onChange={handleChange}
                                                 />
-                                                {errors.heading && <span className="text-danger">{errors.heading}</span>}
+                                                {errors.heading && <span className="invalid-feedback">{errors.heading}</span>}
                                             </div>
                                         </div>
                                         <div className="form-group row">
@@ -141,7 +141,7 @@ const AddHomeProjects = () => {
                                                     placeholder='Enter Project Description'
                                                     onChange={handleChange}
                                                 />
-                                                {errors.description && <span className="text-danger">{errors.description}</span>}
+                                                {errors.description && <span className="invalid-feedback">{errors.description}</span>}
                                             </div>
                                         </div>
                                         <div className="form-group row">
@@ -155,7 +155,7 @@ const AddHomeProjects = () => {
                                                     placeholder='Enter Project Link'
                                                     onChange={handleChange}
                                                 />
-                                                {errors.link && <span className="text-danger">{errors.link}</span>}
+                                                {errors.link && <span className="invalid-feedback">{errors.link}</span>}
                                             </div>
                                         </div>
 
@@ -170,7 +170,7 @@ const AddHomeProjects = () => {
                                                     accept="image/*"
                                                     onChange={(e) => handleFileChange(e, setMainIcon, 'mainIcon')}
                                                 />
-                                                {errors.mainIcon && <span className="text-danger">{errors.mainIcon}</span>}
+                                                {errors.mainIcon && <span className="invalid-feedback">{errors.mainIcon}</span>}
                                             </div>
                                         </div>
                                         <input type="submit" className="btn btn-primary btn-sm" value="Submit" />

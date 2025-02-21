@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../api";
 
-const AddAnnual = () => {
+const AddAnnualFinance = () => {
   const [heading, setHeading] = useState("");
   const [link, setLink] = useState("");
   const [errors, setErrors] = useState({});
@@ -167,4 +167,4 @@ const AddAnnual = () => {
   );
 };
 
-export default AddAnnual;
+export default AddAnnualFinance;

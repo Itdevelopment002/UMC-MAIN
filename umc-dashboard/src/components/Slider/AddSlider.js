@@ -82,7 +82,8 @@ const AddSlider = () => {
                       <div className="col-md-4">
                         <input
                           type="text"
-                          className={`form-control ${
+                          placeholder="Enter Slider Name"
+                          className={`form-control form-control-md ${
                             errors.sliderName ? "is-invalid" : ""
                           }`}
                           value={sliderName}
@@ -108,7 +109,7 @@ const AddSlider = () => {
                             type="file"
                             id="image"
                             name="image"
-                            className={`form-control ${
+                            className={`form-control form-control-md ${
                               errors.selectedFile ? "is-invalid" : ""
                             }`}
                             onChange={handleFileChange}

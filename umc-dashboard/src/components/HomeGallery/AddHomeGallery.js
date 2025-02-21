@@ -93,7 +93,7 @@ const AddHomeGallery = () => {
                           className={`form-control form-control-md ${
                             errors.photoName ? "is-invalid" : ""
                           }`}
-                          placeholder=""
+                          placeholder="Enter Photo Gallery Name"
                           value={photoName}
                           onChange={(e) => {
                             setPhotoName(e.target.value);

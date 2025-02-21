@@ -100,12 +100,12 @@ const AddDataTable3 = () => {
                       <div className="col-md-4">
                         <select
                           name="language_code"
-                          className={`form-control ${errors.language ? "is-invalid" : ""
+                          className={`form-control ${errors.language_code ? "is-invalid" : ""
                             }`}
                           value={formData.language_code}
                           onChange={handleChange}
                         >
-                          <option value="">Select Language</option>
+                          <option value="" disabled>Select Language</option>
                           <option value="en">English</option>
                           <option value="mr">Marathi</option>
                         </select>
@@ -122,7 +122,7 @@ const AddDataTable3 = () => {
                           name="heading"
                           className={`form-control ${errors.heading ? "is-invalid" : ""
                             }`}
-                          placeholder="Enter heading"
+                          placeholder="Enter Title"
                           value={formData.heading}
                           onChange={handleChange}
                         />
@@ -140,7 +140,7 @@ const AddDataTable3 = () => {
                           name="description"
                           className={`form-control ${errors.description ? "is-invalid" : ""
                             }`}
-                          placeholder="Enter description"
+                          placeholder="Enter Description"
                           value={formData.description}
                           onChange={handleChange}
                           rows="2"

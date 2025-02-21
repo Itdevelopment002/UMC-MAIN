@@ -7,13 +7,10 @@ import "../TableCss/TableCss.css";
 import Swal from "sweetalert2";
 import { useTranslation } from "react-i18next";
 
-
-
 const ElectedMember = () => {
     const [electeddata, setElecteddata] = useState([]);
     const [bgImage, setBgImage] = useState("");
     const { i18n, t } = useTranslation();
-
 
     useEffect(() => {
         fetchElectedData();
@@ -23,7 +20,7 @@ const ElectedMember = () => {
     const fetchElectedData = async () => {
         try {
             const response = await api.get(`/elected_data?lang=${i18n.language}`);
-            setElecteddata(response.data);
+            setElecteddata(response.data.reverse());
         } catch (error) {
             console.error("Error fetching elected member data:", error);
         }
