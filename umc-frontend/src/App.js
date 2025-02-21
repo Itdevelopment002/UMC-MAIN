@@ -148,7 +148,8 @@ function App() {
 
   return (
     <>
-      {loading ? (
+   <div className="app-container"> 
+   {loading ? (
         <div className="loader-container d-flex items-center">
           <img
             src={loaderimage}
@@ -280,6 +281,7 @@ function App() {
           <Footer data-aos="fade-down" />
         </>
       )}
+   </div>
     </>
   );
 }
