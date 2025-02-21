@@ -311,7 +311,7 @@ const Commissioner = () => {
                                             <thead>
                                                 <tr>
                                                     <th width="10%" className="text-center">Sr. No.</th>
-                                                    <th>Description</th>
+                                                    <th>Commissioner Description</th>
                                                     <th width="15%" className="text-center">Action</th>
                                                 </tr>
                                             </thead>
@@ -421,7 +421,7 @@ const Commissioner = () => {
                                                     </select>
                                                 </div>
                                                 <div className="form-group">
-                                                    <label htmlFor="description">Description</label>
+                                                    <label htmlFor="description">Commissioner Description</label>
                                                     <textarea
                                                         className="form-control"
                                                         id="description"

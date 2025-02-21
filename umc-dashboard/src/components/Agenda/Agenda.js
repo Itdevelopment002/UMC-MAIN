@@ -240,7 +240,6 @@ const Agenda = () => {
                         </div>
                     </div>
 
-                    {/* Modals */}
                     {showEditModal && (
                         <div
                             className="modal fade show"
@@ -381,9 +380,9 @@ const Agenda = () => {
                             </div>
                         </div>
                     )}
-                    <ToastContainer />
                 </div>
             </div>
+            <ToastContainer />
         </>
     );
 };

@@ -120,6 +120,7 @@ const AddDepartmentPage = () => {
                                                     value={heading}
                                                     name="heading"
                                                     onChange={handleChange}
+                                                    placeholder='Enter Department Name'
                                                 />
                                                 {errors.heading && <span className="invalid-feedback">{errors.heading}</span>}
                                             </div>
@@ -133,6 +134,7 @@ const AddDepartmentPage = () => {
                                                     value={link}
                                                     name="link"
                                                     onChange={handleChange}
+                                                    placeholder='Enter Department Link'
                                                 />
                                                 {errors.link && <span className="invalid-feedback">{errors.link}</span>}
                                             </div>

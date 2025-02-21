@@ -201,7 +201,7 @@ const AddDeptDescription = () => {
                                             />
                                             {subDescriptions.map((subDesc, index) => (
                                                 <div className="form-group row" key={index}>
-                                                    <label className="col-form-label col-md-2">
+                                                    <label className="col-form-label col-md-3">
                                                         Sub Description {index + 1}
                                                     </label>
                                                     <div className="col-md-4">
