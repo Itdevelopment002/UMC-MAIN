@@ -124,32 +124,27 @@ const TopHeader = () => {
                     <button onClick={handleIncreaseFontSize} className="text-size-btn">{t("header.aPlus")}</button>
                     <span className="divider">|</span>
                     <div className="custom-dropdown">
-                        <div className="selected-language">
-                            <span>{getLanguageText()}</span>
-                            <RiArrowDropDownLine size={25} />
-                        </div>
+    <div className="selected-language">
+        <span>{getLanguageText()}</span>
+        <RiArrowDropDownLine size={25} className="arrow" />
+    </div>
 
-                        <div className="dropdown-options">
-                            <div
-                                className={`dropdown-option ${selectedLanguage === "en" ? "selected" : ""}`}
-                                onClick={() => handleLanguageChange("en")}
-                            >
-                                English
-                            </div>
-                            {/* <div
-                                className={`dropdown-option ${selectedLanguage === "hi" ? "selected" : ""}`}
-                                onClick={() => handleLanguageChange("hi")}
-                            >
-                                हिंदी
-                            </div> */}
-                            <div
-                                className={`dropdown-option ${selectedLanguage === "mr" ? "selected" : ""}`}
-                                onClick={() => handleLanguageChange("mr")}
-                            >
-                                मराठी
-                            </div>
-                        </div>
-                    </div>
+    <div className="dropdown-options">
+        <div
+            className={`dropdown-option ${selectedLanguage === "en" ? "selected" : ""}`}
+            onClick={() => handleLanguageChange("en")}
+        >
+            English
+        </div>
+        <div
+            className={`dropdown-option ${selectedLanguage === "mr" ? "selected" : ""}`}
+            onClick={() => handleLanguageChange("mr")}
+        >
+            मराठी
+        </div>
+    </div>
+</div>
+
 
 
                     <div className="social-icons top-bar-social-media d-flex">
