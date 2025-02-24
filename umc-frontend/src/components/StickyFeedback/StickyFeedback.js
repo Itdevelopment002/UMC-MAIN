@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import Swal from "sweetalert2";
 import "./StickyFeedback.css";
 import api from "../api";
+import { useTranslation } from "react-i18next";
 
 function StickyFeedback() {
     const [isOpen, setIsOpen] = useState(false);
@@ -10,6 +11,7 @@ function StickyFeedback() {
     const [comments, setComments] = useState("");
     const [errors, setErrors] = useState({});
     const feedbackRef = useRef(null);
+    const { i18n, t } = useTranslation();
 
     const toggleFeedback = () => {
         setIsOpen(!isOpen);
@@ -107,11 +109,11 @@ function StickyFeedback() {
         <div className="App">
             <div ref={feedbackRef} className={`feedback-container ${isOpen ? "open" : ""}`}>
                 <div className="feedback-tab" onClick={toggleFeedback}>
-                    FEEDBACK
+                {t('feedback.title')}
                 </div>
                 <div className="feedback-panel">
-                    <h3>Feedback</h3>
-                    <p>Rate <span className="required">*</span></p>
+                    <h3>{t('feedback.heading')}</h3>
+                    <p>{t('feedback.rate')} <span className="required">*</span></p>
                     <div className="feedback-stars">
                         {Array(5)
                             .fill()
@@ -127,7 +129,7 @@ function StickyFeedback() {
                     </div>
                     {errors.rating && <p className="error-message">{errors.rating}</p>}
 
-                    <p>Did you like the website <span className="required">*</span></p>
+                    <p>{t('feedback.like')} <span className="required">*</span></p>
                     <div className="radio-buttons">
                         <label>
                             <input
@@ -136,7 +138,7 @@ function StickyFeedback() {
                                 value="Yes"
                                 checked={opinion === "Yes"}
                                 onChange={(e) => handleOpinionChange(e.target.value)}
-                            /> Yes
+                            /> {t('feedback.yes')}
                         </label>
                         <label>
                             <input
@@ -145,12 +147,12 @@ function StickyFeedback() {
                                 value="No"
                                 checked={opinion === "No"}
                                 onChange={(e) => handleOpinionChange(e.target.value)}
-                            /> No
+                            /> {t('feedback.no')}
                         </label>
                     </div>
                     {errors.opinion && <p className="error-message">{errors.opinion}</p>}
 
-                    <p>Additional Comments <span className="required">*</span></p>
+                    <p>{t('feedback.comment')} <span className="required">*</span></p>
                     <textarea
                         rows="3"
                         placeholder="Your comments"
@@ -164,7 +166,7 @@ function StickyFeedback() {
                         className="submit-button"
                         onClick={handleSubmit}
                     >
-                        Submit
+                        {t('feedback.submit')}
                     </button>
                 </div>
             </div>

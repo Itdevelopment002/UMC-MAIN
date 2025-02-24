@@ -46,7 +46,7 @@
   color: #000000;
   font-size: 24px;
   font-weight: 700;
-  font-family: "Inter";
+  font-family: "Inter" !important;
   margin: 0;
 }
 
