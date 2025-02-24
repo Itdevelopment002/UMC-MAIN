@@ -239,7 +239,7 @@ const BottomSlider = () => {
                     )
                       .filter(
                         (page) =>
-                          page >= currentPage - 1 && page <= currentPage + 1 // Show current page and its neighbors
+                          page >= currentPage - 1 && page <= currentPage + 1
                       )
                       .map((page) => (
                         <li
@@ -312,7 +312,6 @@ const BottomSlider = () => {
             </div>
           </div>
 
-          {/* Delete Modal */}
           <div
             className={`modal fade ${showDeleteModal ? "show" : ""}`}
             style={{ display: showDeleteModal ? "block" : "none" }}

@@ -51,8 +51,7 @@ const AddBottomSlider = () => {
       console.error("Error uploading Slider link:", error);
       if (error.response) {
         alert(
-          `Error: ${
-            error.response.data.message || "Failed to upload the Slider link."
+          `Error: ${error.response.data.message || "Failed to upload the Slider link."
           }`
         );
       } else {
@@ -94,9 +93,8 @@ const AddBottomSlider = () => {
                       <div className="col-md-4">
                         <input
                           type="text"
-                          className={`form-control ${
-                            errors.websitelink ? "is-invalid" : ""
-                          }`}
+                          className={`form-control ${errors.websitelink ? "is-invalid" : ""
+                            }`}
                           placeholder="Enter Slider Link"
                           value={websitelink}
                           onChange={(e) => {
@@ -124,9 +122,8 @@ const AddBottomSlider = () => {
                             type="file"
                             id="userfile"
                             name="websitelogo"
-                            className={`form-control col-md-12 col-xs-12 ${
-                              errors.websitelogo ? "is-invalid" : ""
-                            }`}
+                            className={`form-control col-md-12 col-xs-12 ${errors.websitelogo ? "is-invalid" : ""
+                              }`}
                             onChange={(e) => {
                               setLogo(e.target.files[0]);
                               if (errors.websitelogo) {

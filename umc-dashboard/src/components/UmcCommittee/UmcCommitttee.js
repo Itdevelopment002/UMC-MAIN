@@ -204,7 +204,7 @@ const UmcCommittee = () => {
                         {standingPageData.length > 0 ? (
                           standingPageData.map((item, index) => (
                             <tr key={item.id}>
-                              <td className="text-center">{index + 1}</td>
+                              <td className="text-center">{((standingCurrentPage - 1) * itemsPerPage) + (index + 1)}</td>
                               <td>{item.heading}</td>
                               <td className="text-center">
                                 <button
@@ -405,7 +405,7 @@ const UmcCommittee = () => {
                         {womenPageData.length > 0 ? (
                           womenPageData.map((item, index) => (
                             <tr key={item.id}>
-                              <td className="text-center">{index + 1}</td>
+                              <td className="text-center">{((womenCurrentPage - 1) * itemsPerPage) + (index + 1)}</td>
                               <td>{item.heading}</td>
                               <td className="text-center">
                                 <button

@@ -120,13 +120,13 @@ const AddStructureTab4 = () => {
                                         </div>
                                         <button type="submit" className="btn btn-primary btn-sm">Submit</button>
                                     </form>
-                                    <ToastContainer />
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <ToastContainer />
         </>
     );
 };

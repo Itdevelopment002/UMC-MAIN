@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import api, { baseURL } from "../api";
+import api from "../api";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -14,6 +14,11 @@ const AdministrativeStructure = () => {
     const [modalType, setModalType] = useState("");
     const [selectedItem, setSelectedItem] = useState(null);
     const [editData, setEditData] = useState({});
+    const [structure1CurrentPage, setStructure1CurrentPage] = useState(1);
+    const [structure2CurrentPage, setStructure2CurrentPage] = useState(1);
+    const [structure3CurrentPage, setStructure3CurrentPage] = useState(1);
+    const [structure4CurrentPage, setStructure4CurrentPage] = useState(1);
+    const itemsPerPage = 5;
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -201,6 +206,14 @@ const AdministrativeStructure = () => {
         closeModal();
     };
 
+    const structure1CurrentPageData = structureData1.slice((structure1CurrentPage - 1) * itemsPerPage, structure1CurrentPage * itemsPerPage);
+    const structure2CurrentPageData = structureData2.slice((structure2CurrentPage - 1) * itemsPerPage, structure2CurrentPage * itemsPerPage);
+    const structure3CurrentPageData = structureData3.slice((structure3CurrentPage - 1) * itemsPerPage, structure3CurrentPage * itemsPerPage);
+    const structure4CurrentPageData = structureData4.slice((structure4CurrentPage - 1) * itemsPerPage, structure4CurrentPage * itemsPerPage);
+    const structure1TotalPages = Math.ceil(structureData1.length / itemsPerPage);
+    const structure2TotalPages = Math.ceil(structureData2.length / itemsPerPage);
+    const structure3TotalPages = Math.ceil(structureData3.length / itemsPerPage);
+    const structure4TotalPages = Math.ceil(structureData4.length / itemsPerPage);
 
     return (
         <div>
@@ -244,10 +257,10 @@ const AdministrativeStructure = () => {
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {structureData1.length > 0 ? (
-                                                    structureData1.map((item, index) => (
+                                                {structure1CurrentPageData.length > 0 ? (
+                                                    structure1CurrentPageData.map((item, index) => (
                                                         <tr key={item.id}>
-                                                            <td className="text-center">{index + 1}</td>
+                                                            <td className="text-center">{((structure1CurrentPage - 1) * itemsPerPage) + (index + 1)}</td>
                                                             <td>{item.heading1}</td>
                                                             <td>{item.heading2}</td>
                                                             <td className="text-center">
@@ -278,6 +291,43 @@ const AdministrativeStructure = () => {
                                             </tbody>
                                         </table>
                                     </div>
+                                </div>
+                                <div className="mt-4">
+                                    <ul className="pagination">
+                                        <li
+                                            className={`page-item ${structure1CurrentPage === 1 ? "disabled" : ""}`}
+                                        >
+                                            <button
+                                                className="page-link"
+                                                onClick={() => setStructure1CurrentPage(structure1CurrentPage - 1)}
+                                            >
+                                                Previous
+                                            </button>
+                                        </li>
+                                        {Array.from({ length: structure1TotalPages }, (_, i) => (
+                                            <li
+                                                className={`page-item ${structure1CurrentPage === i + 1 ? "active" : ""}`}
+                                                key={i}
+                                            >
+                                                <button
+                                                    className="page-link"
+                                                    onClick={() => setStructure1CurrentPage(i + 1)}
+                                                >
+                                                    {i + 1}
+                                                </button>
+                                            </li>
+                                        ))}
+                                        <li
+                                            className={`page-item ${structure1CurrentPage === structure1TotalPages ? "disabled" : ""}`}
+                                        >
+                                            <button
+                                                className="page-link"
+                                                onClick={() => setStructure1CurrentPage(structure1CurrentPage + 1)}
+                                            >
+                                                Next
+                                            </button>
+                                        </li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>
@@ -311,10 +361,10 @@ const AdministrativeStructure = () => {
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {structureData2.length > 0 ? (
-                                                    structureData2.map((item, index) => (
+                                                {structure2CurrentPageData.length > 0 ? (
+                                                    structure2CurrentPageData.map((item, index) => (
                                                         <tr key={item.id}>
-                                                            <td className="text-center">{index + 1}</td>
+                                                            <td className="text-center">{((structure2CurrentPage - 1) * itemsPerPage) + (index + 1)}</td>
                                                             <td>{item.heading1}</td>
                                                             <td>{item.heading2}</td>
                                                             <td>{item.heading3}</td>
@@ -346,6 +396,43 @@ const AdministrativeStructure = () => {
                                             </tbody>
                                         </table>
                                     </div>
+                                </div>
+                                <div className="mt-4">
+                                    <ul className="pagination">
+                                        <li
+                                            className={`page-item ${structure2CurrentPage === 1 ? "disabled" : ""}`}
+                                        >
+                                            <button
+                                                className="page-link"
+                                                onClick={() => setStructure2CurrentPage(structure2CurrentPage - 1)}
+                                            >
+                                                Previous
+                                            </button>
+                                        </li>
+                                        {Array.from({ length: structure2TotalPages }, (_, i) => (
+                                            <li
+                                                className={`page-item ${structure2CurrentPage === i + 1 ? "active" : ""}`}
+                                                key={i}
+                                            >
+                                                <button
+                                                    className="page-link"
+                                                    onClick={() => setStructure2CurrentPage(i + 1)}
+                                                >
+                                                    {i + 1}
+                                                </button>
+                                            </li>
+                                        ))}
+                                        <li
+                                            className={`page-item ${structure2CurrentPage === structure2TotalPages ? "disabled" : ""}`}
+                                        >
+                                            <button
+                                                className="page-link"
+                                                onClick={() => setStructure2CurrentPage(structure2CurrentPage + 1)}
+                                            >
+                                                Next
+                                            </button>
+                                        </li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>
@@ -380,10 +467,10 @@ const AdministrativeStructure = () => {
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {structureData3.length > 0 ? (
-                                                    structureData3.map((item, index) => (
+                                                {structure3CurrentPageData.length > 0 ? (
+                                                    structure3CurrentPageData.map((item, index) => (
                                                         <tr key={item.id}>
-                                                            <td className="text-center">{index + 1}</td>
+                                                            <td className="text-center">{((structure3CurrentPage - 1) * itemsPerPage) + (index + 1)}</td>
                                                             <td>{item.heading1}</td>
                                                             <td>{item.heading2}</td>
                                                             <td>{item.heading3}</td>
@@ -417,6 +504,43 @@ const AdministrativeStructure = () => {
                                         </table>
                                     </div>
                                 </div>
+                                <div className="mt-4">
+                                    <ul className="pagination">
+                                        <li
+                                            className={`page-item ${structure3CurrentPage === 1 ? "disabled" : ""}`}
+                                        >
+                                            <button
+                                                className="page-link"
+                                                onClick={() => setStructure3CurrentPage(structure3CurrentPage - 1)}
+                                            >
+                                                Previous
+                                            </button>
+                                        </li>
+                                        {Array.from({ length: structure3TotalPages }, (_, i) => (
+                                            <li
+                                                className={`page-item ${structure3CurrentPage === i + 1 ? "active" : ""}`}
+                                                key={i}
+                                            >
+                                                <button
+                                                    className="page-link"
+                                                    onClick={() => setStructure3CurrentPage(i + 1)}
+                                                >
+                                                    {i + 1}
+                                                </button>
+                                            </li>
+                                        ))}
+                                        <li
+                                            className={`page-item ${structure3CurrentPage === structure3TotalPages ? "disabled" : ""}`}
+                                        >
+                                            <button
+                                                className="page-link"
+                                                onClick={() => setStructure3CurrentPage(structure3CurrentPage + 1)}
+                                            >
+                                                Next
+                                            </button>
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -448,10 +572,10 @@ const AdministrativeStructure = () => {
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {structureData4.length > 0 ? (
-                                                    structureData4.map((item, index) => (
+                                                {structure4CurrentPageData.length > 0 ? (
+                                                    structure4CurrentPageData.map((item, index) => (
                                                         <tr key={item.id}>
-                                                            <td className="text-center">{index + 1}</td>
+                                                            <td className="text-center">{((structure4CurrentPage - 1) * itemsPerPage) + (index + 1)}</td>
                                                             <td>{item.ward}</td>
                                                             <td>{item.officer}</td>
                                                             <td className="text-center">
@@ -482,6 +606,43 @@ const AdministrativeStructure = () => {
                                             </tbody>
                                         </table>
                                     </div>
+                                </div>
+                                <div className="mt-4">
+                                    <ul className="pagination">
+                                        <li
+                                            className={`page-item ${structure4CurrentPage === 1 ? "disabled" : ""}`}
+                                        >
+                                            <button
+                                                className="page-link"
+                                                onClick={() => setStructure4CurrentPage(structure4CurrentPage - 1)}
+                                            >
+                                                Previous
+                                            </button>
+                                        </li>
+                                        {Array.from({ length: structure4TotalPages }, (_, i) => (
+                                            <li
+                                                className={`page-item ${structure4CurrentPage === i + 1 ? "active" : ""}`}
+                                                key={i}
+                                            >
+                                                <button
+                                                    className="page-link"
+                                                    onClick={() => setStructure4CurrentPage(i + 1)}
+                                                >
+                                                    {i + 1}
+                                                </button>
+                                            </li>
+                                        ))}
+                                        <li
+                                            className={`page-item ${structure4CurrentPage === structure4TotalPages ? "disabled" : ""}`}
+                                        >
+                                            <button
+                                                className="page-link"
+                                                onClick={() => setStructure4CurrentPage(structure4CurrentPage + 1)}
+                                            >
+                                                Next
+                                            </button>
+                                        </li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>

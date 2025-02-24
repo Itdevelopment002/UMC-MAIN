@@ -139,7 +139,7 @@ const AddProjectCategory = () => {
                           placeholder="Enter Project Heading"
                         />
                         {errors.heading && (
-                          <div className="text-danger mt-1">
+                          <div className="invalid-feedback">
                             {errors.heading}
                           </div>
                         )}
@@ -163,9 +163,9 @@ const AddProjectCategory = () => {
                           />
                         </div>
                         {errors.images && (
-                          <div className="text-danger mt-1">
+                          <small className="text-danger">
                             {errors.images}
-                          </div>
+                          </small>
                         )}
                       </div>
                     </div>

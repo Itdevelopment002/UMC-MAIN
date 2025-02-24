@@ -156,6 +156,7 @@ const AddHodDetails = () => {
                                                     className={`form-control form-control-md ${errors.hodName ? 'is-invalid' : ''}`}
                                                     value={hodName}
                                                     name="hodName"
+                                                    placeholder="Enter Hod Name"
                                                     onChange={(e) => {
                                                         setHodName(e.target.value);
                                                         setErrors((prev) => ({ ...prev, hodName: "" }));
@@ -200,6 +201,7 @@ const AddHodDetails = () => {
                                                     className={`form-control form-control-md ${errors.education ? 'is-invalid' : ''}`}
                                                     value={education}
                                                     name="education"
+                                                    placeholder="Enter Education Qualification"
                                                     onChange={(e) => {
                                                         setEducation(e.target.value);
                                                         setErrors((prev) => ({ ...prev, education: "" }));
@@ -215,6 +217,7 @@ const AddHodDetails = () => {
                                                     type="text"
                                                     className={`form-control form-control-md ${errors.address ? 'is-invalid' : ''}`}
                                                     value={address}
+                                                    placeholder="Enter Office Address"
                                                     name="address"
                                                     onChange={(e) => {
                                                         setAddress(e.target.value);
@@ -232,6 +235,7 @@ const AddHodDetails = () => {
                                                     className={`form-control form-control-md ${errors.number ? 'is-invalid' : ''}`}
                                                     value={number}
                                                     name="number"
+                                                    placeholder="Enter Phone Number"
                                                     onChange={(e) => {
                                                         setNumber(e.target.value);
                                                         setErrors((prev) => ({ ...prev, number: "" }));
@@ -248,6 +252,7 @@ const AddHodDetails = () => {
                                                     className={`form-control form-control-md ${errors.email ? 'is-invalid' : ''}`}
                                                     value={email}
                                                     name="email"
+                                                    placeholder="Enter Email Address"
                                                     onChange={(e) => {
                                                         setEmail(e.target.value);
                                                         setErrors((prev) => ({ ...prev, email: "" }));
