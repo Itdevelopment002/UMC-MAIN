@@ -68,9 +68,7 @@ const CustomerSupport = () => {
                             alt="Coming Soon"
                             className="coming-soon-gif"
                         />
-                        <p className="coming-soon-message">
-                            {t('commingsoon.text')}
-                        </p>
+                        
                     </div>
 
                 </div>

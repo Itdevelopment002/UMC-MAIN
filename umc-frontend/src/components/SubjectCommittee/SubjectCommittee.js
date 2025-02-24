@@ -72,9 +72,7 @@ const MayorOffice = () => {
                             className="coming-soon-gif"
 
                         />
-                        <p className="coming-soon-message">
-                            {t('commingsoon.text')}
-                        </p>
+                        
                     </div>
 
                 </div>
