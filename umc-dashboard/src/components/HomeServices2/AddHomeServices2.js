@@ -94,7 +94,7 @@ const AddHomeServices2 = () => {
                             }
                           }}
                         >
-                          <option value="">Select Language</option>
+                          <option value="" disabled>Select Language</option>
                           <option value="en">English</option>
                           <option value="mr">Marathi</option>
                         </select>
@@ -103,7 +103,7 @@ const AddHomeServices2 = () => {
                     </div>
                     <div className="form-group row">
                       <label className="col-form-label col-md-2">
-                        Service heading <span className="text-danger">*</span>
+                        Service Heading <span className="text-danger">*</span>
                       </label>
                       <div className="col-md-4">
                         <input

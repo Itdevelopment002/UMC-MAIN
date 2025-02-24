@@ -23,7 +23,7 @@ const HistoryContent = () => {
             newErrors.description = "Description is required.";
         }
         if (!languageCode.trim()) {
-            newErrors.languageCode = "Language is required.";
+            newErrors.languageCode = "Language Selection is required.";
         }
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
@@ -157,7 +157,6 @@ const HistoryContent = () => {
                                         <tr>
                                             <th width="10%" className="text-center">Sr. No.</th>
                                             <th>Description</th>
-                                            <th>Language</th>
                                             <th width="15%" className="text-center">Action</th>
                                         </tr>
                                     </thead>
@@ -166,7 +165,6 @@ const HistoryContent = () => {
                                             <tr key={item.id}>
                                                 <td className="text-center">{((currentPage - 1) * itemsPerPage) + (index + 1)}</td>
                                                 <td>{item.description}</td>
-                                                <td>{item.language_code}</td>
                                                 <td className="text-center">
                                                     <button
                                                         className="btn btn-success btn-sm m-t-10"
@@ -230,25 +228,7 @@ const HistoryContent = () => {
                             <div className="modal-body">
                                 <form>
                                     <div className="form-group">
-                                        <label>Description</label>
-                                        <textarea
-                                            rows={3}
-                                            className={`form-control ${errors.description ? "is-invalid" : ""
-                                                }`}
-                                            placeholder="Enter Description"
-                                            value={description}
-                                            onChange={(e) =>
-                                                handleDescriptionChange(e.target.value)
-                                            }
-                                        />
-                                        {errors.description && (
-                                            <div className="invalid-feedback">
-                                                {errors.description}
-                                            </div>
-                                        )}
-                                    </div>
-                                    <div className="mb-3">
-                                        <label className="form-label">
+                                        <label>
                                             Select Language
                                         </label>
                                         <select
@@ -267,13 +247,36 @@ const HistoryContent = () => {
                                             </div>
                                         )}
                                     </div>
+                                    <div className="form-group">
+                                        <label>Description</label>
+                                        <textarea
+                                            rows={3}
+                                            className={`form-control ${errors.description ? "is-invalid" : ""
+                                                }`}
+                                            placeholder="Enter Description"
+                                            value={description}
+                                            onChange={(e) =>
+                                                handleDescriptionChange(e.target.value)
+                                            }
+                                        />
+                                        {errors.description && (
+                                            <div className="invalid-feedback">
+                                                {errors.description}
+                                            </div>
+                                        )}
+                                    </div>
                                 </form>
                             </div>
                             <div className="modal-footer">
                                 <button
                                     type="button"
                                     className="btn btn-sm btn-secondary"
-                                    onClick={() => setShowAddNewModal(false)}
+                                    onClick={() => {
+                                        setShowAddNewModal(false);
+                                        setDescription("");
+                                        setLanguageCode("");
+                                        setErrors({ description: "", languageCode: "" });
+                                    }}
                                 >
                                     Close
                                 </button>
@@ -343,22 +346,8 @@ const HistoryContent = () => {
                             </div>
                             <div className="modal-body">
                                 <form>
-                                    <div className="form-group">
-                                        <label>Description</label>
-                                        <textarea
-                                            rows={3}
-                                            className="form-control"
-                                            value={editData.description}
-                                            onChange={(e) =>
-                                                setEditData({
-                                                    ...editData,
-                                                    description: e.target.value,
-                                                })
-                                            }
-                                        />
-                                    </div>
-                                    <div className="mb-3">
-                                        <label className="form-label">
+                                <div className="form-group">
+                                        <label>
                                             Select Language
                                         </label>
                                         <select
@@ -376,6 +365,20 @@ const HistoryContent = () => {
                                             <option value="en">English</option>
                                             <option value="mr">Marathi</option>
                                         </select>
+                                    </div>
+                                    <div className="form-group">
+                                        <label>Description</label>
+                                        <textarea
+                                            rows={3}
+                                            className="form-control"
+                                            value={editData.description}
+                                            onChange={(e) =>
+                                                setEditData({
+                                                    ...editData,
+                                                    description: e.target.value,
+                                                })
+                                            }
+                                        />
                                     </div>
                                 </form>
                             </div>

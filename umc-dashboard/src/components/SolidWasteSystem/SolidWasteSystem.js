@@ -303,7 +303,7 @@ const SolidWasteSystem = () => {
                         </select>
                       </div>
                       <div className="mb-3">
-                        <label className="form-label">Description</label>
+                        <label className="form-label">Swms Description</label>
                         <input
                           type="text"
                           className="form-control"
@@ -313,7 +313,7 @@ const SolidWasteSystem = () => {
                         />
                       </div>
                       <div className="mb-3">
-                        <label className="form-label">Link</label>
+                        <label className="form-label">Swms Link</label>
                         <input
                           type="text"
                           className="form-control"

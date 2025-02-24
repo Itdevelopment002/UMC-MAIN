@@ -168,7 +168,7 @@ const EServices = () => {
 
   return (
     <div className="container-fluid mb-4 mt-4">
-      <div className="row">
+      <div className="row" style={{backgroundColor:"#ffffff"}}>
         <div className="col-xl-6 col-lg-6 col-md-12 col-sm-12">
           <div className="e-services-container p-2">
             <div className="tabs-container right-section-font mb-4">
