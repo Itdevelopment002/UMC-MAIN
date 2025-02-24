@@ -595,7 +595,7 @@
     },
     "feedback":{
         "title": "FEEDBACK",
-        "Heading": "Feedback",
+        "heading": "Feedback",
         "rate": "Rate",
         "like": "Did you like the website",
         "yes": "Yes",

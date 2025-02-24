@@ -302,11 +302,11 @@ const AdministrativeStructure = () => {
                   <table className="table table-bordered table-responsive shadow mt-4">
                     <thead className="bg-orange text-white">
                       <tr>
-                        <th className="table-heading-styling" style={{ textAlign: "center" }}>{t("administrative.srNo")}</th>
-                        <th className="table-heading-styling" style={{ textAlign: "center" }}>{t("administrative.table3_1")}</th>
-                        <th className="table-heading-styling" style={{ textAlign: "center" }}>{t("administrative.table3_2")}</th>
-                        <th className="table-heading-styling" style={{ textAlign: "center" }}>{t("administrative.table3_3")}</th>
-                        <th className="table-heading-styling" style={{ textAlign: "center" }}>{t("administrative.table3_4")}</th>
+                        <th className="table-heading-styling" style={{ textAlign: "center", textWrap: 'pretty' }}>{t("administrative.srNo")}</th>
+                        <th className="table-heading-styling" style={{ textAlign: "center", textWrap: 'pretty' }}>{t("administrative.table3_1")}</th>
+                        <th className="table-heading-styling" style={{ textAlign: "center", textWrap: 'pretty' }}>{t("administrative.table3_2")}</th>
+                        <th className="table-heading-styling" style={{ textAlign: "center", textWrap: 'pretty' }}>{t("administrative.table3_3")}</th>
+                        <th className="table-heading-styling" style={{ textAlign: "center", textWrap: 'pretty' }}>{t("administrative.table3_4")}</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -343,7 +343,7 @@ const AdministrativeStructure = () => {
                                 paddingLeft: "5px",
                                 paddingRight: "5px",
                                 color: "#000000",
-                                textAlign: "center"
+                                textAlign: "center",
                               }}
                             >
                               {item.heading1}
@@ -353,7 +353,7 @@ const AdministrativeStructure = () => {
                                 paddingLeft: "5px",
                                 paddingRight: "5px",
                                 color: "#000000",
-                                textAlign: "center"
+                                textAlign: "center",
                               }}
                             >
                               {item.heading2}
@@ -363,7 +363,7 @@ const AdministrativeStructure = () => {
                                 paddingLeft: "5px",
                                 paddingRight: "5px",
                                 color: "#000000",
-                                textAlign: "center"
+                                textAlign: "center",
                               }}
                             >
                               {item.heading3}
@@ -373,7 +373,7 @@ const AdministrativeStructure = () => {
                                 paddingLeft: "5px",
                                 paddingRight: "5px",
                                 color: "#000000",
-                                textAlign: "center"
+                                textAlign: "center",
                               }}
                             >
                               {item.heading4}

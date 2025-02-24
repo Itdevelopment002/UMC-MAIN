@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const db = require("../config/db.js");
 
+
 router.put("/edit_:name/:id", (req, res) => {
   const { name, id } = req.params;
   const { status } = req.body;
@@ -24,5 +25,6 @@ router.put("/edit_:name/:id", (req, res) => {
       .json({ message: `Status updated successfully in ${name} table` });
   });
 });
+
 
 module.exports = router;

@@ -2,6 +2,42 @@ const express = require("express");
 const router = express.Router();
 const db = require("../config/db");
 
+
+router.get("/recruitment", (req, res) => {
+  const language = req.query.lang;
+  let query;
+  let params = [];
+  if (language) {
+    query = `SELECT * FROM recruitments WHERE language_code = ?`;
+    params.push(language);
+  } else {
+    query = "SELECT * FROM recruitments";
+  }
+
+  db.query(query, params, (err, results) => {
+    if (err) {
+      return res.status(500).json({ message: "Database error", error: err });
+    }
+    res.status(200).json(results);
+  });
+});
+
+
+router.get("/recruitment/:id", (req, res) => {
+  const { id } = req.params;
+  const sql = "SELECT * FROM recruitments WHERE id = ?";
+  db.query(sql, [id], (err, result) => {
+    if (err) {
+      return res.status(500).json({ message: "Database error", error: err });
+    }
+    if (result.length === 0) {
+      return res.status(404).json({ message: "Recruitment not found" });
+    }
+    res.status(200).json(result[0]);
+  });
+});
+
+
 router.post("/recruitment", (req, res) => {
   const { heading, description, link, language_code } = req.body;
 
@@ -26,38 +62,6 @@ router.post("/recruitment", (req, res) => {
   });
 });
 
-router.get("/recruitment", (req, res) => {
-  const language = req.query.lang;
-  let query;
-  let params = [];
-  if (language) {
-    query = `SELECT * FROM recruitments WHERE language_code = ?`;
-    params.push(language);
-  } else {
-    query = "SELECT * FROM recruitments";
-  }
-  
-  db.query(query, params,(err, results) => {
-    if (err) {
-      return res.status(500).json({ message: "Database error", error: err });
-    }
-    res.status(200).json(results);
-  });
-});
-
-router.get("/recruitment/:id", (req, res) => {
-  const { id } = req.params;
-  const sql = "SELECT * FROM recruitments WHERE id = ?";
-  db.query(sql, [id], (err, result) => {
-    if (err) {
-      return res.status(500).json({ message: "Database error", error: err });
-    }
-    if (result.length === 0) {
-      return res.status(404).json({ message: "Recruitment not found" });
-    }
-    res.status(200).json(result[0]);
-  });
-});
 
 router.put("/recruitment/:id", (req, res) => {
   const { id } = req.params;
@@ -117,5 +121,6 @@ router.delete("/recruitment/:id", (req, res) => {
     res.status(200).json({ message: "Recruitment deleted successfully" });
   });
 });
+
 
 module.exports = router;

@@ -19,6 +19,7 @@ router.get("/commissioner-desc", (req, res) => {
   });
 });
 
+
 router.get("/commissioner-desc/:id", (req, res) => {
   const { id } = req.params;
   const sql = "SELECT * FROM commissioner_desc WHERE id = ?";

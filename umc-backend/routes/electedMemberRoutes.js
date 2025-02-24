@@ -2,12 +2,7 @@ const express = require("express");
 const router = express.Router();
 const db = require("../config/db.js");
 
-// router.get("/elected_data", (req, res) => {
-//   db.query("SELECT * FROM elected_member", (err, results) => {
-//     if (err) throw err;
-//     res.json(results);
-//   });
-// });
+
 router.get("/elected_data", (req, res) => {
   const language = req.query.lang;
   let query;
@@ -25,6 +20,7 @@ router.get("/elected_data", (req, res) => {
   });
 });
 
+
 router.post("/elected_data", (req, res) => {
   const { heading, link, language_code } = req.body;
   const sql = "INSERT INTO elected_member (heading, link,language_code) VALUES (?, ?,?)";
@@ -33,6 +29,7 @@ router.post("/elected_data", (req, res) => {
     res.json({ id: result.insertId, heading, link, language_code });
   });
 });
+
 
 router.put("/elected_data/:id", (req, res) => {
   const { heading, link, language_code } = req.body;
@@ -43,6 +40,7 @@ router.put("/elected_data/:id", (req, res) => {
   });
 });
 
+
 router.delete("/elected_data/:id", (req, res) => {
   const sql = "DELETE FROM elected_member WHERE id = ?";
   db.query(sql, [req.params.id], (err, result) => {
@@ -50,5 +48,6 @@ router.delete("/elected_data/:id", (req, res) => {
     res.json({ success: true });
   });
 });
+
 
 module.exports = router;

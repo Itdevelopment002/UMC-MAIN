@@ -13,9 +13,7 @@ const transporter = nodemailer.createTransport({
 
 const createEmailTemplate = (data) => {
   const { rating, opinion, comment } = data;
-
-  // Generate star icons based on the rating
-  const stars = "⭐".repeat(rating); // Repeat the star emoji based on the rating value
+  const stars = "⭐".repeat(rating); 
 
   return `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; border: 1px solid #ddd; padding: 20px; border-radius: 8px;">
@@ -42,6 +40,7 @@ const createEmailTemplate = (data) => {
   `;
 };
 
+
 router.post("/email", async (req, res) => {
   const { rating, opinion, comment } = req.body;
 
@@ -67,5 +66,6 @@ router.post("/email", async (req, res) => {
     res.status(500).json({ error: "Error sending email" });
   }
 });
+
 
 module.exports = router;

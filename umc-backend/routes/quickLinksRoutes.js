@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const db = require("../config/db.js");
 
+
 router.get("/quick-link", (req, res) => {
   const language = req.query.lang;
   let query;
@@ -18,6 +19,7 @@ router.get("/quick-link", (req, res) => {
   });
 });
 
+
 router.post("/quick-link", (req, res) => {
   const { heading, link, language_code } = req.body;
   const sql = "INSERT INTO quick_links (heading, link, language_code) VALUES (?, ?, ?)";
@@ -26,6 +28,7 @@ router.post("/quick-link", (req, res) => {
     res.json({ id: result.insertId, heading, link, language_code });
   });
 });
+
 
 router.put("/quick-link/:id", (req, res) => {
   const { heading, link, language_code } = req.body;
@@ -36,6 +39,7 @@ router.put("/quick-link/:id", (req, res) => {
   });
 });
 
+
 router.delete("/quick-link/:id", (req, res) => {
   const sql = "DELETE FROM quick_links WHERE id = ?";
   db.query(sql, [req.params.id], (err, result) => {
@@ -43,5 +47,6 @@ router.delete("/quick-link/:id", (req, res) => {
     res.json({ success: true });
   });
 });
+
 
 module.exports = router;

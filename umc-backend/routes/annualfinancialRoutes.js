@@ -3,13 +3,6 @@ const router = express.Router();
 const db = require("../config/db.js");
 
 
-// router.get("/annual-finance", (req, res) => {
-//   db.query("SELECT * FROM annualfinance", (err, results) => {
-//     if (err) throw err;
-//     res.json(results);
-//   });
-// });
-
 router.get("/annual-finance", (req, res) => {
   const language = req.query.lang;
   let query;
@@ -26,6 +19,7 @@ router.get("/annual-finance", (req, res) => {
     res.json(results);
   });
 });
+
 
 router.post("/annual-finance", (req, res) => {
   const { heading, link,language_code } = req.body;

@@ -2,12 +2,7 @@ const express = require("express");
 const router = express.Router();
 const db = require("../config/db.js");
 
-// router.get("/budgets_data", (req, res) => {
-//   db.query("SELECT * FROM budgets", (err, results) => {
-//     if (err) throw err;
-//     res.json(results);
-//   });
-// });
+
 router.get("/budgets_data", (req, res) => {
   const language = req.query.lang;
   let query;
@@ -24,6 +19,7 @@ router.get("/budgets_data", (req, res) => {
     res.json(results);
   });
 });
+
 
 router.post("/budgets_data", (req, res) => {
   const { year, heading, link ,language_code} = req.body;
