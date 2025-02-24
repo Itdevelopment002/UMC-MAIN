@@ -266,6 +266,17 @@
     margin-top: 30px;
   }
 
+  .profile-card {
+    padding: 20px !important;
+    border-right: 0px solid #e6e6e6;
+    margin-bottom: 20px;
+
+  }
+
+  .profile-div {
+    padding-right: 15px !important;
+  }
+
 }
 
 
@@ -318,28 +329,30 @@
     font-size: 16px;
   }
 }
+
 @media (min-width: 992px) and (max-width: 1104px) {
   .custom-name {
-    font-size:1rem;
+    font-size: 1rem;
   }
 
   .custom-title {
-    font-size: 0.8rem; 
+    font-size: 0.8rem;
   }
-  
+
   .organization {
     font-size: 0.8rem;
   }
 }
+
 @media (min-width: 1400px) and (max-width: 1450px) {
   .custom-name {
-    font-size:1.2rem;
+    font-size: 1.2rem;
   }
 
   .custom-title {
     font-size: 0.9rem;
   }
-  
+
   .organization {
     font-size: 0.9rem;
   }

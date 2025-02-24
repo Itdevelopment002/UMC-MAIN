@@ -80,7 +80,7 @@ const ContactUs = () => {
                         <span className="highlighted-text"> {t("contactUs.us")}</span>
                         <hr />
                     </h2>
-                    <div className="row mt-5 gap-3">
+                    <div className="row pt-5 gap-3" style={{backgroundColor:'#fff'}}>
                         <div className="col-xl-5 col-lg-5 col-md-12 col-12 col-sm-12 left_section">
                             {contact.map((item, index) => (
                                 <div className="d-flex items-content" key={index}>
@@ -93,7 +93,7 @@ const ContactUs = () => {
                                     </div>
                                     <div className="ms-3">
                                         <h5>{item.heading}</h5>
-                                        <p>
+                                        <p className="custom-email">
                                             {index === contact.length - 1 ? (
                                                 <Link
                                                     to="https://drive.google.com/file/d/13EhELXyYBaX6-2Jxj4FLWFmCY6iLyIps/view?usp=drive_link"
