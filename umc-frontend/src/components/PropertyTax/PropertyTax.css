@@ -1,5 +1,5 @@
 #property-css .inter-font {
-  font-family: "Inter";
+  font-family: "Inter" !important;
 }
 
 #property-css .roboto-font {

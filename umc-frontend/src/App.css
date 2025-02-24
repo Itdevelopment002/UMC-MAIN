@@ -1,3 +1,18 @@
+
+
+:root {
+  --global-font-family: 'Roboto', sans-serif;
+}
+
+body {
+  font-family: var(--global-font-family) !important;
+}
+
+* {
+  font-family: var(--global-font-family) !important;
+}
+
+
 .container-fluid {
     padding: 0px 50px !important;
 }

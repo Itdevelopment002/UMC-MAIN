@@ -159,7 +159,7 @@ function App() {
         </div>
       ) : (
         <>
-          <GlobalFontHandler /> {/* Add the GlobalFontHandler here */}
+          <GlobalFontHandler /> 
           <Header data-aos="fade-down" />
           <StickyFeedback data-aos="fade-right" />
           <Routes>
@@ -170,7 +170,7 @@ function App() {
             {/* RTS */}
             <Route path="/rts-act-2015" element={<RTS data-aos="fade-up" />} />
 
-            {/* About UMC */}
+           {/* About UMC */}
             <Route path="/location" element={<Location data-aos="fade-left" />} />
             <Route path="/history" element={<History data-aos="zoom-in" />} />
             <Route path="/commissioner" element={<Commissioner data-aos="fade-up" />} />
