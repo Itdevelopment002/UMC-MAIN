@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const db = require("../config/db.js");
 
+
 router.get("/standing-committee", (req, res) => {
   const language = req.query.lang;
   let query;
@@ -19,6 +20,7 @@ router.get("/standing-committee", (req, res) => {
   });
 });
 
+
 router.post("/standing-committee", (req, res) => {
   const { heading, language_code } = req.body;
   const sql = "INSERT INTO standingcommittee (heading, language_code) VALUES (?, ?)";
@@ -27,6 +29,7 @@ router.post("/standing-committee", (req, res) => {
     res.json({ id: result.insertId, heading });
   });
 });
+
 
 router.put("/standing-committee/:id", (req, res) => {
   const { heading, language_code } = req.body;
@@ -37,6 +40,7 @@ router.put("/standing-committee/:id", (req, res) => {
   });
 });
 
+
 router.delete("/standing-committee/:id", (req, res) => {
   const sql = "DELETE FROM standingcommittee WHERE id = ?";
   db.query(sql, [req.params.id], (err, result) => {
@@ -44,5 +48,6 @@ router.delete("/standing-committee/:id", (req, res) => {
     res.json({ success: true });
   });
 });
+
 
 module.exports = router;

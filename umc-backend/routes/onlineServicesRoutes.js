@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const db = require("../config/db.js");
 
+
 router.get("/online_service", (req, res) => {
   const language = req.query.lang;
   let query;
@@ -18,6 +19,7 @@ router.get("/online_service", (req, res) => {
   });
 });
 
+
 router.post("/online_service", (req, res) => {
   const { heading, link, language_code } = req.body;
   const sql = "INSERT INTO online_services (heading, link, language_code) VALUES (?, ?, ?)";
@@ -26,6 +28,7 @@ router.post("/online_service", (req, res) => {
     res.json({ id: result.insertId, heading, link, language_code });
   });
 });
+
 
 router.put("/online_service/:id", (req, res) => {
   const { heading, link, language_code } = req.body;
@@ -36,6 +39,7 @@ router.put("/online_service/:id", (req, res) => {
   });
 });
 
+
 router.delete("/online_service/:id", (req, res) => {
   const sql = "DELETE FROM online_services WHERE id = ?";
   db.query(sql, [req.params.id], (err, result) => {
@@ -43,5 +47,6 @@ router.delete("/online_service/:id", (req, res) => {
     res.json({ success: true });
   });
 });
+
 
 module.exports = router;

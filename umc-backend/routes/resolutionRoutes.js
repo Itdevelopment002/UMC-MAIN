@@ -8,16 +8,6 @@ const convertToMySQLDate = (dateString) => {
 };
 
 
-// router.get("/resolution", (req, res) => {
-//   db.query("SELECT * FROM resolution", (err, results) => {
-//     if (err) {
-//       console.error(err);
-//       return res.status(500).json({ error: "Failed to fetch resolutions." });
-//     }
-//     res.json(results);
-//   });
-// });
-
 router.get("/resolution", (req, res) => {
   const language = req.query.lang;
   let query;
@@ -34,6 +24,7 @@ router.get("/resolution", (req, res) => {
     res.json(results);
   });
 });
+
 
 router.post("/resolution", (req, res) => {
   const { Department_Name, Resolutions_No_Date, Schedule_Date_of_Meeting, Adjournment_Notice, pdf_link, language_code } = req.body;
@@ -57,6 +48,7 @@ router.post("/resolution", (req, res) => {
     });
 });
 
+
 router.put("/resolution/:Sr_No", (req, res) => {
   const { Department_Name, Resolutions_No_Date, Schedule_Date_of_Meeting, Adjournment_Notice, pdf_link, language_code } = req.body;
   const formattedDate = Schedule_Date_of_Meeting ? convertToMySQLDate(Schedule_Date_of_Meeting) : null;
@@ -78,7 +70,7 @@ router.put("/resolution/:Sr_No", (req, res) => {
   );
 });
 
-// Delete a resolution
+
 router.delete("/resolution/:Sr_No", (req, res) => {
   const sql = "DELETE FROM resolution WHERE Sr_No = ?";
   db.query(sql, [req.params.Sr_No], (err, result) => {
@@ -89,5 +81,6 @@ router.delete("/resolution/:Sr_No", (req, res) => {
     res.json({ success: true });
   });
 });
+
 
 module.exports = router;

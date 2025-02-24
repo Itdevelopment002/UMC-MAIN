@@ -16,29 +16,6 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-router.post('/home-gallerys', upload.single('image'), (req, res) => {
-    if (!req.file) {
-        return res.status(400).json({ message: 'No file uploaded' });
-    }
-
-    const filePath = `/uploads/${req.file.filename}`; 
-    const photoName = req.body.photoName; 
-
-    if (!photoName) {
-        return res.status(400).json({ message: 'photo name is required' });
-    }
-
-    const sql = 'INSERT INTO home_gallery (photo_name, file_path) VALUES (?, ?)'; 
-    db.query(sql, [photoName, filePath], (err, result) => {
-        if (err) {
-            return res.status(500).json({ message: 'Database error', error: err });
-        }
-        res.status(201).json({
-            message: 'Image and photo name uploaded successfully',
-            imageUrl: filePath,
-        });
-    });
-});
 
 router.get('/home-gallerys', (req, res) => {
     const sql = 'SELECT * FROM home_gallery'; 
@@ -68,6 +45,7 @@ router.get('/home-gallerys', (req, res) => {
     });
 });
 
+
 router.get('/home-gallerys/:id', (req, res) => {
     const { id } = req.params;
 
@@ -91,37 +69,31 @@ router.get('/home-gallerys/:id', (req, res) => {
     });
 });
 
-router.delete('/home-gallerys/:id', (req, res) => {
-    const { id } = req.params;
 
-    const selectSql = 'SELECT file_path FROM home_gallery WHERE id = ?';
-    db.query(selectSql, [id], (err, result) => {
+router.post('/home-gallerys', upload.single('image'), (req, res) => {
+    if (!req.file) {
+        return res.status(400).json({ message: 'No file uploaded' });
+    }
+
+    const filePath = `/uploads/${req.file.filename}`; 
+    const photoName = req.body.photoName; 
+
+    if (!photoName) {
+        return res.status(400).json({ message: 'photo name is required' });
+    }
+
+    const sql = 'INSERT INTO home_gallery (photo_name, file_path) VALUES (?, ?)'; 
+    db.query(sql, [photoName, filePath], (err, result) => {
         if (err) {
             return res.status(500).json({ message: 'Database error', error: err });
         }
-
-        if (result.length === 0) {
-            return res.status(404).json({ message: 'Gallery not found' });
-        }
-
-        const filePath = result[0].file_path;
-
-        const deleteSql = 'DELETE FROM home_gallery WHERE id = ?';
-        db.query(deleteSql, [id], (err, deleteResult) => {
-            if (err) {
-                return res.status(500).json({ message: 'Database error', error: err });
-            }
-
-            fs.unlink(path.join(__dirname, '..', filePath), (fsErr) => {
-                if (fsErr) {
-                    console.error('Error deleting file:', fsErr);
-                }
-            });
-
-            res.status(200).json({ message: 'Home gallery deleted successfully' });
+        res.status(201).json({
+            message: 'Image and photo name uploaded successfully',
+            imageUrl: filePath,
         });
     });
 });
+
 
 router.put('/home-gallerys/:id', upload.single('image'), (req, res) => {
     const { id } = req.params;
@@ -174,6 +146,39 @@ router.put('/home-gallerys/:id', upload.single('image'), (req, res) => {
             }
 
             res.status(200).json({ message: 'Home gallery updated successfully' });
+        });
+    });
+});
+
+
+router.delete('/home-gallerys/:id', (req, res) => {
+    const { id } = req.params;
+
+    const selectSql = 'SELECT file_path FROM home_gallery WHERE id = ?';
+    db.query(selectSql, [id], (err, result) => {
+        if (err) {
+            return res.status(500).json({ message: 'Database error', error: err });
+        }
+
+        if (result.length === 0) {
+            return res.status(404).json({ message: 'Gallery not found' });
+        }
+
+        const filePath = result[0].file_path;
+
+        const deleteSql = 'DELETE FROM home_gallery WHERE id = ?';
+        db.query(deleteSql, [id], (err, deleteResult) => {
+            if (err) {
+                return res.status(500).json({ message: 'Database error', error: err });
+            }
+
+            fs.unlink(path.join(__dirname, '..', filePath), (fsErr) => {
+                if (fsErr) {
+                    console.error('Error deleting file:', fsErr);
+                }
+            });
+
+            res.status(200).json({ message: 'Home gallery deleted successfully' });
         });
     });
 });

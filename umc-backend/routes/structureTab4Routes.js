@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const db = require("../config/db.js");
 
-// Get all data or filter by language
+
 router.get("/structure-tab4", (req, res) => {
     const language = req.query.lang;
     let query = "SELECT * FROM structuretab4";
@@ -22,7 +22,7 @@ router.get("/structure-tab4", (req, res) => {
     });
 });
 
-// Add new data
+
 router.post("/structure-tab4", (req, res) => {
     const { ward, officer, language_code } = req.body;
 
@@ -40,7 +40,7 @@ router.post("/structure-tab4", (req, res) => {
     });
 });
 
-// Update data
+
 router.put("/structure-tab4/:id", (req, res) => {
     const { ward, officer, language_code } = req.body;
     const id = req.params.id;
@@ -59,6 +59,7 @@ router.put("/structure-tab4/:id", (req, res) => {
     });
 });
 
+
 router.delete("/structure-tab4/:id", (req, res) => {
     const sql = "DELETE FROM structuretab4 WHERE id = ?";
     db.query(sql, [req.params.id], (err, result) => {
@@ -69,5 +70,6 @@ router.delete("/structure-tab4/:id", (req, res) => {
         res.json({ success: true, message: "Data deleted successfully" });
     });
 });
+
 
 module.exports = router;

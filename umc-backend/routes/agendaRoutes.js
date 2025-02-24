@@ -7,15 +7,6 @@ const convertToMySQLDate = (dateString) => {
   return `${year}-${month}-${day}`;
 };
 
-// router.get("/agenda_data", (req, res) => {
-//   db.query("SELECT * FROM agenda", (err, results) => {
-//     if (err) {
-//       console.error(err);
-//       return res.status(500).json({ error: "Failed to fetch agenda." });
-//     }
-//     res.json(results);
-//   });
-// });
 
 router.get("/agenda_data", (req, res) => {
   const language = req.query.lang;
@@ -33,6 +24,7 @@ router.get("/agenda_data", (req, res) => {
     res.json(results);
   });
 });
+
 
 router.post("/agenda_data", (req, res) => {
   const { Department_Name, Agenda_No_Date, Schedule_Date_of_Meeting, Adjournment_Notice,language_code, pdf_link } = req.body;

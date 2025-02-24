@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const db = require("../config/db.js");
 
+
 router.get("/property-dept", (req, res) => {
   const language = req.query.lang;
   let query;
@@ -19,6 +20,7 @@ router.get("/property-dept", (req, res) => {
   });
 });
 
+
 router.post("/property-dept", (req, res) => {
   const { description, link, language_code } = req.body;
   const sql = "INSERT INTO property_dept (description, link, language_code) VALUES (?, ?, ?)";
@@ -27,6 +29,7 @@ router.post("/property-dept", (req, res) => {
     res.json({ id: result.insertId, description, link, language_code });
   });
 });
+
 
 router.put("/property-dept/:id", (req, res) => {
   const { description, link, language_code } = req.body;
@@ -37,6 +40,7 @@ router.put("/property-dept/:id", (req, res) => {
   });
 });
 
+
 router.delete("/property-dept/:id", (req, res) => {
   const sql = "DELETE FROM property_dept WHERE id = ?";
   db.query(sql, [req.params.id], (err, result) => {
@@ -44,5 +48,6 @@ router.delete("/property-dept/:id", (req, res) => {
     res.json({ success: true });
   });
 });
+
 
 module.exports = router;

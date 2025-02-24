@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const db = require("../config/db.js");
 
+
 router.get("/department-pdfs", (req, res) => {
   const language = req.query.lang;
   let query;
@@ -19,6 +20,7 @@ router.get("/department-pdfs", (req, res) => {
   });
 });
 
+
 router.post("/department-pdfs", (req, res) => {
   const { department, heading, link, language_code } = req.body;
   const sql = "INSERT INTO deptpdf (department, heading, link, language_code) VALUES (?, ?, ?, ?)";
@@ -27,6 +29,7 @@ router.post("/department-pdfs", (req, res) => {
     res.json({ id: result.insertId, department, heading, link, language_code });
   });
 });
+
 
 router.put("/department-pdfs/:id", (req, res) => {
   const { department, heading, link, language_code } = req.body;
@@ -37,6 +40,7 @@ router.put("/department-pdfs/:id", (req, res) => {
   });
 });
 
+
 router.delete("/department-pdfs/:id", (req, res) => {
   const sql = "DELETE FROM deptpdf WHERE id = ?";
   db.query(sql, [req.params.id], (err, result) => {
@@ -44,5 +48,6 @@ router.delete("/department-pdfs/:id", (req, res) => {
     res.json({ success: true });
   });
 });
+
 
 module.exports = router;

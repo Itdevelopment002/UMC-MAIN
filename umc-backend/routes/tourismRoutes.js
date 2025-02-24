@@ -16,47 +16,12 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-// Upload Middleware: Adjusted for single and array files
 const uploadFields = upload.fields([
   { name: "main_image", maxCount: 1 },
-  { name: "gallery", maxCount: 10 }, // Adjust maxCount as needed
+  { name: "gallery", maxCount: 10 }, 
 ]);
 
-router.post("/tourism", uploadFields, (req, res) => {
-  const { name, address, hours, description, locationLink, language_code } = req.body;
 
-  // Validation
-  if (!name || !address || !hours || !description || !locationLink || !language_code || !req.files.main_image) {
-    return res.status(400).json({ message: "All fields are required" });
-  }
-
-  const mainImagePath = `/uploads/${req.files.main_image[0].filename}`;
-  const imagePaths = req.files.gallery
-    ? req.files.gallery.map((file) => `/uploads/${file.filename}`)
-    : [];
-
-  const query = `
-    INSERT INTO ad_tourism (name, address, hours, description, main_image, location_link, language_code, gallery)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-  `;
-  db.query(
-    query,
-    [name, address, hours, description, mainImagePath, locationLink, language_code, JSON.stringify(imagePaths)],
-    (err, result) => {
-      if (err) {
-        return res.status(500).json({ message: "Error adding tourism site", error: err });
-      }
-      res.status(201).json({
-        message: "Tourism site added successfully",
-        tourismId: result.insertId,
-        main_image: mainImagePath,
-        gallery: imagePaths,
-      });
-    }
-  );
-});
-
-// Fetch All Tourism Data
 router.get("/tourism", (req, res) => {
   const language = req.query.lang;
   let query;
@@ -103,46 +68,41 @@ router.get("/tourism/name/:name", (req, res) => {
   });
 });
 
-// Delete Tourism Data
-router.delete("/tourism/:id", (req, res) => {
-  const { id } = req.params;
 
-  const selectSql = "SELECT gallery, main_image FROM ad_tourism WHERE id = ?";
-  db.query(selectSql, [id], (err, result) => {
-    if (err) {
-      return res.status(500).json({ message: "Database error", error: err });
-    }
+router.post("/tourism", uploadFields, (req, res) => {
+  const { name, address, hours, description, locationLink, language_code } = req.body;
 
-    if (result.length === 0) {
-      return res.status(404).json({ message: "Tourism site not found" });
-    }
+  if (!name || !address || !hours || !description || !locationLink || !language_code || !req.files.main_image) {
+    return res.status(400).json({ message: "All fields are required" });
+  }
 
-    const { gallery, main_image } = result[0];
+  const mainImagePath = `/uploads/${req.files.main_image[0].filename}`;
+  const imagePaths = req.files.gallery
+    ? req.files.gallery.map((file) => `/uploads/${file.filename}`)
+    : [];
 
-    const images = JSON.parse(gallery);
-    const allImages = [...images, main_image];
-
-    const deleteSql = "DELETE FROM ad_tourism WHERE id = ?";
-    db.query(deleteSql, [id], (err) => {
+  const query = `
+    INSERT INTO ad_tourism (name, address, hours, description, main_image, location_link, language_code, gallery)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+  `;
+  db.query(
+    query,
+    [name, address, hours, description, mainImagePath, locationLink, language_code, JSON.stringify(imagePaths)],
+    (err, result) => {
       if (err) {
-        return res.status(500).json({ message: "Database error", error: err });
+        return res.status(500).json({ message: "Error adding tourism site", error: err });
       }
-
-      allImages.forEach((image) => {
-        const filePath = path.join(__dirname, "..", image);
-        fs.unlink(filePath, (fsErr) => {
-          if (fsErr) {
-            console.error("Error deleting image:", fsErr);
-          }
-        });
+      res.status(201).json({
+        message: "Tourism site added successfully",
+        tourismId: result.insertId,
+        main_image: mainImagePath,
+        gallery: imagePaths,
       });
-
-      res.status(200).json({ message: "Tourism site deleted successfully" });
-    });
-  });
+    }
+  );
 });
 
-// Update Tourism Data
+
 router.put("/tourism/:id", uploadFields, (req, res) => {
   const { id } = req.params;
   const { name, address, hours, description, locationLink, language_code } = req.body;
@@ -206,5 +166,45 @@ router.put("/tourism/:id", uploadFields, (req, res) => {
     res.status(200).json({ message: "Tourism site updated successfully" });
   });
 });
+
+
+router.delete("/tourism/:id", (req, res) => {
+  const { id } = req.params;
+
+  const selectSql = "SELECT gallery, main_image FROM ad_tourism WHERE id = ?";
+  db.query(selectSql, [id], (err, result) => {
+    if (err) {
+      return res.status(500).json({ message: "Database error", error: err });
+    }
+
+    if (result.length === 0) {
+      return res.status(404).json({ message: "Tourism site not found" });
+    }
+
+    const { gallery, main_image } = result[0];
+
+    const images = JSON.parse(gallery);
+    const allImages = [...images, main_image];
+
+    const deleteSql = "DELETE FROM ad_tourism WHERE id = ?";
+    db.query(deleteSql, [id], (err) => {
+      if (err) {
+        return res.status(500).json({ message: "Database error", error: err });
+      }
+
+      allImages.forEach((image) => {
+        const filePath = path.join(__dirname, "..", image);
+        fs.unlink(filePath, (fsErr) => {
+          if (fsErr) {
+            console.error("Error deleting image:", fsErr);
+          }
+        });
+      });
+
+      res.status(200).json({ message: "Tourism site deleted successfully" });
+    });
+  });
+});
+
 
 module.exports = router;

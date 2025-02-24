@@ -188,5 +188,7 @@ router.delete("/banner/:id", (req, res) => {
   });
 });
 
+router.use("/uploads", express.static("uploads"));
 
 module.exports = router;
+

@@ -20,6 +20,7 @@ router.get("/ward-committee", (req, res) => {
   });
 });
 
+
 router.post("/ward-committee", (req, res) => {
   const { ward, heading , language_code} = req.body;
   const sql = "INSERT INTO wardcommittee (ward, heading, language_code) VALUES (?, ?, ?)";
@@ -28,6 +29,7 @@ router.post("/ward-committee", (req, res) => {
     res.json({ id: result.insertId, ward, heading, language_code });
   });
 });
+
 
 router.put("/ward-committee/:id", (req, res) => {
   const { ward, heading, language_code } = req.body;
@@ -38,6 +40,7 @@ router.put("/ward-committee/:id", (req, res) => {
   });
 });
 
+
 router.delete("/ward-committee/:id", (req, res) => {
   const sql = "DELETE FROM wardcommittee WHERE id = ?";
   db.query(sql, [req.params.id], (err, result) => {
@@ -45,5 +48,6 @@ router.delete("/ward-committee/:id", (req, res) => {
     res.json({ success: true });
   });
 });
+
 
 module.exports = router;

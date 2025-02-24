@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const db = require("../config/db.js");
 
+
 router.get("/women-committee", (req, res) => {
   const language = req.query.lang;
   let query;
@@ -19,6 +20,7 @@ router.get("/women-committee", (req, res) => {
   });
 });
 
+
 router.post("/women-committee", (req, res) => {
   const { heading, language_code } = req.body;
   const sql = "INSERT INTO womencommittee (heading, language_code) VALUES (?, ?)";
@@ -28,6 +30,7 @@ router.post("/women-committee", (req, res) => {
   });
 });
 
+
 router.put("/women-committee/:id", (req, res) => {
   const { heading, language_code } = req.body;
   const sql = "UPDATE womencommittee SET heading = ?, language_code = ? WHERE id = ?";
@@ -36,6 +39,7 @@ router.put("/women-committee/:id", (req, res) => {
     res.json({ success: true });
   });
 });
+
 
 router.delete("/women-committee/:id", (req, res) => {
   const sql = "DELETE FROM womencommittee WHERE id = ?";

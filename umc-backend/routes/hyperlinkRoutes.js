@@ -2,20 +2,6 @@ const express = require("express");
 const router = express.Router();
 const db = require("../config/db.js");
 
-router.post("/hyperlink-policy", (req, res) => {
-  const { description, language_code } = req.body;
-
-  const sql = "INSERT INTO hyperlinkpolicy (description, language_code) VALUES (?, ?)";
-  db.query(sql, [description, language_code], (err, result) => {
-    if (err) {
-      console.error("Error inserting data:", err);
-      return res
-        .status(500)
-        .json({ error: "Failed to add hyperlink policy" });
-    }
-    res.status(201).json({ id: result.insertId, description, language_code });
-  });
-});
 
 router.get("/hyperlink-policy", (req, res) => {
   const language = req.query.lang;
@@ -34,19 +20,22 @@ router.get("/hyperlink-policy", (req, res) => {
   });
 });
 
-router.delete("/hyperlink-policy/:id", (req, res) => {
-  const { id } = req.params;
-  const sql = "DELETE FROM hyperlinkpolicy WHERE id = ?";
-  db.query(sql, [id], (err, result) => {
+
+router.post("/hyperlink-policy", (req, res) => {
+  const { description, language_code } = req.body;
+
+  const sql = "INSERT INTO hyperlinkpolicy (description, language_code) VALUES (?, ?)";
+  db.query(sql, [description, language_code], (err, result) => {
     if (err) {
-      console.error("Error deleting data:", err);
+      console.error("Error inserting data:", err);
       return res
         .status(500)
-        .json({ error: "Failed to delete hyperlink policy" });
+        .json({ error: "Failed to add hyperlink policy" });
     }
-    res.json({ message: "Hyperlink Policy deleted successfully" });
+    res.status(201).json({ id: result.insertId, description, language_code });
   });
 });
+
 
 router.put("/hyperlink-policy/:id", (req, res) => {
   const { id } = req.params;
@@ -62,5 +51,21 @@ router.put("/hyperlink-policy/:id", (req, res) => {
     res.json({ message: "Hyperlink Policy updated successfully" });
   });
 });
+
+
+router.delete("/hyperlink-policy/:id", (req, res) => {
+  const { id } = req.params;
+  const sql = "DELETE FROM hyperlinkpolicy WHERE id = ?";
+  db.query(sql, [id], (err, result) => {
+    if (err) {
+      console.error("Error deleting data:", err);
+      return res
+        .status(500)
+        .json({ error: "Failed to delete hyperlink policy" });
+    }
+    res.json({ message: "Hyperlink Policy deleted successfully" });
+  });
+});
+
 
 module.exports = router;

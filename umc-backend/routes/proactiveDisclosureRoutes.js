@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const db = require("../config/db.js");
 
+
 router.get("/proactive-disclosure", (req, res) => {
   const language = req.query.lang;
   let query;
@@ -19,6 +20,7 @@ router.get("/proactive-disclosure", (req, res) => {
   });
 });
 
+
 router.post("/proactive-disclosure", (req, res) => {
   const { description, link, language_code } = req.body;
   const sql = "INSERT INTO proactive_disclosure (description, link, language_code) VALUES (?, ?, ?)";
@@ -27,6 +29,7 @@ router.post("/proactive-disclosure", (req, res) => {
     res.json({ id: result.insertId, description, link, language_code });
   });
 });
+
 
 router.put("/proactive-disclosure/:id", (req, res) => {
   const { description, link, language_code } = req.body;
@@ -37,6 +40,7 @@ router.put("/proactive-disclosure/:id", (req, res) => {
   });
 });
 
+
 router.delete("/proactive-disclosure/:id", (req, res) => {
   const sql = "DELETE FROM proactive_disclosure WHERE id = ?";
   db.query(sql, [req.params.id], (err, result) => {
@@ -44,5 +48,6 @@ router.delete("/proactive-disclosure/:id", (req, res) => {
     res.json({ success: true });
   });
 });
+
 
 module.exports = router;

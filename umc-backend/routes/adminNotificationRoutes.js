@@ -3,6 +3,7 @@ const router = express.Router();
 const db = require("../config/db.js");
 router.use(express.json());
 
+
 router.get("/admin-notifications", (req, res) => {
   const query = "SELECT * FROM admin_notification";
   db.query(query, (err, results) => {
