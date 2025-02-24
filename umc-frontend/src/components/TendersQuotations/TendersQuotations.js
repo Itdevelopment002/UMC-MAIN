@@ -190,7 +190,7 @@ const TendersQuotations = () => {
                                 <table className="table table-bordered shadow table-responsive">
                                     <thead className="bg-orange text-white">
                                         <tr>
-                                            <th className="table-heading-styling text-center" width='8%'>{t('departments.sno')}</th>
+                                            <th className="table-heading-styling text-center" width='8%'>{t('tender.issue_date')}</th>
                                             <th className="table-heading-styling" width='60%'>{t('tender.tendername')}</th>
                                             <th className="table-heading-styling">{t("propertyTaxDept.department")}</th>
                                             <th className="table-heading-styling text-center">{t('departments.action')}</th>
@@ -200,21 +200,13 @@ const TendersQuotations = () => {
                                         {currentData.map((item, index) => (
                                             <tr key={index}>
                                                 <td className="font-large text-center">
-                                                    {(() => {
-                                                        const language = i18n.language;
-
-                                                        const toMarathiNumbers = (num) => {
-                                                            const marathiDigits = ["०", "१", "२", "३", "४", "५", "६", "७", "८", "९"];
-                                                            return num
-                                                                .toString()
-                                                                .split("")
-                                                                .map((digit) => marathiDigits[parseInt(digit, 10)])
-                                                                .join("");
-                                                        };
-
-                                                        const number = startIndex + index + 1;
-                                                        return language === "mr" ? toMarathiNumbers(number) : number;
-                                                    })()}
+                                                    {new Date(item.issue_date)
+                                                        .toLocaleDateString("en-GB", {
+                                                            day: "2-digit",
+                                                            month: "2-digit",
+                                                            year: "numeric",
+                                                        })
+                                                        .replace(/\//g, "-")}
                                                 </td>
                                                 <td style={{ textWrap: "pretty" }}>{item.heading}</td>
                                                 <td>{item.department}</td>
