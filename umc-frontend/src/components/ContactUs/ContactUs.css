@@ -62,7 +62,6 @@
 #contact-css .card-body {
     position: relative;
     padding-left: 18px;
-    text-align: justify;
 }
 
 #contact-css .left-border {
@@ -94,4 +93,23 @@
     font-size: 16px;
     color: #67748E;
     margin-bottom: 5px;
+}
+#contact-css .custom-email{
+    word-break: break-word;
+}
+
+@media (max-width:700px){
+    #contact-css .card-header {
+        width: 100%;
+    }
+}
+@media (max-width:567px){
+    #contact-css .card-header {
+        width: 60%;
+    }
+}
+@media (max-width:360px){
+    #contact-css .card-header {
+        width: 100%;
+    }
 }
