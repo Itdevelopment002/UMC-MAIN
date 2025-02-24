@@ -538,6 +538,7 @@
         "title": "Tenders & Quotations",
         "highlight": "Tenders",
         "highlight-text": "& Quotations",
+        "issue_date": "Issue Date",
         "tendername": "Quotations / Tenders Details"
     },
     "rti": {
