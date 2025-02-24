@@ -1,7 +1,16 @@
-body {
-  position: relative;
+
+:root {
+  --global-font-family: 'Roboto', sans-serif;
 }
 
+body {
+    position: relative;
+  font-family: var(--global-font-family) !important;
+}
+
+* {
+  font-family: var(--global-font-family) !important;
+}
 body::before {
   content: "";
   position: fixed;
@@ -12,6 +21,7 @@ body::before {
   background: url(./assets/bg-watermark.png) center/1380px no-repeat;
   opacity: 0.1;
   z-index: -1;
+
 }
 
 

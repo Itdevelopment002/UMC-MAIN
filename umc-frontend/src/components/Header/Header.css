@@ -11,9 +11,9 @@
     }
 }
 
-.navbar-container {
+/* .navbar-container {
     font-family: "Roboto";
-}
+} */
 
 .top-bar {
     background-color: #FFF7E2;
@@ -170,7 +170,7 @@
     color: #662D1E;
     font-weight: 600;
     margin-top: 10px;
-    font-family: 'Rowdies';
+    font-family: 'Rowdies' !important;
     margin: 0px;
     text-decoration: none !important;
 }

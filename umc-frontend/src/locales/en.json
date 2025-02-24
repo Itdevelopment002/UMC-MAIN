@@ -595,5 +595,15 @@
         "title": "Sub RTI",
         "highlight": "Sub",
         "highlight-text": "RTI"
+    },
+    "feedback":{
+        "title": "FEEDBACK",
+        "Heading": "Feedback",
+        "rate": "Rate",
+        "like": "Did you like the website",
+        "yes": "Yes",
+        "no" : "No",
+        "comment": "Additional Comments",
+        "submit" : "Submit"
     }
 }
