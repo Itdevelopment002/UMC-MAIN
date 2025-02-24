@@ -400,9 +400,9 @@
         "highlight-text": "Administrative Department"
     },
     "handicapDept": {
-        "title": "Handicap Welfare Scheme",
+        "title": "Handicap Welfare Department",
         "highlight": "Handicap",
-        "highlight-text": "Welfare Scheme"
+        "highlight-text": "Welfare Department"
     },
     "lbtDept": {
         "title": "LBT Department",

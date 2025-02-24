@@ -71,7 +71,7 @@ const HandicapWelfareScheme = () => {
     return pageNumbers;
   };
 
-  const department_name = (i18n.language === 'en') ? "Handicap Welfare Scheme": "दिव्यांग कल्याणकारी विभाग"
+  const department_name = (i18n.language === 'en') ? "Handicap Welfare Department": "दिव्यांग कल्याणकारी विभाग"
 
   const fetchBanner = async () => {
     try {
