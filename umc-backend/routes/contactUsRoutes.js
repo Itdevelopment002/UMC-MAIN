@@ -19,6 +19,41 @@ const upload = multer({
   limits: { fileSize: 10 * 1024 * 1024 },
 });
 
+
+router.get("/contact-info", (req, res) => {
+  const language = req.query.lang;
+  let query;
+  let params = [];
+  if (language) {
+    query = `SELECT * FROM contactinfo WHERE language_code = ?`;
+    params.push(language);
+  } else {
+    query = "SELECT * FROM contactinfo";
+  }
+  db.query(query, params,(err, results) => {
+    if (err) {
+      return res.status(500).json({ message: "Database error", error: err });
+    }
+    res.status(200).json(results);
+  });
+});
+
+
+router.get("/contact-info/:id", (req, res) => {
+  const { id } = req.params;
+  const sql = "SELECT * FROM contactinfo WHERE id = ?";
+  db.query(sql, [id], (err, result) => {
+    if (err) {
+      return res.status(500).json({ message: "Database error", error: err });
+    }
+    if (result.length === 0) {
+      return res.status(404).json({ message: "Contact not found" });
+    }
+    res.status(200).json(result[0]);
+  });
+});
+
+
 router.post("/contact-info", upload.single("contactIcon"), (req, res) => {
   const { heading, description, language_code } = req.body;
 
@@ -42,37 +77,6 @@ router.post("/contact-info", upload.single("contactIcon"), (req, res) => {
   });
 });
 
-router.get("/contact-info", (req, res) => {
-  const language = req.query.lang;
-  let query;
-  let params = [];
-  if (language) {
-    query = `SELECT * FROM contactinfo WHERE language_code = ?`;
-    params.push(language);
-  } else {
-    query = "SELECT * FROM contactinfo";
-  }
-  db.query(query, params,(err, results) => {
-    if (err) {
-      return res.status(500).json({ message: "Database error", error: err });
-    }
-    res.status(200).json(results);
-  });
-});
-
-router.get("/contact-info/:id", (req, res) => {
-  const { id } = req.params;
-  const sql = "SELECT * FROM contactinfo WHERE id = ?";
-  db.query(sql, [id], (err, result) => {
-    if (err) {
-      return res.status(500).json({ message: "Database error", error: err });
-    }
-    if (result.length === 0) {
-      return res.status(404).json({ message: "Contact not found" });
-    }
-    res.status(200).json(result[0]);
-  });
-});
 
 router.put("/contact-info/:id", upload.single("contactIcon"), (req, res) => {
   const { id } = req.params;
@@ -147,6 +151,7 @@ router.put("/contact-info/:id", upload.single("contactIcon"), (req, res) => {
   });
 });
 
+
 router.delete("/contact-info/:id", (req, res) => {
   const { id } = req.params;
 
@@ -179,5 +184,6 @@ router.delete("/contact-info/:id", (req, res) => {
     });
   });
 });
+
 
 module.exports = router;

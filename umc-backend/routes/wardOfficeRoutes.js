@@ -2,17 +2,7 @@ const express = require("express");
 const router = express.Router();
 const db = require("../config/db.js");
 
-// Get all ward offices
-// router.get("/ward-offices", (req, res) => {
-//   db.query("SELECT * FROM WardOffices", (err, results) => {
-//     if (err) {
-//       console.error(err);
-//       res.status(500).json({ error: "Database query error" });
-//     } else {
-//       res.json(results);
-//     }
-//   });
-// });
+
 router.get("/ward-offices", (req, res) => {
   const language = req.query.lang;
   let query;
@@ -30,7 +20,7 @@ router.get("/ward-offices", (req, res) => {
   });
 });
 
-// Add a new ward office
+
 router.post("/ward-offices", (req, res) => {
   const { ward_no, ward_name, officer_name, address, email, mobile, landline, areas, map_url,language_code } = req.body;
 
@@ -65,7 +55,7 @@ router.post("/ward-offices", (req, res) => {
   );
 });
 
-// Update a ward office by ID
+
 router.put("/ward-offices/:id", (req, res) => {
   const { ward_no, ward_name, officer_name, address, email, mobile, landline, areas, map_url,language_code } = req.body;
 
@@ -89,7 +79,7 @@ router.put("/ward-offices/:id", (req, res) => {
   );
 });
 
-// Delete a ward office by ID
+
 router.delete("/ward-offices/:id", (req, res) => {
   const sql = "DELETE FROM WardOffices WHERE id = ?";
 
@@ -102,5 +92,6 @@ router.delete("/ward-offices/:id", (req, res) => {
     }
   });
 });
+
 
 module.exports = router;

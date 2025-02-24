@@ -18,29 +18,6 @@ const upload = multer({ storage,
  limits: { fileSize: 10 * 1024 * 1024 },
 });
 
-router.post("/hod-details", upload.single("hodImage"), (req, res) => {
-  if (!req.file) {
-    return res.status(400).json({ message: "No file uploaded" });
-  }
-
-  const filePath = `/uploads/${req.file.filename}`;
-  const { hodName, designation, education, address, number, email, language_code } = req.body;
-
-  if (!hodName || !designation || !education || !address || !number || !email || !language_code) {
-    return res.status(400).json({ message: "Hod name, designation, education, address, number and email are required" });
-  }
-
-  const sql = "INSERT INTO depthod (name, designation, education, address, number, email, language_code, file_path) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-  db.query(sql, [hodName, designation, education, address, number, email, language_code, filePath], (err, result) => {
-    if (err) {
-      return res.status(500).json({ message: "Database error", error: err });
-    }
-    res.status(201).json({
-      message: "Name, designation, education, address, number, email and image uploaded successfully",
-      hodImageUrl: filePath,
-    });
-  });
-});
 
 router.get("/hod-details", (req, res) => {
   const language = req.query.lang;
@@ -97,37 +74,30 @@ router.get("/hod-details/:id?", (req, res) => {
 });
 
 
-router.delete("/hod-details/:id", (req, res) => {
-  const { id } = req.params;
+router.post("/hod-details", upload.single("hodImage"), (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ message: "No file uploaded" });
+  }
 
-  const selectSql = "SELECT file_path FROM depthod WHERE id = ?";
-  db.query(selectSql, [id], (err, result) => {
+  const filePath = `/uploads/${req.file.filename}`;
+  const { hodName, designation, education, address, number, email, language_code } = req.body;
+
+  if (!hodName || !designation || !education || !address || !number || !email || !language_code) {
+    return res.status(400).json({ message: "Hod name, designation, education, address, number and email are required" });
+  }
+
+  const sql = "INSERT INTO depthod (name, designation, education, address, number, email, language_code, file_path) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+  db.query(sql, [hodName, designation, education, address, number, email, language_code, filePath], (err, result) => {
     if (err) {
       return res.status(500).json({ message: "Database error", error: err });
     }
-
-    if (result.length === 0) {
-      return res.status(404).json({ message: "Hod detail not found" });
-    }
-
-    const filePath = result[0].file_path;
-
-    const deleteSql = "DELETE FROM depthod WHERE id = ?";
-    db.query(deleteSql, [id], (err, deleteResult) => {
-      if (err) {
-        return res.status(500).json({ message: "Database error", error: err });
-      }
-
-      fs.unlink(path.join(__dirname, "..", filePath), (fsErr) => {
-        if (fsErr) {
-          console.error("Error deleting file:", fsErr);
-        }
-      });
-
-      res.status(200).json({ message: "Hod detail deleted successfully" });
+    res.status(201).json({
+      message: "Name, designation, education, address, number, email and image uploaded successfully",
+      hodImageUrl: filePath,
     });
   });
 });
+
 
 router.put("/hod-details/:id", upload.single("hodImage"), (req, res) => {
   const { id } = req.params;
@@ -219,5 +189,39 @@ router.put("/hod-details/:id", upload.single("hodImage"), (req, res) => {
     });
   });
 });
+
+
+router.delete("/hod-details/:id", (req, res) => {
+  const { id } = req.params;
+
+  const selectSql = "SELECT file_path FROM depthod WHERE id = ?";
+  db.query(selectSql, [id], (err, result) => {
+    if (err) {
+      return res.status(500).json({ message: "Database error", error: err });
+    }
+
+    if (result.length === 0) {
+      return res.status(404).json({ message: "Hod detail not found" });
+    }
+
+    const filePath = result[0].file_path;
+
+    const deleteSql = "DELETE FROM depthod WHERE id = ?";
+    db.query(deleteSql, [id], (err, deleteResult) => {
+      if (err) {
+        return res.status(500).json({ message: "Database error", error: err });
+      }
+
+      fs.unlink(path.join(__dirname, "..", filePath), (fsErr) => {
+        if (fsErr) {
+          console.error("Error deleting file:", fsErr);
+        }
+      });
+
+      res.status(200).json({ message: "Hod detail deleted successfully" });
+    });
+  });
+});
+
 
 module.exports = router;

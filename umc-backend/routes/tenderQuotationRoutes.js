@@ -7,6 +7,7 @@ const convertToMySQLDate = (dateString) => {
   return `${year}-${month}-${day}`;
 };
 
+
 router.get("/tenders-quotations", (req, res) => {
   const language = req.query.lang;
   let query;
@@ -24,6 +25,7 @@ router.get("/tenders-quotations", (req, res) => {
   });
 });
 
+
 router.post("/tenders-quotations", (req, res) => {
   const { heading, department, link, issue_date, language_code } = req.body;
   const formattedDate = convertToMySQLDate(issue_date);
@@ -33,6 +35,7 @@ router.post("/tenders-quotations", (req, res) => {
     res.json({ id: result.insertId, heading, department, link, language_code });
   });
 });
+
 
 router.put("/tenders-quotations/:id", (req, res) => {
   const { heading, department, link, issue_date, language_code } = req.body;
@@ -44,6 +47,7 @@ router.put("/tenders-quotations/:id", (req, res) => {
   });
 });
 
+
 router.delete("/tenders-quotations/:id", (req, res) => {
   const sql = "DELETE FROM tenders_quotations WHERE id = ?";
   db.query(sql, [req.params.id], (err, result) => {
@@ -51,5 +55,6 @@ router.delete("/tenders-quotations/:id", (req, res) => {
     res.json({ success: true });
   });
 });
+
 
 module.exports = router;

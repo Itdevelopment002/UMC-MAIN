@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const db = require("../config/db.js");
 
+
 router.get("/history_desc", (req, res) => {
   const language = req.query.lang;
   let query;
@@ -20,6 +21,7 @@ router.get("/history_desc", (req, res) => {
   });
 });
 
+
 router.post("/history_desc", (req, res) => {
   const { description, language_code } = req.body;
   const query = "INSERT INTO history_desc (description, language_code) VALUES (?, ?)";
@@ -32,6 +34,17 @@ router.post("/history_desc", (req, res) => {
     res.status(201).json({ id: result.insertId, description });
   });
 });
+
+
+router.put("/history_desc/:id", (req, res) => {
+  const { description, language_code } = req.body;
+  const sql = "UPDATE history_desc SET description = ?, language_code= ? WHERE id = ?";
+  db.query(sql, [description, language_code, req.params.id], (err, result) => {
+    if (err) throw err;
+    res.json({ success: true });
+  });
+});
+
 
 router.delete("/history_desc/:id", (req, res) => {
   const { id } = req.params;
@@ -47,13 +60,5 @@ router.delete("/history_desc/:id", (req, res) => {
   });
 });
 
-router.put("/history_desc/:id", (req, res) => {
-  const { description, language_code } = req.body;
-  const sql = "UPDATE history_desc SET description = ?, language_code= ? WHERE id = ?";
-  db.query(sql, [description, language_code, req.params.id], (err, result) => {
-    if (err) throw err;
-    res.json({ success: true });
-  });
-});
 
 module.exports = router;

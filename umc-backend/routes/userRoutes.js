@@ -18,19 +18,6 @@ const upload = multer({ storage,
  limits: { fileSize: 10 * 1024 * 1024 },
 });
 
-router.post("/users", (req, res) => {
-  const { username, password, department } = req.body;
-
-  const query =
-    "INSERT INTO users (username, password, department) VALUES (?, ?, ?)";
-  db.query(query, [username, password, department], (err, results) => {
-    if (err) {
-      console.error("Error adding user:", err);
-      return res.status(500).json({ message: "Error adding user" });
-    }
-    res.status(201).json({ id: results.insertId, username, department });
-  });
-});
 
 router.get("/users", (req, res) => {
   const query = "SELECT * FROM users";
@@ -42,6 +29,7 @@ router.get("/users", (req, res) => {
     res.json(results);
   });
 });
+
 
 router.get("/users/:id", (req, res) => { 
   const { id } = req.params;
@@ -58,6 +46,22 @@ router.get("/users/:id", (req, res) => {
     res.json(results[0]);
   });
 });
+
+
+router.post("/users", (req, res) => {
+  const { username, password, department } = req.body;
+
+  const query =
+    "INSERT INTO users (username, password, department) VALUES (?, ?, ?)";
+  db.query(query, [username, password, department], (err, results) => {
+    if (err) {
+      console.error("Error adding user:", err);
+      return res.status(500).json({ message: "Error adding user" });
+    }
+    res.status(201).json({ id: results.insertId, username, department });
+  });
+});
+
 
 router.put("/users/:id", upload.single("userImage"), async (req, res) => {
   const { id } = req.params;
@@ -114,7 +118,6 @@ router.put("/users/:id", upload.single("userImage"), async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 });
-
 
 
 router.delete("/users:id", (req, res) => {

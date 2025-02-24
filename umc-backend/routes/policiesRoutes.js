@@ -2,12 +2,14 @@ const express = require("express");
 const router = express.Router();
 const db = require("../config/db.js");
 
+
 router.get("/policies_data", (req, res) => {
   db.query("SELECT * FROM policies", (err, results) => {
     if (err) throw err;
     res.json(results);
   });
 });
+
 
 router.post("/policies_data", (req, res) => {
   const { heading, link } = req.body;
@@ -18,6 +20,7 @@ router.post("/policies_data", (req, res) => {
   });
 });
 
+
 router.put("/policies_data/:id", (req, res) => {
   const { heading, link } = req.body;
   const sql = "UPDATE policies SET heading = ?, link = ? WHERE id = ?";
@@ -27,6 +30,7 @@ router.put("/policies_data/:id", (req, res) => {
   });
 });
 
+
 router.delete("/policies_data/:id", (req, res) => {
   const sql = "DELETE FROM policies WHERE id = ?";
   db.query(sql, [req.params.id], (err, result) => {
@@ -34,5 +38,6 @@ router.delete("/policies_data/:id", (req, res) => {
     res.json({ success: true });
   });
 });
+
 
 module.exports = router;

@@ -26,6 +26,7 @@ const deleteFileIfExists = async (filePath) => {
   }
 };
 
+
 router.get("/projects", (req, res) => {
   const language = req.query.lang;
   let query;
@@ -45,6 +46,7 @@ router.get("/projects", (req, res) => {
   });
 });
 
+
 router.get("/projects/:id", (req, res) => {
   const { id } = req.params;
   const sql = "SELECT * FROM projects WHERE id = ?";
@@ -60,6 +62,49 @@ router.get("/projects/:id", (req, res) => {
     res.status(200).json(result[0]);
   });
 });
+
+
+router.post(
+  "/projects",
+  upload.fields([{ name: "mainIcon" }]),
+  async (req, res) => {
+    const { heading, description, link, language_code } = req.body;
+    if (!heading || !description || !link || !language_code) {
+      return res
+        .status(400)
+        .json({ message: "Project heading, Language code, description and link are required" });
+    }
+
+    let mainIconPath = null;
+
+    if (req.files["mainIcon"]) {
+      mainIconPath = path.join("uploads", req.files["mainIcon"][0].filename);
+    }
+
+    const insertSql =
+      "INSERT INTO projects (heading, description, link, language_code, main_icon_path) VALUES (?, ?, ?, ?, ?)";
+    const insertParams = [
+      heading,
+      description,
+      link,
+      language_code,
+      mainIconPath,
+    ];
+
+    db.query(insertSql, insertParams, (err, result) => {
+      if (err) {
+        return res.status(500).json({ message: "Database error", error: err });
+      }
+      res
+        .status(201)
+        .json({
+          message: "Project added successfully",
+          projectId: result.insertId,
+        });
+    });
+  }
+);
+
 
 router.put(
   "/projects/:id",
@@ -149,46 +194,6 @@ router.put(
   }
 );
 
-router.post(
-  "/projects",
-  upload.fields([{ name: "mainIcon" }]),
-  async (req, res) => {
-    const { heading, description, link, language_code } = req.body;
-    if (!heading || !description || !link || !language_code) {
-      return res
-        .status(400)
-        .json({ message: "Project heading, Language code, description and link are required" });
-    }
-
-    let mainIconPath = null;
-
-    if (req.files["mainIcon"]) {
-      mainIconPath = path.join("uploads", req.files["mainIcon"][0].filename);
-    }
-
-    const insertSql =
-      "INSERT INTO projects (heading, description, link, language_code, main_icon_path) VALUES (?, ?, ?, ?, ?)";
-    const insertParams = [
-      heading,
-      description,
-      link,
-      language_code,
-      mainIconPath,
-    ];
-
-    db.query(insertSql, insertParams, (err, result) => {
-      if (err) {
-        return res.status(500).json({ message: "Database error", error: err });
-      }
-      res
-        .status(201)
-        .json({
-          message: "Project added successfully",
-          projectId: result.insertId,
-        });
-    });
-  }
-);
 
 router.delete("/projects/:id", async (req, res) => {
   const { id } = req.params;
@@ -219,5 +224,6 @@ router.delete("/projects/:id", async (req, res) => {
     });
   });
 });
+
 
 module.exports = router;

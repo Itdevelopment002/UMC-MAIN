@@ -19,29 +19,6 @@ const upload = multer({
   limits: { fileSize: 10 * 1024 * 1024 },
 });
 
-router.post("/department-banner", upload.single("bannerImage"), (req, res) => {
-  if (!req.file) {
-    return res.status(400).json({ message: "No file uploaded" });
-  }
-
-  const filePath = `/uploads/${req.file.filename}`;
-  const departmentName = req.body.departmentName;
-
-  if (!departmentName) {
-    return res.status(400).json({ message: "Department name is required" });
-  }
-
-  const sql = "INSERT INTO deptbanner (name, file_path) VALUES (?, ?)";
-  db.query(sql, [departmentName, filePath], (err, result) => {
-    if (err) {
-      return res.status(500).json({ message: "Database error", error: err });
-    }
-    res.status(201).json({
-      message: "Image and department name uploaded successfully",
-      imageUrl: filePath,
-    });
-  });
-});
 
 router.get("/department-banner", (req, res) => {
   const sql = "SELECT * FROM deptbanner";
@@ -54,6 +31,7 @@ router.get("/department-banner", (req, res) => {
     res.status(200).json(results);
   });
 });
+
 
 router.get("/department-banner/:id", (req, res) => {
   const { id } = req.params;
@@ -78,37 +56,31 @@ router.get("/department-banner/:id", (req, res) => {
   });
 });
 
-router.delete("/department-banner/:id", (req, res) => {
-  const { id } = req.params;
 
-  const selectSql = "SELECT file_path FROM deptbanner WHERE id = ?";
-  db.query(selectSql, [id], (err, result) => {
+router.post("/department-banner", upload.single("bannerImage"), (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ message: "No file uploaded" });
+  }
+
+  const filePath = `/uploads/${req.file.filename}`;
+  const departmentName = req.body.departmentName;
+
+  if (!departmentName) {
+    return res.status(400).json({ message: "Department name is required" });
+  }
+
+  const sql = "INSERT INTO deptbanner (name, file_path) VALUES (?, ?)";
+  db.query(sql, [departmentName, filePath], (err, result) => {
     if (err) {
       return res.status(500).json({ message: "Database error", error: err });
     }
-
-    if (result.length === 0) {
-      return res.status(404).json({ message: "Department banner not found" });
-    }
-
-    const filePath = result[0].file_path;
-
-    const deleteSql = "DELETE FROM deptbanner WHERE id = ?";
-    db.query(deleteSql, [id], (err, deleteResult) => {
-      if (err) {
-        return res.status(500).json({ message: "Database error", error: err });
-      }
-
-      fs.unlink(path.join(__dirname, "..", filePath), (fsErr) => {
-        if (fsErr) {
-          console.error("Error deleting file:", fsErr);
-        }
-      });
-
-      res.status(200).json({ message: "Department banner deleted successfully" });
+    res.status(201).json({
+      message: "Image and department name uploaded successfully",
+      imageUrl: filePath,
     });
   });
 });
+
 
 router.put("/department-banner/:id", upload.single("bannerImage"), (req, res) => {
   const { id } = req.params;
@@ -164,5 +136,39 @@ router.put("/department-banner/:id", upload.single("bannerImage"), (req, res) =>
     });
   });
 });
+
+
+router.delete("/department-banner/:id", (req, res) => {
+  const { id } = req.params;
+
+  const selectSql = "SELECT file_path FROM deptbanner WHERE id = ?";
+  db.query(selectSql, [id], (err, result) => {
+    if (err) {
+      return res.status(500).json({ message: "Database error", error: err });
+    }
+
+    if (result.length === 0) {
+      return res.status(404).json({ message: "Department banner not found" });
+    }
+
+    const filePath = result[0].file_path;
+
+    const deleteSql = "DELETE FROM deptbanner WHERE id = ?";
+    db.query(deleteSql, [id], (err, deleteResult) => {
+      if (err) {
+        return res.status(500).json({ message: "Database error", error: err });
+      }
+
+      fs.unlink(path.join(__dirname, "..", filePath), (fsErr) => {
+        if (fsErr) {
+          console.error("Error deleting file:", fsErr);
+        }
+      });
+
+      res.status(200).json({ message: "Department banner deleted successfully" });
+    });
+  });
+});
+
 
 module.exports = router;

@@ -6,243 +6,262 @@ require('dotenv').config();
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
-app.use('/uploads', express.static('uploads'));
 
-const sliderRoutes = require('./routes/sliderRoutes');
-const serviceRoutes = require('./routes/serviceRoutes');
-const firestationRoutes = require('./routes/firestationRoutes');
-const historyRoutes = require('./routes/historyRoutes');
-const electedRoutes = require('./routes/electedRoutes');
-const presidentRoutes = require('./routes/presidentRoutes');
-const videosRoutes = require('./routes/videosRoutes');
-const galleryRoutes = require('./routes/galleryRoutes');
-const schoolRoutes = require('./routes/schoolRoutes');
-const schoolImageRoutes = require('./routes/schoolImageRoutes');
-const tenderRoutes = require('./routes/tenderRoutes');
-const departmentRoutes = require('./routes/departmentRoutes');
-const propertyHolderRoutes = require('./routes/propertyHolderRoutes');
-const muncipalRoutes = require('./routes/muncipalRoutes');
-const electricRoutes = require('./routes/electricRoutes');
-const roadsRoutes = require('./routes/roadsRoutes');
-const wardsRoutes = require('./routes/wardsRoutes');
-const gardenRoutes = require('./routes/gardenRoutes');
-const righttoservicesRoutes = require ('./routes/righttoservicesRoutes');
-const pdfRToSRoutes = require('./routes/pdfRToSRoutes');
-const GeneraladminaddyearRoutes = require('./routes/GeneraladminaddyearRoutes');
-const GeneraladmindepartmentRoutes = require('./routes/GeneraladmindepartmentRoutes');
-const NewsupdateRoutes = require('./routes/NewsupdateRoutes');
-const PublicdescriptionRoutes = require('./routes/PublicdescriptionRoutes');
-const WebsitelinkRoutes = require('./routes/WebsitelinkRoutes');
-const userRoutes = require('./routes/userRoutes');
-const pondRoutes = require('./routes/pondRoutes');
-const hospitalRoutes = require('./routes/hospitalRoutes');
-const functionRoutes = require('./routes/functionRoutes');
-const healthDeptRoutes = require('./routes/healthDeptRoutes');
-const sanitationRoutes = require('./routes/sanitationRoutes');
-const treatmentRoutes = require('./routes/treatmentRoutes');
-const litigationRoutes = require('./routes/litigationRoutes');
-const healthPhotoRoutes = require('./routes/healthPhotoRoutes');
+
+{/* Main Menu */}
 const mainMenuRoutes = require('./routes/mainMenuRoutes');
-const loginRoutes = require('./routes/loginRoutes');
-const visitorRoutes = require('./routes/visitorRoutes');
-const pondImageRoutes = require('./routes/pondImageRoutes');
-const emailRoutes = require('./routes/emailRoutes');
-const publicationRoutes = require('./routes/publicationRoutes');
-const downloadRoutes = require('./routes/downloadRoutes');
-const developmentRoutes = require('./routes/developmentRoutes');
-const developmentPdfRoutes = require('./routes/developmentPdfRoutes');
-const departmentDataRoutes = require('./routes/departmentDataRoutes');
-const departmentYearRoutes = require('./routes/departmentYearRoutes');
-const notificationRoutes = require('./routes/notificationRoutes');
-const adminNotificationRoutes = require('./routes/adminNotificationRoutes');
-const notifyStatusRoutes = require('./routes/notifyStatusRoutes');
+
+{/* Home */}
 const ministerDetailRoutes = require('./routes/ministerDetailRoutes');
-const citizenServicesRoutes = require('./routes/citizenServicesRoutes');
-const homeVideosRoutes = require('./routes/homeVideosRoutes');
+const sliderRoutes = require('./routes/sliderRoutes');
 const currentUpdateRoutes = require('./routes/currentUpdateRoutes') ;
 const umcNewsRoutes = require('./routes/umcNewsRoutes');
-const eServicesRoutes = require('./routes/eServicesRoutes');
 const initiativeRoutes = require('./routes/initiativeRoutes');
-const bottomSliderRoutes = require('./routes/bottomSliderRoutes');
-const homeServices2Routes = require('./routes/homeServices2Routes');
-const homeGalleryRoutes = require('./routes/homeGalleryRoutes');
-const quickLinksRoutes = require('./routes/quickLinksRoutes');
-const helpLinksRoutes = require('./routes/helpLinksRoutes');
-const onlineServicesRoutes = require('./routes/onlineServicesRoutes');
+const eServicesRoutes = require('./routes/eServicesRoutes');
 const informationRoutes = require('./routes/informationRoutes');
-const projectRoutes = require('./routes/projectRoutes');
-const homeService1Routes = require('./routes/homeService1Routes');
+const citizenServicesRoutes = require('./routes/citizenServicesRoutes');
+const homeVideosRoutes = require('./routes/homeVideosRoutes');
+const homeGalleryRoutes = require('./routes/homeGalleryRoutes');
 const portalServicesRoutes = require('./routes/portalServicesRoutes');
 const emergencyServicesRoutes = require('./routes/emergencyServicesRoutes');
-const contactInfoRoutes = require('./routes/contactInfoRoutes');
+const homeService1Routes = require('./routes/homeService1Routes');
+const homeServices2Routes = require('./routes/homeServices2Routes');
+const bottomSliderRoutes = require('./routes/bottomSliderRoutes');
+const swmsRoutes = require('./routes/swmsRoutes');
+const pressNotesRoutes = require('./routes/pressNotesRoutes');
+const propertyDeptRoutes = require('./routes/propertyDeptRoutes');
+
+{/* About UMC */}
 const locationRoutes = require('./routes/locationRoutes');
 const commissionerDetailsRoutes = require('./routes/commissionerDetailsRoutes');
 const commissionerDescRoutes = require('./routes/commissionerDescRoutes');
 const historyImageRoutes = require('./routes/historyImageRoutes');
 const historyDescRoutes = require('./routes/historyDescRoutes');
 const tourismRoutes = require('./routes/tourismRoutes');
-const departmentPageRoutes = require('./routes/departmentPageRoutes');
-const deptBannerRoutes = require('./routes/deptBannerRoutes');
-const deptHodRoutes = require('./routes/deptHodRoutes');
-const deptPdfRoutes = require('./routes/deptPdfRoutes');
-const deptDescriptionRoutes = require('./routes/deptDescriptionRoutes');
-const administrativeRoutes = require('./routes/administrationRoutes');
-const annualfinancialRoutes = require('./routes/annualfinancialRoutes');
-const wardOfficeRoutes = require('./routes/wardOfficeRoutes');
-const resolutionRoutes = require('./routes/resolutionRoutes');
-const policiesRoutes = require('./routes/policiesRoutes');
-const agendaRoutes = require('./routes/agendaRoutes');
-const eNewsRoutes = require('./routes/eNewsRoutes');
-const electedMemberRoutes = require('./routes/electedMemberRoutes');
-const budgetsRoutes = require('./routes/budgetsRoutes');
-const muncipalMeetingRoutes = require('./routes/muncipalMeetingRoutes');
-const policyRoutes = require('./routes/policyRoutes');
-const hyperlinkRoutes = require('./routes/hyperlinkRoutes');
-const recruitmentRoutes = require('./routes/recruitmentRoutes');
-const rtsRoutes = require('./routes/rtsRoutes');
-const wardRoutes = require('./routes/wardRoutes');
-const contactUsRoutes = require('./routes/contactUsRoutes');
-const swmsRoutes = require('./routes/swmsRoutes');
-const tenderQuotationRoutes = require('./routes/tenderQuotationRoutes');
-const pressNotesRoutes = require('./routes/pressNotesRoutes');
-const propertyDeptRoutes = require('./routes/propertyDeptRoutes');
-const rtiRoutes = require('./routes/rtiRoutes');
-const standingRoutes = require('./routes/standingRoutes');
-const womenRoutes = require('./routes/womenRoutes');
-const wardCommitteeRoutes = require('./routes/wardCommitteeRoutes');
-const circularRoutes = require('./routes/circularRoutes');
-const onlineServiceRoutes = require('./routes/onlineServiceRoutes');
-const imagesGalleryRoutes = require('./routes/imagesGalleryRoutes');
-const videoGalleryRoutes = require('./routes/videoGalleryRoutes');
-const bannerRoutes = require('./routes/bannerRoutes');
-const screenReaderRoutes = require('./routes/screenReaderRoutes');
-const proactiveDisclosureRoutes = require('./routes/proactiveDisclosureRoutes');
-const subRtiRoutes = require('./routes/subRtiRoutes');
-const projectDetailsRoutes = require('./routes/projectDetailsRoutes');
-const projectDescriptionRoutes = require('./routes/projectDescriptionRoutes');
+
+{/* Administrative Wings */}
 const structureTab1Routes = require('./routes/structureTab1Routes');
 const structureTab2Routes = require('./routes/structureTab2Routes');
 const structureTab3Routes = require('./routes/structureTab3Routes');
 const structureTab4Routes = require('./routes/structureTab4Routes');
 
+{/* Corporation */}
+const administrationRoutes = require('./routes/administrationRoutes');
+const annualfinancialRoutes = require('./routes/annualfinancialRoutes');
+const electedMemberRoutes = require('./routes/electedMemberRoutes');
+const eNewsRoutes = require('./routes/eNewsRoutes');
+const muncipalMeetingRoutes = require('./routes/muncipalMeetingRoutes');
+const agendaRoutes = require('./routes/agendaRoutes');
+const budgetsRoutes = require('./routes/budgetsRoutes');
+const standingRoutes = require('./routes/standingRoutes');
+const wardCommitteeRoutes = require('./routes/wardCommitteeRoutes');
+const womenRoutes = require('./routes/womenRoutes');
+const policiesRoutes = require('./routes/policiesRoutes');
+const resolutionRoutes = require('./routes/resolutionRoutes');
+const wardOfficeRoutes = require('./routes/wardOfficeRoutes');
 
-app.use('/api', sliderRoutes);
-app.use('/api', serviceRoutes);
-app.use('/api', firestationRoutes);
-app.use('/api', historyRoutes);
-app.use('/api', electedRoutes);
-app.use('/api', presidentRoutes);
-app.use('/api', videosRoutes);
-app.use('/api', galleryRoutes);
-app.use('/api', schoolRoutes);
-app.use('/api', schoolImageRoutes);
-app.use('/api', tenderRoutes);
-app.use('/api', departmentRoutes);
-app.use('/api', propertyHolderRoutes);
-app.use('/api', electricRoutes);
-app.use('/api', roadsRoutes);
-app.use('/api', muncipalRoutes);
-app.use('/api', wardsRoutes);
-app.use('/api', gardenRoutes);
-app.use('/api', righttoservicesRoutes);
-app.use('/api', pdfRToSRoutes);
-app.use('/api', GeneraladminaddyearRoutes);
-app.use('/api', GeneraladmindepartmentRoutes);
-app.use('/api', NewsupdateRoutes);
-app.use('/api', PublicdescriptionRoutes);
-app.use('/api', WebsitelinkRoutes);
-app.use('/api', userRoutes);
-app.use('/api', pondRoutes);
-app.use('/api', hospitalRoutes);
-app.use('/api', functionRoutes);
-app.use('/api', healthDeptRoutes);
-app.use('/api', sanitationRoutes);
-app.use('/api', treatmentRoutes);
-app.use('/api', litigationRoutes);
-app.use('/api', healthPhotoRoutes);
+{/* Departments */}
+const departmentPageRoutes = require('./routes/departmentPageRoutes');
+const deptBannerRoutes = require('./routes/deptBannerRoutes');
+const deptDescriptionRoutes = require('./routes/deptDescriptionRoutes');
+const deptHodRoutes = require('./routes/deptHodRoutes');
+const deptPdfRoutes = require('./routes/deptPdfRoutes');
+
+{/* Tenders and Quotations */}
+const tenderQuotationRoutes = require('./routes/tenderQuotationRoutes');
+
+{/* Right to Service */}
+const rtsRoutes = require('./routes/rtsRoutes');
+
+{/* Circulars */}
+const circularRoutes = require('./routes/circularRoutes');
+
+{/* Online Services */}
+const onlineServiceRoutes = require('./routes/onlineServiceRoutes');
+
+{/* Gallery */}
+const imagesGalleryRoutes = require('./routes/imagesGalleryRoutes');
+const videoGalleryRoutes = require('./routes/videoGalleryRoutes');
+
+{/* Upcoming Projects */}
+const projectRoutes = require('./routes/projectRoutes');
+const projectDetailsRoutes = require('./routes/projectDetailsRoutes');
+const projectDescriptionRoutes = require('./routes/projectDescriptionRoutes');
+
+{/* Right to Information */}
+const rtiRoutes = require('./routes/rtiRoutes');
+const proactiveDisclosureRoutes = require('./routes/proactiveDisclosureRoutes');
+const subRtiRoutes = require('./routes/subRtiRoutes');
+
+{/* Recruitment */}
+const recruitmentRoutes = require('./routes/recruitmentRoutes');
+
+{/* Banner */}
+const bannerRoutes = require('./routes/bannerRoutes');
+
+{/* Screen Reader */}
+const screenReaderRoutes = require('./routes/screenReaderRoutes');
+
+{/* Contact Us */}
+const contactUsRoutes = require('./routes/contactUsRoutes');
+const wardRoutes = require('./routes/wardRoutes');
+
+{/* Privacy Policy */}
+const policyRoutes = require('./routes/policyRoutes');
+
+{/* Hyperlink Policy */}
+const hyperlinkRoutes = require('./routes/hyperlinkRoutes');
+
+{/* Footer */}
+const contactInfoRoutes = require('./routes/contactInfoRoutes');
+const quickLinksRoutes = require('./routes/quickLinksRoutes');
+const helpLinksRoutes = require('./routes/helpLinksRoutes');
+const onlineServicesRoutes = require('./routes/onlineServicesRoutes');
+
+{/* Profile */}
+const userRoutes = require('./routes/userRoutes');
+
+{/* Email */}
+const emailRoutes = require('./routes/emailRoutes');
+
+{/* Login */}
+const loginRoutes = require('./routes/loginRoutes');
+
+{/* Visitor */}
+const visitorRoutes = require('./routes/visitorRoutes');
+
+{/* Notification */}
+const notificationRoutes = require('./routes/notificationRoutes');
+const adminNotificationRoutes = require('./routes/adminNotificationRoutes');
+const notifyStatusRoutes = require('./routes/notifyStatusRoutes');
+
+
+{/* Main Menu */}
 app.use('/api', mainMenuRoutes);
-app.use('/api', loginRoutes);
-app.use('/api', visitorRoutes);
-app.use('/api', pondImageRoutes);
-app.use('/api', emailRoutes);
-app.use('/api', publicationRoutes);
-app.use('/api', downloadRoutes);
-app.use('/api', developmentRoutes);
-app.use('/api', developmentPdfRoutes);
-app.use('/api', departmentDataRoutes);
-app.use('/api', departmentYearRoutes);
-app.use('/api', notificationRoutes);
-app.use('/api', adminNotificationRoutes);
-app.use('/api', notifyStatusRoutes);
+
+{/* Home */}
 app.use('/api', ministerDetailRoutes);
-app.use('/api', citizenServicesRoutes);
-app.use('/api', homeVideosRoutes);
+app.use('/api', sliderRoutes);
 app.use('/api', currentUpdateRoutes);
 app.use('/api', umcNewsRoutes);
-app.use('/api', eServicesRoutes);
 app.use('/api', initiativeRoutes);
-app.use('/api', bottomSliderRoutes);
-app.use('/api', homeServices2Routes);
-app.use('/api', homeGalleryRoutes);
-app.use('/api', quickLinksRoutes);
-app.use('/api', helpLinksRoutes);
-app.use('/api', onlineServicesRoutes);
+app.use('/api', eServicesRoutes);
 app.use('/api', informationRoutes);
-app.use('/api', projectRoutes);
-app.use('/api', homeService1Routes);
+app.use('/api', citizenServicesRoutes);
+app.use('/api', homeVideosRoutes);
+app.use('/api', homeGalleryRoutes);
 app.use('/api', portalServicesRoutes);
 app.use('/api', emergencyServicesRoutes);
-app.use('/api', contactInfoRoutes);
+app.use('/api', homeService1Routes);
+app.use('/api', homeServices2Routes);
+app.use('/api', bottomSliderRoutes);
+app.use('/api', swmsRoutes);
+app.use('/api', pressNotesRoutes);
+app.use('/api', propertyDeptRoutes);
+
+{/* About UMC */}
 app.use('/api', locationRoutes);
 app.use('/api', commissionerDetailsRoutes);
 app.use('/api', commissionerDescRoutes);
 app.use('/api', historyImageRoutes);
 app.use('/api', historyDescRoutes);
 app.use('/api', tourismRoutes);
-app.use('/api', departmentPageRoutes);
-app.use('/api', deptBannerRoutes);
-app.use('/api', deptHodRoutes);
-app.use('/api', deptPdfRoutes);
-app.use('/api', deptDescriptionRoutes);
-app.use('/api', administrativeRoutes);
-app.use('/api', annualfinancialRoutes);
-app.use('/api', wardOfficeRoutes);
-app.use('/api', resolutionRoutes);
-app.use('/api', policiesRoutes);
-app.use('/api', agendaRoutes);
-app.use('/api', eNewsRoutes);
-app.use('/api', electedMemberRoutes);
-app.use('/api', budgetsRoutes);
-app.use('/api', muncipalMeetingRoutes);
-app.use('/api', policyRoutes);
-app.use('/api', hyperlinkRoutes);
-app.use('/api', recruitmentRoutes);
-app.use('/api', rtsRoutes);
-app.use('/api', wardRoutes);
-app.use('/api', contactUsRoutes);
-app.use('/api', swmsRoutes);
-app.use('/api', tenderQuotationRoutes);
-app.use('/api', pressNotesRoutes);
-app.use('/api', propertyDeptRoutes);
-app.use('/api', rtiRoutes);
-app.use('/api', standingRoutes);
-app.use('/api', womenRoutes);
-app.use('/api', wardCommitteeRoutes);
-app.use('/api', circularRoutes);
-app.use('/api', onlineServiceRoutes);
-app.use('/api', imagesGalleryRoutes);
-app.use('/api', videoGalleryRoutes);
-app.use('/api', bannerRoutes);
-app.use('/api', screenReaderRoutes);
-app.use('/api', proactiveDisclosureRoutes);
-app.use('/api', subRtiRoutes);
-app.use('/api', projectDetailsRoutes);
-app.use('/api', projectDescriptionRoutes);
+
+{/* Administrative Wings */}
 app.use('/api', structureTab1Routes);
 app.use('/api', structureTab2Routes);
 app.use('/api', structureTab3Routes);
 app.use('/api', structureTab4Routes);
 
+{/* Corporation */}
+app.use('/api', administrationRoutes);
+app.use('/api', annualfinancialRoutes);
+app.use('/api', electedMemberRoutes);
+app.use('/api', eNewsRoutes);
+app.use('/api', muncipalMeetingRoutes);
+app.use('/api', agendaRoutes);
+app.use('/api', budgetsRoutes);
+app.use('/api', standingRoutes);
+app.use('/api', wardCommitteeRoutes);
+app.use('/api', womenRoutes);
+app.use('/api', policiesRoutes);
+app.use('/api', resolutionRoutes);
+app.use('/api', wardOfficeRoutes);
+
+{/* Departments */}
+app.use('/api', departmentPageRoutes);
+app.use('/api', deptBannerRoutes);
+app.use('/api', deptDescriptionRoutes);
+app.use('/api', deptHodRoutes);
+app.use('/api', deptPdfRoutes);
+
+{/* Tenders and Quotations */}
+app.use('/api', tenderQuotationRoutes);
+
+{/* Right to Service */}
+app.use('/api', rtsRoutes);
+
+{/* Circulars */}
+app.use('/api', circularRoutes);
+
+{/* Online Services */}
+app.use('/api', onlineServiceRoutes);
+
+{/* Gallery */}
+app.use('/api', imagesGalleryRoutes);
+app.use('/api', videoGalleryRoutes);
+
+{/* Upcoming Projects */}
+app.use('/api', projectRoutes);
+app.use('/api', projectDetailsRoutes);
+app.use('/api', projectDescriptionRoutes);
+
+{/* Right to Information */}
+app.use('/api', rtiRoutes);
+app.use('/api', proactiveDisclosureRoutes);
+app.use('/api', subRtiRoutes);
+
+{/* Recruitment */}
+app.use('/api', recruitmentRoutes);
+
+{/* Banner */}
+app.use('/api', bannerRoutes);
+
+{/* Visitor */}
+app.use('/api', screenReaderRoutes);
+
+{/* Contact Us */}
+app.use('/api', contactUsRoutes);
+app.use('/api', wardRoutes);
+
+{/* Privacy Policy */}
+app.use('/api', policyRoutes);
+
+{/* Hyperlink Policy */}
+app.use('/api', hyperlinkRoutes);
+
+{/* Footer */}
+app.use('/api', contactInfoRoutes);
+app.use('/api', quickLinksRoutes);
+app.use('/api', helpLinksRoutes);
+app.use('/api', onlineServicesRoutes);
+
+{/* Profile */}
+app.use('/api', userRoutes);
+
+{/* Feedback */}
+app.use('/api', emailRoutes);
+
+{/* Login */}
+app.use('/api', loginRoutes);
+
+{/* Visitor */}
+app.use('/api', visitorRoutes);
+
+{/* Notification */}
+app.use('/api', notificationRoutes);
+app.use('/api', adminNotificationRoutes);
+app.use('/api', notifyStatusRoutes);
 
 
 const PORT = process.env.PORT || 5011;

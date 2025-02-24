@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const db = require("../config/db.js");
 
+
 router.get("/notification", (req, res) => {
   const sql = "SELECT * FROM notification";
   db.query(sql, (err, results) => {
@@ -11,6 +12,7 @@ router.get("/notification", (req, res) => {
     res.json(results);
   });
 });
+
 
 router.get("/notification/:id", (req, res) => {
   const { id } = req.params;
@@ -22,6 +24,7 @@ router.get("/notification/:id", (req, res) => {
     res.json(results[0]);
   });
 });
+
 
 router.post("/notification", (req, res) => {
   const { heading, description, role, readed } = req.body;
@@ -45,6 +48,7 @@ router.post("/notification", (req, res) => {
   });
 });
 
+
 router.put("/update/:id", (req, res) => {
   const notificationId = req.params.id;
   const { readed } = req.body;
@@ -64,6 +68,7 @@ router.put("/update/:id", (req, res) => {
   });
 });
 
+
 router.delete("/notification/:id", (req, res) => {
   const { id } = req.params;
   const sql = "DELETE FROM notification WHERE id = ?";
@@ -74,5 +79,6 @@ router.delete("/notification/:id", (req, res) => {
     res.json({ message: "Notification deleted successfully", id });
   });
 });
+
 
 module.exports = router;
