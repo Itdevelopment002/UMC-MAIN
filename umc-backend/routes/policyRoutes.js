@@ -2,18 +2,6 @@ const express = require("express");
 const router = express.Router();
 const db = require("../config/db.js");
 
-router.post("/privacy-policy", (req, res) => {
-  const { heading, description, language_code } = req.body;
-
-  const sql = "INSERT INTO policy (heading, description, language_code) VALUES (?, ?, ?)";
-  db.query(sql, [heading, description, language_code], (err, result) => {
-    if (err) {
-      console.error("Error inserting data:", err);
-      return res.status(500).json({ error: "Failed to add privacy policy" });
-    }
-    res.status(201).json({ id: result.insertId, heading, description, language_code });
-  });
-});
 
 router.get("/privacy-policy", (req, res) => {
   const language = req.query.lang;
@@ -32,17 +20,20 @@ router.get("/privacy-policy", (req, res) => {
   });
 });
 
-router.delete("/privacy-policy/:id", (req, res) => {
-  const { id } = req.params;
-  const sql = "DELETE FROM policy WHERE id = ?";
-  db.query(sql, [id], (err, result) => {
+
+router.post("/privacy-policy", (req, res) => {
+  const { heading, description, language_code } = req.body;
+
+  const sql = "INSERT INTO policy (heading, description, language_code) VALUES (?, ?, ?)";
+  db.query(sql, [heading, description, language_code], (err, result) => {
     if (err) {
-      console.error("Error deleting data:", err);
-      return res.status(500).json({ error: "Failed to delete privacy policy" });
+      console.error("Error inserting data:", err);
+      return res.status(500).json({ error: "Failed to add privacy policy" });
     }
-    res.json({ message: "Privacy Policy deleted successfully" });
+    res.status(201).json({ id: result.insertId, heading, description, language_code });
   });
 });
+
 
 router.put("/privacy-policy/:id", (req, res) => {
   const { id } = req.params;
@@ -56,5 +47,19 @@ router.put("/privacy-policy/:id", (req, res) => {
     res.json({ message: "Privacy Policy updated successfully" });
   });
 });
+
+
+router.delete("/privacy-policy/:id", (req, res) => {
+  const { id } = req.params;
+  const sql = "DELETE FROM policy WHERE id = ?";
+  db.query(sql, [id], (err, result) => {
+    if (err) {
+      console.error("Error deleting data:", err);
+      return res.status(500).json({ error: "Failed to delete privacy policy" });
+    }
+    res.json({ message: "Privacy Policy deleted successfully" });
+  });
+});
+
 
 module.exports = router;

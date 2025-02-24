@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const db = require("../config/db.js");
 
+
 router.get("/screen-reader", (req, res) => {
     const language = req.query.lang;
     let query;
@@ -18,6 +19,7 @@ router.get("/screen-reader", (req, res) => {
         res.json(results);
     });
 });
+
 
 router.post("/screen-reader", (req, res) => {
     const { name, website, available, language_code } = req.body;
@@ -46,6 +48,7 @@ router.put("/screen-reader/:id", (req, res) => {
     });
 });
 
+
 router.delete("/screen-reader/:id", (req, res) => {
     const { id } = req.params;
     const sql = "DELETE FROM screen_reader WHERE id = ?";
@@ -57,5 +60,6 @@ router.delete("/screen-reader/:id", (req, res) => {
         res.json({ message: "Screen Reader Access deleted successfully" });
     });
 });
+
 
 module.exports = router;

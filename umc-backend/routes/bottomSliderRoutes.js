@@ -16,9 +16,9 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
+
 router.get("/bottom-sliders", (req, res) => {
   const sql = "SELECT * FROM bottom_slider";
-  
   db.query(sql, (err, results) => {
     if (err) {
       return res.status(500).json({ message: "Database error", error: err });

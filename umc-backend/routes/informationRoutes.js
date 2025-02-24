@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const db = require("../config/db.js");
 
+
 router.get("/information", (req, res) => {
   const language = req.query.lang;
   let query;
@@ -19,6 +20,7 @@ router.get("/information", (req, res) => {
   });
 });
 
+
 router.post("/information", (req, res) => {
   const { heading, link, language_code } = req.body;
   const sql = "INSERT INTO information (heading, link, language_code) VALUES (?, ?, ?)";
@@ -27,6 +29,7 @@ router.post("/information", (req, res) => {
     res.json({ id: result.insertId, heading, link });
   });
 });
+
 
 router.put("/information/:id", (req, res) => {
   const { heading, link, language_code } = req.body;
@@ -37,6 +40,7 @@ router.put("/information/:id", (req, res) => {
   });
 });
 
+
 router.delete("/information/:id", (req, res) => {
   const sql = "DELETE FROM information WHERE id = ?";
   db.query(sql, [req.params.id], (err, result) => {
@@ -44,5 +48,6 @@ router.delete("/information/:id", (req, res) => {
     res.json({ success: true });
   });
 });
+
 
 module.exports = router;

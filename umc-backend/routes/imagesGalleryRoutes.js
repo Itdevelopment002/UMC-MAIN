@@ -19,6 +19,24 @@ const upload = multer({
   limits: { fileSize: 10 * 1024 * 1024 },
 });
 
+
+router.get("/categories", (req, res) => {
+  const language = req.query.lang;
+  let query;
+  let params = [];
+  if (language) {
+    query = `SELECT * FROM categories WHERE language_code = ?`;
+    params.push(language);
+  } else {
+    query = "SELECT * FROM categories";
+  }
+  db.query(query, params, (err, results) => {
+    if (err) return res.status(500).json({ error: err.message });
+    res.json(results);
+  });
+});
+
+
 router.post("/categories", (req, res) => {
   const { categoryName, language_code } = req.body;
   if (!categoryName || !language_code) return res.status(400).json({ error: "Category name is required" });
@@ -28,6 +46,7 @@ router.post("/categories", (req, res) => {
     res.json({ message: "Category added successfully", id: result.insertId });
   });
 });
+
 
 router.put("/categories/:id", (req, res) => {
   const { id } = req.params;
@@ -42,6 +61,27 @@ router.put("/categories/:id", (req, res) => {
     res.json({ message: "Category updated successfully" });
   });
 });
+
+
+router.delete("/categories/:id", (req, res) => {
+  const { id } = req.params;
+
+  db.query("DELETE FROM categories WHERE id = ?", [id], (err, result) => {
+    if (err) return res.status(500).json({ error: err.message });
+    res.json({ message: "Category deleted successfully" });
+  });
+});
+
+
+router.get("/category-images/:category_id", (req, res) => {
+  const { category_id } = req.params;
+
+  db.query("SELECT * FROM category_images WHERE category_id = ?", [category_id], (err, results) => {
+    if (err) return res.status(500).json({ error: err.message });
+    res.json(results);
+  });
+});
+
 
 router.post("/category-images", upload.single("image"), (req, res) => {
   const { category_id } = req.body;
@@ -72,11 +112,9 @@ router.put("/category-images/:id", upload.single("image"), (req, res) => {
 
     const oldImagePath = `.${results[0].image_url}`;
 
-    // Update the database with the new image
     db.query("UPDATE category_images SET image_url = ? WHERE id = ?", [newImageUrl, id], (updateErr) => {
       if (updateErr) return res.status(500).json({ error: updateErr.message });
 
-      // Delete the old image file from storage
       fs.unlink(oldImagePath, (unlinkErr) => {
         if (unlinkErr) console.error("Failed to delete old image:", unlinkErr);
         res.json({ message: "Image updated successfully", image_url: newImageUrl });
@@ -85,39 +123,6 @@ router.put("/category-images/:id", upload.single("image"), (req, res) => {
   });
 });
 
-router.get("/categories", (req, res) => {
-  const language = req.query.lang;
-  let query;
-  let params = [];
-  if (language) {
-    query = `SELECT * FROM categories WHERE language_code = ?`;
-    params.push(language);
-  } else {
-    query = "SELECT * FROM categories";
-  }
-  db.query(query, params, (err, results) => {
-    if (err) return res.status(500).json({ error: err.message });
-    res.json(results);
-  });
-});
-
-router.get("/category-images/:category_id", (req, res) => {
-  const { category_id } = req.params;
-
-  db.query("SELECT * FROM category_images WHERE category_id = ?", [category_id], (err, results) => {
-    if (err) return res.status(500).json({ error: err.message });
-    res.json(results);
-  });
-});
-
-router.delete("/categories/:id", (req, res) => {
-  const { id } = req.params;
-
-  db.query("DELETE FROM categories WHERE id = ?", [id], (err, result) => {
-    if (err) return res.status(500).json({ error: err.message });
-    res.json({ message: "Category deleted successfully" });
-  });
-});
 
 router.delete("/category-images/:id", (req, res) => {
   const { id } = req.params;
@@ -141,5 +146,6 @@ router.delete("/category-images/:id", (req, res) => {
     });
   });
 });
+
 
 module.exports = router;

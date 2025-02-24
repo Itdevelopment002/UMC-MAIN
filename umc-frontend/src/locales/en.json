@@ -538,6 +538,7 @@
         "title": "Tenders & Quotations",
         "highlight": "Tenders",
         "highlight-text": "& Quotations",
+        "issue_date": "Issue Date",
         "tendername": "Quotations / Tenders Details"
     },
     "rti": {
@@ -595,7 +596,7 @@
     },
     "feedback":{
         "title": "FEEDBACK",
-        "Heading": "Feedback",
+        "heading": "Feedback",
         "rate": "Rate",
         "like": "Did you like the website",
         "yes": "Yes",

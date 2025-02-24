@@ -7,29 +7,6 @@ const convertToMySQLDate = (dateString) => {
   return `${year}-${month}-${day}`;
 };
 
-router.post("/home-video", (req, res) => {
-  const {videoUrl } = req.body;
-
-  if (!videoUrl) {
-    return res
-      .status(400)
-      .json({
-        message: "video URL are required",
-      });
-  }
-
-  const sql =
-    "INSERT INTO home_video (video_url) VALUES (?)";
-  db.query(sql, [videoUrl], (err, result) => {
-    if (err) {
-      console.error("Database error:", err);
-      return res.status(500).json({ message: "Database error", error: err });
-    }
-    res
-      .status(200)
-      .json({ message: "Video added successfully", videoId: result.insertId });
-  });
-});
 
 router.get("/home-video", (req, res) => {
   const sql = "SELECT * FROM home_video";
@@ -40,6 +17,7 @@ router.get("/home-video", (req, res) => {
     res.status(200).json(results);
   });
 });
+
 
 router.get("/home-video/:id", (req, res) => {
   const { id } = req.params;
@@ -54,6 +32,7 @@ router.get("/home-video/:id", (req, res) => {
     res.status(200).json(result[0]);
   });
 });
+
 
 router.put("/home-video/:id", (req, res) => {
   const { id } = req.params;
@@ -78,6 +57,7 @@ router.put("/home-video/:id", (req, res) => {
   });
 });
 
+
 router.delete("/home-video/:id", (req, res) => {
   const { id } = req.params;
 
@@ -92,5 +72,6 @@ router.delete("/home-video/:id", (req, res) => {
     res.status(200).json({ message: "Video deleted successfully" });
   });
 });
+
 
 module.exports = router;

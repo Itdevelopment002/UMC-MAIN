@@ -16,6 +16,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
+
 router.get("/minister-details", (req, res) => {
   const language = req.query.lang;
   let query;
@@ -161,6 +162,7 @@ router.put("/minister-details/:id", upload.single("image"), (req, res) => {
   });
 });
 
+
 router.delete("/minister-details/:id", (req, res) => {
   const { id } = req.params;
 
@@ -193,5 +195,6 @@ router.delete("/minister-details/:id", (req, res) => {
     });
   });
 });
+
 
 module.exports = router;

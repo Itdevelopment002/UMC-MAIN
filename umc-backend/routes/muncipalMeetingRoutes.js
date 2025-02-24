@@ -2,13 +2,7 @@ const express = require("express");
 const router = express.Router();
 const db = require("../config/db.js");
 
-// Get all municipal meeting records
-// router.get("/muncipal_meetings", (req, res) => {
-//   db.query("SELECT * FROM muncipal_meeting", (err, results) => {
-//     if (err) throw err;
-//     res.json(results);
-//   });
-// });
+
 router.get("/muncipal_meetings", (req, res) => {
   const language = req.query.lang;
   let query;
@@ -25,7 +19,8 @@ router.get("/muncipal_meetings", (req, res) => {
     res.json(results);
   });
 });
-// Add a new municipal meeting record
+
+
 router.post("/muncipal_meetings", (req, res) => {
   const { name, year, pdf_link1, pdf_link2, pdf_link3,language_code } = req.body;
   const sql =
@@ -44,7 +39,7 @@ router.post("/muncipal_meetings", (req, res) => {
   });
 });
 
-// Update a municipal meeting record
+
 router.put("/muncipal_meetings/:id", (req, res) => {
   const { name, year, pdf_link1, pdf_link2, pdf_link3,language_code } = req.body;
   const sql =
@@ -59,7 +54,7 @@ router.put("/muncipal_meetings/:id", (req, res) => {
   );
 });
 
-// Delete a municipal meeting record
+
 router.delete("/muncipal_meetings/:id", (req, res) => {
   const sql = "DELETE FROM muncipal_meeting WHERE id = ?";
   db.query(sql, [req.params.id], (err, result) => {
@@ -67,5 +62,6 @@ router.delete("/muncipal_meetings/:id", (req, res) => {
     res.json({ success: true });
   });
 });
+
 
 module.exports = router;

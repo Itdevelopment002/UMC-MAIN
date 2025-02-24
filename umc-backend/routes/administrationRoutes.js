@@ -2,12 +2,7 @@ const express = require("express");
 const router = express.Router();
 const db = require("../config/db.js");
 
-// router.get("/administration", (req, res) => {
-//   db.query("SELECT * FROM administration", (err, results) => {
-//     if (err) throw err;
-//     res.json(results);
-//   });
-// });
+
 router.get("/administration", (req, res) => {
   const language = req.query.lang;
   let query;
@@ -24,6 +19,7 @@ router.get("/administration", (req, res) => {
     res.json(results);
   });
 });
+
 
 router.post("/administration", (req, res) => {
   const { name, designation, phone,language_code } = req.body;

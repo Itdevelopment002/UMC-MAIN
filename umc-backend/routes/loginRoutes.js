@@ -8,6 +8,7 @@ const generateUniqueId = (req, res, next) => {
   next();
 };
 
+
 router.post("/login", generateUniqueId, (req, res) => {
   const { department, username, password } = req.body;
 
@@ -34,5 +35,6 @@ router.post("/login", generateUniqueId, (req, res) => {
     }
   });
 });
+
 
 module.exports = router;
