@@ -166,8 +166,6 @@ const Footer = () => {
               ))}
             </ul>
           </div>
-
-
           <div className="col-lg-2 col-md-4 col-sm-4 mb-4">
             <h4 className="footer-heading">{t("footer.onlineServices")}</h4>
             <ul className="footer-links">
@@ -189,16 +187,25 @@ const Footer = () => {
         <hr className="footer-divider" />
         <div className="footer-bottom p-0">
           <span className="footer-sapn1">
-            &copy; {new Date().getFullYear()}  {t("footer.copyWrite")}
+            &copy; {new Date().toLocaleString(i18n.language === "mr" ? "mr-IN" : "en-US", { year: "numeric" })}
+            {" "}{t("footer.copyWrite")}
           </span>
-          <span className="fw-bold ">{t("footer.totalVisitors")}:{" "}
+
+          <span className="fw-bold ">
+            {t("footer.totalVisitors")}:{" "}
             {visitorCount !== null ? (
-              <Link to="#." className="count-style">{visitorCount}</Link>
+              <Link to="#." className="count-style">
+                {i18n.language === "mr"
+                  ? new Intl.NumberFormat("mr-IN").format(visitorCount)
+                  : visitorCount}
+              </Link>
             ) : error ? (
               <span>{error}</span>
             ) : (
               t("footer.loading")
-            )}</span>
+            )}
+          </span>
+
           {/* <span className="footer-sapn2">{t("footer.designBy")}</span> */}
         </div>
       </div>

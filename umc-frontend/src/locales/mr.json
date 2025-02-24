@@ -600,5 +600,15 @@
         "title": "सब RTI",
         "highlight": "सब",
         "highlight-text": "RTI"
+    },
+    "feedback":{
+        "title": "अभिप्राय",
+        "Heading": "अभिप्राय",
+        "rate": "रेट करा",
+        "like": "तुम्हाला वेबसाइट आवडली का",
+        "yes": "हो",
+        "no" : "नाही",
+        "comment": "अतिरिक्त टिप्पण्या",
+        "submit" : "सबमिट करा"
     }
 }
