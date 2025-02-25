@@ -5,17 +5,15 @@ import "../DepartmentCustomCss/DepartmentCustom.css";
 import api, { baseURL } from "../api"
 import { useTranslation } from "react-i18next";
 
-const ITEMS_PER_PAGE = 10;
-
 const Administration = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [administration, setAdinistration] = useState([]);
+    const ITEMS_PER_PAGE = 10;
     const totalPages = Math.ceil(administration.length / ITEMS_PER_PAGE);
     const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
     const currentData = administration.slice(startIndex, startIndex + ITEMS_PER_PAGE);
     const [bgImage, setBgImage] = useState("");
     const { i18n, t } = useTranslation();
-
 
     const fetchAdministration = async () => {
         try {
@@ -29,6 +27,7 @@ const Administration = () => {
     useEffect(() => {
         fetchAdministration();
         fetchHeaderImage();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [i18n.language]);
 
     const handlePageChange = (pageNumber) => {
@@ -63,6 +62,7 @@ const Administration = () => {
         }
         return pageNumbers;
     };
+
     const fetchHeaderImage = async () => {
         try {
             const response = await api.get("/banner");
@@ -82,12 +82,14 @@ const Administration = () => {
             console.error("Error fetching header image:", error);
         }
     };
+
     useEffect(() => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }, []);
 
     return (
         <>
+
             <div
                 className="history-header-image"
                 style={{

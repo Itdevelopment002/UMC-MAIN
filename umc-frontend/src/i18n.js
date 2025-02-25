@@ -10,7 +10,7 @@ i18n.use(initReactI18next).init({
         hi: { translation: hi },
         mr: { translation: mr }
     },
-    lng: "mr", // Default language
+    lng: "mr", 
     fallbackLng: "mr",
     interpolation: { escapeValue: false }
 });

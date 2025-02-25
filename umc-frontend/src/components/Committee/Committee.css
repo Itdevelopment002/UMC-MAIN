@@ -39,7 +39,6 @@
   transition: all 0.3s ease;
 }
 
-
 #committee-css .btn.active {
   background: linear-gradient(to right, #BA358B, #FAB02F) !important;
   color: white;
@@ -57,7 +56,6 @@
     padding: 8px 20px;
   }
 }
-
 
 @media (max-width: 768px) {
   #committee-css .btn {

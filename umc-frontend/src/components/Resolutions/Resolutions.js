@@ -14,7 +14,9 @@ const Resolutions = () => {
     useEffect(() => {
         fetchResolutions();
         fetchHeaderImage();
+        //eslint-disable-next-line react-hooks/exhaustive-deps
     }, [i18n.language]);
+
     const fetchResolutions = async () => {
         try {
             const response = await api.get(`/resolution?lang=${i18n.language}`);
@@ -43,6 +45,7 @@ const Resolutions = () => {
             console.error("Error fetching header image:", error);
         }
     };
+
     const [itemsPerPage, setItemsPerPage] = useState(10);
     const [currentPage, setCurrentPage] = useState(1);
     //eslint-disable-next-line
@@ -117,11 +120,11 @@ const Resolutions = () => {
 
     return (
         <>
+
             <div
                 className="history-header-image"
                 style={{
                     backgroundImage: `url(${bgImage})`,
-
                 }}
             ></div>
 

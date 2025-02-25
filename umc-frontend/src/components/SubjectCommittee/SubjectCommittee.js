@@ -6,18 +6,13 @@ import comingsoon from '../../assets/newcomingsoon.png'
 import api, { baseURL } from "../api";
 import { useTranslation } from "react-i18next";
 
-
-const MayorOffice = () => {
+const SubjectCommittee = () => {
     const [bgImage, setBgImage] = useState("");
-    const { i18n, t } = useTranslation();
+    const { t } = useTranslation();
 
-    useEffect(() => {
-        fetchHeaderImage();
-    }, []);
     const fetchHeaderImage = async () => {
         try {
             const response = await api.get("/banner");
-
             if (response.data.length > 0) {
                 let selectedBanner = response.data.find(banner => banner.banner_name === "Mayor-office");
 
@@ -33,7 +28,9 @@ const MayorOffice = () => {
             console.error("Error fetching header image:", error);
         }
     };
+
     useEffect(() => {
+        fetchHeaderImage();
         window.scrollTo({ top: 0, behavior: "smooth" });
     }, []);
 
@@ -70,9 +67,7 @@ const MayorOffice = () => {
                             src={comingsoon}
                             alt="Coming Soon"
                             className="coming-soon-gif"
-
                         />
-                        
                     </div>
 
                 </div>
@@ -81,4 +76,4 @@ const MayorOffice = () => {
     );
 };
 
-export default MayorOffice;
+export default SubjectCommittee;

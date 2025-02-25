@@ -11,7 +11,7 @@ function StickyFeedback() {
     const [comments, setComments] = useState("");
     const [errors, setErrors] = useState({});
     const feedbackRef = useRef(null);
-    const { i18n, t } = useTranslation();
+    const { t } = useTranslation();
 
     const toggleFeedback = () => {
         setIsOpen(!isOpen);
@@ -69,6 +69,7 @@ function StickyFeedback() {
 
     const sendFeedbackToBackend = async (feedbackData) => {
         try {
+            // eslint-disable-next-line
             const response = await api.post("/email", feedbackData);
             Swal.fire({
                 title: "Thank You!",
@@ -109,7 +110,7 @@ function StickyFeedback() {
         <div className="App">
             <div ref={feedbackRef} className={`feedback-container ${isOpen ? "open" : ""}`}>
                 <div className="feedback-tab" onClick={toggleFeedback}>
-                {t('feedback.title')}
+                    {t('feedback.title')}
                 </div>
                 <div className="feedback-panel">
                     <h3>{t('feedback.heading')}</h3>

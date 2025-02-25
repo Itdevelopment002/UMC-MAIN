@@ -15,6 +15,7 @@ const ElectedMember = () => {
     useEffect(() => {
         fetchElectedData();
         fetchHeaderImage();
+        //eslint-disable-next-line react-hooks/exhaustive-deps
     }, [i18n.language]);
 
     const fetchElectedData = async () => {
@@ -64,11 +65,11 @@ const ElectedMember = () => {
 
     return (
         <>
+
             <div
                 className="history-header-image"
                 style={{
                     backgroundImage: `url(${bgImage})`,
-
                 }}
             ></div>
 

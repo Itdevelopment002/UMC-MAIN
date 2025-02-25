@@ -6,7 +6,6 @@ import api, { baseURL } from "../api";
 import Cookies from "js-cookie";
 import { useTranslation } from "react-i18next";
 
-
 const Footer = () => {
   const [contacts, setContacts] = useState([]);
   const [quicklinks, setQuickLinks] = useState([]);
@@ -68,8 +67,7 @@ const Footer = () => {
     fetchHelpLinks();
     fetchOnlineServices();
     fetchContacts();
-
-
+    //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [i18n.language]);
 
   const fetchQuickLinks = async () => {
@@ -80,6 +78,7 @@ const Footer = () => {
       console.error("Error fetching services:", error);
     }
   };
+
   const fetchHelpLinks = async () => {
     try {
       const response = await api.get(`/helps?lang=${i18n.language}`);
@@ -88,6 +87,7 @@ const Footer = () => {
       console.error("Error fetching services:", error);
     }
   };
+
   const fetchOnlineServices = async () => {
     try {
       const response = await api.get(`/online_service?lang=${i18n.language}`);
@@ -96,6 +96,7 @@ const Footer = () => {
       console.error("Error fetching services:", error);
     }
   };
+
   const fetchContacts = () => {
     api
       .get(`/contacts-info?lang=${i18n.language}`)
@@ -104,7 +105,6 @@ const Footer = () => {
         console.error("Error fetching contact info details!", error);
       });
   };
-
 
   return (
     <footer className="footer" id="footer">

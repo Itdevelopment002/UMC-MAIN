@@ -12,7 +12,6 @@ const CurrentUpdate = () => {
     const marquee = document.querySelector(".marquee-content");
     const computedStyle = window.getComputedStyle(marquee);
     const transform = computedStyle.transform;
-
     let translateX = 0;
     if (transform !== "none") {
       const matrix =
@@ -23,7 +22,6 @@ const CurrentUpdate = () => {
         translateX = parseFloat(values[4]);
       }
     }
-
     setAnimationState({
       paused: true,
       translateX,
@@ -48,6 +46,7 @@ const CurrentUpdate = () => {
 
   useEffect(() => {
     fetchUpdates();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [i18n.language]);
 
   return (

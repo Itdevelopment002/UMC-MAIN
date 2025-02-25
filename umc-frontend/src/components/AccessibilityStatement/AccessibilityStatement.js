@@ -3,14 +3,13 @@ import { Link } from "react-router-dom";
 import "./AccessibilityStatement.css";
 import "../CommingSoon/CommingSoon.css";
 import comingsoon from '../../assets/newcomingsoon.png'
-import api,{baseURL} from "../api";
+import api, { baseURL } from "../api";
 import { useTranslation } from "react-i18next";
 
 
 const AccessibilityStatement = () => {
     const [bgImage, setBgImage] = useState("");
-    const { i18n, t } = useTranslation();
-    
+    const { t } = useTranslation();
 
     const fetchHeaderImage = async () => {
         try {
@@ -31,16 +30,15 @@ const AccessibilityStatement = () => {
             console.error("Error fetching header image:", error);
         }
     };
-     useEffect(() => {
-            fetchHeaderImage();
-        }, []);
+
     useEffect(() => {
+        fetchHeaderImage();
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }, []);
 
     return (
         <>
-           <div
+            <div
                 className="history-header-image"
                 style={{
                     backgroundImage: `url(${bgImage})`,
@@ -52,7 +50,7 @@ const AccessibilityStatement = () => {
                 <div className="container-fluid font-location mt-4 mb-2" id="accessibility-css">
                     <nav className="breadcrumb">
                         <Link to="/" className="breadcrumb-item text-decoration-none">
-                        {t('departments.home')}
+                            {t('departments.home')}
                         </Link>
                         <span className="breadcrumb-item active1">{t('accessbility.title')}</span>
                     </nav>
@@ -66,9 +64,9 @@ const AccessibilityStatement = () => {
                             src={comingsoon}
                             alt="Coming Soon"
                             className="coming-soon-gif"
-                            
+
                         />
-                       
+
                     </div>
                 </div>
             </div>

@@ -4,19 +4,15 @@ import api, { baseURL } from "../api";
 import "./Location.css";
 import { useTranslation } from "react-i18next";
 
-
 const Location = () => {
-
-
   const [tableData, setTableData] = useState([]);
   const [bgImage, setBgImage] = useState("");
   const { i18n, t } = useTranslation();
-  
-
 
   useEffect(() => {
     fetchPolicy();
     fetchHeaderImage();
+    //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [i18n.language]);
 
   const fetchPolicy = async () => {
@@ -54,21 +50,23 @@ const Location = () => {
 
   return (
     <>
+
       <div
         className="history-header-image"
         style={{
           backgroundImage: `url(${bgImage})`,
-         
+
         }}
       ></div>
+
       <div id="main-content">
         <div className="container-fluid font-location mt-4 mb-5" id="location-css">
           <nav className="breadcrumb">
             <Link to="/" className="breadcrumb-item text-decoration-none">
-             {t('location.home')}
+              {t('location.home')}
             </Link>
             <Link to="#" className="breadcrumb-item text-decoration-none">
-            {t('location.aboutumc')}
+              {t('location.aboutumc')}
             </Link>
             <span className="breadcrumb-item active1">{t('location.location-title')}</span>
           </nav>
@@ -91,7 +89,7 @@ const Location = () => {
           </div>
           <div className="mt-5 col-lg-4 col-md-5 col-sm-12">
             <h3 className="text-orange">
-            {t('location.location-title')} <span className="text-black">{t('location.information')}</span>
+              {t('location.location-title')} <span className="text-black">{t('location.information')}</span>
               <span className="divider"></span>
             </h3>
             <hr />
@@ -131,7 +129,7 @@ const Location = () => {
                   ) : (
                     <tr>
                       <td colSpan="4" className="text-center">
-                      {t('location.nodata')}
+                        {t('location.nodata')}
                       </td>
                     </tr>
                   )}
@@ -144,7 +142,7 @@ const Location = () => {
                 <thead className="bg-orange text-white">
                   <tr>
                     <th colSpan="2" className="table-heading-styling">
-                    {t('location.emnumber')}
+                      {t('location.emnumber')}
                     </th>
                   </tr>
                 </thead>
@@ -179,7 +177,7 @@ const Location = () => {
                   ) : (
                     <tr>
                       <td colSpan="4" className="text-center">
-                      {t('location.nodata')}
+                        {t('location.nodata')}
                       </td>
                     </tr>
                   )}
@@ -192,7 +190,7 @@ const Location = () => {
                 <thead className="bg-orange text-white">
                   <tr>
                     <th colSpan="2" className="table-heading-styling">
-                    {t('location.emnumber')}
+                      {t('location.emnumber')}
                     </th>
                   </tr>
                 </thead>
@@ -227,7 +225,7 @@ const Location = () => {
                   ) : (
                     <tr>
                       <td colSpan="4" className="text-center">
-                      {t('location.nodata')}
+                        {t('location.nodata')}
                       </td>
                     </tr>
                   )}
@@ -238,7 +236,7 @@ const Location = () => {
 
           <div className="mt-4 col-lg-4 col-md-5 col-sm-12">
             <h3 className="text-orange">
-            {t('location.city')} <span className="text-black">{t('location.information')}</span>
+              {t('location.city')} <span className="text-black">{t('location.information')}</span>
               <span className="divider"></span>
             </h3>
             <hr />
@@ -250,7 +248,7 @@ const Location = () => {
                 <thead className="bg-orange text-white">
                   <tr>
                     <th colSpan="2" className="table-heading-styling">
-                    {t('location.populationandarea')}
+                      {t('location.populationandarea')}
                     </th>
                   </tr>
                 </thead>
@@ -285,7 +283,7 @@ const Location = () => {
                   ) : (
                     <tr>
                       <td colSpan="4" className="text-center">
-                      {t('location.nodata')}
+                        {t('location.nodata')}
                       </td>
                     </tr>
                   )}

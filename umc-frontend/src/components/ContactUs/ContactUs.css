@@ -103,11 +103,13 @@
         width: 100%;
     }
 }
+
 @media (max-width:567px){
     #contact-css .card-header {
         width: 60%;
     }
 }
+
 @media (max-width:360px){
     #contact-css .card-header {
         width: 100%;

@@ -53,6 +53,7 @@ const Info = () => {
     fetchServices();
     fetchDesc();
     fetchCoData();
+    //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [i18n.language]);
 
   useEffect(() => {
@@ -63,16 +64,14 @@ const Info = () => {
     setExpanded(!expanded);
   };
 
-
-
   return (
+
     <div className="container-fluid mt-5">
       {desc.length === 0 ? (
         <div>Loading data...</div>
       ) : (
         <div className="row align-items-center">
           <div className="col-xxl-3 col-xl-4 col-lg-4 col-md-12 profile-div" data-aos="fade-right">
-          
             <div className="profile-card">
               <img
                 src={`${baseURL}${coData[0]?.image_path}`}
@@ -82,7 +81,6 @@ const Info = () => {
               <h5 className="custom-name">{coData[0]?.coName} </h5>
               <p className="custom-title">{coData[0]?.designation}</p>
               <p className="organization">{t('home.organization')}</p>
-
             </div>
           </div>
 
@@ -117,8 +115,6 @@ const Info = () => {
             <button className="see-more-btn" onClick={toggleDescription}>
               {expanded ? t("home.readLess") : t("home.readMore")}
             </button>
-
-
           </div>
 
           <div className="col-xxl-3 col-xl-3 col-lg-3 col-md-12" id="info-section" data-aos="fade-top">

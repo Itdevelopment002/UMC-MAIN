@@ -12,21 +12,17 @@ import pdficon from '../../assets/images/Departments/document 1.png';
 import api, { baseURL } from "../api";
 import { useTranslation } from "react-i18next";
 
-
-const ITEMS_PER_PAGE = 10;
-
 const AccountsDepartment = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [banner, setBanner] = useState([]);
   const [description, setDescription] = useState([]);
   const [hod, setHod] = useState([]);
   const [pdf, setPdf] = useState([]);
-
+  const ITEMS_PER_PAGE = 10;
   const totalPages = Math.ceil(pdf.length / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const currentData = pdf.slice(startIndex, startIndex + ITEMS_PER_PAGE);
   const { i18n, t } = useTranslation();
-
 
   const handlePageChange = (pageNumber) => {
     if (pageNumber >= 1 && pageNumber <= totalPages) {
@@ -120,16 +116,16 @@ const AccountsDepartment = () => {
     fetchHod();
     fetchDescription();
     fetchPdf();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [i18n.language]);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
+    //eslint-disable-next-line
   }, []);
 
   return (
     <>
-
-      {/* <div className="audit-header-image"></div> */}
 
       <div className="">
         <img

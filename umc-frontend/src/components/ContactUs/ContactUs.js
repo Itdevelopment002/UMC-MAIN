@@ -10,9 +10,10 @@ const ContactUs = () => {
     const [bgImage, setBgImage] = useState("");
     const { i18n, t } = useTranslation();
 
-     useEffect(() => {
-            fetchHeaderImage();
-        }, []);
+    useEffect(() => {
+        fetchHeaderImage();
+    }, []);
+
     const fetchHeaderImage = async () => {
         try {
             const response = await api.get("/banner");
@@ -32,6 +33,7 @@ const ContactUs = () => {
             console.error("Error fetching header image:", error);
         }
     };
+
     const fetchContact = async () => {
         try {
             const response = await api.get(`/contact-info?lang=${i18n.language}`);
@@ -50,16 +52,17 @@ const ContactUs = () => {
         }
     };
 
-
     useEffect(() => {
         fetchContact();
         fetchWard();
         window.scrollTo({ top: 0, behavior: "smooth" });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [i18n.language]);
 
     return (
         <>
-          <div
+
+            <div
                 className="history-header-image"
                 style={{
                     backgroundImage: `url(${bgImage})`,
@@ -80,7 +83,7 @@ const ContactUs = () => {
                         <span className="highlighted-text"> {t("contactUs.us")}</span>
                         <hr />
                     </h2>
-                    <div className="row pt-5 gap-3" style={{backgroundColor:'#fff'}}>
+                    <div className="row pt-5 gap-3" style={{ backgroundColor: '#fff' }}>
                         <div className="col-xl-5 col-lg-5 col-md-12 col-12 col-sm-12 left_section">
                             {contact.map((item, index) => (
                                 <div className="d-flex items-content" key={index}>

@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { useTranslation } from 'react-i18next';
 import "./BirthCertificate.css";
 import PropertyTaximg from "../../assets/images/online-services/property.png";
 import BirthCertificateimg from "../../assets/images/online-services/birth.png";
 import DeathCertificateimg from "../../assets/images/online-services/death.png";
 import eTenderimg from "../../assets/images/online-services/tender.png";
 import api, { baseURL } from "../api";
+import { useTranslation } from 'react-i18next';
 
 const BirthCertificate = () => {
-  const { t, i18n } = useTranslation(); // Added i18n to detect language changes
   const [activeTab, setActiveTab] = useState("#birth-certificate");
   const [bgImage, setBgImage] = useState("");
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const { t, i18n } = useTranslation();
 
   const fetchHeaderImage = async () => {
     try {
@@ -75,8 +76,9 @@ const BirthCertificate = () => {
   const [tabData, setTabData] = useState(initializeTabData());
 
   useEffect(() => {
-    setTabData(initializeTabData()); 
-  }, [i18n.language]); 
+    setTabData(initializeTabData());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [i18n.language]);
 
   const fetchServices = async () => {
     try {
@@ -100,6 +102,7 @@ const BirthCertificate = () => {
   useEffect(() => {
     fetchServices();
     fetchHeaderImage();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const activeTabData = tabData.find((tab) => tab.id === activeTab);

@@ -9,7 +9,7 @@ import Headlogo3 from "../../assets/images/header-img/Hindi_logo 1.png";
 import Headlogo4 from "../../assets/images/header-img/promotion (1).png";
 import TopHeader from "../TopHeader/TopHeader";
 import { useLocation } from "react-router-dom";
-import api, { baseURL } from "../api";
+import api from "../api";
 
 const Navbar = () => {
     const [menuData, setMenuData] = useState([]);
@@ -17,7 +17,6 @@ const Navbar = () => {
     const location = useLocation();
     const navRef = useRef(null);
     const { i18n, t } = useTranslation();
-
 
     const toggleNav = () => {
         setIsNavCollapsed(!isNavCollapsed);
@@ -38,6 +37,7 @@ const Navbar = () => {
 
     useEffect(() => {
         fetchMenuData();
+        //eslint-disable-next-line react-hooks/exhaustive-deps
     }, [i18n.language]);
 
     const handleNavClick = (link) => {
@@ -90,26 +90,22 @@ const Navbar = () => {
         };
     }, []);
 
+    //eslint-disable-next-line
     const openPDF = (pdfURL) => {
         window.open(pdfURL, '_blank');
     };
-
 
     useEffect(() => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }, []);
 
-
-
-
     const generateDropdownClass = (mainMenu) => {
         if (mainMenu === "उ. म. पा. बद्दल") {
             return "बद्दल-dropdown";
         }
-        const firstWord = mainMenu.split(' ')[0]; // Extract the first word
-        return firstWord.toLowerCase() + '-dropdown'; // Convert to lowercase and append "-dropdown"
+        const firstWord = mainMenu.split(' ')[0];
+        return firstWord.toLowerCase() + '-dropdown';
     };
-
 
     const splitIntoColumns = (subMenus, columns = 3) => {
         const columnSize = Math.ceil(subMenus.length / columns);
@@ -120,11 +116,8 @@ const Navbar = () => {
         return result;
     };
 
-
-
     const renderDropdown = (menu) => {
         const dropdownClass = generateDropdownClass(menu.mainMenu);
-
         if (menu.mainMenu === "Departments" || menu.mainMenu === "Corporation" || menu.mainMenu === "Online Services" || menu.mainMenu === "विभाग" || menu.mainMenu === "महानगरपालिका" || menu.mainMenu === "ऑनलाइन सेवा") {
             const columnCount = (menu.mainMenu === "Online Services" || menu.mainMenu === "ऑनलाइन सेवा") ? 2 : 3;
             const columns = splitIntoColumns(menu.subMenus, columnCount);
@@ -167,8 +160,6 @@ const Navbar = () => {
                                             </div>
                                         </li>
                                     )}
-
-
                                 </div>
                             ))}
                         </div>
@@ -209,7 +200,6 @@ const Navbar = () => {
             );
         }
     };
-
 
     return (
         <div className="navbar-container">
