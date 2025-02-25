@@ -9,7 +9,7 @@ import eTenderimg from "../../assets/images/online-services/tender.png";
 import api, { baseURL } from "../api";
 
 const DeathCertificate = () => {
-  const { t, i18n } = useTranslation(); // Added i18n to detect language changes
+  const { t, i18n } = useTranslation();
   const [activeTab, setActiveTab] = useState("#death-certificate");
   const [bgImage, setBgImage] = useState("");
 
@@ -37,7 +37,6 @@ const DeathCertificate = () => {
     setActiveTab(tab);
   };
 
-  // Initialize tabData with translated strings
   const initializeTabData = () => [
     {
       id: "#property-tax-payment",
@@ -73,13 +72,12 @@ const DeathCertificate = () => {
     },
   ];
 
-  // Use a state to store tabData
   const [tabData, setTabData] = useState(initializeTabData());
 
-  // Re-initialize tabData whenever the language changes
   useEffect(() => {
-    setTabData(initializeTabData()); // Update tabData when language changes
-  }, [i18n.language]); // Dependency on i18n.language to trigger re-render
+    setTabData(initializeTabData());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [i18n.language]);
 
   const fetchServices = async () => {
     try {
@@ -103,6 +101,7 @@ const DeathCertificate = () => {
   useEffect(() => {
     fetchServices();
     fetchHeaderImage();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const activeTabData = tabData.find((tab) => tab.id === activeTab);

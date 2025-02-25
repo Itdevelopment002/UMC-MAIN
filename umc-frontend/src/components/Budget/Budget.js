@@ -6,7 +6,6 @@ import Swal from 'sweetalert2';
 import api, { baseURL } from "../api";
 import { useTranslation } from "react-i18next";
 
-
 const Budget = () => {
     const [selectedButton, setSelectedButton] = useState();
     const [budgetData, setBudgetData] = useState([]);
@@ -16,10 +15,6 @@ const Budget = () => {
     const [bgImage, setBgImage] = useState("");
     const { i18n, t } = useTranslation();
 
-    useEffect(() => {
-        fetchHeaderImage();
-
-    }, []);
     const fetchHeaderImage = async () => {
         try {
             const response = await api.get("/banner");
@@ -39,35 +34,28 @@ const Budget = () => {
             console.error("Error fetching header image:", error);
         }
     };
-    // Fetching data from the API
+
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const response = await api.get(`/budgets_data?lang=${i18n.language}`);
-    
                 setBudgetData(response.data);
                 setLoading(false);
-    
-                // Extract unique years and sort them in descending order
                 const years = [...new Set(response.data.map(item => item.year))]
                     .sort((a, b) => b.localeCompare(a, undefined, { numeric: true }));
-    
                 setUniqueYears(years);
-    
-                // Set the largest year as the active year
                 if (years.length > 0) {
                     setSelectedButton(years[0]);
                 }
-    
+
             } catch (err) {
                 setError("Failed to fetch data.");
                 setLoading(false);
             }
         };
-    
         fetchData();
     }, [i18n.language]);
-    
+
 
     const handleClick = (link, e) => {
         if (link === "#") {
@@ -92,6 +80,7 @@ const Budget = () => {
     const tableData = getTableData();
     const [itemsPerPage, setItemsPerPage] = useState(10);
     const [currentPage, setCurrentPage] = useState(1);
+    // eslint-disable-next-line
     const [searchTerm, setSearchTerm] = useState("");
 
     const filteredData = tableData.filter((item) =>
@@ -108,11 +97,13 @@ const Budget = () => {
         }
     };
 
+    // eslint-disable-next-line
     const handleItemsPerPageChange = (e) => {
         setItemsPerPage(parseInt(e.target.value));
         setCurrentPage(1);
     };
 
+    // eslint-disable-next-line
     const renderPageNumbers = () => {
         const pageNumbers = [];
         for (let i = 1; i <= totalPages; i++) {
@@ -140,23 +131,21 @@ const Budget = () => {
         return pageNumbers;
     };
 
-    const updatedtotalEntries = filteredData.length;
-    const startEntry = (currentPage - 1) * itemsPerPage + 1;
-    const endEntry = Math.min(currentPage * itemsPerPage, updatedtotalEntries);
-
     useEffect(() => {
+        fetchHeaderImage();
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }, []);
 
     return (
         <>
+
             <div
                 className="history-header-image"
                 style={{
                     backgroundImage: `url(${bgImage})`,
-
                 }}
             ></div>
+
             <div id="main-content">
                 <div className="container-fluid font-location mt-4 mb-5" id="budget-css">
                     <nav className="breadcrumb">
@@ -176,14 +165,12 @@ const Budget = () => {
 
                     <div className="row mt-4 row-styling-3" id="municipal-css">
                         <div className="col-xl-9 col-lg-12 col-md-12 col-sm-12 col-12 ">
-
-                            {/* Dynamic Year Buttons */}
                             <div className="button-group mb-4 d-flex justify-content-start">
                                 {[...uniqueYears]
                                     .sort((a, b) => {
                                         const yearA = parseInt(a.split("-")[0], 10);
                                         const yearB = parseInt(b.split("-")[0], 10);
-                                        return yearB - yearA; // Sort in descending order
+                                        return yearB - yearA;
                                     })
                                     .map((year) => (
                                         <button
@@ -194,9 +181,7 @@ const Budget = () => {
                                             {year}
                                         </button>
                                     ))}
-
                             </div>
-
                             <div className="circular-wrapper mt-5">
                                 <table className="table table-bordered shadow table-responsive">
                                     <thead className="bg-orange text-white">
@@ -224,20 +209,19 @@ const Budget = () => {
                                                 <tr key={index}>
                                                     <td className="font-large text-center">
                                                         {(() => {
-                                                        const language = i18n.language;
+                                                            const language = i18n.language;
 
-                                                        const toMarathiNumbers = (num) => {
-                                                            const marathiDigits = ["०", "१", "२", "३", "४", "५", "६", "७", "८", "९"];
-                                                            return num
-                                                                .toString()
-                                                                .split("")
-                                                                .map((digit) => marathiDigits[parseInt(digit, 10)])
-                                                                .join("");
-                                                        };
-
-                                                        const number = startIndex + index + 1;
-                                                        return language === "mr" ? toMarathiNumbers(number) : number;
-                                                    })()}
+                                                            const toMarathiNumbers = (num) => {
+                                                                const marathiDigits = ["०", "१", "२", "३", "४", "५", "६", "७", "८", "९"];
+                                                                return num
+                                                                    .toString()
+                                                                    .split("")
+                                                                    .map((digit) => marathiDigits[parseInt(digit, 10)])
+                                                                    .join("");
+                                                            };
+                                                            const number = startIndex + index + 1;
+                                                            return language === "mr" ? toMarathiNumbers(number) : number;
+                                                        })()}
                                                     </td>
                                                     <td>{item.heading}</td>
                                                     <td className="text-center">
@@ -268,7 +252,6 @@ const Budget = () => {
                                     </tbody>
                                 </table>
                             </div>
-
                         </div>
                     </div>
                 </div>

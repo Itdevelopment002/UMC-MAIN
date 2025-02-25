@@ -13,10 +13,6 @@ const PhotoGallery = () => {
   const [currentIndices, setCurrentIndices] = useState({});
   const { i18n, t } = useTranslation();
 
-  useEffect(() => {
-    fetchHeaderImage();
-  }, []);
-
   const fetchHeaderImage = async () => {
     try {
       const response = await api.get("/banner");
@@ -70,6 +66,7 @@ const PhotoGallery = () => {
   }, [images]);
 
   useEffect(() => {
+    fetchHeaderImage();
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 

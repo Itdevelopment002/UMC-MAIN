@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import api, { baseURL } from "../api";
+import api from "../api";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -40,12 +40,13 @@ const VideoGallery = () => {
 
   useEffect(() => {
     fetchCategoryVideoData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleCategoryChange = (categoryId) => {
     setSelectedCategory(categoryId);
     api.get(`/category-videos/${categoryId}`)
-      .then((response) => setVideos(response.data))
+      .then((response) => setVideos(response.data.reverse()))
       .catch((error) => toast.error("Failed to fetch videos!"));
   };
 

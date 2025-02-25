@@ -7,10 +7,8 @@ import 'aos/dist/aos.css';
 import api, { baseURL } from "../api";
 import { useTranslation } from "react-i18next";
 
-
 const CitizenServices = () => {
   const [homeservices1, setHomeServices1] = useState([]);
-  const [citzenServices, setCitizenServices] = useState([]);
   const [videos, setVideos] = useState([]);
   const [information, setInformation] = useState([]);
   const [projects, setProjects] = useState([]);
@@ -18,11 +16,11 @@ const CitizenServices = () => {
   const { i18n, t } = useTranslation();
 
   useEffect(() => {
-    fetchServices();
     fetchVideos();
     fetchHomeServices1();
     fetchInformation();
     fetchProjects();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [i18n.language]);
 
   useEffect(() => {
@@ -88,16 +86,6 @@ const CitizenServices = () => {
       console.error("Error Fetching projects!", error);
     }
   };
-
-  const fetchServices = async () => {
-    try {
-      const response = await api.get("/citizen-services");
-      setCitizenServices(response.data);
-    } catch (error) {
-      console.error("Error fetching services:", error);
-    }
-  };
-
 
   const fetchVideos = async () => {
     try {
@@ -204,7 +192,7 @@ const CitizenServices = () => {
                 >
                   {projects.map((project, index) => (
                     <div key={index}>
-                      <Link to={project.link} className="text-decoartion-none" style={{color: "black"}}>
+                      <Link to={project.link} className="text-decoartion-none" style={{ color: "black" }}>
                         <div className="project-item">
                           <img
                             src={`${baseURL}/${project.main_icon_path}`}
@@ -224,7 +212,7 @@ const CitizenServices = () => {
                   ))}
                   {projects.map((project, index) => (
                     <div key={`duplicate-${index}`}>
-                      <Link to={project.link} className="text-decoartion-none" style={{color: "black"}}>
+                      <Link to={project.link} className="text-decoartion-none" style={{ color: "black" }}>
                         <div className="project-item">
                           <img
                             src={`${baseURL}/${project.main_icon_path}`}
@@ -247,13 +235,12 @@ const CitizenServices = () => {
             </div>
           </div>
 
-
           <div className="col-xl-2 col-lg-4 col-md-4 col-sm-5">
             <div className="citigen">
               <div className="vertical-line"></div>
               <div className="d-flex">
                 <h2 className="section-title">
-                {t("home.video")} <span className="subtitle">{t("home.gallery")}</span>
+                  {t("home.video")} <span className="subtitle">{t("home.gallery")}</span>
                 </h2>
               </div>
             </div>
@@ -283,7 +270,6 @@ const CitizenServices = () => {
               )}
             </div>
           </div>
-
 
           <div className="col-xl-4 col-lg-8 col-md-8 col-sm-7">
             <div className="menu-list">

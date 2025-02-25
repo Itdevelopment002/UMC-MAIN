@@ -53,6 +53,7 @@ const TendersQuotations = () => {
     useEffect(() => {
         fetchTenders();
         fetchHeaderImage();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [i18n.language]);
 
     const filteredData = tenders.filter((item) =>
@@ -120,6 +121,7 @@ const TendersQuotations = () => {
 
     return (
         <>
+
             <div
                 className="history-header-image"
                 style={{

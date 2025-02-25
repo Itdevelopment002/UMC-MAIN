@@ -7,12 +7,10 @@ import Swal from "sweetalert2";
 import api, { baseURL } from "../api"
 import { useTranslation } from "react-i18next";
 
-
 const RTI = () => {
     const [rti, setRti] = useState([]);
     const [bgImage, setBgImage] = useState("");
     const { i18n, t } = useTranslation();
-
 
     const fetchHeaderImage = async () => {
         try {
@@ -33,6 +31,7 @@ const RTI = () => {
             console.error("Error fetching header image:", error);
         }
     };
+
     const fetchRti = async () => {
         try {
             const response = await api.get(`/rti-info?lang=${i18n.language}`);
@@ -46,6 +45,7 @@ const RTI = () => {
         fetchHeaderImage();
         fetchRti();
         window.scrollTo({ top: 0, behavior: 'smooth' });
+        //eslint-disable-next-line react-hooks/exhaustive-deps
     }, [i18n.language]);
 
     const handleClick = (link, e) => {
@@ -62,6 +62,7 @@ const RTI = () => {
 
     return (
         <>
+
             <div
                 className="history-header-image"
                 style={{

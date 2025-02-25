@@ -6,14 +6,10 @@ import comingsoon from '../../assets/newcomingsoon.png'
 import api, { baseURL } from "../api"
 import { useTranslation } from "react-i18next";
 
-
 const CustomerSupport = () => {
     const [bgImage, setBgImage] = useState("");
-    const { i18n, t } = useTranslation();
+    const { t } = useTranslation();
 
-    useEffect(() => {
-        fetchHeaderImage();
-    }, []);
     const fetchHeaderImage = async () => {
         try {
             const response = await api.get("/banner");
@@ -35,11 +31,13 @@ const CustomerSupport = () => {
     };
 
     useEffect(() => {
+        fetchHeaderImage();
         window.scrollTo({ top: 0, behavior: "smooth" });
     }, []);
 
     return (
         <>
+
             <div
                 className="history-header-image"
                 style={{
@@ -68,9 +66,7 @@ const CustomerSupport = () => {
                             alt="Coming Soon"
                             className="coming-soon-gif"
                         />
-                        
                     </div>
-
                 </div>
             </div>
         </>

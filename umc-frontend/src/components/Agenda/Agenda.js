@@ -6,18 +6,15 @@ import pdficon from '../../assets/images/Departments/document 1.png';
 import Swal from 'sweetalert2';
 import { useTranslation } from "react-i18next";
 
-
-
 const Agenda = () => {
     const [agenda, setAgenda] = useState([]);
     const [bgImage, setBgImage] = useState("");
     const { i18n, t } = useTranslation();
 
-
     useEffect(() => {
         fetchAgenda();
         fetchHeaderImage();
-
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [i18n.language]);
 
     const fetchAgenda = async () => {
@@ -48,6 +45,7 @@ const Agenda = () => {
             console.error("Error fetching header image:", error);
         }
     };
+
     const [itemsPerPage, setItemsPerPage] = useState(10);
     const [currentPage, setCurrentPage] = useState(1);
     //eslint-disable-next-line
@@ -56,7 +54,6 @@ const Agenda = () => {
     const filteredData = agenda.filter((item) =>
         item.Department_Name.toLowerCase().includes(searchTerm.toLowerCase())
     );
-
     const totalPages = Math.ceil(filteredData.length / itemsPerPage);
     const startIndex = (currentPage - 1) * itemsPerPage;
     const currentData = filteredData.slice(startIndex, startIndex + itemsPerPage);
@@ -122,6 +119,7 @@ const Agenda = () => {
 
     return (
         <>
+
             <div
                 className="history-header-image"
                 style={{
@@ -129,6 +127,7 @@ const Agenda = () => {
 
                 }}
             ></div>
+
             <div id="main-content">
                 <div className="container-fluid font-location mt-4 mb-5" id="resolution-css">
                     <nav className="breadcrumb">
@@ -145,6 +144,7 @@ const Agenda = () => {
                         <span className="highlighted-text"> {t('agenda.highlight-text')}</span>
                         <hr />
                     </h2>
+
                     <div className="row mt-4 row-styling-3">
                         <div className="col-12">
                             <div className="circular-wrapper">
@@ -315,6 +315,7 @@ const Agenda = () => {
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div >
         </>

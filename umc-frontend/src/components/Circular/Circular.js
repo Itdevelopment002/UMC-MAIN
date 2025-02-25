@@ -10,8 +10,7 @@ const Circular = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [searchTerm, setSearchTerm] = useState("");
     const [circularData, setCircularData] = useState([]);
-        const [bgImage, setBgImage] = useState("");
-    
+    const [bgImage, setBgImage] = useState("");
 
     const fetchHeaderImage = async () => {
         try {
@@ -32,6 +31,7 @@ const Circular = () => {
             console.error("Error fetching header image:", error);
         }
     };
+
     const fetchData = async () => {
         try {
             const response = await api.get("/circular-info");
@@ -105,7 +105,6 @@ const Circular = () => {
                 className="history-header-image"
                 style={{
                     backgroundImage: `url(${bgImage})`,
-
                 }}
             ></div>
 

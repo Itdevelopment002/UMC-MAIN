@@ -10,7 +10,7 @@
   width: 170px;
   height: 200px;
   border-radius: 20px;
-  background: linear-gradient(to bottom, #BB368A, #FEBA28); 
+  background: linear-gradient(to bottom, #BB368A, #FEBA28);
   border-left: 5px solid transparent;
   border-bottom: 5px solid #FEBA28;
   object-fit: cover;
@@ -66,7 +66,6 @@
 }
 
 #commissioner-css .text-box {
-  /* display: flex; */
   flex-direction: column;
   font-size: 16px;
   word-break: break-word;
