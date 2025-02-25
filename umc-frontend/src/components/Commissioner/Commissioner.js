@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./Commissioner.css";
 import { Link } from "react-router-dom";
-import Commissionerimg from "../../assets/images/commissioner/Commissioner.png";
 import cicon1 from "../../assets/images/commissioner/Vector.png";
 import cicon2 from "../../assets/images/commissioner/Vector (1).png";
 import cicon3 from "../../assets/images/commissioner/Vector (3).png";
@@ -11,9 +10,7 @@ import cicon6 from "../../assets/images/commissioner/Vector (7).png";
 import api, { baseURL } from "../api";
 import { useTranslation } from "react-i18next";
 
-
 const Commissioner = () => {
-
   const [coData, setCoData] = useState([]);
   const [descData, setDescData] = useState([]);
   const [bgImage, setBgImage] = useState("");
@@ -23,8 +20,8 @@ const Commissioner = () => {
     fetchCoData();
     fetchDescData();
     fetchHeaderImage();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [i18n.language]);
-
 
   const fetchCoData = async () => {
     try {
@@ -34,6 +31,7 @@ const Commissioner = () => {
       console.error("Failed to fetch Commissioner Details data!");
     }
   };
+
   const fetchDescData = async () => {
     try {
       const response = await api.get(`/commissioner-desc?lang=${i18n.language}`);
@@ -69,13 +67,15 @@ const Commissioner = () => {
 
   return (
     <>
+
       <div
         className="history-header-image"
         style={{
           backgroundImage: `url(${bgImage})`,
-         
+
         }}
       ></div>
+
       <div id="main-content">
         <div
           className="container-fluid font-location mt-2 mb-5"
@@ -83,10 +83,10 @@ const Commissioner = () => {
         >
           <nav className="breadcrumb">
             <Link to="/" className="breadcrumb-item text-decoration-none">
-            {t('location.home')}
+              {t('location.home')}
             </Link>
             <Link to="#" className="breadcrumb-item text-decoration-none">
-            {t('location.aboutumc')}
+              {t('location.aboutumc')}
             </Link>
             <span className="breadcrumb-item active1">{t('commissioner.commissionerText')}</span>
           </nav>
@@ -138,7 +138,7 @@ const Commissioner = () => {
                       </div>
                       <div className="text-box">
                         <strong className="label">
-                        {t('commissioner.qualification')} :
+                          {t('commissioner.qualification')} :
                         </strong>
                         <span className="value">
                           {" "}
@@ -185,7 +185,6 @@ const Commissioner = () => {
           <div className="row mt-4">
             <div className="col-lg-12 col-md-12 col-sm-12 col-12">
               <div className="commisioner-overview">
-               {/*  <h4>Brief Overview of the Commissioner</h4> */}
                 <h4>{t("commisioner-overview")}</h4>
               </div>
               {descData.length > 0 ? (

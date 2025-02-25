@@ -6,15 +6,14 @@ import pdficon from '../../assets/images/Departments/document 1.png';
 import Swal from 'sweetalert2';
 import { useTranslation } from "react-i18next";
 
-
 const ENews = () => {
     const [enewsList, setEnewsList] = useState([]);
     const { i18n, t } = useTranslation();
 
-
     useEffect(() => {
         fetchEnews();
         fetchHeaderImage();
+        //eslint-disable-next-line react-hooks/exhaustive-deps
     }, [i18n.language]);
 
     const fetchEnews = async () => {
@@ -25,6 +24,7 @@ const ENews = () => {
             console.error("Error fetching e-news:", error);
         }
     };
+
     const fetchHeaderImage = async () => {
         try {
             const response = await api.get("/banner");
@@ -44,6 +44,7 @@ const ENews = () => {
             console.error("Error fetching header image:", error);
         }
     };
+
     const [itemsPerPage, setItemsPerPage] = useState(10);
     const [currentPage, setCurrentPage] = useState(1);
     //eslint-disable-next-line

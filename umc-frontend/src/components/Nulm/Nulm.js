@@ -12,7 +12,6 @@ import pdficon from '../../assets/images/Departments/document 1.png';
 import api, { baseURL } from "../api";
 import { useTranslation } from "react-i18next";
 
-const ITEMS_PER_PAGE = 10;
 
 const NulmDepartment = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -21,7 +20,7 @@ const NulmDepartment = () => {
   const [hod, setHod] = useState([]);
   const [pdf, setPdf] = useState([]);
   const { i18n, t } = useTranslation();
-
+  const ITEMS_PER_PAGE = 10;
   const totalPages = Math.ceil(pdf.length / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const currentData = pdf.slice(startIndex, startIndex + ITEMS_PER_PAGE);
@@ -118,6 +117,7 @@ const NulmDepartment = () => {
     fetchHod();
     fetchDescription();
     fetchPdf();
+    //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [i18n.language]);
 
   useEffect(() => {
@@ -126,8 +126,6 @@ const NulmDepartment = () => {
 
   return (
     <>
-
-      {/* <div className="environment-header-image"></div> */}
 
       <div className="">
         <img
@@ -142,8 +140,7 @@ const NulmDepartment = () => {
       </div>
 
       <div id="main-content">
-
-        <div className="container-fluid font-location mt-4 mb-2" id="accounts-css">
+        <div className="container-fluid font-location mt-4 mb-2" id="nulm-css">
           <nav className="breadcrumb">
             <Link to="/" className="breadcrumb-item text-decoration-none">
               {t('departments.home')}
@@ -205,7 +202,7 @@ const NulmDepartment = () => {
                       </div>
                       <div className="dept-text-box">
                         <strong className="dept-label">{t('departments.designation')} :</strong>
-                           <span className="dept-value">
+                        <span className="dept-value">
                           {hod[0]?.designation
                             ? i18n.language === 'en'
                               ? ` ${t('departments.head1')} ${hod[0].designation}`

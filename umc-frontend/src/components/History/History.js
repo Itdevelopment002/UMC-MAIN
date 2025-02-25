@@ -16,6 +16,7 @@ const History = () => {
     fetchGallerys();
     fetchDesc();
     fetchHeaderImage();
+    //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [i18n.language]);
 
   const fetchGallerys = async () => {
@@ -57,15 +58,14 @@ const History = () => {
     }
   };
 
-
-
   return (
     <>
+
       <div
         className="history-header-image"
         style={{
           backgroundImage: `url(${bgImage})`,
-         
+
         }}
       ></div>
 
@@ -73,10 +73,10 @@ const History = () => {
         <div className="container-fluid font-location mt-2 mb-5" id="history-css">
           <nav className="breadcrumb">
             <Link to="/" className="breadcrumb-item text-decoration-none">
-            {t('location.home')}
+              {t('location.home')}
             </Link>
             <Link to="#" className="breadcrumb-item text-decoration-none">
-            {t('location.aboutumc')}
+              {t('location.aboutumc')}
             </Link>
             <span className="breadcrumb-item active1">{t("history-title2")}</span>
           </nav>
@@ -92,8 +92,6 @@ const History = () => {
             <div className="col-lg-9 col-md-8 col-sm-12 col-12 content">
               <div className="history-section">
                 <h2 className="history-title">
-                  {/* <span className="highlight">History</span>
-                  <span className="highlighted-text"> of UMC</span> */}
                   <span className="highlight">{t("history-title1")}</span>
                   <span className="highlighted-text"> {t("history-title2")}</span>
                 </h2>

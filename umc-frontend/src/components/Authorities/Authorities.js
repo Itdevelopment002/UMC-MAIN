@@ -6,10 +6,9 @@ import comingsoon from '../../assets/newcomingsoon.png'
 import api, { baseURL } from "../api";
 import { useTranslation } from "react-i18next";
 
-
-const MayorOffice = () => {
+const Authorities = () => {
     const [bgImage, setBgImage] = useState("");
-    const { i18n, t } = useTranslation();
+    const { t } = useTranslation();
 
     useEffect(() => {
         fetchHeaderImage();
@@ -64,21 +63,17 @@ const MayorOffice = () => {
                         <span className="highlighted-text"> {t('authorities.highlight-text')}</span>
                         <hr />
                     </h2>
-
                     <div className="coming-soon-section text-center mt-4">
                         <img
                             src={comingsoon}
                             alt="Coming Soon"
                             className="coming-soon-gif"
-
                         />
-                        
                     </div>
-
                 </div>
             </div>
         </>
     );
 };
 
-export default MayorOffice;
+export default Authorities;

@@ -6,7 +6,6 @@ import "../CommingSoon/CommingSoon.css";
 import comingsoon from '../../assets/newcomingsoon.png'
 import { useTranslation } from "react-i18next";
 
-
 const Committee = () => {
     const [selectedButton, setSelectedButton] = useState("Standing Committee");
     const [standingData, setStandingData] = useState([]);
@@ -17,14 +16,13 @@ const Committee = () => {
     const [bgImage, setBgImage] = useState("");
     const { i18n, t } = useTranslation();
 
-
     useEffect(() => {
         fetchHeaderImage();
     }, []);
+
     const fetchHeaderImage = async () => {
         try {
             const response = await api.get('/banner');
-
             if (response.data.length > 0) {
                 let selectedBanner = response.data.find(banner => banner.banner_name === "Committee");
 
@@ -60,6 +58,7 @@ const Committee = () => {
         fetchData();
     }, [i18n.language]);
 
+    // eslint-disable-next-line
     const handleButtonClick = (buttonName) => {
         setSelectedButton(buttonName);
         setCurrentPage(1);
@@ -101,8 +100,7 @@ const Committee = () => {
 
     const transformedData = transformWardData(wardData);
 
-
-
+    // eslint-disable-next-line
     const getCurrentData = (data) => {
         const startIndex = (currentPage - 1) * itemsPerPage;
         return data.slice(startIndex, startIndex + itemsPerPage);
@@ -115,9 +113,8 @@ const Committee = () => {
             : transformedData.length;
 
     const totalPages = Math.ceil(totalEntries / itemsPerPage);
-    const startEntry = (currentPage - 1) * itemsPerPage + 1;
-    const endEntry = Math.min(currentPage * itemsPerPage, totalEntries);
 
+    // eslint-disable-next-line
     const handlePageChange = (pageNumber) => {
         if (pageNumber >= 1 && pageNumber <= totalPages) {
             setCurrentPage(pageNumber);
@@ -283,15 +280,15 @@ const Committee = () => {
                             </nav>
                         </div>
                     </div> */}
+
                     <div className="coming-soon-section text-center mt-4">
                         <img
                             src={comingsoon}
                             alt="Coming Soon"
                             className="coming-soon-gif"
-
                         />
-                        
                     </div>
+
                 </div>
             </div>
         </>

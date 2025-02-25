@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./VideoGallery.css";
-import api, { baseURL } from "../api";
 import { useTranslation } from "react-i18next";
+import { MdKeyboardArrowLeft } from "react-icons/md";
+import { MdKeyboardArrowRight } from "react-icons/md";
+import api, { baseURL } from "../api";
 
 const VideoGallery = () => {
   const [categories, setCategories] = useState([]);
@@ -10,10 +12,6 @@ const VideoGallery = () => {
   const [bgImage, setBgImage] = useState("");
   const [currentIndices, setCurrentIndices] = useState({});
   const { i18n, t } = useTranslation();
-
-  useEffect(() => {
-    fetchHeaderImage();
-  }, []);
 
   const fetchHeaderImage = async () => {
     try {
@@ -53,9 +51,10 @@ const VideoGallery = () => {
       });
     }
   }, [categories]);
-  
+
 
   useEffect(() => {
+    fetchHeaderImage();
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
 
@@ -105,10 +104,10 @@ const VideoGallery = () => {
                 {videos[category.id] && videos[category.id].length > 8 && (
                   <div className="slider-controls">
                     <button onClick={() => handlePrevious(category.id)} className="gallery-custom-btn">
-                      <i className="fas fa-chevron-left"></i>
+                      <MdKeyboardArrowLeft size={20} />
                     </button>
                     <button onClick={() => handleNext(category.id)} className="gallery-custom-btn">
-                      <i className="fas fa-chevron-right"></i>
+                      <MdKeyboardArrowRight size={20} />
                     </button>
                   </div>
                 )}

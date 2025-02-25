@@ -4,16 +4,12 @@ import api, { baseURL } from "../api";
 import "./WardOffice.css";
 import { useTranslation } from "react-i18next";
 
-
 const WardOffice = () => {
     const [wardData, setWardData] = useState([]);
     const [selectedWard, setSelectedWard] = useState(null);
     const [bgImage, setBgImage] = useState("");
     const { i18n, t } = useTranslation();
 
-    useEffect(() => {
-        fetchHeaderImage();
-    }, []);
     const fetchHeaderImage = async () => {
         try {
             const response = await api.get("/banner");
@@ -33,6 +29,7 @@ const WardOffice = () => {
             console.error("Error fetching header image:", error);
         }
     };
+
     useEffect(() => {
         api.get(`/ward-offices?lang=${i18n.language}`)
             .then((response) => {
@@ -44,7 +41,7 @@ const WardOffice = () => {
             .catch((error) => {
                 console.error("Error fetching ward data:", error);
             });
-
+        fetchHeaderImage();
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }, [i18n.language]);
 
@@ -54,6 +51,7 @@ const WardOffice = () => {
 
     return (
         <>
+
             <div
                 className="history-header-image"
                 style={{
@@ -81,10 +79,9 @@ const WardOffice = () => {
 
                     <div className="row border content-row">
                         <div className="col-md-2 sidebar d-flex flex-column justify-content-center align-items-center">
-                            {/* List of all wards */}
                             {wardData.map((ward) => (
                                 <button
-                                    key={ward.id}  // Assuming the API returns `id` for each ward
+                                    key={ward.id}
                                     className={`btn ${selectedWard && selectedWard.id === ward.id ? "active" : ""}`}
                                     onClick={() => handleWardClick(ward)}
                                 >
@@ -100,7 +97,6 @@ const WardOffice = () => {
                                         <h5 className="ward-title">
                                             {selectedWard.ward_name}
                                         </h5>
-
                                         <p className="ward-text">
                                             <strong>{t('corporation.wardname')}:</strong> {selectedWard.officer_name}
                                         </p>
@@ -125,20 +121,16 @@ const WardOffice = () => {
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {/* Check if 'areas' is an array before mapping */}
-
                                                 <tr>
                                                     <td style={{ textAlign: 'center', height: '100px' }}>{selectedWard.ward_no}</td>
                                                     <td className="areapadding">{selectedWard.areas}</td>
                                                 </tr>
-
                                             </tbody>
                                         </table>
                                     </div>
                                     <div className="col-md-5 map-container">
                                         <h5 className="ward-location-title">{t('location.location-title')}</h5>
                                         <div className="map-wrapper">
-                                            {/* Example map, replace with dynamic URL if necessary */}
                                             <iframe
                                                 src={selectedWard.map_url}
                                                 width="100%"
@@ -150,7 +142,6 @@ const WardOffice = () => {
                                             ></iframe>
                                         </div>
                                     </div>
-
                                 </div>
                             )}
                         </div>

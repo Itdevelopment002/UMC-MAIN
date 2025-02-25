@@ -14,7 +14,6 @@ const RTS = () => {
     const fetchHeaderImage = async () => {
         try {
             const response = await api.get("/banner");
-
             if (response.data.length > 0) {
                 let selectedBanner = response.data.find(banner => banner.banner_name === "Right to Service");
 
@@ -44,6 +43,7 @@ const RTS = () => {
         fetchRts();
         fetchHeaderImage();
         window.scrollTo({ top: 0, behavior: 'smooth' });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [i18n.language]);
 
     return (
@@ -60,7 +60,7 @@ const RTS = () => {
                 <div className="container-fluid font-location mt-2 mb-5" id='rts-css'>
                     <nav className="breadcrumb">
                         <Link to="/" className="breadcrumb-item text-decoration-none">
-                        {t("breadcrumbHome")}
+                            {t("breadcrumbHome")}
                         </Link>
                         <span className="breadcrumb-item active1">{t("rts.breadcrumb")}</span>
                     </nav>
@@ -78,13 +78,13 @@ const RTS = () => {
                                     <thead className="bg-orange text-white">
                                         <tr>
                                             <th className="table-heading-styling" style={{ textAlign: "center" }}>
-                                            {t("rts.srNo")}
+                                                {t("rts.srNo")}
                                             </th>
                                             <th className="table-heading-styling">
-                                            {t("rts.breadcrumb")}
+                                                {t("rts.breadcrumb")}
                                             </th>
                                             <th className="table-heading-styling" style={{ textAlign: "center" }}>
-                                            {t("rts.action")}
+                                                {t("rts.action")}
                                             </th>
                                         </tr>
                                     </thead>
@@ -102,20 +102,20 @@ const RTS = () => {
                                                     }}
                                                 >
                                                     {(() => {
-    const language = i18n.language;
+                                                        const language = i18n.language;
 
-    const toMarathiNumbers = (num) => {
-      const marathiDigits = ["०", "१", "२", "३", "४", "५", "६", "७", "८", "९"];
-      return num
-        .toString()
-        .split("")
-        .map((digit) => marathiDigits[parseInt(digit, 10)])
-        .join("");
-    };
+                                                        const toMarathiNumbers = (num) => {
+                                                            const marathiDigits = ["०", "१", "२", "३", "४", "५", "६", "७", "८", "९"];
+                                                            return num
+                                                                .toString()
+                                                                .split("")
+                                                                .map((digit) => marathiDigits[parseInt(digit, 10)])
+                                                                .join("");
+                                                        };
 
-    const number = index + 1;
-    return language === "mr" ? toMarathiNumbers(number) : number;
-  })()}
+                                                        const number = index + 1;
+                                                        return language === "mr" ? toMarathiNumbers(number) : number;
+                                                    })()}
                                                 </td>
                                                 <td
                                                     width="70%"

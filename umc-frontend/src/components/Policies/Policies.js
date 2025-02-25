@@ -7,17 +7,17 @@ import Swal from 'sweetalert2';
 import api, { baseURL } from "../api";
 import { useTranslation } from "react-i18next";
 
-
-
 const Policies = () => {
     const [policiesdata, setPoliciesdata] = useState([]);
     const [bgImage, setBgImage] = useState("");
-        const { i18n, t } = useTranslation();
-    
+    const { i18n } = useTranslation();
+
     useEffect(() => {
         fetchPoliciesData();
         fetchHeaderImage();
+        //eslint-disable-next-line react-hooks/exhaustive-deps
     }, [i18n.language]);
+
     const fetchHeaderImage = async () => {
         try {
             const response = await api.get("/banner");
@@ -38,8 +38,6 @@ const Policies = () => {
         }
     };
 
-
-
     const fetchPoliciesData = async () => {
         try {
             const response = await api.get(`/policies_data?lang=${i18n.language}`);
@@ -48,7 +46,6 @@ const Policies = () => {
             console.error("Error fetching quick links:", error);
         }
     };
-
 
     useEffect(() => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -68,6 +65,7 @@ const Policies = () => {
 
     return (
         <>
+
             <div
                 className="history-header-image"
                 style={{

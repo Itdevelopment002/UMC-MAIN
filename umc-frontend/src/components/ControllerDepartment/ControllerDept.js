@@ -11,7 +11,6 @@ import cicon5 from "../../assets/images/Departments/Vector (6).png";
 import cicon6 from "../../assets/images/Departments/Vector (7).png";
 import pdficon from '../../assets/images/Departments/document 1.png'
 
-
 const employeesData1 = [
   { Srno: "01", Title: "UMC Disaster Management Plan 2024", Action: "View PDF" },
   { Srno: "02", Title: "Regarding emergency management and pre-monsoon review meetings in the Municipal Corporation. (28/04/2022)", Action: "View PDF" },
@@ -25,11 +24,9 @@ const employeesData1 = [
   { Srno: "10", Title: "Flood Management Guidelines 2022", Action: "View PDF" },
 ];
 
-const ITEMS_PER_PAGE = 10;
-
 const ControllerDept = () => {
   const [currentPage, setCurrentPage] = useState(1);
-
+  const ITEMS_PER_PAGE = 10;
   const totalPages = Math.ceil(employeesData1.length / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const currentData = employeesData1.slice(startIndex, startIndex + ITEMS_PER_PAGE);

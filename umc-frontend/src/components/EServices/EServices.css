@@ -26,7 +26,7 @@
   outline: 2px solid #f5507a;
 }
 
-.tabs-container .nav-tabs .nav-item .nav-link{
+.tabs-container .nav-tabs .nav-item .nav-link {
   padding: 5px 20px 5px 20px !important;
   font-size: 16px !important;
 }
@@ -62,20 +62,20 @@
 }
 
 .custom-list-effect {
-  color: #000; 
-  transition: color 0.3s ease-in-out; 
+  color: #000;
+  transition: color 0.3s ease-in-out;
 }
 
 .custom-list-effect:hover {
-  color: #068CE1; 
+  color: #068CE1;
 }
 
 .custom-list-effect.active {
-  color: #068CE1; 
+  color: #068CE1;
 }
 
 @media (max-width: 1355px) {
-  .tabs-container .nav-tabs .nav-item .nav-link{
+  .tabs-container .nav-tabs .nav-item .nav-link {
     padding: 5px 10px 5px 10px !important;
     font-size: 16px !important;
   }
@@ -116,7 +116,7 @@
     max-height: 310px;
   }
 
-  .tabs-container .nav-tabs .nav-item .nav-link{
+  .tabs-container .nav-tabs .nav-item .nav-link {
     padding: 6px 10px 6px 10px !important;
     font-size: 14px !important;
   }
@@ -197,26 +197,26 @@
 
 .img-with-border {
   display: flex;
-  align-items: center; 
-  justify-content: center; 
-  border-right: 1px solid #ccc; 
-  padding-right: 2px; 
-  height: 100%; 
+  align-items: center;
+  justify-content: center;
+  border-right: 1px solid #ccc;
+  padding-right: 2px;
+  height: 100%;
 }
 
 .initiative-img {
   width: 40px;
   height: 40px;
-  padding: 7px; 
+  padding: 7px;
 }
 
-.initiative-text{
+.initiative-text {
   font-family: 'Roboto';
   font-weight: 500;
   font-size: 15px;
 }
 
-.initiatives-layout{
+.initiatives-layout {
   margin-left: 5px !important;
   margin-right: 5px !important;
 }
@@ -227,13 +227,13 @@
 }
 
 .e-services-layout td {
-  vertical-align: top; 
+  vertical-align: top;
   padding: 10px;
   border: 1px solid #ddd;
 }
 
 .e-services-layout td:first-child {
-  border-left: none; 
+  border-left: none;
 }
 
 .e-services-layout td:last-child {
@@ -242,38 +242,38 @@
 
 .e-services-layout .service-item {
   display: flex;
-  align-items: flex-start; 
-  gap: 8px; 
+  align-items: flex-start;
+  gap: 8px;
 }
 
 .e-services-layout .tick-icon {
-  flex-shrink: 0; 
+  flex-shrink: 0;
   width: 18px;
   height: 18px;
-  margin-top: 2px; 
+  margin-top: 2px;
 }
 
 .e-services-layout .service-text {
   font-size: 15px;
   font-weight: 500;
   color: #333;
-  word-wrap: break-word; 
+  word-wrap: break-word;
 }
 
-@media (max-width: 500px){
+@media (max-width: 500px) {
   .initiative-img {
     width: 35px;
     height: 35px;
-    padding: 6px; 
+    padding: 6px;
   }
 
-  .initiative-text{
+  .initiative-text {
     font-family: 'Roboto';
     font-weight: 500;
     font-size: 14px;
   }
 
-  .initiatives-layout{
+  .initiatives-layout {
     margin-left: 0px !important;
     margin-right: 0px !important;
   }
@@ -283,7 +283,7 @@
   }
 
   .e-services-layout .service-item {
-    gap: 5px; 
+    gap: 5px;
   }
 
   .e-services-layout .service-text {
@@ -308,9 +308,10 @@
 }
 
 @media (min-width: 992px) and (max-width: 1200px) {
-  .upcoming-projects{
+  .upcoming-projects {
     margin-top: 20px;
   }
+
   .news-list {
     max-height: 340px !important;
   }
@@ -393,22 +394,23 @@
 
 .info-scroll-container {
   position: absolute;
-  animation: scroll-loop 25s linear infinite; 
+  animation: scroll-loop 25s linear infinite;
   animation-play-state: running;
 }
 
 @keyframes scroll-loop {
   0% {
-    transform: translateY(10%); 
+    transform: translateY(10%);
   }
+
   100% {
-    transform: translateY(-50%); 
+    transform: translateY(-50%);
   }
 }
 
 .project-item {
   display: flex;
-  align-items: center; 
+  align-items: center;
 }
 
 .e-services-img {
@@ -461,7 +463,7 @@
 }
 
 
- .service-card {
+.service-card {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -474,12 +476,12 @@
   height: 100%;
 }
 
- .service-card:hover {
+.service-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
 
- .service-card:hover {
+.service-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
@@ -497,6 +499,7 @@
   text-align: center;
   font-family: "Roboto";
 }
+
 .citigen {
   display: flex;
   align-items: center;
@@ -506,16 +509,19 @@
 }
 
 @media (min-width:992px) and (max-width: 1255px) {
-  .tabs-container .nav-tabs .nav-item .nav-link{
+  .tabs-container .nav-tabs .nav-item .nav-link {
     padding: 3px 5px 3px 5px !important;
     font-size: 15px !important;
   }
-  .gap-3{
+
+  .gap-3 {
     gap: 0.5rem !important;
   }
+
   .e-services-container {
     height: 410px;
   }
+
   .news-list {
     max-height: 300px;
   }

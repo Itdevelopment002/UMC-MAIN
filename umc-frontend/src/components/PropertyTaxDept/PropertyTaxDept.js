@@ -12,8 +12,6 @@ import pdficon from '../../assets/images/Departments/document 1.png';
 import api, { baseURL } from "../api";
 import { useTranslation } from "react-i18next";
 
-const ITEMS_PER_PAGE = 10;
-
 const PropertyTaxDept = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [banner, setBanner] = useState([]);
@@ -21,7 +19,7 @@ const PropertyTaxDept = () => {
   const [hod, setHod] = useState([]);
   const [pdf, setPdf] = useState([]);
   const { i18n, t } = useTranslation();
-
+  const ITEMS_PER_PAGE = 10;
   const totalPages = Math.ceil(pdf.length / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const currentData = pdf.slice(startIndex, startIndex + ITEMS_PER_PAGE);
@@ -71,7 +69,7 @@ const PropertyTaxDept = () => {
     return pageNumbers;
   };
 
-  const department_name = (i18n.language === 'en') ? "Property Tax Department": "मालमत्ता कर विभाग"
+  const department_name = (i18n.language === 'en') ? "Property Tax Department" : "मालमत्ता कर विभाग"
 
   const fetchBanner = async () => {
     try {
@@ -118,6 +116,7 @@ const PropertyTaxDept = () => {
     fetchHod();
     fetchDescription();
     fetchPdf();
+    //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [i18n.language]);
 
   useEffect(() => {
@@ -126,8 +125,6 @@ const PropertyTaxDept = () => {
 
   return (
     <>
-
-      {/* <div className="environment-header-image"></div> */}
 
       <div className="">
         <img
@@ -142,13 +139,13 @@ const PropertyTaxDept = () => {
       </div>
 
       <div id="main-content">
-        <div className="container-fluid font-location mt-4 mb-2" id="environment-css">
+        <div className="container-fluid font-location mt-4 mb-2" id="tax-css">
           <nav className="breadcrumb">
             <Link to="/" className="breadcrumb-item text-decoration-none">
               {t("breadcrumbHome")}
             </Link>
             <Link to="/departments" className="breadcrumb-item text-decoration-none">
-            {t("propertyTaxDept.department")}
+              {t("propertyTaxDept.department")}
             </Link>
             <span className="breadcrumb-item active1">{t("propertyTaxDept.propertyTaxDepartment")}</span>
           </nav>
@@ -220,7 +217,7 @@ const PropertyTaxDept = () => {
                       </div>
                       <div className="dept-text-box">
                         <strong className="dept-label">
-                        {t("departments.qualification")} :
+                          {t("departments.qualification")} :
                         </strong>
                         <span className="dept-value"> {hod[0]?.education}</span>
                       </div>
@@ -355,7 +352,7 @@ const PropertyTaxDept = () => {
                     ) : (
                       <tr>
                         <td colSpan="3" style={{ textAlign: "center", color: "#333333" }}>
-                        {t("departments.nodata")}
+                          {t("departments.nodata")}
                         </td>
                       </tr>
                     )}
@@ -367,13 +364,13 @@ const PropertyTaxDept = () => {
               <ul className="pagination custom-pagination">
                 <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
                   <button className="page-link" onClick={() => handlePageChange(currentPage - 1)}>
-                  {t("departments.previous")}
+                    {t("departments.previous")}
                   </button>
                 </li>
                 {renderPageNumbers()}
                 <li className={`page-item ${currentPage === totalPages ? "disabled" : ""}`}>
                   <button className="page-link" onClick={() => handlePageChange(currentPage + 1)}>
-                  {t("departments.next")}
+                    {t("departments.next")}
                   </button>
                 </li>
               </ul>

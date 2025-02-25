@@ -4,12 +4,10 @@ import "./HyperlinkPolicy.css";
 import api, { baseURL } from "../api";
 import { useTranslation } from "react-i18next";
 
-
 const HyperlinkPolicy = () => {
     const [policy, setPolicy] = useState([]);
     const [bgImage, setBgImage] = useState("");
     const { i18n, t } = useTranslation();
-
 
     const fetchHeaderImage = async () => {
         try {
@@ -33,6 +31,7 @@ const HyperlinkPolicy = () => {
     useEffect(() => {
         fetchPolicy();
         fetchHeaderImage();
+        //eslint-disable-next-line react-hooks/exhaustive-deps
     }, [i18n.language]);
 
     const fetchPolicy = async () => {

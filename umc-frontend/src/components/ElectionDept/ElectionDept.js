@@ -13,8 +13,6 @@ import pdficon from '../../assets/images/Departments/document 1.png';
 import api, { baseURL } from "../api";
 import { useTranslation } from "react-i18next";
 
-const ITEMS_PER_PAGE = 10;
-
 const ElectionDepartment = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [banner, setBanner] = useState([]);
@@ -22,7 +20,7 @@ const ElectionDepartment = () => {
   const [hod, setHod] = useState([]);
   const [pdf, setPdf] = useState([]);
   const { i18n, t } = useTranslation();
-
+  const ITEMS_PER_PAGE = 10;
   const totalPages = Math.ceil(pdf.length / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const currentData = pdf.slice(startIndex, startIndex + ITEMS_PER_PAGE);
@@ -72,7 +70,7 @@ const ElectionDepartment = () => {
     return pageNumbers;
   };
 
-  const department_name = (i18n.language === 'en') ? "Election Department": "निवडणूक विभाग"
+  const department_name = (i18n.language === 'en') ? "Election Department" : "निवडणूक विभाग"
 
   const fetchBanner = async () => {
     try {
@@ -119,6 +117,7 @@ const ElectionDepartment = () => {
     fetchHod();
     fetchDescription();
     fetchPdf();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [i18n.language]);
 
   useEffect(() => {
@@ -127,8 +126,6 @@ const ElectionDepartment = () => {
 
   return (
     <>
-
-      {/* <div className="election-header-image"></div> */}
 
       <div className="">
         <img
@@ -146,10 +143,10 @@ const ElectionDepartment = () => {
         <div className="container-fluid font-location mt-4 mb-2" id="election-css">
           <nav className="breadcrumb">
             <Link to="/" className="breadcrumb-item text-decoration-none">
-            {t('departments.home')}
+              {t('departments.home')}
             </Link>
             <Link to="/departments" className="breadcrumb-item text-decoration-none">
-            {t('departments.department')}
+              {t('departments.department')}
             </Link>
             <span className="breadcrumb-item active1">{t('electionDept.title')}</span>
           </nav>
@@ -206,7 +203,7 @@ const ElectionDepartment = () => {
                       </div>
                       <div className="dept-text-box">
                         <strong className="dept-label">{t('departments.designation')} :</strong>
-                           <span className="dept-value">
+                        <span className="dept-value">
                           {hod[0]?.designation
                             ? i18n.language === 'en'
                               ? ` ${t('departments.head1')} ${hod[0].designation}`
@@ -221,7 +218,7 @@ const ElectionDepartment = () => {
                       </div>
                       <div className="dept-text-box">
                         <strong className="dept-label">
-                        {t('departments.qualification')} :
+                          {t('departments.qualification')} :
                         </strong>
                         <span className="dept-value"> {hod[0]?.education}</span>
                       </div>
@@ -356,7 +353,7 @@ const ElectionDepartment = () => {
                     ) : (
                       <tr>
                         <td colSpan="3" style={{ textAlign: "center", color: "#333333" }}>
-                        {t('departments.nodata')}
+                          {t('departments.nodata')}
                         </td>
                       </tr>
                     )}
@@ -368,13 +365,13 @@ const ElectionDepartment = () => {
               <ul className="pagination custom-pagination">
                 <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
                   <button className="page-link" onClick={() => handlePageChange(currentPage - 1)}>
-                  {t('departments.previous')}
+                    {t('departments.previous')}
                   </button>
                 </li>
                 {renderPageNumbers()}
                 <li className={`page-item ${currentPage === totalPages ? "disabled" : ""}`}>
                   <button className="page-link" onClick={() => handlePageChange(currentPage + 1)}>
-                  {t('departments.next')}
+                    {t('departments.next')}
                   </button>
                 </li>
               </ul>

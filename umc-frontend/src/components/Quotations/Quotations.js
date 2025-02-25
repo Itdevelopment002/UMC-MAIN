@@ -8,39 +8,39 @@ import api, { baseURL } from "../api";
 const Quotations = () => {
     const [bgImage, setBgImage] = useState("");
 
-    useEffect(() => {
-        fetchHeaderImage();
-    }, []);
     const fetchHeaderImage = async () => {
         try {
-          const response = await api.get("/banner");
-    
-          if (response.data.length > 0) {
-            let selectedBanner = response.data.find(banner => banner.banner_name === "Quotations");
-    
-            if (selectedBanner) {
-              setBgImage(`${baseURL}${selectedBanner.file_path}`);
+            const response = await api.get("/banner");
+
+            if (response.data.length > 0) {
+                let selectedBanner = response.data.find(banner => banner.banner_name === "Quotations");
+
+                if (selectedBanner) {
+                    setBgImage(`${baseURL}${selectedBanner.file_path}`);
+                } else {
+                    console.error("Banner with specified name not found.");
+                }
             } else {
-              console.error("Banner with specified name not found.");
+                console.error("No banner image found.");
             }
-          } else {
-            console.error("No banner image found.");
-          }
         } catch (error) {
-          console.error("Error fetching header image:", error);
+            console.error("Error fetching header image:", error);
         }
-      };
+    };
+
     useEffect(() => {
+        fetchHeaderImage();
         window.scrollTo({ top: 0, behavior: "smooth" });
     }, []);
 
     return (
         <>
+
             <div
                 className="history-header-image"
                 style={{
                     backgroundImage: `url(${bgImage})`,
-                   
+
                 }}
             ></div>
 
@@ -71,9 +71,9 @@ const Quotations = () => {
                             This page is under development and will be available soon.
                         </p>
                     </div>
-
                 </div>
             </div>
+
         </>
     );
 };

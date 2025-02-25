@@ -5,7 +5,6 @@ import pdficon from '../../assets/images/Departments/document 1.png';
 import api, { baseURL } from "../api";
 import { useTranslation } from "react-i18next";
 
-
 const MunicipalMeeting = () => {
     const [selectedButton, setSelectedButton] = useState('');
     const [tableData, setTableData] = useState([]);
@@ -17,9 +16,6 @@ const MunicipalMeeting = () => {
     const [bgImage, setBgImage] = useState("");
     const { i18n, t } = useTranslation();
 
-
-
-    // Fetch data from the backend
     useEffect(() => {
         api.get(`/muncipal_meetings?lang=${i18n.language}`)
             .then((response) => {
@@ -28,7 +24,7 @@ const MunicipalMeeting = () => {
                 setAvailableButtons(uniqueNames);
 
                 const dynamicHeadersMap = {};
-                
+
                 uniqueNames.forEach(name => {
                     dynamicHeadersMap[name] = [
                         `${name} ${t('muncipal.agenda')}`,
@@ -36,7 +32,7 @@ const MunicipalMeeting = () => {
                         `${name} ${t('muncipal.resolution')}`,
                     ];
                 });
-                
+
                 setHeadersMap(dynamicHeadersMap);
 
                 if (uniqueNames.length > 0) {
@@ -46,6 +42,7 @@ const MunicipalMeeting = () => {
             .catch((error) => {
                 console.error("Error fetching data: ", error);
             });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [i18n.language]);
 
     useEffect(() => {
@@ -80,7 +77,7 @@ const MunicipalMeeting = () => {
 
     const handleButtonClick = (buttonName) => {
         setSelectedButton(buttonName);
-        setCurrentPage(1); // Reset to the first page when changing the button
+        setCurrentPage(1);
     };
 
     const filteredData = getTableData().filter((item) =>
@@ -99,7 +96,7 @@ const MunicipalMeeting = () => {
 
     const handleItemsPerPageChange = (e) => {
         setItemsPerPage(parseInt(e.target.value));
-        setCurrentPage(1); // Reset to the first page when changing items per page
+        setCurrentPage(1);
     };
 
     const renderPageNumbers = () => {
@@ -139,14 +136,16 @@ const MunicipalMeeting = () => {
 
     return (
         <>
+
             <div
                 className="history-header-image"
                 style={{
                     backgroundImage: `url(${bgImage})`,
                 }}
             ></div>
+
             <div id="main-content">
-                <div className="container-fluid font-location mt-4 mb-5" id="accounts-css">
+                <div className="container-fluid font-location mt-4 mb-5" id="municipal-css">
                     <nav className="breadcrumb">
                         <Link to="/" className="breadcrumb-item text-decoration-none">
                             {t('corporation.home')}
@@ -194,7 +193,7 @@ const MunicipalMeeting = () => {
 
                                 <div className="input-group d-flex align-items-center" style={{ width: "270px" }}>
                                     <label htmlFor="searchInput" className="search-label" style={{ whiteSpace: "nowrap" }}>
-                                    {t('corporation.search')}
+                                        {t('corporation.search')}
                                     </label>
                                     <input
                                         type="text"
@@ -207,7 +206,6 @@ const MunicipalMeeting = () => {
                                 </div>
                             </div>
 
-                            {/* Table Rendering */}
                             <div className="circular-wrapper">
                                 <table className="table table-bordered shadow table-responsive">
                                     <thead className="bg-orange text-white">
@@ -222,7 +220,23 @@ const MunicipalMeeting = () => {
                                     <tbody>
                                         {currentData.map((item, index) => (
                                             <tr key={index}>
-                                                <td className="font-large text-center">{startEntry + index}</td>
+                                                <td className="font-large text-center">
+                                                    {(() => {
+                                                        const language = i18n.language;
+
+                                                        const toMarathiNumbers = (num) => {
+                                                            const marathiDigits = ["०", "१", "२", "३", "४", "५", "६", "७", "८", "९"];
+                                                            return num
+                                                                .toString()
+                                                                .split("")
+                                                                .map((digit) => marathiDigits[parseInt(digit, 10)])
+                                                                .join("");
+                                                        };
+
+                                                        const number = startEntry + index
+                                                        return language === "mr" ? toMarathiNumbers(number) : number;
+                                                    })()}
+                                                </td>
                                                 <td>{item.year}</td>
                                                 <td className="text-center">
                                                     {item.pdf_link1 && item.pdf_link1 !== "#" ? (

@@ -1,4 +1,4 @@
-#women-css p {
+#records-css p {
   font-size: 16px;
   font-weight: 400;
   text-align: justify;
@@ -6,16 +6,16 @@
   letter-spacing: -0.32px;
 }
 
-#women-css .table-bordered td,
+#records-css .table-bordered td,
 .table-bordered th {
   vertical-align: middle;
 }
 
-#women-css .bg-orange {
+#records-css .bg-orange {
   background-color: #EDEDED !important;
 }
 
-#women-css .table-heading-styling {
+#records-css .table-heading-styling {
   background: #EDEDED !important;
   color: #000000 !important;
   font-size: 15px !important;
@@ -24,7 +24,7 @@
   padding: 10px 10px !important;
 }
 
-#women-css td {
+#records-css td {
   font-weight: 500 !important;
   font-size: 14px !important;
   line-height: 17.41px !important;

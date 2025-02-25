@@ -4,14 +4,10 @@ import "./Departments.css";
 import api, { baseURL } from "../api";
 import { useTranslation } from "react-i18next";
 
-
 const Departments = () => {
     const [departments, setDepartments] = useState([]);
     const [bgImage, setBgImage] = useState("");
-        const { i18n, t } = useTranslation();
-    
-
-
+    const { i18n, t } = useTranslation();
 
     const fetchHeaderImage = async () => {
         try {
@@ -32,6 +28,7 @@ const Departments = () => {
             console.error("Error fetching header image:", error);
         }
     };
+
     const fetchDepartments = async () => {
         try {
             const response = await api.get(`/department-info?lang=${i18n.language}`);
@@ -46,22 +43,25 @@ const Departments = () => {
         fetchHeaderImage();
         fetchDepartments();
         window.scrollTo({ top: 0, behavior: "smooth" });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [i18n.language]);
 
     return (
         <>
-             <div
+
+            <div
                 className="history-header-image"
                 style={{
                     backgroundImage: `url(${bgImage})`,
 
                 }}
             ></div>
+
             <div id="main-content">
                 <div className="container-fluid font-location mt-4 mb-2" id="contact-css">
                     <nav className="breadcrumb">
                         <Link to="/" className="breadcrumb-item text-decoration-none">
-                        {t('department.home')}
+                            {t('department.home')}
                         </Link>
                         <span className="breadcrumb-item active1">{t('department.department')}</span>
                     </nav>

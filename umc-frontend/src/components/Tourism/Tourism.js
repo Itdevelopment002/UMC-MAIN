@@ -5,7 +5,6 @@ import { GrLocation } from "react-icons/gr";
 import api, { baseURL } from "../api";
 import { useTranslation } from "react-i18next";
 
-
 const Tourism = () => {
     const [gardensData, setGardensData] = useState([]);
     const [bgImage, setBgImage] = useState("");
@@ -22,9 +21,11 @@ const Tourism = () => {
         };
         fetchGardens();
     }, [i18n.language]);
+
     useEffect(() => {
         fetchHeaderImage();
     }, []);
+
     const fetchHeaderImage = async () => {
         try {
             const response = await api.get("/banner");
@@ -51,11 +52,11 @@ const Tourism = () => {
 
     return (
         <>
-             <div
+
+            <div
                 className="history-header-image"
                 style={{
                     backgroundImage: `url(${bgImage})`,
-                   
                 }}
             ></div>
 
@@ -112,8 +113,6 @@ const Tourism = () => {
                                     <p><strong>{t('tourism.description')}:</strong> <span className="span-tourism">{location.description || "No Description Available"}</span></p>
                                 </div>
                             </div>
-
-                            {/* Gallery Section */}
                             <div className="row mt-4">
                                 {JSON.parse(location.gallery).map((image, galleryIndex) => (
                                     <div className="col-xl-3 col-lg-3 col-md-6 col-sm-6 sizing-image-col" key={galleryIndex}>
@@ -127,8 +126,6 @@ const Tourism = () => {
                                     </div>
                                 ))}
                             </div>
-
-                            {/* Divider */}
                             {index !== gardensData.length - 1 && (
                                 <>
                                     <hr />

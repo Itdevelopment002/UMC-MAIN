@@ -5,12 +5,10 @@ import "../TableCss/TableCss.css";
 import api, { baseURL } from "../api";
 import { useTranslation } from "react-i18next";
 
-
 const ScreenReader = () => {
     const [reader, setReader] = useState([]);
     const [bgImage, setBgImage] = useState("");
     const { i18n, t } = useTranslation();
-
 
     const fetchReader = async () => {
         try {
@@ -20,7 +18,6 @@ const ScreenReader = () => {
             console.error("Error fetching reader data");
         }
     };
-
 
     const fetchHeaderImage = async () => {
         try {
@@ -46,11 +43,14 @@ const ScreenReader = () => {
         fetchReader();
         fetchHeaderImage();
         window.scrollTo({ top: 0, behavior: 'smooth' });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [i18n.language]);
 
     return (
         <>
+
             <div className="history-header-image" style={{ backgroundImage: `url(${bgImage})` }}></div>
+
             <div id="main-content">
                 <div className="container-fluid font-location mt-4 mb-2" id="reader-css">
                     <nav className="breadcrumb">
