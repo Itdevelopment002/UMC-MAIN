@@ -6,18 +6,13 @@ import comingsoon from '../../assets/newcomingsoon.png'
 import api, { baseURL } from "../api"
 import { useTranslation } from "react-i18next";
 
-
 const TermsConditions = () => {
     const [bgImage, setBgImage] = useState("");
-    const { i18n, t } = useTranslation();
+    const { t } = useTranslation();
 
-    useEffect(() => {
-        fetchHeaderImage();
-    }, []);
     const fetchHeaderImage = async () => {
         try {
             const response = await api.get("/banner");
-
             if (response.data.length > 0) {
                 let selectedBanner = response.data.find(banner => banner.banner_name === "Terms-and-conditions");
 
@@ -35,11 +30,13 @@ const TermsConditions = () => {
     };
 
     useEffect(() => {
+        fetchHeaderImage();
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }, []);
 
     return (
         <>
+
             <div
                 className="history-header-image"
                 style={{
@@ -68,7 +65,6 @@ const TermsConditions = () => {
                             alt="Coming Soon"
                             className="coming-soon-gif"
                         />
-                        
                     </div>
                 </div>
             </div>

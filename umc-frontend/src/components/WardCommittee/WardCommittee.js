@@ -6,40 +6,40 @@ import comingsoon from '../../assets/newcomingsoon.png'
 import api, { baseURL } from "../api";
 
 const WardCommittee = () => {
-        const [bgImage, setBgImage] = useState("");
-        useEffect(() => {
-                fetchHeaderImage();
-            }, []);
-        const fetchHeaderImage = async () => {
-            try {
-                const response = await api.get("/banner");
-    
-                if (response.data.length > 0) {
-                    let selectedBanner = response.data.find(banner => banner.banner_name === "Ward-committee");
-    
-                    if (selectedBanner) {
-                        setBgImage(`${baseURL}${selectedBanner.file_path}`);
-                    } else {
-                        console.error("Banner with specified name not found.");
-                    }
+    const [bgImage, setBgImage] = useState("");
+
+    const fetchHeaderImage = async () => {
+        try {
+            const response = await api.get("/banner");
+
+            if (response.data.length > 0) {
+                let selectedBanner = response.data.find(banner => banner.banner_name === "Ward-committee");
+
+                if (selectedBanner) {
+                    setBgImage(`${baseURL}${selectedBanner.file_path}`);
                 } else {
-                    console.error("No banner image found.");
+                    console.error("Banner with specified name not found.");
                 }
-            } catch (error) {
-                console.error("Error fetching header image:", error);
+            } else {
+                console.error("No banner image found.");
             }
-        };
+        } catch (error) {
+            console.error("Error fetching header image:", error);
+        }
+    };
+
     useEffect(() => {
+        fetchHeaderImage();
         window.scrollTo({ top: 0, behavior: "smooth" });
     }, []);
 
     return (
         <>
-           <div
+
+            <div
                 className="history-header-image"
                 style={{
                     backgroundImage: `url(${bgImage})`,
-
                 }}
             ></div>
 
@@ -70,7 +70,6 @@ const WardCommittee = () => {
                             This page is under development and will be available soon.
                         </p>
                     </div>
-
                 </div>
             </div>
         </>

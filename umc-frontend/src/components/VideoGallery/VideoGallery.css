@@ -40,10 +40,6 @@
   transition: all 0.3s ease-in-out;
 }
 
-#video-gallery-css .gallery-custom-btn i {
-  font-size: 15px;
-}
-
 #video-gallery-css .gallery-custom-btn:hover {
   background-color: #F5507A;
   color: #fff;

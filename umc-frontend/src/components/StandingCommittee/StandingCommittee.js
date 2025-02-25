@@ -6,18 +6,13 @@ import comingsoon from '../../assets/newcomingsoon.png'
 import api, { baseURL } from "../api";
 import { useTranslation } from "react-i18next";
 
-
 const StandingCommittee = () => {
     const [bgImage, setBgImage] = useState("");
-        const { i18n, t } = useTranslation();
-    
-    useEffect(() => {
-        fetchHeaderImage();
-    }, []);
+    const { t } = useTranslation();
+
     const fetchHeaderImage = async () => {
         try {
             const response = await api.get("/banner");
-
             if (response.data.length > 0) {
                 let selectedBanner = response.data.find(banner => banner.banner_name === "Standing-committee");
 
@@ -35,16 +30,18 @@ const StandingCommittee = () => {
     };
 
     useEffect(() => {
+        fetchHeaderImage();
         window.scrollTo({ top: 0, behavior: "smooth" });
     }, []);
 
     return (
         <>
+
             <div
                 className="history-header-image"
                 style={{
                     backgroundImage: `url(${bgImage})`,
-                   
+
                 }}
             ></div>
 
@@ -52,10 +49,10 @@ const StandingCommittee = () => {
                 <div className="container-fluid font-location mt-2 mb-5" id="deputy-css">
                     <nav className="breadcrumb">
                         <Link to="/" className="breadcrumb-item text-decoration-none">
-                        {t('corporation.home')}
+                            {t('corporation.home')}
                         </Link>
                         <Link to="#" className="breadcrumb-item text-decoration-none">
-                        {t('corporation.corporation')}
+                            {t('corporation.corporation')}
                         </Link>
                         <span className="breadcrumb-item active1">{t('standingCommittee.title')}</span>
                     </nav>
@@ -70,7 +67,6 @@ const StandingCommittee = () => {
                             src={comingsoon}
                             alt="Coming Soon"
                             className="coming-soon-gif"
-
                         />
                     </div>
 

@@ -123,29 +123,28 @@ const TopHeader = () => {
                     <span className="divider">|</span>
                     <button onClick={handleIncreaseFontSize} className="text-size-btn">{t("header.aPlus")}</button>
                     <span className="divider">|</span>
+
                     <div className="custom-dropdown">
-    <div className="selected-language">
-        <span>{getLanguageText()}</span>
-        <RiArrowDropDownLine size={25} className="arrow" />
-    </div>
+                        <div className="selected-language">
+                            <span>{getLanguageText()}</span>
+                            <RiArrowDropDownLine size={25} className="arrow" />
+                        </div>
 
-    <div className="dropdown-options">
-        <div
-            className={`dropdown-option ${selectedLanguage === "en" ? "selected" : ""}`}
-            onClick={() => handleLanguageChange("en")}
-        >
-            English
-        </div>
-        <div
-            className={`dropdown-option ${selectedLanguage === "mr" ? "selected" : ""}`}
-            onClick={() => handleLanguageChange("mr")}
-        >
-            मराठी
-        </div>
-    </div>
-</div>
-
-
+                        <div className="dropdown-options">
+                            <div
+                                className={`dropdown-option ${selectedLanguage === "en" ? "selected" : ""}`}
+                                onClick={() => handleLanguageChange("en")}
+                            >
+                                English
+                            </div>
+                            <div
+                                className={`dropdown-option ${selectedLanguage === "mr" ? "selected" : ""}`}
+                                onClick={() => handleLanguageChange("mr")}
+                            >
+                                मराठी
+                            </div>
+                        </div>
+                    </div>
 
                     <div className="social-icons top-bar-social-media d-flex">
                         <Link to="https://twitter.com/my_umcofficial" target="_blank" className="social-link">
@@ -164,6 +163,7 @@ const TopHeader = () => {
                             <img src={youtube} alt="YouTube" className="youtube-icon" />
                         </Link>
                     </div>
+
                 </div>
             </div>
         </>

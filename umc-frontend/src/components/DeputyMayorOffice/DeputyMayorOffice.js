@@ -8,13 +8,7 @@ import { useTranslation } from "react-i18next";
 
 const DeputyMayorOffice = () => {
     const [bgImage, setBgImage] = useState("");
-    const { i18n, t } = useTranslation();
-
-
-
-    useEffect(() => {
-        fetchHeaderImage();
-    }, []);
+    const { t } = useTranslation();
 
     const fetchHeaderImage = async () => {
         try {
@@ -35,7 +29,9 @@ const DeputyMayorOffice = () => {
             console.error("Error fetching header image:", error);
         }
     };
+
     useEffect(() => {
+        fetchHeaderImage();
         window.scrollTo({ top: 0, behavior: "smooth" });
     }, []);
 
@@ -45,7 +41,6 @@ const DeputyMayorOffice = () => {
                 className="history-header-image"
                 style={{
                     backgroundImage: `url(${bgImage})`,
-
                 }}
             ></div>
 
@@ -53,10 +48,10 @@ const DeputyMayorOffice = () => {
                 <div className="container-fluid font-location mt-2 mb-5" id="deputy-css">
                     <nav className="breadcrumb">
                         <Link to="/" className="breadcrumb-item text-decoration-none">
-                        {t('corporation.home')}
+                            {t('corporation.home')}
                         </Link>
                         <Link to="#" className="breadcrumb-item text-decoration-none">
-                        {t('corporation.corporation')}
+                            {t('corporation.corporation')}
                         </Link>
                         <span className="breadcrumb-item active1">{t('dymayorOffice.title')}</span>
                     </nav>
@@ -71,9 +66,7 @@ const DeputyMayorOffice = () => {
                             src={comingsoon}
                             alt="Coming Soon"
                             className="coming-soon-gif"
-
                         />
-                       
                     </div>
 
                 </div>

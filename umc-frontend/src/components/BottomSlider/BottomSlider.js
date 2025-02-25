@@ -29,18 +29,18 @@ const BottomSlider = () => {
   const [sliders, setSliders] = useState([]);
 
 
-  const fetchSliders = async ()=> {
-    try{
+  const fetchSliders = async () => {
+    try {
       const response = await api.get("/bottom-sliders");
       setSliders(response.data);
-    } catch(error){
+    } catch (error) {
       console.error("Error fetching sliders", error)
     }
   }
 
-  useEffect(()=>{
+  useEffect(() => {
     fetchSliders();
-  },[]);
+  }, []);
 
   const settings = {
     dots: false,

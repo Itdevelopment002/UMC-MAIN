@@ -4,12 +4,10 @@ import "./PrivacyPolicy.css";
 import api, { baseURL } from "../api";
 import { useTranslation } from "react-i18next";
 
-
 const PrivacyPolicy = () => {
     const [policy, setPolicy] = useState([]);
     const [bgImage, setBgImage] = useState("");
     const { i18n, t } = useTranslation();
-    
 
     const fetchHeaderImage = async () => {
         try {
@@ -33,6 +31,7 @@ const PrivacyPolicy = () => {
     useEffect(() => {
         fetchPolicy();
         fetchHeaderImage();
+        //eslint-disable-next-line react-hooks/exhaustive-deps
     }, [i18n.language]);
 
     const fetchPolicy = async () => {
@@ -48,7 +47,6 @@ const PrivacyPolicy = () => {
         window.scrollTo({ top: 0, behavior: "smooth" });
     }, []);
 
-    // Group policies by their headings
     const groupedPolicies = policy.reduce((acc, currentPolicy) => {
         const { heading, description } = currentPolicy;
         if (!acc[heading]) {
@@ -60,11 +58,11 @@ const PrivacyPolicy = () => {
 
     return (
         <>
+
             <div
                 className="history-header-image"
                 style={{
                     backgroundImage: `url(${bgImage})`,
-
                 }}
             ></div>
 
@@ -72,7 +70,7 @@ const PrivacyPolicy = () => {
                 <div className="container-fluid font-location mt-4 mb-2" id="privacy-css">
                     <nav className="breadcrumb">
                         <Link to="/" className="breadcrumb-item text-decoration-none">
-                        {t('departments.home')}
+                            {t('departments.home')}
                         </Link>
                         <span className="breadcrumb-item active1">{t('privacy.title')}</span>
                     </nav>
@@ -81,7 +79,6 @@ const PrivacyPolicy = () => {
                         <span className="highlighted-text"> {t('privacy.highlight-text')}</span>
                         <hr />
                     </h2>
-
                     <div className="row">
                         <div className="col-12">
                             {Object.entries(groupedPolicies).map(([heading, descriptions]) => (

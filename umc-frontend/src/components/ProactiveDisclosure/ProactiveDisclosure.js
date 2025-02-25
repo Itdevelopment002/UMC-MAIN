@@ -7,12 +7,10 @@ import Swal from "sweetalert2";
 import api, { baseURL } from "../api"
 import { useTranslation } from "react-i18next";
 
-
 const ProactiveDisclosure = () => {
     const [rti, setRti] = useState([]);
     const [bgImage, setBgImage] = useState("");
-      const { i18n, t } = useTranslation();
-    
+    const { i18n, t } = useTranslation();
 
     const fetchHeaderImage = async () => {
         try {
@@ -33,6 +31,7 @@ const ProactiveDisclosure = () => {
             console.error("Error fetching header image:", error);
         }
     };
+
     const fetchRti = async () => {
         try {
             const response = await api.get(`/proactive-disclosure?lang=${i18n.language}`);
@@ -46,6 +45,7 @@ const ProactiveDisclosure = () => {
         fetchHeaderImage();
         fetchRti();
         window.scrollTo({ top: 0, behavior: 'smooth' });
+        //eslint-disable-next-line react-hooks/exhaustive-deps
     }, [i18n.language]);
 
     const handleClick = (link, e) => {
@@ -62,11 +62,11 @@ const ProactiveDisclosure = () => {
 
     return (
         <>
+
             <div
                 className="history-header-image"
                 style={{
                     backgroundImage: `url(${bgImage})`,
-
                 }}
             ></div>
 
@@ -74,10 +74,10 @@ const ProactiveDisclosure = () => {
                 <div className="container-fluid font-location mt-4 mb-2" id="rti-css">
                     <nav className="breadcrumb">
                         <Link to="/" className="breadcrumb-item text-decoration-none">
-                        {t('departments.home')}
+                            {t('departments.home')}
                         </Link>
                         <Link to="/rti" className="breadcrumb-item text-decoration-none">
-                        {t('proactive.rti')}
+                            {t('proactive.rti')}
                         </Link>
                         <span className="breadcrumb-item active1">{t('proactive.title')}</span>
                     </nav>
@@ -93,13 +93,13 @@ const ProactiveDisclosure = () => {
                                     <thead className="bg-orange text-white">
                                         <tr>
                                             <th className="table-heading-styling" style={{ textAlign: "center" }}>
-                                            {t('departments.sno')}
+                                                {t('departments.sno')}
                                             </th>
                                             <th className="table-heading-styling">
-                                            {t('tourism.description')}
+                                                {t('tourism.description')}
                                             </th>
                                             <th className="table-heading-styling" style={{ textAlign: "center" }}>
-                                            {t('departments.action')}
+                                                {t('departments.action')}
                                             </th>
                                         </tr>
                                     </thead>
@@ -171,7 +171,7 @@ const ProactiveDisclosure = () => {
                                                                         verticalAlign: "middle",
                                                                     }}
                                                                 />
-                                                               {t('departments.view')}
+                                                                {t('departments.view')}
                                                             </>
                                                         ) : (
                                                             <>

@@ -6,7 +6,6 @@ import Swal from 'sweetalert2';
 import api, { baseURL } from "../api";
 import { useTranslation } from "react-i18next";
 
-
 const AnnualFinancialStatement = () => {
     const [itemsPerPage, setItemsPerPage] = useState(10);
     const [annualData, setAnnualData] = useState([]);
@@ -14,7 +13,6 @@ const AnnualFinancialStatement = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const [bgImage, setBgImage] = useState("");
     const { i18n, t } = useTranslation();
-
 
     const totalEntries = annualData.length;
     const filteredData = annualData.filter((item) =>
@@ -24,6 +22,7 @@ const AnnualFinancialStatement = () => {
     useEffect(() => {
         fetchAnnual();
         fetchHeaderImage();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [i18n.language]);
 
     const fetchAnnual = async () => {
@@ -76,6 +75,7 @@ const AnnualFinancialStatement = () => {
         }
         return pageNumbers;
     };
+
     const handleClick = (link, e) => {
         if (link === "#") {
             e.preventDefault();
@@ -87,6 +87,7 @@ const AnnualFinancialStatement = () => {
             });
         }
     };
+
     const updatedtotalEntries = annualData.length;
     const startEntry = (currentPage - 1) * itemsPerPage + 1;
     const endEntry = Math.min(currentPage * itemsPerPage, updatedtotalEntries);
@@ -117,6 +118,7 @@ const AnnualFinancialStatement = () => {
 
     return (
         <>
+
             <div
                 className="history-header-image"
                 style={{
@@ -124,6 +126,7 @@ const AnnualFinancialStatement = () => {
 
                 }}
             ></div>
+
             <div id="main-content">
                 <div className="container-fluid font-location mt-4 mb-5" id="accounts-css">
                     <nav className="breadcrumb">

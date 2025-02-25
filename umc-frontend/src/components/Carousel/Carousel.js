@@ -19,7 +19,7 @@ const Carousel = () => {
   const backgroundColors = ["#ddecf5", "#E0F8F2", "#EEECFF", "#FAEDED"];
   const [sliders, setSliders] = useState([]);
   const [ministers, setMinisters] = useState([]);
-  const { i18n, t } = useTranslation();
+  const { i18n } = useTranslation();
 
   const fetchSliders = async () => {
     try {
@@ -42,9 +42,11 @@ const Carousel = () => {
   useEffect(() => {
     fetchSliders();
     fetchMinisters();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [i18n.language]);
 
   return (
+
     <div className="container-fluid">
       <div className="row home-carousel-section">
         <div className="col-md-12 col-lg-12 col-xl-5 col-xxl-3 col-12 custom-profile-card1">
@@ -88,11 +90,13 @@ const Carousel = () => {
         </div>
       </div>
     </div>
+
   );
 };
 
 const ProfileCard = ({ name, position, image, bgColor }) => {
   return (
+
     <div className="custom-profile-card" style={{ backgroundColor: bgColor }}>
       <div className="align-items-center custom-flex">
         <img src={image} alt={name} className="me-3 image" />
@@ -102,6 +106,7 @@ const ProfileCard = ({ name, position, image, bgColor }) => {
         </div>
       </div>
     </div>
+
   );
 };
 

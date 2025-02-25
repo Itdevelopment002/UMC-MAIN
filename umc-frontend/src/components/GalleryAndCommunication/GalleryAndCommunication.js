@@ -40,16 +40,16 @@ const GalleryAndCommunication = () => {
   }
 
   useEffect(() => {
-  const fetchData = async () => {
-    await fetchPortal();
-    await new Promise((res) => setTimeout(res, 1000));
-    await fetchEmergency();
-    await new Promise((res) => setTimeout(res, 1000));
-    await fetchGallery();
-  };
-  fetchData();
-}, [i18n.language]);
-
+    const fetchData = async () => {
+      await fetchPortal();
+      await new Promise((res) => setTimeout(res, 1000));
+      await fetchEmergency();
+      await new Promise((res) => setTimeout(res, 1000));
+      await fetchGallery();
+    };
+    fetchData();
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [i18n.language]);
 
   useEffect(() => {
     GLightbox({
@@ -69,7 +69,7 @@ const GalleryAndCommunication = () => {
             <div className="vertical-line"></div>
             <div className="title-container">
               <h2 className="section-title">
-              {t("home.photo")} <span className="subtitle">{t("home.gallery")}</span>
+                {t("home.photo")} <span className="subtitle">{t("home.gallery")}</span>
               </h2>
             </div>
             <Link to="/photo-gallery" className="view-all-link">{t("home.viewAll")}</Link>
@@ -97,7 +97,7 @@ const GalleryAndCommunication = () => {
             <div className="vertical-line"></div>
             <div className="d-flex">
               <h2 className="section-title">
-              {t("home.citizen")} <span className="subtitle">{t("home.communication")}</span>
+                {t("home.citizen")} <span className="subtitle">{t("home.communication")}</span>
               </h2>
             </div>
           </div>

@@ -7,12 +7,10 @@ import Swal from 'sweetalert2';
 import api, { baseURL } from "../api"
 import { useTranslation } from "react-i18next";
 
-
 const SWMSystem = () => {
     const [swms, setSwms] = useState([]);
     const [bgImage, setBgImage] = useState("");
-        const { i18n, t } = useTranslation();
-    
+    const { i18n, t } = useTranslation();
 
     const fetchHeaderImage = async () => {
         try {
@@ -34,7 +32,6 @@ const SWMSystem = () => {
         }
     };
 
-
     const fetchSWMS = async () => {
         try {
             const response = await api.get(`/swms?lang=${i18n.language}`);
@@ -48,6 +45,7 @@ const SWMSystem = () => {
         fetchHeaderImage();
         fetchSWMS();
         window.scrollTo({ top: 0, behavior: 'smooth' });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [i18n.language]);
 
     const handleClick = (link, e) => {
@@ -64,6 +62,7 @@ const SWMSystem = () => {
 
     return (
         <>
+
             <div
                 className="history-header-image"
                 style={{
@@ -76,7 +75,7 @@ const SWMSystem = () => {
                 <div className="container-fluid font-location mt-4 mb-2" id="solid-system-css">
                     <nav className="breadcrumb">
                         <Link to="/" className="breadcrumb-item text-decoration-none">
-                        {t('departments.home')}
+                            {t('departments.home')}
                         </Link>
                         <span className="breadcrumb-item active1">{t('solidWaste.title')}</span>
                     </nav>
@@ -93,13 +92,13 @@ const SWMSystem = () => {
                                     <thead className="bg-orange text-white">
                                         <tr>
                                             <th className="table-heading-styling" style={{ textAlign: "center" }}>
-                                            {t('departments.sno')}
+                                                {t('departments.sno')}
                                             </th>
                                             <th className="table-heading-styling">
-                                            {t('tourism.description')}
+                                                {t('tourism.description')}
                                             </th>
                                             <th className="table-heading-styling" style={{ textAlign: "center" }}>
-                                            {t('departments.action')}
+                                                {t('departments.action')}
                                             </th>
                                         </tr>
                                     </thead>
@@ -117,20 +116,20 @@ const SWMSystem = () => {
                                                     }}
                                                 >
                                                     {(() => {
-    const language = i18n.language;
+                                                        const language = i18n.language;
 
-    const toMarathiNumbers = (num) => {
-      const marathiDigits = ["०", "१", "२", "३", "४", "५", "६", "७", "८", "९"];
-      return num
-        .toString()
-        .split("")
-        .map((digit) => marathiDigits[parseInt(digit, 10)])
-        .join("");
-    };
+                                                        const toMarathiNumbers = (num) => {
+                                                            const marathiDigits = ["०", "१", "२", "३", "४", "५", "६", "७", "८", "९"];
+                                                            return num
+                                                                .toString()
+                                                                .split("")
+                                                                .map((digit) => marathiDigits[parseInt(digit, 10)])
+                                                                .join("");
+                                                        };
 
-    const number = index + 1;
-    return language === "mr" ? toMarathiNumbers(number) : number;
-  })()}
+                                                        const number = index + 1;
+                                                        return language === "mr" ? toMarathiNumbers(number) : number;
+                                                    })()}
                                                 </td>
                                                 <td
                                                     width="70%"

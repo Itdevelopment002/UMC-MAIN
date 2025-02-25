@@ -12,8 +12,6 @@ import pdficon from '../../assets/images/Departments/document 1.png';
 import api, { baseURL } from "../api";
 import { useTranslation } from "react-i18next";
 
-const ITEMS_PER_PAGE = 10;
-
 const RecordsDepartment = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [banner, setBanner] = useState([]);
@@ -21,7 +19,7 @@ const RecordsDepartment = () => {
   const [hod, setHod] = useState([]);
   const [pdf, setPdf] = useState([]);
   const { i18n, t } = useTranslation();
-
+  const ITEMS_PER_PAGE = 10;
   const totalPages = Math.ceil(pdf.length / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const currentData = pdf.slice(startIndex, startIndex + ITEMS_PER_PAGE);
@@ -118,6 +116,7 @@ const RecordsDepartment = () => {
     fetchHod();
     fetchDescription();
     fetchPdf();
+    //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [i18n.language]);
 
   useEffect(() => {
@@ -126,8 +125,6 @@ const RecordsDepartment = () => {
 
   return (
     <>
-
-      {/* <div className="environment-header-image"></div> */}
 
       <div className="">
         <img
@@ -142,8 +139,7 @@ const RecordsDepartment = () => {
       </div>
 
       <div id="main-content">
-
-        <div className="container-fluid font-location mt-4 mb-2" id="accounts-css">
+        <div className="container-fluid font-location mt-4 mb-2" id="records-css">
           <nav className="breadcrumb">
             <Link to="/" className="breadcrumb-item text-decoration-none">
               {t('departments.home')}
