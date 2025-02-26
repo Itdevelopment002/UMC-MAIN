@@ -19,6 +19,7 @@ import { MdRecordVoiceOver } from "react-icons/md";
 import { IoInformationCircle } from "react-icons/io5";
 import { AiOutlineFundProjectionScreen } from "react-icons/ai";
 import { PiTreeStructureBold } from "react-icons/pi";
+import { MdOutlineCelebration } from "react-icons/md";
 
 const Sidebar = ({ isOpen, closeSidebar, userDepartment }) => {
   const [openSubmenu, setOpenSubmenu] = useState(null);
@@ -625,6 +626,17 @@ const Sidebar = ({ isOpen, closeSidebar, userDepartment }) => {
                         <MdOutlineDatasetLinked />
                       </i>{" "}
                       Hyperlink Policy
+                    </Link>
+                  </li>
+                  <li
+                    className={activeItem === "/celebration" ? "active" : ""}
+                    onClick={() => handleItemClick("/celebration")}
+                  >
+                    <Link to="/celebration">
+                      <i className="fa">
+                        <MdOutlineCelebration />
+                      </i>{" "}
+                      Celebration
                     </Link>
                   </li>
                   <li
