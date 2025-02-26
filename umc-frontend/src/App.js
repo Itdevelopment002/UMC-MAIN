@@ -95,14 +95,39 @@ import BottomSlider from "./components/BottomSlider/BottomSlider";
 import Footer from "./components/Footer/Footer";
 import { useTranslation } from "react-i18next";
 import loaderimage from "./assets/loader_trans.gif";
+import Celebration from "./components/Celebration/Celebration";
+import api from "../src/components/api";
+
 
 function App() {
-  const [loading, setLoading] = useState(true);
+  const [showIntro, setShowIntro] = useState(true);
+  const [showLoader, setShowLoader] = useState(false);
+  const [showMainContent, setShowMainContent] = useState(false);
   const { i18n } = useTranslation();
 
   useEffect(() => {
     i18n.changeLanguage(i18n.language);
   }, [i18n]);
+
+  useEffect(() => {
+    const fetchCelebrationStatus = async () => {
+      try {
+        const response = await api.get("/celebration/1");
+        const status = response.data.status;
+        if (status === "Disable") {
+          setShowIntro(false);
+          setShowLoader(true);
+          setTimeout(() => {
+            setShowLoader(false);
+            setShowMainContent(true);
+          }, 2000);
+        }
+      } catch (error) {
+        console.error("Error fetching celebration status:", error);
+      }
+    };
+    fetchCelebrationStatus();
+  }, []);
 
   useEffect(() => {
     AOS.init({
@@ -111,13 +136,16 @@ function App() {
       easing: "ease-in-out",
       once: true,
     });
-
-    const timer = setTimeout(() => {
-      setLoading(false);
-      AOS.refresh();
-    }, 1000);
-    return () => clearTimeout(timer);
   }, []);
+
+  const handleIntroComplete = () => {
+    setShowIntro(false);
+    setShowLoader(true);
+    setTimeout(() => {
+      setShowLoader(false);
+      setShowMainContent(true);
+    }, 2000);
+  };
 
   const GlobalFontHandler = () => {
     const location = useLocation();
@@ -132,11 +160,10 @@ function App() {
         }
       };
 
-      // Apply font family on route change
       applyFontBasedOnLanguage();
     }, [location]);
 
-    return null; // This component doesn't render anything
+    return null;
   };
 
   const applyFontFamily = (font) => {
@@ -150,7 +177,8 @@ function App() {
   return (
     <>
       <div className="app-container">
-        {loading ? (
+        {showIntro && <Celebration onStart={handleIntroComplete} />}
+        {showLoader && (
           <div className="loader-container d-flex items-center">
             <img
               src={loaderimage}
@@ -159,7 +187,8 @@ function App() {
               style={{ width: "130px", height: "130px" }}
             />
           </div>
-        ) : (
+        )}
+        {showMainContent && (
           <>
 
             <GlobalFontHandler />

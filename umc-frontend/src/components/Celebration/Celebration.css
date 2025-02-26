@@ -1,0 +1,210 @@
+@import url("https://fonts.googleapis.com/css2?family=Pacifico&display=swap");
+
+.intro-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #FFF7E2;
+    position: relative;
+    overflow: hidden;
+    transition: background 1s ease-in-out;
+}
+
+.ribbon {
+    width: 100%;
+    height: 15px;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    justify-content: space-between;
+    z-index: 2;
+}
+
+.ribbon-left,
+.ribbon-right {
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(90deg, red, #ff4b2b);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    transition: width 2s ease-in-out;
+}
+
+.ribbon.animate .ribbon-left {
+    width: 0;
+}
+
+.ribbon.animate .ribbon-right {
+    width: 0;
+}
+
+.scissor-btn {
+    padding: 12px 30px;
+    font-size: 20px;
+    font-family: "Roboto";
+    background: linear-gradient(90deg, #ff416c, #ff4b2b);
+    color: white;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 0 15px rgba(255, 75, 43, 0.7);
+    animation: glow 1s infinite alternate;
+    z-index: 3;
+}
+
+@keyframes glow {
+    0% {
+        box-shadow: 0 0 10px rgba(255, 75, 43, 0.8);
+    }
+
+    100% {
+        box-shadow: 0 0 25px rgba(255, 75, 43, 1);
+    }
+}
+
+.scissor-btn:hover {
+    background: linear-gradient(90deg, #ff4b2b, #ff416c);
+    transform: scale(1.08);
+}
+
+.scissor-btn:active {
+    transform: scale(0.85);
+}
+
+.intro-page.cut {
+    animation: fadeOut 1.5s ease-in-out forwards;
+}
+
+@keyframes fadeOut {
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+        visibility: hidden;
+    }
+}
+
+
+@keyframes fall {
+    0% {
+        transform: translateY(-100%);
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateY(100vh);
+        opacity: 0;
+    }
+}
+
+.falling-item {
+    position: absolute;
+    top: -50px;
+    width: 30px;
+    height: 30px;
+    background-color: gold;
+    border-radius: 50%;
+    animation: fall 3s linear infinite;
+    opacity: 0.8;
+}
+
+.falling-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 5;
+}
+
+
+@keyframes fall {
+    0% {
+        transform: translateY(-100%);
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateY(200vh);
+        opacity: 0;
+    }
+}
+
+.falling-item {
+    position: absolute;
+    top: 0px;
+    width: 20px;
+    height: 20px;
+    background-color: rgb(255, 217, 0);
+    border-radius: 50%;
+    animation: fall 5s linear infinite;
+    opacity: 1;
+}
+
+.falling-item.star {
+    background-color: #ffd700;
+    clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+}
+
+.falling-item.ribbon {
+    background-color: #ff69b4;
+    width: 5px;
+    height: 20px;
+    border-radius: 5px;
+}
+
+@keyframes popup {
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+
+    50% {
+        transform: scale(1.2);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.popup-message {
+    position: absolute;
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: white;
+    background: linear-gradient(45deg, #ff4b2b, #ff416c);
+    padding: 15px 25px;
+    border-radius: 15px;
+    box-shadow: 0 0 15px rgba(255, 75, 43, 0.9);
+    animation: popup 1s ease-in-out, fadeOut 5s ease-in-out 3s forwards;
+}
+
+@keyframes fireworks {
+    0% {
+        transform: scale(0);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(3);
+        opacity: 0;
+    }
+}
+
+.firework {
+    position: absolute;
+    width: 5px;
+    height: 5px;
+    background-color: rgb(0, 191, 255);
+    border-radius: 70%;
+    animation: fireworks 1.5s ease-out infinite;
+}
