@@ -132,6 +132,7 @@ import AddStructureTab1 from "../AdministrativeStructure/AddStructureTab1";
 import AddStructureTab2 from "../AdministrativeStructure/AddStructureTab2";
 import AddStructureTab3 from "../AdministrativeStructure/AddStructureTab3";
 import AddStructureTab4 from "../AdministrativeStructure/AddStructureTab4";
+import Celebration from "../Celebration/Celebration";
 
 
 function SuperAdminRoutes() {
@@ -305,6 +306,7 @@ function SuperAdminRoutes() {
       <Route path="/add-structure-tab3" element={<AddStructureTab3 />} />
       <Route path="/add-structure-tab4" element={<AddStructureTab4 />} />
       <Route path="/administrative-structure" element={<AdministrativeStructure />} />
+      <Route path="/celebration" element={<Celebration />} />
       <Route path="*" element={<Navigate to="/home" />} />
     </Routes>
   );
