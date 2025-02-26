@@ -112,6 +112,9 @@ const policyRoutes = require('./routes/policyRoutes');
 {/* Hyperlink Policy */}
 const hyperlinkRoutes = require('./routes/hyperlinkRoutes');
 
+{/* Celebration */}
+const celebrationRoutes = require('./routes/celebrationRoutes');
+
 {/* Footer */}
 const contactInfoRoutes = require('./routes/contactInfoRoutes');
 const quickLinksRoutes = require('./routes/quickLinksRoutes');
@@ -134,6 +137,7 @@ const visitorRoutes = require('./routes/visitorRoutes');
 const notificationRoutes = require('./routes/notificationRoutes');
 const adminNotificationRoutes = require('./routes/adminNotificationRoutes');
 const notifyStatusRoutes = require('./routes/notifyStatusRoutes');
+
 
 
 {/* Main Menu */}
@@ -239,6 +243,9 @@ app.use('/api', policyRoutes);
 
 {/* Hyperlink Policy */}
 app.use('/api', hyperlinkRoutes);
+
+{/* Celebration */}
+app.use('/api', celebrationRoutes);
 
 {/* Footer */}
 app.use('/api', contactInfoRoutes);
