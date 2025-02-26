@@ -48,13 +48,13 @@ const Celebration = () => {
                                 <div className="card-block">
                                     <div className="row">
                                         <div className="col-12">
-                                            <h4 className="page-title">Enable / Disable Celebration</h4>
+                                            <h4 className="page-title">Celebration Status</h4>
                                         </div>
                                     </div>
                                     <form onSubmit={handleSubmit}>
                                         <div className="form-group row mt-3">
                                             <label className="col-form-label col-lg-2">
-                                                Select an option
+                                                Select Status
                                             </label>
                                             <div className="col-md-4">
                                                 <div className="form-check">
