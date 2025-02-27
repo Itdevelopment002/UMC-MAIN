@@ -526,3 +526,19 @@
     max-height: 300px;
   }
 }
+@media (min-width:1032px) and (max-width: 1052px) {
+
+  .e-services-container {
+    height: 435px;
+  }
+
+  .news-list {
+    max-height: 350px !important;
+  }
+}
+
+@media (max-width: 445px) {
+  .news-list {
+    max-height: 280px;
+  }
+}

@@ -27,7 +27,8 @@
         "readMore": "अधिक वाचा...",
         "citizen": "नागरिक",
         "services": "सेवा",
-        "UMCNews": " उ.म.पा. बातम्या",
+        "UMCNews": "महत्वाच्या सूचना",
+        "pressNotes": "प्रेस नोट",
         "Initiatives-Programme": "उपक्रम व कार्यक्रम",
         "e-Services": "ई-सेवा",
         "information": "माहिती",
@@ -52,8 +53,8 @@
         "highlight-text": "स्थान",
         "information": "माहिती",
         "nodata": "कोणताही डेटा उपलब्ध नाही.",
-        "emnumber": "महापालिकेच्या कर्मचाऱ्यांची संख्या",
-        "city": "उद्योग",
+        "emnumber": "महापालिका सेवा आणि पायाभूत सुविधा डेटा",
+        "city": "शहराची",
         "populationandarea": "लोकसंख्या आणि क्षेत्रफळ"
     },
     "commissioner": {
@@ -68,6 +69,24 @@
         "phoneNumber": "दूरध्वनी क्रमांक",
         "email": "ईमेल पत्ता",
         "loading": "Loading data"
+    },
+    "addt-commissioner": {
+        "commissionerText": "अतिरिक्त आयुक्त",
+        "highlight1": "उ.म.पा.",
+        "highlight-text": "अतिरिक्त आयुक्त",
+        "name": "अतिरिक्त आयुक्त नाव"
+    },
+    "dept-commissioner": {
+        "commissionerText": "उप आयुक्त",
+        "highlight1": "उ.म.पा.",
+        "highlight-text": "उप आयुक्त",
+        "name": "उप आयुक्त नाव"
+    },
+    "asst-commissioner": {
+        "commissionerText": "सह आयुक्त",
+        "highlight1": "उ.म.पा.",
+        "highlight-text": "सह आयुक्त",
+        "name": "सह आयुक्त नाव"
     },
     "tourism": {
         "tourismText": "पर्यटन",
@@ -124,6 +143,10 @@
     "history-title1": "उ.म.पा.",
     "history-title2": " इतिहास",
     "commisioner-overview": "आयुक्तांचा थोडक्यात आढावा",
+    "addt-commisioner-overview": "अतिरिक्त आयुक्तांचा थोडक्यात आढावा",
+    "dept-commisioner-overview": "उप आयुक्तांचा थोडक्यात आढावा",
+    "asst-commisioner-overview": "सह आयुक्तांचा थोडक्यात आढावा",
+
     "btn-title": "स्थानासाठी येथे क्लिक करा",
     "breadcrumbHome": "मुखपृष्ठ",
     "contactUs": {

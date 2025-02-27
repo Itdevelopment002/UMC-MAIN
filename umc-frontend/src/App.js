@@ -97,6 +97,9 @@ import { useTranslation } from "react-i18next";
 import loaderimage from "./assets/loader_trans.gif";
 import Celebration from "./components/Celebration/Celebration";
 import api from "../src/components/api";
+import AddtCommissioner from "./components/AddtCommissioner/AddtCommissioner";
+import AsstCommissioner from "./components/AsstCommissioner/AsstCommissioner";
+import DeptCommissioner from "./components/DeptCommissioner/DeptCommissioner";
 
 
 function App() {
@@ -207,6 +210,10 @@ function App() {
               <Route path="/history" element={<History data-aos="zoom-in" />} />
               <Route path="/commissioner" element={<Commissioner data-aos="fade-up" />} />
               <Route path="/tourism" element={<Tourism data-aos="fade-up" />} />
+              <Route path="/additional-commissioner" element={<AddtCommissioner data-aos="fade-up" />} />
+              <Route path="/assistant-commissioner" element={<AsstCommissioner data-aos="fade-up" />} />
+              <Route path="/deputy-commissioner" element={<DeptCommissioner data-aos="fade-up" />} />
+
 
               {/* Administrative Wings */}
               <Route path="/administrative-structure" element={<AdministrativeStructure data-aos="fade-up" />} />

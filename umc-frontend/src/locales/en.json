@@ -28,6 +28,7 @@
         "citizen": "Citizen",
         "services": "Services",
         "UMCNews": "UMC News",
+        "pressNotes": "Press Notes",
         "Initiatives-Programme": "Initiatives-Programme",
         "e-Services": "e-Services",
         "information": "Information",
@@ -52,7 +53,7 @@
         "highlight-text": "of UMC",
         "information": "Information",
         "nodata": "No data available.",
-        "emnumber": "NO. OF CORPN. EMPLOYEES.",
+        "emnumber": "Municipal Service and Infrastructure Data",
         "city": "City",
         "populationandarea": "POPULATION AND AREA"
     },
@@ -68,6 +69,24 @@
         "phoneNumber": "Phone Number",
         "email": "Email Address",
         "loading": "Loading data"
+    },
+    "addt-commissioner": {
+        "commissionerText": "Additional Commissioner",
+        "highlight1": "Additional Commissioner",
+        "highlight-text": "of UMC",
+        "name": "Additional Commissioner Name"
+    },
+    "dept-commissioner": {
+        "commissionerText": "Deputy Commissioner",
+        "highlight1": "Deputy Commissioner",
+        "highlight-text": "of UMC",
+        "name": "Deputy Commissioner Name"
+    },
+    "asst-commissioner": {
+        "commissionerText": "Assistant Commissioner",
+        "highlight1": "Assistant Commissioner",
+        "highlight-text": "of UMC",
+        "name": "Assistant Commissioner Name"
     },
     "tourism": {
         "tourismText": "Tourism",
@@ -124,6 +143,10 @@
     "history-title1": "History",
     "history-title2": " of UMC",
     "commisioner-overview": "Brief Overview of the Commissioner",
+    "addt-commisioner-overview": "Brief Overview of the Additional Commissioner",
+    "dept-commisioner-overview": "Brief Overview of the Deputy Commissioner",
+    "asst-commisioner-overview": "Brief Overview of the Assistant Commissioner",
+
     "btn-title": "Click here for the location",
     "breadcrumbHome": "Home",
     "contactUs": {
