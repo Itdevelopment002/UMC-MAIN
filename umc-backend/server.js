@@ -35,6 +35,12 @@ const propertyDeptRoutes = require('./routes/propertyDeptRoutes');
 const locationRoutes = require('./routes/locationRoutes');
 const commissionerDetailsRoutes = require('./routes/commissionerDetailsRoutes');
 const commissionerDescRoutes = require('./routes/commissionerDescRoutes');
+const addtComDetailsRoutes = require('./routes/addtComDetailsRoutes');
+const addtComDescRoutes = require('./routes/addtComDescRoutes');
+const asstComDetailsRoutes = require('./routes/asstComDetailsRoutes');
+const asstComDescRoutes = require('./routes/asstComDescRoutes');
+const deptComDetailsRoutes = require('./routes/deptComDetailsRoutes');
+const deptComDescRoutes = require('./routes/deptComDescRoutes');
 const historyImageRoutes = require('./routes/historyImageRoutes');
 const historyDescRoutes = require('./routes/historyDescRoutes');
 const tourismRoutes = require('./routes/tourismRoutes');
@@ -113,7 +119,8 @@ const policyRoutes = require('./routes/policyRoutes');
 const hyperlinkRoutes = require('./routes/hyperlinkRoutes');
 
 {/* Celebration */}
-const celebrationRoutes = require('./routes/celebrationRoutes');
+const curtainRoutes = require('./routes/curtainRoutes');
+const ribbonRoutes = require('./routes/ribbonRoutes');
 
 {/* Footer */}
 const contactInfoRoutes = require('./routes/contactInfoRoutes');
@@ -167,6 +174,12 @@ app.use('/api', propertyDeptRoutes);
 app.use('/api', locationRoutes);
 app.use('/api', commissionerDetailsRoutes);
 app.use('/api', commissionerDescRoutes);
+app.use('/api', addtComDetailsRoutes);
+app.use('/api', addtComDescRoutes);
+app.use('/api', asstComDetailsRoutes);
+app.use('/api', asstComDescRoutes);
+app.use('/api', deptComDetailsRoutes);
+app.use('/api', deptComDescRoutes);
 app.use('/api', historyImageRoutes);
 app.use('/api', historyDescRoutes);
 app.use('/api', tourismRoutes);
@@ -245,7 +258,8 @@ app.use('/api', policyRoutes);
 app.use('/api', hyperlinkRoutes);
 
 {/* Celebration */}
-app.use('/api', celebrationRoutes);
+app.use('/api', curtainRoutes);
+app.use('/api', ribbonRoutes);
 
 {/* Footer */}
 app.use('/api', contactInfoRoutes);

@@ -49,7 +49,7 @@
   transform: translateX(-50%) !important;
   background-color: #F0A64E80;
   border-radius: 20px !important;
-  width: 180px !important;
+  width: auto !important;
   margin: 0 !important;
   padding-top: 5px !important;
 }
