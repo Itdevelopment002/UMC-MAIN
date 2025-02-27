@@ -76,16 +76,15 @@ const AddSlider = () => {
                   </div>
                   <form onSubmit={handleSubmit}>
                     <div className="form-group row">
-                      <label className="col-form-label col-md-2">
+                      <label className="col-form-label col-lg-2 col-md-3">
                         Slider Name <span className="text-danger">*</span>
                       </label>
                       <div className="col-md-4">
                         <input
                           type="text"
                           placeholder="Enter Slider Name"
-                          className={`form-control form-control-md ${
-                            errors.sliderName ? "is-invalid" : ""
-                          }`}
+                          className={`form-control form-control-md ${errors.sliderName ? "is-invalid" : ""
+                            }`}
                           value={sliderName}
                           onChange={(e) => {
                             setSliderName(e.target.value);
@@ -100,7 +99,7 @@ const AddSlider = () => {
                       </div>
                     </div>
                     <div className="form-group row">
-                      <label className="col-form-label col-lg-2">
+                      <label className="col-form-label col-lg-2 col-md-3">
                         Slider Image <span className="text-danger">*</span>
                       </label>
                       <div className="col-md-4">
@@ -109,9 +108,9 @@ const AddSlider = () => {
                             type="file"
                             id="image"
                             name="image"
-                            className={`form-control form-control-md ${
-                              errors.selectedFile ? "is-invalid" : ""
-                            }`}
+                            accept="image/*"
+                            className={`form-control form-control-md ${errors.selectedFile ? "is-invalid" : ""
+                              }`}
                             onChange={handleFileChange}
                           />
                           {errors.selectedFile && (
@@ -120,6 +119,9 @@ const AddSlider = () => {
                             </div>
                           )}
                         </div>
+                        <small className="text-muted">
+                          📌 Note: Image resolution must be <b>2018 x 787</b> pixels.
+                        </small>
                       </div>
                     </div>
                     <input
