@@ -134,6 +134,18 @@ import AddStructureTab3 from "../AdministrativeStructure/AddStructureTab3";
 import AddStructureTab4 from "../AdministrativeStructure/AddStructureTab4";
 import Celebration from "../Celebration/Celebration";
 
+import AddtCommissioner from "../AddtCommissioner/AddtCommissioner";
+import AddAddtCommissionerDetails from "../AddtCommissioner/AddAddtCommissionerDetails";
+import AddAddtCommissionerDesc from "../AddtCommissioner/AddAddtCommissionerDesc";
+
+import AsstCommissioner from "../AsstCommissioner/AsstCommissioner";
+import AddAsstCommissionerDetails from "../AsstCommissioner/AddAsstCommissionerDetails";
+import AddAsstCommissionerDesc from "../AsstCommissioner/AddAsstCommissionerDesc";
+
+import DeptCommissioner from "../DeptCommissioner/DeptCommissioner";
+import AddDeptCommissionerDesc from "../DeptCommissioner/AddDeptCommissionerDesc";
+import AddDeptCommissionerDetails from "../DeptCommissioner/AddDeptCommissionerDetails";
+
 
 function SuperAdminRoutes() {
   const [departments, setDepartments] = useState([]);
@@ -220,6 +232,19 @@ function SuperAdminRoutes() {
       <Route path="/commissioner" element={<Commissioner />} />
       <Route path="/add-commissioner-details" element={<AddCommissionerDetails />} />
       <Route path="/add-commissioner-desc" element={<AddCommissionerDesc />} />
+
+      <Route path="/additional-commissioner" element={<AddtCommissioner />} />
+      <Route path="/add-addt-commissioner-details" element={<AddAddtCommissionerDetails />} />
+      <Route path="/add-addt-commissioner-desc" element={<AddAddtCommissionerDesc />} />
+
+      <Route path="/deputy-commissioner" element={<DeptCommissioner />} />
+      <Route path="/add-dept-commissioner-details" element={<AddDeptCommissionerDetails />} />
+      <Route path="/add-dept-commissioner-desc" element={<AddDeptCommissionerDesc />} />
+
+      <Route path="/assistant-commissioner" element={<AsstCommissioner />} />
+      <Route path="/add-asst-commissioner-details" element={<AddAsstCommissionerDetails />} />
+      <Route path="/add-asst-commissioner-desc" element={<AddAsstCommissionerDesc />} />
+
       <Route path="/history" element={<UmcHistory />} />
       <Route path="/add-historyImage" element={<AddHistoryImage />} />
       <Route path="/tourism" element={<Tourism />} />

@@ -11,6 +11,7 @@ const EServices = () => {
   //eslint-disable-next-line
   const [activeInfoIndex, setActiveInfoIndex] = useState(null);
   const [umcnews, setUmcNews] = useState([]);
+  const [pressnotes, setPressNotes] = useState([]);
   const [services, setServices] = useState([]);
   const [initiatives, setInitiatives] = useState([]);
   const [information, setInformation] = useState([]);
@@ -39,6 +40,16 @@ const EServices = () => {
       console.error("Error Fetching umc news!", error);
     }
   };
+
+  const fetchNotes = async () => {
+    try {
+      const response = await api.get(`/press-note?lang=${i18n.language}`);
+      setPressNotes(response.data.reverse());
+    } catch (error) {
+      console.error("Error Fetching press notes!", error);
+    }
+  };
+
   const fetchcitizenServices = async () => {
     try {
       const response = await api.get(`/citizen-services?lang=${i18n.language}`);
@@ -47,6 +58,7 @@ const EServices = () => {
       console.error("Error fetching services:", error);
     }
   };
+
   const fetchServices = async () => {
     try {
       const response = await api.get(`/eservices?lang=${i18n.language}`);
@@ -85,6 +97,7 @@ const EServices = () => {
 
   useEffect(() => {
     fetchNews();
+    fetchNotes();
     fetchServices();
     fetchInitiatives();
     fetchInformation();
@@ -107,6 +120,11 @@ const EServices = () => {
       id: "#e-services",
       name: t("home.e-Services"),
       layout: true,
+    },
+    {
+      id: "#press-notes",
+      name: t("home.pressNotes"),
+      items: pressnotes,
     },
     // {
     //   id: "#election",
@@ -265,7 +283,7 @@ const EServices = () => {
                             target="_blank"
                             onClick={() => handleClick(index)}
                           >
-                            {item.heading}
+                            {item.heading || item.description}
                           </Link>
                         ) : (
                           item

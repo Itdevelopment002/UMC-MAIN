@@ -235,7 +235,30 @@ const Sidebar = ({ isOpen, closeSidebar, userDepartment }) => {
                           Commissioner
                         </Link>
                       </li>
-
+                      <li
+                        className={activeItem === "/additional-commissioner" ? "active" : ""}
+                        onClick={() => handleItemClick("/additional-commissioner")}
+                      >
+                        <Link to="/additional-commissioner">
+                          Additional Commissioner
+                        </Link>
+                      </li>
+                      <li
+                        className={activeItem === "/deputy-commissioner" ? "active" : ""}
+                        onClick={() => handleItemClick("/deputy-commissioner")}
+                      >
+                        <Link to="/deputy-commissioner">
+                          Deputy Commissioner
+                        </Link>
+                      </li>
+                      <li
+                        className={activeItem === "/assistant-commissioner" ? "active" : ""}
+                        onClick={() => handleItemClick("/assistant-commissioner")}
+                      >
+                        <Link to="/assistant-commissioner">
+                          Assistant Commissioner
+                        </Link>
+                      </li>
                       <li
                         className={activeItem === "/history" ? "active" : ""}
                         onClick={() => handleItemClick("/history")}
@@ -244,7 +267,6 @@ const Sidebar = ({ isOpen, closeSidebar, userDepartment }) => {
                           History
                         </Link>
                       </li>
-
                       <li
                         className={activeItem === "/tourism" ? "active" : ""}
                         onClick={() => handleItemClick("/tourism")}
