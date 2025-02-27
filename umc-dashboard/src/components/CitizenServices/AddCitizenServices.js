@@ -93,7 +93,7 @@ const AddCitizeServices = () => {
                                     </div>
                                     <form onSubmit={handleSubmit}>
                                         <div className="form-group row">
-                                            <label className="col-form-label col-md-3">
+                                            <label className="col-form-label col-lg-3 col-md-3">
                                                 Select Language <span className="text-danger">*</span>
                                             </label>
                                             <div className="col-md-4">
@@ -111,7 +111,7 @@ const AddCitizeServices = () => {
                                             </div>
                                         </div>
                                         <div className="form-group row">
-                                            <label className="col-form-label col-md-3">Service Heading <span className="text-danger">*</span></label>
+                                            <label className="col-form-label col-lg-3 col-md-3">Service Heading <span className="text-danger">*</span></label>
                                             <div className="col-md-4">
                                                 <input
                                                     type="text"
@@ -125,7 +125,7 @@ const AddCitizeServices = () => {
                                             </div>
                                         </div>
                                         <div className="form-group row">
-                                            <label className="col-form-label col-md-3">Service Link <span className="text-danger">*</span></label>
+                                            <label className="col-form-label col-lg-3 col-md-3">Service Link <span className="text-danger">*</span></label>
                                             <div className="col-md-4">
                                                 <input
                                                     type="text"
@@ -139,7 +139,7 @@ const AddCitizeServices = () => {
                                             </div>
                                         </div>
                                         <div className="form-group row">
-                                            <label className="col-form-label col-lg-3">Service Icon <span className="text-danger">*</span></label>
+                                            <label className="col-form-label col-lg-3 col-md-3">Service Icon <span className="text-danger">*</span></label>
                                             <div className="col-md-4">
                                                 <input
                                                     type="file"
@@ -150,6 +150,7 @@ const AddCitizeServices = () => {
                                                     onChange={(e) => handleFileChange(e, setMainIcon, 'mainIcon')}
                                                 />
                                                 {errors.mainIcon && <span className="invalid-feedback">{errors.mainIcon}</span>}
+                                                <small className="text-muted">📌 Note: Only image files are allowed (JPG, PNG, etc.).</small>
                                             </div>
                                         </div>
                                         <input type="submit" className="btn btn-primary btn-sm" value="Submit" />

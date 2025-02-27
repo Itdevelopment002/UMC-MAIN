@@ -14,19 +14,28 @@ const Celebration = ({ onStart }) => {
     const [showFallingItems, setShowFallingItems] = useState(false);
     const [fallingItems, setFallingItems] = useState([]);
     const [play] = useSound(celebrationSound);
-    const [status, setStatus] = useState("enabled");
+    const [status, setStatus] = useState("");
 
     useEffect(() => {
-        const fetchCelebrationStatus = async () => {
+        const fetchStatuses = async () => {
             try {
-                const response = await api.get("/celebration/1");
-                setStatus(response.data.status);
+                const celebrationResponse = await api.get("/celebration/1");
+                const celebrationStatus = celebrationResponse.data.status;
+                setStatus(celebrationStatus);
+    
+                const cuttingResponse = await api.get("/cutting/1");
+                const cuttingStatus = cuttingResponse.data.status; 
+    
+                if (celebrationStatus === "Enable" && cuttingStatus === "Yes") {
+                    handleCut();
+                }
             } catch (error) {
-                console.error("Error fetching celebration status:", error);
+                console.error("Error fetching statuses:", error);
             }
         };
-
-        fetchCelebrationStatus();
+    
+        const intervalId = setInterval(fetchStatuses, 1000);
+        return () => clearInterval(intervalId);
     }, []);
 
 
@@ -50,6 +59,7 @@ const Celebration = ({ onStart }) => {
 
                 try {
                     await api.put("/celebration/1", { status: "Disable" });
+                    await api.put("/cutting/1", { status: "No" });
                     setStatus("Disable");
                     onStart();
                 } catch (error) {
@@ -107,7 +117,7 @@ const Celebration = ({ onStart }) => {
             </div>
 
             {!animationStarted && (
-                <button onClick={handleCut} className="scissor-btn">
+                <button disabled className="scissor-btn">
                     ✂ Cut the Ribbon
                 </button>
             )}

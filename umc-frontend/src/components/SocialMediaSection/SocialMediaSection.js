@@ -104,10 +104,10 @@ const SocialMedia = () => {
           </div>
           <div>
             <iframe
-              src="https://www.youtube.com/embed/playlist?list=UUPZN5zAMeNHt3hTfdCO4n8A"
+              src="https://www.youtube.com/embed/pvH3s3qI8uE?si=dzKrrPwqZBhzM6Xu"
               width="100%"
               height="400"
-              title="YouTube Playlist"
+              title="YouTube video player"
             ></iframe>
           </div>
         </div>
