@@ -22,6 +22,7 @@ const ViewProfile = () => {
     const handleLogout = () => {
         localStorage.removeItem("authToken");
         localStorage.removeItem("userData");
+        localStorage.removeItem("lastVisitedRoute");
         window.location.href = "/";
     };
 
