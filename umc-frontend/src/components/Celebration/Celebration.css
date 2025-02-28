@@ -39,32 +39,16 @@
     width: 0;
 }
 
-.scissor-btn {
-    padding: 12px 30px;
-    font-size: 20px;
-    font-family: "Roboto";
-    background: linear-gradient(90deg, #ff416c, #ff4b2b);
-    color: white;
-    border: none;
-    border-radius: 50px;
+.scissor-img {
+    width: 150px; 
+    height: auto;
     cursor: pointer;
     position: absolute;
-    transition: all 0.3s ease-in-out;
-    box-shadow: 0 0 15px rgba(255, 75, 43, 0.7);
-    animation: glow 1s infinite alternate;
-    z-index: 3;
     top: 56%;
+    transition: all 0.3s ease-in-out;
+    z-index: 3;
 }
 
-@keyframes glow {
-    0% {
-        box-shadow: 0 0 10px rgba(255, 75, 43, 0.8);
-    }
-
-    100% {
-        box-shadow: 0 0 25px rgba(255, 75, 43, 1);
-    }
-}
 
 .intro-page.cut {
     animation: fadeOut 1.5s ease-in-out forwards;
