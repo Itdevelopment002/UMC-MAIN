@@ -40,12 +40,13 @@
 }
 
 .scissor-img {
-    width: 150px; 
+    width: 150px;
     height: auto;
     position: absolute;
     top: 56%;
     transition: all 0.3s ease-in-out;
     z-index: 3;
+    pointer-events: none;
 }
 
 
