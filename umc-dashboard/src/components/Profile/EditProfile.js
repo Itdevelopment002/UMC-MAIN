@@ -116,6 +116,7 @@ const EditProfile = () => {
             setTimeout(() => {
                 localStorage.removeItem("authToken");
                 localStorage.removeItem("userData");
+                localStorage.removeItem("lastVisitedRoute");
                 window.location.href = "/";
             }, 2000);
         } catch (error) {

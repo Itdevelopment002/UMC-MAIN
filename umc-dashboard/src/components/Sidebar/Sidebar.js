@@ -23,7 +23,7 @@ import { MdOutlineCelebration } from "react-icons/md";
 
 const Sidebar = ({ isOpen, closeSidebar, userDepartment }) => {
   const [openSubmenu, setOpenSubmenu] = useState(null);
-  const [activeItem, setActiveItem] = useState("/");
+  const [activeItem, setActiveItem] = useState(localStorage.getItem("lastVisitedRoute") || "/");
 
   const toggleSubmenu = (menuId) => {
     setOpenSubmenu((prevId) => (prevId === menuId ? null : menuId));
