@@ -53,6 +53,7 @@
     animation: fadeOut 1.5s ease-in-out forwards;
 }
 
+
 @keyframes fadeOut {
     0% {
         opacity: 1;

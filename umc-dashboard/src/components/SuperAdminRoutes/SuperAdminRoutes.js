@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import MainMenu from "../MainMenu/MainMenu";
 import AddMainMenu from "../MainMenu/AddMainMenu";
 import Slider from "../Slider/Slider";
@@ -151,6 +151,20 @@ function SuperAdminRoutes() {
   const [departments, setDepartments] = useState([]);
   const [departmentDatas, setDepartmentDatas] = useState([]);
   const [departmentData, setDepartmentData] = useState([]);
+  const location = useLocation();
+
+  // Save the current route to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem("lastVisitedRoute", location.pathname);
+  }, [location]);
+
+  // On initial load, check if there's a saved route and redirect to it
+  useEffect(() => {
+    const savedRoute = localStorage.getItem("lastVisitedRoute");
+    if (savedRoute && savedRoute !== location.pathname) {
+      window.location.href = savedRoute; // Redirect to the saved route
+    }
+  }, []); 
 
   const fetchDepartments = async () => {
     try {
@@ -332,7 +346,10 @@ function SuperAdminRoutes() {
       <Route path="/add-structure-tab4" element={<AddStructureTab4 />} />
       <Route path="/administrative-structure" element={<AdministrativeStructure />} />
       <Route path="/celebration" element={<Celebration />} />
-      <Route path="*" element={<Navigate to="/home" />} />
+      
+      {/* Redirect unknown routes to last visited or home */}
+      <Route path="*" element={<Navigate to={localStorage.getItem("lastVisitedRoute") || "/home"} />} />
+
     </Routes>
   );
 }
