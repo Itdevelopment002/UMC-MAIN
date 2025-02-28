@@ -42,7 +42,6 @@
 .scissor-img {
     width: 150px; 
     height: auto;
-    cursor: pointer;
     position: absolute;
     top: 56%;
     transition: all 0.3s ease-in-out;
