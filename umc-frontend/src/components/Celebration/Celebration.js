@@ -126,7 +126,6 @@ const Celebration = ({ onStart }) => {
                 <img
                     src={ribbon}
                     alt="Cut the Ribbon"
-                    onClick={handleCut}
                     className="scissor-img"
                 />
             )}
