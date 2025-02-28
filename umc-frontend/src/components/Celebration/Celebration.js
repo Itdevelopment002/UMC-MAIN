@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import "./Celebration.css";
 import Confetti from "react-confetti";
 import celebrationSound from "../../../src/assets/applause-01-253125.mp3";
-import ribbon from "../../assets/ribbon.png";
+import ribbon from "../../assets/ribbon.png"
 import api from "../api";
 
 const Celebration = ({ onStart }) => {
@@ -10,11 +10,11 @@ const Celebration = ({ onStart }) => {
     const [cut, setCut] = useState(false);
     const [showConfetti, setShowConfetti] = useState(false);
     const [showFireworks, setShowFireworks] = useState(false);
+    //eslint-disable-next-line
     const [showGif, setShowGif] = useState(false);
     const [showFallingItems, setShowFallingItems] = useState(false);
     const [fallingItems, setFallingItems] = useState([]);
     const [status, setStatus] = useState("");
-    const audioRef = useRef(null);
 
     useEffect(() => {
         const fetchStatuses = async () => {
@@ -36,22 +36,14 @@ const Celebration = ({ onStart }) => {
 
         const intervalId = setInterval(fetchStatuses, 1000);
         return () => clearInterval(intervalId);
-    }, []);
-
-    useEffect(() => {
-        if (audioRef.current) {
-            audioRef.current.load();
-        }
+        //eslint-disable-next-line
     }, []);
 
     const playSound = () => {
-        if (audioRef.current) {
-            audioRef.current.play().catch((error) => {
-                console.error("Sound play failed:", error);
-                alert("Please interact with the page to enable sound.");
-            });
-        }
+        const audio = new Audio(celebrationSound);
+        audio.play().catch(error => console.error("Sound play failed:", error));
     };
+
 
     const handleCut = async () => {
         setAnimationStarted(true);
@@ -102,7 +94,6 @@ const Celebration = ({ onStart }) => {
 
     return (
         <div className={`intro-page ${cut ? "cut" : ""}`}>
-            <audio ref={audioRef} src={celebrationSound} preload="auto" />
             {showConfetti && <Confetti numberOfPieces={2000} tweenDuration={5000} />}
             {showFireworks && (
                 <>
@@ -135,9 +126,11 @@ const Celebration = ({ onStart }) => {
                 <img
                     src={ribbon}
                     alt="Cut the Ribbon"
+                    onClick={handleCut}
                     className="scissor-img"
                 />
             )}
+
         </div>
     );
 };
