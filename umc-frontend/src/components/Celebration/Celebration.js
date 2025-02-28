@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import "./Celebration.css";
 import Confetti from "react-confetti";
-import useSound from "use-sound";
 import celebrationSound from "../../../src/assets/applause-01-253125.mp3";
+import ribbon from "../../assets/ribbon.png"
 import api from "../api";
 
 const Celebration = ({ onStart }) => {
@@ -10,10 +10,10 @@ const Celebration = ({ onStart }) => {
     const [cut, setCut] = useState(false);
     const [showConfetti, setShowConfetti] = useState(false);
     const [showFireworks, setShowFireworks] = useState(false);
+    //eslint-disable-next-line
     const [showGif, setShowGif] = useState(false);
     const [showFallingItems, setShowFallingItems] = useState(false);
     const [fallingItems, setFallingItems] = useState([]);
-    const [play] = useSound(celebrationSound);
     const [status, setStatus] = useState("");
 
     useEffect(() => {
@@ -22,10 +22,10 @@ const Celebration = ({ onStart }) => {
                 const celebrationResponse = await api.get("/celebration/1");
                 const celebrationStatus = celebrationResponse.data.status;
                 setStatus(celebrationStatus);
-    
+
                 const cuttingResponse = await api.get("/cutting/1");
-                const cuttingStatus = cuttingResponse.data.status; 
-    
+                const cuttingStatus = cuttingResponse.data.status;
+
                 if (celebrationStatus === "Enable" && cuttingStatus === "Yes") {
                     handleCut();
                 }
@@ -33,15 +33,21 @@ const Celebration = ({ onStart }) => {
                 console.error("Error fetching statuses:", error);
             }
         };
-    
+
         const intervalId = setInterval(fetchStatuses, 1000);
         return () => clearInterval(intervalId);
+        //eslint-disable-next-line
     }, []);
+
+    const playSound = () => {
+        const audio = new Audio(celebrationSound);
+        audio.play().catch(error => console.error("Sound play failed:", error));
+    };
 
 
     const handleCut = async () => {
         setAnimationStarted(true);
-        play();
+        playSound();
         setTimeout(async () => {
             setCut(true);
             setShowConfetti(true);
@@ -117,10 +123,14 @@ const Celebration = ({ onStart }) => {
             </div>
 
             {!animationStarted && (
-                <button disabled className="scissor-btn">
-                    ✂ Cut the Ribbon
-                </button>
+                <img
+                    src={ribbon}
+                    alt="Cut the Ribbon"
+                    onClick={handleCut}
+                    className="scissor-img"
+                />
             )}
+
         </div>
     );
 };
