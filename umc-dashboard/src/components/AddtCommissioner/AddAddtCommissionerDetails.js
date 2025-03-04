@@ -248,6 +248,7 @@ const AddAddtCommissionerDetails = () => {
                     <div className="col-md-4">
                       <input
                         type="file"
+                        accept="image/*"
                         className={`form-control ${errors.coImage ? "is-invalid" : ""
                           }`}
                         name="coImage"

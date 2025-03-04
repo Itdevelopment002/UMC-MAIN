@@ -84,7 +84,7 @@ const CensusDepartment = () => {
   const fetchHod = async () => {
     try {
       const response = await api.get(`/hod-details?lang=${i18n.language}`);
-      const filteredData = response.data.filter((item) => item.designation === department_name);
+      const filteredData = response.data.filter((item) => item.department === department_name);
       setHod(filteredData);
     } catch (error) {
       console.error("Error fetching hod data", error);
