@@ -617,7 +617,3 @@ const AddtCommissioner = () => {
 };
 
 export default AddtCommissioner;
-
-
-
-

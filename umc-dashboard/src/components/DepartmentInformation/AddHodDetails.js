@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 const AddHodDetails = () => {
     const [departments, setDepartments] = useState([]);
+    const [department, setDepartment] = useState("");
     const [hodName, setHodName] = useState("");
     const [designation, setDesignation] = useState("");
     const [education, setEducation] = useState("");
@@ -41,6 +42,9 @@ const AddHodDetails = () => {
         if (!hodName) {
             newErrors.hodName = "Hod name is required.";
         }
+        if (!department) {
+            newErrors.department = "Department Name is required.";
+        }
         if (!designation) {
             newErrors.designation = "Designation is required.";
         }
@@ -73,6 +77,7 @@ const AddHodDetails = () => {
         const formData = new FormData();
         formData.append("hodImage", selectedFile);
         formData.append("hodName", hodName);
+        formData.append("department", department);
         formData.append("designation", designation);
         formData.append("education", education);
         formData.append("address", address);
@@ -88,6 +93,7 @@ const AddHodDetails = () => {
                 },
             });
             setHodName("");
+            setDepartment("");
             setDesignation("");
             setEducation("");
             setAddress("");
@@ -149,6 +155,34 @@ const AddHodDetails = () => {
                                             </div>
                                         </div>
                                         <div className="form-group row">
+                                            <label className="col-form-label col-md-3">
+                                                Department Name <span className="text-danger">*</span>
+                                            </label>
+                                            <div className="col-md-4">
+                                                <select
+                                                    className={`form-control ${errors.department ? "is-invalid" : ""}`}
+                                                    name="department"
+                                                    value={department}
+                                                    onChange={(e) => {
+                                                        setDepartment(e.target.value);
+                                                        setErrors((prev) => ({ ...prev, department: "" }));
+                                                    }}
+                                                >
+                                                    <option value="" disabled>
+                                                        Select Department Name
+                                                    </option>
+                                                    {departments.map((department) => (
+                                                        <option value={department.heading} key={department.id}>
+                                                            {department.heading}
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                                {errors.department && (
+                                                    <div className="invalid-feedback">{errors.department}</div>
+                                                )}
+                                            </div>
+                                        </div>
+                                        <div className="form-group row">
                                             <label className="col-form-label col-md-3">Hod Name <span className="text-danger">*</span></label>
                                             <div className="col-md-4">
                                                 <input
@@ -166,31 +200,20 @@ const AddHodDetails = () => {
                                             </div>
                                         </div>
                                         <div className="form-group row">
-                                            <label className="col-form-label col-md-3">
-                                                Designation <span className="text-danger">*</span>
-                                            </label>
+                                            <label className="col-form-label col-md-3">Designation <span className="text-danger">*</span></label>
                                             <div className="col-md-4">
-                                                <select
-                                                    className={`form-control ${errors.designation ? "is-invalid" : ""}`}
-                                                    name="designation"
+                                                <input
+                                                    type="text"
+                                                    className={`form-control form-control-md ${errors.designation ? 'is-invalid' : ''}`}
                                                     value={designation}
+                                                    name="designation"
+                                                    placeholder="Enter Designation"
                                                     onChange={(e) => {
                                                         setDesignation(e.target.value);
                                                         setErrors((prev) => ({ ...prev, designation: "" }));
                                                     }}
-                                                >
-                                                    <option value="" disabled>
-                                                        Select Designation
-                                                    </option>
-                                                    {departments.map((department) => (
-                                                        <option value={department.heading} key={department.id}>
-                                                            {department.heading}
-                                                        </option>
-                                                    ))}
-                                                </select>
-                                                {errors.designation && (
-                                                    <div className="invalid-feedback">{errors.designation}</div>
-                                                )}
+                                                />
+                                                {errors.designation && <span className="invalid-feedback">{errors.designation}</span>}
                                             </div>
                                         </div>
                                         <div className="form-group row">
