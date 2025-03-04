@@ -80,19 +80,19 @@ router.post("/hod-details", upload.single("hodImage"), (req, res) => {
   }
 
   const filePath = `/uploads/${req.file.filename}`;
-  const { hodName, designation, education, address, number, email, language_code } = req.body;
+  const { department, hodName, designation, education, address, number, email, language_code } = req.body;
 
-  if (!hodName || !designation || !education || !address || !number || !email || !language_code) {
-    return res.status(400).json({ message: "Hod name, designation, education, address, number and email are required" });
+  if (!department || !hodName || !designation || !education || !address || !number || !email || !language_code) {
+    return res.status(400).json({ message: "Department, Hod name, designation, education, address, number and email are required" });
   }
 
-  const sql = "INSERT INTO depthod (name, designation, education, address, number, email, language_code, file_path) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-  db.query(sql, [hodName, designation, education, address, number, email, language_code, filePath], (err, result) => {
+  const sql = "INSERT INTO depthod (department, name, designation, education, address, number, email, language_code, file_path) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+  db.query(sql, [department, hodName, designation, education, address, number, email, language_code, filePath], (err, result) => {
     if (err) {
       return res.status(500).json({ message: "Database error", error: err });
     }
     res.status(201).json({
-      message: "Name, designation, education, address, number, email and image uploaded successfully",
+      message: "Department, Name, designation, education, address, number, email and image uploaded successfully",
       hodImageUrl: filePath,
     });
   });
@@ -101,7 +101,7 @@ router.post("/hod-details", upload.single("hodImage"), (req, res) => {
 
 router.put("/hod-details/:id", upload.single("hodImage"), (req, res) => {
   const { id } = req.params;
-  const { name, designation, education, address, number, email, language_code } = req.body;
+  const { department, name, designation, education, address, number, email, language_code } = req.body;
 
   let updateSql = "UPDATE depthod SET";
   const updateParams = [];
@@ -109,6 +109,12 @@ router.put("/hod-details/:id", upload.single("hodImage"), (req, res) => {
   if (name) {
     updateSql += " name = ?";
     updateParams.push(name);
+  }
+
+  if (department) {
+    updateSql +=
+      updateParams.length > 0 ? ", department = ?" : " department = ?";
+    updateParams.push(department);
   }
 
   if (designation) {
