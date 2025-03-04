@@ -203,9 +203,7 @@ const AccountsDepartment = () => {
                       </div>
                       <div className="dept-text-box">
                         <strong className="dept-label">{t('departments.designation')} :</strong>
-                        <span className="dept-value">
-                          {hod[0]?.designation}
-                        </span>
+                        <span className="dept-value">                {hod[0]?.designation} </span>
                       </div>
                     </div>
                     <div className="dept-item">
