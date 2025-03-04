@@ -48,11 +48,9 @@
     z-index: 3;
 }
 
-
 .intro-page.cut {
     animation: fadeOut 1.5s ease-in-out forwards;
 }
-
 
 @keyframes fadeOut {
     0% {
@@ -64,7 +62,6 @@
         visibility: hidden;
     }
 }
-
 
 @keyframes fall {
     0% {
@@ -98,7 +95,6 @@
     pointer-events: none;
     z-index: 5;
 }
-
 
 @keyframes fall {
     0% {

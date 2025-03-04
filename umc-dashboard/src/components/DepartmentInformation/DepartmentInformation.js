@@ -69,7 +69,7 @@ const DepartmentInformation = () => {
     const fetchHodData = async () => {
         try {
             const response = await api.get("/hod-details");
-            const sortedData = response.data.sort((a, b) => a.designation.localeCompare(b.designation));
+            const sortedData = response.data.sort((a, b) => a.department.localeCompare(b.department));
             setHodData(sortedData);
         } catch (error) {
             toast.error("Failed to fetch hod data!");
@@ -178,6 +178,7 @@ const DepartmentInformation = () => {
             else if (modalType === "hod") {
                 const formData = new FormData();
                 formData.append("name", editData.name);
+                formData.append("department", editData.department);
                 formData.append("designation", editData.designation);
                 formData.append("education", editData.education);
                 formData.append("address", editData.address);
@@ -1265,6 +1266,26 @@ const DepartmentInformation = () => {
                                                     </select>
                                                 </div>
                                                 <div className="form-group">
+                                                    <label htmlFor="department">Department Name</label>
+                                                    <select
+                                                        className="form-control"
+                                                        name="department"
+                                                        value={editData.department}
+                                                        onChange={(e) =>
+                                                            setEditData({ ...editData, department: e.target.value })
+                                                        }
+                                                    >
+                                                        <option value="" disabled>
+                                                            Select Department Name
+                                                        </option>
+                                                        {departments.map((department) => (
+                                                            <option value={department.heading} key={department.id}>
+                                                                {department.heading}
+                                                            </option>
+                                                        ))}
+                                                    </select>
+                                                </div>
+                                                <div className="form-group">
                                                     <label htmlFor="name">Hod Name</label>
                                                     <input
                                                         type="text"
@@ -1278,23 +1299,15 @@ const DepartmentInformation = () => {
                                                 </div>
                                                 <div className="form-group">
                                                     <label htmlFor="designation">Designation</label>
-                                                    <select
+                                                    <input
+                                                        type="text"
                                                         className="form-control"
-                                                        name="designation"
+                                                        id="designation"
                                                         value={editData.designation}
                                                         onChange={(e) =>
                                                             setEditData({ ...editData, designation: e.target.value })
                                                         }
-                                                    >
-                                                        <option value="" disabled>
-                                                            Select Designation
-                                                        </option>
-                                                        {departments.map((department) => (
-                                                            <option value={department.heading} key={department.id}>
-                                                                {department.heading}
-                                                            </option>
-                                                        ))}
-                                                    </select>
+                                                    />
                                                 </div>
                                                 <div className="form-group">
                                                     <label htmlFor="education">Education Qualification</label>

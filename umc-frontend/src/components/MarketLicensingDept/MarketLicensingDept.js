@@ -84,7 +84,7 @@ const MarketLicensingDept = () => {
   const fetchHod = async () => {
     try {
       const response = await api.get(`/hod-details?lang=${i18n.language}`);
-      const filteredData = response.data.filter((item) => item.designation === department_name);
+      const filteredData = response.data.filter((item) => item.department === department_name);
       setHod(filteredData);
     } catch (error) {
       console.error("Error fetching hod data", error);
@@ -202,13 +202,7 @@ const MarketLicensingDept = () => {
                       </div>
                       <div className="dept-text-box">
                         <strong className="dept-label">{t('departments.designation')} :</strong>
-                        <span className="dept-value">
-                          {hod[0]?.designation
-                            ? i18n.language === 'en'
-                              ? ` ${t('departments.head1')} ${hod[0].designation}`
-                              : ` ${hod[0].designation} ${t('departments.head2')}`
-                            : ''}
-                        </span>
+                        <span className="dept-value">                {hod[0]?.designation} </span>
                       </div>
                     </div>
                     <div className="dept-item">
