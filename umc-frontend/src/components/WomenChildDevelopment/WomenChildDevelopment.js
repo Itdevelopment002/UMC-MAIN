@@ -181,75 +181,77 @@ const WomenChildDevelopment = () => {
             </div>
           </div>
 
-          <div className="row mt-4">
-            <div className="col-lg-3 col-md-4 col-sm-12 col-12">
-              <div className="dept-profile-card text-center">
-                <img
-                  src={`${baseURL}/${hod[0]?.file_path}`}
-                  alt={hod[0]?.name}
-                  className="dept-profile-image"
-                />
-                <p className="dept-custom-title">{hod[0]?.name}</p>
+          {hod.map((hod, index) => (
+            <div className="row mt-4">
+              <div className="col-lg-3 col-md-4 col-sm-12 col-12">
+                <div className="dept-profile-card text-center">
+                  <img
+                    src={`${baseURL}/${hod.file_path}`}
+                    alt={hod.name}
+                    className="dept-profile-image"
+                  />
+                  <p className="dept-custom-title">{hod.name}</p>
+                </div>
               </div>
-            </div>
-            <div className="col-lg-9 col-md-8 col-sm-12 col-12">
-              <div className="dept-details-card">
-                <div className="dept-row">
-                  <div className="dept-col">
-                    <div className="dept-item">
-                      <div className="dept-icon-box">
-                        <img src={cicon2} alt="icon" className="dept-icon-image" />
+              <div className="col-lg-9 col-md-8 col-sm-12 col-12">
+                <div className="dept-details-card">
+                  <div className="dept-row">
+                    <div className="dept-col">
+                      <div className="dept-item">
+                        <div className="dept-icon-box">
+                          <img src={cicon2} alt="icon" className="dept-icon-image" />
+                        </div>
+                        <div className="dept-text-box">
+                          <strong className="dept-label">{t('departments.designation')} :</strong>
+                          <span className="dept-value">                {hod.designation} </span>
+                        </div>
                       </div>
-                      <div className="dept-text-box">
-                        <strong className="dept-label">{t('departments.designation')} :</strong>
-                        <span className="dept-value">                {hod[0]?.designation} </span>
+                      <div className="dept-item">
+                        <div className="dept-icon-box">
+                          <img src={cicon3} alt="icon" className="dept-icon-image" />
+                        </div>
+                        <div className="dept-text-box">
+                          <strong className="dept-label">
+                            {t('departments.qualification')} :
+                          </strong>
+                          <span className="dept-value"> {hod.education}</span>
+                        </div>
                       </div>
-                    </div>
-                    <div className="dept-item">
-                      <div className="dept-icon-box">
-                        <img src={cicon3} alt="icon" className="dept-icon-image" />
+                      <div className="dept-item">
+                        <div className="dept-icon-box">
+                          <img src={cicon4} alt="icon" className="dept-icon-image" />
+                        </div>
+                        <div className="dept-text-box">
+                          <strong className="dept-label">{t('departments.address')} : </strong>
+                          <span className="dept-value">
+                            {" "}{hod.address}
+                          </span>
+                        </div>
                       </div>
-                      <div className="dept-text-box">
-                        <strong className="dept-label">
-                          {t('departments.qualification')} :
-                        </strong>
-                        <span className="dept-value"> {hod[0]?.education}</span>
+                      <div className="dept-item">
+                        <div className="dept-icon-box">
+                          <img src={cicon5} alt="icon" className="dept-icon-image" />
+                        </div>
+                        <div className="dept-text-box">
+                          <strong className="dept-label">{t('departments.phoneNo')} : </strong>
+                          <span className="dept-value">{hod.number}</span>
+                        </div>
                       </div>
-                    </div>
-                    <div className="dept-item">
-                      <div className="dept-icon-box">
-                        <img src={cicon4} alt="icon" className="dept-icon-image" />
-                      </div>
-                      <div className="dept-text-box">
-                        <strong className="dept-label">{t('departments.address')} :</strong>
-                        <span className="dept-value">
-                          {" "}{hod[0]?.address}
-                        </span>
-                      </div>
-                    </div>
-                    <div className="dept-item">
-                      <div className="dept-icon-box">
-                        <img src={cicon5} alt="icon" className="dept-icon-image" />
-                      </div>
-                      <div className="dept-text-box">
-                        <strong className="dept-label">{t('departments.phoneNo')} : </strong>
-                        <span className="dept-value">{hod[0]?.number}</span>
-                      </div>
-                    </div>
-                    <div className="dept-item">
-                      <div className="dept-icon-box">
-                        <img src={cicon6} alt="icon" className="dept-icon-image" />
-                      </div>
-                      <div className="dept-text-box">
-                        <strong className="dept-label">{t('departments.email')} :</strong>
-                        <span className="dept-value"> {hod[0]?.email}</span>
+                      <div className="dept-item">
+                        <div className="dept-icon-box">
+                          <img src={cicon6} alt="icon" className="dept-icon-image" />
+                        </div>
+                        <div className="dept-text-box">
+                          <strong className="dept-label">{t('departments.email')} :</strong>
+                          <span className="dept-value"> {hod.email}</span>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
+          ))}
 
           <div className="row mt-4 row-styling-3">
             <div className="col-12">
