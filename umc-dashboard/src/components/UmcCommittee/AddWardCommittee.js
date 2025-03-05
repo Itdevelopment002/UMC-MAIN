@@ -15,7 +15,7 @@ const AddWardCommittee = () => {
     if (!language) {
       validationErrors.language = "Language selection is required";
     }
-    
+
     if (!heading) {
       validationErrors.heading = "Member Name is required.";
     }

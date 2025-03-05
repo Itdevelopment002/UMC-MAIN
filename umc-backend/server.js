@@ -72,6 +72,7 @@ const deptBannerRoutes = require('./routes/deptBannerRoutes');
 const deptDescriptionRoutes = require('./routes/deptDescriptionRoutes');
 const deptHodRoutes = require('./routes/deptHodRoutes');
 const deptPdfRoutes = require('./routes/deptPdfRoutes');
+const auditDeptRoutes = require('./routes/auditDeptRoutes');
 
 {/* Tenders and Quotations */}
 const tenderQuotationRoutes = require('./routes/tenderQuotationRoutes');
@@ -211,6 +212,7 @@ app.use('/api', deptBannerRoutes);
 app.use('/api', deptDescriptionRoutes);
 app.use('/api', deptHodRoutes);
 app.use('/api', deptPdfRoutes);
+app.use('/api', auditDeptRoutes);
 
 {/* Tenders and Quotations */}
 app.use('/api', tenderQuotationRoutes);

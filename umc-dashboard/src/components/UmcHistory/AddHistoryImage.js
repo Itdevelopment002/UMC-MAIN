@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import api from "../api";
 import { Link, useNavigate } from "react-router-dom";
-//eslint-disable-next-line
-import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const AddHistoryImage = () => {
@@ -48,12 +46,10 @@ const AddHistoryImage = () => {
       setPhotoName("");
       setSelectedFile(null);
       document.getElementById("image").value = "";
-      toast.success("File uploaded successfully!");
 
       navigate("/history");
     } catch (error) {
       console.error("Error uploading file:", error);
-      toast.error("Error uploading file. Please try again.");
     }
   };
 
