@@ -4,9 +4,7 @@ import { Link } from "react-router-dom";
 import HistoryImage from "./HistoryImage";
 import HistoryContent from "./HistoryContent";
 
-
 const UmcHistory = () => {
-
   return (
     <>
       <div className="page-wrapper">
