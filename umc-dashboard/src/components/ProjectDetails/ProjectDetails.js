@@ -198,6 +198,7 @@ const ProjectDetails = () => {
     if (departmentDescriptionOptions.length > 0) {
       setSelectedDepartmentDescription(departmentDescriptionOptions[0]);
     }
+    //eslint-disable-next-line
   }, [descriptionData]);
 
   const filteredDescriptionData = descriptionData.filter(
@@ -273,7 +274,7 @@ const ProjectDetails = () => {
                                   <div key={imgIndex} className="position-relative me-2">
                                     <img
                                       src={`${baseURL}${img}`}
-                                      alt="image"
+                                      alt={`image-${img}`}
                                       style={{ width: "50px", height: "50px", marginRight: "5px" }}
                                     />
                                   </div>
@@ -384,13 +385,11 @@ const ProjectDetails = () => {
 
                             return (
                               <React.Fragment key={item.id}>
-                                {/* First row with main description */}
                                 <tr>
                                   <td rowSpan={subDescriptions.length || 1} className="text-center">
                                     {startDescriptionIndex + index + 1}
                                   </td>
                                   <td rowSpan={subDescriptions.length || 1}>{item.description}</td>
-                                  {/* Display the first sub-description */}
                                   <td>{subDescriptions.length > 0 ? subDescriptions[0] : "-"}</td>
                                   <td rowSpan={subDescriptions.length || 1} className="text-center">
                                     <button
@@ -411,8 +410,6 @@ const ProjectDetails = () => {
                                     </button>
                                   </td>
                                 </tr>
-
-                                {/* Generate additional rows for remaining sub-descriptions */}
                                 {subDescriptions.slice(1).map((subDesc, idx) => (
                                   <tr key={`${item.id}-sub-${idx}`}>
                                     <td>{subDesc}</td>
@@ -615,6 +612,7 @@ const ProjectDetails = () => {
                           <input
                             type="file"
                             multiple
+                            accept="image/*"
                             onChange={handleFileChange}
                             className="form-control"
                           />
@@ -623,7 +621,7 @@ const ProjectDetails = () => {
                               <div key={index} className="position-relative me-2">
                                 <img
                                   src={url}
-                                  alt={`Image ${index}`}
+                                  alt={`image-${index+1}`}
                                   style={{
                                     width: "50px",
                                     height: "50px",

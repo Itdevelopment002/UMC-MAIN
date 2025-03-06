@@ -134,11 +134,13 @@ const AddCategoryImage = () => {
                         <input
                           type="file"
                           id="image"
+                          accept="image/*"
                           name="image"
                           className={`form-control form-control-md ${errors.image ? "is-invalid" : ""}`}
                           onChange={handleFileChange}
                         />
                         {errors.image && <div className="invalid-feedback">{errors.image}</div>}
+                        <small className="text-muted">📌 Note: Only image files are allowed (JPG, PNG, etc.).</small>
                       </div>
                     </div>
                     <input

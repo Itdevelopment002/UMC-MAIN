@@ -60,7 +60,6 @@ const DepartmentInformation = () => {
             const response = await api.get("/department-description");
             const sortedData = response.data.sort((a, b) => a.department.localeCompare(b.department));
             setDescriptionData(sortedData);
-            console.log(sortedData)
         } catch (error) {
             toast.error("Failed to fetch description data!");
         }
@@ -531,13 +530,11 @@ const DepartmentInformation = () => {
 
                                                         return (
                                                             <React.Fragment key={item.id}>
-                                                                {/* First row with main description */}
                                                                 <tr>
                                                                     <td rowSpan={subDescriptions.length || 1} className="text-center">
                                                                         {startDescriptionIndex + index + 1}
                                                                     </td>
                                                                     <td rowSpan={subDescriptions.length || 1}>{item.description}</td>
-                                                                    {/* Display the first sub-description */}
                                                                     <td>{subDescriptions.length > 0 ? subDescriptions[0] : "-"}</td>
                                                                     <td rowSpan={subDescriptions.length || 1} className="text-center">
                                                                         <button
@@ -558,8 +555,6 @@ const DepartmentInformation = () => {
                                                                         </button>
                                                                     </td>
                                                                 </tr>
-
-                                                                {/* Generate additional rows for remaining sub-descriptions */}
                                                                 {subDescriptions.slice(1).map((subDesc, idx) => (
                                                                     <tr key={`${item.id}-sub-${idx}`}>
                                                                         <td>{subDesc}</td>
@@ -946,8 +941,8 @@ const DepartmentInformation = () => {
                                                     paginatedPdfData.map((item, index) => (
                                                         <tr key={item.id}>
                                                             <td className="text-center">{startPdfIndex + index + 1}</td>
-                                                            <td style={{wordBreak: "break-word", whiteSpace: "normal"}}>{item.heading}</td>
-                                                            <td style={{wordBreak: "break-word", whiteSpace: "normal"}}>
+                                                            <td style={{ wordBreak: "break-word", whiteSpace: "normal" }}>{item.heading}</td>
+                                                            <td style={{ wordBreak: "break-word", whiteSpace: "normal" }}>
                                                                 <Link
                                                                     className="text-decoration-none"
                                                                     target="_blank"
@@ -1146,6 +1141,7 @@ const DepartmentInformation = () => {
                                                         type="file"
                                                         className="form-control"
                                                         id="bannerImage"
+                                                        accept="image/*"
                                                         onChange={handleImageChange}
                                                     />
                                                     {imagePreview && (
@@ -1361,6 +1357,7 @@ const DepartmentInformation = () => {
                                                     <label htmlFor="hodImage">Hod Image</label>
                                                     <input
                                                         type="file"
+                                                        accept="image/*"
                                                         className="form-control"
                                                         id="hodImage"
                                                         onChange={handleImageChange}

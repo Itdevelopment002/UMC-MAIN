@@ -242,7 +242,7 @@ const AddCommissionerDetails = () => {
                   </div>
 
                   <div className="form-group row">
-                    <label className="col-form-label col-md-3">
+                    <label className="col-form-label col-md-3 col-lg-3">
                       CO Image <span className="text-danger">*</span>
                     </label>
                     <div className="col-md-4">
@@ -250,12 +250,14 @@ const AddCommissionerDetails = () => {
                         type="file"
                         className={`form-control ${errors.coImage ? "is-invalid" : ""
                           }`}
+                        accept="image/*"
                         name="coImage"
                         onChange={handleFileChange}
                       />
                       {errors.coImage && (
                         <div className="invalid-feedback">{errors.coImage}</div>
                       )}
+                      <small className="text-muted">📌 Note: Only image files are allowed (JPG, PNG, etc.).</small>
                     </div>
                   </div>
 

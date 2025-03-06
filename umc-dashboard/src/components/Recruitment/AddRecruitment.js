@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import api from "../api";
-//eslint-disable-next-line
-import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
@@ -53,7 +51,6 @@ const AddRecruitment = () => {
 
     try {
       await api.post("/recruitment", videoData);
-      toast.success("Recruitment added successfully!");
       setDescription("");
       setHeading("");
       setLink("");
@@ -61,7 +58,7 @@ const AddRecruitment = () => {
       setErrors({ heading: "", description: "", link: "", language: "" });
       navigate("/recruitment");
     } catch (error) {
-      toast.error("Failed to add recruitment data. Please try again.");
+      console.error("Failed to add recruitment data. Please try again.");
     }
   };
   return (

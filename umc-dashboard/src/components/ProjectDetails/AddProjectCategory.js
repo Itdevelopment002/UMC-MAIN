@@ -150,23 +150,24 @@ const AddProjectCategory = () => {
                         Project Images <span className="text-danger">*</span>
                       </label>
                       <div className="col-md-4">
-                        <div className="input-group mb-3">
-                          <input
-                            type="file"
-                            id="images"
-                            name="images"
-                            className={`form-control col-md-12 col-xs-12 userfile ${errors.images ? "is-invalid" : ""
-                              }`}
-                            multiple
-                            onChange={handleImageChange}
-                            accept="image/*"
-                          />
-                        </div>
+                        <input
+                          type="file"
+                          id="images"
+                          name="images"
+                          className={`form-control col-md-12 col-xs-12 userfile ${errors.images ? "is-invalid" : ""
+                            }`}
+                          multiple
+                          onChange={handleImageChange}
+                          accept="image/*"
+                        />
                         {errors.images && (
-                          <small className="text-danger">
+                          <span className="invalid-feedback">
                             {errors.images}
-                          </small>
+                          </span>
                         )}
+                        <small className="text-muted">
+                          📌 Note: Image resolution must be <b>314 x 410</b> pixels.
+                        </small>
                       </div>
                     </div>
                     <input

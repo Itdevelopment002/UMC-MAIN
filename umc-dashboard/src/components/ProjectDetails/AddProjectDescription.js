@@ -51,7 +51,6 @@ const AddProjectDescription = () => {
         fetchDepartments();
     }, []);
 
-    // Handle form submission
     const handleSubmit = async (e) => {
         e.preventDefault();
 

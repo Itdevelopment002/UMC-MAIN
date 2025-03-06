@@ -160,7 +160,7 @@ const AddPortalServices = () => {
                                         </div>
 
                                         <div className="form-group row">
-                                            <label className="col-form-label col-lg-3">Service Image <span className="text-danger">*</span></label>
+                                            <label className="col-form-label col-lg-3 col-md-3">Service Image <span className="text-danger">*</span></label>
                                             <div className="col-md-4">
                                                 <input
                                                     type="file"
@@ -171,6 +171,7 @@ const AddPortalServices = () => {
                                                     onChange={(e) => handleFileChange(e, setPortalImage, 'portalImage')}
                                                 />
                                                 {errors.portalImage && <span className="invalid-feedback">{errors.portalImage}</span>}
+                                                <small className="text-muted">📌 Note: Only image files are allowed (JPG, PNG, etc.).</small>
                                             </div>
                                         </div>
                                         <input type="submit" className="btn btn-primary btn-sm" value="Submit" />

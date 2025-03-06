@@ -580,17 +580,7 @@
         "thead3": "Departments assigned to Assistant Commissioner",
         "thead4": "Assistant Commissioner Ward Committee",
         "srNo": "Sr. No.",
-        "noData": "No data available",
-        "table1_2": "Shri. Kishore Gavas, Additional Commissioner",
-        "table2_1": "Dr. Vijay Khedkar Deputy Commissioner",
-        "table2_2": "Shri. Vishakha Motghare Deputy Commissioner",
-        "table2_3": "Shri. Ajay Sable Deputy Commissioner (Property)",
-        "table3_1": "Mr. Ajay Sable, Assistant Commissioner (1)",
-        "table3_2": "Mr. Suninil Londhe, Assistant Commissioner (2)",
-        "table3_3": "Mrs. Mayuri Kadam, Assistant Commissioner (3)",
-        "table3_4": "Mr. Vishal Kadam, Assistant Commissioner (4)",
-        "table4_1": "Ward Committee No.",
-        "table4_2": "Name of Assistant Commissioner Officer"
+        "noData": "No data available"
     },
     "upcoming":{
         "title": "Upcoming Projects",
@@ -626,5 +616,11 @@
         "no" : "No",
         "comment": "Additional Comments",
         "submit" : "Submit"
+    },
+    "auditreport":{
+        "action": "Action",
+        "year": "Year",
+        "srNo": "Sr. No.",
+        "viewPDF": "View PDF"
     }
 }

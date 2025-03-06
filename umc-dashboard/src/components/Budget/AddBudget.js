@@ -10,7 +10,6 @@ const AddBudget = () => {
   const [years, setYears] = useState([]);
   const [errors, setErrors] = useState({});
   const [language, setLanguage] = useState("");
-
   const navigate = useNavigate();
 
   useEffect(() => {

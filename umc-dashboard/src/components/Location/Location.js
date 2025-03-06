@@ -8,7 +8,6 @@ import DataTable3 from "./DataTable3";
 import DataTable4 from "./DataTable4";
 
 const Location = () => {
-
   return (
     <>
       <div className="page-wrapper">
@@ -23,7 +22,6 @@ const Location = () => {
               </li>
             </ol>
           </nav>
-
           <DataTable1 />
           <DataTable2 />
           <DataTable3 />
