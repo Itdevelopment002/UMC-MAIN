@@ -102,14 +102,14 @@ const AddScreenReader = () => {
                       <div className="col-md-4">
                         <select
                           className={`form-control ${errors.language ? "is-invalid" : ""
-                          }`}
-                        value={language}
-                        onChange={(e) => {
-                          setLanguage(e.target.value);
-                          if (errors.language) {
-                            setErrors({ ...errors, language: "" });
-                          }
-                        }}
+                            }`}
+                          value={language}
+                          onChange={(e) => {
+                            setLanguage(e.target.value);
+                            if (errors.language) {
+                              setErrors({ ...errors, language: "" });
+                            }
+                          }}
                         >
                           <option value="" disabled>Select Language</option>
                           <option value="en">English</option>

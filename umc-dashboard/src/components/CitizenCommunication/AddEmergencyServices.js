@@ -140,7 +140,7 @@ const AddEmergencyServices = () => {
                                             </div>
                                         </div>
                                         <div className="form-group row">
-                                            <label className="col-form-label col-lg-3">Service Image <span className="text-danger">*</span></label>
+                                            <label className="col-form-label col-lg-3 col-md-3">Service Image <span className="text-danger">*</span></label>
                                             <div className="col-md-4">
                                                 <input
                                                     type="file"
@@ -151,6 +151,7 @@ const AddEmergencyServices = () => {
                                                     onChange={(e) => handleFileChange(e, setEmergencyImage, 'emergencyImage')}
                                                 />
                                                 {errors.emergencyImage && <span className="text-danger">{errors.emergencyImage}</span>}
+                                                <small className="text-muted">📌 Note: Only image files are allowed (JPG, PNG, etc.).</small>
                                             </div>
                                         </div>
                                         <input type="submit" className="btn btn-primary" value="Submit" />

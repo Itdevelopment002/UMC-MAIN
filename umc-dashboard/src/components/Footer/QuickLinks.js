@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import api from "../api";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const QuickLinks = () => {
@@ -168,7 +168,7 @@ const QuickLinks = () => {
                                 )
                                     .filter(
                                         (page) =>
-                                            page >= currentPage - 1 && page <= currentPage + 1 // Show current page and its neighbors
+                                            page >= currentPage - 1 && page <= currentPage + 1
                                     )
                                     .map((page) => (
                                         <li

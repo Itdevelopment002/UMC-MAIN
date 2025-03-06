@@ -312,7 +312,6 @@ const Circulars = () => {
             </div>
           </div>
 
-          {/* Delete Modal */}
           <div
             className={`modal fade ${showDeleteModal ? "show" : ""}`}
             tabIndex="-1"
@@ -345,7 +344,6 @@ const Circulars = () => {
             </div>
           </div>
 
-          {/* Edit Modal */}
           {showEditModal && (
             <div
               className="modal fade show"

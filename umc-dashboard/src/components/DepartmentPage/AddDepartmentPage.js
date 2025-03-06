@@ -152,6 +152,7 @@ const AddDepartmentPage = () => {
                                                     onChange={(e) => handleFileChange(e, setMainIcon, 'mainIcon')}
                                                 />
                                                 {errors.mainIcon && <span className="invalid-feedback">{errors.mainIcon}</span>}
+                                                <small className="text-muted">📌 Note: Only image files are allowed (JPG, PNG, etc.).</small>
                                             </div>
                                         </div>
                                         <input type="submit" className="btn btn-primary btn-sm" value="Submit" />

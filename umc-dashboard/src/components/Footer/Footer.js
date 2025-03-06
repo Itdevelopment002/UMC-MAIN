@@ -9,7 +9,6 @@ import OnlineServices from "./OnlineServices";
 import ContactInfo from "./ContactInfo";
 
 const Footer = () => {
-
   return (
     <>
       <div className="page-wrapper">
@@ -24,7 +23,6 @@ const Footer = () => {
               </li>
             </ol>
           </nav>
-
           <ContactInfo />
           <QuickLinks />
           <Help />

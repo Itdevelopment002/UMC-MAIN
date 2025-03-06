@@ -189,8 +189,8 @@ const AddMainMenu = () => {
                               type="text"
                               placeholder="Enter Main menu link"
                               className={`form-control form-control-md m-t-10${formErrors[index]?.mainMenuLink
-                                  ? "is-invalid"
-                                  : ""
+                                ? "is-invalid"
+                                : ""
                                 }`}
                               value={item.mainMenuLink}
                               onChange={(e) =>
@@ -219,8 +219,8 @@ const AddMainMenu = () => {
                                 type="text"
                                 placeholder="Enter Sub menu name"
                                 className={`form-control m-t-10 ${formErrors[index]?.subMenus[subIndex]?.subMenu
-                                    ? "is-invalid"
-                                    : ""
+                                  ? "is-invalid"
+                                  : ""
                                   }`}
                                 value={subMenu.subMenu}
                                 onChange={(e) =>
@@ -244,8 +244,8 @@ const AddMainMenu = () => {
                                 type="text"
                                 placeholder="Enter Sub menu link"
                                 className={`form-control m-t-10 ${formErrors[index]?.subMenus[subIndex]?.subLink
-                                    ? "is-invalid"
-                                    : ""
+                                  ? "is-invalid"
+                                  : ""
                                   }`}
                                 value={subMenu.subLink}
                                 onChange={(e) =>

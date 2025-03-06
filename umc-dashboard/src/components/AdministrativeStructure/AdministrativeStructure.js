@@ -9,6 +9,7 @@ const AdministrativeStructure = () => {
     const [structureData2, setStructureData2] = useState([]);
     const [structureData3, setStructureData3] = useState([]);
     const [structureData4, setStructureData4] = useState([]);
+    const [tableData, setTableData] = useState([]);
     const [showEditModal, setShowEditModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [modalType, setModalType] = useState("");
@@ -18,6 +19,7 @@ const AdministrativeStructure = () => {
     const [structure2CurrentPage, setStructure2CurrentPage] = useState(1);
     const [structure3CurrentPage, setStructure3CurrentPage] = useState(1);
     const [structure4CurrentPage, setStructure4CurrentPage] = useState(1);
+    const [tableCurrentPage, setTableCurrentPage] = useState(1);
     const itemsPerPage = 5;
     const navigate = useNavigate();
 
@@ -26,6 +28,7 @@ const AdministrativeStructure = () => {
         fetchStructureData2();
         fetchStructureData3();
         fetchStructureData4();
+        fetchTableData();
     }, []);
 
     const fetchStructureData1 = async () => {
@@ -64,6 +67,15 @@ const AdministrativeStructure = () => {
         }
     };
 
+    const fetchTableData = async () => {
+        try {
+            const response = await api.get("/table-heading");
+            setTableData(response.data);
+        } catch (error) {
+            toast.error("Failed to fetch table data!");
+        }
+    };
+
     const handleDelete = async (id, type) => {
         try {
             if (type === "structure1") {
@@ -78,6 +90,9 @@ const AdministrativeStructure = () => {
             } else if (type === "structure4") {
                 await api.delete(`/structure-tab4/${id}`);
                 setStructureData4((prevData) => prevData.filter((item) => item.id !== id));
+            } else if (type === "table") {
+                await api.delete(`/table-heading/${id}`);
+                setTableData((prevData) => prevData.filter((item) => item.id !== id));
             }
 
             let successMessage = "";
@@ -93,6 +108,9 @@ const AdministrativeStructure = () => {
                     break;
                 case "structure4":
                     successMessage = "Assistant Commissioner Ward Committee deleted successfully!";
+                    break;
+                case "table":
+                    successMessage = "Table Heading deleted successfully!";
                     break;
                 default:
                     successMessage = "Deletion successful!";
@@ -177,6 +195,18 @@ const AdministrativeStructure = () => {
                     )
                 );
                 fetchStructureData4();
+            } else if (modalType === "table") {
+                await api.put(`/table-heading/${selectedItem.id}`, {
+                    tablename: editData.tablename,
+                    heading: editData.heading,
+                    language_code: editData.language_code
+                });
+                setTableData(
+                    tableData.map((item) =>
+                        item.id === selectedItem.id ? { ...item, ...editData } : item
+                    )
+                );
+                fetchTableData();
             }
 
             let successMessage = "";
@@ -193,8 +223,11 @@ const AdministrativeStructure = () => {
                 case "structure4":
                     successMessage = "Assistant Commissioner Ward Committee updated successfully!";
                     break;
+                case "table":
+                    successMessage = "Table Heading updated successfully!";
+                    break;
                 default:
-                    successMessage = "Deletion successful!";
+                    successMessage = "Updation successful!";
             }
 
             toast.success(successMessage);
@@ -206,10 +239,12 @@ const AdministrativeStructure = () => {
         closeModal();
     };
 
+    const tableCurrentPageData = tableData.slice((tableCurrentPage - 1) * itemsPerPage, tableCurrentPage * itemsPerPage);
     const structure1CurrentPageData = structureData1.slice((structure1CurrentPage - 1) * itemsPerPage, structure1CurrentPage * itemsPerPage);
     const structure2CurrentPageData = structureData2.slice((structure2CurrentPage - 1) * itemsPerPage, structure2CurrentPage * itemsPerPage);
     const structure3CurrentPageData = structureData3.slice((structure3CurrentPage - 1) * itemsPerPage, structure3CurrentPage * itemsPerPage);
     const structure4CurrentPageData = structureData4.slice((structure4CurrentPage - 1) * itemsPerPage, structure4CurrentPage * itemsPerPage);
+    const tableTotalPages = Math.ceil(tableData.length / itemsPerPage);
     const structure1TotalPages = Math.ceil(structureData1.length / itemsPerPage);
     const structure2TotalPages = Math.ceil(structureData2.length / itemsPerPage);
     const structure3TotalPages = Math.ceil(structureData3.length / itemsPerPage);
@@ -229,6 +264,109 @@ const AdministrativeStructure = () => {
                             </li>
                         </ol>
                     </nav>
+                    <div className="row">
+                        <div className="col-lg-12">
+                            <div className="card-box">
+                                <div className="card-block">
+                                    <div className="row">
+                                        <div className="col-lg-8 col-md-8 col-sm-8 col-6">
+                                            <h4 className="page-title">Table Heading</h4>
+                                        </div>
+                                        <div className="col-lg-4 col-md-4 col-sm-4 col-6 text-right m-b-20">
+                                            <Link
+                                                to="/add-table-heading"
+                                                className="btn btn-primary btn-rounded float-right"
+                                            >
+                                                <i className="fa fa-plus"></i> Add Heading
+                                            </Link>
+                                        </div>
+                                    </div>
+                                    <div className="table-responsive">
+                                        <table className="table table-bordered m-b-0">
+                                            <thead>
+                                                <tr>
+                                                    <th width="10%" className="text-center">Sr. No.</th>
+                                                    <th>Table Name</th>
+                                                    <th>Heading Name</th>
+                                                    <th width="15%" className="text-center">Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {tableCurrentPageData.length > 0 ? (
+                                                    tableCurrentPageData.map((item, index) => (
+                                                        <tr key={item.id}>
+                                                            <td className="text-center">{((tableCurrentPage - 1) * itemsPerPage) + (index + 1)}</td>
+                                                            <td>{item.tablename}</td>
+                                                            <td>{item.heading}</td>
+                                                            <td className="text-center">
+                                                                <button
+                                                                    onClick={() => openEditModal(item, "table")}
+                                                                    className="btn btn-success btn-sm m-t-10"
+                                                                >
+                                                                    Edit
+                                                                </button>
+                                                                <button
+                                                                    onClick={() => {
+                                                                        setSelectedItem(item);
+                                                                        setModalType("table");
+                                                                        setShowDeleteModal(true);
+                                                                    }}
+                                                                    className="btn btn-danger btn-sm m-t-10"
+                                                                >
+                                                                    Delete
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                    ))
+                                                ) : (
+                                                    <tr>
+                                                        <td colSpan="4">No Table Heading Data Available</td>
+                                                    </tr>
+                                                )}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div className="mt-4">
+                                    <ul className="pagination">
+                                        <li
+                                            className={`page-item ${tableCurrentPage === 1 ? "disabled" : ""}`}
+                                        >
+                                            <button
+                                                className="page-link"
+                                                onClick={() => setTableCurrentPage(tableCurrentPage - 1)}
+                                            >
+                                                Previous
+                                            </button>
+                                        </li>
+                                        {Array.from({ length: tableTotalPages }, (_, i) => (
+                                            <li
+                                                className={`page-item ${tableCurrentPage === i + 1 ? "active" : ""}`}
+                                                key={i}
+                                            >
+                                                <button
+                                                    className="page-link"
+                                                    onClick={() => setTableCurrentPage(i + 1)}
+                                                >
+                                                    {i + 1}
+                                                </button>
+                                            </li>
+                                        ))}
+                                        <li
+                                            className={`page-item ${tableCurrentPage === tableTotalPages ? "disabled" : ""}`}
+                                        >
+                                            <button
+                                                className="page-link"
+                                                onClick={() => setTableCurrentPage(tableCurrentPage + 1)}
+                                            >
+                                                Next
+                                            </button>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div className="row">
                         <div className="col-lg-12">
                             <div className="card-box">
@@ -668,7 +806,9 @@ const AdministrativeStructure = () => {
                                                     ? "Edit Departments Entrusted to the Deputy Commissioner"
                                                     : modalType === "structure3"
                                                         ? "Edit Departments Assigned to Assistant Commissioner"
-                                                        : "Edit Assistant Commissioner Ward Committee"}
+                                                        : modalType === "table"
+                                                            ? "Edit Table Heading"
+                                                            : "Edit Assistant Commissioner Ward Committee"}
                                         </h5>
                                     </div>
                                     <div className="modal-body">
@@ -865,6 +1005,57 @@ const AdministrativeStructure = () => {
                                                             setEditData({
                                                                 ...editData,
                                                                 heading4: e.target.value,
+                                                            })
+                                                        }
+                                                    />
+                                                </div>
+                                            </>
+                                        ) : modalType === "table" ? (
+                                            <>
+                                                <div className="form-group">
+                                                    <label htmlFor="language_code">Select Language</label>
+                                                    <select
+                                                        className="form-control"
+                                                        id="language_code"
+                                                        value={editData.language_code}
+                                                        onChange={(e) =>
+                                                            setEditData({
+                                                                ...editData,
+                                                                language_code: e.target.value,
+                                                            })
+                                                        }
+                                                    >
+                                                        <option value="" disabled>Select Language</option>
+                                                        <option value="en">English</option>
+                                                        <option value="mr">Marathi</option>
+                                                    </select>
+                                                </div>
+                                                <div className="form-group">
+                                                    <label htmlFor="tablename">Table Name</label>
+                                                    <input
+                                                        type="text"
+                                                        className="form-control"
+                                                        id="tablename"
+                                                        value={editData.tablename}
+                                                        onChange={(e) =>
+                                                            setEditData({
+                                                                ...editData,
+                                                                tablename: e.target.value,
+                                                            })
+                                                        }
+                                                    />
+                                                </div>
+                                                <div className="form-group">
+                                                    <label htmlFor="heading">Heading Name</label>
+                                                    <input
+                                                        type="text"
+                                                        className="form-control"
+                                                        id="heading"
+                                                        value={editData.heading}
+                                                        onChange={(e) =>
+                                                            setEditData({
+                                                                ...editData,
+                                                                heading: e.target.value,
                                                             })
                                                         }
                                                     />

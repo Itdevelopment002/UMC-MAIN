@@ -93,7 +93,6 @@ const AsstCommissioner = () => {
     const handleSaveChanges = async () => {
         try {
             if (modalType === "history") {
-                // Update history data
                 await api.put(`/asst-commissioner-desc/${selectedItem.id}`, {
                     description: editData.description,
                     language_code: editData.language_code,
@@ -107,7 +106,6 @@ const AsstCommissioner = () => {
                 );
                 fetchDescData();
             } else if (modalType === "co") {
-                // Prepare form data for CO
                 const formData = new FormData();
                 formData.append("coName", editData.coName);
                 formData.append("designation", editData.designation);
@@ -126,8 +124,6 @@ const AsstCommissioner = () => {
                         "Content-Type": "multipart/form-data",
                     },
                 });
-
-                // Update local CO data
                 setCoData(
                     coData.map((item) =>
                         item.id === selectedItem.id ? { ...item, ...editData } : item
@@ -135,12 +131,7 @@ const AsstCommissioner = () => {
                 );
                 fetchCoData();
             }
-
-            // Display success message
-            toast.success('Assistant Commissioner Information update suceessfully'
-            );
-
-            // Redirect to the appropriate page if needed
+            toast.success('Assistant Commissioner Information update suceessfully');
             navigate('/assistant-commissioner');
 
         } catch (error) {
@@ -175,7 +166,6 @@ const AsstCommissioner = () => {
             setCurrentPage(pageNumber);
         }
     };
-
 
     return (
         <div>
@@ -536,6 +526,7 @@ const AsstCommissioner = () => {
                                                         type="file"
                                                         className="form-control"
                                                         id="coImage"
+                                                        accept="image/*"
                                                         onChange={handleImageChange}
                                                     />
                                                     {imagePreview && (

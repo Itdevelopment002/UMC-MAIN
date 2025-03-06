@@ -141,7 +141,7 @@ const AddHomeService1 = () => {
                                         </div>
 
                                         <div className="form-group row">
-                                            <label className="col-form-label col-lg-2">Service Icon <span className="text-danger">*</span></label>
+                                            <label className="col-form-label col-lg-2 col-md-2">Service Icon <span className="text-danger">*</span></label>
                                             <div className="col-md-4">
                                                 <input
                                                     type="file"
@@ -152,6 +152,7 @@ const AddHomeService1 = () => {
                                                     onChange={(e) => handleFileChange(e, setMainIcon, 'mainIcon')}
                                                 />
                                                 {errors.mainIcon && <span className="invalid-feedback">{errors.mainIcon}</span>}
+                                                <small className="text-muted">📌 Note: Only image files are allowed (JPG, PNG, etc.).</small>
                                             </div>
                                         </div>
                                         <input type="submit" className="btn btn-primary btn-sm" value="Submit" />

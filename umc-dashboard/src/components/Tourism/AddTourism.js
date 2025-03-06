@@ -264,7 +264,7 @@ const AddTourism = () => {
                       </div>
                     </div>
                     <div className="form-group row">
-                      <label className="col-form-label col-md-2">
+                      <label className="col-form-label col-md-2 col-lg-2">
                         Site Main Image <span className="text-danger">*</span>
                       </label>
                       <div className="col-md-5">
@@ -275,10 +275,11 @@ const AddTourism = () => {
                           accept="image/*"
                         />
                         {errors.mainImage && <div className="invalid-feedback">{errors.mainImage}</div>}
+                        <small className="text-muted">📌 Note: Only image files are allowed (JPG, PNG, etc.).</small>
                       </div>
                     </div>
                     <div className="form-group row">
-                      <label className="col-form-label col-md-2">
+                      <label className="col-form-label col-md-2 col-lg-2">
                         Site Images <span className="text-danger">*</span>
                       </label>
                       <div className="col-md-5">
@@ -290,6 +291,7 @@ const AddTourism = () => {
                           accept="image/*"
                         />
                         {errors.galleryImages && <div className="invalid-feedback">{errors.galleryImages}</div>}
+                        <small className="text-muted">📌 Note: Only image files are allowed (JPG, PNG, etc.).</small>
                       </div>
                     </div>
                     <input type="submit" className="btn btn-primary btn-sm" value="Submit" />

@@ -119,25 +119,25 @@ const AddDepartmentBanner = () => {
                                             </div>
                                         </div>
                                         <div className="form-group row">
-                                            <label className="col-form-label col-lg-2">
+                                            <label className="col-form-label col-lg-2 col-md-2">
                                                 Department Banner <span className="text-danger">*</span>
                                             </label>
                                             <div className="col-md-4">
-                                                <div className="input-group mb-3">
-                                                    <input
-                                                        type="file"
-                                                        id="bannerImage"
-                                                        name="bannerImage"
-                                                        className={`form-control ${errors.selectedFile ? "is-invalid" : ""
-                                                            }`}
-                                                        onChange={handleFileChange}
-                                                    />
-                                                    {errors.selectedFile && (
-                                                        <div className="invalid-feedback">
-                                                            {errors.selectedFile}
-                                                        </div>
-                                                    )}
-                                                </div>
+                                                <input
+                                                    type="file"
+                                                    id="bannerImage"
+                                                    name="bannerImage"
+                                                    accept="image/*"
+                                                    className={`form-control ${errors.selectedFile ? "is-invalid" : ""
+                                                        }`}
+                                                    onChange={handleFileChange}
+                                                />
+                                                {errors.selectedFile && (
+                                                    <div className="invalid-feedback">
+                                                        {errors.selectedFile}
+                                                    </div>
+                                                )}
+                                                <small className="text-muted">📌 Note: Only image files are allowed (JPG, PNG, etc.).</small>
                                             </div>
                                         </div>
                                         <input

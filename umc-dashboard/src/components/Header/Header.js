@@ -18,9 +18,9 @@ const Header = ({ onLogout, userDepartment }) => {
     useState(false);
   const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
   const [notifications, setNotifications] = useState([]);
+  //eslint-disable-next-line
   const [unreadCount, setUnreadCount] = useState(0);
   const [showAll, setShowAll] = useState(false);
-  const [darkMode, setDarkMode] = useState(false);
 
   const notificationsToShow = showAll
     ? notifications
@@ -55,6 +55,7 @@ const Header = ({ onLogout, userDepartment }) => {
     // eslint-disable-next-line
   }, [userDepartment]);
 
+  
   const fetchUser = async () => {
     try {
       const response = await api.get(`/users/${userDepartment.id}`);
@@ -68,12 +69,6 @@ const Header = ({ onLogout, userDepartment }) => {
     fetchUser();
     //eslint-disable-next-line
   }, [userDepartment]);
-
-
-  const handleDarkModeToggle = () => {
-    setDarkMode((prev) => !prev);
-    document.body.classList.toggle("dark-mode");
-  };
 
   const handleDeleteNotification = async (id) => {
     try {
@@ -155,7 +150,7 @@ const Header = ({ onLogout, userDepartment }) => {
         <div className="header">
           <div className="header-left">
             <Link to="/home" className="logo">
-              <img src={headerlogo} alt="KBMC Logo" className="logo-image" />
+              <img src={headerlogo} alt="UMC Logo" className="logo-image" />
             </Link>
           </div>
 
@@ -172,7 +167,7 @@ const Header = ({ onLogout, userDepartment }) => {
           </Link>
           <ul className="nav user-menu float-right">
             <li className="nav-item dropdown d-none d-sm-block">
-              <Link
+              {/* <Link
                 to="#."
                 className="dropdown-toggle nav-link"
                 onClick={(e) => {
@@ -185,7 +180,7 @@ const Header = ({ onLogout, userDepartment }) => {
                 <span className="badge badge-pill bg-danger float-right">
                   {unreadCount}
                 </span>
-              </Link>
+              </Link> */}
               {isNotificationDropdownOpen && (
                 <div className="dropdown-menu notifications show notification-keep-visible">
                   <div className="topnav-dropdown-header">

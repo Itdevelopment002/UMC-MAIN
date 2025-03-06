@@ -194,6 +194,7 @@ const AddMinisterDetails = () => {
                             type="file"
                             className={`form-control ${errors.image ? "is-invalid" : ""}`}
                             name="image"
+                            accept="image/*"
                             onChange={handleChange}
                             ref={fileInputRef}
                           />

@@ -8,6 +8,7 @@ import cicon4 from "../../assets/images/Departments/Vector (5).png";
 import cicon5 from "../../assets/images/Departments/Vector (6).png";
 import cicon6 from "../../assets/images/Departments/Vector (7).png";
 import pdficon from '../../assets/images/Departments/document 1.png';
+import Swal from 'sweetalert2';
 import api, { baseURL } from "../api";
 import { useTranslation } from "react-i18next";
 
@@ -18,7 +19,6 @@ const AuditDepartment = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const [availableButtons, setAvailableButtons] = useState([]);
-  const [headersMap, setHeadersMap] = useState({});
   const [banner, setBanner] = useState([]);
   const [description, setDescription] = useState([]);
   const [hod, setHod] = useState([]);
@@ -36,13 +36,11 @@ const AuditDepartment = () => {
 
         uniqueNames.forEach(name => {
           dynamicHeadersMap[name] = [
-            `${name} ${t('muncipal.agenda')}`,
+            `${t('muncipal.agenda')}`,
             `${name} ${t('muncipal.minutes')}`,
             `${name} ${t('muncipal.resolution')}`,
           ];
         });
-
-        setHeadersMap(dynamicHeadersMap);
 
         if (uniqueNames.length > 0) {
           setSelectedButton(uniqueNames[0]);
@@ -53,8 +51,6 @@ const AuditDepartment = () => {
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [i18n.language]);
-
-  const tableHeaders = headersMap[selectedButton] || [];
 
   const getTableData = () => {
     return tableData.filter(item => item.name === selectedButton);
@@ -114,6 +110,18 @@ const AuditDepartment = () => {
   const updatedTotalEntries = filteredData.length;
   const startEntry = (currentPage - 1) * itemsPerPage + 1;
   const endEntry = Math.min(currentPage * itemsPerPage, updatedTotalEntries);
+
+  const handleClick = (link, e) => {
+    if (link === "#") {
+      e.preventDefault();
+      Swal.fire({
+        title: 'Information',
+        text: 'The PDF for this department will be available soon.',
+        icon: 'info',
+        confirmButtonText: 'Ok'
+      });
+    }
+  };
 
   const department_name = (i18n.language === 'en') ? "Audit Department" : "लेखापरीक्षण विभाग"
 
@@ -337,11 +345,9 @@ const AuditDepartment = () => {
                 <table className="table table-bordered shadow table-responsive">
                   <thead className="bg-orange text-white">
                     <tr>
-                      <th className="table-heading-styling text-center" width="8%">{t('departments.sno')}</th>
-                      <th className="table-heading-styling" width="25%">{t('corporation.year')}</th>
-                      {tableHeaders.map((header, index) => (
-                        <th className="table-heading-styling text-center" key={index}>{header}</th>
-                      ))}
+                      <th className="table-heading-styling text-center" width="10%">{t('auditreport.srNo')}</th>
+                      <th className="table-heading-styling">{t('auditreport.year')}</th>
+                      <th className="table-heading-styling text-center" width="25%">{t('auditreport.action')}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -366,63 +372,25 @@ const AuditDepartment = () => {
                         </td>
                         <td>{item.year}</td>
                         <td className="text-center">
-                          {item.pdf_link1 && item.pdf_link1 !== "#" ? (
+                          {item.pdf_link && item.pdf_link !== "#" ? (
                             <Link
-                              to={item.pdf_link1}
-                              target="_blank"
-                              rel="noopener noreferrer"
+                              to={item.pdf_link}
+                              className="text-decoration-none"
+                              target={item.link === "#" ? "" : "_blank"}
+                              style={{ color: "#333333" }}
+                              onClick={(e) => handleClick(item.link, e)}
                             >
                               <img
                                 src={pdficon}
-                                alt="PDF"
+                                alt="PDF Icon"
                                 style={{
                                   width: "18px",
                                   height: "18px",
+                                  marginRight: "8px",
                                   verticalAlign: "middle",
                                 }}
                               />
-                            </Link>
-                          ) : (
-                            "-"
-                          )}
-                        </td>
-                        <td className="text-center">
-                          {item.pdf_link2 && item.pdf_link2 !== "#" ? (
-                            <Link
-                              to={item.pdf_link2}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            >
-                              <img
-                                src={pdficon}
-                                alt="PDF"
-                                style={{
-                                  width: "18px",
-                                  height: "18px",
-                                  verticalAlign: "middle",
-                                }}
-                              />
-                            </Link>
-                          ) : (
-                            "-"
-                          )}
-                        </td>
-                        <td className="text-center">
-                          {item.pdf_link3 && item.pdf_link3 !== "#" ? (
-                            <Link
-                              to={item.pdf_link3}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            >
-                              <img
-                                src={pdficon}
-                                alt="PDF"
-                                style={{
-                                  width: "18px",
-                                  height: "18px",
-                                  verticalAlign: "middle",
-                                }}
-                              />
+                              {t('auditreport.viewPDF')}
                             </Link>
                           ) : (
                             "-"

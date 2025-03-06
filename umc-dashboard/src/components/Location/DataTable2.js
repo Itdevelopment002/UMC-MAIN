@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import api from "../api";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const DataTable2 = () => {
@@ -75,15 +75,13 @@ const DataTable2 = () => {
   };
 
   const currentPageData = policyData
-    .filter((policy) => policy.type === "Table 2") // Filter for "Table 1" type
+    .filter((policy) => policy.type === "Table 2")
     .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   const totalPages = Math.ceil(
     policyData.filter((policy) => policy.type === "Table 2").length / itemsPerPage
   );
 
-
-  // Handle link click to set type and navigate to a different page
   const handleLinkClick = (type) => {
     setSelectedType(type);
   };

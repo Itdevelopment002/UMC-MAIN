@@ -240,7 +240,6 @@ const Resolutions = () => {
                         </div>
                     </div>
 
-                    {/* Modals */}
                     {showEditModal && (
                         <div
                             className="modal fade show"

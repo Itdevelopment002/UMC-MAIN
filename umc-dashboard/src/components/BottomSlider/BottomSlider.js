@@ -111,8 +111,30 @@ const BottomSlider = () => {
       id: websitelink.id,
       websitelink: websitelink.websitelink,
       websitelogo: websitelink.websitelogo,
+      websitelogoPreview: `${baseURL}${websitelink.websitelogo}`,
     });
     setShowEditModal(true);
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setEditLinkData({
+          ...editLinkData,
+          websitelogo: file,
+          websitelogoPreview: reader.result,
+        });
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setEditLinkData({
+        ...editLinkData,
+        websitelogo: null,
+        websitelogoPreview: `${baseURL}${editLinkData.websitelogo}`, // Fallback to the existing image
+      });
+    }
   };
 
   return (
@@ -380,13 +402,9 @@ const BottomSlider = () => {
                         <input
                           type="file"
                           id="websitelogo"
+                          accept="image/*"
                           className="form-control"
-                          onChange={(e) =>
-                            setEditLinkData({
-                              ...editLinkData,
-                              websitelogo: e.target.files[0],
-                            })
-                          }
+                          onChange={handleFileChange}
                         />
                         {editLinkData.websitelogoPreview && (
                           <img
@@ -397,7 +415,6 @@ const BottomSlider = () => {
                           />
                         )}
                       </div>
-
                     </form>
                   </div>
                   <div className="modal-footer">

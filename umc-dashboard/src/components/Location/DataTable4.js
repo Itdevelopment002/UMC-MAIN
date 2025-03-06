@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import api from "../api";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const DataTable4 = () => {
@@ -10,7 +10,7 @@ const DataTable4 = () => {
   const [showEditModal, setShowEditModal] = useState(false);
   const [selectedPolicy, setSelectedPolicy] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [selectedType, setSelectedType] = useState(""); // To store the selected type
+  const [selectedType, setSelectedType] = useState("");
   const itemsPerPage = 5;
 
   useEffect(() => {
@@ -74,7 +74,7 @@ const DataTable4 = () => {
     setSelectedPolicy({ ...selectedPolicy, [name]: value });
   };
   const currentPageData = policyData
-    .filter((policy) => policy.type === "Table 4") // Filter for "Table 1" type
+    .filter((policy) => policy.type === "Table 4")
     .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   const totalPages = Math.ceil(

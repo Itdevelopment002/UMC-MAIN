@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import api from '../api';
 import { useNavigate } from 'react-router-dom';
-import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Link } from "react-router-dom";
 
@@ -59,13 +58,12 @@ const AddHomeProjects = () => {
         if (mainIcon) formData.append('mainIcon', mainIcon);
 
         try {
+            //eslint-disable-next-line
             const response = await api.post('/projects', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
             });
-
-            toast.success(response.data.message);
             setHeading('');
             setDescription('');
             setLink('');
@@ -75,7 +73,6 @@ const AddHomeProjects = () => {
             navigate('/home-projects');
         } catch (error) {
             console.error('Error uploading file:', error);
-            toast.error('Failed to add project. Please try again.');
         }
     };
 
@@ -160,7 +157,7 @@ const AddHomeProjects = () => {
                                         </div>
 
                                         <div className="form-group row">
-                                            <label className="col-form-label col-lg-3">Project Image <span className="text-danger">*</span></label>
+                                            <label className="col-form-label col-lg-3 col-md-3">Project Image <span className="text-danger">*</span></label>
                                             <div className="col-md-4">
                                                 <input
                                                     type="file"
@@ -171,11 +168,11 @@ const AddHomeProjects = () => {
                                                     onChange={(e) => handleFileChange(e, setMainIcon, 'mainIcon')}
                                                 />
                                                 {errors.mainIcon && <span className="invalid-feedback">{errors.mainIcon}</span>}
+                                                <small className="text-muted">📌 Note: Only image files are allowed (JPG, PNG, etc.).</small>
                                             </div>
                                         </div>
                                         <input type="submit" className="btn btn-primary btn-sm" value="Submit" />
                                     </form>
-                                    <ToastContainer />
                                 </div>
                             </div>
                         </div>

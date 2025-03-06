@@ -163,13 +163,14 @@ const AddContact = () => {
                       </div>
                     </div>
                     <div className="form-group row my-3">
-                      <label className="col-form-label col-md-2">
+                      <label className="col-form-label col-md-2 col-lg-2">
                         Contact Icon <span className="text-danger">*</span>
                       </label>
                       <div className="col-md-4">
                         <input
                           type="file"
                           id="userfile"
+                          accept="image/*"
                           name="contactIcon"
                           className={`form-control form-control-md ${errors.contactIcon ? "is-invalid" : ""
                             }`}
@@ -180,6 +181,7 @@ const AddContact = () => {
                             {errors.contactIcon}
                           </div>
                         )}
+                        <small className="text-muted">📌 Note: Only image files are allowed (JPG, PNG, etc.).</small>
                       </div>
                     </div>
                     <input

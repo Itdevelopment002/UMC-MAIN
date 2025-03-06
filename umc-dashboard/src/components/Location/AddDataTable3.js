@@ -12,7 +12,6 @@ const AddDataTable3 = () => {
   const [errors, setErrors] = useState({ heading: "", description: "", language_code: "" });
   const navigate = useNavigate();
 
-  // Handle input field changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -39,7 +38,6 @@ const AddDataTable3 = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
 

@@ -8,6 +8,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 const HistoryImage = () => {
   const [gallerys, setGallerys] = useState([]);
+  const [imagePreview, setImagePreview] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [selectedGallery, setSelectedGallery] = useState(null);
@@ -51,6 +52,7 @@ const HistoryImage = () => {
     }
   };
 
+  //eslint-disable-next-line
   const handleDelete = (gallery) => {
     setSelectedGallery(gallery);
     setShowDeleteModal(true);
@@ -71,6 +73,7 @@ const HistoryImage = () => {
 
   const handleEdit = (gallery) => {
     setSelectedGallery(gallery);
+    setImagePreview(`${baseURL}${gallery.file_path}`);
     setShowEditModal(true);
     setSelectedFile(null);
   };
@@ -94,6 +97,7 @@ const HistoryImage = () => {
       });
       fetchGallerys();
       toast.success("History Image updated successfully!");
+      setImagePreview(null);
       setShowEditModal(false);
     } catch (error) {
       console.error("Error updating history image:", error);
@@ -106,6 +110,7 @@ const HistoryImage = () => {
     if (e.target.files[0]) {
       const imageUrl = URL.createObjectURL(e.target.files[0]);
       setSelectedGallery({ ...selectedGallery, image: imageUrl });
+      setImagePreview(imageUrl);
     }
   };
 
@@ -119,6 +124,14 @@ const HistoryImage = () => {
                 <div className="col-12">
                   <h4 className="page-title">History Image</h4>
                 </div>
+                {/* <div className="col-sm-8 col-12 text-right">
+                  <Link
+                    to="/add-historyImage"
+                    className="btn btn-primary btn-rounded float-right"
+                  >
+                    <i className="fa fa-plus"></i> Add Image
+                  </Link>
+                </div> */}
               </div>
               <div className="table-responsive">
                 <table className="table table-bordered m-b-0">
@@ -155,12 +168,12 @@ const HistoryImage = () => {
                           >
                             Edit
                           </button>
-                          <button
+                          {/* <button
                             className="btn btn-danger btn-sm m-t-10"
                             onClick={() => handleDelete(gallery)}
                           >
                             Delete
-                          </button>
+                          </button> */}
 
                         </td>
                       </tr>
@@ -228,15 +241,17 @@ const HistoryImage = () => {
                   <label>Upload Image</label>
                   <input
                     type="file"
+                    accept="image/*"
                     className="form-control"
                     onChange={handleFileChange}
                   />
                 </div>
-                {selectedGallery?.image && (
+                {imagePreview && (
                   <img
-                    src={selectedGallery.image}
-                    alt="Selected"
-                    style={{ width: "30%", height: "auto", marginTop: "10px" }}
+                    src={imagePreview}
+                    alt="preview"
+                    width="100px"
+                    className="mt-2"
                   />
                 )}
               </div>
