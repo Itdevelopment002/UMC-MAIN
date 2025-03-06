@@ -32,14 +32,14 @@
 .custom-profile-card .name-color {
   font-family: 'Roboto';
   color: #1A2B3B !important;
-  font-weight: 500;
+  font-weight: 700;
 }
 
 .custom-profile-card .position-custom {
   font-family: 'Roboto';
   margin-top: 2px;
   color: #1A2B3B !important;
-  font-weight: 400;
+  font-weight: 600;
 }
 
 .swiper-pagination {

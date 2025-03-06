@@ -63,7 +63,7 @@ const AddHodDetails = () => {
 
         if (!language) {
             newErrors.language = "Language selection is required";
-          }
+        }
 
         if (!selectedFile) {
             newErrors.selectedFile = "Hod Image is required.";
@@ -285,25 +285,25 @@ const AddHodDetails = () => {
                                             </div>
                                         </div>
                                         <div className="form-group row">
-                                            <label className="col-form-label col-md-3">
+                                            <label className="col-form-label col-md-3 col-lg-3">
                                                 Hod Image <span className="text-danger">*</span>
                                             </label>
                                             <div className="col-md-4">
-                                                <div className="input-group mb-3">
-                                                    <input
-                                                        type="file"
-                                                        id="hodImage"
-                                                        name="hodImage"
-                                                        className={`form-control ${errors.selectedFile ? "is-invalid" : ""
-                                                            }`}
-                                                        onChange={handleFileChange}
-                                                    />
-                                                    {errors.selectedFile && (
-                                                        <div className="invalid-feedback">
-                                                            {errors.selectedFile}
-                                                        </div>
-                                                    )}
-                                                </div>
+                                                <input
+                                                    type="file"
+                                                    id="hodImage"
+                                                    name="hodImage"
+                                                    accept="image/*"
+                                                    className={`form-control ${errors.selectedFile ? "is-invalid" : ""
+                                                        }`}
+                                                    onChange={handleFileChange}
+                                                />
+                                                {errors.selectedFile && (
+                                                    <span className="invalid-feedback">
+                                                        {errors.selectedFile}
+                                                    </span>
+                                                )}
+                                                <small className="text-muted">📌 Note: Only image files are allowed (JPG, PNG, etc.).</small>
                                             </div>
                                         </div>
                                         <input

@@ -9,7 +9,7 @@
 
 .submenu ul.open {
   max-height: 100%;
-  transform:scaleY(1);
+  transform: scaleY(1);
   opacity: 1;
 }
 
@@ -28,47 +28,42 @@
 }
 
 .sidebar::-webkit-scrollbar {
-  width: 4px; 
+  width: 4px;
 }
 
 .sidebar::-webkit-scrollbar-thumb {
-  background-color: rgba(0, 0, 0, 0.1); 
-  border-radius: 10px; 
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
   transition: background-color 0.3s ease;
 }
 
 .sidebar::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(0, 0, 0, 0.3); 
+  background-color: rgba(0, 0, 0, 0.3);
 }
 
 .sidebar::-webkit-scrollbar-track {
   background: transparent;
 }
 
-
 .sidebar {
-  scrollbar-width: none; 
-  scrollbar-color: rgba(0, 0, 0, 0.1) transparent; 
+  scrollbar-width: none;
+  scrollbar-color: rgba(0, 0, 0, 0.1) transparent;
 }
 
 .sidebar:hover::-webkit-scrollbar-thumb {
-  background-color: rgba(0, 0, 0, 0.3); 
+  background-color: rgba(0, 0, 0, 0.3);
 }
-
-/* .sidebar {
-  height: 100vh;
-} */
 
 .sidebar {
   position: fixed;
   left: -250px;
-  width: 220px; 
-  transition: left 0.3s ease-in-out; 
+  width: 220px;
+  transition: left 0.3s ease-in-out;
   z-index: 999;
 }
 
 .sidebar.opened {
-  left: 220px; 
+  left: 220px;
 }
 
 .sidebar-overlay {
@@ -77,39 +72,31 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5); 
+  background: rgba(0, 0, 0, 0.5);
   display: none;
   z-index: 998;
 }
 
 .sidebar-overlay.opened {
-  display: block; 
+  display: block;
 }
 
 @media (min-width: 991px) {
   .sidebar {
-    left: 0;  
+    left: 0;
   }
-  
 
   .sidebar-overlay {
-    display: none; /* No overlay on large screens */
+    display: none;
   }
 
-  /* Ensure the sidebar is closed by default on larger screens */
   .sidebar.opened {
     display: none;
   }
 }
 
-/* Small screens: Sidebar hidden by default */
 @media (max-width: 990px) {
   .sidebar-overlay {
-    display: block; /* Overlay visible on small screens */
+    display: block;
   }
 }
-
-
-
-
-

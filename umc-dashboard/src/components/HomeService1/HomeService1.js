@@ -197,7 +197,6 @@ const HomeService1 = () => {
                 </div>
                 <div className="mt-4">
                   <ul className="pagination">
-                    {/* Previous Button */}
                     <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
                       <button
                         className="page-link"
@@ -206,8 +205,6 @@ const HomeService1 = () => {
                         Previous
                       </button>
                     </li>
-
-                    {/* Always show the first page */}
                     {currentPage > 2 && (
                       <li className={`page-item ${currentPage === 1 ? "active" : ""}`}>
                         <button className="page-link" onClick={() => setCurrentPage(1)}>
@@ -215,8 +212,6 @@ const HomeService1 = () => {
                         </button>
                       </li>
                     )}
-
-                    {/* Show the second page if currentPage is greater than 2 */}
                     {currentPage > 3 && (
                       <li className={`page-item ${currentPage === 2 ? "active" : ""}`}>
                         <button className="page-link" onClick={() => setCurrentPage(2)}>
@@ -224,22 +219,18 @@ const HomeService1 = () => {
                         </button>
                       </li>
                     )}
-
-                    {/* Show ellipsis if currentPage is far from the start */}
                     {currentPage > 4 && (
                       <li className="page-item disabled">
                         <span className="page-link">...</span>
                       </li>
                     )}
-
-                    {/* Show currentPage and its neighbors */}
                     {Array.from(
                       { length: Math.ceil(info.length / infoPerPage) },
                       (_, i) => i + 1
                     )
                       .filter(
                         (page) =>
-                          page >= currentPage - 1 && page <= currentPage + 1 // Show current page and its neighbors
+                          page >= currentPage - 1 && page <= currentPage + 1
                       )
                       .map((page) => (
                         <li
@@ -254,15 +245,11 @@ const HomeService1 = () => {
                           </button>
                         </li>
                       ))}
-
-                    {/* Show ellipsis if currentPage is far from the end */}
                     {currentPage < Math.ceil(info.length / infoPerPage) - 3 && (
                       <li className="page-item disabled">
                         <span className="page-link">...</span>
                       </li>
                     )}
-
-                    {/* Show the second-to-last page if currentPage is not near the end */}
                     {currentPage < Math.ceil(info.length / infoPerPage) - 2 && (
                       <li
                         className={`page-item ${currentPage === Math.ceil(info.length / infoPerPage) - 1
@@ -280,8 +267,6 @@ const HomeService1 = () => {
                         </button>
                       </li>
                     )}
-
-                    {/* Always show the last page */}
                     {currentPage < Math.ceil(info.length / infoPerPage) - 1 && (
                       <li
                         className={`page-item ${currentPage === Math.ceil(info.length / infoPerPage)
@@ -299,8 +284,6 @@ const HomeService1 = () => {
                         </button>
                       </li>
                     )}
-
-                    {/* Next Button */}
                     <li
                       className={`page-item ${currentPage === Math.ceil(info.length / infoPerPage)
                         ? "disabled"
@@ -423,6 +406,7 @@ const HomeService1 = () => {
                         <input
                           type="file"
                           className="form-control"
+                          accept="image/*"
                           onChange={(e) => handleFileChange(e, "mainIcon")}
                         />
                         {imagePreview && (

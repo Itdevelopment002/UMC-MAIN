@@ -346,6 +346,7 @@ const Slider = () => {
                         <input
                           type="file"
                           className="form-control"
+                          accept="image/*"
                           onChange={handleImageChange}
                         />
                         {imagePreview && (

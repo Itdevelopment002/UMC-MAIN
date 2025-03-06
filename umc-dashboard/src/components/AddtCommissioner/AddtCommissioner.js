@@ -93,7 +93,6 @@ const AddtCommissioner = () => {
     const handleSaveChanges = async () => {
         try {
             if (modalType === "history") {
-                // Update history data
                 await api.put(`/addt-commissioner-desc/${selectedItem.id}`, {
                     description: editData.description,
                     language_code: editData.language_code,
@@ -107,7 +106,6 @@ const AddtCommissioner = () => {
                 );
                 fetchDescData();
             } else if (modalType === "co") {
-                // Prepare form data for CO
                 const formData = new FormData();
                 formData.append("coName", editData.coName);
                 formData.append("designation", editData.designation);
@@ -126,8 +124,6 @@ const AddtCommissioner = () => {
                         "Content-Type": "multipart/form-data",
                     },
                 });
-
-                // Update local CO data
                 setCoData(
                     coData.map((item) =>
                         item.id === selectedItem.id ? { ...item, ...editData } : item
@@ -135,14 +131,8 @@ const AddtCommissioner = () => {
                 );
                 fetchCoData();
             }
-
-            // Display success message
-            toast.success('Additional Commissioner Information update suceessfully'
-            );
-
-            // Redirect to the appropriate page if needed
+            toast.success('Additional Commissioner Information update suceessfully');
             navigate('/additional-commissioner');
-
         } catch (error) {
             console.error(error);
             toast.error("Failed to update the entry!");
@@ -536,6 +526,7 @@ const AddtCommissioner = () => {
                                                         type="file"
                                                         className="form-control"
                                                         id="coImage"
+                                                        accept="image/*"
                                                         onChange={handleImageChange}
                                                     />
                                                     {imagePreview && (

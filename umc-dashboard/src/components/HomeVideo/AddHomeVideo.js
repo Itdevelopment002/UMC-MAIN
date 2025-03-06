@@ -1,18 +1,13 @@
 import React, { useState } from "react";
 import api from "../api";
-//eslint-disable-next-line
-import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 
 const AddHomeVideo = () => {
   const [videoUrl, setVideoUrl] = useState("");
-  const [errors, setErrors] = useState({
-    videoUrl: "",
-  });
+  const [errors, setErrors] = useState({ videoUrl: "", });
   const navigate = useNavigate();
-
 
   const validateForm = () => {
     const newErrors = {};
@@ -36,13 +31,12 @@ const AddHomeVideo = () => {
 
     try {
       await api.post("/home-video", videoData);
-      toast.success("Video added successfully!");
       setErrors({ videoUrl: "" });
       setVideoUrl("");
 
       navigate("/home-video");
     } catch (error) {
-      toast.error("Failed to add video. Please try again.");
+      console.error("Failed to add video. Please try again.");
     }
   };
   return (
@@ -78,9 +72,8 @@ const AddHomeVideo = () => {
                         <div className="input-group">
                           <input
                             type="text"
-                            className={`form-control col-md-12 col-xs-12 userfile ${
-                              errors.videoUrl ? "is-invalid" : ""
-                            }`}
+                            className={`form-control col-md-12 col-xs-12 userfile ${errors.videoUrl ? "is-invalid" : ""
+                              }`}
                             placeholder="Enter Video URL"
                             value={videoUrl}
                             onChange={(e) => {

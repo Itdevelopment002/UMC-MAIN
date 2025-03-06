@@ -5,9 +5,7 @@ import api from "../api";
 const AddAuditReport = () => {
   const [name, setName] = useState("");
   const [year, setYear] = useState("");
-  const [pdfLink1, setPdfLink1] = useState("");
-  const [pdfLink2, setPdfLink2] = useState("");
-  const [pdfLink3, setPdfLink3] = useState("");
+  const [pdfLink, setPdfLink] = useState("");
   const [language, setLanguage] = useState("");
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
@@ -25,16 +23,8 @@ const AddAuditReport = () => {
       validationErrors.year = "Year is required.";
     }
 
-    if (!pdfLink1) {
-      validationErrors.pdfLink1 = "PDF Link 1 is required.";
-    }
-
-    if (!pdfLink2) {
-      validationErrors.pdfLink2 = "PDF Link 2 is required.";
-    }
-
-    if (!pdfLink3) {
-      validationErrors.pdfLink3 = "PDF Link 3 is required.";
+    if (!pdfLink) {
+      validationErrors.pdfLink = "PDF Link is required.";
     }
 
     setErrors(validationErrors);
@@ -53,18 +43,14 @@ const AddAuditReport = () => {
       const response = await api.post("/audit-report", {
         name,
         year,
-        pdf_link1: pdfLink1,
-        pdf_link2: pdfLink2,
-        pdf_link3: pdfLink3,
+        pdf_link: pdfLink,
         language_code: language,
 
       });
       setLanguage("");
       setName("");
       setYear("");
-      setPdfLink1("");
-      setPdfLink2("");
-      setPdfLink3("");
+      setPdfLink("");
       navigate("/audit-report");
     } catch (error) {
       console.error("Error adding audit report data:", error);
@@ -174,15 +160,13 @@ const AddAuditReport = () => {
                         )}
                       </div>
                     </div>
-                    {["PDF Link 1", "PDF Link 2", "PDF Link 3"].map(
+                    {["PDF Link"].map(
                       (label, index) => {
                         const stateHandlers = [
-                          [pdfLink1, setPdfLink1],
-                          [pdfLink2, setPdfLink2],
-                          [pdfLink3, setPdfLink3],
+                          [pdfLink, setPdfLink],
                         ];
                         const [link, setLink] = stateHandlers[index];
-                        const errorField = `pdfLink${index + 1}`;
+                        const errorField = `pdfLink`;
                         return (
                           <div className="form-group row" key={label}>
                             <label className="col-form-label col-md-2">

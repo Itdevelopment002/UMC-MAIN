@@ -106,39 +106,39 @@ const AddHistoryImage = () => {
                       </div>
                     </div>
                     <div className="form-group row">
-                      <label className="col-form-label col-lg-2">
+                      <label className="col-form-label col-lg-2 col-md-2">
                         Upload Image{" "}
                         <span className="text-danger">*</span>
                       </label>
                       <div className="col-md-4">
-                        <div className="input-group mb-3">
-                          <input
-                            type="file"
-                            id="image"
-                            name="image"
-                            className={`form-control col-md-12 col-xs-12 userfile ${errors.selectedFile ? "is-invalid" : ""
-                              }`}
-                            onChange={(e) => {
-                              handleFileChange(e);
-                              if (e.target.files[0]) {
-                                setErrors((prevErrors) => ({
-                                  ...prevErrors,
-                                  selectedFile: "",
-                                }));
-                              }
-                            }}
-                          />
-                          {errors.selectedFile && (
-                            <div className="invalid-feedback">
-                              {errors.selectedFile}
-                            </div>
-                          )}
-                        </div>
+                        <input
+                          type="file"
+                          id="image"
+                          accept="image/*"
+                          name="image"
+                          className={`form-control col-md-12 col-xs-12 userfile ${errors.selectedFile ? "is-invalid" : ""
+                            }`}
+                          onChange={(e) => {
+                            handleFileChange(e);
+                            if (e.target.files[0]) {
+                              setErrors((prevErrors) => ({
+                                ...prevErrors,
+                                selectedFile: "",
+                              }));
+                            }
+                          }}
+                        />
+                        {errors.selectedFile && (
+                          <div className="invalid-feedback">
+                            {errors.selectedFile}
+                          </div>
+                        )}
+                        <small className="text-muted">📌 Note: Only image files are allowed (JPG, PNG, etc.).</small>
                       </div>
                     </div>
                     <input
                       type="submit"
-                      className="btn btn-primary"
+                      className="btn btn-sm btn-primary"
                       value="Upload"
                     />
                   </form>

@@ -419,6 +419,7 @@ const HomeProjects = () => {
                         <input
                           type="file"
                           className="form-control"
+                          accept="image/*"
                           onChange={(e) => handleFileChange(e, "mainIcon")}
                         />
                         {imagePreview && (

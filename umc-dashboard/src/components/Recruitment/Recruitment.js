@@ -375,7 +375,6 @@ const Recruitment = () => {
             </div>
           </div>
 
-          {/* Edit Modal */}
           {showEditModal && (
             <div
               className="modal fade show"

@@ -257,6 +257,7 @@ const AddAddtCommissionerDetails = () => {
                       {errors.coImage && (
                         <div className="invalid-feedback">{errors.coImage}</div>
                       )}
+                      <small className="text-muted">📌 Note: Only image files are allowed (JPG, PNG, etc.).</small>
                     </div>
                   </div>
 

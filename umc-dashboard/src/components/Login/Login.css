@@ -1,24 +1,19 @@
-/* Full Page Setup */
 .login-page {
   height: 100vh;
-  /* background-image: url("../../assets/img/bg2.jpg"); */
-  /* background: linear-gradient(to right, #f99f72 0%, #f77b90 100%); */
   background: #fdf8ed;
-  background-size: cover; 
+  background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  display: flex; 
+  display: flex;
   font-family: 'Roboto';
 }
 
-/* Row setup for layout */
 .row1 {
   margin: 0;
   height: 100%;
   width: 100%;
 }
 
-/* Left Side */
 .left-side {
   width: 50%;
   display: flex;
@@ -26,9 +21,8 @@
   align-items: center;
 }
 
-/* Right Side */
 .right-side {
-  width: 50%; /* Half the screen width */
+  width: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -40,7 +34,6 @@
   font-weight: normal;
 }
 
-/* Form Container */
 .form-container1 {
   max-width: 450px;
   width: 100%;
@@ -53,10 +46,10 @@
 
 .form-container1 img {
   max-width: 100%;
-  height: auto; 
-  max-height: 60px; 
-  margin: 0 auto; 
-  display: block; 
+  height: auto;
+  max-height: 60px;
+  margin: 0 auto;
+  display: block;
 }
 
 .form-container1 h2 {
@@ -74,9 +67,9 @@
 }
 
 .button-container {
-  display: flex;             
-  justify-content: center;   
-  align-items: center;  
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .btn1 {
@@ -86,7 +79,7 @@
   padding: 8px 30px;
   text-transform: uppercase;
   background: linear-gradient(to right, #F57F42 0%, #F55570 100%);
-  color:white;
+  color: white;
 }
 
 .btn-clicked {
@@ -96,9 +89,8 @@
   padding: 8px 30px;
   text-transform: uppercase;
   background: linear-gradient(to right, #F57F42 0%, #F55570 100%);
-  color:white;
+  color: white;
 }
-
 
 .a1 {
   color: #333;
@@ -111,17 +103,8 @@
   color: #007bff;
 }
 
-/* .btn-custom-color{
-  background: linear-gradient(to right, #F57F42 0%, #F55570 100%);
-  color: rgb(255, 255, 255);
-} */
-/* .bg-transparent-info{
-  color: black;
-} */
-
-/* Custom colors */
 .btn-superadmin {
-  background: #f8f2e3;  /* Customize with your color */
+  background: #f8f2e3;
   color: black;
   font-weight: 400;
   padding: 5px 20px;
@@ -132,44 +115,35 @@
   color: black;
 }
 
-/* .btn-superadmin:hover {
-  background-color: #0056b3; 
-}
-
-.btn-guest:hover {
-  background-color: #f1f1f1;
-} */
-
-
-
 @media (max-width: 768px) {
   .login-page {
-    flex-direction: column; 
-    background-position: right; /* Show the right side of the background image */
+    flex-direction: column;
+    background-position: right;
   }
 
   .left-side {
-    display: none; /* Hide left side on smaller screens */
+    display: none;
   }
 
   .right-side {
-    width: 100%; /* Make the right side take full width */
+    width: 100%;
   }
 
   .form-container {
-    padding: 20px; /* Reduce padding for smaller screens */
+    padding: 20px;
   }
 }
+
 @media (max-width: 768px) {
   .login-page {
-    background-size: cover; /* Adjusts the size to ensure visibility on smaller devices */
-    background-position: left; /* Focus on the right part of the image */
+    background-size: cover;
+    background-position: left;
   }
 }
 
 @media (max-width: 480px) {
   .login-page {
-    background-size: cover; /* Ensure the image doesn't crop on very small devices */
-    background-position: left; /* Re-center the image */
+    background-size: cover;
+    background-position: left;
   }
 }

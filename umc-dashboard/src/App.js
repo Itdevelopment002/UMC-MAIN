@@ -8,7 +8,8 @@ import "./assets/css/font-awesome.min.css";
 import "./assets/css/fullcalendar.min.css";
 import "./assets/css/select2.min.css";
 import "./assets/css/tagsinput.css";
-import loaderimage from "./assets/img/loader_trans.gif";
+import loaderimage from "./assets/img/loader_trans.gif"; 
+
 
 import Login from "./components/Login/Login";
 import Header from "./components/Header/Header";
@@ -117,7 +118,7 @@ import Circulars from "./components/Circulars/Circulars";
 import AddCirculars from "./components/Circulars/AddCirculars";
 import OnlineHomeServices from "./components/OnlineHomeServices/OnlineHomeServices";
 import AddOnlineHomeServices from "./components/OnlineHomeServices/AddOnlineHomeServices";
-import PhotosGallery from "./components/PhotosGallery/PhotosGalllery";
+import PhotosGallery from "./components/PhotosGallery/PhotosGallery";
 import AddCategory from "./components/PhotosGallery/AddCategory";
 import AddCategoryImage from "./components/PhotosGallery/AddCategoryImages";
 import VideoGallery from "./components/VideoGallery/VideoGallery";
@@ -155,6 +156,7 @@ import AddHelp from "./components/Footer/AddHelp";
 import AddOnlineServices from "./components/Footer/AddOnlineServices";
 import ViewProfile from "./components/Profile/ViewProfile";
 import EditProfile from "./components/Profile/EditProfile";
+import AddTableHeading from "./components/AdministrativeStructure/AddTableHeading";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(
@@ -292,6 +294,7 @@ function App() {
 
                     {/* Administrative Wings */}
                     <Route path="/administrative-structure" element={<AdministrativeStructure />} />
+                    <Route path="/add-table-heading" element={<AddTableHeading />} />
                     <Route path="/add-structure-tab1" element={<AddStructureTab1 />} />
                     <Route path="/add-structure-tab2" element={<AddStructureTab2 />} />
                     <Route path="/add-structure-tab3" element={<AddStructureTab3 />} />

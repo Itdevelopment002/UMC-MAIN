@@ -435,6 +435,7 @@ const CitizenCommunication = () => {
                                                         type="file"
                                                         className="form-control"
                                                         id="portalImage"
+                                                        accept="image/*"
                                                         onChange={handleImageChange}
                                                     />
                                                     {imagePreview && (
@@ -508,6 +509,7 @@ const CitizenCommunication = () => {
                                                         type="file"
                                                         className="form-control"
                                                         id="emergencyImage"
+                                                        accept="image/*"
                                                         onChange={handleImageChange}
                                                     />
                                                     {imagePreview && (

@@ -46,6 +46,7 @@ const historyDescRoutes = require('./routes/historyDescRoutes');
 const tourismRoutes = require('./routes/tourismRoutes');
 
 {/* Administrative Wings */}
+const tableHeadingRoutes = require('./routes/tableHeadingRoutes');
 const structureTab1Routes = require('./routes/structureTab1Routes');
 const structureTab2Routes = require('./routes/structureTab2Routes');
 const structureTab3Routes = require('./routes/structureTab3Routes');
@@ -186,6 +187,7 @@ app.use('/api', historyDescRoutes);
 app.use('/api', tourismRoutes);
 
 {/* Administrative Wings */}
+app.use('/api', tableHeadingRoutes);
 app.use('/api', structureTab1Routes);
 app.use('/api', structureTab2Routes);
 app.use('/api', structureTab3Routes);

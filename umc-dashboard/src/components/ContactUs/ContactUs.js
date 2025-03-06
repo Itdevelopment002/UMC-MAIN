@@ -392,6 +392,7 @@ const ContactUs = () => {
                           <label htmlFor="contactIcon">Contact Icon</label>
                           <input
                             type="file"
+                            accept="image/*"
                             className="form-control"
                             id="contactIcon"
                             onChange={handleImageChange}
