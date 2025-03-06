@@ -7,7 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 const MuncipalMeeting = () => {
     const [municipalMeetingsData, setMunicipalMeetingsData] = useState([]);
     const [filteredMeetings, setFilteredMeetings] = useState([]);
-    const [selectedMeetingName, setSelectedMeetingName] = useState(""); // Default to empty, will be set later
+    const [selectedMeetingName, setSelectedMeetingName] = useState("");
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
     const [selectedMeeting, setSelectedMeeting] = useState(null);
@@ -16,10 +16,12 @@ const MuncipalMeeting = () => {
 
     useEffect(() => {
         fetchMunicipalMeetingsData();
+        //eslint-disable-next-line
     }, []);
 
     useEffect(() => {
         filterMeetingsByName(selectedMeetingName);
+        //eslint-disable-next-line
     }, [selectedMeetingName, municipalMeetingsData]);
 
     const fetchMunicipalMeetingsData = async () => {
@@ -27,9 +29,9 @@ const MuncipalMeeting = () => {
             const response = await api.get("/muncipal_meetings");
             setMunicipalMeetingsData(response.data);
             if (response.data.length > 0) {
-                setSelectedMeetingName(response.data[0].name); // Set the default to the first meeting's name
+                setSelectedMeetingName(response.data[0].name);
             }
-            filterMeetingsByName(""); // Show all meetings by default
+            filterMeetingsByName("");
         } catch (error) {
             console.error("Error fetching municipal meetings:", error);
             toast.error("Failed to fetch municipal meetings!");
@@ -39,9 +41,9 @@ const MuncipalMeeting = () => {
     const filterMeetingsByName = (name) => {
         const filtered = name
             ? municipalMeetingsData.filter((meeting) =>
-                meeting.name.toLowerCase() === name.toLowerCase() // Exact match
+                meeting.name.toLowerCase() === name.toLowerCase()
             )
-            : municipalMeetingsData; // If name is empty, show all
+            : municipalMeetingsData;
         setFilteredMeetings(filtered);
     };
 
@@ -72,8 +74,7 @@ const MuncipalMeeting = () => {
                 meeting.id === selectedMeeting.id ? selectedMeeting : meeting
             );
             setMunicipalMeetingsData(updatedMeetings);
-            fetchMunicipalMeetingsData();
-            filterMeetingsByName();
+            filterMeetingsByName(selectedMeetingName);
             setShowEditModal(false);
             toast.success("Municipal meeting updated successfully!");
         } catch (error) {
@@ -98,14 +99,12 @@ const MuncipalMeeting = () => {
     };
 
     const handleMeetingNameChange = (e) => {
-        setSelectedMeetingName(e.target.value); // Update the selected meeting name
+        setSelectedMeetingName(e.target.value);
     };
 
     const indexOfLastMeeting = currentPage * meetingsPerPage;
     const indexOfFirstMeeting = indexOfLastMeeting - meetingsPerPage;
     const currentMeetings = filteredMeetings.slice(indexOfFirstMeeting, indexOfLastMeeting);
-
-    // Get unique meeting names dynamically from the data
     const meetingNames = Array.from(new Set(municipalMeetingsData.map(meeting => meeting.name)));
 
     return (
@@ -274,7 +273,6 @@ const MuncipalMeeting = () => {
                         </div>
                     </div>
 
-                    {/* Edit and Delete Modals */}
                     {showEditModal && (
                         <div
                             className="modal fade show"
@@ -292,18 +290,8 @@ const MuncipalMeeting = () => {
                                     </div>
                                     <div className="modal-body">
                                         <form>
-                                            {/* <div className="mb-3">
-                                                <label className="form-label">Meeting Name</label>
-                                                <input
-                                                    type="text"
-                                                    className="form-control"
-                                                    name="name"
-                                                    value={selectedMeeting?.name || ""}
-                                                    onChange={handleEditChange}
-                                                />
-                                            </div> */}
                                             <div className="mb-3">
-                                            <label className="form-label">
+                                                <label className="form-label">
                                                     Select Language
                                                 </label>
 
@@ -379,7 +367,6 @@ const MuncipalMeeting = () => {
                         </div>
                     )}
 
-                    {/* Delete Modal */}
                     {showDeleteModal && (
                         <div
                             className="modal fade show"

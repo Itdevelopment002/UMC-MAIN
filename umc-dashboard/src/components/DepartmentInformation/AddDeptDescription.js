@@ -167,8 +167,6 @@ const AddDeptDescription = () => {
                                                 )}
                                             </div>
                                         </div>
-
-                                        {/* Description Input */}
                                         <div className="form-group row">
                                             <label className="col-form-label col-md-3">
                                                 Department Description <span className="text-danger">*</span>

@@ -8,6 +8,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 const Initiatives = () => {
   const [initiatives, setInitiatives] = useState([]);
+  const [imagePreview, setImagePreview] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [selectedInitiative, setSelectedInitiative] = useState(null);
@@ -52,6 +53,7 @@ const Initiatives = () => {
     try {
       const response = await api.get(`/initiatives/${initiativeId}`);
       setSelectedInitiative(response.data);
+      setImagePreview(`${baseURL}/${response.data.main_icon_path}`);
       setShowEditModal(true);
     } catch (error) {
       console.error("Error fetching initiative:", error);
@@ -80,6 +82,7 @@ const Initiatives = () => {
 
   const handleCloseEditModal = () => {
     setShowEditModal(false);
+    setImagePreview(null);
     setSelectedInitiative(null);
   };
 
@@ -108,6 +111,7 @@ const Initiatives = () => {
     const file = e.target.files[0];
     if (file) {
       setSelectedInitiative((prevInitiative) => ({ ...prevInitiative, [field]: file }));
+      setImagePreview(URL.createObjectURL(file));
     }
   };
 
@@ -393,8 +397,17 @@ const Initiatives = () => {
                         <input
                           type="file"
                           className="form-control"
+                          accept="image/*"
                           onChange={(e) => handleFileChange(e, "mainIcon")}
                         />
+                        {imagePreview && (
+                          <img
+                            src={imagePreview}
+                            alt="preview"
+                            width="70"
+                            className="mt-2"
+                          />
+                        )}
                       </div>
                     </form>
                   </div>

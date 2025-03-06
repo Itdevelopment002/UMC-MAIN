@@ -10,33 +10,30 @@ const AddCategory = () => {
   const [errors, setErrors] = useState({ categoryName: "", language: "" });
 
   const handleChange = (e) => {
-    const { name, value } = e.target;  
-
+    const { name, value } = e.target;
     if (name === "categoryName") setCategoryName(value);
-    if (name === "language") setLanguage(value); 
-
+    if (name === "language") setLanguage(value);
     setErrors({ categoryName: "", language: "" });
   };
 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     let newErrors = {};
-  
+
     if (!categoryName.trim()) {
       newErrors.categoryName = "Category Name is required.";
     }
-  
+
     if (!language.trim()) {
       newErrors.language = "Language Selection is required.";
     }
-  
+
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return;
     }
-  
+
     try {
       await api.post("/categories", { categoryName, language_code: language });
       navigate("/photo-gallery");
@@ -44,7 +41,7 @@ const AddCategory = () => {
       console.error("Error submitting category data:", error);
     }
   };
-  
+
   return (
     <div>
       <div className="page-wrapper">

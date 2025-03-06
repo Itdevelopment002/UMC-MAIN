@@ -343,6 +343,7 @@ const HomeGallery = () => {
                       <label>Gallery Image</label>
                       <input
                         type="file"
+                        accept="image/*"
                         className="form-control"
                         onChange={handleFileChange}
                       />

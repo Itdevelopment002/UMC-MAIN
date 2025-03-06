@@ -56,8 +56,9 @@ const PhotosGallery = () => {
 
   useEffect(() => {
     fetchCategoryImageData();
+    //eslint-disable-next-line
   }, []);
-
+  
   const handleCategoryChange = (categoryId) => {
     setSelectedCategory(categoryId);
     api.get(`/category-images/${categoryId}`)
@@ -401,6 +402,7 @@ const PhotosGallery = () => {
                             type="file"
                             className="form-control"
                             id="image"
+                            accept="image/*"
                             onChange={handleImageChange}
                           />
                           {imagePreview && (

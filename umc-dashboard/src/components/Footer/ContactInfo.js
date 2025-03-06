@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import GLightbox from "glightbox";
 import "glightbox/dist/css/glightbox.min.css";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import api, { baseURL } from "../api";
 
@@ -112,6 +112,7 @@ const ContactInfo = () => {
     }
   };
 
+  //eslint-disable-next-line
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
@@ -388,6 +389,7 @@ const ContactInfo = () => {
                     <input
                       type="file"
                       className="form-control"
+                      accept="image/*"
                       onChange={handleImageChange}
                     />
                     {imagePreview && (

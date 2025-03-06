@@ -112,7 +112,7 @@ const AddBottomSlider = () => {
                       </div>
                     </div>
                     <div className="form-group row">
-                      <label className="col-form-label col-lg-2">
+                      <label className="col-form-label col-lg-2 col-md-2">
                         Slider Image
                         <span className="text-danger">*</span>
                       </label>
@@ -122,6 +122,7 @@ const AddBottomSlider = () => {
                             type="file"
                             id="userfile"
                             name="websitelogo"
+                            accept="image/*"
                             className={`form-control col-md-12 col-xs-12 ${errors.websitelogo ? "is-invalid" : ""
                               }`}
                             onChange={(e) => {
@@ -137,6 +138,7 @@ const AddBottomSlider = () => {
                             </div>
                           )}
                         </div>
+                        <small className="text-muted">📌 Note: Only image files are allowed (JPG, PNG, etc.).</small>
                       </div>
                     </div>
                     <input

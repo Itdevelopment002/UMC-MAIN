@@ -195,7 +195,7 @@ const SubRti = () => {
                     )
                       .filter(
                         (page) =>
-                          page >= currentPage - 1 && page <= currentPage + 1 // Show current page and its neighbors
+                          page >= currentPage - 1 && page <= currentPage + 1
                       )
                       .map((page) => (
                         <li

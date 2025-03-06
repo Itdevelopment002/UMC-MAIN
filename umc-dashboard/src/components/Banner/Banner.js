@@ -8,6 +8,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 const Banner = () => {
   const [banners, setBanners] = useState([]);
+  const [imagePreview, setImagePreview] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [selectedBanner, setSelectedBanner] = useState(null);
@@ -62,6 +63,7 @@ const Banner = () => {
   const handleEdit = (banner) => {
     setSelectedBanner(banner);
     setShowEditModal(true);
+    setImagePreview(`${baseURL}/${banner.file_path}`);
     setSelectedFile(null);
   };
 
@@ -80,6 +82,7 @@ const Banner = () => {
       });
       fetchBanners();
       toast.success("Banner updated successfully!");
+      setImagePreview(null);
       setShowEditModal(false);
     } catch (error) {
       console.error("Error updating banner:", error);
@@ -92,6 +95,7 @@ const Banner = () => {
     if (e.target.files[0]) {
       const imageUrl = URL.createObjectURL(e.target.files[0]);
       setSelectedBanner({ ...selectedBanner, image: imageUrl });
+      setImagePreview(imageUrl);
     }
   };
 
@@ -332,19 +336,18 @@ const Banner = () => {
                       <label>Banner Image</label>
                       <input
                         type="file"
+                        accept="image/*"
                         className="form-control"
                         onChange={handleFileChange}
                       />
                     </div>
-                    {selectedBanner?.image && (
-                      <div className="form-group">
-                        <img
-                          src={selectedBanner.image}
-                          alt="Preview"
-                          width="20%"
-                          className="img-thumbnail"
-                        />
-                      </div>
+                    {imagePreview && (
+                      <img
+                        src={imagePreview}
+                        alt="preview"
+                        width="50%"
+                        className="mt-2"
+                      />
                     )}
                   </div>
                   <div className="modal-footer">

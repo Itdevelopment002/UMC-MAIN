@@ -85,6 +85,7 @@ const AddBanner = () => {
                           className={`form-control ${errors.bannerName ? "is-invalid" : ""
                             }`}
                           value={bannerName}
+                          placeholder="Enter Banner Name"
                           onChange={(e) => {
                             setBannerName(e.target.value);
                             setErrors((prev) => ({ ...prev, bannerName: "" }));
@@ -98,7 +99,7 @@ const AddBanner = () => {
                       </div>
                     </div>
                     <div className="form-group row">
-                      <label className="col-form-label col-lg-2">
+                      <label className="col-form-label col-lg-2 col-md-2">
                         Banner Image <span className="text-danger">*</span>
                       </label>
                       <div className="col-md-4">
@@ -107,6 +108,7 @@ const AddBanner = () => {
                             type="file"
                             id="image"
                             name="image"
+                            accept="image/*"
                             className={`form-control ${errors.selectedFile ? "is-invalid" : ""
                               }`}
                             onChange={handleFileChange}
@@ -117,6 +119,7 @@ const AddBanner = () => {
                             </div>
                           )}
                         </div>
+                        <small className="text-muted">📌 Note: Only image files are allowed (JPG, PNG, etc.).</small>
                       </div>
                     </div>
                     <input

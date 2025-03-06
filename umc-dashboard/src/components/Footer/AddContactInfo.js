@@ -123,7 +123,7 @@ const AddContactInfo = () => {
                   </div>
                   <form onSubmit={handleSubmit}>
                     <div className="form-group row">
-                      <label className="col-form-label col-md-2">
+                      <label className="col-form-label col-md-2 col-lg-2">
                         Select Language <span className="text-danger">*</span>
                       </label>
                       <div className="col-md-5">
@@ -142,7 +142,7 @@ const AddContactInfo = () => {
                       </div>
                     </div>
                     <div className="form-group row">
-                      <label className="col-form-label col-lg-2">
+                      <label className="col-form-label col-lg-2 col-md-2">
                         Contact Title <span className="text-danger">*</span>
                       </label>
                       <div className="col-md-5">
@@ -163,7 +163,7 @@ const AddContactInfo = () => {
                       </div>
                     </div>
                     <div className="form-group row">
-                      <label className="col-form-label col-lg-2">
+                      <label className="col-form-label col-lg-2 col-md-2">
                         Contact Description <span className="text-danger">*</span>
                       </label>
                       <div className="col-md-5">
@@ -184,7 +184,7 @@ const AddContactInfo = () => {
                       </div>
                     </div>
                     <div className="form-group row">
-                      <label className="col-form-label col-lg-2">
+                      <label className="col-form-label col-lg-2 col-md-2">
                         Contact Icon
                         <span className="text-danger">*</span>
                       </label>
@@ -195,7 +195,7 @@ const AddContactInfo = () => {
                             className={`form-control col-md-12 col-xs-12 userfile  ${errors.image ? "is-invalid" : ""
                               }`}
                             name="image"
-                            placeholder="Enter Contact Icon"
+                            accept="image/*"
                             onChange={handleChange}
                             ref={fileInputRef}
                           />
@@ -203,6 +203,7 @@ const AddContactInfo = () => {
                         {errors.image && (
                           <small className="text-danger">{errors.image}</small>
                         )}
+                        <small className="text-muted">📌 Note: Only image files are allowed (JPG, PNG, etc.).</small>
                       </div>
                     </div>
                     <input

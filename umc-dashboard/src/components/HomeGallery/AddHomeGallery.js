@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import api from "../api";
 import { Link, useNavigate } from "react-router-dom";
-//eslint-disable-next-line
-import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const AddHomeGallery = () => {
@@ -48,12 +46,10 @@ const AddHomeGallery = () => {
       setPhotoName("");
       setSelectedFile(null);
       document.getElementById("image").value = "";
-      toast.success("File uploaded successfully!");
 
       navigate("/home-gallery");
     } catch (error) {
       console.error("Error uploading file:", error);
-      toast.error("Error uploading file. Please try again.");
     }
   };
 
@@ -90,9 +86,8 @@ const AddHomeGallery = () => {
                       <div className="col-md-4">
                         <input
                           type="text"
-                          className={`form-control form-control-md ${
-                            errors.photoName ? "is-invalid" : ""
-                          }`}
+                          className={`form-control form-control-md ${errors.photoName ? "is-invalid" : ""
+                            }`}
                           placeholder="Enter Photo Gallery Name"
                           value={photoName}
                           onChange={(e) => {
@@ -111,7 +106,7 @@ const AddHomeGallery = () => {
                       </div>
                     </div>
                     <div className="form-group row">
-                      <label className="col-form-label col-lg-2">
+                      <label className="col-form-label col-lg-2 col-md-2">
                         Photo Gallery Image{" "}
                         <span className="text-danger">*</span>
                       </label>
@@ -121,9 +116,9 @@ const AddHomeGallery = () => {
                             type="file"
                             id="image"
                             name="image"
-                            className={`form-control form-control-md col-md-12 col-xs-12 userfile ${
-                              errors.selectedFile ? "is-invalid" : ""
-                            }`}
+                            accept="image/*"
+                            className={`form-control form-control-md col-md-12 col-xs-12 userfile ${errors.selectedFile ? "is-invalid" : ""
+                              }`}
                             onChange={(e) => {
                               handleFileChange(e);
                               if (e.target.files[0]) {
@@ -140,6 +135,7 @@ const AddHomeGallery = () => {
                             </div>
                           )}
                         </div>
+                        <small className="text-muted">📌 Note: Only image files are allowed (JPG, PNG, etc.).</small>
                       </div>
                     </div>
                     <input

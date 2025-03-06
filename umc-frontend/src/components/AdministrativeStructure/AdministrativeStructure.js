@@ -10,6 +10,11 @@ const AdministrativeStructure = () => {
   const [structureData2, setStructureData2] = useState([]);
   const [structureData3, setStructureData3] = useState([]);
   const [structureData4, setStructureData4] = useState([]);
+  const [tableData1, setTableData1] = useState([]);
+  const [tableData2, setTableData2] = useState([]);
+  const [tableData3, setTableData3] = useState([]);
+  const [tableData4, setTableData4] = useState([]);
+  const [commissioner, setCommissioner] = useState([]);
   const [bgImage, setBgImage] = useState("");
   const { i18n, t } = useTranslation();
 
@@ -33,12 +38,24 @@ const AdministrativeStructure = () => {
     }
   };
 
+  const fetchCommissioner = async () => {
+    try {
+      const response = await api.get(`/commissioner-details?lang=${i18n.language}`);
+      setCommissioner(response.data);
+    } catch (error) {
+      console.error("Failed to fetch Commissioner Details data!");
+    }
+  };
+
   useEffect(() => {
     fetchStructureData1();
     fetchStructureData2();
     fetchStructureData3();
     fetchStructureData4();
+    fetchTableData();
+    fetchCommissioner();
     fetchHeaderImage();
+    //eslint-disable-next-line
   }, [i18n.language]);
 
   const fetchStructureData1 = async () => {
@@ -77,6 +94,22 @@ const AdministrativeStructure = () => {
     }
   };
 
+  const fetchTableData = async () => {
+    try {
+      const response = await api.get(`/table-heading?lang=${i18n.language}`);
+      const table1 = response.data.filter((item) => item.tablename === "Departments entrusted to Additional Commissioners");
+      const table2 = response.data.filter((item) => item.tablename === "Departments entrusted to the Deputy Commissioner");
+      const table3 = response.data.filter((item) => item.tablename === "Departments assigned to Assistant Commissioner");
+      const table4 = response.data.filter((item) => item.tablename === "Assistant Commissioner Ward Committee");
+      setTableData1(table1);
+      setTableData2(table2);
+      setTableData3(table3);
+      setTableData4(table4);
+    } catch (error) {
+      console.error("Failed to fetch data!");
+    }
+  };
+
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
@@ -107,7 +140,13 @@ const AdministrativeStructure = () => {
             <span className="highlighted-text"> {t("administrative.structure")}</span>
           </h2>
           <hr />
-          <div className="row">
+          <div className="row mt-4">
+            {commissioner.map((item, index) => (
+              <>
+                <h4 className="text-center fw-semibold">{item.coName}</h4>
+                <h5 className="text-center text-muted fw-bold">{item.designation}</h5>
+              </>
+            ))}
             <div className="col-12 col-xl-12 col-lg-12 col-md-12 col-sm-12">
               <div className="row mt-4">
                 <div className="col-12 col-xl-6 col-lg-6 col-md-12 col-sm-12">
@@ -124,7 +163,9 @@ const AdministrativeStructure = () => {
                     <thead className="bg-orange text-white">
                       <tr>
                         <th className="table-heading-styling" style={{ textAlign: "center" }}>{t("administrative.srNo")}</th>
-                        <th className="table-heading-styling" style={{ textAlign: "center" }} colSpan={2}>{t("administrative.table1_2")}</th>
+                        {tableData1.map((item) => (
+                          <th className="table-heading-styling text-center" style={{textWrap: "pretty"}} colSpan={2}>{item.heading}</th>
+                        ))}
                       </tr>
                     </thead>
                     <tbody>
@@ -207,9 +248,9 @@ const AdministrativeStructure = () => {
                     <thead className="bg-orange text-white">
                       <tr>
                         <th className="table-heading-styling" style={{ textAlign: "center" }}>{t("administrative.srNo")}</th>
-                        <th className="table-heading-styling" style={{ textAlign: "center" }}>{t("administrative.table2_1")}</th>
-                        <th className="table-heading-styling" style={{ textAlign: "center" }}>{t("administrative.table2_2")}</th>
-                        <th className="table-heading-styling" style={{ textAlign: "center" }}>{t("administrative.table2_3")}</th>
+                        {tableData2.map((item) => (
+                          <th className="table-heading-styling text-center" style={{textWrap: "pretty"}}>{item.heading}</th>
+                        ))}
                       </tr>
                     </thead>
                     <tbody>
@@ -303,10 +344,9 @@ const AdministrativeStructure = () => {
                     <thead className="bg-orange text-white">
                       <tr>
                         <th className="table-heading-styling" style={{ textAlign: "center", textWrap: 'pretty' }}>{t("administrative.srNo")}</th>
-                        <th className="table-heading-styling" style={{ textAlign: "center", textWrap: 'pretty' }}>{t("administrative.table3_1")}</th>
-                        <th className="table-heading-styling" style={{ textAlign: "center", textWrap: 'pretty' }}>{t("administrative.table3_2")}</th>
-                        <th className="table-heading-styling" style={{ textAlign: "center", textWrap: 'pretty' }}>{t("administrative.table3_3")}</th>
-                        <th className="table-heading-styling" style={{ textAlign: "center", textWrap: 'pretty' }}>{t("administrative.table3_4")}</th>
+                        {tableData3.map((item) => (
+                          <th className="table-heading-styling text-center" style={{textWrap: "pretty"}}>{item.heading}</th>
+                        ))}
                       </tr>
                     </thead>
                     <tbody>
@@ -405,8 +445,9 @@ const AdministrativeStructure = () => {
                   <table className="table table-bordered table-responsive shadow mt-4">
                     <thead className="bg-orange text-white">
                       <tr>
-                        <th className="table-heading-styling" style={{ textAlign: "center" }}>{t("administrative.table4_1")}</th>
-                        <th className="table-heading-styling" style={{ textAlign: "center" }}>{t("administrative.table4_2")}</th>
+                        {tableData4.map((item) => (
+                          <th className="table-heading-styling text-center" style={{textWrap: "pretty"}}>{item.heading}</th>
+                        ))}
                       </tr>
                     </thead>
                     <tbody>

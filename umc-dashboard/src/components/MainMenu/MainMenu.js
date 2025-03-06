@@ -150,7 +150,7 @@ const MainMenu = () => {
                     </div>
                   </div>
                   <div className="table-responsive">
-                    <table className="table table-bordered m-b-0" style={{ tableLayout: "fixed" }}>
+                    <table className="table table-bordered m-b-0">
                       <colgroup>
                         <col style={{ width: "10%" }} />
                         <col style={{ width: "20%" }} />
@@ -161,29 +161,29 @@ const MainMenu = () => {
                       </colgroup>
                       <thead>
                         <tr>
-                          <th className="text-center">Sr. No.</th>
-                          <th>Main Menu</th>
-                          <th>Main Menu Link</th>
-                          <th>Sub Menu</th>
-                          <th>Sub Menu Link</th>
-                          <th className="text-center">Action</th>
+                          <th className="text-center" style={{ textWrap: "pretty" }}>Sr. No.</th>
+                          <th style={{ textWrap: "pretty" }}>Main Menu</th>
+                          <th style={{ textWrap: "pretty" }}>Main Menu Link</th>
+                          <th style={{ textWrap: "pretty" }}>Sub Menu</th>
+                          <th style={{ textWrap: "pretty" }}>Sub Menu Link</th>
+                          <th className="text-center" style={{ textWrap: "pretty" }}>Action</th>
                         </tr>
                       </thead>
                       <tbody>
                         {currentItems.map((item, index) => (
                           <React.Fragment key={item.mainMenuId}>
                             <tr>
-                              <td className="text-center">{indexOfFirstItem + index + 1}</td>
-                              <td style={{ wordBreak: "break-word", whiteSpace: "normal" }}>{item.mainMenu}</td>
-                              <td style={{ wordBreak: "break-word", whiteSpace: "normal" }}>
+                              <td className="text-center" style={{ textWrap: "pretty" }}>{indexOfFirstItem + index + 1}</td>
+                              <td style={{ textWrap: "pretty" }}>{item.mainMenu}</td>
+                              <td style={{ textWrap: "pretty" }}>
                                 {item.mainMenuLink}
                               </td>
-                              <td style={{ wordBreak: "break-word", whiteSpace: "normal" }}>
+                              <td style={{ textWrap: "pretty" }}>
                                 {item.subMenus && item.subMenus.length > 0
                                   ? item.subMenus[0].subMenu
                                   : "-"}
                               </td>
-                              <td style={{ wordBreak: "break-word", whiteSpace: "normal" }}>
+                              <td style={{ textWrap: "pretty" }}>
                                 {item.subMenus && item.subMenus.length > 0
                                   ? item.subMenus[0].subLink
                                   : "-"}
@@ -195,6 +195,7 @@ const MainMenu = () => {
                                     : 1
                                 }
                                 className="text-center"
+                                style={{ textWrap: "pretty" }}
                               >
                                 <button
                                   className="btn btn-success btn-sm m-t-10"
@@ -267,7 +268,6 @@ const MainMenu = () => {
             </div>
           </div>
 
-          {/* Edit Modal */}
           {showEditModal && (
             <div
               className="modal fade show"
@@ -414,7 +414,6 @@ const MainMenu = () => {
             </div>
           )}
 
-          {/* Delete Modal */}
           {showDeleteModal && (
             <div
               className="modal fade show"

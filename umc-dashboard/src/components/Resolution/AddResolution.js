@@ -106,7 +106,7 @@ const AddResolution = () => {
                     </div>
                   </div>
                   <form onSubmit={handleSubmit}>
-                  <div className="form-group row">
+                    <div className="form-group row">
                       <label className="col-form-label col-md-2">
                         Select Language <span className="text-danger">*</span>
                       </label>

@@ -11,11 +11,10 @@ const Tourism = () => {
     const [currentImages, setCurrentImages] = useState([]);
     const [removedImages, setRemovedImages] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 5;
-
     const [selectedGarden, setSelectedGarden] = useState({ main_image: null });
     const [selectedFiles, setSelectedFiles] = useState([]);
     const [objectURLs, setObjectURLs] = useState({ mainImageURL: null, galleryURLs: [] });
+    const itemsPerPage = 5;
 
     const handleMainImageChange = (e) => {
         const newMainImage = e.target.files[0];
@@ -44,6 +43,7 @@ const Tourism = () => {
             }));
         }
     };
+
     const handleRemoveMainImage = () => {
         if (objectURLs.mainImageURL) {
             URL.revokeObjectURL(objectURLs.mainImageURL);
@@ -54,10 +54,7 @@ const Tourism = () => {
 
     const handleRemoveImage = (index) => {
         const updatedFiles = selectedFiles.filter((_, i) => i !== index);
-
-        // Revoke the URL for the removed file
         URL.revokeObjectURL(objectURLs.galleryURLs[index]);
-
         setSelectedFiles(updatedFiles);
         setObjectURLs((prev) => ({
             ...prev,
@@ -66,7 +63,6 @@ const Tourism = () => {
     };
 
     useEffect(() => {
-        // Cleanup object URLs on unmount
         return () => {
             if (objectURLs.mainImageURL) {
                 URL.revokeObjectURL(objectURLs.mainImageURL);
@@ -74,10 +70,6 @@ const Tourism = () => {
             objectURLs.galleryURLs.forEach((url) => URL.revokeObjectURL(url));
         };
     }, [objectURLs]);
-
-
-
-
 
     useEffect(() => {
         const lightbox = GLightbox({ selector: ".glightbox" });
@@ -104,16 +96,13 @@ const Tourism = () => {
     const handleEdit = (garden) => {
         setSelectedGarden(garden);
         setSelectedFiles([]);
-
-        // Safely parse gallery images, fallback to an empty array if parsing fails or if gallery is undefined
         try {
             const parsedImages = garden.gallery ? JSON.parse(garden.gallery) : [];
             setCurrentImages(parsedImages);
         } catch (error) {
             console.error("Error parsing gallery images:", error);
-            setCurrentImages([]); // Fallback to an empty array if parsing fails
+            setCurrentImages([]);
         }
-
         setRemovedImages([]);
         setShowEditModal(true);
     };
@@ -131,44 +120,31 @@ const Tourism = () => {
         setRemovedImages([]);
     };
 
-
     const handleSaveEdit = async () => {
         try {
             const formData = new FormData();
-
-            // Append basic details
             formData.append("name", selectedGarden.name);
             formData.append("address", selectedGarden.address);
             formData.append("hours", selectedGarden.hours);
             formData.append("description", selectedGarden.description);
             formData.append("locationLink", selectedGarden.location_link);
             formData.append("language_code", selectedGarden.language_code);
-
-            // Handle main image
             if (selectedGarden?.main_image) {
                 formData.append("main_image", selectedGarden.main_image);
             }
 
-            // Handle existing images
             currentImages.forEach((img) => {
                 if (!removedImages.includes(img)) {
                     formData.append("gallery", img);
                 }
             });
 
-            // Handle newly added images
             selectedFiles.forEach((file) => {
-                formData.append("gallery", file); // Include new images
+                formData.append("gallery", file);
             });
-
-            // API call to update the data
             await api.put(`/tourism/${selectedGarden.id}`, formData);
-
-            // Fetch updated list
             const response = await api.get("/tourism");
             setGardensData(response.data);
-
-            // Close modal
             setShowEditModal(false);
         } catch (error) {
             console.error("Error saving garden changes:", error);
@@ -186,17 +162,6 @@ const Tourism = () => {
             console.error("Error deleting garden:", error);
         }
     };
-
-    // const handleRemoveImage = (image) => {
-    //     if (currentImages.includes(image)) {
-    //         setRemovedImages([...removedImages, image]);
-    //         setCurrentImages(currentImages.filter((img) => img !== image));
-    //     } else {
-    //         setSelectedFiles(
-    //             selectedFiles.filter((file) => file.name !== image.name)
-    //         );
-    //     }
-    // };
 
     const totalPages = Math.ceil(gardensData.length / itemsPerPage);
     const paginatedData = gardensData.slice(
@@ -256,8 +221,6 @@ const Tourism = () => {
                                                     <th style={{ width: '10%' }} className="text-center">Action</th>
                                                 </tr>
                                             </thead>
-
-
                                             <tbody>
                                                 {paginatedData.map((tourism, index) => (
                                                     <tr key={tourism.id}>
@@ -278,7 +241,6 @@ const Tourism = () => {
                                                                 style={{ width: "50px", height: "50px" }}
                                                             />
                                                         </td>
-
                                                         <td className="text-center">
                                                             <div className="d-flex flex-wrap">
                                                                 {JSON.parse(tourism.gallery).map((img, imgIndex) => (
@@ -337,7 +299,6 @@ const Tourism = () => {
                         </div>
                     </div>
 
-                    {/* Delete Modal */}
                     <div
                         className={`modal fade ${showDeleteModal ? "show" : ""}`}
                         style={{ display: showDeleteModal ? "block" : "none" }}
@@ -367,14 +328,13 @@ const Tourism = () => {
                         </div>
                     </div>
 
-                    {/* Edit Modal */}
                     <div
                         className={`modal fade ${showEditModal ? "show" : ""}`}
                         id="editModal"
                         tabIndex="-1"
                         aria-labelledby="editModalLabel"
                         aria-hidden={!showEditModal}
-                        style={{ display: showEditModal ? "block" : "none" }} // This forces the modal to be shown/hidden
+                        style={{ display: showEditModal ? "block" : "none" }}
                     >
                         <div className="modal-dialog">
                             <div className="modal-content">
@@ -385,16 +345,16 @@ const Tourism = () => {
                                     <button
                                         type="button"
                                         className="btn-close"
-                                        onClick={handleCloseEditModal}  // Close the modal on click
+                                        onClick={handleCloseEditModal}
                                         aria-label="Close"
                                     ></button>
                                 </div>
                                 <div
                                     className="modal-body"
                                     style={{
-                                        maxHeight: "500px", // Adjust this value as needed
+                                        maxHeight: "500px",
                                         overflowY: "auto",
-                                        scrollbarWidth: "thin"  // Enable vertical scrolling
+                                        scrollbarWidth: "thin"
                                     }}
                                 >
                                     <div className="form-group">
@@ -486,7 +446,6 @@ const Tourism = () => {
                                             }
                                         />
                                     </div>
-
                                     <div className="form-group">
                                         <label>Main Image</label>
                                         <div className="d-flex flex-column">
@@ -514,9 +473,9 @@ const Tourism = () => {
                                                 type="file"
                                                 onChange={handleMainImageChange}
                                                 className="form-control"
+                                                accept="image/*"
                                             />
                                         </div>
-
                                         <div className="form-group">
                                             <label>Gallery</label>
                                             <input
@@ -524,6 +483,7 @@ const Tourism = () => {
                                                 multiple
                                                 onChange={handleFileChange}
                                                 className="form-control"
+                                                accept="image/*"
                                             />
                                             <div className="d-flex flex-wrap mt-2">
                                                 {objectURLs.galleryURLs.map((url, index) => (
@@ -569,15 +529,6 @@ const Tourism = () => {
                             </div>
                         </div>
                     </div>
-
-
-
-
-
-
-
-
-
                 </div>
             </div>
         </>

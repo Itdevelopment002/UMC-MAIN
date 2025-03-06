@@ -17,6 +17,7 @@ const ViewProfile = () => {
 
     useEffect(() => {
         fetchUser();
+        //eslint-disable-next-line
     }, [id]);
 
     const handleLogout = () => {
