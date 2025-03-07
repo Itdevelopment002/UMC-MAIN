@@ -118,8 +118,8 @@ const Navbar = () => {
 
     const renderDropdown = (menu) => {
         const dropdownClass = generateDropdownClass(menu.mainMenu);
-        if (menu.mainMenu === "About UMC" || menu.mainMenu === "Departments" || menu.mainMenu === "Corporation" || menu.mainMenu === "Online Services" || menu.mainMenu === "उ. म. पा. बद्दल" || menu.mainMenu === "विभाग" || menu.mainMenu === "महानगरपालिका" || menu.mainMenu === "ऑनलाइन सेवा") {
-            const columnCount = (menu.mainMenu === "About UMC" || menu.mainMenu === "Online Services" || menu.mainMenu === "ऑनलाइन सेवा" || menu.mainMenu === "उ. म. पा. बद्दल") ? 2 : 3;
+        if (menu.mainMenu === "Departments" || menu.mainMenu === "Corporation" || menu.mainMenu === "Online Services" || menu.mainMenu === "विभाग" || menu.mainMenu === "महानगरपालिका" || menu.mainMenu === "ऑनलाइन सेवा") {
+            const columnCount = (menu.mainMenu === "Online Services" || menu.mainMenu === "ऑनलाइन सेवा") ? 2 : 3;
             const columns = splitIntoColumns(menu.subMenus, columnCount);
             return (
                 <li className={`nav-item dropdown ${dropdownClass} ${activeLink === menu.mainMenu ? "active" : ""}`}>
