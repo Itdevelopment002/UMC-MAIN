@@ -69,10 +69,7 @@ const Tenders = () => {
         issue_date: formattedIssueDate,
         language_code: selectedTender.language_code,
       });
-      const updatedTender = tender.map((tender) =>
-        tender.id === selectedTender.id ? selectedTender : tender
-      );
-      setTender(updatedTender);
+      fetchTenders();
       setShowEditModal(false);
       toast.success("Tender and Quotation updated successfully!");
     } catch (error) {

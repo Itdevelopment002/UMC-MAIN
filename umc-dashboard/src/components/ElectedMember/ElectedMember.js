@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import api from "../api";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Flatpickr from "react-flatpickr";
+import "flatpickr/dist/themes/material_blue.css";
 
 const ElectedMember = () => {
     const [electeddata, setElecteddata] = useState([]);
@@ -19,7 +21,12 @@ const ElectedMember = () => {
     const fetchElectedData = async () => {
         try {
             const response = await api.get("/elected_data");
-            setElecteddata(response.data.reverse());
+            const sortedData = response.data.sort((a, b) => {
+                const dateA = a.issue_date ? new Date(a.issue_date) : new Date(0);
+                const dateB = b.issue_date ? new Date(b.issue_date) : new Date(0);
+                return dateB - dateA;
+            });
+            setElecteddata(sortedData);
         } catch (error) {
             console.error("Error fetching elected member data:", error);
             toast.error("Failed to fetch elected member data!");
@@ -39,16 +46,17 @@ const ElectedMember = () => {
     };
 
     const handleEditSave = async () => {
+        const formattedIssueDate = selectedServices.issue_date
+            ? formatDate(selectedServices.issue_date)
+            : "";
         try {
             await api.put(`/elected_data/${selectedServices.id}`, {
                 heading: selectedServices.heading,
                 link: selectedServices.link,
+                issue_date: formattedIssueDate,
                 language_code: selectedServices.language_code,
             });
-            const updatedServices = electeddata.map((services) =>
-                services.id === selectedServices.id ? selectedServices : services
-            );
-            setElecteddata(updatedServices);
+            fetchElectedData();
             setShowEditModal(false);
             toast.success("Elected member data updated successfully!");
         } catch (error) {
@@ -75,6 +83,14 @@ const ElectedMember = () => {
     const indexOfLastServices = currentPage * servicesPerPage;
     const indexOfFirstServices = indexOfLastServices - servicesPerPage;
     const currentServices = electeddata.slice(indexOfFirstServices, indexOfLastServices);
+
+    const formatDate = (date) => {
+        const d = new Date(date);
+        const day = String(d.getDate()).padStart(2, "0");
+        const month = String(d.getMonth() + 1).padStart(2, "0");
+        const year = d.getFullYear();
+        return `${day}-${month}-${year}`;
+    };
 
     return (
         <>
@@ -115,6 +131,7 @@ const ElectedMember = () => {
                                                     <th width="10%" className="text-center">Sr. No.</th>
                                                     <th>Heading</th>
                                                     <th>PDF Link</th>
+                                                    <th width="20%" className="text-center">Issue Date</th>
                                                     <th width="15%" className="text-center">Action</th>
                                                 </tr>
                                             </thead>
@@ -134,6 +151,15 @@ const ElectedMember = () => {
                                                             >
                                                                 {service.link}
                                                             </Link>
+                                                        </td>
+                                                        <td className="text-center">
+                                                            {new Date(service.issue_date)
+                                                                .toLocaleDateString("en-GB", {
+                                                                    day: "2-digit",
+                                                                    month: "2-digit",
+                                                                    year: "numeric",
+                                                                })
+                                                                .replace(/\//g, "-")}
                                                         </td>
                                                         <td className="text-center">
                                                             <button
@@ -252,6 +278,20 @@ const ElectedMember = () => {
                                                     name="link"
                                                     value={selectedServices?.link || ""}
                                                     onChange={handleEditChange}
+                                                />
+                                            </div>
+                                            <div className="mb-3">
+                                                <label className="form-label">Issue Date</label>
+                                                <Flatpickr
+                                                    value={selectedServices?.issue_date || ""}
+                                                    onChange={(date) =>
+                                                        setSelectedServices({
+                                                            ...selectedServices,
+                                                            issue_date: date[0],
+                                                        })
+                                                    }
+                                                    className="form-control"
+                                                    options={{ dateFormat: "d-m-Y" }}
                                                 />
                                             </div>
                                         </form>

@@ -35,7 +35,12 @@ const Circular = () => {
     const fetchData = async () => {
         try {
             const response = await api.get("/circular-info");
-            setCircularData(response.data);
+            const sortedData = response.data.sort((a, b) => {
+                const dateA = a.publish_date ? new Date(a.publish_date) : new Date(0);
+                const dateB = b.publish_date ? new Date(b.publish_date) : new Date(0);
+                return dateB - dateA;
+              });
+            setCircularData(sortedData);
         } catch (error) {
             console.error("Error fetching data", error);
         }

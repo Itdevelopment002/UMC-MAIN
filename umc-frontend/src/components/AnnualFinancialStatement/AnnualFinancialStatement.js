@@ -28,7 +28,12 @@ const AnnualFinancialStatement = () => {
     const fetchAnnual = async () => {
         try {
             const response = await api.get(`/annual-finance?lang=${i18n.language}`);
-            setAnnualData(response.data);
+            const sortedData = response.data.sort((a, b) => {
+                const dateA = a.issue_date ? new Date(a.issue_date) : new Date(0);
+                const dateB = b.issue_date ? new Date(b.issue_date) : new Date(0);
+                return dateB - dateA;
+            });
+            setAnnualData(sortedData);
         } catch (error) {
             console.error("Error fetching Annual:", error);
         }
@@ -36,7 +41,7 @@ const AnnualFinancialStatement = () => {
 
     const totalPages = Math.ceil(annualData.length / itemsPerPage);
     const startIndex = (currentPage - 1) * itemsPerPage;
-    const currentData = filteredData.reverse().slice(startIndex, startIndex + itemsPerPage);
+    const currentData = filteredData.slice(startIndex, startIndex + itemsPerPage);
 
     const handlePageChange = (pageNumber) => {
         if (pageNumber >= 1 && pageNumber <= totalPages) {

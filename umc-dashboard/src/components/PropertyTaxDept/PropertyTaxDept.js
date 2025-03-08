@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import api from "../api";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Flatpickr from "react-flatpickr";
+import "flatpickr/dist/themes/material_blue.css";
 
 const PropertyTaxDept = () => {
   const [tax, setTax] = useState([]);
@@ -19,7 +21,12 @@ const PropertyTaxDept = () => {
   const fetchTax = async () => {
     try {
       const response = await api.get("/property-dept");
-      setTax(response.data.reverse());
+      const sortedData = response.data.sort((a, b) => {
+        const dateA = a.issue_date ? new Date(a.issue_date) : new Date(0);
+        const dateB = b.issue_date ? new Date(b.issue_date) : new Date(0);
+        return dateB - dateA;
+      });
+      setTax(sortedData);
     } catch (error) {
       console.error("Error fetching property tax data:", error);
       toast.error("Failed to fetch property tax data!");
@@ -39,16 +46,17 @@ const PropertyTaxDept = () => {
   };
 
   const handleEditSave = async () => {
+    const formattedIssueDate = selectedTax.issue_date
+      ? formatDate(selectedTax.issue_date)
+      : "";
     try {
       await api.put(`/property-dept/${selectedTax.id}`, {
         description: selectedTax.description,
         link: selectedTax.link,
+        issue_date: formattedIssueDate,
         language_code: selectedTax.language_code,
       });
-      const updatedTax = tax.map((tax) =>
-        tax.id === selectedTax.id ? selectedTax : tax
-      );
-      setTax(updatedTax);
+      fetchTax();
       setShowEditModal(false);
       toast.success("Tax updated successfully!");
     } catch (error) {
@@ -75,6 +83,14 @@ const PropertyTaxDept = () => {
   const indexOfLastTax = currentPage * taxPerPage;
   const indexOfFirstTax = indexOfLastTax - taxPerPage;
   const currentTax = tax.slice(indexOfFirstTax, indexOfLastTax);
+
+  const formatDate = (date) => {
+    const d = new Date(date);
+    const day = String(d.getDate()).padStart(2, "0");
+    const month = String(d.getMonth() + 1).padStart(2, "0");
+    const year = d.getFullYear();
+    return `${day}-${month}-${year}`;
+  };
 
   return (
     <div>
@@ -114,6 +130,7 @@ const PropertyTaxDept = () => {
                           <th width="10%" className="text-center">Sr. No.</th>
                           <th>Description</th>
                           <th>Link</th>
+                          <th width="20%" className="text-center">Issue Date</th>
                           <th width="15%" className="text-center">Action</th>
                         </tr>
                       </thead>
@@ -134,6 +151,15 @@ const PropertyTaxDept = () => {
                                 >
                                   {tax.link}
                                 </Link>
+                              </td>
+                              <td className="text-center">
+                                {new Date(tax.issue_date)
+                                  .toLocaleDateString("en-GB", {
+                                    day: "2-digit",
+                                    month: "2-digit",
+                                    year: "numeric",
+                                  })
+                                  .replace(/\//g, "-")}
                               </td>
                               <td className="text-center">
                                 <button
@@ -319,6 +345,20 @@ const PropertyTaxDept = () => {
                           name="link"
                           value={selectedTax?.link || ""}
                           onChange={handleEditChange}
+                        />
+                      </div>
+                      <div className="mb-3">
+                        <label className="form-label">Issue Date</label>
+                        <Flatpickr
+                          value={selectedTax?.issue_date || ""}
+                          onChange={(date) =>
+                            setSelectedTax({
+                              ...selectedTax,
+                              issue_date: date[0],
+                            })
+                          }
+                          className="form-control"
+                          options={{ dateFormat: "d-m-Y" }}
                         />
                       </div>
                     </form>

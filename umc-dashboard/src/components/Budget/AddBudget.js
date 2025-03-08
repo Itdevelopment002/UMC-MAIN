@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../api";
+import Flatpickr from "react-flatpickr";
+import "flatpickr/dist/themes/material_blue.css";
 
 const AddBudget = () => {
   const [heading, setHeading] = useState("");
   const [link, setLink] = useState("");
   const [year, setYear] = useState("");
+  const [issueDate, setIssueDate] = useState("");
   const [newYear, setNewYear] = useState("");
   const [years, setYears] = useState([]);
   const [errors, setErrors] = useState({});
@@ -31,6 +34,14 @@ const AddBudget = () => {
     fetchYears();
   }, []);
 
+  const formatDate = (date) => {
+    const d = new Date(date);
+    const day = String(d.getDate()).padStart(2, "0");
+    const month = String(d.getMonth() + 1).padStart(2, "0");
+    const year = d.getFullYear();
+    return `${day}-${month}-${year}`;
+  };
+
   const validateForm = () => {
     const validationErrors = {};
     if (!language) {
@@ -42,6 +53,10 @@ const AddBudget = () => {
 
     if (!link) {
       validationErrors.link = "Link is required.";
+    }
+    
+    if (!issueDate) {
+      validationErrors.issueDate = "Issue Date is required.";
     }
 
     if (!year) {
@@ -59,13 +74,15 @@ const AddBudget = () => {
       return;
     }
 
-    try {
-      await api.post("/budgets_data", { heading, link, year, language_code: language, });
-      setLanguage("");
+    const formattedDate = formatDate(issueDate);
 
+    try {
+      await api.post("/budgets_data", { heading, link, year, issue_date: formattedDate, language_code: language, });
+      setLanguage("");
       setHeading("");
       setLink("");
       setYear("");
+      setIssueDate("");
       navigate("/budget");
     } catch (error) {
       console.error("Error adding budget data:", error);
@@ -226,6 +243,40 @@ const AddBudget = () => {
                         />
                         {errors.link && (
                           <div className="invalid-feedback">{errors.link}</div>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="form-group row">
+                      <label className="col-form-label col-md-2">
+                        Issue Date <span className="text-danger">*</span>
+                      </label>
+                      <div className="cal-icon col-md-4">
+                        <Flatpickr
+                          id="startDatePicker"
+                          className={`form-control ${errors.issueDate ? "is-invalid" : ""
+                            }`}
+                          placeholder="Select Issue Date"
+                          value={issueDate}
+                          onChange={(date) => {
+                            setIssueDate(date[0]);
+                            if (issueDate) {
+                              setErrors({ ...errors, issueDate: "" });
+                            }
+                          }}
+                          options={{
+                            dateFormat: "d-m-Y",
+                            monthSelectorType: "dropdown",
+                            prevArrow:
+                              '<svg><path d="M10 5L5 10L10 15"></path></svg>',
+                            nextArrow:
+                              '<svg><path d="M5 5L10 10L5 15"></path></svg>',
+                          }}
+                        />
+                        {errors.issueDate && (
+                          <small className="invalid-feedback">
+                            {errors.issueDate}
+                          </small>
                         )}
                       </div>
                     </div>

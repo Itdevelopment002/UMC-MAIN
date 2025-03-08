@@ -3,19 +3,31 @@ import api from "../api";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import Flatpickr from "react-flatpickr";
+import "flatpickr/dist/themes/material_blue.css";
 
 const AddRecruitment = () => {
   const [heading, setHeading] = useState("");
   const [description, setDescription] = useState("");
   const [link, setLink] = useState("");
+  const [issueDate, setIssueDate] = useState("");
   const [language, setLanguage] = useState("");
   const [errors, setErrors] = useState({
     heading: "",
     description: "",
     link: "",
+    issueDate: "",
     language: "",
   });
   const navigate = useNavigate();
+
+  const formatDate = (date) => {
+    const d = new Date(date);
+    const day = String(d.getDate()).padStart(2, "0");
+    const month = String(d.getMonth() + 1).padStart(2, "0");
+    const year = d.getFullYear();
+    return `${day}-${month}-${year}`;
+  };
 
   const validateForm = () => {
     const newErrors = {};
@@ -31,6 +43,9 @@ const AddRecruitment = () => {
     if (!link) {
       newErrors.link = "Job Link is required.";
     }
+    if (!issueDate) {
+      newErrors.issueDate = "Issue Date is required.";
+    }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -42,10 +57,13 @@ const AddRecruitment = () => {
       return;
     }
 
+    const formattedDate = formatDate(issueDate);
+
     const videoData = {
       heading,
       description,
       link,
+      issue_date: formattedDate,
       language_code: language,
     };
 
@@ -54,8 +72,9 @@ const AddRecruitment = () => {
       setDescription("");
       setHeading("");
       setLink("");
+      setIssueDate("");
       setLanguage("");
-      setErrors({ heading: "", description: "", link: "", language: "" });
+      setErrors({ heading: "", description: "", link: "", issueDate: "", language: "" });
       navigate("/recruitment");
     } catch (error) {
       console.error("Failed to add recruitment data. Please try again.");
@@ -190,6 +209,39 @@ const AddRecruitment = () => {
                         {errors.link && (
                           <small className="invalid-feedback">
                             {errors.link}
+                          </small>
+                        )}
+                      </div>
+                    </div>
+                    <div className="form-group row">
+                      <label className="col-form-label col-md-2">
+                        Issue Date <span className="text-danger">*</span>
+                      </label>
+                      <div className="cal-icon col-md-4">
+                        <Flatpickr
+                          id="startDatePicker"
+                          className={`form-control ${errors.issueDate ? "is-invalid" : ""
+                            }`}
+                          placeholder="Select Issue Date"
+                          value={issueDate}
+                          onChange={(date) => {
+                            setIssueDate(date[0]);
+                            if (issueDate) {
+                              setErrors({ ...errors, issueDate: "" });
+                            }
+                          }}
+                          options={{
+                            dateFormat: "d-m-Y",
+                            monthSelectorType: "dropdown",
+                            prevArrow:
+                              '<svg><path d="M10 5L5 10L10 15"></path></svg>',
+                            nextArrow:
+                              '<svg><path d="M5 5L10 10L5 15"></path></svg>',
+                          }}
+                        />
+                        {errors.issueDate && (
+                          <small className="invalid-feedback">
+                            {errors.issueDate}
                           </small>
                         )}
                       </div>
