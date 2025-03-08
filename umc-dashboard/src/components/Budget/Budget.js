@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import api from "../api";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Flatpickr from "react-flatpickr";
+import "flatpickr/dist/themes/material_blue.css";
 
 const Budget = () => {
     const [budgetsData, setBudgetsData] = useState([]);
@@ -31,9 +33,14 @@ const Budget = () => {
     const fetchBudgetsData = async () => {
         try {
             const response = await api.get("/budgets_data");
-            setBudgetsData(response.data);
-            setFilteredBudgets(response.data);
-            const uniqueYears = [...new Set(response.data.map((budget) => budget.year))];
+            const sortedData = response.data.sort((a, b) => {
+                const dateA = a.issue_date ? new Date(a.issue_date) : new Date(0);
+                const dateB = b.issue_date ? new Date(b.issue_date) : new Date(0);
+                return dateB - dateA;
+            });
+            setBudgetsData(sortedData);
+            setFilteredBudgets(sortedData);
+            const uniqueYears = [...new Set(sortedData.map((budget) => budget.year))];
             const sortedUniqueYears = uniqueYears.sort((a, b) => {
                 const yearA = parseInt(a.split("-")[0], 10);
                 const yearB = parseInt(b.split("-")[0], 10);
@@ -62,11 +69,15 @@ const Budget = () => {
     };
 
     const handleEditSave = async () => {
+        const formattedIssueDate = selectedBudget.issue_date
+            ? formatDate(selectedBudget.issue_date)
+            : "";
         try {
             await api.put(`/budgets_data/${selectedBudget.id}`, {
                 year: selectedBudget.year,
                 heading: selectedBudget.heading,
                 link: selectedBudget.link,
+                issue_date: formattedIssueDate,
                 language_code: selectedBudget.language_code,
 
             });
@@ -102,6 +113,14 @@ const Budget = () => {
     const indexOfFirstBudget = indexOfLastBudget - budgetsPerPage;
     const currentBudgets = filteredBudgets.slice(indexOfFirstBudget, indexOfLastBudget);
     const uniqueYears = [...new Set(budgetsData.map((budget) => budget.year))];
+
+    const formatDate = (date) => {
+        const d = new Date(date);
+        const day = String(d.getDate()).padStart(2, "0");
+        const month = String(d.getMonth() + 1).padStart(2, "0");
+        const year = d.getFullYear();
+        return `${day}-${month}-${year}`;
+    };
 
     return (
         <>
@@ -166,6 +185,7 @@ const Budget = () => {
                                                     <th width="10%" className="text-center">Sr. No.</th>
                                                     <th>Heading</th>
                                                     <th>PDF Link</th>
+                                                    <th width="15%" className="text-center">Issue Date</th>
                                                     <th width="15%" className="text-center">Action</th>
                                                 </tr>
                                             </thead>
@@ -185,6 +205,15 @@ const Budget = () => {
                                                             >
                                                                 {budget.link}
                                                             </Link>
+                                                        </td>
+                                                        <td className="text-center">
+                                                            {new Date(budget.issue_date)
+                                                                .toLocaleDateString("en-GB", {
+                                                                    day: "2-digit",
+                                                                    month: "2-digit",
+                                                                    year: "numeric",
+                                                                })
+                                                                .replace(/\//g, "-")}
                                                         </td>
                                                         <td className="text-center">
                                                             <button
@@ -299,6 +328,20 @@ const Budget = () => {
                                                     name="link"
                                                     value={selectedBudget?.link || ""}
                                                     onChange={handleEditChange}
+                                                />
+                                            </div>
+                                            <div className="mb-3">
+                                                <label className="form-label">Issue Date</label>
+                                                <Flatpickr
+                                                    value={selectedBudget?.issue_date || ""}
+                                                    onChange={(date) =>
+                                                        setSelectedBudget({
+                                                            ...selectedBudget,
+                                                            issue_date: date[0],
+                                                        })
+                                                    }
+                                                    className="form-control"
+                                                    options={{ dateFormat: "d-m-Y" }}
                                                 />
                                             </div>
                                         </form>

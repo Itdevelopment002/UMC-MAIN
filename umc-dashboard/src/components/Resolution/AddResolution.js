@@ -69,12 +69,14 @@ const AddResolution = () => {
         Schedule_Date_of_Meeting: formattedDate,
         Adjournment_Notice,
         pdf_link,
+        language_code: language,
       });
       setDepartmentName("");
       setResolutionsNoDate("");
       setScheduleDateOfMeeting("");
       setAdjournmentNotice("");
       setPdfLink("");
+      setLanguage("");
       navigate("/resolution");
     } catch (error) {
       console.error("Error adding resolution:", error);

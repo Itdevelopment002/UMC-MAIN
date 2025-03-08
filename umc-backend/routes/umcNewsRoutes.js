@@ -2,6 +2,11 @@ const express = require("express");
 const router = express.Router();
 const db = require("../config/db.js");
 
+const convertToMySQLDate = (dateString) => {
+  const [day, month, year] = dateString.split("-");
+  return `${year}-${month}-${day}`;
+};
+
 
 router.get("/umc-news", (req, res) => {
   const language = req.query.lang;
@@ -21,9 +26,10 @@ router.get("/umc-news", (req, res) => {
 
 
 router.post("/umc-news", (req, res) => {
-  const { heading, link, language_code } = req.body;
-  const sql = "INSERT INTO umcnews (heading, link, language_code) VALUES (?, ?, ?)";
-  db.query(sql, [heading, link, language_code], (err, result) => {
+  const { heading, link, issue_date, language_code } = req.body;
+  const formattedDate = convertToMySQLDate(issue_date);
+  const sql = "INSERT INTO umcnews (heading, link, issue_date, language_code) VALUES (?, ?, ?, ?)";
+  db.query(sql, [heading, link, formattedDate, language_code], (err, result) => {
     if (err) throw err;
     res.json({ id: result.insertId, heading, link, language_code });
   });
@@ -31,9 +37,10 @@ router.post("/umc-news", (req, res) => {
 
 
 router.put("/umc-news/:id", (req, res) => {
-  const { heading, link, language_code } = req.body;
-  const sql = "UPDATE umcnews SET heading = ?, link = ?, language_code = ? WHERE id = ?";
-  db.query(sql, [heading, link, language_code, req.params.id], (err, result) => {
+  const { heading, link, issue_date, language_code } = req.body;
+  const formattedDate = issue_date ? convertToMySQLDate(issue_date) : null;
+  const sql = "UPDATE umcnews SET heading = ?, link = ?, issue_date = ?, language_code = ? WHERE id = ?";
+  db.query(sql, [heading, link, formattedDate, language_code, req.params.id], (err, result) => {
     if (err) throw err;
     res.json({ success: true });
   });

@@ -2,6 +2,11 @@ const express = require("express");
 const router = express.Router();
 const db = require("../config/db.js");
 
+const convertToMySQLDate = (dateString) => {
+  const [day, month, year] = dateString.split("-");
+  return `${year}-${month}-${day}`;
+};
+
 
 router.get("/muncipal_meetings", (req, res) => {
   const language = req.query.lang;
@@ -22,10 +27,11 @@ router.get("/muncipal_meetings", (req, res) => {
 
 
 router.post("/muncipal_meetings", (req, res) => {
-  const { name, year, pdf_link1, pdf_link2, pdf_link3,language_code } = req.body;
+  const { name, year, pdf_link1, pdf_link2, pdf_link3, issue_date, language_code } = req.body;
+  const formattedDate = convertToMySQLDate(issue_date);
   const sql =
-    "INSERT INTO muncipal_meeting (name, year, pdf_link1, pdf_link2, pdf_link3,language_code) VALUES (?, ?, ?, ?, ?,?)";
-  db.query(sql, [name, year, pdf_link1, pdf_link2, pdf_link3,language_code], (err, result) => {
+    "INSERT INTO muncipal_meeting (name, year, pdf_link1, pdf_link2, pdf_link3, issue_date, language_code) VALUES (?, ?, ?, ?, ?, ?, ?)";
+  db.query(sql, [name, year, pdf_link1, pdf_link2, pdf_link3, formattedDate, language_code], (err, result) => {
     if (err) throw err;
     res.json({
       id: result.insertId,
@@ -41,12 +47,13 @@ router.post("/muncipal_meetings", (req, res) => {
 
 
 router.put("/muncipal_meetings/:id", (req, res) => {
-  const { name, year, pdf_link1, pdf_link2, pdf_link3,language_code } = req.body;
+  const { name, year, pdf_link1, pdf_link2, pdf_link3, issue_date, language_code } = req.body;
+  const formattedDate = issue_date ? convertToMySQLDate(issue_date) : null;
   const sql =
-    "UPDATE muncipal_meeting SET name = ?, year = ?, pdf_link1 = ?, pdf_link2 = ?, pdf_link3 = ? ,language_code = ? WHERE id = ?";
+    "UPDATE muncipal_meeting SET name = ?, year = ?, pdf_link1 = ?, pdf_link2 = ?, pdf_link3 = ? , issue_date = ?, language_code = ? WHERE id = ?";
   db.query(
     sql,
-    [name, year, pdf_link1, pdf_link2, pdf_link3,language_code, req.params.id],
+    [name, year, pdf_link1, pdf_link2, pdf_link3, formattedDate, language_code, req.params.id],
     (err, result) => {
       if (err) throw err;
       res.json({ success: true });

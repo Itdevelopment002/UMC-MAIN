@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import api from "../api";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Flatpickr from "react-flatpickr";
+import "flatpickr/dist/themes/material_blue.css";
 
 const Recruitment = () => {
   const [recruitment, setRecruitment] = useState([]);
@@ -21,7 +23,12 @@ const Recruitment = () => {
   const fetchRecruitment = async () => {
     try {
       const response = await api.get("/recruitment");
-      setRecruitment(response.data.reverse());
+      const sortedData = response.data.sort((a, b) => {
+        const dateA = a.issue_date ? new Date(a.issue_date) : new Date(0);
+        const dateB = b.issue_date ? new Date(b.issue_date) : new Date(0);
+        return dateB - dateA;
+      });
+      setRecruitment(sortedData);
     } catch (error) {
       console.error("Error fetching recruitment:", error);
       toast.error("Error fetching recruitment");
@@ -51,13 +58,16 @@ const Recruitment = () => {
   const handleSaveEdit = async () => {
     try {
       setIsLoading(true);
-      const { heading, description, link, language_code } = selectedRecruitment;
+      const formattedIssueDate = selectedRecruitment.issue_date
+        ? formatDate(selectedRecruitment.issue_date)
+        : "";
 
       await api.put(`/recruitment/${selectedRecruitment.id}`, {
-        heading,
-        description,
-        link,
-        language_code,
+        heading: selectedRecruitment.heading,
+        description: selectedRecruitment.description,
+        link: selectedRecruitment.link,
+        issue_date: formattedIssueDate,
+        language_code: selectedRecruitment.language_code,
       });
       toast.success("Recruitment updated successfully");
       fetchRecruitment();
@@ -102,6 +112,14 @@ const Recruitment = () => {
     currentPageOld * itemsPerPage
   );
 
+  const formatDate = (date) => {
+    const d = new Date(date);
+    const day = String(d.getDate()).padStart(2, "0");
+    const month = String(d.getMonth() + 1).padStart(2, "0");
+    const year = d.getFullYear();
+    return `${day}-${month}-${year}`;
+  };
+
   return (
     <div>
       <div className="page-wrapper">
@@ -145,6 +163,7 @@ const Recruitment = () => {
                           <th width="10%" className="text-center">Sr. No.</th>
                           <th width="35%">Job Description</th>
                           <th width="35%">Job Link</th>
+                          <th width="20%" className="text-center">Issue Date</th>
                           <th width="15%" className="text-center">Action</th>
                         </tr>
                       </thead>
@@ -165,6 +184,15 @@ const Recruitment = () => {
                                 >
                                   {recruitment.link}
                                 </Link>
+                              </td>
+                              <td className="text-center">
+                                {new Date(recruitment.issue_date)
+                                  .toLocaleDateString("en-GB", {
+                                    day: "2-digit",
+                                    month: "2-digit",
+                                    year: "numeric",
+                                  })
+                                  .replace(/\//g, "-")}
                               </td>
                               <td className="text-center">
                                 <button
@@ -247,6 +275,7 @@ const Recruitment = () => {
                           <th width="10%" className="text-center">Sr. No.</th>
                           <th width="35%">Job Description</th>
                           <th width="35%">Job Link</th>
+                          <th width="20%" className="text-center">Issue Date</th>
                           <th width="15%" className="text-center">Action</th>
                         </tr>
                       </thead>
@@ -267,6 +296,15 @@ const Recruitment = () => {
                                 >
                                   {recruitment.link}
                                 </Link>
+                              </td>
+                              <td className="text-center">
+                                {new Date(recruitment.issue_date)
+                                  .toLocaleDateString("en-GB", {
+                                    day: "2-digit",
+                                    month: "2-digit",
+                                    year: "numeric",
+                                  })
+                                  .replace(/\//g, "-")}
                               </td>
                               <td className="text-center">
                                 <button
@@ -460,6 +498,20 @@ const Recruitment = () => {
                               link: e.target.value,
                             })
                           }
+                        />
+                      </div>
+                      <div className="form-group">
+                        <label>Issue Date</label>
+                        <Flatpickr
+                          value={selectedRecruitment?.issue_date || ""}
+                          onChange={(date) =>
+                            setSelectedRecruitment({
+                              ...selectedRecruitment,
+                              issue_date: date[0],
+                            })
+                          }
+                          className="form-control"
+                          options={{ dateFormat: "d-m-Y" }}
                         />
                       </div>
                     </form>

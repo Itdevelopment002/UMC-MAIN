@@ -5,6 +5,8 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import GLightbox from "glightbox";
 import "glightbox/dist/css/glightbox.min.css";
+import Flatpickr from "react-flatpickr";
+import "flatpickr/dist/themes/material_blue.css";
 
 const DepartmentInformation = () => {
     const [selectedDepartmentDescription, setSelectedDepartmentDescription] = useState("");
@@ -78,7 +80,11 @@ const DepartmentInformation = () => {
     const fetchPdfData = async () => {
         try {
             const response = await api.get("/department-pdfs");
-            const sortedData = response.data.reverse().sort((a, b) => a.department.localeCompare(b.department));
+            const sortedData = response.data.sort((a, b) => {
+                const dateA = a.issue_date ? new Date(a.issue_date) : new Date(0);
+                const dateB = b.issue_date ? new Date(b.issue_date) : new Date(0);
+                return dateB - dateA;
+            });
             setPdfData(sortedData);
         } catch (error) {
             toast.error("Failed to fetch pdf data!");
@@ -108,6 +114,14 @@ const DepartmentInformation = () => {
             toast.error("Failed to delete the entry!");
         }
         closeModal();
+    };
+
+    const formatDate = (date) => {
+        const d = new Date(date);
+        const day = String(d.getDate()).padStart(2, "0");
+        const month = String(d.getMonth() + 1).padStart(2, "0");
+        const year = d.getFullYear();
+        return `${day}-${month}-${year}`;
     };
 
     const openEditModal = (item, type) => {
@@ -201,10 +215,12 @@ const DepartmentInformation = () => {
                 fetchHodData();
             }
             else if (modalType === "pdf") {
+                const formattedIssueDate = editData.issue_date ? formatDate(editData.issue_date) : "";
                 await api.put(`/department-pdfs/${selectedItem.id}`, {
                     department: editData.department,
                     heading: editData.heading,
                     link: editData.link,
+                    issue_date: formattedIssueDate,
                     language_code: editData.language_code,
                 });
                 setPdfData(
@@ -933,6 +949,7 @@ const DepartmentInformation = () => {
                                                     <th width="10%" className="text-center">Sr. No.</th>
                                                     <th width="35">PDF Heading</th>
                                                     <th width="35">PDF Link</th>
+                                                    <th width="10%" className="text-center">Issue Date</th>
                                                     <th width="15%" className="text-center">Action</th>
                                                 </tr>
                                             </thead>
@@ -951,6 +968,15 @@ const DepartmentInformation = () => {
                                                                 >
                                                                     {item.link}
                                                                 </Link>
+                                                            </td>
+                                                            <td className="text-center" style={{ wordBreak: "break-word", whiteSpace: "normal" }}>
+                                                                {new Date(item.issue_date)
+                                                                    .toLocaleDateString("en-GB", {
+                                                                        day: "2-digit",
+                                                                        month: "2-digit",
+                                                                        year: "numeric",
+                                                                    })
+                                                                    .replace(/\//g, "-")}
                                                             </td>
                                                             <td className="text-center">
                                                                 <button
@@ -1434,6 +1460,20 @@ const DepartmentInformation = () => {
                                                         onChange={(e) =>
                                                             setEditData({ ...editData, link: e.target.value })
                                                         }
+                                                    />
+                                                </div>
+                                                <div className="form-group">
+                                                    <label htmlFor="name">Issue Date</label>
+                                                    <Flatpickr
+                                                        value={editData.issue_date || ""}
+                                                        onChange={(date) =>
+                                                            setEditData({
+                                                                ...editData,
+                                                                issue_date: date[0],
+                                                            })
+                                                        }
+                                                        className="form-control"
+                                                        options={{ dateFormat: "d-m-Y" }}
                                                     />
                                                 </div>
                                             </>

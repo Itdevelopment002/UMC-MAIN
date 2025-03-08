@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import api from "../api";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import "react-toastify/dist/ReactToastify.css";
+import Flatpickr from "react-flatpickr";
 
 const MuncipalMeeting = () => {
     const [municipalMeetingsData, setMunicipalMeetingsData] = useState([]);
@@ -27,9 +29,14 @@ const MuncipalMeeting = () => {
     const fetchMunicipalMeetingsData = async () => {
         try {
             const response = await api.get("/muncipal_meetings");
-            setMunicipalMeetingsData(response.data);
-            if (response.data.length > 0) {
-                setSelectedMeetingName(response.data[0].name);
+            const sortedData = response.data.sort((a, b) => {
+                const dateA = a.issue_date ? new Date(a.issue_date) : new Date(0);
+                const dateB = b.issue_date ? new Date(b.issue_date) : new Date(0);
+                return dateB - dateA;
+            });
+            setMunicipalMeetingsData(sortedData);
+            if (sortedData.length > 0) {
+                setSelectedMeetingName(sortedData[0].name);
             }
             filterMeetingsByName("");
         } catch (error) {
@@ -60,6 +67,9 @@ const MuncipalMeeting = () => {
     };
 
     const handleEditSave = async () => {
+        const formattedIssueDate = selectedMeeting.issue_date
+            ? formatDate(selectedMeeting.issue_date)
+            : "";
         try {
             await api.put(`/muncipal_meetings/${selectedMeeting.id}`, {
                 name: selectedMeeting.name,
@@ -67,6 +77,7 @@ const MuncipalMeeting = () => {
                 pdf_link1: selectedMeeting.pdf_link1,
                 pdf_link2: selectedMeeting.pdf_link2,
                 pdf_link3: selectedMeeting.pdf_link3,
+                issue_date: formattedIssueDate,
                 language_code: selectedMeeting.language_code,
 
             });
@@ -106,6 +117,14 @@ const MuncipalMeeting = () => {
     const indexOfFirstMeeting = indexOfLastMeeting - meetingsPerPage;
     const currentMeetings = filteredMeetings.slice(indexOfFirstMeeting, indexOfLastMeeting);
     const meetingNames = Array.from(new Set(municipalMeetingsData.map(meeting => meeting.name)));
+
+    const formatDate = (date) => {
+        const d = new Date(date);
+        const day = String(d.getDate()).padStart(2, "0");
+        const month = String(d.getMonth() + 1).padStart(2, "0");
+        const year = d.getFullYear();
+        return `${day}-${month}-${year}`;
+    };
 
     return (
         <>
@@ -163,6 +182,7 @@ const MuncipalMeeting = () => {
                                                     <th width="10%" className="text-center">Sr. No.</th>
                                                     <th>Year</th>
                                                     <th>PDF Links</th>
+                                                    <th width="15%" className="text-center">Issue Date</th>
                                                     <th width="15%" className="text-center">Action</th>
                                                 </tr>
                                             </thead>
@@ -182,6 +202,15 @@ const MuncipalMeeting = () => {
                                                             >
                                                                 {meeting.pdf_link1}
                                                             </Link>
+                                                        </td>
+                                                        <td className="text-center">
+                                                            {new Date(meeting.issue_date)
+                                                                .toLocaleDateString("en-GB", {
+                                                                    day: "2-digit",
+                                                                    month: "2-digit",
+                                                                    year: "numeric",
+                                                                })
+                                                                .replace(/\//g, "-")}
                                                         </td>
                                                         <td rowSpan="3" className="text-center" style={{ textAlign: 'center' }}>
                                                             <button
@@ -342,6 +371,20 @@ const MuncipalMeeting = () => {
                                                     name="pdf_link3"
                                                     value={selectedMeeting?.pdf_link3 || ""}
                                                     onChange={handleEditChange}
+                                                />
+                                            </div>
+                                            <div className="mb-3">
+                                                <label className="form-label">Issue Date</label>
+                                                <Flatpickr
+                                                    value={selectedMeeting?.issue_date || ""}
+                                                    onChange={(date) =>
+                                                        setSelectedMeeting({
+                                                            ...selectedMeeting,
+                                                            issue_date: date[0],
+                                                        })
+                                                    }
+                                                    className="form-control"
+                                                    options={{ dateFormat: "d-m-Y" }}
                                                 />
                                             </div>
                                         </form>

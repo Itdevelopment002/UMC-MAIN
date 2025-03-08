@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import api from "../api";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Flatpickr from "react-flatpickr";
+import "flatpickr/dist/themes/material_blue.css";
 
 const PressNote = () => {
   const [note, setNote] = useState([]);
@@ -19,7 +21,12 @@ const PressNote = () => {
   const fetchNotes = async () => {
     try {
       const response = await api.get("/press-note");
-      setNote(response.data.reverse());
+      const sortedData = response.data.sort((a, b) => {
+        const dateA = a.issue_date ? new Date(a.issue_date) : new Date(0);
+        const dateB = b.issue_date ? new Date(b.issue_date) : new Date(0);
+        return dateB - dateA;
+      });
+      setNote(sortedData);
     } catch (error) {
       console.error("Error fetching note:", error);
       toast.error("Failed to fetch note data!");
@@ -39,16 +46,17 @@ const PressNote = () => {
   };
 
   const handleEditSave = async () => {
+    const formattedIssueDate = selectedNote.issue_date
+      ? formatDate(selectedNote.issue_date)
+      : "";
     try {
       await api.put(`/press-note/${selectedNote.id}`, {
         description: selectedNote.description,
         link: selectedNote.link,
         language_code: selectedNote.language_code,
+        issue_date: formattedIssueDate,
       });
-      const updatedNote = note.map((note) =>
-        note.id === selectedNote.id ? selectedNote : note
-      );
-      setNote(updatedNote);
+      fetchNotes();
       setShowEditModal(false);
       toast.success("Press Note updated successfully!");
     } catch (error) {
@@ -75,6 +83,14 @@ const PressNote = () => {
   const indexOfLastNote = currentPage * notePerPage;
   const indexOfFirstNote = indexOfLastNote - notePerPage;
   const currentNote = note.slice(indexOfFirstNote, indexOfLastNote);
+
+  const formatDate = (date) => {
+    const d = new Date(date);
+    const day = String(d.getDate()).padStart(2, "0");
+    const month = String(d.getMonth() + 1).padStart(2, "0");
+    const year = d.getFullYear();
+    return `${day}-${month}-${year}`;
+  };
 
   return (
     <div>
@@ -114,6 +130,7 @@ const PressNote = () => {
                           <th width="10%" className="text-center">Sr. No.</th>
                           <th>Description</th>
                           <th>Link</th>
+                          <th width="20%" className="text-center">Issue Date</th>
                           <th width="15%" className="text-center">Action</th>
                         </tr>
                       </thead>
@@ -134,6 +151,15 @@ const PressNote = () => {
                                 >
                                   {note.link}
                                 </Link>
+                              </td>
+                              <td className="text-center">
+                                {new Date(note.issue_date)
+                                  .toLocaleDateString("en-GB", {
+                                    day: "2-digit",
+                                    month: "2-digit",
+                                    year: "numeric",
+                                  })
+                                  .replace(/\//g, "-")}
                               </td>
                               <td className="text-center">
                                 <button
@@ -320,6 +346,20 @@ const PressNote = () => {
                           name="link"
                           value={selectedNote?.link || ""}
                           onChange={handleEditChange}
+                        />
+                      </div>
+                      <div className="mb-3">
+                        <label className="form-label">Issue Date</label>
+                        <Flatpickr
+                          value={selectedNote?.issue_date || ""}
+                          onChange={(date) =>
+                            setSelectedNote({
+                              ...selectedNote,
+                              issue_date: date[0],
+                            })
+                          }
+                          className="form-control"
+                          options={{ dateFormat: "d-m-Y" }}
                         />
                       </div>
                     </form>

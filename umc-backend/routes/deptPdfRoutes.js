@@ -2,6 +2,11 @@ const express = require("express");
 const router = express.Router();
 const db = require("../config/db.js");
 
+const convertToMySQLDate = (dateString) => {
+  const [day, month, year] = dateString.split("-");
+  return `${year}-${month}-${day}`;
+};
+
 
 router.get("/department-pdfs", (req, res) => {
   const language = req.query.lang;
@@ -22,9 +27,10 @@ router.get("/department-pdfs", (req, res) => {
 
 
 router.post("/department-pdfs", (req, res) => {
-  const { department, heading, link, language_code } = req.body;
-  const sql = "INSERT INTO deptpdf (department, heading, link, language_code) VALUES (?, ?, ?, ?)";
-  db.query(sql, [department, heading, link, language_code], (err, result) => {
+  const { department, heading, link, issue_date, language_code } = req.body;
+  const formattedDate = convertToMySQLDate(issue_date);
+  const sql = "INSERT INTO deptpdf (department, heading, link, issue_date, language_code) VALUES (?, ?, ?, ?, ?)";
+  db.query(sql, [department, heading, link, formattedDate, language_code], (err, result) => {
     if (err) throw err;
     res.json({ id: result.insertId, department, heading, link, language_code });
   });
@@ -32,9 +38,10 @@ router.post("/department-pdfs", (req, res) => {
 
 
 router.put("/department-pdfs/:id", (req, res) => {
-  const { department, heading, link, language_code } = req.body;
-  const sql = "UPDATE deptpdf SET department = ?, heading = ?, link = ?, language_code = ? WHERE id = ?";
-  db.query(sql, [department, heading, link, language_code, req.params.id], (err, result) => {
+  const { department, heading, link, issue_date, language_code } = req.body;
+  const formattedDate = issue_date ? convertToMySQLDate(issue_date) : null;
+  const sql = "UPDATE deptpdf SET department = ?, heading = ?, link = ?, issue_date = ?, language_code = ? WHERE id = ?";
+  db.query(sql, [department, heading, link, formattedDate, language_code, req.params.id], (err, result) => {
     if (err) throw err;
     res.json({ success: true });
   });

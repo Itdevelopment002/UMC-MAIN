@@ -19,8 +19,13 @@ const MunicipalMeeting = () => {
     useEffect(() => {
         api.get(`/muncipal_meetings?lang=${i18n.language}`)
             .then((response) => {
-                setTableData(response.data);
-                const uniqueNames = [...new Set(response.data.map(item => item.name))];
+                const sortedData = response.data.sort((a, b) => {
+                    const dateA = a.issue_date ? new Date(a.issue_date) : new Date(0);
+                    const dateB = b.issue_date ? new Date(b.issue_date) : new Date(0);
+                    return dateB - dateA;
+                });
+                setTableData(sortedData);
+                const uniqueNames = [...new Set(sortedData.map(item => item.name))];
                 setAvailableButtons(uniqueNames);
 
                 const dynamicHeadersMap = {};

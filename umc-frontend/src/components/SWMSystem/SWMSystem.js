@@ -35,7 +35,12 @@ const SWMSystem = () => {
     const fetchSWMS = async () => {
         try {
             const response = await api.get(`/swms?lang=${i18n.language}`);
-            setSwms(response.data)
+            const sortedData = response.data.sort((a, b) => {
+                const dateA = a.issue_date ? new Date(a.issue_date) : new Date(0);
+                const dateB = b.issue_date ? new Date(b.issue_date) : new Date(0);
+                return dateB - dateA;
+            });
+            setSwms(sortedData)
         } catch (error) {
             console.error("Error fetching swms data", error);
         }
