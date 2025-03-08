@@ -2,6 +2,10 @@ const express = require("express");
 const router = express.Router();
 const db = require("../config/db");
 
+const convertToMySQLDate = (dateString) => {
+  const [day, month, year] = dateString.split("-");
+  return `${year}-${month}-${day}`;
+};
 
 router.get("/recruitment", (req, res) => {
   const language = req.query.lang;
@@ -39,19 +43,19 @@ router.get("/recruitment/:id", (req, res) => {
 
 
 router.post("/recruitment", (req, res) => {
-  const { heading, description, link, language_code } = req.body;
+  const { heading, description, link, issue_date, language_code } = req.body;
 
-  if (!heading || !description || !link || !language_code) {
+  if (!heading || !description || !link || !issue_date || !language_code) {
     return res
       .status(400)
       .json({
         message: "Heading, Language code, Description and Link are required",
       });
   }
-
+  const formattedDate = convertToMySQLDate(issue_date);
   const sql =
-    "INSERT INTO recruitments (heading, description, link, language_code) VALUES (?, ?, ?, ?)";
-  db.query(sql, [heading, description, link, language_code], (err, result) => {
+    "INSERT INTO recruitments (heading, description, link, issue_date, language_code) VALUES (?, ?, ?, ?, ?)";
+  db.query(sql, [heading, description, link, formattedDate, language_code], (err, result) => {
     if (err) {
       console.error("Database error:", err);
       return res.status(500).json({ message: "Database error", error: err });
@@ -65,11 +69,13 @@ router.post("/recruitment", (req, res) => {
 
 router.put("/recruitment/:id", (req, res) => {
   const { id } = req.params;
-  const { heading, description, link, language_code } = req.body;
+  const { heading, description, link, issue_date, language_code } = req.body;
 
   let updateSql = "UPDATE recruitments SET ";
   const updateParams = [];
   const updateFields = [];
+
+  const formattedDate = issue_date ? convertToMySQLDate(issue_date) : null;
 
   if (heading) {
     updateFields.push("heading = ?");
@@ -84,6 +90,11 @@ router.put("/recruitment/:id", (req, res) => {
   if (link) {
     updateFields.push("link = ?");
     updateParams.push(link);
+  }
+
+  if (formattedDate) {
+    updateFields.push("issue_date = ?");
+    updateParams.push(formattedDate);
   }
 
   if (language_code) {

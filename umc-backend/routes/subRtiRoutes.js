@@ -2,6 +2,11 @@ const express = require("express");
 const router = express.Router();
 const db = require("../config/db.js");
 
+const convertToMySQLDate = (dateString) => {
+  const [day, month, year] = dateString.split("-");
+  return `${year}-${month}-${day}`;
+};
+
 
 router.get("/sub-rti", (req, res) => {
   const language = req.query.lang;
@@ -22,9 +27,10 @@ router.get("/sub-rti", (req, res) => {
 
 
 router.post("/sub-rti", (req, res) => {
-  const { description, link, language_code } = req.body;
-  const sql = "INSERT INTO subrti (description, link, language_code) VALUES (?, ?, ?)";
-  db.query(sql, [description, link, language_code], (err, result) => {
+  const { description, link, issue_date, language_code } = req.body;
+  const formattedDate = convertToMySQLDate(issue_date);
+  const sql = "INSERT INTO subrti (description, link, issue_date, language_code) VALUES (?, ?, ?, ?)";
+  db.query(sql, [description, link, formattedDate, language_code], (err, result) => {
     if (err) throw err;
     res.json({ id: result.insertId, description, link, language_code });
   });
@@ -32,9 +38,10 @@ router.post("/sub-rti", (req, res) => {
 
 
 router.put("/sub-rti/:id", (req, res) => {
-  const { description, link, language_code } = req.body;
-  const sql = "UPDATE subrti SET description = ?, link = ?, language_code = ? WHERE id = ?";
-  db.query(sql, [description, link, language_code, req.params.id], (err, result) => {
+  const { description, link, issue_date, language_code } = req.body;
+  const formattedDate = convertToMySQLDate(issue_date);
+  const sql = "UPDATE subrti SET description = ?, link = ?, issue_date = ?, language_code = ? WHERE id = ?";
+  db.query(sql, [description, link, formattedDate, language_code, req.params.id], (err, result) => {
     if (err) throw err;
     res.json({ success: true });
   });

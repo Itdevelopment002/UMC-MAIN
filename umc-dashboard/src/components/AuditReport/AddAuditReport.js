@@ -1,14 +1,25 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import Flatpickr from "react-flatpickr";
+import "flatpickr/dist/themes/material_blue.css";
 import api from "../api";
 
 const AddAuditReport = () => {
   const [name, setName] = useState("");
   const [year, setYear] = useState("");
   const [pdfLink, setPdfLink] = useState("");
+  const [issueDate, setIssueDate] = useState("");
   const [language, setLanguage] = useState("");
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
+
+  const formatDate = (date) => {
+    const d = new Date(date);
+    const day = String(d.getDate()).padStart(2, "0");
+    const month = String(d.getMonth() + 1).padStart(2, "0");
+    const year = d.getFullYear();
+    return `${day}-${month}-${year}`;
+  };
 
   const validateForm = () => {
     const validationErrors = {};
@@ -21,6 +32,10 @@ const AddAuditReport = () => {
 
     if (!year) {
       validationErrors.year = "Year is required.";
+    }
+
+    if (!issueDate) {
+      validationErrors.issueDate = "Issue Date is required.";
     }
 
     if (!pdfLink) {
@@ -38,12 +53,15 @@ const AddAuditReport = () => {
       return;
     }
 
+    const formattedDate = formatDate(issueDate);
+
     try {
       //eslint-disable-next-line
       const response = await api.post("/audit-report", {
         name,
         year,
         pdf_link: pdfLink,
+        issue_date: formattedDate,
         language_code: language,
 
       });
@@ -51,6 +69,7 @@ const AddAuditReport = () => {
       setName("");
       setYear("");
       setPdfLink("");
+      setIssueDate("");
       navigate("/audit-report");
     } catch (error) {
       console.error("Error adding audit report data:", error);
@@ -196,6 +215,39 @@ const AddAuditReport = () => {
                         );
                       }
                     )}
+                    <div className="form-group row">
+                      <label className="col-form-label col-md-2">
+                        Issue Date <span className="text-danger">*</span>
+                      </label>
+                      <div className="cal-icon col-md-4">
+                        <Flatpickr
+                          id="startDatePicker"
+                          className={`form-control ${errors.issueDate ? "is-invalid" : ""
+                            }`}
+                          placeholder="Select Issue Date"
+                          value={issueDate}
+                          onChange={(date) => {
+                            setIssueDate(date[0]);
+                            if (issueDate) {
+                              setErrors({ ...errors, issueDate: "" });
+                            }
+                          }}
+                          options={{
+                            dateFormat: "d-m-Y",
+                            monthSelectorType: "dropdown",
+                            prevArrow:
+                              '<svg><path d="M10 5L5 10L10 15"></path></svg>',
+                            nextArrow:
+                              '<svg><path d="M5 5L10 10L5 15"></path></svg>',
+                          }}
+                        />
+                        {errors.issueDate && (
+                          <small className="invalid-feedback">
+                            {errors.issueDate}
+                          </small>
+                        )}
+                      </div>
+                    </div>
                     <input
                       type="submit"
                       className="btn btn-primary btn-sm mt-3"

@@ -21,7 +21,12 @@ const Agenda = () => {
     const fetchResolutions = async () => {
         try {
             const response = await api.get("/agenda_data");
-            setResolutions(response.data);
+            const sortedData = response.data.sort((a, b) => {
+                const dateA = a.Schedule_Date_of_Meeting ? new Date(a.Schedule_Date_of_Meeting) : new Date(0);
+                const dateB = b.Schedule_Date_of_Meeting ? new Date(b.Schedule_Date_of_Meeting) : new Date(0);
+                return dateB - dateA;
+              });
+            setResolutions(sortedData);
         } catch (error) {
             console.error("Error fetching agenda:", error);
             toast.error("Failed to fetch agenda!");

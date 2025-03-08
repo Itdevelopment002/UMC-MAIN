@@ -1,10 +1,13 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../api";
+import Flatpickr from "react-flatpickr";
+import "flatpickr/dist/themes/material_blue.css";
 
 const AddMuncipalMeeting = () => {
   const [name, setName] = useState("");
   const [year, setYear] = useState("");
+  const [issueDate, setIssueDate] = useState("");
   const [pdfLink1, setPdfLink1] = useState("");
   const [pdfLink2, setPdfLink2] = useState("");
   const [pdfLink3, setPdfLink3] = useState("");
@@ -12,6 +15,14 @@ const AddMuncipalMeeting = () => {
 
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
+
+  const formatDate = (date) => {
+    const d = new Date(date);
+    const day = String(d.getDate()).padStart(2, "0");
+    const month = String(d.getMonth() + 1).padStart(2, "0");
+    const year = d.getFullYear();
+    return `${day}-${month}-${year}`;
+  };
 
   const validateForm = () => {
     const validationErrors = {};
@@ -24,6 +35,10 @@ const AddMuncipalMeeting = () => {
 
     if (!year) {
       validationErrors.year = "Year is required.";
+    }
+
+    if (!issueDate) {
+      validationErrors.issueDate = "Issue Date is required.";
     }
 
     if (!pdfLink1) {
@@ -49,6 +64,8 @@ const AddMuncipalMeeting = () => {
       return;
     }
 
+    const formattedDate = formatDate(issueDate);
+
     try {
       //eslint-disable-next-line
       const response = await api.post("/muncipal_meetings", {
@@ -57,12 +74,14 @@ const AddMuncipalMeeting = () => {
         pdf_link1: pdfLink1,
         pdf_link2: pdfLink2,
         pdf_link3: pdfLink3,
+        issue_date: formattedDate,
         language_code: language,
 
       });
       setLanguage("");
       setName("");
       setYear("");
+      setIssueDate("");
       setPdfLink1("");
       setPdfLink2("");
       setPdfLink3("");
@@ -144,10 +163,10 @@ const AddMuncipalMeeting = () => {
                           <option value="Tree Committee">Tree Committee</option>
                           <option value="Transport Committee">Transport Committee</option>
                           <option value="सर्वसाधारण सभा">सर्वसाधारण सभा</option>
-                          <option value="विशेष सर्वसाधारण सभा">विशेष सर्वसाधारण सभा</option>
+                          <option value="विशेष सभा">विशेष सभा</option>
                           <option value="स्थायी समिती">स्थायी समिती</option>
                           <option value="वृक्ष समिती">वृक्ष समिती</option>
-                          <option value="वाहतूक समिती">वाहतूक समिती</option>
+                          <option value="परिवहन समिती">परिवहन समिती</option>
                         </select>
                         {errors.name && (
                           <div className="invalid-feedback">{errors.name}</div>
@@ -215,6 +234,39 @@ const AddMuncipalMeeting = () => {
                         );
                       }
                     )}
+                    <div className="form-group row">
+                      <label className="col-form-label col-md-2">
+                        Issue Date <span className="text-danger">*</span>
+                      </label>
+                      <div className="cal-icon col-md-4">
+                        <Flatpickr
+                          id="startDatePicker"
+                          className={`form-control ${errors.issueDate ? "is-invalid" : ""
+                            }`}
+                          placeholder="Select Issue Date"
+                          value={issueDate}
+                          onChange={(date) => {
+                            setIssueDate(date[0]);
+                            if (issueDate) {
+                              setErrors({ ...errors, issueDate: "" });
+                            }
+                          }}
+                          options={{
+                            dateFormat: "d-m-Y",
+                            monthSelectorType: "dropdown",
+                            prevArrow:
+                              '<svg><path d="M10 5L5 10L10 15"></path></svg>',
+                            nextArrow:
+                              '<svg><path d="M5 5L10 10L5 15"></path></svg>',
+                          }}
+                        />
+                        {errors.issueDate && (
+                          <small className="invalid-feedback">
+                            {errors.issueDate}
+                          </small>
+                        )}
+                      </div>
+                    </div>
                     <input
                       type="submit"
                       className="btn btn-primary btn-sm mt-3"

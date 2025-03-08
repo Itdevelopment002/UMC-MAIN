@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import api from "../api";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Flatpickr from "react-flatpickr";
+import "flatpickr/dist/themes/material_blue.css";
 
 const UMCNews = () => {
   const [news, setNews] = useState([]);
@@ -19,7 +21,12 @@ const UMCNews = () => {
   const fetchNews = async () => {
     try {
       const response = await api.get("/umc-news");
-      setNews(response.data.reverse());
+      const sortedData = response.data.sort((a, b) => {
+        const dateA = a.issue_date ? new Date(a.issue_date) : new Date(0);
+        const dateB = b.issue_date ? new Date(b.issue_date) : new Date(0);
+        return dateB - dateA;
+      });
+      setNews(sortedData);
     } catch (error) {
       console.error("Error fetching news:", error);
       toast.error("Failed to fetch news data!");
@@ -39,16 +46,17 @@ const UMCNews = () => {
   };
 
   const handleEditSave = async () => {
+    const formattedIssueDate = selectedNews.issue_date
+      ? formatDate(selectedNews.issue_date)
+      : "";
     try {
       await api.put(`/umc-news/${selectedNews.id}`, {
         heading: selectedNews.heading,
         link: selectedNews.link,
+        issue_date: formattedIssueDate,
         language_code: selectedNews.language_code,
       });
-      const updatedNews = news.map((news) =>
-        news.id === selectedNews.id ? selectedNews : news
-      );
-      setNews(updatedNews);
+      fetchNews();
       setShowEditModal(false);
       toast.success("News updated successfully!");
     } catch (error) {
@@ -75,6 +83,14 @@ const UMCNews = () => {
   const indexOfLastNews = currentPage * newsPerPage;
   const indexOfFirstNews = indexOfLastNews - newsPerPage;
   const currentNews = news.slice(indexOfFirstNews, indexOfLastNews);
+
+  const formatDate = (date) => {
+    const d = new Date(date);
+    const day = String(d.getDate()).padStart(2, "0");
+    const month = String(d.getMonth() + 1).padStart(2, "0");
+    const year = d.getFullYear();
+    return `${day}-${month}-${year}`;
+  };
 
   return (
     <div>
@@ -114,6 +130,7 @@ const UMCNews = () => {
                           <th width="10%" className="text-center">Sr. No.</th>
                           <th>News Heading</th>
                           <th>News Link</th>
+                          <th width="20%" className="text-center">Issue Date</th>
                           <th width="15%" className="text-center">Action</th>
                         </tr>
                       </thead>
@@ -128,6 +145,15 @@ const UMCNews = () => {
                               <Link to={news.link} target="_blank" className="text-decoration-none" style={{ color: "#000" }}>
                                 {news.link}
                               </Link>
+                            </td>
+                            <td className="text-center">
+                              {new Date(news.issue_date)
+                                .toLocaleDateString("en-GB", {
+                                  day: "2-digit",
+                                  month: "2-digit",
+                                  year: "numeric",
+                                })
+                                .replace(/\//g, "-")}
                             </td>
                             <td className="text-center">
                               <button
@@ -300,6 +326,20 @@ const UMCNews = () => {
                           name="link"
                           value={selectedNews?.link || ""}
                           onChange={handleEditChange}
+                        />
+                      </div>
+                      <div className="mb-3">
+                        <label className="form-label">Issue Date</label>
+                        <Flatpickr
+                          value={selectedNews?.issue_date || ""}
+                          onChange={(date) =>
+                            setSelectedNews({
+                              ...selectedNews,
+                              issue_date: date[0],
+                            })
+                          }
+                          className="form-control"
+                          options={{ dateFormat: "d-m-Y" }}
                         />
                       </div>
                     </form>

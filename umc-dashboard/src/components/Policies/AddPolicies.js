@@ -1,13 +1,24 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../api";
+import Flatpickr from "react-flatpickr";
+import "flatpickr/dist/themes/material_blue.css";
 
 const AddPolicies = () => {
   const [heading, setHeading] = useState("");
   const [link, setLink] = useState("");
+  const [issueDate, setIssueDate] = useState("");
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
   const [language, setLanguage] = useState("");
+
+  const formatDate = (date) => {
+    const d = new Date(date);
+    const day = String(d.getDate()).padStart(2, "0");
+    const month = String(d.getMonth() + 1).padStart(2, "0");
+    const year = d.getFullYear();
+    return `${day}-${month}-${year}`;
+  };
 
   const validateForm = () => {
     const validationErrors = {};
@@ -16,6 +27,10 @@ const AddPolicies = () => {
     }
     if (!heading) {
       validationErrors.heading = "Heading is required.";
+    }
+
+    if (!issueDate) {
+      validationErrors.issueDate = "Issue Date is required.";
     }
 
     if (!link) {
@@ -33,17 +48,19 @@ const AddPolicies = () => {
       return;
     }
 
+    const formattedDate = formatDate(issueDate);
+
     try {
       //eslint-disable-next-line
       const response = await api.post("/policies_data", {
         heading: heading,
         link: link,
+        issue_date: formattedDate,
         language_code: language,
-
       });
       setLanguage("");
-
       setHeading("");
+      setIssueDate("");
       setLink("");
       navigate("/policies");
     } catch (error) {
@@ -146,6 +163,40 @@ const AddPolicies = () => {
                           <div className="invalid-feedback">
                             {errors.link}
                           </div>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="form-group row mt-3">
+                      <label className="col-form-label col-md-2">
+                        Issue Date <span className="text-danger">*</span>
+                      </label>
+                      <div className="cal-icon col-md-4">
+                        <Flatpickr
+                          id="startDatePicker"
+                          className={`form-control ${errors.issueDate ? "is-invalid" : ""
+                            }`}
+                          placeholder="Select Issue Date"
+                          value={issueDate}
+                          onChange={(date) => {
+                            setIssueDate(date[0]);
+                            if (issueDate) {
+                              setErrors({ ...errors, issueDate: "" });
+                            }
+                          }}
+                          options={{
+                            dateFormat: "d-m-Y",
+                            monthSelectorType: "dropdown",
+                            prevArrow:
+                              '<svg><path d="M10 5L5 10L10 15"></path></svg>',
+                            nextArrow:
+                              '<svg><path d="M5 5L10 10L5 15"></path></svg>',
+                          }}
+                        />
+                        {errors.issueDate && (
+                          <small className="invalid-feedback">
+                            {errors.issueDate}
+                          </small>
                         )}
                       </div>
                     </div>

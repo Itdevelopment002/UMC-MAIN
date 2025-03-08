@@ -20,7 +20,12 @@ const Resolutions = () => {
     const fetchResolutions = async () => {
         try {
             const response = await api.get(`/resolution?lang=${i18n.language}`);
-            setResolutions(response.data);
+            const sortedData = response.data.sort((a, b) => {
+                const dateA = a.Schedule_Date_of_Meeting ? new Date(a.Schedule_Date_of_Meeting) : new Date(0);
+                const dateB = b.Schedule_Date_of_Meeting ? new Date(b.Schedule_Date_of_Meeting) : new Date(0);
+                return dateB - dateA;
+            });
+            setResolutions(sortedData);
         } catch (error) {
             console.error("Error fetching resolutions:", error);
         }
@@ -46,14 +51,14 @@ const Resolutions = () => {
         }
     };
 
+    console.log(resolutions)
+
     const [itemsPerPage, setItemsPerPage] = useState(10);
     const [currentPage, setCurrentPage] = useState(1);
     //eslint-disable-next-line
     const [searchTerm, setSearchTerm] = useState("");
     const totalEntries = resolutions.length;
-    const filteredData = resolutions.filter((item) =>
-        item.Department_Name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    const filteredData = resolutions;
 
     const totalPages = Math.ceil(filteredData.length / itemsPerPage);
     const startIndex = (currentPage - 1) * itemsPerPage;
