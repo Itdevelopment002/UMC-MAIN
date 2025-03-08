@@ -21,7 +21,12 @@ const ElectedMember = () => {
     const fetchElectedData = async () => {
         try {
             const response = await api.get(`/elected_data?lang=${i18n.language}`);
-            setElecteddata(response.data.reverse());
+            const sortedData = response.data.sort((a, b) => {
+                const dateA = a.issue_date ? new Date(a.issue_date) : new Date(0);
+                const dateB = b.issue_date ? new Date(b.issue_date) : new Date(0);
+                return dateB - dateA;
+            });
+            setElecteddata(sortedData);
         } catch (error) {
             console.error("Error fetching elected member data:", error);
         }

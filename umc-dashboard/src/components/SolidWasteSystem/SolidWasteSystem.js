@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import api from "../api";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Flatpickr from "react-flatpickr";
+import "flatpickr/dist/themes/material_blue.css";
 
 const SolidWasteSystem = () => {
   const [swms, setSwms] = useState([]);
@@ -19,7 +21,12 @@ const SolidWasteSystem = () => {
   const fetchSwms = async () => {
     try {
       const response = await api.get("/swms");
-      setSwms(response.data);
+      const sortedData = response.data.sort((a, b) => {
+        const dateA = a.issue_date ? new Date(a.issue_date) : new Date(0);
+        const dateB = b.issue_date ? new Date(b.issue_date) : new Date(0);
+        return dateB - dateA;
+      });
+      setSwms(sortedData);
     } catch (error) {
       console.error("Error fetching swms:", error);
       toast.error("Failed to fetch swms data!");
@@ -39,10 +46,14 @@ const SolidWasteSystem = () => {
   };
 
   const handleEditSave = async () => {
+    const formattedIssueDate = selectedSwms.issue_date
+      ? formatDate(selectedSwms.issue_date)
+      : "";
     try {
       await api.put(`/swms/${selectedSwms.id}`, {
         description: selectedSwms.description,
         link: selectedSwms.link,
+        issue_date: formattedIssueDate,
         language_code: selectedSwms.language_code,
       });
       const updatedSwms = swms.map((swms) =>
@@ -75,6 +86,14 @@ const SolidWasteSystem = () => {
   const indexOfLastSwms = currentPage * swmsPerPage;
   const indexOfFirstSwms = indexOfLastSwms - swmsPerPage;
   const currentSwms = swms.slice(indexOfFirstSwms, indexOfLastSwms);
+
+  const formatDate = (date) => {
+    const d = new Date(date);
+    const day = String(d.getDate()).padStart(2, "0");
+    const month = String(d.getMonth() + 1).padStart(2, "0");
+    const year = d.getFullYear();
+    return `${day}-${month}-${year}`;
+  };
 
   return (
     <div>
@@ -114,6 +133,7 @@ const SolidWasteSystem = () => {
                           <th width="10%" className="text-center">Sr. No.</th>
                           <th>Description</th>
                           <th>Link</th>
+                          <th width="20%" className="text-center">Issue Date</th>
                           <th width="15%" className="text-center">Action</th>
                         </tr>
                       </thead>
@@ -134,6 +154,15 @@ const SolidWasteSystem = () => {
                                 >
                                   {swms.link}
                                 </Link>
+                              </td>
+                              <td className="text-center">
+                                {new Date(swms.issue_date)
+                                  .toLocaleDateString("en-GB", {
+                                    day: "2-digit",
+                                    month: "2-digit",
+                                    year: "numeric",
+                                  })
+                                  .replace(/\//g, "-")}
                               </td>
                               <td className="text-center">
                                 <button
@@ -320,6 +349,20 @@ const SolidWasteSystem = () => {
                           name="link"
                           value={selectedSwms?.link || ""}
                           onChange={handleEditChange}
+                        />
+                      </div>
+                      <div className="mb-3">
+                        <label className="form-label">Issue Date</label>
+                        <Flatpickr
+                          value={selectedSwms?.issue_date || ""}
+                          onChange={(date) =>
+                            setSelectedSwms({
+                              ...selectedSwms,
+                              issue_date: date[0],
+                            })
+                          }
+                          className="form-control"
+                          options={{ dateFormat: "d-m-Y" }}
                         />
                       </div>
                     </form>

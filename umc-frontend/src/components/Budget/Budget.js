@@ -39,7 +39,12 @@ const Budget = () => {
         const fetchData = async () => {
             try {
                 const response = await api.get(`/budgets_data?lang=${i18n.language}`);
-                setBudgetData(response.data);
+                const sortedData = response.data.sort((a, b) => {
+                    const dateA = a.issue_date ? new Date(a.issue_date) : new Date(0);
+                    const dateB = b.issue_date ? new Date(b.issue_date) : new Date(0);
+                    return dateB - dateA;
+                  });
+                setBudgetData(sortedData);
                 setLoading(false);
                 const years = [...new Set(response.data.map(item => item.year))]
                     .sort((a, b) => b.localeCompare(a, undefined, { numeric: true }));
@@ -188,7 +193,7 @@ const Budget = () => {
                                         <tr>
                                             <th className="table-heading-styling text-center" width="8%">{t('departments.sno')}</th>
                                             <th className="table-heading-styling text-start">{t('corporation.budget')}</th>
-                                            <th className="table-heading-styling text-center" width="10%">{t('departments.action')}</th>
+                                            <th className="table-heading-styling text-center" width="20%">{t('departments.action')}</th>
                                         </tr>
                                     </thead>
                                     <tbody>

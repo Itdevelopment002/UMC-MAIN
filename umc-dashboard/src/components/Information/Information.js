@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import api from "../api";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Flatpickr from "react-flatpickr";
+import "flatpickr/dist/themes/material_blue.css";
 
 const Information = () => {
   const [info, setInfo] = useState([]);
@@ -19,7 +21,12 @@ const Information = () => {
   const fetchInfo = async () => {
     try {
       const response = await api.get("/information");
-      setInfo(response.data.reverse());
+      const sortedData = response.data.sort((a, b) => {
+        const dateA = a.issue_date ? new Date(a.issue_date) : new Date(0);
+        const dateB = b.issue_date ? new Date(b.issue_date) : new Date(0);
+        return dateB - dateA;
+      });
+      setInfo(sortedData);
     } catch (error) {
       console.error("Error fetching info:", error);
       toast.error("Failed to fetch info data!");
@@ -39,16 +46,17 @@ const Information = () => {
   };
 
   const handleEditSave = async () => {
+    const formattedIssueDate = selectedInfo.issue_date
+      ? formatDate(selectedInfo.issue_date)
+      : "";
     try {
       await api.put(`/information/${selectedInfo.id}`, {
         heading: selectedInfo.heading,
         link: selectedInfo.link,
+        issue_date: formattedIssueDate,
         language_code: selectedInfo.language_code,
       });
-      const updatedInfo = info.map((info) =>
-        info.id === selectedInfo.id ? selectedInfo : info
-      );
-      setInfo(updatedInfo);
+      fetchInfo();
       setShowEditModal(false);
       toast.success("Information updated successfully!");
     } catch (error) {
@@ -75,6 +83,14 @@ const Information = () => {
   const indexOfLastInfo = currentPage * infoPerPage;
   const indexOfFirstInfo = indexOfLastInfo - infoPerPage;
   const currentInfo = info.slice(indexOfFirstInfo, indexOfLastInfo);
+
+  const formatDate = (date) => {
+    const d = new Date(date);
+    const day = String(d.getDate()).padStart(2, "0");
+    const month = String(d.getMonth() + 1).padStart(2, "0");
+    const year = d.getFullYear();
+    return `${day}-${month}-${year}`;
+  };
 
   return (
     <div>
@@ -114,6 +130,7 @@ const Information = () => {
                           <th width="10%" className="text-center">Sr. No.</th>
                           <th>Heading</th>
                           <th>Link</th>
+                          <th width="20%" className="text-center">Issue Date</th>
                           <th width="15%" className="text-center">Action</th>
                         </tr>
                       </thead>
@@ -128,6 +145,15 @@ const Information = () => {
                               <Link to={info.link} target="_blank" className="text-decoration-none" style={{ color: "#000" }}>
                                 {info.link}
                               </Link>
+                            </td>
+                            <td className="text-center">
+                              {new Date(info.issue_date)
+                                .toLocaleDateString("en-GB", {
+                                  day: "2-digit",
+                                  month: "2-digit",
+                                  year: "numeric",
+                                })
+                                .replace(/\//g, "-")}
                             </td>
                             <td className="text-center">
                               <button
@@ -308,6 +334,20 @@ const Information = () => {
                           name="link"
                           value={selectedInfo?.link || ""}
                           onChange={handleEditChange}
+                        />
+                      </div>
+                      <div className="mb-3">
+                        <label className="form-label">Issue Date</label>
+                        <Flatpickr
+                          value={selectedInfo?.issue_date || ""}
+                          onChange={(date) =>
+                            setSelectedInfo({
+                              ...selectedInfo,
+                              issue_date: date[0],
+                            })
+                          }
+                          className="form-control"
+                          options={{ dateFormat: "d-m-Y" }}
                         />
                       </div>
                     </form>

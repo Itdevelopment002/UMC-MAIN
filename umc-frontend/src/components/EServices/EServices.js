@@ -35,7 +35,12 @@ const EServices = () => {
   const fetchNews = async () => {
     try {
       const response = await api.get(`/umc-news?lang=${i18n.language}`);
-      setUmcNews(response.data.reverse());
+      const sortedData = response.data.sort((a, b) => {
+        const dateA = a.issue_date ? new Date(a.issue_date) : new Date(0);
+        const dateB = b.issue_date ? new Date(b.issue_date) : new Date(0);
+        return dateB - dateA;
+      });
+      setUmcNews(sortedData);
     } catch (error) {
       console.error("Error Fetching umc news!", error);
     }
@@ -44,7 +49,12 @@ const EServices = () => {
   const fetchNotes = async () => {
     try {
       const response = await api.get(`/press-note?lang=${i18n.language}`);
-      setPressNotes(response.data.reverse());
+      const sortedData = response.data.sort((a, b) => {
+        const dateA = a.issue_date ? new Date(a.issue_date) : new Date(0);
+        const dateB = b.issue_date ? new Date(b.issue_date) : new Date(0);
+        return dateB - dateA;
+      });
+      setPressNotes(sortedData);
     } catch (error) {
       console.error("Error Fetching press notes!", error);
     }
@@ -103,6 +113,7 @@ const EServices = () => {
     fetchInformation();
     fetchProjects();
     fetchcitizenServices();
+    //eslint-disable-next-line
   }, [i18n.language]);
 
   const tabData = [
@@ -186,7 +197,7 @@ const EServices = () => {
 
   return (
     <div className="container-fluid mb-4 mt-4">
-      <div className="row" style={{backgroundColor:"#ffffff"}}>
+      <div className="row" style={{ backgroundColor: "#ffffff" }}>
         <div className="col-xl-6 col-lg-6 col-md-12 col-sm-12">
           <div className="e-services-container p-2">
             <div className="tabs-container right-section-font mb-4">

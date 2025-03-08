@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import api from "../api";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Flatpickr from "react-flatpickr";
+import "flatpickr/dist/themes/material_blue.css";
 
 const Policies = () => {
     const [policiesdata, setPoliciesdata] = useState([]);
@@ -19,7 +21,12 @@ const Policies = () => {
     const fetchPoliciesData = async () => {
         try {
             const response = await api.get("/policies_data");
-            setPoliciesdata(response.data);
+            const sortedData = response.data.sort((a, b) => {
+                const dateA = a.issue_date ? new Date(a.issue_date) : new Date(0);
+                const dateB = b.issue_date ? new Date(b.issue_date) : new Date(0);
+                return dateB - dateA;
+            });
+            setPoliciesdata(sortedData);
         } catch (error) {
             console.error("Error fetching quick links:", error);
             toast.error("Failed to fetch quick links!");
@@ -39,17 +46,21 @@ const Policies = () => {
     };
 
     const handleEditSave = async () => {
+        const formattedIssueDate = selectedServices.issue_date
+            ? formatDate(selectedServices.issue_date)
+            : "";
         try {
             await api.put(`/policies_data/${selectedServices.id}`, {
                 heading: selectedServices.heading,
                 link: selectedServices.link,
+                issue_date: formattedIssueDate,
                 language_code: selectedServices.language_code,
 
             });
             const updatedServices = policiesdata.map((services) =>
                 services.id === selectedServices.id ? selectedServices : services
             );
-            setPoliciesdata(updatedServices);
+            fetchPoliciesData();
             setShowEditModal(false);
             toast.success("Policies updated successfully!");
         } catch (error) {
@@ -76,6 +87,14 @@ const Policies = () => {
     const indexOfLastServices = currentPage * servicesPerPage;
     const indexOfFirstServices = indexOfLastServices - servicesPerPage;
     const currentServices = policiesdata.slice(indexOfFirstServices, indexOfLastServices);
+
+    const formatDate = (date) => {
+        const d = new Date(date);
+        const day = String(d.getDate()).padStart(2, "0");
+        const month = String(d.getMonth() + 1).padStart(2, "0");
+        const year = d.getFullYear();
+        return `${day}-${month}-${year}`;
+    };
 
     return (
         <>
@@ -115,7 +134,8 @@ const Policies = () => {
                                                 <tr>
                                                     <th width="10%" className="text-center">Sr. No.</th>
                                                     <th width="35%">Heading</th>
-                                                    <th width="35%">PDF Link</th>
+                                                    <th>PDF Link</th>
+                                                    <th width="15%" className="text-center" style={{textWrap: "pretty"}}>Issue Date</th>
                                                     <th width="15%" className="text-center">Action</th>
                                                 </tr>
                                             </thead>
@@ -126,7 +146,7 @@ const Policies = () => {
                                                             {index + 1 + (currentPage - 1) * servicesPerPage}
                                                         </td>
                                                         <td>{service.heading}</td>
-                                                        <td>
+                                                        <td style={{textWrap: "pretty"}}>
                                                             <Link
                                                                 to={service.link !== "#" ? `${service.link}` : "#"}
                                                                 target={service.link !== "#" ? "_blank" : ""}
@@ -135,6 +155,15 @@ const Policies = () => {
                                                             >
                                                                 {service.link}
                                                             </Link>
+                                                        </td>
+                                                        <td className="text-center">
+                                                            {new Date(service.issue_date)
+                                                                .toLocaleDateString("en-GB", {
+                                                                    day: "2-digit",
+                                                                    month: "2-digit",
+                                                                    year: "numeric",
+                                                                })
+                                                                .replace(/\//g, "-")}
                                                         </td>
                                                         <td className="text-center">
                                                             <button
@@ -253,6 +282,20 @@ const Policies = () => {
                                                     name="link"
                                                     value={selectedServices?.link || ""}
                                                     onChange={handleEditChange}
+                                                />
+                                            </div>
+                                            <div className="mb-3">
+                                                <label className="form-label">Issue Date</label>
+                                                <Flatpickr
+                                                    value={selectedServices?.issue_date || ""}
+                                                    onChange={(date) =>
+                                                        setSelectedServices({
+                                                            ...selectedServices,
+                                                            issue_date: date[0],
+                                                        })
+                                                    }
+                                                    className="form-control"
+                                                    options={{ dateFormat: "d-m-Y" }}
                                                 />
                                             </div>
                                         </form>

@@ -35,7 +35,12 @@ const PTDept = () => {
     const fetchTax = async () => {
         try {
             const response = await api.get(`/property-dept?lang=${i18n.language}`);
-            setTax(response.data.reverse());
+            const sortedData = response.data.sort((a, b) => {
+                const dateA = a.issue_date ? new Date(a.issue_date) : new Date(0);
+                const dateB = b.issue_date ? new Date(b.issue_date) : new Date(0);
+                return dateB - dateA;
+            });
+            setTax(sortedData);
         } catch (error) {
             console.error("Error fetching property tax data", error);
         }
@@ -62,7 +67,7 @@ const PTDept = () => {
 
     return (
         <>
-        
+
             <div
                 className="history-header-image"
                 style={{

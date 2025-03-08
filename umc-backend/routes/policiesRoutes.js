@@ -2,9 +2,24 @@ const express = require("express");
 const router = express.Router();
 const db = require("../config/db.js");
 
+const convertToMySQLDate = (dateString) => {
+  const [day, month, year] = dateString.split("-");
+  return `${year}-${month}-${day}`;
+};
+
 
 router.get("/policies_data", (req, res) => {
-  db.query("SELECT * FROM policies", (err, results) => {
+  const language = req.query.lang;
+  let query;
+  let params = [];
+  if (language) {
+    query = `SELECT * FROM policies WHERE language_code = ?`;
+    params.push(language);
+  } else {
+    query = "SELECT * FROM policies";
+  }
+
+  db.query(query, params, (err, results) => {
     if (err) throw err;
     res.json(results);
   });
@@ -12,9 +27,10 @@ router.get("/policies_data", (req, res) => {
 
 
 router.post("/policies_data", (req, res) => {
-  const { heading, link } = req.body;
-  const sql = "INSERT INTO policies (heading, link) VALUES (?, ?)";
-  db.query(sql, [heading, link], (err, result) => {
+  const { heading, link, issue_date, language_code } = req.body;
+  const formattedDate = convertToMySQLDate(issue_date);
+  const sql = "INSERT INTO policies (heading,  link, issue_date, language_code) VALUES (?, ?, ?, ?)";
+  db.query(sql, [heading, link, formattedDate, language_code], (err, result) => {
     if (err) throw err;
     res.json({ id: result.insertId, heading, link });
   });
@@ -22,9 +38,10 @@ router.post("/policies_data", (req, res) => {
 
 
 router.put("/policies_data/:id", (req, res) => {
-  const { heading, link } = req.body;
-  const sql = "UPDATE policies SET heading = ?, link = ? WHERE id = ?";
-  db.query(sql, [heading, link, req.params.id], (err, result) => {
+  const { heading, link, issue_date, language_code } = req.body;
+  const formattedDate = issue_date ? convertToMySQLDate(issue_date) : null;
+  const sql = "UPDATE policies SET heading = ?, link = ?, issue_date = ?, language_code = ? WHERE id = ?";
+  db.query(sql, [heading, link, formattedDate, language_code, req.params.id], (err, result) => {
     if (err) throw err;
     res.json({ success: true });
   });

@@ -1,13 +1,24 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../api";
+import Flatpickr from "react-flatpickr";
+import "flatpickr/dist/themes/material_blue.css";
 
 const AddSolidWasteSystem = () => {
   const [description, setDescription] = useState("");
   const [link, setLink] = useState("");
   const [language, setLanguage] = useState("");
+  const [issueDate, setIssueDate] = useState("");
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
+
+  const formatDate = (date) => {
+    const d = new Date(date);
+    const day = String(d.getDate()).padStart(2, "0");
+    const month = String(d.getMonth() + 1).padStart(2, "0");
+    const year = d.getFullYear();
+    return `${day}-${month}-${year}`;
+  };
 
   const validateForm = () => {
     const validationErrors = {};
@@ -18,6 +29,10 @@ const AddSolidWasteSystem = () => {
 
     if (!language) {
       validationErrors.language = "Language selection is required";
+    }
+
+    if (!issueDate) {
+      validationErrors.issueDate = "Issue Date is required.";
     }
 
     if (!link) {
@@ -35,16 +50,20 @@ const AddSolidWasteSystem = () => {
       return;
     }
 
+    const formattedDate = formatDate(issueDate);
+
     try {
       //eslint-disable-next-line
       const response = await api.post("/swms", {
         description: description,
         link: link,
+        issue_date: formattedDate,
         language_code: language,
       });
       setDescription("");
       setLink("");
       setLanguage("");
+      setIssueDate("");
       navigate("/swms");
     } catch (error) {
       console.error("Error adding swms data:", error);
@@ -147,6 +166,40 @@ const AddSolidWasteSystem = () => {
                           <div className="invalid-feedback">
                             {errors.link}
                           </div>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="form-group row">
+                      <label className="col-form-label col-md-2">
+                        Issue Date <span className="text-danger">*</span>
+                      </label>
+                      <div className="cal-icon col-md-4">
+                        <Flatpickr
+                          id="startDatePicker"
+                          className={`form-control ${errors.issueDate ? "is-invalid" : ""
+                            }`}
+                          placeholder="Select Issue Date"
+                          value={issueDate}
+                          onChange={(date) => {
+                            setIssueDate(date[0]);
+                            if (issueDate) {
+                              setErrors({ ...errors, issueDate: "" });
+                            }
+                          }}
+                          options={{
+                            dateFormat: "d-m-Y",
+                            monthSelectorType: "dropdown",
+                            prevArrow:
+                              '<svg><path d="M10 5L5 10L10 15"></path></svg>',
+                            nextArrow:
+                              '<svg><path d="M5 5L10 10L5 15"></path></svg>',
+                          }}
+                        />
+                        {errors.issueDate && (
+                          <small className="invalid-feedback">
+                            {errors.issueDate}
+                          </small>
                         )}
                       </div>
                     </div>

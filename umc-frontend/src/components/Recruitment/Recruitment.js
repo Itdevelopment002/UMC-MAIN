@@ -40,7 +40,12 @@ const Recruitment = () => {
   const fetchRecruitment = async () => {
     try {
       const response = await api.get(`/recruitment?lang=${i18n.language}`);
-      setRecruitment(response.data.reverse());
+      const sortedData = response.data.sort((a, b) => {
+        const dateA = a.issue_date ? new Date(a.issue_date) : new Date(0);
+        const dateB = b.issue_date ? new Date(b.issue_date) : new Date(0);
+        return dateB - dateA;
+      });
+      setRecruitment(sortedData);
     } catch (error) {
       console.error("Error fetching recruitment:", error);
     }

@@ -28,7 +28,12 @@ const AuditDepartment = () => {
   useEffect(() => {
     api.get(`/audit-report?lang=${i18n.language}`)
       .then((response) => {
-        setTableData(response.data);
+        const sortedData = response.data.sort((a, b) => {
+          const dateA = a.issue_date ? new Date(a.issue_date) : new Date(0);
+          const dateB = b.issue_date ? new Date(b.issue_date) : new Date(0);
+          return dateB - dateA;
+        });
+        setTableData(sortedData);
         const uniqueNames = [...new Set(response.data.map(item => item.name))];
         setAvailableButtons(uniqueNames);
 

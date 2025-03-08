@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import api from "../api";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Flatpickr from "react-flatpickr";
+import "flatpickr/dist/themes/material_blue.css";
 
 const Annual = () => {
   const [annual, setAnnual] = useState([]);
@@ -19,7 +21,12 @@ const Annual = () => {
   const fetchAnnual = async () => {
     try {
       const response = await api.get("/annual-finance");
-      setAnnual(response.data.reverse());
+      const sortedData = response.data.sort((a, b) => {
+        const dateA = a.issue_date ? new Date(a.issue_date) : new Date(0);
+        const dateB = b.issue_date ? new Date(b.issue_date) : new Date(0);
+        return dateB - dateA;
+      });
+      setAnnual(sortedData);
     } catch (error) {
       console.error("Error fetching Annual Financial Statement:", error);
       toast.error("Failed to fetch Annual Financial Statement data!");
@@ -39,17 +46,18 @@ const Annual = () => {
   };
 
   const handleEditSave = async () => {
+    const formattedIssueDate = selectedAnnual.issue_date
+      ? formatDate(selectedAnnual.issue_date)
+      : "";
     try {
       await api.put(`/annual-finance/${selectedAnnual.id}`, {
         heading: selectedAnnual.heading,
         link: selectedAnnual.link,
+        issue_date: formattedIssueDate,
         language_code: selectedAnnual.language_code,
 
       });
-      const updatedAnnual = annual.map((annual) =>
-        annual.id === selectedAnnual.id ? selectedAnnual : annual
-      );
-      setAnnual(updatedAnnual);
+      fetchAnnual();
       setShowEditModal(false);
       toast.success("Annual Financial Statement updated successfully!");
     } catch (error) {
@@ -76,6 +84,14 @@ const Annual = () => {
   const indexOfLastAnnual = currentPage * annualPerPage;
   const indexOfFirstAnnual = indexOfLastAnnual - annualPerPage;
   const currentAnnual = annual.slice(indexOfFirstAnnual, indexOfLastAnnual);
+
+  const formatDate = (date) => {
+    const d = new Date(date);
+    const day = String(d.getDate()).padStart(2, "0");
+    const month = String(d.getMonth() + 1).padStart(2, "0");
+    const year = d.getFullYear();
+    return `${day}-${month}-${year}`;
+  };
 
   return (
     <div>
@@ -115,6 +131,7 @@ const Annual = () => {
                           <th width="10%" className="text-center">Sr. No.</th>
                           <th>Heading</th>
                           <th>Link</th>
+                          <th width="20%" className="text-center">Issue Date</th>
                           <th width="15%" className="text-center">Action</th>
                         </tr>
                       </thead>
@@ -134,6 +151,15 @@ const Annual = () => {
                               >
                                 {annual.link}
                               </Link>
+                            </td>
+                            <td className="text-center">
+                              {new Date(annual.issue_date)
+                                .toLocaleDateString("en-GB", {
+                                  day: "2-digit",
+                                  month: "2-digit",
+                                  year: "numeric",
+                                })
+                                .replace(/\//g, "-")}
                             </td>
                             <td className="text-center">
                               <button
@@ -252,6 +278,20 @@ const Annual = () => {
                           name="link"
                           value={selectedAnnual?.link || ""}
                           onChange={handleEditChange}
+                        />
+                      </div>
+                      <div className="mb-3">
+                        <label className="form-label">Issue Date</label>
+                        <Flatpickr
+                          value={selectedAnnual?.issue_date || ""}
+                          onChange={(date) =>
+                            setSelectedAnnual({
+                              ...selectedAnnual,
+                              issue_date: date[0],
+                            })
+                          }
+                          className="form-control"
+                          options={{ dateFormat: "d-m-Y" }}
                         />
                       </div>
                     </form>
