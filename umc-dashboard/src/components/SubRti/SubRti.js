@@ -56,10 +56,7 @@ const SubRti = () => {
         issue_date: formattedIssueDate,
         language_code: selectedRti.language_code,
       });
-      const updatedRti = rti.map((rti) =>
-        rti.id === selectedRti.id ? selectedRti : rti
-      );
-      setRti(updatedRti);
+      fetchSubRTI();
       setShowEditModal(false);
       toast.success("Sub RTI updated successfully!");
     } catch (error) {

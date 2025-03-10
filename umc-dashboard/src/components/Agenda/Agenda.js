@@ -61,12 +61,7 @@ const Agenda = () => {
                 language_code: selectedResolution.language_code,
 
             });
-            const updatedResolutions = resolutions.map((resolution) =>
-                resolution.Sr_No === selectedResolution.Sr_No
-                    ? selectedResolution
-                    : resolution
-            );
-            setResolutions(updatedResolutions);
+            fetchResolutions();
             setShowEditModal(false);
             toast.success("Agenda updated successfully!");
         } catch (error) {
