@@ -120,8 +120,8 @@ const ContactUs = () => {
 
                         <div className="col-xl-6 col-lg-6 col-md-12 col-12 col-sm-12">
                             <div className="row">
-                                {ward.map((ward) => (
-                                    <div className="col-sm-6 mb-3" key={ward}>
+                                {ward.map((ward, index) => (
+                                    <div className="col-sm-6 mb-3" key={index}>
                                         <div className="card">
                                             <span className="card-header text-white bg-gradient">
                                                 {t("contactUs.wardOfficeNo")} {ward.office}

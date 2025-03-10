@@ -146,7 +146,6 @@ const AccountsDepartment = () => {
       </div>
 
       <div id="main-content">
-
         <div className="container-fluid font-location mt-4 mb-2" id="accounts-css">
           <nav className="breadcrumb">
             <Link to="/" className="breadcrumb-item text-decoration-none">

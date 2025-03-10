@@ -137,7 +137,7 @@ const GalleryAndCommunication = () => {
           </div>
           <div className="contact-section mt-3">
             {emergency.map((item, index) => (
-              <>
+              <React.Fragment key={index}>
                 <div className="d-flex align-items-center mb-1 px-2">
                   <Link to={`tel:${item.number}`} className="contact-link">
                     <img
@@ -159,7 +159,7 @@ const GalleryAndCommunication = () => {
                     }}
                   />
                 )}
-              </>
+              </React.Fragment>
             ))}
           </div>
         </div>

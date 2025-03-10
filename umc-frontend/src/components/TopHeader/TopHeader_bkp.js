@@ -58,11 +58,14 @@ const TopHeader = () => {
     }, []);
 
     const applyFontFamily = (font) => {
-        document.body.style.fontFamily = font;
         document.documentElement.style.setProperty("--global-font-family", font);
-        document.querySelectorAll("*").forEach((el) => {
-            el.style.fontFamily = font;
-        });
+        document.body.style.fontFamily = font;
+
+        // Add a global CSS rule instead of iterating over all elements
+        const styleTag = document.getElementById("dynamic-font-style") || document.createElement("style");
+        styleTag.id = "dynamic-font-style";
+        styleTag.innerHTML = `* { font-family: var(--global-font-family) !important; }`;
+        document.head.appendChild(styleTag);
     };
 
     const handleLanguageChange = (language) => {

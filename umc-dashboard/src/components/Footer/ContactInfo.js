@@ -168,13 +168,13 @@ const ContactInfo = () => {
                         </td>
                         <td className="text-center">
                           <button
-                            className="btn btn-success btn-sm"
+                            className="btn btn-success btn-sm m-t-10"
                             onClick={() => handleEditModalOpen(contact)}
                           >
                             Edit
                           </button>
                           <button
-                            className="btn btn-danger btn-sm"
+                            className="btn btn-danger btn-sm m-t-10"
                             onClick={() => handleDeleteModalOpen(contact)}
                           >
                             Delete
