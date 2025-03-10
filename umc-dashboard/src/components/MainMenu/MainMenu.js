@@ -171,8 +171,8 @@ const MainMenu = () => {
                       </thead>
                       <tbody>
                         {currentItems.map((item, index) => (
-                          <React.Fragment key={item.mainMenuId}>
-                            <tr>
+                          <React.Fragment key={index}>
+                            <tr key={index}>
                               <td className="text-center" style={{ textWrap: "pretty" }}>{indexOfFirstItem + index + 1}</td>
                               <td style={{ textWrap: "pretty" }}>{item.mainMenu}</td>
                               <td style={{ textWrap: "pretty" }}>
@@ -216,7 +216,7 @@ const MainMenu = () => {
                             {item.subMenus &&
                               item.subMenus.length > 1 &&
                               item.subMenus.slice(1).map((sub, subIndex) => (
-                                <tr key={sub.subMenuId}>
+                                <tr key={subIndex}>
                                   <td></td>
                                   <td></td>
                                   <td></td>

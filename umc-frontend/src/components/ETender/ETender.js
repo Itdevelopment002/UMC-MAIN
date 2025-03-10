@@ -132,7 +132,7 @@ const ETender = () => {
             </Link>
             <span className="breadcrumb-item active1">{t('eTender.name')}</span>
           </nav>
-          <h2 class="location-title"><span class="highlight">{t('eTender.name1')}</span><span class="highlighted-text"> {t('eTender.name2')}</span></h2>
+          <h2 className="location-title"><span className="highlight">{t('eTender.name1')}</span><span className="highlighted-text"> {t('eTender.name2')}</span></h2>
           <div className="row mt-4 row-styling-3">
             <div className="col-xl-9 col-lg-12 col-md-12 col-sm-12">
               <div className="e-services-container p-2">

@@ -201,8 +201,8 @@ const Administration = () => {
                                     </tbody>
                                 </table>
                             </div>
-                            <div class="last-updated-container">
-                                <p class="last-updated-text"><b>{t('corporation.update')} :</b> 20-09-2024 01:00 pm</p>
+                            <div className="last-updated-container">
+                                <p className="last-updated-text"><b>{t('corporation.update')} :</b> 20-09-2024 01:00 pm</p>
                             </div>
                         </div>
                         <nav aria-label="Page navigation" className="d-flex justify-content-start paginationtop">
