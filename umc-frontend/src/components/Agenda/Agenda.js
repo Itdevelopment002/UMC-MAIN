@@ -312,7 +312,7 @@ const Agenda = () => {
                                     </ul>
                                 </nav>
 
-                                <div class="last-updated-container">
+                                <div className="last-updated-container">
                                     <p className="last-updated-text">
                                         <b>{t('corporation.showing')} {startEntry} {t('corporation.to')} {endEntry} {t('corporation.of')} {totalEntries} {t('corporation.entries')}</b>
                                     </p>

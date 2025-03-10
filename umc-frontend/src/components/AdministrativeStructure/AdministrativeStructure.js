@@ -142,10 +142,10 @@ const AdministrativeStructure = () => {
           <hr />
           <div className="row mt-4">
             {commissioner.map((item, index) => (
-              <>
+              <React.Fragment key={index}>
                 <h4 className="text-center fw-semibold">{item.coName}</h4>
                 <h5 className="text-center text-muted fw-bold">{item.designation}</h5>
-              </>
+              </React.Fragment>
             ))}
             <div className="col-12 col-xl-12 col-lg-12 col-md-12 col-sm-12">
               <div className="row mt-4">
@@ -163,15 +163,15 @@ const AdministrativeStructure = () => {
                     <thead className="bg-orange text-white">
                       <tr>
                         <th className="table-heading-styling" style={{ textAlign: "center" }}>{t("administrative.srNo")}</th>
-                        {tableData1.map((item) => (
-                          <th className="table-heading-styling text-center" style={{textWrap: "pretty"}} colSpan={2}>{item.heading}</th>
+                        {tableData1.map((item, index) => (
+                          <th key={index} className="table-heading-styling text-center" style={{textWrap: "pretty"}} colSpan={2}>{item.heading}</th>
                         ))}
                       </tr>
                     </thead>
                     <tbody>
                       {structureData1.length > 0 ? (
                         structureData1.map((item, index) => (
-                          <tr key={item.id}>
+                          <tr key={index}>
                             <td
                               className="font-large"
                               width="8%"
@@ -248,15 +248,15 @@ const AdministrativeStructure = () => {
                     <thead className="bg-orange text-white">
                       <tr>
                         <th className="table-heading-styling" style={{ textAlign: "center" }}>{t("administrative.srNo")}</th>
-                        {tableData2.map((item) => (
-                          <th className="table-heading-styling text-center" style={{textWrap: "pretty"}}>{item.heading}</th>
+                        {tableData2.map((item, index) => (
+                          <th key={index} className="table-heading-styling text-center" style={{textWrap: "pretty"}}>{item.heading}</th>
                         ))}
                       </tr>
                     </thead>
                     <tbody>
                       {structureData2.length > 0 ? (
                         structureData2.map((item, index) => (
-                          <tr key={item.id}>
+                          <tr key={index}>
                             <td
                               className="font-large"
                               width="8%"
@@ -344,15 +344,15 @@ const AdministrativeStructure = () => {
                     <thead className="bg-orange text-white">
                       <tr>
                         <th className="table-heading-styling" style={{ textAlign: "center", textWrap: 'pretty' }}>{t("administrative.srNo")}</th>
-                        {tableData3.map((item) => (
-                          <th className="table-heading-styling text-center" style={{textWrap: "pretty"}}>{item.heading}</th>
+                        {tableData3.map((item, index) => (
+                          <th key={index} className="table-heading-styling text-center" style={{textWrap: "pretty"}}>{item.heading}</th>
                         ))}
                       </tr>
                     </thead>
                     <tbody>
                       {structureData3.length > 0 ? (
                         structureData3.map((item, index) => (
-                          <tr key={item.id}>
+                          <tr key={index}>
                             <td
                               className="font-large"
                               style={{
@@ -445,15 +445,15 @@ const AdministrativeStructure = () => {
                   <table className="table table-bordered table-responsive shadow mt-4">
                     <thead className="bg-orange text-white">
                       <tr>
-                        {tableData4.map((item) => (
-                          <th className="table-heading-styling text-center" style={{textWrap: "pretty"}}>{item.heading}</th>
+                        {tableData4.map((item, index) => (
+                          <th key={index} className="table-heading-styling text-center" style={{textWrap: "pretty"}}>{item.heading}</th>
                         ))}
                       </tr>
                     </thead>
                     <tbody>
                       {structureData4.length > 0 ? (
                         structureData4.map((item, index) => (
-                          <tr key={item.id}>
+                          <tr key={index}>
                             <td
                               width="50%"
                               style={{

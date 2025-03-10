@@ -158,7 +158,7 @@ const Budget = () => {
                                         <label style={{ fontWeight: '500' }}>Filter by Year</label>
                                         <select
                                             className="form-control"
-                                            value={selectedYear}
+                                            value={selectedYear || ""}
                                             onChange={(e) => setSelectedYear(e.target.value)}
                                             style={{ width: '200px' }}
                                         >

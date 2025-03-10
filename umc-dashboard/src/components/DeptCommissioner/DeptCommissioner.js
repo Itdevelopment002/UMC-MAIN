@@ -51,8 +51,6 @@ const DeptCommissioner = () => {
         }
     };
 
-    console.log(descData);
-
     const handleDelete = async (id, type) => {
         try {
             if (type === "history") {

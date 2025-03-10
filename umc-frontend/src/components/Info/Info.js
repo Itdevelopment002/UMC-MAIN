@@ -88,28 +88,25 @@ const Info = () => {
             <div className="heading">
               <h1 data-aos="fade-up" className="info-heading1"><span className="info-heading2 fw-bold">{t('home.info-heading2')}</span></h1>
             </div>
-            <div
-              className="description-container"
+            <div className="description-container"
               style={{
                 overflowY: expanded ? "auto" : "hidden",
                 maxHeight: "220px",
                 gap: "10px",
               }}
             >
-              <p className="description">
-                {desc.length > 0 && (
-                  <div>
-                    {expanded
-                      ? desc.map((item, index) => (
-                        <div key={index}>
-                          <p className="description">{item.description}</p>
-                        </div>
-                      ))
-                      : <div>{desc[0].description.slice(0, 480)} <span style={{ color: "gray" }}>...</span></div>
-                    }
-                  </div>
-                )}
-              </p>
+              {desc.length > 0 && (
+                <div>
+                  {expanded
+                    ? desc.map((item, index) => (
+                      <div key={index}>
+                        <p className="description">{item.description}</p>
+                      </div>
+                    ))
+                    : <p className="description">{desc[0].description.slice(0, 480)} <span style={{ color: "gray" }}>...</span></p>
+                  }
+                </div>
+              )}
             </div>
 
             <button className="see-more-btn" onClick={toggleDescription}>
