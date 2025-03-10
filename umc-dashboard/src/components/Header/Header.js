@@ -55,8 +55,12 @@ const Header = ({ onLogout, userDepartment }) => {
     // eslint-disable-next-line
   }, [userDepartment]);
 
-  
+
   const fetchUser = async () => {
+    if (!userDepartment || !userDepartment.id) {
+      return;
+    }
+
     try {
       const response = await api.get(`/users/${userDepartment.id}`);
       setUser(response.data);
@@ -66,7 +70,9 @@ const Header = ({ onLogout, userDepartment }) => {
   };
 
   useEffect(() => {
-    fetchUser();
+    if (userDepartment) {
+      fetchUser();
+    }
     //eslint-disable-next-line
   }, [userDepartment]);
 
