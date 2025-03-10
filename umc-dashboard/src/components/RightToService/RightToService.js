@@ -56,10 +56,7 @@ const RightToService = () => {
         issue_date: formattedIssueDate,
         language_code: selectedRts.language_code,
       });
-      const updatedRts = rts.map((rts) =>
-        rts.id === selectedRts.id ? selectedRts : rts
-      );
-      setRts(updatedRts);
+      fetchRts();
       setShowEditModal(false);
       toast.success("Rts updated successfully!");
     } catch (error) {
