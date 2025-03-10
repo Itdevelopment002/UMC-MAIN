@@ -59,10 +59,7 @@ const ENews = () => {
                 language_code: selectedAgenda.language_code,
 
             });
-            const updatedAgendaList = enewsList.map((agenda) =>
-                agenda.id === selectedAgenda.id ? selectedAgenda : agenda
-            );
-            setEnewsList(updatedAgendaList);
+            fetchEnews();
             setShowEditModal(false);
             toast.success("e-News updated successfully!");
         } catch (error) {
