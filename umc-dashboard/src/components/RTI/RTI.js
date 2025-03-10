@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import api from "../api";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Flatpickr from "react-flatpickr";
+import "flatpickr/dist/themes/material_blue.css";
 
 const RTI = () => {
   const [rti, setRti] = useState([]);
@@ -19,7 +21,12 @@ const RTI = () => {
   const fetchRTI = async () => {
     try {
       const response = await api.get("/rti-info");
-      setRti(response.data);
+      const sortedData = response.data.sort((a, b) => {
+        const dateA = a.issue_date ? new Date(a.issue_date) : new Date(0);
+        const dateB = b.issue_date ? new Date(b.issue_date) : new Date(0);
+        return dateB - dateA;
+      });
+      setRti(sortedData);
     } catch (error) {
       console.error("Error fetching rti:", error);
       toast.error("Failed to fetch rti data!");
@@ -39,16 +46,17 @@ const RTI = () => {
   };
 
   const handleEditSave = async () => {
+    const formattedIssueDate = selectedRti.issue_date
+      ? formatDate(selectedRti.issue_date)
+      : "";
     try {
       await api.put(`/rti-info/${selectedRti.id}`, {
         description: selectedRti.description,
         link: selectedRti.link,
+        issue_date: formattedIssueDate,
         language_code: selectedRti.language_code,
       });
-      const updatedRti = rti.map((rti) =>
-        rti.id === selectedRti.id ? selectedRti : rti
-      );
-      setRti(updatedRti);
+      fetchRTI();
       setShowEditModal(false);
       toast.success("Right to Information updated successfully!");
     } catch (error) {
@@ -75,6 +83,14 @@ const RTI = () => {
   const indexOfLastRti = currentPage * rtiPerPage;
   const indexOfFirstRti = indexOfLastRti - rtiPerPage;
   const currentRti = rti.slice(indexOfFirstRti, indexOfLastRti);
+
+  const formatDate = (date) => {
+    const d = new Date(date);
+    const day = String(d.getDate()).padStart(2, "0");
+    const month = String(d.getMonth() + 1).padStart(2, "0");
+    const year = d.getFullYear();
+    return `${day}-${month}-${year}`;
+  };
 
   return (
     <div>
@@ -114,6 +130,7 @@ const RTI = () => {
                           <th width="10%" className="text-center">Sr. No.</th>
                           <th>Description</th>
                           <th>Link</th>
+                          <th width="20%" className="text-center">Issue Date</th>
                           <th width="15%" className="text-center">Action</th>
                         </tr>
                       </thead>
@@ -134,6 +151,15 @@ const RTI = () => {
                                 >
                                   {rti.link}
                                 </Link>
+                              </td>
+                              <td className="text-center">
+                                {new Date(rti.issue_date)
+                                  .toLocaleDateString("en-GB", {
+                                    day: "2-digit",
+                                    month: "2-digit",
+                                    year: "numeric",
+                                  })
+                                  .replace(/\//g, "-")}
                               </td>
                               <td className="text-center">
                                 <button
@@ -319,6 +345,20 @@ const RTI = () => {
                           name="link"
                           value={selectedRti?.link || ""}
                           onChange={handleEditChange}
+                        />
+                      </div>
+                      <div className="mb-3">
+                        <label className="form-label">Issue Date</label>
+                        <Flatpickr
+                          value={selectedRti?.issue_date || ""}
+                          onChange={(date) =>
+                            setSelectedRti({
+                              ...selectedRti,
+                              issue_date: date[0],
+                            })
+                          }
+                          className="form-control"
+                          options={{ dateFormat: "d-m-Y" }}
                         />
                       </div>
                     </form>
