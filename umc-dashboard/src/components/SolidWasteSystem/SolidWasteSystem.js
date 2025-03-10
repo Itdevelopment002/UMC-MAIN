@@ -56,10 +56,7 @@ const SolidWasteSystem = () => {
         issue_date: formattedIssueDate,
         language_code: selectedSwms.language_code,
       });
-      const updatedSwms = swms.map((swms) =>
-        swms.id === selectedSwms.id ? selectedSwms : swms
-      );
-      setSwms(updatedSwms);
+      fetchSwms();
       setShowEditModal(false);
       toast.success("Swms updated successfully!");
     } catch (error) {
