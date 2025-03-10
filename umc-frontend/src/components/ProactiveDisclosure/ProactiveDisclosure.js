@@ -35,7 +35,12 @@ const ProactiveDisclosure = () => {
     const fetchRti = async () => {
         try {
             const response = await api.get(`/proactive-disclosure?lang=${i18n.language}`);
-            setRti(response.data);
+            const sortedData = response.data.sort((a, b) => {
+                const dateA = a.issue_date ? new Date(a.issue_date) : new Date(0);
+                const dateB = b.issue_date ? new Date(b.issue_date) : new Date(0);
+                return dateB - dateA;
+            });
+            setRti(sortedData);
         } catch (error) {
             console.error("Error fetching proactive disclosure data", error);
         }
