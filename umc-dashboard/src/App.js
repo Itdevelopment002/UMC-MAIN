@@ -8,7 +8,7 @@ import "./assets/css/font-awesome.min.css";
 import "./assets/css/fullcalendar.min.css";
 import "./assets/css/select2.min.css";
 import "./assets/css/tagsinput.css";
-import loaderimage from "./assets/img/loader_trans.gif"; 
+import loaderimage from "./assets/img/loader_trans.gif";
 
 
 import Login from "./components/Login/Login";
@@ -227,7 +227,9 @@ function App() {
                 <Sidebar />
                 <div>
                   <Routes>
-                    
+
+                    <Route path="/" element={<Navigate to="/home" replace />} />
+
                     {/* Header */}
                     <Route path="/home" element={<MainMenu />} />
                     <Route path="/add-main-menu" element={<AddMainMenu />} />
