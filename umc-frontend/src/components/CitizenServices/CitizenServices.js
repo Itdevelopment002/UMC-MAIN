@@ -279,9 +279,8 @@ const CitizenServices = () => {
           <div className="col-xl-4 col-lg-8 col-md-8 col-sm-7">
             <div className="menu-list">
               {homeservices1.map((item, index) => (
-                <Link to={item.link} className="text-decoration-none">
+                <Link key={index} to={item.link} className="text-decoration-none">
                   <div
-                    key={index}
                     className="menu-item mb-3"
                     data-aos="fade-right"
                     data-aos-delay={`${index * 100}`}

@@ -170,12 +170,19 @@ function App() {
   };
 
   const applyFontFamily = (font) => {
-    document.body.style.fontFamily = font;
     document.documentElement.style.setProperty("--global-font-family", font);
-    document.querySelectorAll("*").forEach((el) => {
-      el.style.fontFamily = font;
-    });
-  };
+    document.body.style.fontFamily = font;
+    let styleTag = document.getElementById("dynamic-font-style");
+    
+    if (!styleTag) {
+        styleTag = document.createElement("style");
+        styleTag.id = "dynamic-font-style";
+        document.head.appendChild(styleTag);
+    }
+    styleTag.innerHTML = `
+        * { font-family: var(--global-font-family) !important; }
+    `;
+};
 
   return (
     <>

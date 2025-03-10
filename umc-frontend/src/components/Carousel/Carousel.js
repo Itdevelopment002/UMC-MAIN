@@ -72,7 +72,7 @@ const Carousel = () => {
             navigation
             pagination={{ clickable: true }}
             autoplay={{ delay: 4000, disableOnInteraction: false }}
-            loop={true}
+            loop={sliders.length > 1}
             effect="fade"
             speed={1000}
             className="carousel-image-slider mt-2"
