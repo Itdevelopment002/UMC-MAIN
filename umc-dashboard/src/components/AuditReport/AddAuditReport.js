@@ -148,7 +148,7 @@ const AddAuditReport = () => {
                           <option value="Monthly Accumulated Expense Report">Monthly Accumulated Expense Report</option>
                           <option value="अंतर्गत लेखापरीक्षण अहवाल">अंतर्गत लेखापरीक्षण अहवाल</option>
                           <option value="स्थानिक विधी लेखा परीक्षा अहवाल">स्थानिक विधी लेखा परीक्षा अहवाल</option>
-                          <option value="प्रधान महालेखा अहवाल">प्रधान महालेखा अहवाल</option>
+                          <option value="महालेखापाल अहवाल">महालेखापाल अहवाल</option>
                           <option value="मासिक जमा-खर्च अहवाल">मासिक जमा-खर्च अहवाल</option>
                         </select>
                         {errors.name && (
