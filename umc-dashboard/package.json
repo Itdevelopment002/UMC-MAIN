@@ -33,11 +33,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-<<<<<<< HEAD
-    "start": "cross-env BROWSER=none PORT=4016 react-scripts start",
-=======
     "start": "cross-env PORT=3024 react-scripts start",
->>>>>>> d132dd2444c63b6f85e4054e2acda0e39fb01e40
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
