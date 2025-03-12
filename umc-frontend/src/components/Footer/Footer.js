@@ -5,6 +5,8 @@ import Logo from "../../assets/images/logo 1.png";
 import api, { baseURL } from "../api";
 import Cookies from "js-cookie";
 import { useTranslation } from "react-i18next";
+import img1 from "../../assets/icon_W2_a.jpg";
+import img2 from "../../assets/w3c-icon..png"
 
 const Footer = () => {
   const [contacts, setContacts] = useState([]);
@@ -206,7 +208,10 @@ const Footer = () => {
             )}
           </span>
 
-          {/* <span className="footer-sapn2">{t("footer.designBy")}</span> */}
+          <span className="footer-sapn2">
+            <img className="img1" src={img2} alt="w32"/>
+            <img className="img2"src={img1} alt="w3c"/>
+          </span>
         </div>
       </div>
     </footer>
