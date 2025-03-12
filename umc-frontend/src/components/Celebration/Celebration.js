@@ -14,7 +14,7 @@ const Celebration = ({ onStart }) => {
     const [showGif, setShowGif] = useState(false);
     const [showFallingItems, setShowFallingItems] = useState(false);
     const [fallingItems, setFallingItems] = useState([]);
-    const [status, setStatus] = useState("");
+    const [status, setStatus] = useState("disable");
 
     useEffect(() => {
         const fetchStatuses = async () => {
@@ -22,7 +22,6 @@ const Celebration = ({ onStart }) => {
                 const celebrationResponse = await api.get("/celebration/1");
                 const celebrationStatus = celebrationResponse.data.status;
                 setStatus(celebrationStatus);
-
                 const cuttingResponse = await api.get("/cutting/1");
                 const cuttingStatus = cuttingResponse.data.status;
 
@@ -93,7 +92,7 @@ const Celebration = ({ onStart }) => {
     }
 
     return (
-        <div className={`intro-page ${cut ? "cut" : ""}`}>
+        <div className={`${status === "Enable" ? "intro-page" : ""} ${cut ? "cut" : ""}`}>
             {showConfetti && <Confetti numberOfPieces={2000} tweenDuration={5000} />}
             {showFireworks && (
                 <>
@@ -116,13 +115,14 @@ const Celebration = ({ onStart }) => {
                     ))}
                 </div>
             )}
-
-            <div className={`ribbon ${animationStarted ? "animate" : ""}`}>
-                <div className="ribbon-left"></div>
-                <div className="ribbon-right"></div>
-            </div>
-
-            {!animationStarted && (
+            {status === "Enable" && (
+                <div className={`ribbon ${animationStarted ? "animate" : ""}`}>
+                    <div className="ribbon-left"></div>
+                    <div className="ribbon-right"></div>
+                </div>
+            )}
+            
+            {!animationStarted && status === "Enable" && (
                 <img
                     src={ribbon}
                     alt="Cut the Ribbon"
