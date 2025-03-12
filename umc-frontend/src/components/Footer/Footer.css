@@ -133,6 +133,10 @@
 .footer-bottom span {
   flex: 1;
 }
+.footer-sapn2 .img2{
+  height: 28px;
+}
+
 
 @media (min-width: 768px) {
   .footer-sapn1 {
