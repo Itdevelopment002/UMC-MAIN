@@ -34,7 +34,16 @@ const AuditDepartment = () => {
           return dateB - dateA;
         });
         setTableData(sortedData);
-        const uniqueNames = [...new Set(response.data.map(item => item.name))];
+
+        const dataSortedById = response.data.sort((a, b) => a.id - b.id);
+
+        const uniqueNames = dataSortedById.reduce((acc, item) => {
+          if (!acc.includes(item.name)) {
+            acc.push(item.name);
+          }
+          return acc;
+        }, []);
+
         setAvailableButtons(uniqueNames);
 
         const dynamicHeadersMap = {};
