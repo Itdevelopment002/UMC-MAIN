@@ -28,7 +28,7 @@ const VideoGallery = () => {
   useEffect(() => {
     api.get(`/video-categories?lang=${i18n.language}`)
       .then((response) => {
-        setCategories(response.data);
+        setCategories(response.data.reverse());
       })
       .catch((error) => console.error("Error fetching categories:", error));
   }, [i18n.language]);

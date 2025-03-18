@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import GLightbox from "glightbox";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import "glightbox/dist/css/glightbox.min.css";
 import "./PhotoGallery.css";
 import api, { baseURL } from "../api";
@@ -36,7 +37,7 @@ const PhotoGallery = () => {
   useEffect(() => {
     api.get(`/categories?lang=${i18n.language}`)
       .then((response) => {
-        setCategories(response.data);
+        setCategories(response.data.reverse());
       })
       .catch((error) => console.error("Error fetching categories:", error));
   }, [i18n.language]);
@@ -128,13 +129,13 @@ const PhotoGallery = () => {
                 </h3>
                 {images[category.id] && images[category.id].length > 8 && (
                   <div className="slider-controls">
-                    <button onClick={() => handlePrevious(category.id)} className="gallery-custom-btn">
-                      <i className="fas fa-chevron-left"></i>
-                    </button>
-                    <button onClick={() => handleNext(category.id)} className="gallery-custom-btn">
-                      <i className="fas fa-chevron-right"></i>
-                    </button>
-                  </div>
+                  <button onClick={() => handlePrevious(category.id)} className="gallery-custom-btn">
+                    <FaChevronLeft />
+                  </button>
+                  <button onClick={() => handleNext(category.id)} className="gallery-custom-btn">
+                    <FaChevronRight />
+                  </button>
+                </div>
 
                 )}
               </div>
