@@ -64,6 +64,7 @@ const ScreenReader = () => {
                         <span className="highlighted-text"> {t('reader.highlight-text')}</span>
                         <hr />
                     </h2>
+                    <span className="custom-system-style-div span-system1">{t('reader.message')}</span>
                     <div className="row mt-4">
                         <div className="col-12 col-xl-9 col-lg-12 col-md-12 col-sm-12">
                             <div className="system-style-div text-start">
