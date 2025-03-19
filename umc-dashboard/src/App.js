@@ -435,8 +435,10 @@ function App() {
                         <Route path="/add-department-description" element={<AddDeptDescription user={userData} />} />
                         <Route path="/add-hod-details" element={<AddHodDetails user={userData} />} />
                         <Route path="/add-department-pdfs" element={<AddDeptPdfs user={userData} />} />
+                        <Route path="/view-profile/:id" element={<ViewProfile />} />
+                        <Route path="/edit-profile/:id" element={<EditProfile />} />
 
-                        {userData.permission === "Audit Department" && (
+                        {userData?.permission?.includes("Audit Department") && (
                           <>
                             <Route path="/audit-report" element={<AuditReport />} />
                             <Route path="/add-audit-report" element={<AddAuditReport />} />
