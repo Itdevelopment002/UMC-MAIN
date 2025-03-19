@@ -37,6 +37,8 @@ const DepartmentInformation = ({ user }) => {
         fetchPdfData();
     }, []);
 
+    const userData = JSON.parse(localStorage.getItem("userData"));
+
     const fetchDepartments = async () => {
         try {
             const response = await api.get("/department-info");
@@ -51,7 +53,13 @@ const DepartmentInformation = ({ user }) => {
         try {
             const response = await api.get("/department-banner");
             const sortedData = response.data.sort((a, b) => a.name.localeCompare(b.name));
-            setBannerData(sortedData);
+            if (userData.role === "Superadmin") {
+                setBannerData(sortedData);
+            } else {
+                const userPermissions = userData?.permission?.split(",").map(perm => perm.trim());
+                const filteredData = sortedData.filter(item => userPermissions.includes(item.name));
+                setBannerData(filteredData);
+            }
         } catch (error) {
             toast.error("Failed to fetch banner data!");
         }
@@ -61,7 +69,13 @@ const DepartmentInformation = ({ user }) => {
         try {
             const response = await api.get("/department-description");
             const sortedData = response.data.sort((a, b) => a.department.localeCompare(b.department));
-            setDescriptionData(sortedData);
+            if (userData.role === "Superadmin") {
+                setDescriptionData(sortedData);
+            } else {
+                const userPermissions = userData?.permission?.split(",").map(perm => perm.trim());
+                const filteredData = sortedData.filter(item => userPermissions.includes(item.department));
+                setDescriptionData(filteredData);
+            }
         } catch (error) {
             toast.error("Failed to fetch description data!");
         }
@@ -71,7 +85,13 @@ const DepartmentInformation = ({ user }) => {
         try {
             const response = await api.get("/hod-details");
             const sortedData = response.data.sort((a, b) => a.department.localeCompare(b.department));
-            setHodData(sortedData);
+            if (userData.role === "Superadmin") {
+                setHodData(sortedData);
+            } else {
+                const userPermissions = userData?.permission?.split(",").map(perm => perm.trim());
+                const filteredData = sortedData.filter(item => userPermissions.includes(item.department));
+                setHodData(filteredData);
+            }
         } catch (error) {
             toast.error("Failed to fetch hod data!");
         }
@@ -85,7 +105,13 @@ const DepartmentInformation = ({ user }) => {
                 const dateB = b.issue_date ? new Date(b.issue_date) : new Date(0);
                 return dateB - dateA;
             });
-            setPdfData(sortedData);
+            if (userData.role === "Superadmin") {
+                setPdfData(sortedData);
+            } else {
+                const userPermissions = userData?.permission?.split(",").map(perm => perm.trim());
+                const filteredData = sortedData.filter(item => userPermissions.includes(item.department));
+                setPdfData(filteredData);
+            }
         } catch (error) {
             toast.error("Failed to fetch pdf data!");
         }
@@ -907,7 +933,7 @@ const DepartmentInformation = ({ user }) => {
                             </div>
                         </div>
                     </div>
-                    {!user?.permission?.includes("Audit Department") && (
+                    {!(user?.permission?.includes("Audit Department") || user?.permission?.includes("लेखा परीक्षण विभाग")) && (
                         <div className="row">
                             <div className="col-lg-12">
                                 <div className="card-box">
