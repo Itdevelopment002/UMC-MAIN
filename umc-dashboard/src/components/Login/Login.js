@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "./Login.css";
 import img from "../../assets/img/umclogo.png";
 import { Link, useNavigate } from "react-router-dom";
@@ -6,15 +6,13 @@ import api from "../api";
 
 const Login = ({ onLogin }) => {
   const navigate = useNavigate();
-  const [departments, setDepartments] = useState([]);
-  const [loginType, setLoginType] = useState("superadmin");
   const [userData, setData] = useState({
     username: "",
     password: "",
-    department: "Admin",
   });
   const [isClicked, setIsClicked] = useState(false);
   const [errors, setErrors] = useState({});
+  const [serverError, setServerError] = useState("");
 
   const handleChange = (e) => {
     setData({
@@ -22,14 +20,13 @@ const Login = ({ onLogin }) => {
       [e.target.name]: e.target.value,
     });
     setErrors({ ...errors, [e.target.name]: "" });
+    setServerError(""); 
   };
 
   const validateForm = () => {
     const newErrors = {};
     if (!userData.username) newErrors.username = "Username is required";
     if (!userData.password) newErrors.password = "Password is required";
-    if (loginType === "admin" && !userData.department)
-      newErrors.department = "Department is required";
     return newErrors;
   };
 
@@ -39,18 +36,34 @@ const Login = ({ onLogin }) => {
     const validationErrors = validateForm();
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
+      setIsClicked(false);
       return;
     }
 
     try {
-      const endpoint = "/login";
-      const response = await api.post(endpoint, userData);
+      const response = await api.post("/login", userData);
       localStorage.setItem("authToken", response.data.uniqueId);
       localStorage.setItem("userData", JSON.stringify(response.data.user));
+      const {role} = response.data.user;
       onLogin();
-      navigate("/home");
+      if(role === "Superadmin"){
+        navigate("/home");
+      } else{
+        navigate("/department-information");
+      }
     } catch (err) {
-      console.error("Error fetching user data");
+      setIsClicked(false);
+      if (err.response) {
+        if (err.response.status === 403) {
+          setServerError("User is temporarily disabled");
+        } else if (err.response.status === 401) {
+          setServerError("Invalid credentials. Please try again.");
+        } else {
+          setServerError("Server error. Please try again later.");
+        }
+      } else {
+        setServerError("Network error. Check your connection.");
+      }
     }
   };
 
@@ -61,67 +74,37 @@ const Login = ({ onLogin }) => {
           <div className="form-container form-container1">
             <img src={img} alt="Logo" className="mb-4" />
             <div className="button-container mb-4 d-flex justify-content-center">
-              <button
-                className={`btn btn-sm mx-1 ${loginType === "superadmin"
-                  ? "btn-superadmin"
-                  : "btn-guest"
-                  }`}
-              >
-                Admin Login
-              </button>
+              <button className="btn btn-sm mx-1 btn-superadmin">Admin Login</button>
             </div>
-            <form>
-              {loginType === "admin" && (
-                <div className="mb-3 text-start">
-                  <label className="mb-2 label1">Department</label>
-                  <select
-                    className="form-control form-control1"
-                    name="department"
-                    value={userData.department}
-                    onChange={handleChange}
-                  >
-                    <option value="" disabled>
-                      Select Department
-                    </option>
-                    {departments.map((department) => (
-                      <option
-                        value={department.department_name}
-                        key={department.id}
-                      >
-                        {department.department_name}
-                      </option>
-                    ))}
-                  </select>
-                  {errors.department && (
-                    <div className="text-danger">{errors.department}</div>
-                  )}
-                </div>
-              )}
+            {serverError && <div className="alert alert-danger">{serverError}</div>}
+            <form onSubmit={onSubmit}>
               <div className="mb-3 text-start">
-                <label className="mb-2 label1">Username</label>
+                <label className="mb-2 label1">
+                  Username or email <span className="text-danger">*</span>
+                </label>
                 <input
                   type="text"
                   className="form-control form-control1"
                   name="username"
                   value={userData.username}
                   onChange={handleChange}
+                  placeholder="Enter username or email"
                 />
-                {errors.username && (
-                  <div className="text-danger">{errors.username}</div>
-                )}
+                {errors.username && <small className="text-danger">{errors.username}</small>}
               </div>
               <div className="mb-3 text-start">
-                <label className="mb-2 label1">Password</label>
+                <label className="mb-2 label1">
+                  Password <span className="text-danger">*</span>
+                </label>
                 <input
                   type="password"
                   className="form-control form-control1"
                   name="password"
                   value={userData.password}
                   onChange={handleChange}
+                  placeholder="Enter password"
                 />
-                {errors.password && (
-                  <div className="text-danger">{errors.password}</div>
-                )}
+                {errors.password && <small className="text-danger">{errors.password}</small>}
               </div>
               <div className="d-flex justify-content-between mb-4">
                 <div></div>
@@ -130,10 +113,7 @@ const Login = ({ onLogin }) => {
                 </Link>
               </div>
               <div className="button-container">
-                <button
-                  onClick={onSubmit}
-                  className={`btn ${isClicked ? "btn-clicked" : "btn1"}`}
-                >
+                <button type="submit" className={`btn ${isClicked ? "btn-clicked" : "btn1"}`}>
                   Login
                 </button>
               </div>

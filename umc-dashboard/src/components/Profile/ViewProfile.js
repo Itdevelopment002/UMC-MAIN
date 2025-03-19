@@ -50,17 +50,12 @@ const ViewProfile = () => {
                                 style={{ width: "150px" }}
                             />
                             <h5 className="mt-3">{user?.username || "User"}</h5>
-                            <p className="text-muted">{user?.designation || "N/A"}</p>
+                            <h6 className="text-muted">{user?.role || "User"}</h6>
                         </div>
-                        <div className="col-md-8">
+                        <div className="col-md-8 mt-2">
                             <div className="row">
                                 <div className="col-sm-4"><strong>Full Name:</strong></div>
                                 <div className="col-sm-8 text-muted">{user?.fullname || "N/A"}</div>
-                            </div>
-                            <hr />
-                            <div className="row">
-                                <div className="col-sm-4"><strong>Designation:</strong></div>
-                                <div className="col-sm-8 text-muted">{user?.designation || "N/A"}</div>
                             </div>
                             <hr />
                             <div className="row">
@@ -69,9 +64,15 @@ const ViewProfile = () => {
                             </div>
                             <hr />
                             <div className="row">
-                                <div className="col-sm-4"><strong>Mobile:</strong></div>
-                                <div className="col-sm-8 text-muted">{user?.mobile || "912345XXXX"}</div>
+                                <div className="col-sm-4"><strong>Status:</strong></div>
+                                <div className="col-sm-8 text-muted">{user?.status || "N/A"}</div>
                             </div>
+                            <hr />
+                            <div className="row">
+                                <div className="col-sm-4"><strong>Permission:</strong></div>
+                                <div className="col-sm-8 text-muted">{user?.permission || "N/A"}</div>
+                            </div>
+                            <hr />
                             <div className="mt-3 d-flex justify-content-end">
                                 <Link to={`/edit-profile/${user?.id}`} className="btn btn-outline-success mx-2 btn-sm">
                                     Edit Profile

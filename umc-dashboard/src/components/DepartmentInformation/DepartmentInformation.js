@@ -8,7 +8,7 @@ import "glightbox/dist/css/glightbox.min.css";
 import Flatpickr from "react-flatpickr";
 import "flatpickr/dist/themes/material_blue.css";
 
-const DepartmentInformation = () => {
+const DepartmentInformation = ({ user }) => {
     const [selectedDepartmentDescription, setSelectedDepartmentDescription] = useState("");
     const [selectedDepartmentPdf, setSelectedDepartmentPdf] = useState("");
     const [bannerData, setBannerData] = useState([]);
@@ -907,213 +907,215 @@ const DepartmentInformation = () => {
                             </div>
                         </div>
                     </div>
-                    <div className="row">
-                        <div className="col-lg-12">
-                            <div className="card-box">
-                                <div className="card-block">
-                                    <div className="row">
-                                        <div className="col-6">
-                                            <h4 className="page-title">Department Pdfs</h4>
+                    {!user?.permission?.includes("Audit Department") && (
+                        <div className="row">
+                            <div className="col-lg-12">
+                                <div className="card-box">
+                                    <div className="card-block">
+                                        <div className="row">
+                                            <div className="col-6">
+                                                <h4 className="page-title">Department Pdfs</h4>
+                                            </div>
+                                            <div className="col-6 text-right m-b-20">
+                                                <Link
+                                                    to="/add-department-pdfs"
+                                                    className="btn btn-primary btn-rounded float-right"
+                                                >
+                                                    <i className="fa fa-plus"></i> Add Pdf
+                                                </Link>
+                                            </div>
                                         </div>
-                                        <div className="col-6 text-right m-b-20">
-                                            <Link
-                                                to="/add-department-pdfs"
-                                                className="btn btn-primary btn-rounded float-right"
-                                            >
-                                                <i className="fa fa-plus"></i> Add Pdf
-                                            </Link>
+                                        <div className="row">
+                                            <div className="col-sm-4">
+                                                <select
+                                                    className="form-control"
+                                                    value={selectedDepartmentPdf}
+                                                    onChange={(e) => {
+                                                        setSelectedDepartmentPdf(e.target.value);
+                                                        setPdfCurrentPage(1);
+                                                    }}
+                                                >
+                                                    {departmentPdfOptions.map((dept, index) => (
+                                                        <option key={index} value={dept}>
+                                                            {dept}
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div className="row">
-                                        <div className="col-sm-4">
-                                            <select
-                                                className="form-control"
-                                                value={selectedDepartmentPdf}
-                                                onChange={(e) => {
-                                                    setSelectedDepartmentPdf(e.target.value);
-                                                    setPdfCurrentPage(1);
-                                                }}
-                                            >
-                                                {departmentPdfOptions.map((dept, index) => (
-                                                    <option key={index} value={dept}>
-                                                        {dept}
-                                                    </option>
-                                                ))}
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div className="table-responsive m-t-20">
-                                        <table className="table table-bordered m-b-0">
-                                            <thead>
-                                                <tr>
-                                                    <th width="10%" className="text-center">Sr. No.</th>
-                                                    <th width="35">PDF Heading</th>
-                                                    <th width="35">PDF Link</th>
-                                                    <th width="10%" className="text-center">Issue Date</th>
-                                                    <th width="15%" className="text-center">Action</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {paginatedPdfData.length > 0 ? (
-                                                    paginatedPdfData.map((item, index) => (
-                                                        <tr key={item.id}>
-                                                            <td className="text-center">{startPdfIndex + index + 1}</td>
-                                                            <td style={{ wordBreak: "break-word", whiteSpace: "normal" }}>{item.heading}</td>
-                                                            <td style={{ wordBreak: "break-word", whiteSpace: "normal" }}>
-                                                                <Link
-                                                                    className="text-decoration-none"
-                                                                    target="_blank"
-                                                                    style={{ color: "#000" }}
-                                                                    to={item.link}
-                                                                >
-                                                                    {item.link}
-                                                                </Link>
-                                                            </td>
-                                                            <td className="text-center" style={{ wordBreak: "break-word", whiteSpace: "normal" }}>
-                                                                {new Date(item.issue_date)
-                                                                    .toLocaleDateString("en-GB", {
-                                                                        day: "2-digit",
-                                                                        month: "2-digit",
-                                                                        year: "numeric",
-                                                                    })
-                                                                    .replace(/\//g, "-")}
-                                                            </td>
-                                                            <td className="text-center">
-                                                                <button
-                                                                    onClick={() => openEditModal(item, "pdf")}
-                                                                    className="btn btn-success btn-sm m-t-10"
-                                                                >
-                                                                    Edit
-                                                                </button>
-                                                                <button
-                                                                    onClick={() => {
-                                                                        setSelectedItem(item);
-                                                                        setModalType("pdf");
-                                                                        setShowDeleteModal(true);
-                                                                    }}
-                                                                    className="btn btn-danger btn-sm m-t-10"
-                                                                >
-                                                                    Delete
-                                                                </button>
+                                        <div className="table-responsive m-t-20">
+                                            <table className="table table-bordered m-b-0">
+                                                <thead>
+                                                    <tr>
+                                                        <th width="10%" className="text-center">Sr. No.</th>
+                                                        <th width="35">PDF Heading</th>
+                                                        <th width="35">PDF Link</th>
+                                                        <th width="10%" className="text-center">Issue Date</th>
+                                                        <th width="15%" className="text-center">Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {paginatedPdfData.length > 0 ? (
+                                                        paginatedPdfData.map((item, index) => (
+                                                            <tr key={item.id}>
+                                                                <td className="text-center">{startPdfIndex + index + 1}</td>
+                                                                <td style={{ wordBreak: "break-word", whiteSpace: "normal" }}>{item.heading}</td>
+                                                                <td style={{ wordBreak: "break-word", whiteSpace: "normal" }}>
+                                                                    <Link
+                                                                        className="text-decoration-none"
+                                                                        target="_blank"
+                                                                        style={{ color: "#000" }}
+                                                                        to={item.link}
+                                                                    >
+                                                                        {item.link}
+                                                                    </Link>
+                                                                </td>
+                                                                <td className="text-center" style={{ wordBreak: "break-word", whiteSpace: "normal" }}>
+                                                                    {new Date(item.issue_date)
+                                                                        .toLocaleDateString("en-GB", {
+                                                                            day: "2-digit",
+                                                                            month: "2-digit",
+                                                                            year: "numeric",
+                                                                        })
+                                                                        .replace(/\//g, "-")}
+                                                                </td>
+                                                                <td className="text-center">
+                                                                    <button
+                                                                        onClick={() => openEditModal(item, "pdf")}
+                                                                        className="btn btn-success btn-sm m-t-10"
+                                                                    >
+                                                                        Edit
+                                                                    </button>
+                                                                    <button
+                                                                        onClick={() => {
+                                                                            setSelectedItem(item);
+                                                                            setModalType("pdf");
+                                                                            setShowDeleteModal(true);
+                                                                        }}
+                                                                        className="btn btn-danger btn-sm m-t-10"
+                                                                    >
+                                                                        Delete
+                                                                    </button>
+                                                                </td>
+                                                            </tr>
+                                                        ))
+                                                    ) : (
+                                                        <tr>
+                                                            <td colSpan={4} className="text-center">
+                                                                No Pdf Data Available
                                                             </td>
                                                         </tr>
-                                                    ))
-                                                ) : (
-                                                    <tr>
-                                                        <td colSpan={4} className="text-center">
-                                                            No Pdf Data Available
-                                                        </td>
-                                                    </tr>
-                                                )}
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                    <ul className="pagination mt-4">
-                                        <li className={`page-item ${pdfCurrentPage === 1 ? "disabled" : ""}`}>
-                                            <button
-                                                className="page-link"
-                                                onClick={() => setPdfCurrentPage(pdfCurrentPage - 1)}
-                                            >
-                                                Previous
-                                            </button>
-                                        </li>
-                                        {pdfCurrentPage > 2 && (
-                                            <li className={`page-item ${pdfCurrentPage === 1 ? "active" : ""}`}>
-                                                <button className="page-link" onClick={() => setPdfCurrentPage(1)}>
-                                                    1
+                                                    )}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <ul className="pagination mt-4">
+                                            <li className={`page-item ${pdfCurrentPage === 1 ? "disabled" : ""}`}>
+                                                <button
+                                                    className="page-link"
+                                                    onClick={() => setPdfCurrentPage(pdfCurrentPage - 1)}
+                                                >
+                                                    Previous
                                                 </button>
                                             </li>
-                                        )}
-                                        {pdfCurrentPage > 3 && (
-                                            <li className={`page-item ${pdfCurrentPage === 2 ? "active" : ""}`}>
-                                                <button className="page-link" onClick={() => setPdfCurrentPage(2)}>
-                                                    2
-                                                </button>
-                                            </li>
-                                        )}
-                                        {pdfCurrentPage > 4 && (
-                                            <li className="page-item disabled">
-                                                <span className="page-link">...</span>
-                                            </li>
-                                        )}
-                                        {Array.from(
-                                            { length: Math.ceil(filteredPdfData.length / itemsPerPage) },
-                                            (_, i) => i + 1
-                                        )
-                                            .filter(
-                                                (page) =>
-                                                    page >= pdfCurrentPage - 1 && page <= pdfCurrentPage + 1
+                                            {pdfCurrentPage > 2 && (
+                                                <li className={`page-item ${pdfCurrentPage === 1 ? "active" : ""}`}>
+                                                    <button className="page-link" onClick={() => setPdfCurrentPage(1)}>
+                                                        1
+                                                    </button>
+                                                </li>
+                                            )}
+                                            {pdfCurrentPage > 3 && (
+                                                <li className={`page-item ${pdfCurrentPage === 2 ? "active" : ""}`}>
+                                                    <button className="page-link" onClick={() => setPdfCurrentPage(2)}>
+                                                        2
+                                                    </button>
+                                                </li>
+                                            )}
+                                            {pdfCurrentPage > 4 && (
+                                                <li className="page-item disabled">
+                                                    <span className="page-link">...</span>
+                                                </li>
+                                            )}
+                                            {Array.from(
+                                                { length: Math.ceil(filteredPdfData.length / itemsPerPage) },
+                                                (_, i) => i + 1
                                             )
-                                            .map((page) => (
+                                                .filter(
+                                                    (page) =>
+                                                        page >= pdfCurrentPage - 1 && page <= pdfCurrentPage + 1
+                                                )
+                                                .map((page) => (
+                                                    <li
+                                                        className={`page-item ${pdfCurrentPage === page ? "active" : ""}`}
+                                                        key={page}
+                                                    >
+                                                        <button
+                                                            className="page-link"
+                                                            onClick={() => setPdfCurrentPage(page)}
+                                                        >
+                                                            {page}
+                                                        </button>
+                                                    </li>
+                                                ))}
+                                            {pdfCurrentPage < Math.ceil(filteredPdfData.length / itemsPerPage) - 3 && (
+                                                <li className="page-item disabled">
+                                                    <span className="page-link">...</span>
+                                                </li>
+                                            )}
+                                            {pdfCurrentPage < Math.ceil(filteredPdfData.length / itemsPerPage) - 2 && (
                                                 <li
-                                                    className={`page-item ${pdfCurrentPage === page ? "active" : ""}`}
-                                                    key={page}
+                                                    className={`page-item ${pdfCurrentPage === Math.ceil(filteredPdfData.length / itemsPerPage) - 1
+                                                        ? "active"
+                                                        : ""
+                                                        }`}
                                                 >
                                                     <button
                                                         className="page-link"
-                                                        onClick={() => setPdfCurrentPage(page)}
+                                                        onClick={() =>
+                                                            setPdfCurrentPage(Math.ceil(filteredPdfData.length / itemsPerPage) - 1)
+                                                        }
                                                     >
-                                                        {page}
+                                                        {Math.ceil(filteredPdfData.length / itemsPerPage) - 1}
                                                     </button>
                                                 </li>
-                                            ))}
-                                        {pdfCurrentPage < Math.ceil(filteredPdfData.length / itemsPerPage) - 3 && (
-                                            <li className="page-item disabled">
-                                                <span className="page-link">...</span>
-                                            </li>
-                                        )}
-                                        {pdfCurrentPage < Math.ceil(filteredPdfData.length / itemsPerPage) - 2 && (
-                                            <li
-                                                className={`page-item ${pdfCurrentPage === Math.ceil(filteredPdfData.length / itemsPerPage) - 1
-                                                    ? "active"
-                                                    : ""
-                                                    }`}
-                                            >
-                                                <button
-                                                    className="page-link"
-                                                    onClick={() =>
-                                                        setPdfCurrentPage(Math.ceil(filteredPdfData.length / itemsPerPage) - 1)
-                                                    }
+                                            )}
+                                            {pdfCurrentPage < Math.ceil(filteredPdfData.length / itemsPerPage) - 1 && (
+                                                <li
+                                                    className={`page-item ${pdfCurrentPage === Math.ceil(filteredPdfData.length / itemsPerPage)
+                                                        ? "active"
+                                                        : ""
+                                                        }`}
                                                 >
-                                                    {Math.ceil(filteredPdfData.length / itemsPerPage) - 1}
-                                                </button>
-                                            </li>
-                                        )}
-                                        {pdfCurrentPage < Math.ceil(filteredPdfData.length / itemsPerPage) - 1 && (
+                                                    <button
+                                                        className="page-link"
+                                                        onClick={() =>
+                                                            setPdfCurrentPage(Math.ceil(filteredPdfData.length / itemsPerPage))
+                                                        }
+                                                    >
+                                                        {Math.ceil(filteredPdfData.length / itemsPerPage)}
+                                                    </button>
+                                                </li>
+                                            )}
                                             <li
                                                 className={`page-item ${pdfCurrentPage === Math.ceil(filteredPdfData.length / itemsPerPage)
-                                                    ? "active"
+                                                    ? "disabled"
                                                     : ""
                                                     }`}
                                             >
                                                 <button
                                                     className="page-link"
-                                                    onClick={() =>
-                                                        setPdfCurrentPage(Math.ceil(filteredPdfData.length / itemsPerPage))
-                                                    }
+                                                    onClick={() => setPdfCurrentPage(pdfCurrentPage + 1)}
                                                 >
-                                                    {Math.ceil(filteredPdfData.length / itemsPerPage)}
+                                                    Next
                                                 </button>
                                             </li>
-                                        )}
-                                        <li
-                                            className={`page-item ${pdfCurrentPage === Math.ceil(filteredPdfData.length / itemsPerPage)
-                                                ? "disabled"
-                                                : ""
-                                                }`}
-                                        >
-                                            <button
-                                                className="page-link"
-                                                onClick={() => setPdfCurrentPage(pdfCurrentPage + 1)}
-                                            >
-                                                Next
-                                            </button>
-                                        </li>
-                                    </ul>
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    )}
 
                     {showEditModal && (
                         <div
