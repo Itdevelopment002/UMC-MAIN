@@ -14,11 +14,12 @@ const storage = multer.diskStorage({
   },
 });
 
-const upload = multer({ storage,
- limits: { fileSize: 10 * 1024 * 1024 },
+const upload = multer({
+  storage,
+  limits: { fileSize: 10 * 1024 * 1024 },
 });
 
-
+// Fetch all users
 router.get("/users", (req, res) => {
   const query = "SELECT * FROM users";
   db.query(query, (err, results) => {
@@ -26,12 +27,17 @@ router.get("/users", (req, res) => {
       console.error("Error fetching users:", err);
       return res.status(500).json({ message: "Error fetching users" });
     }
-    res.json(results);
+    // Convert permission string to array
+    const users = results.map((user) => ({
+      ...user,
+      permission: user.permission ? user.permission.split(",") : [],
+    }));
+    res.json(users);
   });
 });
 
-
-router.get("/users/:id", (req, res) => { 
+// Fetch a single user by ID
+router.get("/users/:id", (req, res) => {
   const { id } = req.params;
 
   const query = "SELECT * FROM users WHERE id = ?";
@@ -43,29 +49,54 @@ router.get("/users/:id", (req, res) => {
     if (results.length === 0) {
       return res.status(404).json({ message: "User not found" });
     }
-    res.json(results[0]);
+    // Convert permission string to array
+    const user = {
+      ...results[0],
+      permission: results[0].permission ? results[0].permission.split(",") : [],
+    };
+    res.json(user);
   });
 });
 
+// Add a new user
+router.post("/users", upload.single("userImage"), (req, res) => {
+  const { username, fullname, role, email, password, permission } = req.body;
+  const defaultImage = "uploads/image.jpg";
+  const userImage = req.file ? `uploads/${req.file.filename}` : defaultImage;
 
-router.post("/users", (req, res) => {
-  const { username, password, department } = req.body;
+  // Convert permission array to comma-separated string
+  const permissionString = Array.isArray(permission) ? permission.join(",") : permission;
 
-  const query =
-    "INSERT INTO users (username, password, department) VALUES (?, ?, ?)";
-  db.query(query, [username, password, department], (err, results) => {
-    if (err) {
-      console.error("Error adding user:", err);
-      return res.status(500).json({ message: "Error adding user" });
+  const query = `
+    INSERT INTO users (username, fullname, role, email, password, permission, userImage) 
+    VALUES (?, ?, ?, ?, ?, ?, ?)
+  `;
+
+  db.query(
+    query,
+    [username, fullname, role, email, password, permissionString, userImage],
+    (err, results) => {
+      if (err) {
+        console.error("Error adding user:", err);
+        return res.status(500).json({ message: "Error adding user" });
+      }
+      res.status(201).json({
+        id: results.insertId,
+        username,
+        fullname,
+        role,
+        email,
+        permission: permissionString.split(","),
+        userImage,
+      });
     }
-    res.status(201).json({ id: results.insertId, username, department });
-  });
+  );
 });
 
-
+// Update a user
 router.put("/users/:id", upload.single("userImage"), async (req, res) => {
   const { id } = req.params;
-  const { fullname, email, mobile, designation, password } = req.body;
+  const { fullname, email, role, permission, status, password } = req.body;
   const imagePath = req.file ? `uploads/${req.file.filename}` : null;
 
   try {
@@ -82,14 +113,24 @@ router.put("/users/:id", upload.single("userImage"), async (req, res) => {
 
       const updatedFullname = fullname || user.fullname;
       const updatedEmail = email || user.email;
-      const updatedMobile = mobile || user.mobile;
-      const updatedDesignation = designation || user.designation;
+      const updatedRole = role || user.role;
+      const updatedPermission = permission ? (Array.isArray(permission) ? permission.join(",") : permission) : user.permission;
+      const updatedStatus = status || user.status;
       const updatedPassword = password || user.password;
       const updatedImage = imagePath || user.userImage;
 
       const query =
-        "UPDATE users SET fullname = ?, email = ?, mobile = ?, designation = ?, password = ?, userImage = ? WHERE id = ?";
-      const values = [updatedFullname, updatedEmail, updatedMobile, updatedDesignation, updatedPassword, updatedImage, id];
+        "UPDATE users SET fullname = ?, email = ?, role = ?, permission = ?, status = ?, password = ?, userImage = ? WHERE id = ?";
+      const values = [
+        updatedFullname,
+        updatedEmail,
+        updatedRole,
+        updatedPermission,
+        updatedStatus,
+        updatedPassword,
+        updatedImage,
+        id,
+      ];
 
       db.query(query, values, (err, results) => {
         if (err) {
@@ -107,8 +148,9 @@ router.put("/users/:id", upload.single("userImage"), async (req, res) => {
           message: "User updated successfully",
           fullname: updatedFullname,
           email: updatedEmail,
-          mobile: updatedMobile,
-          designation: updatedDesignation,
+          role: updatedRole,
+          permission: updatedPermission.split(","),
+          status: updatedStatus,
           userImage: updatedImage,
         });
       });
@@ -119,8 +161,8 @@ router.put("/users/:id", upload.single("userImage"), async (req, res) => {
   }
 });
 
-
-router.delete("/users:id", (req, res) => {
+// Delete a user
+router.delete("/users/:id", (req, res) => {
   const { id } = req.params;
 
   const query = "DELETE FROM users WHERE id = ?";
