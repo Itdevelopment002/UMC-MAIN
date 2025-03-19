@@ -713,7 +713,7 @@ const Sidebar = ({ isOpen, closeSidebar, user }) => {
                           Department Information
                         </Link>
                       </li>
-                      {user.permission === "Audit Department" && (
+                      {user?.permission?.includes("Audit Department") && (
                         <li
                           className={activeItem === "/audit-report" ? "active" : ""}
                           onClick={() => handleItemClick("/audit-report")}
