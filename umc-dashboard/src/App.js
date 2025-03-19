@@ -157,6 +157,8 @@ import AddOnlineServices from "./components/Footer/AddOnlineServices";
 import ViewProfile from "./components/Profile/ViewProfile";
 import EditProfile from "./components/Profile/EditProfile";
 import AddTableHeading from "./components/AdministrativeStructure/AddTableHeading";
+import AddUsers from "./components/Users/AddUsers";
+import Users from "./components/Users/Users";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(
@@ -224,201 +226,227 @@ function App() {
             <>
               <Header onLogout={handleLogout} userDepartment={userData} />
               <div>
-                <Sidebar />
+                <Sidebar user={userData} />
                 <div>
                   <Routes>
 
                     <Route path="/" element={<Navigate to="/home" replace />} />
 
-                    {/* Header */}
-                    <Route path="/home" element={<MainMenu />} />
-                    <Route path="/add-main-menu" element={<AddMainMenu />} />
+                    {userData.role === "Superadmin" && (
+                      <>
+                        {/* Header */}
+                        <Route path="/home" element={<MainMenu />} />
+                        <Route path="/add-main-menu" element={<AddMainMenu />} />
 
-                    {/* Home */}
-                    <Route path="/minister" element={<MinisterDetails />} />
-                    <Route path="/add-minister" element={<AddMinisterDetails />} />
-                    <Route path="/slider" element={<Slider />} />
-                    <Route path="/add-slider" element={<AddSlider />} />
-                    <Route path="/current-update" element={<CurrentUpdate />} />
-                    <Route path="/add-current-update" element={<AddCurrentUpdate />} />
-                    <Route path="/umc-news" element={<UMCNews />} />
-                    <Route path="/add-umc-news" element={<AddUMCNews />} />
-                    <Route path="/initiatives" element={<Initiatives />} />
-                    <Route path="/add-initiatives" element={<AddInitiatives />} />
-                    <Route path="/eservices" element={<EServices />} />
-                    <Route path="/add-eservices" element={<AddEServices />} />
-                    <Route path="/information" element={<Information />} />
-                    <Route path="/add-information" element={<AddInformation />} />
-                    <Route path="/citizen-services" element={<CitizeServices />} />
-                    <Route path="/add-citizen-services" element={<AddCitizeServices />} />
-                    <Route path="/home-video" element={<HomeVideo />} />
-                    <Route path="/add-home-video" element={<AddHomeVideo />} />
-                    <Route path="/home-gallery" element={<HomeGallery />} />
-                    <Route path="/add-home-gallery" element={<AddHomeGallery />} />
-                    <Route path="/citizen-communication" element={<CitizenCommunication />} />
-                    <Route path="/add-portal-services" element={<AddPortalServices />} />
-                    <Route path="/add-emergency-services" element={<AddEmergencyServices />} />
-                    <Route path="/home-services1" element={<HomeService1 />} />
-                    <Route path="/add-home-services1" element={<AddHomeService1 />} />
-                    <Route path="/home-services2" element={<HomeServices2 />} />
-                    <Route path="/add-home-services2" element={<AddHomeServices2 />} />
-                    <Route path="/bottom-slider" element={<BottomSlider />} />
-                    <Route path="/add-bottom-slider" element={<AddBottomSlider />} />
-                    <Route path="/swms" element={<SolidWasteSystem />} />
-                    <Route path="/add-swms" element={<AddSolidWasteSystem />} />
-                    <Route path="/press-note" element={<PressNote />} />
-                    <Route path="/add-press-note" element={<AddPressNote />} />
-                    <Route path="/property-tax-department" element={<PropertyTaxDept />} />
-                    <Route path="/add-property-tax-department" element={<AddPropertyTaxDept />} />
+                        {/* Home */}
+                        <Route path="/minister" element={<MinisterDetails />} />
+                        <Route path="/add-minister" element={<AddMinisterDetails />} />
+                        <Route path="/slider" element={<Slider />} />
+                        <Route path="/add-slider" element={<AddSlider />} />
+                        <Route path="/current-update" element={<CurrentUpdate />} />
+                        <Route path="/add-current-update" element={<AddCurrentUpdate />} />
+                        <Route path="/umc-news" element={<UMCNews />} />
+                        <Route path="/add-umc-news" element={<AddUMCNews />} />
+                        <Route path="/initiatives" element={<Initiatives />} />
+                        <Route path="/add-initiatives" element={<AddInitiatives />} />
+                        <Route path="/eservices" element={<EServices />} />
+                        <Route path="/add-eservices" element={<AddEServices />} />
+                        <Route path="/information" element={<Information />} />
+                        <Route path="/add-information" element={<AddInformation />} />
+                        <Route path="/citizen-services" element={<CitizeServices />} />
+                        <Route path="/add-citizen-services" element={<AddCitizeServices />} />
+                        <Route path="/home-video" element={<HomeVideo />} />
+                        <Route path="/add-home-video" element={<AddHomeVideo />} />
+                        <Route path="/home-gallery" element={<HomeGallery />} />
+                        <Route path="/add-home-gallery" element={<AddHomeGallery />} />
+                        <Route path="/citizen-communication" element={<CitizenCommunication />} />
+                        <Route path="/add-portal-services" element={<AddPortalServices />} />
+                        <Route path="/add-emergency-services" element={<AddEmergencyServices />} />
+                        <Route path="/home-services1" element={<HomeService1 />} />
+                        <Route path="/add-home-services1" element={<AddHomeService1 />} />
+                        <Route path="/home-services2" element={<HomeServices2 />} />
+                        <Route path="/add-home-services2" element={<AddHomeServices2 />} />
+                        <Route path="/bottom-slider" element={<BottomSlider />} />
+                        <Route path="/add-bottom-slider" element={<AddBottomSlider />} />
+                        <Route path="/swms" element={<SolidWasteSystem />} />
+                        <Route path="/add-swms" element={<AddSolidWasteSystem />} />
+                        <Route path="/press-note" element={<PressNote />} />
+                        <Route path="/add-press-note" element={<AddPressNote />} />
+                        <Route path="/property-tax-department" element={<PropertyTaxDept />} />
+                        <Route path="/add-property-tax-department" element={<AddPropertyTaxDept />} />
 
-                    {/* About UMC */}
-                    <Route path="/location" element={<Location />} />
-                    <Route path="/add-datatable1" element={<AddDataTable1 />} />
-                    <Route path="/add-datatable2" element={<AddDataTable2 />} />
-                    <Route path="/add-datatable3" element={<AddDataTable3 />} />
-                    <Route path="/add-datatable4" element={<AddDataTable4 />} />
-                    <Route path="/commissioner" element={<Commissioner />} />
-                    <Route path="/add-commissioner-details" element={<AddCommissionerDetails />} />
-                    <Route path="/add-commissioner-desc" element={<AddCommissionerDesc />} />
-                    <Route path="/additional-commissioner" element={<AddtCommissioner />} />
-                    <Route path="/add-addt-commissioner-details" element={<AddAddtCommissionerDetails />} />
-                    <Route path="/add-addt-commissioner-desc" element={<AddAddtCommissionerDesc />} />
-                    <Route path="/deputy-commissioner" element={<DeptCommissioner />} />
-                    <Route path="/add-dept-commissioner-details" element={<AddDeptCommissionerDetails />} />
-                    <Route path="/add-dept-commissioner-desc" element={<AddDeptCommissionerDesc />} />
-                    <Route path="/assistant-commissioner" element={<AsstCommissioner />} />
-                    <Route path="/add-asst-commissioner-details" element={<AddAsstCommissionerDetails />} />
-                    <Route path="/add-asst-commissioner-desc" element={<AddAsstCommissionerDesc />} />
-                    <Route path="/history" element={<UmcHistory />} />
-                    <Route path="/add-historyImage" element={<AddHistoryImage />} />
-                    <Route path="/tourism" element={<Tourism />} />
-                    <Route path="/add-tourism" element={<AddTourism />} />
+                        {/* About UMC */}
+                        <Route path="/location" element={<Location />} />
+                        <Route path="/add-datatable1" element={<AddDataTable1 />} />
+                        <Route path="/add-datatable2" element={<AddDataTable2 />} />
+                        <Route path="/add-datatable3" element={<AddDataTable3 />} />
+                        <Route path="/add-datatable4" element={<AddDataTable4 />} />
+                        <Route path="/commissioner" element={<Commissioner />} />
+                        <Route path="/add-commissioner-details" element={<AddCommissionerDetails />} />
+                        <Route path="/add-commissioner-desc" element={<AddCommissionerDesc />} />
+                        <Route path="/additional-commissioner" element={<AddtCommissioner />} />
+                        <Route path="/add-addt-commissioner-details" element={<AddAddtCommissionerDetails />} />
+                        <Route path="/add-addt-commissioner-desc" element={<AddAddtCommissionerDesc />} />
+                        <Route path="/deputy-commissioner" element={<DeptCommissioner />} />
+                        <Route path="/add-dept-commissioner-details" element={<AddDeptCommissionerDetails />} />
+                        <Route path="/add-dept-commissioner-desc" element={<AddDeptCommissionerDesc />} />
+                        <Route path="/assistant-commissioner" element={<AsstCommissioner />} />
+                        <Route path="/add-asst-commissioner-details" element={<AddAsstCommissionerDetails />} />
+                        <Route path="/add-asst-commissioner-desc" element={<AddAsstCommissionerDesc />} />
+                        <Route path="/history" element={<UmcHistory />} />
+                        <Route path="/add-historyImage" element={<AddHistoryImage />} />
+                        <Route path="/tourism" element={<Tourism />} />
+                        <Route path="/add-tourism" element={<AddTourism />} />
 
-                    {/* Administrative Wings */}
-                    <Route path="/administrative-structure" element={<AdministrativeStructure />} />
-                    <Route path="/add-table-heading" element={<AddTableHeading />} />
-                    <Route path="/add-structure-tab1" element={<AddStructureTab1 />} />
-                    <Route path="/add-structure-tab2" element={<AddStructureTab2 />} />
-                    <Route path="/add-structure-tab3" element={<AddStructureTab3 />} />
-                    <Route path="/add-structure-tab4" element={<AddStructureTab4 />} />
+                        {/* Administrative Wings */}
+                        <Route path="/administrative-structure" element={<AdministrativeStructure />} />
+                        <Route path="/add-table-heading" element={<AddTableHeading />} />
+                        <Route path="/add-structure-tab1" element={<AddStructureTab1 />} />
+                        <Route path="/add-structure-tab2" element={<AddStructureTab2 />} />
+                        <Route path="/add-structure-tab3" element={<AddStructureTab3 />} />
+                        <Route path="/add-structure-tab4" element={<AddStructureTab4 />} />
 
-                    {/* Corporation */}
-                    <Route path="/adminstration" element={<Administration />} />
-                    <Route path="/add-adminstration" element={<AddAdministration />} />
-                    <Route path="/annual-financial-statement" element={<Annual />} />
-                    <Route path="/add-annual-financial-statement" element={<AddAnnual />} />
-                    <Route path="/elected-member" element={<ElectedMember />} />
-                    <Route path="/add-elected-member" element={<AddElectedMember />} />
-                    <Route path="/enews-letter" element={<ENews />} />
-                    <Route path="/add-enews-letter" element={<AddeNews />} />
-                    <Route path="/muncipal-meeting" element={<MuncipalMeeting />} />
-                    <Route path="/add-muncipal-meeting" element={<AddMuncipalMeeting />} />
-                    <Route path="/agenda" element={<Agenda />} />
-                    <Route path="/add-agenda" element={<AddAgenda />} />
-                    <Route path="/budget" element={<Budget />} />
-                    <Route path="/add-budget" element={<AddBudget />} />
-                    <Route path="/umc-committee" element={<UmcCommittee />} />
-                    <Route path="/add-standing-committee" element={<AddStandingCommittee />} />
-                    <Route path="/add-ward-committee" element={<AddWardCommittee />} />
-                    <Route path="/add-women-committee" element={<AddWomenCommittee />} />
-                    <Route path="/policies" element={<Policies />} />
-                    <Route path="/add-policies" element={<AddPolicies />} />
-                    <Route path="/resolution" element={<Resolutions />} />
-                    <Route path="/add-resolution" element={<AddResolution />} />
-                    <Route path="/ward-office" element={<WardOffice />} />
-                    <Route path="/add-ward-office" element={<AddWardOffice />} />
+                        {/* Corporation */}
+                        <Route path="/adminstration" element={<Administration />} />
+                        <Route path="/add-adminstration" element={<AddAdministration />} />
+                        <Route path="/annual-financial-statement" element={<Annual />} />
+                        <Route path="/add-annual-financial-statement" element={<AddAnnual />} />
+                        <Route path="/elected-member" element={<ElectedMember />} />
+                        <Route path="/add-elected-member" element={<AddElectedMember />} />
+                        <Route path="/enews-letter" element={<ENews />} />
+                        <Route path="/add-enews-letter" element={<AddeNews />} />
+                        <Route path="/muncipal-meeting" element={<MuncipalMeeting />} />
+                        <Route path="/add-muncipal-meeting" element={<AddMuncipalMeeting />} />
+                        <Route path="/agenda" element={<Agenda />} />
+                        <Route path="/add-agenda" element={<AddAgenda />} />
+                        <Route path="/budget" element={<Budget />} />
+                        <Route path="/add-budget" element={<AddBudget />} />
+                        <Route path="/umc-committee" element={<UmcCommittee />} />
+                        <Route path="/add-standing-committee" element={<AddStandingCommittee />} />
+                        <Route path="/add-ward-committee" element={<AddWardCommittee />} />
+                        <Route path="/add-women-committee" element={<AddWomenCommittee />} />
+                        <Route path="/policies" element={<Policies />} />
+                        <Route path="/add-policies" element={<AddPolicies />} />
+                        <Route path="/resolution" element={<Resolutions />} />
+                        <Route path="/add-resolution" element={<AddResolution />} />
+                        <Route path="/ward-office" element={<WardOffice />} />
+                        <Route path="/add-ward-office" element={<AddWardOffice />} />
 
-                    {/* Departments */}
-                    <Route path="/departments" element={<DepartmentPage />} />
-                    <Route path="/add-departments" element={<AddDepartmentPage />} />
-                    <Route path="/department-information" element={<DepartmentInformation />} />
-                    <Route path="/add-department-banner" element={<AddDepartmentBanner />} />
-                    <Route path="/add-department-description" element={<AddDeptDescription />} />
-                    <Route path="/add-hod-details" element={<AddHodDetails />} />
-                    <Route path="/add-department-pdfs" element={<AddDeptPdfs />} />
-                    <Route path="/audit-report" element={<AuditReport />} />
-                    <Route path="/add-audit-report" element={<AddAuditReport />} />
+                        {/* Departments */}
+                        <Route path="/departments" element={<DepartmentPage />} />
+                        <Route path="/add-departments" element={<AddDepartmentPage />} />
+                        <Route path="/department-information" element={<DepartmentInformation />} />
+                        <Route path="/add-department-banner" element={<AddDepartmentBanner />} />
+                        <Route path="/add-department-description" element={<AddDeptDescription />} />
+                        <Route path="/add-hod-details" element={<AddHodDetails />} />
+                        <Route path="/add-department-pdfs" element={<AddDeptPdfs />} />
+                        <Route path="/audit-report" element={<AuditReport />} />
+                        <Route path="/add-audit-report" element={<AddAuditReport />} />
 
-                    {/* Citizen Services */}
-                    <Route path="/tenders-quotations" element={<Tenders />} />
-                    <Route path="/add-tenders-quotations" element={<AddTenders />} />
+                        {/* Citizen Services */}
+                        <Route path="/tenders-quotations" element={<Tenders />} />
+                        <Route path="/add-tenders-quotations" element={<AddTenders />} />
 
-                    {/* RTS */}
-                    <Route path="/rts" element={<RightToService />} />
-                    <Route path="/add-rts" element={<AddRightToService />} />
+                        {/* RTS */}
+                        <Route path="/rts" element={<RightToService />} />
+                        <Route path="/add-rts" element={<AddRightToService />} />
 
-                    {/* Circulars */}
-                    <Route path="/circulars" element={<Circulars />} />
-                    <Route path="/add-circulars" element={<AddCirculars />} />
+                        {/* Circulars */}
+                        <Route path="/circulars" element={<Circulars />} />
+                        <Route path="/add-circulars" element={<AddCirculars />} />
 
-                    {/* Online Services */}
-                    <Route path="/online-home-services" element={<OnlineHomeServices />} />
-                    <Route path="/add-online-home-services" element={<AddOnlineHomeServices />} />
+                        {/* Online Services */}
+                        <Route path="/online-home-services" element={<OnlineHomeServices />} />
+                        <Route path="/add-online-home-services" element={<AddOnlineHomeServices />} />
 
-                    {/* Gallery */}
-                    <Route path="/photo-gallery" element={<PhotosGallery />} />
-                    <Route path="/add-category" element={<AddCategory />} />
-                    <Route path="/add-category-images" element={<AddCategoryImage />} />
-                    <Route path="/video-gallery" element={<VideoGallery />} />
-                    <Route path="/add-video-category" element={<AddVideoCategory />} />
-                    <Route path="/add-category-videos" element={<AddCategoryVideos />} />
+                        {/* Gallery */}
+                        <Route path="/photo-gallery" element={<PhotosGallery />} />
+                        <Route path="/add-category" element={<AddCategory />} />
+                        <Route path="/add-category-images" element={<AddCategoryImage />} />
+                        <Route path="/video-gallery" element={<VideoGallery />} />
+                        <Route path="/add-video-category" element={<AddVideoCategory />} />
+                        <Route path="/add-category-videos" element={<AddCategoryVideos />} />
 
-                    {/* Upcoming Projects */}
-                    <Route path="/home-projects" element={<HomeProjects />} />
-                    <Route path="/add-home-projects" element={<AddHomeProjects />} />
-                    <Route path="/project-details" element={<ProjectDetails />} />
-                    <Route path="/add-project-category" element={<AddProjectCategory />} />
-                    <Route path="/add-project-description" element={<AddProjectDescription />} />
+                        {/* Upcoming Projects */}
+                        <Route path="/home-projects" element={<HomeProjects />} />
+                        <Route path="/add-home-projects" element={<AddHomeProjects />} />
+                        <Route path="/project-details" element={<ProjectDetails />} />
+                        <Route path="/add-project-category" element={<AddProjectCategory />} />
+                        <Route path="/add-project-description" element={<AddProjectDescription />} />
 
-                    {/* RTI */}
-                    <Route path="/rti" element={<RTI />} />
-                    <Route path="/add-rti" element={<AddRTI />} />
-                    <Route path="/proactive-disclosure" element={<ProactiveDisclosure />} />
-                    <Route path="/add-proactive-disclosure" element={<AddProactiveDisclosure />} />
-                    <Route path="/sub-rti" element={<SubRti />} />
-                    <Route path="/add-sub-rti" element={<AddSubRti />} />
+                        {/* RTI */}
+                        <Route path="/rti" element={<RTI />} />
+                        <Route path="/add-rti" element={<AddRTI />} />
+                        <Route path="/proactive-disclosure" element={<ProactiveDisclosure />} />
+                        <Route path="/add-proactive-disclosure" element={<AddProactiveDisclosure />} />
+                        <Route path="/sub-rti" element={<SubRti />} />
+                        <Route path="/add-sub-rti" element={<AddSubRti />} />
 
-                    {/* Recruitment */}
-                    <Route path="/recruitment" element={<Recruitment />} />
-                    <Route path="/add-recruitment" element={<AddRecruitment />} />
+                        {/* Recruitment */}
+                        <Route path="/recruitment" element={<Recruitment />} />
+                        <Route path="/add-recruitment" element={<AddRecruitment />} />
 
-                    {/* Banner */}
-                    <Route path="/banner" element={<Banner />} />
-                    <Route path="/add-banner" element={<AddBanner />} />
+                        {/* Banner */}
+                        <Route path="/banner" element={<Banner />} />
+                        <Route path="/add-banner" element={<AddBanner />} />
 
-                    {/* Screen Reader Access */}
-                    <Route path="/screen-reader-access" element={<ScreenReader />} />
-                    <Route path="/add-screen-reader-access" element={<AddScreenReader />} />
+                        {/* Screen Reader Access */}
+                        <Route path="/screen-reader-access" element={<ScreenReader />} />
+                        <Route path="/add-screen-reader-access" element={<AddScreenReader />} />
 
-                    {/* Contact Us */}
-                    <Route path="/contact-us" element={<ContactUs />} />
-                    <Route path="/add-contact-info" element={<AddContact />} />
-                    <Route path="/add-ward-info" element={<AddWard />} />
+                        {/* Contact Us */}
+                        <Route path="/contact-us" element={<ContactUs />} />
+                        <Route path="/add-contact-info" element={<AddContact />} />
+                        <Route path="/add-ward-info" element={<AddWard />} />
 
-                    {/* Privacy Policy */}
-                    <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-                    <Route path="/add-privacy-policy" element={<AddPrivacyPolicy />} />
+                        {/* Privacy Policy */}
+                        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                        <Route path="/add-privacy-policy" element={<AddPrivacyPolicy />} />
 
-                    {/* Hyperlink Policy */}
-                    <Route path="/hyperlink-policy" element={<HyperlinkPolicy />} />
-                    <Route path="/add-hyperlink-policy" element={<AddHyperlinkPolicy />} />
+                        {/* Hyperlink Policy */}
+                        <Route path="/hyperlink-policy" element={<HyperlinkPolicy />} />
+                        <Route path="/add-hyperlink-policy" element={<AddHyperlinkPolicy />} />
 
-                    {/* Celebration */}
-                    <Route path="/celebration" element={<Celebration />} />
+                        {/* Celebration */}
+                        <Route path="/celebration" element={<Celebration />} />
 
-                    {/* Footer */}
-                    <Route path="/footer" element={<Footer />} />
-                    <Route path="/add-contact" element={<AddContactInfo />} />
-                    <Route path="/add-quick-links" element={<AddQuickLinks />} />
-                    <Route path="/add-help" element={<AddHelp />} />
-                    <Route path="/add-online-services" element={<AddOnlineServices />} />
+                        {/* Footer */}
+                        <Route path="/footer" element={<Footer />} />
+                        <Route path="/add-contact" element={<AddContactInfo />} />
+                        <Route path="/add-quick-links" element={<AddQuickLinks />} />
+                        <Route path="/add-help" element={<AddHelp />} />
+                        <Route path="/add-online-services" element={<AddOnlineServices />} />
 
-                    {/* Profile */}
-                    <Route path="/view-profile/:id" element={<ViewProfile />} />
-                    <Route path="/edit-profile/:id" element={<EditProfile />} />
+                        {/* Profile */}
+                        <Route path="/users" element={<Users />} />
+                        <Route path="/add-users" element={<AddUsers />} />
+                        <Route path="/view-profile/:id" element={<ViewProfile />} />
+                        <Route path="/edit-profile/:id" element={<EditProfile />} />
 
-                    {/* Last Visited */}
-                    <Route path="*" element={<Navigate to={localStorage.getItem("lastVisitedRoute") || "/home"} />} />
+                        {/* Last Visited */}
+                        <Route path="*" element={<Navigate to="/home" replace/>} />
+                      </>
+                    )}
+
+                    {userData.role === "Admin" && (
+                      <>
+                        <Route path="/department-information" element={<DepartmentInformation user={userData} />} />
+                        <Route path="/add-department-banner" element={<AddDepartmentBanner user={userData} />} />
+                        <Route path="/add-department-description" element={<AddDeptDescription user={userData} />} />
+                        <Route path="/add-hod-details" element={<AddHodDetails user={userData} />} />
+                        <Route path="/add-department-pdfs" element={<AddDeptPdfs user={userData} />} />
+
+                        {userData.permission === "Audit Department" && (
+                          <>
+                            <Route path="/audit-report" element={<AuditReport />} />
+                            <Route path="/add-audit-report" element={<AddAuditReport />} />
+                          </>
+                        )}
+
+                        <Route path="*" element={<Navigate to="/department-information" replace />} />
+
+                      </>
+                    )}
 
                   </Routes>
                 </div>

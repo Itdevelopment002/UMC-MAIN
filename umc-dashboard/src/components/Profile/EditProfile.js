@@ -14,8 +14,6 @@ const EditProfile = () => {
     const [user, setUser] = useState(null);
     const [fullname, setFullname] = useState("");
     const [email, setEmail] = useState("");
-    const [mobile, setMobile] = useState("");
-    const [designation, setDesignation] = useState("");
     const [image, setImage] = useState(null);
     const [previewImage, setPreviewImage] = useState(null);
     const [password, setPassword] = useState("");
@@ -41,8 +39,6 @@ const EditProfile = () => {
             setUser(userData);
             setFullname(userData.fullname || "");
             setEmail(userData.email || "");
-            setMobile(userData.mobile || "");
-            setDesignation(userData.designation || "");
             setPreviewImage(userData.userImage ? `${baseURL}/${userData.userImage}` : "https://via.placeholder.com/150");
             setIsChanged(false);
         } catch (error) {
@@ -64,8 +60,6 @@ const EditProfile = () => {
             const formData = new FormData();
             formData.append("fullname", fullname);
             formData.append("email", email);
-            formData.append("mobile", mobile);
-            formData.append("designation", designation);
             if (image) formData.append("userImage", image);
 
             await api.put(`/users/${id}`, formData, { headers: { "Content-Type": "multipart/form-data" } });
@@ -130,8 +124,6 @@ const EditProfile = () => {
         const value = e.target.value;
         if (field === "fullname") setFullname(value);
         if (field === "email") setEmail(value);
-        if (field === "mobile") setMobile(value);
-        if (field === "designation") setDesignation(value);
 
         setIsChanged(true);
     };
@@ -165,7 +157,7 @@ const EditProfile = () => {
                                 </label>
                             </div>
                         </div>
-                        <div className="col-md-8">
+                        <div className="col-md-8 mt-4">
                             <div className="row mb-3">
                                 <div className="col-sm-4"><strong>Full Name:</strong></div>
                                 <div className="col-sm-8">
@@ -178,17 +170,6 @@ const EditProfile = () => {
                                 </div>
                             </div>
                             <div className="row mb-3">
-                                <div className="col-sm-4"><strong>Designation:</strong></div>
-                                <div className="col-sm-8">
-                                    <input
-                                        type="text"
-                                        className="form-control custom-input-edit-profile"
-                                        value={designation}
-                                        onChange={(e) => handleFieldChange(e, "designation")}
-                                    />
-                                </div>
-                            </div>
-                            <div className="row mb-3">
                                 <div className="col-sm-4"><strong>Email:</strong></div>
                                 <div className="col-sm-8">
                                     <input
@@ -196,17 +177,6 @@ const EditProfile = () => {
                                         className="form-control custom-input-edit-profile"
                                         value={email}
                                         onChange={(e) => handleFieldChange(e, "email")}
-                                    />
-                                </div>
-                            </div>
-                            <div className="row mb-3">
-                                <div className="col-sm-4"><strong>Mobile:</strong></div>
-                                <div className="col-sm-8">
-                                    <input
-                                        type="text"
-                                        className="form-control custom-input-edit-profile"
-                                        value={mobile}
-                                        onChange={(e) => handleFieldChange(e, "mobile")}
                                     />
                                 </div>
                             </div>
