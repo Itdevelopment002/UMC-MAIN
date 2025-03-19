@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import api from "../api";
 import { Link, useNavigate } from "react-router-dom";
 
-const AddDepartmentBanner = () => {
+const AddDepartmentBanner = (user) => {
     const [departments, setDepartments] = useState([]);
     const [departmentName, setDepartmentName] = useState("");
     const [selectedFile, setSelectedFile] = useState(null);

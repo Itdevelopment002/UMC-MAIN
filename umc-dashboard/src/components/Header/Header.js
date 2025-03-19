@@ -318,7 +318,6 @@ const Header = ({ onLogout, userDepartment }) => {
 
                   <Link className="dropdown-item" onClick={onLogout}>
                     <FiLogOut className="dropdown-icon" />
-
                     Logout
                   </Link>
                 </div>
@@ -331,7 +330,7 @@ const Header = ({ onLogout, userDepartment }) => {
       <Sidebar
         isOpen={isSidebarOpen}
         closeSidebar={closeSidebar}
-        userDepartment={userDepartment.department}
+        user={user}
       />
     </>
   );
