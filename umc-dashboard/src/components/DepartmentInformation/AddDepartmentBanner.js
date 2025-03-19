@@ -2,18 +2,25 @@ import React, { useState, useEffect } from "react";
 import api from "../api";
 import { Link, useNavigate } from "react-router-dom";
 
-const AddDepartmentBanner = (user) => {
+const AddDepartmentBanner = () => {
     const [departments, setDepartments] = useState([]);
     const [departmentName, setDepartmentName] = useState("");
     const [selectedFile, setSelectedFile] = useState(null);
     const [errors, setErrors] = useState({});
     const navigate = useNavigate();
+    const userData = JSON.parse(localStorage.getItem("userData"));
 
     const fetchDepartments = async () => {
         try {
             const response = await api.get("/department-info");
             const sortedData = response.data.sort((a, b) => a.heading.localeCompare(b.heading));
-            setDepartments(sortedData);
+            if (userData.role === "Superadmin") {
+                setDepartments(sortedData);
+            } else {
+                const userPermissions = userData?.permission?.split(",").map(perm => perm.trim());
+                const filteredData = sortedData.filter(item => userPermissions.includes(item.heading));
+                setDepartments(filteredData);
+            }
         } catch (error) {
             console.error("Error fetching departments:", error);
         }
