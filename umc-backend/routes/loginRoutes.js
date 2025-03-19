@@ -8,13 +8,11 @@ const generateUniqueId = (req, res, next) => {
   next();
 };
 
-
 router.post("/login", generateUniqueId, (req, res) => {
-  const { department, username, password } = req.body;
+  const { username, password } = req.body;
 
-  const query =
-    "SELECT * FROM users WHERE department = ? AND username = ? AND password = ?";
-  db.query(query, [department, username, password], (err, result) => {
+  const query = "SELECT * FROM users WHERE username = ? OR email = ? AND password = ?";
+  db.query(query, [username, username, password], (err, result) => {
     if (err) {
       console.error("Database query error:", err);
       return res.status(500).json({ message: "Server error" });
@@ -22,11 +20,17 @@ router.post("/login", generateUniqueId, (req, res) => {
 
     if (result.length > 0) {
       const user = result[0];
+
+      if (user.status !== "Active") {
+        return res.status(403).json({ message: "User is temporarily disabled" });
+      }
+
       res.json({
         message: "Login successful",
         user: {
           id: user.id,
-          department: user.department,
+          role: user.role,
+          permission: user.permission,
         },
         uniqueId: req.uniqueId,
       });
@@ -35,6 +39,5 @@ router.post("/login", generateUniqueId, (req, res) => {
     }
   });
 });
-
 
 module.exports = router;
