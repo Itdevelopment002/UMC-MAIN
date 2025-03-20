@@ -36,6 +36,7 @@ const AddHodDetails = () => {
 
     useEffect(() => {
         fetchDepartments();
+        //eslint-disable-next-line
     }, []);
 
     const handleFileChange = (e) => {

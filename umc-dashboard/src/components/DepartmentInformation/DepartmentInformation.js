@@ -35,6 +35,7 @@ const DepartmentInformation = ({ user }) => {
         fetchDescriptionData();
         fetchHodData();
         fetchPdfData();
+        //eslint-disable-next-line
     }, []);
 
     const userData = JSON.parse(localStorage.getItem("userData"));

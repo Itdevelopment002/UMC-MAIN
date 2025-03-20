@@ -272,17 +272,17 @@ const Header = ({ onLogout, userDepartment }) => {
                   />
                   <span className="status online"></span>
                 </span>
-                <span className="">{user?.username}</span>
+                <span className="">{user?.fullname}</span>
                 <i className="fa fa-angle-down ml-1"></i>
               </Link>
               {isUserDropdownOpen && (
                 <div className="dropdown-menu show dropdown-keep-visible">
-                  <Link className="dropdown-item" to={`/view-profile/${userDepartment.id}`}>
+                  <Link className="dropdown-item" to="/view-profile">
                     <FaUser className="dropdown-icon" />
                     View Profile
                   </Link>
 
-                  <Link className="dropdown-item" to={`/edit-profile/${userDepartment.id}`}>
+                  <Link className="dropdown-item" to="/edit-profile">
                     <FaEdit className="dropdown-icon" />
                     Edit Profile
                   </Link>
@@ -306,12 +306,12 @@ const Header = ({ onLogout, userDepartment }) => {
               </Link>
               {isUserDropdownOpen && (
                 <div className="dropdown-menu dropdown-menu-right show mx-2 dropdown-keep-visible">
-                  <Link className="dropdown-item" to={`/view-profile/${userDepartment.id}`}>
+                  <Link className="dropdown-item" to="/view-profile">
                     <FaUser className="dropdown-icon" />
                     View Profile
                   </Link>
 
-                  <Link className="dropdown-item" to={`/edit-profile/${userDepartment.id}`}>
+                  <Link className="dropdown-item" to="/edit-profile">
                     <FaEdit className="dropdown-icon" />
                     Edit Profile
                   </Link>

@@ -159,6 +159,8 @@ import EditProfile from "./components/Profile/EditProfile";
 import AddTableHeading from "./components/AdministrativeStructure/AddTableHeading";
 import AddUsers from "./components/Users/AddUsers";
 import Users from "./components/Users/Users";
+import ResetPassword from "./components/ResetPassword/ResetPassword";
+import CodeVerification from "./components/CodeVerification/CodeVerification";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(
@@ -209,6 +211,8 @@ function App() {
       {!isAuthenticated ? (
         <Routes>
           <Route path="/" element={<Login onLogin={handleLogin} />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
+          <Route path="/reset-password-verification" element={<CodeVerification />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       ) : (
@@ -420,8 +424,8 @@ function App() {
                         {/* Profile */}
                         <Route path="/users" element={<Users />} />
                         <Route path="/add-users" element={<AddUsers />} />
-                        <Route path="/view-profile/:id" element={<ViewProfile />} />
-                        <Route path="/edit-profile/:id" element={<EditProfile />} />
+                        <Route path="/view-profile" element={<ViewProfile />} />
+                        <Route path="/edit-profile" element={<EditProfile />} />
 
                         {/* Last Visited */}
                         <Route path="*" element={<Navigate to="/home" replace/>} />
@@ -435,8 +439,8 @@ function App() {
                         <Route path="/add-department-description" element={<AddDeptDescription user={userData} />} />
                         <Route path="/add-hod-details" element={<AddHodDetails user={userData} />} />
                         <Route path="/add-department-pdfs" element={<AddDeptPdfs user={userData} />} />
-                        <Route path="/view-profile/:id" element={<ViewProfile />} />
-                        <Route path="/edit-profile/:id" element={<EditProfile />} />
+                        <Route path="/view-profile" element={<ViewProfile />} />
+                        <Route path="/edit-profile" element={<EditProfile />} />
 
                         {userData?.permission?.includes("Audit Department") && (
                           <>
