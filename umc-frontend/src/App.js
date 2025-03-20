@@ -3,7 +3,7 @@ import "./App.css";
 import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Route, Routes, useLocation } from "react-router-dom";
 import AOS from "aos";
-import "aos/dist/aos.css";
+import 'aos/dist/aos.css';
 import Header from "./components/Header/Header";
 import StickyFeedback from "./components/StickyFeedback/StickyFeedback";
 import Home from "./components/Home/Home";
