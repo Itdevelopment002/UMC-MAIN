@@ -69,6 +69,7 @@ const AddDeptPdfs = () => {
 
   useEffect(() => {
     fetchDepartments();
+    //eslint-disable-next-line
   }, []);
 
   const handleSubmit = async (e) => {
