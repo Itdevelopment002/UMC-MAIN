@@ -5,6 +5,7 @@ import "glightbox/dist/css/glightbox.min.css";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import api, { baseURL } from "../api";
+import './AddUsers.css'
 
 const Users = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -13,6 +14,10 @@ const Users = () => {
   const [users, setUsers] = useState([]);
   const [departments, setDepartments] = useState([]);
   const [permissionDropdownOpen, setPermissionDropdownOpen] = useState(false);
+  const [showChangePasswordModal, setShowChangePasswordModal] = useState(false);
+  const [selectedUserForPasswordChange, setSelectedUserForPasswordChange] = useState(null);
+  const [newPassword, setNewPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     fetchDepartments();
@@ -30,9 +35,7 @@ const Users = () => {
   const [editData, setEditData] = useState({
     role: "",
     fullname: "",
-    email: "",
     permission: [],
-    password: "",
     status: "",
     userImage: null,
   });
@@ -51,6 +54,10 @@ const Users = () => {
     return () => lightbox.destroy();
   }, [currentUsers]);
 
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
   const fetchUsers = () => {
     api
       .get("/users")
@@ -58,10 +65,10 @@ const Users = () => {
         const usersWithPermissionArray = response.data.map((user) => ({
           ...user,
           permission: Array.isArray(user.permission)
-            ? user.permission 
+            ? user.permission
             : typeof user.permission === "string"
-              ? user.permission.split(",").map((perm) => perm.trim()) 
-              : [], 
+              ? user.permission.split(",").map((perm) => perm.trim())
+              : [],
         }));
         setUsers(usersWithPermissionArray);
       })
@@ -70,6 +77,36 @@ const Users = () => {
         toast.error("Failed to load user details.");
       });
   };
+
+  const handleChangePasswordModalOpen = (user) => {
+    setSelectedUserForPasswordChange(user);
+    setShowChangePasswordModal(true);
+  };
+
+  const handleCloseChangePasswordModal = () => {
+    setShowChangePasswordModal(false);
+    setSelectedUserForPasswordChange(null);
+    setNewPassword("");
+  };
+
+  const handleChangePasswordSubmit = async () => {
+    if (!newPassword) {
+      toast.error("Please enter a new password.");
+      return;
+    }
+
+    try {
+      await api.patch(`/users/${selectedUserForPasswordChange.id}/update-password`, {
+        newPassword,
+      });
+      toast.success("Password updated successfully!");
+      handleCloseChangePasswordModal();
+    } catch (error) {
+      console.error("Error updating password:", error);
+      toast.error("Failed to update password.");
+    }
+  };
+
 
   const handlePermissionChange = (e, permission) => {
     if (e.target.checked) {
@@ -85,9 +122,6 @@ const Users = () => {
     }
   };
 
-  useEffect(() => {
-    fetchUsers();
-  }, []);
 
   const handleDeleteModalOpen = (user) => {
     setSelectedUser(user);
@@ -97,7 +131,7 @@ const Users = () => {
   const handleEditModalOpen = (user) => {
     setEditData({
       ...user,
-      permission: user.permission, 
+      permission: user.permission,
     });
     setImagePreview(`${baseURL}/${user.userImage}`);
     setShowEditModal(true);
@@ -150,9 +184,7 @@ const Users = () => {
     setEditData({
       role: "",
       fullname: "",
-      email: "",
       permission: [],
-      password: "",
       status: "",
       userImage: null,
     });
@@ -212,9 +244,7 @@ const Users = () => {
                           <th>Full name</th>
                           <th>Email</th>
                           <th>Role</th>
-                          <th>Permission</th>
                           <th>Status</th>
-                          <th>Password</th>
                           <th className="text-center">Action</th>
                         </tr>
                       </thead>
@@ -239,9 +269,7 @@ const Users = () => {
                             <td>{user.fullname}</td>
                             <td>{user.email}</td>
                             <td>{user.role}</td>
-                            <td>{user.permission.join(", ")}</td>
                             <td>{user.status}</td>
-                            <td>{user.password}</td>
                             <td className="text-center">
                               <button
                                 className="btn btn-success btn-sm m-t-10"
@@ -254,6 +282,12 @@ const Users = () => {
                                 onClick={() => handleDeleteModalOpen(user)}
                               >
                                 Delete
+                              </button>
+                              <button
+                                className="btn btn-warning btn-sm m-t-10"
+                                onClick={() => handleChangePasswordModalOpen(user)}
+                              >
+                                Change Password
                               </button>
                             </td>
                           </tr>
@@ -412,20 +446,6 @@ const Users = () => {
                         />
                       </div>
                       <div className="form-group">
-                        <label>Email</label>
-                        <input
-                          type="email"
-                          className="form-control"
-                          value={editData.email}
-                          onChange={(e) =>
-                            setEditData({
-                              ...editData,
-                              email: e.target.value,
-                            })
-                          }
-                        />
-                      </div>
-                      <div className="form-group">
                         <label>Role</label>
                         <select
                           className="form-control"
@@ -456,7 +476,7 @@ const Users = () => {
                               <span className="selected-options text-truncate" title={editData.permission.join(", ")}>
                                 {editData.permission.length > 0 ? editData.permission.join(", ") : "Select Permissions"}
                               </span>
-                              <i style={{fontSize: "10px", fontWeight: "100"}} className="fa fa-chevron-down"></i>
+                              <i style={{ fontSize: "10px", fontWeight: "100" }} className="fa fa-chevron-down"></i>
                             </button>
 
                             {permissionDropdownOpen && (
@@ -499,20 +519,6 @@ const Users = () => {
                         </select>
                       </div>
                       <div className="form-group">
-                        <label>Password</label>
-                        <input
-                          type="password"
-                          className="form-control"
-                          value={editData.password}
-                          onChange={(e) =>
-                            setEditData({
-                              ...editData,
-                              password: e.target.value,
-                            })
-                          }
-                        />
-                      </div>
-                      <div className="form-group">
                         <label>Image</label>
                         <input
                           type="file"
@@ -551,6 +557,59 @@ const Users = () => {
               </div>
             </div>
           )}
+
+          {showChangePasswordModal && (
+            <div className="modal fade show d-block" tabIndex="-1">
+              <div className="modal-dialog modal-dialog-centered">
+                <div className="modal-content">
+                  <div className="modal-header">
+                    <h5 className="modal-title">Change Password</h5>
+                  </div>
+                  <div className="modal-body">
+                    <form>
+                      <div className="form-group">
+                        <label>New Password</label>
+                        <div className="input-group">
+                          <input
+                            type={showPassword ? "text" : "password"}
+                            className="form-control"
+                            value={newPassword}
+                            onChange={(e) => setNewPassword(e.target.value)}
+                            placeholder="Enter new password"
+                          />
+                          <span
+                            className="input-group-text"
+                            onClick={() => setShowPassword(!showPassword)}
+                            style={{ cursor: "pointer" }}
+                          >
+                            <i className={`fas ${showPassword ? "fa-eye-slash" : "fa-eye"}`}></i>
+                          </span>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                  <div className="modal-footer">
+                    <button
+                      type="button"
+                      className="btn btn-sm btn-secondary"
+                      onClick={handleCloseChangePasswordModal}
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="button"
+                      className="btn btn-sm btn-primary"
+                      onClick={handleChangePasswordSubmit}
+                    >
+                      Update Password
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+
         </div>
       </div>
 

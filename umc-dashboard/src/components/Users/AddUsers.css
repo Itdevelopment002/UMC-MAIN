@@ -1,0 +1,15 @@
+
+  .input-group-text i {
+    font-size: 16px;
+    color: #6c757d;
+  }
+  .input-group-text:hover i {
+    color: #F55570;
+  }
+  
+  input:focus, select:focus, textarea:focus {
+    outline: none !important;
+    box-shadow: none !important;
+    border-color: #fd8f2f !important;
+  }
+  

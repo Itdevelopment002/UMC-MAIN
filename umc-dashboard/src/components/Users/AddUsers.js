@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api";
 import { Link } from "react-router-dom";
+import './AddUsers.css'
 
 const AddUsers = () => {
   const [departments, setDepartments] = useState([]);
@@ -12,6 +13,8 @@ const AddUsers = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [cnfpassword, setCnfpassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showCnfPassword, setShowCnfPassword] = useState(false);
   const [image, setImage] = useState(null);
   const [selectedPermission, setSelectedPermission] = useState([]);
   const [previewImage, setPreviewImage] = useState(null);
@@ -256,38 +259,58 @@ const AddUsers = () => {
                     </div>
                   )}
 
-                  <div className="form-group">
-                    <label>
-                      Password <span className="text-danger">*</span>
-                    </label>
-                    <input
-                      type="password"
-                      className={`form-control ${errors.password ? "is-invalid" : ""}`}
-                      placeholder="Enter Password"
-                      value={password}
-                      onChange={(e) => {
-                        setPassword(e.target.value);
-                        setErrors((prev) => ({ ...prev, password: "" }));
-                      }}
-                    />
-                    {errors.password && <small className="text-danger">{errors.password}</small>}
-                  </div>
+                  <div>
+                    <div className="form-group position-relative">
+                      <label>
+                        Password <span className="text-danger">*</span>
+                      </label>
+                      <div className="input-group">
+                        <input
+                          type={showPassword ? "text" : "password"}
+                          className={`form-control ${errors.password ? "is-invalid" : ""}`}
+                          placeholder="Enter Password"
+                          value={password}
+                          onChange={(e) => {
+                            setPassword(e.target.value);
+                            setErrors((prev) => ({ ...prev, password: "" }));
+                          }}
+                        />
+                        <span
+                          className="input-group-text"
+                          onClick={() => setShowPassword(!showPassword)}
+                          style={{ cursor: "pointer" }}
+                        >
+                          <i className={`fas ${showPassword ? "fa-eye-slash" : "fa-eye"}`}></i>
+                        </span>
+                      </div>
+                      {errors.password && <small className="text-danger">{errors.password}</small>}
+                    </div>
 
-                  <div className="form-group">
-                    <label>
-                      Confirm Password <span className="text-danger">*</span>
-                    </label>
-                    <input
-                      type="password"
-                      className={`form-control ${errors.cnfpassword ? "is-invalid" : ""}`}
-                      placeholder="Confirm Password"
-                      value={cnfpassword}
-                      onChange={(e) => {
-                        setCnfpassword(e.target.value);
-                        setErrors((prev) => ({ ...prev, cnfpassword: "" }));
-                      }}
-                    />
-                    {errors.cnfpassword && <small className="text-danger">{errors.cnfpassword}</small>}
+                    <div className="form-group position-relative mt-3">
+                      <label>
+                        Confirm Password <span className="text-danger">*</span>
+                      </label>
+                      <div className="input-group">
+                        <input
+                          type={showCnfPassword ? "text" : "password"}
+                          className={`form-control ${errors.cnfpassword ? "is-invalid" : ""}`}
+                          placeholder="Confirm Password"
+                          value={cnfpassword}
+                          onChange={(e) => {
+                            setCnfpassword(e.target.value);
+                            setErrors((prev) => ({ ...prev, cnfpassword: "" }));
+                          }}
+                        />
+                        <span
+                          className="input-group-text"
+                          onClick={() => setShowCnfPassword(!showCnfPassword)}
+                          style={{ cursor: "pointer" }}
+                        >
+                          <i className={`fas ${showCnfPassword ? "fa-eye-slash" : "fa-eye"}`}></i>
+                        </span>
+                      </div>
+                      {errors.cnfpassword && <small className="text-danger">{errors.cnfpassword}</small>}
+                    </div>
                   </div>
 
                   <button type="submit" className="btn btn-sm btn-primary">Submit</button>
