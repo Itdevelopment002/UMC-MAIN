@@ -4,6 +4,7 @@ const path = require("path");
 const fs = require("fs");
 const router = express.Router();
 const db = require("../config/db.js");
+const bcrypt = require("bcrypt");
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -59,13 +60,17 @@ router.get("/users/:id", (req, res) => {
 });
 
 // Add a new user
-router.post("/users", upload.single("userImage"), (req, res) => {
+router.post("/users", upload.single("userImage"), async (req, res) => {
   const { username, fullname, role, email, password, permission } = req.body;
   const defaultImage = "uploads/image.jpg";
   const userImage = req.file ? `uploads/${req.file.filename}` : defaultImage;
 
   // Convert permission array to comma-separated string
   const permissionString = Array.isArray(permission) ? permission.join(",") : permission;
+
+  // Hash the password
+  const saltRounds = 10;
+  const hashedPassword = await bcrypt.hash(password, saltRounds);
 
   const query = `
     INSERT INTO users (username, fullname, role, email, password, permission, userImage) 
@@ -74,7 +79,7 @@ router.post("/users", upload.single("userImage"), (req, res) => {
 
   db.query(
     query,
-    [username, fullname, role, email, password, permissionString, userImage],
+    [username, fullname, role, email, hashedPassword, permissionString, userImage],
     (err, results) => {
       if (err) {
         console.error("Error adding user:", err);
@@ -96,7 +101,7 @@ router.post("/users", upload.single("userImage"), (req, res) => {
 // Update a user
 router.put("/users/:id", upload.single("userImage"), async (req, res) => {
   const { id } = req.params;
-  const { fullname, email, role, permission, status, password } = req.body;
+  const { fullname, role, permission, status } = req.body;
   const imagePath = req.file ? `uploads/${req.file.filename}` : null;
 
   try {
@@ -112,22 +117,18 @@ router.put("/users/:id", upload.single("userImage"), async (req, res) => {
       let user = results[0];
 
       const updatedFullname = fullname || user.fullname;
-      const updatedEmail = email || user.email;
       const updatedRole = role || user.role;
       const updatedPermission = permission ? (Array.isArray(permission) ? permission.join(",") : permission) : user.permission;
       const updatedStatus = status || user.status;
-      const updatedPassword = password || user.password;
       const updatedImage = imagePath || user.userImage;
 
       const query =
-        "UPDATE users SET fullname = ?, email = ?, role = ?, permission = ?, status = ?, password = ?, userImage = ? WHERE id = ?";
+        "UPDATE users SET fullname = ?, role = ?, permission = ?, status = ?, userImage = ? WHERE id = ?";
       const values = [
         updatedFullname,
-        updatedEmail,
         updatedRole,
         updatedPermission,
         updatedStatus,
-        updatedPassword,
         updatedImage,
         id,
       ];
@@ -147,7 +148,6 @@ router.put("/users/:id", upload.single("userImage"), async (req, res) => {
         res.json({
           message: "User updated successfully",
           fullname: updatedFullname,
-          email: updatedEmail,
           role: updatedRole,
           permission: updatedPermission.split(","),
           status: updatedStatus,
@@ -159,6 +159,32 @@ router.put("/users/:id", upload.single("userImage"), async (req, res) => {
     console.error("Error in updating user:", error);
     res.status(500).json({ message: "Internal server error" });
   }
+});
+
+// Update password alone
+router.patch("/users/:id/update-password", async (req, res) => {
+  const { id } = req.params;
+  const { newPassword } = req.body;
+
+  if (!newPassword) {
+    return res.status(400).json({ message: "New password is required" });
+  }
+
+  // Hash the new password
+  const saltRounds = 10;
+  const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
+
+  const query = "UPDATE users SET password = ? WHERE id = ?";
+  db.query(query, [hashedPassword, id], (err, results) => {
+    if (err) {
+      console.error("Error updating password:", err);
+      return res.status(500).json({ message: "Error updating password" });
+    }
+    if (results.affectedRows === 0) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.json({ message: "Password updated successfully" });
+  });
 });
 
 // Delete a user
