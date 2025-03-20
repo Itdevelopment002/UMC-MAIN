@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useParams, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { FiEdit } from "react-icons/fi";
 import api, { baseURL } from "../api";
@@ -9,7 +9,6 @@ import "react-toastify/dist/ReactToastify.css";
 import { Modal, Button } from "react-bootstrap";
 
 const EditProfile = () => {
-    const { id } = useParams();
     const navigate = useNavigate();
     const [user, setUser] = useState(null);
     const [fullname, setFullname] = useState("");
@@ -25,6 +24,8 @@ const EditProfile = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [showOldPassword, setShowOldPassword] = useState(false);
+    const userData = JSON.parse(localStorage.getItem("userData"));
+    const id = userData?.id;
 
     useEffect(() => {
         fetchUser();
