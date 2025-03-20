@@ -1,16 +1,14 @@
 import React, { useState } from "react";
-import "./Login.css";
+import "./ResetPassword.css";
 import img from "../../assets/img/umclogo.png";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import api from "../api";
 
-const Login = ({ onLogin }) => {
+const ResetPassword = ({ onLogin }) => {
   const navigate = useNavigate();
   const [userData, setData] = useState({
-    username: "",
-    password: "",
+    email: "",
   });
-  const [isClicked, setIsClicked] = useState(false);
   const [errors, setErrors] = useState({});
   const [serverError, setServerError] = useState("");
 
@@ -20,23 +18,20 @@ const Login = ({ onLogin }) => {
       [e.target.name]: e.target.value,
     });
     setErrors({ ...errors, [e.target.name]: "" });
-    setServerError(""); 
+    setServerError("");
   };
 
   const validateForm = () => {
     const newErrors = {};
-    if (!userData.username) newErrors.username = "Username is required";
-    if (!userData.password) newErrors.password = "Password is required";
+    if (!userData.email) newErrors.email = "Email Address is required";
     return newErrors;
   };
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    setIsClicked(true);
     const validationErrors = validateForm();
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
-      setIsClicked(false);
       return;
     }
 
@@ -44,15 +39,14 @@ const Login = ({ onLogin }) => {
       const response = await api.post("/login", userData);
       localStorage.setItem("authToken", response.data.uniqueId);
       localStorage.setItem("userData", JSON.stringify(response.data.user));
-      const {role} = response.data.user;
+      const { role } = response.data.user;
       onLogin();
-      if(role === "Superadmin"){
+      if (role === "Superadmin") {
         navigate("/home");
-      } else{
+      } else {
         navigate("/department-information");
       }
     } catch (err) {
-      setIsClicked(false);
       if (err.response) {
         if (err.response.status === 403) {
           setServerError("User is temporarily disabled");
@@ -73,48 +67,31 @@ const Login = ({ onLogin }) => {
         <div className="col-md-12 d-flex align-items-center justify-content-center right-side">
           <div className="form-container form-container1">
             <img src={img} alt="Logo" className="mb-4" />
-            <div className="button-container mb-4 d-flex justify-content-center">
-              <button className="btn btn-sm mx-1 btn-superadmin">Admin Login</button>
-            </div>
+            <h4 className="text-center">Reset Password</h4>
+            <p className="text-center text-muted">Enter email for verification code.</p>
             {serverError && <div className="alert alert-danger">{serverError}</div>}
-            <form onSubmit={onSubmit}>
+            <form onSubmit={onSubmit} className="mt-4">
               <div className="mb-3 text-start">
-                <label className="mb-2 label1">
-                  Username or email <span className="text-danger">*</span>
+                <label className="mb-2 fw-bold">
+                  Email Address <span className="text-danger">*</span>
                 </label>
                 <input
-                  type="text"
+                  type="email"
                   className="form-control form-control1"
-                  name="username"
-                  value={userData.username}
+                  name="email"
+                  value={userData.email}
                   onChange={handleChange}
-                  placeholder="Enter username or email"
+                  placeholder="Enter email address"
                 />
-                {errors.username && <small className="text-danger">{errors.username}</small>}
+                {errors.email && <small className="text-danger">{errors.email}</small>}
               </div>
-              <div className="mb-3 text-start">
-                <label className="mb-2 label1">
-                  Password <span className="text-danger">*</span>
-                </label>
-                <input
-                  type="password"
-                  className="form-control form-control1"
-                  name="password"
-                  value={userData.password}
-                  onChange={handleChange}
-                  placeholder="Enter password"
-                />
-                {errors.password && <small className="text-danger">{errors.password}</small>}
-              </div>
-              <div className="d-flex justify-content-between mb-4">
-                <div></div>
-                <Link to="/reset-password" className="a1 text-decoration-none">
-                  Forget your Password?
-                </Link>
-              </div>
-              <div className="button-container">
-                <button type="submit" className={`btn ${isClicked ? "btn-clicked" : "btn1"}`}>
-                  Login
+              <hr className="mt-4" />
+              <div className="custom-button-container12">
+                <button onClick={()=> {navigate("/")}} className="custom-btn12 custom-cancel12">
+                  Cancel
+                </button>
+                <button type="submit" className="custom-btn12 custom-verify12">
+                  Confirm
                 </button>
               </div>
             </form>
@@ -125,4 +102,4 @@ const Login = ({ onLogin }) => {
   );
 };
 
-export default Login;
+export default ResetPassword;

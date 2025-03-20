@@ -28,6 +28,7 @@ const AddDepartmentBanner = () => {
 
     useEffect(() => {
         fetchDepartments();
+        //eslint-disable-next-line
     }, []);
 
     const handleFileChange = (e) => {

@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import api, { baseURL } from "../api";
 
 const ViewProfile = () => {
-    const { id } = useParams();
     const [user, setUser] = useState(null);
+    const userData = JSON.parse(localStorage.getItem("userData"));
+    const id = userData?.id;
 
     const fetchUser = async () => {
         try {
@@ -74,7 +75,7 @@ const ViewProfile = () => {
                             </div>
                             <hr />
                             <div className="mt-3 d-flex justify-content-end">
-                                <Link to={`/edit-profile/${user?.id}`} className="btn btn-outline-success mx-2 btn-sm">
+                                <Link to={`/edit-profile`} className="btn btn-outline-success mx-2 btn-sm">
                                     Edit Profile
                                 </Link>
                                 <button className="btn btn-outline-primary mx-2 btn-sm" onClick={handleLogout}>
