@@ -11,6 +11,7 @@ const ResetPassword = ({ onLogin }) => {
   });
   const [errors, setErrors] = useState({});
   const [serverError, setServerError] = useState("");
+  const [loading, setLoading] = useState(false);  // Loader state
 
   const handleChange = (e) => {
     setData({
@@ -35,29 +36,25 @@ const ResetPassword = ({ onLogin }) => {
       return;
     }
 
+    setLoading(true);  // Start loader
+
     try {
-      const response = await api.post("/login", userData);
-      localStorage.setItem("authToken", response.data.uniqueId);
-      localStorage.setItem("userData", JSON.stringify(response.data.user));
-      const { role } = response.data.user;
-      onLogin();
-      if (role === "Superadmin") {
-        navigate("/home");
-      } else {
-        navigate("/department-information");
+      const response = await api.post("/reset-password", userData);
+      if (response.data.message === "OTP sent successfully") {
+        navigate("/reset-password-verification", { state: { email: userData.email } });
       }
     } catch (err) {
       if (err.response) {
-        if (err.response.status === 403) {
-          setServerError("User is temporarily disabled");
-        } else if (err.response.status === 401) {
-          setServerError("Invalid credentials. Please try again.");
+        if (err.response.status === 400) {
+          setServerError("Invalid email, Please write a valid email.");
         } else {
           setServerError("Server error. Please try again later.");
         }
       } else {
         setServerError("Network error. Check your connection.");
       }
+    } finally {
+      setLoading(false);  // Stop loader
     }
   };
 
@@ -69,7 +66,9 @@ const ResetPassword = ({ onLogin }) => {
             <img src={img} alt="Logo" className="mb-4" />
             <h4 className="text-center">Reset Password</h4>
             <p className="text-center text-muted">Enter email for verification code.</p>
+
             {serverError && <div className="alert alert-danger">{serverError}</div>}
+
             <form onSubmit={onSubmit} className="mt-4">
               <div className="mb-3 text-start">
                 <label className="mb-2 fw-bold">
@@ -82,18 +81,31 @@ const ResetPassword = ({ onLogin }) => {
                   value={userData.email}
                   onChange={handleChange}
                   placeholder="Enter email address"
+                  required
                 />
                 {errors.email && <small className="text-danger">{errors.email}</small>}
               </div>
+
               <hr className="mt-4" />
+
               <div className="custom-button-container12">
-                <button onClick={()=> {navigate("/")}} className="custom-btn12 custom-cancel12">
+                <button
+                  onClick={() => navigate("/")}
+                  className="custom-btn12 custom-cancel12"
+                  disabled={loading} 
+                >
                   Cancel
                 </button>
-                <button type="submit" className="custom-btn12 custom-verify12">
-                  Confirm
+
+                <button
+                  type="submit"
+                  className="custom-btn12 custom-verify12"
+                  disabled={loading} 
+                >
+                  {loading ? "Sending OTP..." : "Confirm"}  
                 </button>
               </div>
+
             </form>
           </div>
         </div>

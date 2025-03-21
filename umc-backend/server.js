@@ -147,6 +147,10 @@ const notificationRoutes = require('./routes/notificationRoutes');
 const adminNotificationRoutes = require('./routes/adminNotificationRoutes');
 const notifyStatusRoutes = require('./routes/notifyStatusRoutes');
 
+// Reset Passward
+const resetPassRoutes = require('./routes/resetPassRoutes');
+
+
 
 
 {/* Main Menu */}
@@ -287,6 +291,11 @@ app.use('/api', visitorRoutes);
 app.use('/api', notificationRoutes);
 app.use('/api', adminNotificationRoutes);
 app.use('/api', notifyStatusRoutes);
+
+// Reset Passward
+
+app.use('/api', resetPassRoutes);
+
 
 
 const PORT = process.env.PORT || 5011;
