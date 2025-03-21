@@ -110,6 +110,21 @@
   color: black;
 }
 
+.resend-btn {
+  color: green;                
+  text-decoration: none;
+  transition: color 0.3s ease;
+  border: none;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+}
+
+.resend-btn:hover {
+  color: #009ce7;                 
+}
+
+
 @media (max-width: 768px) {
   .login-page {
     flex-direction: column;

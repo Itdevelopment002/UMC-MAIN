@@ -161,6 +161,7 @@ import AddUsers from "./components/Users/AddUsers";
 import Users from "./components/Users/Users";
 import ResetPassword from "./components/ResetPassword/ResetPassword";
 import CodeVerification from "./components/CodeVerification/CodeVerification";
+import ChangePassword from "./components/ChangePassword/ChangePassword";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(
@@ -213,6 +214,7 @@ function App() {
           <Route path="/" element={<Login onLogin={handleLogin} />} />
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/reset-password-verification" element={<CodeVerification />} />
+          <Route path="/change-password" element={<ChangePassword />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       ) : (
