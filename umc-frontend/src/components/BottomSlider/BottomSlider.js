@@ -10,7 +10,7 @@ import api, { baseURL } from "../api";
 const NextArrow = (props) => {
   const { onClick } = props;
   return (
-    <div className="custom-arrow custom-next-arrow" onClick={onClick}>
+    <div className="custom-arrow custom-next-arrow" aria-label="Next slide"role="button" tabIndex="0" onClick={onClick}>
       <FaChevronRight size={15} />
     </div>
   );
@@ -19,7 +19,7 @@ const NextArrow = (props) => {
 const PrevArrow = (props) => {
   const { onClick } = props;
   return (
-    <div className="custom-arrow custom-prev-arrow" onClick={onClick}>
+    <div className="custom-arrow custom-prev-arrow" aria-label="Previous slide" role="button" tabIndex="0" onClick={onClick}>
       <FaChevronLeft size={15} />
     </div>
   );

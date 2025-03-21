@@ -112,6 +112,7 @@ const TopHeader = () => {
                                 mainContent.scrollIntoView({ behavior: "smooth" });
                             }
                         }}
+                        role="button" tabIndex="0"
                         style={{ cursor: "pointer" }}
                     >
                         {t("header.skipContent")}
@@ -126,7 +127,7 @@ const TopHeader = () => {
                     <button onClick={handleIncreaseFontSize} className="text-size-btn">{t("header.aPlus")}</button>
                     <span className="divider">|</span>
 
-                    <div className="custom-dropdown">
+                    <div className="custom-dropdown" role="button" tabIndex="0">
                         <div className="selected-language">
                             <span>{getLanguageText()}</span>
                             <RiArrowDropDownLine size={25} className="arrow" />
@@ -149,19 +150,19 @@ const TopHeader = () => {
                     </div>
 
                     <div className="social-icons top-bar-social-media d-flex">
-                        <Link to="https://twitter.com/my_umcofficial" target="_blank" className="social-link">
+                        <Link to="https://twitter.com/my_umcofficial" target="_blank" aria-label="Follow us on Twitter (Opens in a new tab)" className="social-link">
                             <img src={twitter} alt="Twitter" className="twitter-icon" />
                         </Link>
                         <span className="divider">|</span>
-                        <Link to="https://www.facebook.com/myumc/" target="_blank" className="social-link">
+                        <Link to="https://www.facebook.com/myumc/" target="_blank" aria-label="Follow us on Facebook (Opens in a new tab)" className="social-link">
                             <img src={facebook} alt="Facebook" className="facebook-icon" />
                         </Link>
                         <span className="divider">|</span>
-                        <Link to="https://www.instagram.com/my_umc/" target="_blank" className="social-link">
+                        <Link to="https://www.instagram.com/my_umc/" target="_blank" aria-label="Follow us on Instagram (Opens in a new tab)" className="social-link">
                             <img src={instagram} alt="Instagram" className="insta-icon" />
                         </Link>
                         <span className="divider">|</span>
-                        <Link to="https://www.youtube.com/channel/UCPZN5zAMeNHt3hTfdCO4n8A" target="_blank" className="social-link">
+                        <Link to="https://www.youtube.com/channel/UCPZN5zAMeNHt3hTfdCO4n8A" aria-label="Follow us on Youtube (Opens in a new tab)" target="_blank" className="social-link">
                             <img src={youtube} alt="YouTube" className="youtube-icon" />
                         </Link>
                     </div>

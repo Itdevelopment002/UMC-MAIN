@@ -109,7 +109,7 @@ function StickyFeedback() {
     return (
         <div className="App">
             <div ref={feedbackRef} className={`feedback-container ${isOpen ? "open" : ""}`}>
-                <div className="feedback-tab" onClick={toggleFeedback}>
+                <div className="feedback-tab" role="button" tabIndex="0" onClick={toggleFeedback}>
                     {t('feedback.title')}
                 </div>
                 <div className="feedback-panel">
