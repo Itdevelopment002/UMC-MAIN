@@ -223,7 +223,7 @@ const WardOffice = () => {
       </div>
       <ToastContainer />
       {showEditModal && (
-        <div id="editModal" class="modal fade show" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true" style={{ overflowY: 'auto', maxHeight: '100vh', scrollbarWidth: 'none', display: 'block' }}>
+        <div id="editModal" className="modal fade show" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true" style={{ overflowY: 'auto', maxHeight: '100vh', scrollbarWidth: 'none', display: 'block' }}>
           <div className="modal-dialog modal-dialog-centered">
             <div className="modal-content">
               <div className="modal-header">
