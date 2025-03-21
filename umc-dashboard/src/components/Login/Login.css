@@ -115,6 +115,19 @@
   color: black;
 }
 
+.password-toggle-icon {
+  position: absolute;
+  right: 15px;
+  top: 75%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #6c757d;
+}
+
+.password-toggle-icon:hover {
+  color: #495057;
+}
+
 @media (max-width: 768px) {
   .login-page {
     flex-direction: column;

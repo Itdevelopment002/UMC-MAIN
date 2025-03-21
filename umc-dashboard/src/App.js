@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Route, Routes, Navigate, useLocation } from "react-router-dom";
+import { Route, Routes, Navigate, useLocation, useNavigate } from "react-router-dom";
 import "./App.css";
 import "./assets/css/bootstrap-datetimepicker.min.css";
 import "./assets/css/bootstrap.min.css";
@@ -171,6 +171,44 @@ function App() {
   const [userData, setUserData] = useState({});
   const [loading, setLoading] = useState(false);
   const location = useLocation();
+  const LOGOUT_TIME = 24 * 60 * 60 * 1000;
+  const navigate = useNavigate();
+
+  const handleAutoLogout = () => {
+    const loginTime = localStorage.getItem("loginTime");
+    if (loginTime) {
+      const currentTime = new Date().getTime();
+      if (currentTime - loginTime > LOGOUT_TIME) {
+        handleLogout();
+        navigate("/");
+      }
+    }
+  };
+
+  const handleUserActivity = () => {
+    localStorage.setItem("loginTime", new Date().getTime());
+  };
+
+  useEffect(() => {
+    const events = ["mousemove", "keydown", "click", "scroll"];
+    events.forEach((event) => {
+      window.addEventListener(event, handleUserActivity);
+    });
+
+    return () => {
+      events.forEach((event) => {
+        window.removeEventListener(event, handleUserActivity);
+      });
+    };
+  }, []);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      handleAutoLogout();
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [isAuthenticated, navigate]);
 
   useEffect(() => {
     const savedUser = JSON.parse(localStorage.getItem("userData"));
@@ -182,6 +220,7 @@ function App() {
   const handleLogin = () => {
     setLoading(true);
     setIsAuthenticated(true);
+    localStorage.setItem("loginTime", new Date().getTime());
     setTimeout(() => {
       setLoading(false);
     }, 1000);
@@ -191,9 +230,17 @@ function App() {
     localStorage.removeItem("authToken");
     localStorage.removeItem("userData");
     localStorage.removeItem("lastVisitedRoute");
-    setUserData({})
+    localStorage.removeItem("loginTime");
+    setUserData({});
     setIsAuthenticated(false);
   };
+
+  useEffect(() => {
+    const savedUser = JSON.parse(localStorage.getItem("userData"));
+    if (savedUser) {
+      setUserData(savedUser);
+    }
+  }, [isAuthenticated]);
 
   useEffect(() => {
     localStorage.setItem("lastVisitedRoute", location.pathname);
