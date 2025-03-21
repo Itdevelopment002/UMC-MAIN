@@ -113,7 +113,7 @@ function StickyFeedback() {
                     {t('feedback.title')}
                 </div>
                 <div className="feedback-panel">
-                    <h3>{t('feedback.heading')}</h3>
+                    <h1>{t('feedback.heading')}</h1>
                     <p>{t('feedback.rate')} <span className="required">*</span></p>
                     <div className="feedback-stars">
                         {Array(5)
