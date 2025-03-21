@@ -2,7 +2,9 @@ const express = require("express");
 const router = express.Router();
 const db = require("../config/db.js");
 const { v4: uuidv4 } = require("uuid");
-const bcrypt = require("bcrypt");
+// const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
+
 
 const generateUniqueId = (req, res, next) => {
   req.uniqueId = uuidv4();

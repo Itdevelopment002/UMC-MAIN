@@ -4,7 +4,9 @@ const db = require("../config/db");
 require("dotenv").config();
 const nodemailer = require("nodemailer");
 const cron = require("node-cron");
-const bcrypt = require("bcrypt");
+// const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
+
 
 // Configure nodemailer transporter
 const transporter = nodemailer.createTransport({
