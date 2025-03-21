@@ -86,7 +86,7 @@ const Info = () => {
 
           <div className="col-xxl-6 col-xl-5 col-lg-5 col-md-12 welcome-section" data-aos="fade-down">
             <div className="heading">
-              <h1 data-aos="fade-up" className="info-heading1"><span className="info-heading2 fw-bold">{t('home.info-heading2')}</span></h1>
+              <h2 data-aos="fade-up" className="info-heading1"><span className="info-heading2 fw-bold">{t('home.info-heading2')}</span></h2>
             </div>
             <div className="description-container"
               style={{

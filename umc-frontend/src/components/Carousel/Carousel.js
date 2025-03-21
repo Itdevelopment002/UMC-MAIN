@@ -71,7 +71,7 @@ const Carousel = () => {
             modules={[Pagination, Autoplay, EffectFade]}
             pagination={{
               clickable: true, renderBullet: (index, className) =>
-                `<span class="${className}" role="button" aria-label="Go to slide ${index + 1}"></span>`
+                `<span class="${className}" role="button" aria-label="Go to slide ${index + 1}" tabindex="0"></span>`
             }}
             autoplay={{ delay: 4000, disableOnInteraction: false }}
             loop={sliders.length > 1}
