@@ -3,6 +3,7 @@ import "./Login.css";
 import img from "../../assets/img/umclogo.png";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../api";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const Login = ({ onLogin }) => {
   const navigate = useNavigate();
@@ -13,6 +14,7 @@ const Login = ({ onLogin }) => {
   const [isClicked, setIsClicked] = useState(false);
   const [errors, setErrors] = useState({});
   const [serverError, setServerError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e) => {
     setData({
@@ -20,7 +22,7 @@ const Login = ({ onLogin }) => {
       [e.target.name]: e.target.value,
     });
     setErrors({ ...errors, [e.target.name]: "" });
-    setServerError(""); 
+    setServerError("");
   };
 
   const validateForm = () => {
@@ -44,11 +46,11 @@ const Login = ({ onLogin }) => {
       const response = await api.post("/login", userData);
       localStorage.setItem("authToken", response.data.uniqueId);
       localStorage.setItem("userData", JSON.stringify(response.data.user));
-      const {role} = response.data.user;
+      const { role } = response.data.user;
       onLogin();
-      if(role === "Superadmin"){
+      if (role === "Superadmin") {
         navigate("/home");
-      } else{
+      } else {
         navigate("/department-information");
       }
     } catch (err) {
@@ -92,18 +94,24 @@ const Login = ({ onLogin }) => {
                 />
                 {errors.username && <small className="text-danger">{errors.username}</small>}
               </div>
-              <div className="mb-3 text-start">
+              <div className="mb-3 text-start position-relative">
                 <label className="mb-2 label1">
                   Password <span className="text-danger">*</span>
                 </label>
                 <input
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   className="form-control form-control1"
                   name="password"
                   value={userData.password}
                   onChange={handleChange}
                   placeholder="Enter password"
                 />
+                <span
+                  className="password-toggle-icon"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? <FaEyeSlash /> : <FaEye />}
+                </span>
                 {errors.password && <small className="text-danger">{errors.password}</small>}
               </div>
               <div className="d-flex justify-content-between mb-4">
