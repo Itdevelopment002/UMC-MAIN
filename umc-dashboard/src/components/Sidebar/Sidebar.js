@@ -473,17 +473,6 @@ const Sidebar = ({ isOpen, closeSidebar, user }) => {
                     </Link>
                   </li>
                   <li
-                    className={activeItem === "/circulars" ? "active" : ""}
-                    onClick={() => handleItemClick("/circulars")}
-                  >
-                    <Link to="/circulars">
-                      <i className="fa">
-                        <LuNotepadText />
-                      </i>{" "}
-                      Circulars
-                    </Link>
-                  </li>
-                  <li
                     className={activeItem === "/online-home-services" ? "active" : ""}
                     onClick={() => handleItemClick("/online-home-services")}
                   >
