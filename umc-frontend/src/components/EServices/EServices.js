@@ -241,6 +241,7 @@ const EServices = () => {
                                     className="text-decoration-none"
                                     style={{ color: "#000000" }}
                                     target="_blank"
+                                    aria-label={`Visit ${service.heading} website`}
                                   >
                                     <span className="service-text">{service.heading}</span>
                                   </Link>
@@ -264,6 +265,7 @@ const EServices = () => {
                                 src={`${baseURL}/${initiative.main_icon_path}`}
                                 alt={initiative.heading}
                                 className="initiative-img"
+                                aria-label={`Visit ${initiative.heading} website`}
                               />
                             </div>
                             <span className="initiative-text ms-3">
@@ -330,6 +332,7 @@ const EServices = () => {
                       src={`${baseURL}/${service.main_icon_path}`}
                       alt={service.service_heading}
                       className="service-image mb-3"
+                      aria-label={`Visit ${service.service_heading} website`}
                     />
                     <h5 className="service-title">{service.service_heading}</h5>
                   </div>

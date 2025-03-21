@@ -68,9 +68,11 @@ const Carousel = () => {
 
         <div className="col-md-12 col-lg-12 col-xl-7 col-xxl-9 col-12">
           <Swiper
-            modules={[Navigation, Pagination, Autoplay, EffectFade]}
-            navigation
-            pagination={{ clickable: true }}
+            modules={[Pagination, Autoplay, EffectFade]}
+            pagination={{
+              clickable: true, renderBullet: (index, className) =>
+                `<span class="${className}" role="button" aria-label="Go to slide ${index + 1}"></span>`
+            }}
             autoplay={{ delay: 4000, disableOnInteraction: false }}
             loop={sliders.length > 1}
             effect="fade"

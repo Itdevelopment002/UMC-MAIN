@@ -130,6 +130,7 @@ const Navbar = () => {
                         id={`${menu.mainMenu}Dropdown`}
                         role="button"
                         aria-expanded="false"
+                        aria-haspopup="true"
                     >
                         <span className="me-1">{menu.mainMenu}</span>
                         <i className="dropdown-icon"></i>
@@ -177,6 +178,7 @@ const Navbar = () => {
                         id={`dropdown-${menu.id}`}
                         role="button"
                         aria-expanded="false"
+                        aria-haspopup="true"
                     >
                         <span className="me-1">{menu.mainMenu}</span>
                         <i className="dropdown-icon"></i>
@@ -220,6 +222,7 @@ const Navbar = () => {
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-decoration-none"
+                        aria-label="Visit Aaple Sarkar website (Opens in a new tab)"
                     >
                         <img src={Headlogo2} alt="Image2" className="banner-img2" />
                     </Link>
@@ -270,6 +273,7 @@ const Navbar = () => {
                                         <li className={`nav-item ${activeLink === menu.mainMenu ? "active" : ""}`}>
                                             <Link
                                                 to={menu.mainMenuLink}
+                                                aria-label="View document on Google Drive (Opens in a new tab)"
                                                 target={menu.mainMenuLink.includes("http") ? "_blank" : "_self"}
                                                 rel={menu.mainMenuLink.includes("http") ? "noopener noreferrer" : ""}
                                                 className={`nav-link ${activeLink === menu.mainMenu ? "active" : ""}`}
