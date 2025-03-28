@@ -1,24 +1,121 @@
+// const express = require("express");
+// const router = express.Router();
+// const db = require("../config/db.js");
+
+// router.get("/dept-commissioner-desc", (req, res) => {
+//   const language = req.query.lang;
+//   let query;
+//   let params = [];
+//   if (language) {
+//     query = `SELECT * FROM dept_commissioner_desc WHERE language_code = ?`;
+//     params.push(language);
+//   } else {
+//     query = "SELECT * FROM dept_commissioner_desc";
+//   }
+
+//   db.query(query, params, (err, results) => {
+//     if (err) throw err;
+//     res.json(results);
+//   });
+// });
+
+
+// router.get("/dept-commissioner-desc/:id", (req, res) => {
+//   const { id } = req.params;
+//   const sql = "SELECT * FROM dept_commissioner_desc WHERE id = ?";
+//   db.query(sql, [id], (err, result) => {
+//     if (err) {
+//       return res.status(500).json({ message: "Database error", error: err });
+//     }
+//     if (result.length === 0) {
+//       return res.status(404).json({ message: "Deputy Commissioner Description not found" });
+//     }
+//     res.status(200).json(result[0]);
+//   });
+// });
+
+
+// router.post("/dept-commissioner-desc", (req, res) => {
+//   const { description, language_code } = req.body;
+//   if (!description || !language_code) {
+//     return res.status(400).json({ message: "Description is required" });
+//   }
+//   const sql = "INSERT INTO dept_commissioner_desc (description, language_code) VALUES (?, ?)";
+//   db.query(sql, [description, language_code], (err, result) => {
+//     if (err) {
+//       return res.status(500).json({ message: "Database error", error: err });
+//     }
+//     res
+//       .status(201)
+//       .json({
+//         message: "Deputy Commissioner Description added successfully",
+//         historyId: result.insertId,
+//       });
+//   });
+// });
+
+
+// router.put("/dept-commissioner-desc/:id", (req, res) => {
+//   const { id } = req.params;
+//   const { description, language_code } = req.body;
+//   const sql = "UPDATE dept_commissioner_desc SET description = ?, language_code = ? WHERE id = ?";
+//   db.query(sql, [description, language_code, id], (err, result) => {
+//     if (err) {
+//       return res.status(500).json({ message: "Database error", error: err });
+//     }
+//     if (result.affectedRows === 0) {
+//       return res.status(404).json({ message: "Deputy Commissioner Description not found" });
+//     }
+//     res.status(200).json({ message: "Deputy Commissioner Description updated successfully" });
+//   });
+// });
+
+
+// router.delete("/dept-commissioner-desc/:id", (req, res) => {
+//   const { id } = req.params;
+//   const sql = "DELETE FROM dept_commissioner_desc WHERE id = ?";
+//   db.query(sql, [id], (err, result) => {
+//     if (err) {
+//       return res.status(500).json({ message: "Database error", error: err });
+//     }
+//     if (result.affectedRows === 0) {
+//       return res.status(404).json({ message: "Deputy Commissioner Description not found" });
+//     }
+//     res.status(200).json({ message: "Deputy Commissioner Description deleted successfully" });
+//   });
+// });
+
+
+// module.exports = router;
+
+
 const express = require("express");
 const router = express.Router();
 const db = require("../config/db.js");
 
 router.get("/dept-commissioner-desc", (req, res) => {
-  const language = req.query.lang;
-  let query;
+  const { lang, commissioner } = req.query;
+  let query = "SELECT * FROM dept_commissioner_desc";
   let params = [];
-  if (language) {
-    query = `SELECT * FROM dept_commissioner_desc WHERE language_code = ?`;
-    params.push(language);
-  } else {
-    query = "SELECT * FROM dept_commissioner_desc";
+
+  if (lang && commissioner) {
+    query += " WHERE language_code = ? AND commissioner_name = ?";
+    params.push(lang, commissioner);
+  } else if (lang) {
+    query += " WHERE language_code = ?";
+    params.push(lang);
+  } else if (commissioner) {
+    query += " WHERE commissioner_name = ?";
+    params.push(commissioner);
   }
 
   db.query(query, params, (err, results) => {
-    if (err) throw err;
-    res.json(results);
+    if (err) {
+      return res.status(500).json({ message: "Database error", error: err });
+    }
+    res.status(200).json(results);
   });
 });
-
 
 router.get("/dept-commissioner-desc/:id", (req, res) => {
   const { id } = req.params;
@@ -28,62 +125,70 @@ router.get("/dept-commissioner-desc/:id", (req, res) => {
       return res.status(500).json({ message: "Database error", error: err });
     }
     if (result.length === 0) {
-      return res.status(404).json({ message: "Deputy Commissioner Description not found" });
+      return res.status(404).json({ message: "Deputy Commissioner description not found" });
     }
     res.status(200).json(result[0]);
   });
 });
 
-
 router.post("/dept-commissioner-desc", (req, res) => {
-  const { description, language_code } = req.body;
-  if (!description || !language_code) {
-    return res.status(400).json({ message: "Description is required" });
+  const { description, language_code, commissioner_name } = req.body;
+  
+  if (!description || !language_code || !commissioner_name) {
+    return res.status(400).json({ message: "All fields are required" });
   }
-  const sql = "INSERT INTO dept_commissioner_desc (description, language_code) VALUES (?, ?)";
-  db.query(sql, [description, language_code], (err, result) => {
+
+  const sql = `
+    INSERT INTO dept_commissioner_desc 
+    (commissioner_name, description, language_code) 
+    VALUES (?, ?, ?)
+  `;
+  
+  db.query(sql, [commissioner_name, description, language_code], (err, result) => {
     if (err) {
       return res.status(500).json({ message: "Database error", error: err });
     }
-    res
-      .status(201)
-      .json({
-        message: "Deputy Commissioner Description added successfully",
-        historyId: result.insertId,
-      });
+    res.status(201).json({ 
+      message: "Deputy Commissioner description added successfully",
+      id: result.insertId 
+    });
   });
 });
 
-
 router.put("/dept-commissioner-desc/:id", (req, res) => {
   const { id } = req.params;
-  const { description, language_code } = req.body;
-  const sql = "UPDATE dept_commissioner_desc SET description = ?, language_code = ? WHERE id = ?";
-  db.query(sql, [description, language_code, id], (err, result) => {
+  const { description, language_code, commissioner_name } = req.body;
+  
+  const sql = `
+    UPDATE dept_commissioner_desc 
+    SET commissioner_name = ?, description = ?, language_code = ?
+    WHERE id = ?
+  `;
+  
+  db.query(sql, [commissioner_name, description, language_code, id], (err, result) => {
     if (err) {
       return res.status(500).json({ message: "Database error", error: err });
     }
     if (result.affectedRows === 0) {
-      return res.status(404).json({ message: "Deputy Commissioner Description not found" });
+      return res.status(404).json({ message: "Deputy Commissioner description not found" });
     }
-    res.status(200).json({ message: "Deputy Commissioner Description updated successfully" });
+    res.status(200).json({ message: "Deputy Commissioner description updated successfully" });
   });
 });
-
 
 router.delete("/dept-commissioner-desc/:id", (req, res) => {
   const { id } = req.params;
   const sql = "DELETE FROM dept_commissioner_desc WHERE id = ?";
+  
   db.query(sql, [id], (err, result) => {
     if (err) {
       return res.status(500).json({ message: "Database error", error: err });
     }
     if (result.affectedRows === 0) {
-      return res.status(404).json({ message: "Deputy Commissioner Description not found" });
+      return res.status(404).json({ message: "Deputy Commissioner description not found" });
     }
-    res.status(200).json({ message: "Deputy Commissioner Description deleted successfully" });
+    res.status(200).json({ message: "Deputy Commissioner description deleted successfully" });
   });
 });
-
 
 module.exports = router;
