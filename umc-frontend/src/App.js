@@ -98,6 +98,7 @@ import api from "../src/components/api";
 import AddtCommissioner from "./components/AddtCommissioner/AddtCommissioner";
 import AsstCommissioner from "./components/AsstCommissioner/AsstCommissioner";
 import DeptCommissioner from "./components/DeptCommissioner/DeptCommissioner";
+import Sitemap from "./components/SiteMap/SiteMap";
 
 function App() {
   const [showIntro, setShowIntro] = useState(true);
@@ -297,6 +298,7 @@ function App() {
             <StickyFeedback data-aos="fade-right" />
 
             <Routes>
+             <Route path="/sitemap" element={<Sitemap />} />
               {/* Home */}
               <Route path="/" element={<Home data-aos="fade-up" />} />
 
