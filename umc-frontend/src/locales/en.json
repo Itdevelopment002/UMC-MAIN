@@ -146,7 +146,6 @@
     "addt-commisioner-overview": "Brief Overview of the Additional Commissioner",
     "dept-commisioner-overview": "Brief Overview of the Deputy Commissioner",
     "asst-commisioner-overview": "Brief Overview of the Assistant Commissioner",
-
     "btn-title": "Click here for the location",
     "breadcrumbHome": "Home",
     "contactUs": {
@@ -381,7 +380,7 @@
         "propertyTaxDepartment": "Property Tax Department",
         "property": "Property",
         "taxDepartment": "Tax Department",
-        "text":"List of property tax areas of more than one lakh"
+        "text": "List of property tax areas of more than one lakh"
     },
     "diasterDept": {
         "title": "Disaster Management",
@@ -570,7 +569,6 @@
         "highlight": "Right",
         "highlight-text": "to Information"
     },
-
     "administrative": {
         "wings": "Administrative Wings",
         "breadcrumb": "Administrative Structure",
@@ -583,45 +581,55 @@
         "srNo": "Sr. No.",
         "noData": "No data available"
     },
-    "upcoming":{
+    "upcoming": {
         "title": "Upcoming Projects",
         "highlight": "Upcoming",
         "highlight-text": "Projects",
         "workdetail": "Work Details",
         "noimage": "No images available"
-
     },
-    "census":{
+    "census": {
         "title": "Census & Aadhar Center",
         "highlight": "Census &",
         "highlight-text": "Aadhar Center"
     },
-    "proactive":{
+    "proactive": {
         "rti": "RTI",
         "title": "Proactive Disclosure (section 4)",
         "highlight": "Proactive",
         "highlight-text": "Disclosure (section 4)"
     },
-    "subrti":{
+    "subrti": {
         "name": "Proactive Disclosure",
         "title": "Sub RTI",
         "highlight": "Sub",
         "highlight-text": "RTI"
     },
-    "feedback":{
+    "feedback": {
         "title": "FEEDBACK",
         "heading": "Feedback",
         "rate": "Rate",
         "like": "Did you like the website",
         "yes": "Yes",
-        "no" : "No",
+        "no": "No",
         "comment": "Additional Comments",
-        "submit" : "Submit"
+        "submit": "Submit"
     },
-    "auditreport":{
+    "auditreport": {
         "action": "Action",
         "year": "Year",
         "srNo": "Sr. No.",
         "viewPDF": "View PDF"
-    }
+    },
+    "sitemap": {
+        "home": "Home",
+        "title": "Sitemap",
+        "mainTitle": "Ulhasnagar Municipal Corporation Website Sitemap",
+        "description": "Complete directory of all pages available on our website",
+        "additionalLinks": "Additional Links"
+    },
+    "termsConditions": "Terms & Conditions",
+    "privacyPolicy": "Privacy Policy",
+    "accessibility": "Accessibility Statement",
+    "loading": "Loading..."
 }
