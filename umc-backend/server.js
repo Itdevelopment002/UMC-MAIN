@@ -29,6 +29,7 @@ const homeServices2Routes = require('./routes/homeServices2Routes');
 const bottomSliderRoutes = require('./routes/bottomSliderRoutes');
 const swmsRoutes = require('./routes/swmsRoutes');
 const pressNotesRoutes = require('./routes/pressNotesRoutes');
+const employeeInfoRoutes = require('./routes/employeeInfoRoutes');
 const propertyDeptRoutes = require('./routes/propertyDeptRoutes');
 
 {/* About UMC */}
@@ -174,6 +175,7 @@ app.use('/api', homeServices2Routes);
 app.use('/api', bottomSliderRoutes);
 app.use('/api', swmsRoutes);
 app.use('/api', pressNotesRoutes);
+app.use('/api', employeeInfoRoutes);
 app.use('/api', propertyDeptRoutes);
 
 {/* About UMC */}
