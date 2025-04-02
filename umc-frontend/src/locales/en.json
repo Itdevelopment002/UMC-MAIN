@@ -628,6 +628,11 @@
         "description": "Complete directory of all pages available on our website",
         "additionalLinks": "Additional Links"
     },
+    "empInfo": {
+        "title": "Employee Information",
+        "highlight": "Employee",
+        "highlight-text": "Information"
+    },
     "termsConditions": "Terms & Conditions",
     "privacyPolicy": "Privacy Policy",
     "accessibility": "Accessibility Statement",
