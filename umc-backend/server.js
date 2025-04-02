@@ -29,8 +29,8 @@ const homeServices2Routes = require('./routes/homeServices2Routes');
 const bottomSliderRoutes = require('./routes/bottomSliderRoutes');
 const swmsRoutes = require('./routes/swmsRoutes');
 const pressNotesRoutes = require('./routes/pressNotesRoutes');
-const employeeInfoRoutes = require('./routes/employeeInfoRoutes');
 const propertyDeptRoutes = require('./routes/propertyDeptRoutes');
+const empInfoRoutes = require('./routes/empInfoRoutes');
 
 {/* About UMC */}
 const locationRoutes = require('./routes/locationRoutes');
@@ -140,6 +140,9 @@ const emailRoutes = require('./routes/emailRoutes');
 {/* Login */}
 const loginRoutes = require('./routes/loginRoutes');
 
+{/* Reset Password */}
+const resetPassRoutes = require('./routes/resetPassRoutes');
+
 {/* Visitor */}
 const visitorRoutes = require('./routes/visitorRoutes');
 
@@ -147,10 +150,6 @@ const visitorRoutes = require('./routes/visitorRoutes');
 const notificationRoutes = require('./routes/notificationRoutes');
 const adminNotificationRoutes = require('./routes/adminNotificationRoutes');
 const notifyStatusRoutes = require('./routes/notifyStatusRoutes');
-
-// Reset Passward
-const resetPassRoutes = require('./routes/resetPassRoutes');
-
 
 
 
@@ -175,8 +174,8 @@ app.use('/api', homeServices2Routes);
 app.use('/api', bottomSliderRoutes);
 app.use('/api', swmsRoutes);
 app.use('/api', pressNotesRoutes);
-app.use('/api', employeeInfoRoutes);
 app.use('/api', propertyDeptRoutes);
+app.use('/api', empInfoRoutes);
 
 {/* About UMC */}
 app.use('/api', locationRoutes);
@@ -286,6 +285,9 @@ app.use('/api', emailRoutes);
 {/* Login */}
 app.use('/api', loginRoutes);
 
+{/* Reset Password */}
+app.use('/api', resetPassRoutes);
+
 {/* Visitor */}
 app.use('/api', visitorRoutes);
 
@@ -293,11 +295,6 @@ app.use('/api', visitorRoutes);
 app.use('/api', notificationRoutes);
 app.use('/api', adminNotificationRoutes);
 app.use('/api', notifyStatusRoutes);
-
-// Reset Passward
-
-app.use('/api', resetPassRoutes);
-
 
 
 const PORT = process.env.PORT || 5011;

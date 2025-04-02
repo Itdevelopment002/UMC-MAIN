@@ -7,18 +7,18 @@ import Flatpickr from "react-flatpickr";
 import "flatpickr/dist/themes/material_blue.css";
 
 const EmployeeInfo = () => {
-  const [info, setInfo] = useState([]);
+  const [emp, setEmp] = useState([]);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
-  const [selectedInfo, setSelectedInfo] = useState(null);
+  const [selectedEmp, setSelectedEmp] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const infoPerPage = 10;
+  const empPerPage = 10;
 
   useEffect(() => {
-    fetchInfo();
+    fetchEmp();
   }, []);
 
-  const fetchInfo = async () => {
+  const fetchEmp = async () => {
     try {
       const response = await api.get("/emp-info");
       const sortedData = response.data.sort((a, b) => {
@@ -26,63 +26,63 @@ const EmployeeInfo = () => {
         const dateB = b.issue_date ? new Date(b.issue_date) : new Date(0);
         return dateB - dateA;
       });
-      setInfo(sortedData);
+      setEmp(sortedData);
     } catch (error) {
-      console.error("Error fetching employee info:", error);
-      toast.error("Failed to fetch employee information!");
+      console.error("Error fetching emp info:", error);
+      toast.error("Failed to fetch emp info data!");
     }
   };
 
   const handleDelete = async () => {
     try {
-      await api.delete(`/emp-info/${selectedInfo.id}`);
-      setInfo(info.filter((w) => w.id !== selectedInfo.id));
+      await api.delete(`/emp-info/${selectedEmp.id}`);
+      setEmp(emp.filter((w) => w.id !== selectedEmp.id));
       setShowDeleteModal(false);
-      toast.success("Employee information deleted successfully!");
+      toast.success("Employee Information deleted successfully!");
     } catch (error) {
-      console.error("Error deleting info:", error);
-      toast.error("Failed to delete the information!");
+      console.error("Error deleting emp info:", error);
+      toast.error("Failed to delete the emp info!");
     }
   };
 
   const handleEditSave = async () => {
-    const formattedIssueDate = selectedInfo.issue_date
-      ? formatDate(selectedInfo.issue_date)
+    const formattedIssueDate = selectedEmp.issue_date
+      ? formatDate(selectedEmp.issue_date)
       : "";
     try {
-      await api.put(`/emp-info/${selectedInfo.id}`, {
-        description: selectedInfo.description,
-        link: selectedInfo.link,
-        language_code: selectedInfo.language_code,
+      await api.put(`/emp-info/${selectedEmp.id}`, {
+        description: selectedEmp.description,
+        link: selectedEmp.link,
         issue_date: formattedIssueDate,
+        language_code: selectedEmp.language_code,
       });
-      fetchInfo();
+      fetchEmp();
       setShowEditModal(false);
-      toast.success("Employee information updated successfully!");
+      toast.success("Employee Information updated successfully!");
     } catch (error) {
-      console.error("Error updating info:", error);
-      toast.error("Failed to update the information!");
+      console.error("Error updating emp info:", error);
+      toast.error("Failed to update the emp info!");
     }
   };
 
-  const handleEditClick = (info) => {
-    setSelectedInfo({ ...info });
+  const handleEditClick = (emp) => {
+    setSelectedEmp({ ...emp });
     setShowEditModal(true);
   };
 
-  const handleDeleteClick = (info) => {
-    setSelectedInfo(info);
+  const handleDeleteClick = (emp) => {
+    setSelectedEmp(emp);
     setShowDeleteModal(true);
   };
 
   const handleEditChange = (e) => {
     const { name, value } = e.target;
-    setSelectedInfo({ ...selectedInfo, [name]: value });
+    setSelectedEmp({ ...selectedEmp, [name]: value });
   };
 
-  const indexOfLastInfo = currentPage * infoPerPage;
-  const indexOfFirstInfo = indexOfLastInfo - infoPerPage;
-  const currentInfo = info.slice(indexOfFirstInfo, indexOfLastInfo);
+  const indexOfLastEmp = currentPage * empPerPage;
+  const indexOfFirstEmp = indexOfLastEmp - empPerPage;
+  const currentEmp = emp.slice(indexOfFirstEmp, indexOfLastEmp);
 
   const formatDate = (date) => {
     const d = new Date(date);
@@ -99,7 +99,7 @@ const EmployeeInfo = () => {
           <nav aria-label="breadcrumb">
             <ol className="breadcrumb">
               <li className="breadcrumb-item">
-                <Link to="#">Home</Link>
+                <Link to="/home">Home</Link>
               </li>
               <li className="breadcrumb-item active" aria-current="page">
                 Employee Information
@@ -135,25 +135,25 @@ const EmployeeInfo = () => {
                         </tr>
                       </thead>
                       <tbody>
-                        {currentInfo.length > 0 ? (
-                          currentInfo.map((info, index) => (
-                            <tr key={info.id}>
+                        {currentEmp.length > 0 ? (
+                          currentEmp.map((emp, index) => (
+                            <tr key={emp.id}>
                               <td className="text-center">
-                                {index + 1 + (currentPage - 1) * infoPerPage}
+                                {index + 1 + (currentPage - 1) * empPerPage}
                               </td>
-                              <td>{info.description}</td>
+                              <td>{emp.description}</td>
                               <td>
                                 <Link
-                                  to={info.link !== "#" ? `${info.link}` : "#"}
-                                  target={info.link !== "#" ? "_blank" : ""}
+                                  to={emp.link !== "#" ? `${emp.link}` : "#"}
+                                  target={emp.link !== "#" ? "_blank" : ""}
                                   className="text-decoration-none"
                                   style={{ color: "#000" }}
                                 >
-                                  {info.link}
+                                  {emp.link}
                                 </Link>
                               </td>
                               <td className="text-center">
-                                {new Date(info.issue_date)
+                                {new Date(emp.issue_date)
                                   .toLocaleDateString("en-GB", {
                                     day: "2-digit",
                                     month: "2-digit",
@@ -163,14 +163,14 @@ const EmployeeInfo = () => {
                               </td>
                               <td className="text-center">
                                 <button
-                                  onClick={() => handleEditClick(info)}
+                                  onClick={() => handleEditClick(emp)}
                                   className="btn btn-success btn-sm m-t-10"
                                 >
                                   Edit
                                 </button>
                                 <button
                                   className="btn btn-danger btn-sm m-t-10"
-                                  onClick={() => handleDeleteClick(info)}
+                                  onClick={() => handleDeleteClick(emp)}
                                 >
                                   Delete
                                 </button>
@@ -179,9 +179,10 @@ const EmployeeInfo = () => {
                           ))
                         ) : (
                           <tr>
-                            <td colSpan={4} className="text-center">No employee information available</td>
+                            <td colSpan={5} className="text-center">No Employee Information available</td>
                           </tr>
                         )}
+
                       </tbody>
                     </table>
                   </div>
@@ -216,7 +217,7 @@ const EmployeeInfo = () => {
                       </li>
                     )}
                     {Array.from(
-                      { length: Math.ceil(info.length / infoPerPage) },
+                      { length: Math.ceil(emp.length / empPerPage) },
                       (_, i) => i + 1
                     )
                       .filter(
@@ -236,14 +237,14 @@ const EmployeeInfo = () => {
                           </button>
                         </li>
                       ))}
-                    {currentPage < Math.ceil(info.length / infoPerPage) - 3 && (
+                    {currentPage < Math.ceil(emp.length / empPerPage) - 3 && (
                       <li className="page-item disabled">
                         <span className="page-link">...</span>
                       </li>
                     )}
-                    {currentPage < Math.ceil(info.length / infoPerPage) - 2 && (
+                    {currentPage < Math.ceil(emp.length / empPerPage) - 2 && (
                       <li
-                        className={`page-item ${currentPage === Math.ceil(info.length / infoPerPage) - 1
+                        className={`page-item ${currentPage === Math.ceil(emp.length / empPerPage) - 1
                           ? "active"
                           : ""
                           }`}
@@ -251,16 +252,16 @@ const EmployeeInfo = () => {
                         <button
                           className="page-link"
                           onClick={() =>
-                            setCurrentPage(Math.ceil(info.length / infoPerPage) - 1)
+                            setCurrentPage(Math.ceil(emp.length / empPerPage) - 1)
                           }
                         >
-                          {Math.ceil(info.length / infoPerPage) - 1}
+                          {Math.ceil(emp.length / empPerPage) - 1}
                         </button>
                       </li>
                     )}
-                    {currentPage < Math.ceil(info.length / infoPerPage) - 1 && (
+                    {currentPage < Math.ceil(emp.length / empPerPage) - 1 && (
                       <li
-                        className={`page-item ${currentPage === Math.ceil(info.length / infoPerPage)
+                        className={`page-item ${currentPage === Math.ceil(emp.length / empPerPage)
                           ? "active"
                           : ""
                           }`}
@@ -268,15 +269,15 @@ const EmployeeInfo = () => {
                         <button
                           className="page-link"
                           onClick={() =>
-                            setCurrentPage(Math.ceil(info.length / infoPerPage))
+                            setCurrentPage(Math.ceil(emp.length / empPerPage))
                           }
                         >
-                          {Math.ceil(info.length / infoPerPage)}
+                          {Math.ceil(emp.length / empPerPage)}
                         </button>
                       </li>
                     )}
                     <li
-                      className={`page-item ${currentPage === Math.ceil(info.length / infoPerPage)
+                      className={`page-item ${currentPage === Math.ceil(emp.length / empPerPage)
                         ? "disabled"
                         : ""
                         }`}
@@ -315,44 +316,45 @@ const EmployeeInfo = () => {
                         <label className="form-label">
                           Select Language
                         </label>
+
                         <select
                           className="form-control"
-                          value={selectedInfo?.language_code || ""}
-                          onChange={handleEditChange}
                           name="language_code"
+                          value={selectedEmp?.language_code || ""}
+                          onChange={handleEditChange}
                         >
-                          <option value="">Select Language</option>
+                          <option value="" disabled>Select Language</option>
                           <option value="en">English</option>
                           <option value="mr">Marathi</option>
                         </select>
                       </div>
                       <div className="mb-3">
-                        <label className="form-label">Description</label>
+                        <label className="form-label">Emp Info Description</label>
                         <input
                           type="text"
                           className="form-control"
                           name="description"
-                          value={selectedInfo?.description || ""}
+                          value={selectedEmp?.description || ""}
                           onChange={handleEditChange}
                         />
                       </div>
                       <div className="mb-3">
-                        <label className="form-label">Link</label>
+                        <label className="form-label">Emp Info Link</label>
                         <input
                           type="text"
                           className="form-control"
                           name="link"
-                          value={selectedInfo?.link || ""}
+                          value={selectedEmp?.link || ""}
                           onChange={handleEditChange}
                         />
                       </div>
                       <div className="mb-3">
                         <label className="form-label">Issue Date</label>
                         <Flatpickr
-                          value={selectedInfo?.issue_date || ""}
+                          value={selectedEmp?.issue_date || ""}
                           onChange={(date) =>
-                            setSelectedInfo({
-                              ...selectedInfo,
+                            setSelectedEmp({
+                              ...selectedEmp,
                               issue_date: date[0],
                             })
                           }

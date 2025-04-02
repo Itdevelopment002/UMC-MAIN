@@ -21,6 +21,7 @@ import { AiOutlineFundProjectionScreen } from "react-icons/ai";
 import { PiTreeStructureBold } from "react-icons/pi";
 import { MdOutlineCelebration } from "react-icons/md";
 import { FaUsers } from "react-icons/fa";
+import { FaUserFriends } from "react-icons/fa";
 
 const Sidebar = ({ isOpen, closeSidebar, user }) => {
   const [openSubmenu, setOpenSubmenu] = useState(null);
