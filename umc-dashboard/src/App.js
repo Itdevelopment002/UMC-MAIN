@@ -51,6 +51,8 @@ import PressNote from "./components/PressNote/PressNote";
 import AddPressNote from "./components/PressNote/AddPressNote";
 import PropertyTaxDept from "./components/PropertyTaxDept/PropertyTaxDept";
 import AddPropertyTaxDept from "./components/PropertyTaxDept/AddPropertyTaxDept";
+import EmpInfo from "./components/EmployeeInfo/EmployeeInfo";
+import AddEmpInfo from "./components/EmployeeInfo/AddEmployeeInfo";
 import Location from "./components/Location/Location";
 import AddDataTable1 from "./components/Location/AddDataTable1";
 import AddDataTable2 from "./components/Location/AddDataTable2";
@@ -162,8 +164,6 @@ import Users from "./components/Users/Users";
 import ResetPassword from "./components/ResetPassword/ResetPassword";
 import CodeVerification from "./components/CodeVerification/CodeVerification";
 import ChangePassword from "./components/ChangePassword/ChangePassword";
-import EmpInfo from "./components/EmployeeInfo/EmployeeInfo";
-import AddEmpInfo from "./components/EmployeeInfo/AddEmployeeInfo";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(
@@ -327,11 +327,10 @@ function App() {
                         <Route path="/add-swms" element={<AddSolidWasteSystem />} />
                         <Route path="/press-note" element={<PressNote />} />
                         <Route path="/add-press-note" element={<AddPressNote />} />
-                        <Route path="/emp-info" element={<EmpInfo />} />
-                        <Route path="/add-emp-info" element={<AddEmpInfo />} />
-
                         <Route path="/property-tax-department" element={<PropertyTaxDept />} />
                         <Route path="/add-property-tax-department" element={<AddPropertyTaxDept />} />
+                        <Route path="/emp-info" element={<EmpInfo />} />
+                        <Route path="/add-emp-info" element={<AddEmpInfo />} />
 
                         {/* About UMC */}
                         <Route path="/location" element={<Location />} />

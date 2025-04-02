@@ -98,6 +98,7 @@ import api from "../src/components/api";
 import AddtCommissioner from "./components/AddtCommissioner/AddtCommissioner";
 import AsstCommissioner from "./components/AsstCommissioner/AsstCommissioner";
 import DeptCommissioner from "./components/DeptCommissioner/DeptCommissioner";
+import EmpInformation from "./components/EmpInformation/EmpInformation";
 import Sitemap from "./components/SiteMap/SiteMap";
 
 function App() {
@@ -195,6 +196,7 @@ function App() {
     "/authorities": "Authorities | Ulhasnagar Municipal Corporation",
     "/ward-committee": "Ward Committee | Ulhasnagar Municipal Corporation",
     "/customer-support": "Customer Support | Ulhasnagar Municipal Corporation",
+    "/employee-information": "Employee Information | Ulhasnagar Municipal Corporation",
   };
 
   // Update document title based on the current route
@@ -416,6 +418,8 @@ function App() {
               <Route path="/authorities" element={<Authorities />} />
               <Route path="/ward-committee" element={<WardCommittee />} />
               <Route path="/customer-support" element={<CustomerSupport />} />
+
+              <Route path="/employee-information" element={<EmpInformation />} />
             </Routes>
 
             <BottomSlider data-aos="fade-up" />

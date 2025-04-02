@@ -1,0 +1,18 @@
+#solid-system-css .system-style-div {
+    display: flex;
+    background-color: #F3F3F3;
+    align-items: center;
+    padding: 10px 20px;
+}
+
+#solid-system-css .span-system1 {
+    font-family: 'Roboto';
+    font-weight: 600;
+    font-size: 16px;
+}
+
+#solid-system-css .span-system2 {
+    font-family: 'Roboto';
+    font-weight: 400;
+    font-size: 16px;
+}

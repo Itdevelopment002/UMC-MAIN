@@ -632,6 +632,11 @@
         "description": "आमच्या वेबसाइटवरील सर्व पृष्ठांची संपूर्ण यादी",
         "additionalLinks": "अतिरिक्त दुवे"
     },
+    "empInfo": {
+        "title": "कर्मचारी माहिती",
+        "highlight": "कर्मचारी",
+        "highlight-text": "माहिती"
+    },
     "termsConditions": "अटी आणि नियम",
     "privacyPolicy": "गोपनीयता धोरण",
     "accessibility": "प्रवेशयोग्यता विधान",

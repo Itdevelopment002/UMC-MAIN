@@ -13,10 +13,10 @@ router.get("/emp-info", (req, res) => {
   let query;
   let params = [];
   if (language) {
-    query = `SELECT * FROM emp_info WHERE language_code = ?`;
+    query = `SELECT * FROM empInfo WHERE language_code = ?`;
     params.push(language);
   } else {
-    query = "SELECT * FROM emp_info";
+    query = "SELECT * FROM empInfo";
   }
 
   db.query(query, params, (err, results) => {
@@ -29,7 +29,7 @@ router.get("/emp-info", (req, res) => {
 router.post("/emp-info", (req, res) => {
   const { description, link, issue_date, language_code } = req.body;
   const formattedDate = convertToMySQLDate(issue_date);
-  const sql = "INSERT INTO emp_info (description, link, issue_date, language_code) VALUES (?, ?, ?, ?)";
+  const sql = "INSERT INTO empInfo (description, link, issue_date, language_code) VALUES (?, ?, ?, ?)";
   db.query(sql, [description, link, formattedDate, language_code], (err, result) => {
     if (err) throw err;
     res.json({ id: result.insertId, description, link, language_code });
@@ -40,7 +40,7 @@ router.post("/emp-info", (req, res) => {
 router.put("/emp-info/:id", (req, res) => {
   const { description, link, issue_date, language_code } = req.body;
   const formattedDate = issue_date ? convertToMySQLDate(issue_date) : null;
-  const sql = "UPDATE emp_info SET description = ?, link = ?, issue_date = ?, language_code = ? WHERE id = ?";
+  const sql = "UPDATE empInfo SET description = ?, link = ?, issue_date = ?, language_code = ? WHERE id = ?";
   db.query(sql, [description, link, formattedDate, language_code, req.params.id], (err, result) => {
     if (err) throw err;
     res.json({ success: true });
@@ -49,7 +49,7 @@ router.put("/emp-info/:id", (req, res) => {
 
 
 router.delete("/emp-info/:id", (req, res) => {
-  const sql = "DELETE FROM emp_info WHERE id = ?";
+  const sql = "DELETE FROM empInfo WHERE id = ?";
   db.query(sql, [req.params.id], (err, result) => {
     if (err) throw err;
     res.json({ success: true });
