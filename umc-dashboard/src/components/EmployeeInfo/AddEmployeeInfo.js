@@ -4,7 +4,7 @@ import api from "../api";
 import Flatpickr from "react-flatpickr";
 import "flatpickr/dist/themes/material_blue.css";
 
-const AddEmpInfo = () => {
+const AddEmployeeInformation = () => {
   const [description, setDescription] = useState("");
   const [link, setLink] = useState("");
   const [language, setLanguage] = useState("");
@@ -23,6 +23,10 @@ const AddEmpInfo = () => {
   const validateForm = () => {
     const validationErrors = {};
 
+    if (!description) {
+      validationErrors.description = "Emp Info Description is required.";
+    }
+
     if (!language) {
       validationErrors.language = "Language selection is required";
     }
@@ -31,12 +35,8 @@ const AddEmpInfo = () => {
       validationErrors.issueDate = "Issue Date is required.";
     }
 
-    if (!description) {
-      validationErrors.description = "Description is required.";
-    }
-
     if (!link) {
-      validationErrors.link = "Link is required.";
+      validationErrors.link = "Emp Info Link is required.";
     }
 
     setErrors(validationErrors);
@@ -57,8 +57,8 @@ const AddEmpInfo = () => {
       const response = await api.post("/emp-info", {
         description: description,
         link: link,
-        language_code: language,
         issue_date: formattedDate,
+        language_code: language,
       });
       setDescription("");
       setLink("");
@@ -66,7 +66,7 @@ const AddEmpInfo = () => {
       setIssueDate("");
       navigate("/emp-info");
     } catch (error) {
-      console.error("Error adding emp info:", error);
+      console.error("Error adding emp info data:", error);
     }
   };
 
@@ -79,10 +79,10 @@ const AddEmpInfo = () => {
               <Link to="#">Home</Link>
             </li>
             <li className="breadcrumb-item">
-              <Link to="/emp-info">Employee Info</Link>
+              <Link to="/emp-info">Employee Information</Link>
             </li>
             <li className="breadcrumb-item active" aria-current="page">
-              Add Employee Info
+              Add Employee Information
             </li>
           </ol>
           <div className="row">
@@ -91,7 +91,7 @@ const AddEmpInfo = () => {
                 <div className="card-block">
                   <div className="row">
                     <div className="col-12">
-                      <h4 className="page-title">Add Employee Info</h4>
+                      <h4 className="page-title">Add Employee Information</h4>
                     </div>
                   </div>
                   <form onSubmit={handleSubmit}>
@@ -120,14 +120,14 @@ const AddEmpInfo = () => {
                     </div>
                     <div className="form-group row">
                       <label className="col-form-label col-md-2">
-                        Description <span className="text-danger">*</span>
+                        Emp Info Description <span className="text-danger">*</span>
                       </label>
                       <div className="col-md-4">
                         <input
                           type="text"
                           className={`form-control form-control-md ${errors.description ? "is-invalid" : ""
                             }`}
-                          placeholder="Enter Description"
+                          placeholder="Enter Emp Info Description"
                           value={description}
                           onChange={(e) => {
                             setDescription(e.target.value);
@@ -146,14 +146,14 @@ const AddEmpInfo = () => {
 
                     <div className="form-group row mt-3">
                       <label className="col-form-label col-md-2">
-                        Link <span className="text-danger">*</span>
+                        Emp Info Link <span className="text-danger">*</span>
                       </label>
                       <div className="col-md-4">
                         <input
                           type="text"
                           className={`form-control form-control-md ${errors.link ? "is-invalid" : ""
                             }`}
-                          placeholder="Enter Link"
+                          placeholder="Enter Emp Info Link"
                           value={link}
                           onChange={(e) => {
                             setLink(e.target.value);
@@ -169,6 +169,7 @@ const AddEmpInfo = () => {
                         )}
                       </div>
                     </div>
+
                     <div className="form-group row">
                       <label className="col-form-label col-md-2">
                         Issue Date <span className="text-danger">*</span>
@@ -202,9 +203,10 @@ const AddEmpInfo = () => {
                         )}
                       </div>
                     </div>
+
                     <input
                       type="submit"
-                      className="btn btn-primary btn-sm"
+                      className="btn btn-primary btn-sm mt-3"
                       value="Submit"
                     />
                   </form>
@@ -218,4 +220,4 @@ const AddEmpInfo = () => {
   );
 };
 
-export default AddEmpInfo;
+export default AddEmployeeInformation;
