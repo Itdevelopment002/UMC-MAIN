@@ -144,7 +144,7 @@ const Users = () => {
         setUsers(users.filter((user) => user.id !== selectedUser.id));
         setShowDeleteModal(false);
         setSelectedUser(null);
-        toast.success("User deleted successfully!");
+        toast.success("User is deleted successfully!");
       })
       .catch((error) => {
         console.error("Error deleting user!", error);
@@ -171,7 +171,7 @@ const Users = () => {
 
       fetchUsers();
       setShowEditModal(false);
-      toast.success("User updated successfully!");
+      toast.success("User is updated successfully!");
     } catch (error) {
       console.error("Error updating user!", error);
       toast.error("Failed to update user.");
@@ -394,7 +394,7 @@ const Users = () => {
               <div className="modal-dialog modal-dialog-centered">
                 <div className="modal-content">
                   <div className="modal-body text-center">
-                    <h5>Are you sure you want to delete this item?</h5>
+                    <h5>Are you sure you want to delete this user?</h5>
                   </div>
                   <div className="modal-footer">
                     <button

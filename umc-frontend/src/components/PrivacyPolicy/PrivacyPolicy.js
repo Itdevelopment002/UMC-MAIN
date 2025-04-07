@@ -72,6 +72,9 @@ const PrivacyPolicy = () => {
                         <Link to="/" className="breadcrumb-item text-decoration-none">
                             {t('departments.home')}
                         </Link>
+                        <Link to="#" className="breadcrumb-item text-decoration-none">
+                            {t('privacy.subTitle')}
+                        </Link>
                         <span className="breadcrumb-item active1">{t('privacy.title')}</span>
                     </nav>
                     <h2 className="location-title">
