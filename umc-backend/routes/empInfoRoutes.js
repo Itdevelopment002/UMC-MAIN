@@ -12,6 +12,7 @@ router.get("/emp-info", (req, res) => {
   const language = req.query.lang;
   let query;
   let params = [];
+  
   if (language) {
     query = `SELECT * FROM empInfo WHERE language_code = ?`;
     params.push(language);
@@ -20,7 +21,14 @@ router.get("/emp-info", (req, res) => {
   }
 
   db.query(query, params, (err, results) => {
-    if (err) throw err;
+    if (err) {
+      console.error("Database error:", err);
+      return res.status(500).json({ 
+        error: true,
+        message: "Database error occurred",
+        details: err.message 
+      });
+    }
     res.json(results);
   });
 });
