@@ -133,7 +133,17 @@ const Footer = () => {
                     />
                     <div className="contact-text">
                       <p className="contact-title">{contact.heading}</p>
-                      <span className="contact-detail">{contact.description}</span>
+                      {contact.heading === "Phone" || contact.heading === "दूरध्वनी" ? (
+                        <Link to={`tel:${contact.description}`} className="contact-detail">
+                          {contact.description}
+                        </Link>
+                      ) : contact.heading === "Email" || contact.heading === "ईमेल" ? (
+                        <Link to={`mailto:${contact.description}`} className="contact-detail">
+                          {contact.description}
+                        </Link>
+                      ) : (
+                        <span className="contact-detail">{contact.description}</span>
+                      )}
                     </div>
                   </div>
                 </li>
@@ -209,8 +219,8 @@ const Footer = () => {
           </span>
 
           <span className="footer-sapn2">
-            <img className="img1" src={img2} alt="w32"/>
-            <img className="img2"src={img1} alt="w3c"/>
+            <img className="img1" src={img2} alt="w32" />
+            <img className="img2" src={img1} alt="w3c" />
           </span>
         </div>
       </div>

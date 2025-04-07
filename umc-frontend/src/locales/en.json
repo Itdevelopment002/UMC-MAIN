@@ -519,6 +519,7 @@
     },
     "privacy": {
         "title": "Privacy Policy",
+        "subTitle": "Help",
         "highlight": "Privacy",
         "highlight-text": "Policy"
     },
@@ -539,6 +540,7 @@
     },
     "support": {
         "title": "Customer Support",
+        "subTitle": "Help",
         "highlight": "Customer",
         "highlight-text": "Support"
     },
