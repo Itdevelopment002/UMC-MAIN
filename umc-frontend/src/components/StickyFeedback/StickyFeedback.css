@@ -170,3 +170,34 @@
     font-size: 0.8rem !important;
     margin-top: -10px;
 }
+
+/* Add these styles to your existing StickyFeedback.css */
+.textarea-container {
+    position: relative;
+    width: 100%;
+}
+
+.char-counter-inside {
+    position: absolute;
+    right: 8px;
+    bottom: 0px;
+    font-size: 11px;
+    background-color: rgba(255, 255, 255, 0.7);
+    padding: 2px 5px;
+    border-radius: 3px;
+    color: #666;
+}
+
+.char-counter-inside.warning {
+    color: orange;
+}
+
+.char-counter-inside.error {
+    color: red;
+}
+
+/* Make sure your textarea has some padding at the bottom */
+textarea {
+    padding-bottom: 25px; /* Give space for the counter */
+    /* ... keep other existing textarea styles ... */
+}

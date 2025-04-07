@@ -394,7 +394,7 @@
 
 .info-scroll-container {
   position: absolute;
-  animation: scroll-loop 25s linear infinite;
+  animation: scroll-loop 50s linear infinite;
   animation-play-state: running;
 }
 
