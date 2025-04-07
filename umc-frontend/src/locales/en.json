@@ -615,7 +615,8 @@
         "yes": "Yes",
         "no": "No",
         "comment": "Additional Comments",
-        "submit": "Submit"
+        "submit": "Submit",
+        "comment_placeholder": "Your comments..."
     },
     "auditreport": {
         "action": "Action",

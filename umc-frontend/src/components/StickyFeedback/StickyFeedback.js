@@ -9,9 +9,11 @@ function StickyFeedback() {
     const [rating, setRating] = useState(0);
     const [opinion, setOpinion] = useState("");
     const [comments, setComments] = useState("");
+    const [charCount, setCharCount] = useState(0);
     const [errors, setErrors] = useState({});
     const feedbackRef = useRef(null);
     const { t } = useTranslation();
+    const MAX_CHARS = 200;
 
     const toggleFeedback = () => {
         setIsOpen(!isOpen);
@@ -27,8 +29,13 @@ function StickyFeedback() {
         clearError("opinion");
     };
 
-    const handleCommentsChange = (value) => {
-        setComments(value);
+    const handleCommentsChange = (e) => {
+        const inputValue = e.target.value;
+        const filteredValue = inputValue.replace(/[^a-zA-Z0-9\s.,!?'"-]/g, '');
+        const limitedValue = filteredValue.slice(0, MAX_CHARS);
+
+        setComments(limitedValue);
+        setCharCount(limitedValue.length);
         clearError("comments");
     };
 
@@ -63,6 +70,7 @@ function StickyFeedback() {
         if (rating === 0) validationErrors.rating = "Rating is required.";
         if (!opinion) validationErrors.opinion = "Please select an option.";
         if (!comments.trim()) validationErrors.comments = "Comments are required.";
+        else if (comments.length < 10) validationErrors.comments = "Comments must be at least 10 characters.";
         setErrors(validationErrors);
         return Object.keys(validationErrors).length === 0;
     };
@@ -101,6 +109,7 @@ function StickyFeedback() {
             setRating(0);
             setOpinion("");
             setComments("");
+            setCharCount(0);
             setErrors({});
             setIsOpen(false);
         }
@@ -154,12 +163,19 @@ function StickyFeedback() {
                     {errors.opinion && <p className="error-message">{errors.opinion}</p>}
 
                     <p>{t('feedback.comment')} <span className="required">*</span></p>
-                    <textarea
-                        rows="3"
-                        placeholder="Your comments"
-                        value={comments}
-                        onChange={(e) => handleCommentsChange(e.target.value)}
-                    ></textarea>
+                    <div className="textarea-container">
+                        <textarea
+                            rows="3"
+                            placeholder={t('feedback.comment_placeholder')}
+                            value={comments}
+                            onChange={handleCommentsChange}
+                        ></textarea>
+                        <span className={`char-counter-inside ${charCount >= MAX_CHARS ? 'error' :
+                                charCount >= MAX_CHARS - 20 ? 'warning' : ''
+                            }`}>
+                            {charCount}/{MAX_CHARS}
+                        </span>
+                    </div>
                     {errors.comments && <p className="error-message">{errors.comments}</p>}
 
                     <button

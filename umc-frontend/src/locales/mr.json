@@ -619,7 +619,8 @@
         "yes": "हो",
         "no": "नाही",
         "comment": "अतिरिक्त टिप्पण्या",
-        "submit": "सबमिट करा"
+        "submit": "सबमिट करा",
+        "comment_placeholder": "तुमच्या टिप्पण्या..."
     },
     "auditreport": {
         "action": "कृती",
