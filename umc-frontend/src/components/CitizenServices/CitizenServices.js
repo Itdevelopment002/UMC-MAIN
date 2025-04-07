@@ -37,7 +37,7 @@ const CitizenServices = () => {
     if (scrollContainerRef.current) {
       scrollContainerRef.current.style.animation = "none";
       void scrollContainerRef.current.offsetHeight;
-      scrollContainerRef.current.style.animation = "scroll-loop 25s linear infinite";
+      scrollContainerRef.current.style.animation = "scroll-loop 50s linear infinite";
     }
   }, [information]);
 
