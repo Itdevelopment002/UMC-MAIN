@@ -45,12 +45,34 @@ const AddUsers = () => {
     }
   };
 
+  const getPasswordStrength = (password) => {
+    const strongRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    const moderateRegex = /^(?=.*[a-zA-Z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$/;
+
+    if (strongRegex.test(password)) {
+      return { message: "✅ Strong password", color: "success" };
+    } else if (moderateRegex.test(password)) {
+      return { message: "⚠️ Moderate password", color: "warning" };
+    } else {
+      return { message: "❌ Weak password", color: "danger" };
+    }
+  };
+
   const checkUsernameExists = () => {
     if (!username) return;
     const userExists = users.some((user) => user.username === username);
     setErrors((prev) => ({
       ...prev,
       username: userExists ? "Username already exists." : "",
+    }));
+  };
+
+  const checkEmailExists = () => {
+    if (!email) return;
+    const emailExists = users.some((user) => user.email === email);
+    setErrors((prev) => ({
+      ...prev,
+      email: emailExists ? "Email Address already exists." : "",
     }));
   };
 
@@ -87,8 +109,8 @@ const AddUsers = () => {
     } else if (!/\S+@\S+\.\S+/.test(email)) {
       newErrors.email = "Invalid email format.";
     }
-    if (!password || password.length < 6) {
-      newErrors.password = "Password must be at least 6 characters.";
+    if (!password || password.length < 8) {
+      newErrors.password = "Password must be at least 8 characters.";
     }
     if (password !== cnfpassword) {
       newErrors.cnfpassword = "Passwords do not match.";
@@ -187,10 +209,17 @@ const AddUsers = () => {
                     <label>
                       Email <span className="text-danger">*</span>
                     </label>
-                    <input type="email" className={`form-control ${errors.email ? "is-invalid" : ""}`} placeholder="Enter Email" value={email} onChange={(e) => {
-                      setEmail(e.target.value);
-                      setErrors((prev) => ({ ...prev, email: "" }));
-                    }} />
+                    <input
+                      type="email"
+                      className={`form-control ${errors.email ? "is-invalid" : ""}`}
+                      placeholder="Enter Email"
+                      value={email}
+                      onChange={(e) => {
+                        setEmail(e.target.value);
+                        setErrors((prev) => ({ ...prev, email: "" }));
+                      }}
+                      onBlur={checkEmailExists}
+                    />
                     {errors.email && <small className="text-danger">{errors.email}</small>}
                   </div>
 
@@ -283,6 +312,14 @@ const AddUsers = () => {
                           <i className={`fas ${showPassword ? "fa-eye-slash" : "fa-eye"}`}></i>
                         </span>
                       </div>
+                      {password && (
+                        <small className={`text-${getPasswordStrength(password).color}`}>
+                          {getPasswordStrength(password).message}
+                        </small>
+                      )}
+                      <small className="text-muted d-block mt-1">
+                        Use at least 8 characters, including uppercase, lowercase, numbers, and special characters (@, #, $, etc.).
+                      </small>
                       {errors.password && <small className="text-danger">{errors.password}</small>}
                     </div>
 
