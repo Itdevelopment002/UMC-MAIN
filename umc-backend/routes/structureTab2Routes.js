@@ -21,19 +21,19 @@ router.get("/structure-tab2", (req, res) => {
 
 
 router.post("/structure-tab2", (req, res) => {
-  const { heading1, heading2, heading3, language_code } = req.body;
-  const sql = "INSERT INTO structuretab2 (heading1, heading2, heading3, language_code) VALUES (?, ?, ?, ?)";
-  db.query(sql, [heading1, heading2, heading3, language_code], (err, result) => {
+  const { heading1, heading2, heading3, heading4, language_code } = req.body;
+  const sql = "INSERT INTO structuretab2 (heading1, heading2, heading3,heading4, language_code) VALUES (?, ?, ?, ?, ?)";
+  db.query(sql, [heading1, heading2, heading3, heading4, language_code], (err, result) => {
     if (err) throw err;
-    res.json({ id: result.insertId, heading1, heading2, heading3, language_code });
+    res.json({ id: result.insertId, heading1, heading2, heading3, heading4, language_code });
   });
 });
 
 
 router.put("/structure-tab2/:id", (req, res) => {
-  const { heading1, heading2, heading3, language_code } = req.body;
-  const sql = "UPDATE structuretab2 SET heading1 = ?, heading2 = ?, heading3 = ?, language_code = ? WHERE id = ?";
-  db.query(sql, [heading1, heading2, heading3, language_code, req.params.id], (err, result) => {
+  const { heading1, heading2, heading3, heading4, language_code } = req.body;
+  const sql = "UPDATE structuretab2 SET heading1 = ?, heading2 = ?, heading3 = ?, heading4 = ?, language_code = ? WHERE id = ?";
+  db.query(sql, [heading1, heading2, heading3, heading4, language_code, req.params.id], (err, result) => {
     if (err) throw err;
     res.json({ success: true });
   });
