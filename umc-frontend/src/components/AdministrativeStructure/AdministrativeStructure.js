@@ -284,7 +284,6 @@ const AdministrativeStructure = () => {
                               })()}
                             </td>
                             <td
-                              width="33%"
                               style={{
                                 paddingLeft: "10px",
                                 paddingRight: "10px",
@@ -295,7 +294,6 @@ const AdministrativeStructure = () => {
                               {item.heading1}
                             </td>
                             <td
-                              width="33%"
                               style={{
                                 paddingLeft: "10px",
                                 paddingRight: "10px",
@@ -306,7 +304,6 @@ const AdministrativeStructure = () => {
                               {item.heading2}
                             </td>
                             <td
-                              width="33%"
                               style={{
                                 paddingLeft: "10px",
                                 paddingRight: "10px",
@@ -315,6 +312,16 @@ const AdministrativeStructure = () => {
                               }}
                             >
                               {item.heading3}
+                            </td>
+                            <td
+                              style={{
+                                paddingLeft: "10px",
+                                paddingRight: "10px",
+                                color: "#000000",
+                                textAlign: "center"
+                              }}
+                            >
+                              {item.heading4}
                             </td>
                           </tr>
                         ))

@@ -161,6 +161,7 @@ const AdministrativeStructure = () => {
                     heading1: editData.heading1,
                     heading2: editData.heading2,
                     heading3: editData.heading3,
+                    heading4: editData.heading4,
                     language_code: editData.language_code
                 });
                 setStructureData2(
@@ -495,6 +496,7 @@ const AdministrativeStructure = () => {
                                                     <th>Heading 1</th>
                                                     <th>Heading 2</th>
                                                     <th>Heading 3</th>
+                                                    <th>Heading 4</th>
                                                     <th width="15%" className="text-center">Action</th>
                                                 </tr>
                                             </thead>
@@ -506,6 +508,7 @@ const AdministrativeStructure = () => {
                                                             <td>{item.heading1}</td>
                                                             <td>{item.heading2}</td>
                                                             <td>{item.heading3}</td>
+                                                            <td>{item.heading4}</td>
                                                             <td className="text-center">
                                                                 <button
                                                                     onClick={() => openEditModal(item, "structure2")}
@@ -924,6 +927,20 @@ const AdministrativeStructure = () => {
                                                             setEditData({
                                                                 ...editData,
                                                                 heading3: e.target.value,
+                                                            })
+                                                        }
+                                                    />
+                                                </div> <div className="form-group">
+                                                    <label htmlFor="heading3">Heading 4</label>
+                                                    <input
+                                                        type="text"
+                                                        className="form-control"
+                                                        id="heading4"
+                                                        value={editData.heading4}
+                                                        onChange={(e) =>
+                                                            setEditData({
+                                                                ...editData,
+                                                                heading4: e.target.value,
                                                             })
                                                         }
                                                     />
