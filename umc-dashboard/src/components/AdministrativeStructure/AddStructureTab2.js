@@ -9,6 +9,7 @@ const AddStructureTab2 = () => {
     const [heading1, setHeading1] = useState('');
     const [heading2, setHeading2] = useState('');
     const [heading3, setHeading3] = useState('');
+    const [heading4, setHeading4] = useState('');
     const [language, setLanguage] = useState('');
     const [errors, setErrors] = useState({});
     const navigate = useNavigate();
@@ -18,6 +19,7 @@ const AddStructureTab2 = () => {
         if (!heading1.trim()) errors.heading1 = "Heading 1 is required.";
         if (!heading2.trim()) errors.heading2 = "Heading 2 is required.";
         if (!heading3.trim()) errors.heading3 = "Heading 3 is required.";
+        if (!heading4.trim()) errors.heading4 = "Heading 4 is required.";
         if (!language) errors.language = "Language selection is required.";
         setErrors(errors);
         return Object.keys(errors).length === 0;
@@ -29,6 +31,7 @@ const AddStructureTab2 = () => {
         if (name === "heading1") setHeading1(value);
         if (name === "heading2") setHeading2(value);
         if (name === "heading3") setHeading3(value);
+        if (name === "heading4") setHeading4(value);
         if (name === "language") setLanguage(value);
     };
 
@@ -42,6 +45,7 @@ const AddStructureTab2 = () => {
                 heading1: heading1.trim(),
                 heading2: heading2.trim(),
                 heading3: heading3.trim(),
+                heading4: heading4.trim(),
                 language_code: language
             });
 
@@ -50,6 +54,7 @@ const AddStructureTab2 = () => {
             setHeading1('');
             setHeading2('');
             setHeading3('');
+            setHeading4('');
             setLanguage('');
             navigate('/administrative-structure');
         } catch (error) {
@@ -137,6 +142,22 @@ const AddStructureTab2 = () => {
                                                     onChange={handleChange}
                                                 />
                                                 {errors.heading3 && <div className="invalid-feedback">{errors.heading3}</div>}
+                                            </div>
+                                        </div>
+                                        <div className="form-group row">
+                                            <label className="col-form-label col-md-2">
+                                                Heading 4 <span className="text-danger">*</span>
+                                            </label>
+                                            <div className="col-md-4">
+                                                <input
+                                                    type="text"
+                                                    className={`form-control ${errors.heading4 ? 'is-invalid' : ''}`}
+                                                    value={heading4}
+                                                    name="heading4"
+                                                    placeholder="Enter Heading 4"
+                                                    onChange={handleChange}
+                                                />
+                                                {errors.heading3 && <div className="invalid-feedback">{errors.heading4}</div>}
                                             </div>
                                         </div>
                                         <button type="submit" className="btn btn-primary btn-sm">Submit</button>
