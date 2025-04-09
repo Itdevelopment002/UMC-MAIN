@@ -20,7 +20,7 @@ const upload = multer({
 });
 
 
-router.get("/commissioner-details", (req, res) => {
+router.get("/commissioner-data", (req, res) => {
   const language = req.query.lang;
   let query;
   let params = [];
@@ -39,7 +39,7 @@ router.get("/commissioner-details", (req, res) => {
 });
 
 
-router.get("/commissioner-details/:id", (req, res) => {
+router.get("/commissioner-data/:id", (req, res) => {
   const { id } = req.params;
   const sql = "SELECT * FROM commissioner_details WHERE id = ?";
   db.query(sql, [id], (err, result) => {
@@ -54,9 +54,9 @@ router.get("/commissioner-details/:id", (req, res) => {
 });
 
 
-router.post("/commissioner-details", upload.single("coImage"), (req, res) => {
-  const { coName, designation, qualification, address, number, email, language_code } = req.body;
-  if (!coName || !designation || !qualification || !address || !number || !email || !language_code) {
+router.post("/commissioner-data", upload.single("coImage"), (req, res) => {
+  const { coName, designation, qualification, address, number, email, description, language_code } = req.body;
+  if (!coName || !designation || !qualification || !address || !number || !email || !description || !language_code) {
     return res
       .status(400)
       .json({ message: "All fields are required" });
@@ -66,10 +66,10 @@ router.post("/commissioner-details", upload.single("coImage"), (req, res) => {
 
   const sql = `
     INSERT INTO commissioner_details 
-    (coName, designation, qualification, address, number, email, language_code, image_path) 
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    (coName, designation, qualification, address, number, email, description, language_code, image_path) 
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
   `;
-  db.query(sql, [coName, designation, qualification, address, number, email, language_code, imagePath], (err, result) => {
+  db.query(sql, [coName, designation, qualification, address, number, email, description, language_code, imagePath], (err, result) => {
     if (err) {
       return res.status(500).json({ message: "Database error", error: err });
     }
@@ -78,9 +78,9 @@ router.post("/commissioner-details", upload.single("coImage"), (req, res) => {
 });
 
 
-router.put("/commissioner-details/:id", upload.single("coImage"), (req, res) => {
+router.put("/commissioner-data/:id", upload.single("coImage"), (req, res) => {
   const { id } = req.params;
-  const { coName, designation, qualification, address, number, email, language_code } = req.body;
+  const { coName, designation, qualification, address, number, email, description, language_code } = req.body;
 
   let updateSql = "UPDATE commissioner_details SET";
   const updateParams = [];
@@ -108,6 +108,10 @@ router.put("/commissioner-details/:id", upload.single("coImage"), (req, res) => 
   if (email) {
     updateSql += updateParams.length > 0 ? ", email = ?" : " email = ?";
     updateParams.push(email);
+  }
+  if (description) {
+    updateSql += updateParams.length > 0 ? ", description = ?" : " description = ?";
+    updateParams.push(description);
   }
   if (language_code) {
     updateSql += updateParams.length > 0 ? ", language_code = ?" : " language_code = ?";
@@ -159,7 +163,7 @@ router.put("/commissioner-details/:id", upload.single("coImage"), (req, res) => 
 });
 
 
-router.delete("/commissioner-details/:id", (req, res) => {
+router.delete("/commissioner-data/:id", (req, res) => {
   const { id } = req.params;
 
   const selectSql = "SELECT image_path FROM commissioner_details WHERE id = ?";

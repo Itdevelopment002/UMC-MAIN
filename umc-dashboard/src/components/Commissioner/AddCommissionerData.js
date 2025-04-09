@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 import api from "../api";
 
-const AddCommissionerDetails = () => {
+const AddCommissionerData = () => {
   const [formData, setFormData] = useState({
     coName: "",
     designation: "",
@@ -10,6 +12,7 @@ const AddCommissionerDetails = () => {
     address: "",
     number: "",
     email: "",
+    description: "",
     language_code: "",
     coImage: null,
   });
@@ -28,6 +31,11 @@ const AddCommissionerDetails = () => {
     setErrors({ ...errors, coImage: "" });
   };
 
+  const handleDescriptionChange = (value) => {
+    setFormData({ ...formData, description: value });
+    setErrors({ ...errors, description: "" });
+  };
+
   const validateForm = () => {
     const newErrors = {};
     if (!formData.coName.trim()) newErrors.coName = "Commissioner Name is required.";
@@ -40,12 +48,11 @@ const AddCommissionerDetails = () => {
     if (!formData.language_code.trim()) newErrors.language_code = "Language Selection is required.";
     if (!formData.email.trim()) {
       newErrors.email = "Email Id is required.";
-    } else if (
-      !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(formData.email)
-    ) {
-      newErrors.email = "Invalid email format.";
     }
     if (!formData.coImage) newErrors.coImage = "Commissioner Image is required.";
+    if (!formData.description || formData.description === "<p><br></p>") {
+      newErrors.description = "Commissioner Description is required.";
+    }
     return newErrors;
   };
 
@@ -65,11 +72,12 @@ const AddCommissionerDetails = () => {
     data.append("address", formData.address);
     data.append("number", formData.number);
     data.append("email", formData.email);
+    data.append("description", formData.description);
     data.append("language_code", formData.language_code);
     if (formData.coImage) data.append("coImage", formData.coImage);
 
     try {
-      const response = await api.post("/commissioner-details", data, {
+      const response = await api.post("/commissioner-data", data, {
         headers: { "Content-Type": "multipart/form-data" },
       });
       if (response.status === 200) {
@@ -91,12 +99,12 @@ const AddCommissionerDetails = () => {
             <li className="breadcrumb-item">
               <Link to="/commissioner">Commissioner</Link>
             </li>
-            <li className="breadcrumb-item active">Add Commissioner Details</li>
+            <li className="breadcrumb-item active">Add Commissioner Data</li>
           </ol>
           <div className="row">
             <div className="col-lg-12">
               <div className="card-box">
-                <h4 className="page-title">Add Commissioner Details</h4>
+                <h4 className="page-title">Add Commissioner Data</h4>
                 <form onSubmit={handleSubmit}>
                   <div className="form-group row">
                     <label className="col-form-label col-md-3">
@@ -114,7 +122,9 @@ const AddCommissionerDetails = () => {
                         <option value="en">English</option>
                         <option value="mr">Marathi</option>
                       </select>
-                      {errors.language && <div className="invalid-feedback">{errors.language}</div>}
+                      {errors.language_code && (
+                        <div className="invalid-feedback">{errors.language_code}</div>
+                      )}
                     </div>
                   </div>
                   <div className="form-group row">
@@ -129,7 +139,7 @@ const AddCommissionerDetails = () => {
                         name="coName"
                         value={formData.coName}
                         onChange={handleChange}
-                        placeholder="Enter CO Name"
+                        placeholder="Enter Commissioner Name"
                       />
                       {errors.coName && (
                         <div className="invalid-feedback">{errors.coName}</div>
@@ -227,7 +237,7 @@ const AddCommissionerDetails = () => {
                     </label>
                     <div className="col-md-4">
                       <input
-                        type="email"
+                        type="text"
                         className={`form-control ${errors.email ? "is-invalid" : ""
                           }`}
                         name="email"
@@ -242,8 +252,46 @@ const AddCommissionerDetails = () => {
                   </div>
 
                   <div className="form-group row">
+                    <label className="col-form-label col-md-3">
+                      Commissioner Description <span className="text-danger">*</span>
+                    </label>
+                    <div className="col-md-8">
+                      <ReactQuill
+                        theme="snow"
+                        value={formData.description}
+                        onChange={handleDescriptionChange}
+                        placeholder="Enter Description"
+                        className={`form-control ${errors.description ? "is-invalid" : ""
+                          }`}
+                        modules={{
+                          toolbar: [
+                            [{ header: [1, 2, 3, false] }],
+                            ["bold", "italic", "underline", "strike"],
+                            [{ list: "ordered" }, { list: "bullet" }],
+                            [{ align: [] }],
+                            [{ color: [] }, { background: [] }],
+                            [{ font: [] }],
+                            ["link", "image"],
+                            ["clean"],
+                          ],
+                        }}
+                        formats={[
+                          "header",
+                          "bold", "italic", "underline", "strike",
+                          "list", "bullet",
+                          "align", "color", "background",
+                          "font", "link", "image"
+                        ]}
+                      />
+                      {errors.description && (
+                        <div className="invalid-feedback">{errors.description}</div>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="form-group row">
                     <label className="col-form-label col-md-3 col-lg-3">
-                      CO Image <span className="text-danger">*</span>
+                      Commissioner Image <span className="text-danger">*</span>
                     </label>
                     <div className="col-md-4">
                       <input
@@ -263,7 +311,7 @@ const AddCommissionerDetails = () => {
 
                   <div className="form-group row">
                     <div className="col-md-4">
-                      <button type="submit" className="btn btn-primary">
+                      <button type="submit" className="btn btn-sm btn-primary">
                         Submit
                       </button>
                     </div>
@@ -278,4 +326,4 @@ const AddCommissionerDetails = () => {
   );
 };
 
-export default AddCommissionerDetails;
+export default AddCommissionerData;
