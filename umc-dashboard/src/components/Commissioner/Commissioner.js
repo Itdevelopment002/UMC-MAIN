@@ -4,23 +4,20 @@ import api, { baseURL } from "../api";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import GLightbox from "glightbox";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 import "glightbox/dist/css/glightbox.min.css";
 
 const Commissioner = () => {
     const [coData, setCoData] = useState([]);
-    const [descData, setDescData] = useState([]);
     const [showEditModal, setShowEditModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
-    const [modalType, setModalType] = useState("");
     const [selectedItem, setSelectedItem] = useState(null);
     const [editData, setEditData] = useState({});
     const [imagePreview, setImagePreview] = useState("");
     const navigate = useNavigate();
-    const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 5;
 
     useEffect(() => {
-        fetchDescData();
         fetchCoData();
     }, []);
 
@@ -33,33 +30,19 @@ const Commissioner = () => {
         };
     }, [coData]);
 
-    const fetchDescData = async () => {
-        try {
-            const response = await api.get("/commissioner-desc");
-            setDescData(response.data);
-        } catch (error) {
-            toast.error("Failed to fetch Commissioner description data!");
-        }
-    };
-
     const fetchCoData = async () => {
         try {
-            const response = await api.get("/commissioner-details");
+            const response = await api.get("/commissioner-data");
             setCoData(response.data);
         } catch (error) {
             toast.error("Failed to fetch Commissioner Details data!");
         }
     };
 
-    const handleDelete = async (id, type) => {
+    const handleDelete = async (id) => {
         try {
-            if (type === "history") {
-                await api.delete(`/commissioner-desc/${id}`);
-                setDescData((prevData) => prevData.filter((item) => item.id !== id));
-            } else if (type === "co") {
-                await api.delete(`/commissioner-details/${id}`);
-                setCoData((prevData) => prevData.filter((item) => item.id !== id));
-            }
+            await api.delete(`/commissioner-data/${id}`);
+            setCoData((prevData) => prevData.filter((item) => item.id !== id));
             toast.success(
                 `Commissioner Information deleted successfully!`
             );
@@ -73,10 +56,9 @@ const Commissioner = () => {
     const openEditModal = (item, type) => {
         setSelectedItem(item);
         setEditData(
-            type === "history" ? { description: item.description, language_code: item.language_code } : { ...item }
+            { ...item }
         );
-        setImagePreview(type === "co" ? `${baseURL}${item.image_path}` : "");
-        setModalType(type);
+        setImagePreview(`${baseURL}${item.image_path}`);
         setShowEditModal(true);
     };
 
@@ -90,48 +72,33 @@ const Commissioner = () => {
 
     const handleSaveChanges = async () => {
         try {
-            if (modalType === "history") {
-                await api.put(`/commissioner-desc/${selectedItem.id}`, {
-                    description: editData.description,
-                    language_code: editData.language_code,
-                });
-                setDescData(
-                    descData.map((item) =>
-                        item.id === selectedItem.id
-                            ? { ...item, description: editData.description, language_code: editData.language_code, }
-                            : item
-                    )
-                );
-                fetchDescData();
-            } else if (modalType === "co") {
-                const formData = new FormData();
-                formData.append("coName", editData.coName);
-                formData.append("designation", editData.designation);
-                formData.append("qualification", editData.qualification);
-                formData.append("address", editData.address);
-                formData.append("number", editData.number);
-                formData.append("email", editData.email);
-                formData.append("language_code", editData.language_code);
+            const formData = new FormData();
+            formData.append("coName", editData.coName);
+            formData.append("designation", editData.designation);
+            formData.append("qualification", editData.qualification);
+            formData.append("address", editData.address);
+            formData.append("number", editData.number);
+            formData.append("email", editData.email);
+            formData.append("description", editData.description);
+            formData.append("language_code", editData.language_code);
 
-                if (editData.imageFile) {
-                    formData.append("coImage", editData.imageFile);
-                }
-
-                await api.put(`/commissioner-details/${selectedItem.id}`, formData, {
-                    headers: {
-                        "Content-Type": "multipart/form-data",
-                    },
-                });
-                setCoData(
-                    coData.map((item) =>
-                        item.id === selectedItem.id ? { ...item, ...editData } : item
-                    )
-                );
-                fetchCoData();
+            if (editData.imageFile) {
+                formData.append("coImage", editData.imageFile);
             }
+
+            await api.put(`/commissioner-data/${selectedItem.id}`, formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            });
+            setCoData(
+                coData.map((item) =>
+                    item.id === selectedItem.id ? { ...item, ...editData } : item
+                )
+            );
+            fetchCoData();
             toast.success('Commissioner Information update suceessfully');
             navigate('/commissioner');
-
         } catch (error) {
             console.error(error);
             toast.error("Failed to update the entry!");
@@ -139,7 +106,6 @@ const Commissioner = () => {
             closeModal();
         }
     };
-
 
     const handleImageChange = (e) => {
         const file = e.target.files[0];
@@ -152,19 +118,6 @@ const Commissioner = () => {
             reader.readAsDataURL(file);
         }
     };
-
-    const totalPages = Math.ceil(descData.length / itemsPerPage);
-    const currentPageData = descData.slice(
-        (currentPage - 1) * itemsPerPage,
-        currentPage * itemsPerPage
-    );
-
-    const handlePageChange = (pageNumber) => {
-        if (pageNumber > 0 && pageNumber <= totalPages) {
-            setCurrentPage(pageNumber);
-        }
-    };
-
 
     return (
         <div>
@@ -186,19 +139,12 @@ const Commissioner = () => {
                                 <div className="card-block">
                                     <div className="row ">
                                         <div className="col-sm-4 col-3">
-                                            <h4 className="page-title">Commissioner Details</h4>
+                                            <h4 className="page-title">Commissioner Data</h4>
                                         </div>
                                         <div className="col-sm-8 col-9 text-right m-b-20">
                                             <Link
-                                                to={coData.length > 0 ? "#" : "/add-commissioner-details"}
-                                                className={`btn btn-primary btn-rounded float-right ${coData.length > 0 ? "disabled" : ""
-                                                    }`}
-                                                onClick={(e) => {
-                                                    if (coData.length > 0) {
-                                                        e.preventDefault();
-                                                        toast.info("Commissioner details already exist!");
-                                                    }
-                                                }}
+                                                to={coData.length > 1 ? "#" : "/add-commissioner-data"}
+                                                className={`btn btn-primary btn-rounded float-right ${coData.length > 1 ? "disabled" : ""}`}
                                             >
                                                 <i className="fa fa-plus"></i> Add Details
                                             </Link>
@@ -208,15 +154,16 @@ const Commissioner = () => {
                                         <table className="table table-bordered m-b-0">
                                             <thead>
                                                 <tr>
-                                                    <th width="10%" className="text-center">Sr. No.</th>
-                                                    <th className="text-center">Commissioner Image</th>
-                                                    <th>Commissioner Name</th>
-                                                    <th>Designation</th>
-                                                    <th>Education Qualification</th>
-                                                    <th>Office Address</th>
-                                                    <th>Phone No.</th>
-                                                    <th>Mail Id</th>
-                                                    <th width="15%" className="text-center">Action</th>
+                                                    <th style={{ width: "5%" }} className="text-center">Sr. No.</th>
+                                                    <th style={{ width: "10%" }} className="text-center">Commissioner Image</th>
+                                                    <th style={{ width: "10%" }}>Commissioner Name</th>
+                                                    <th style={{ width: "10%" }}>Designation</th>
+                                                    <th style={{ width: "10%" }}>Education Qualification</th>
+                                                    <th style={{ width: "10%" }}>Office Address</th>
+                                                    <th style={{ width: "10%" }}>Phone No.</th>
+                                                    <th style={{ width: "10%" }}>Mail Id</th>
+                                                    <th style={{ width: "25%" }}>Commissioner Description</th>
+                                                    <th style={{ width: "10%" }} className="text-center">Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -240,12 +187,13 @@ const Commissioner = () => {
                                                                     />
                                                                 </Link>
                                                             </td>
-                                                            <td>{item.coName}</td>
-                                                            <td>{item.designation}</td>
-                                                            <td>{item.qualification}</td>
-                                                            <td>{item.address}</td>
-                                                            <td>{item.number}</td>
-                                                            <td>{item.email}</td>
+                                                            <td style={{wordBreak: "break-word", whiteSpace: "normal"}}>{item.coName}</td>
+                                                            <td style={{wordBreak: "break-word", whiteSpace: "normal"}}>{item.designation}</td>
+                                                            <td style={{wordBreak: "break-word", whiteSpace: "normal"}}>{item.qualification}</td>
+                                                            <td style={{wordBreak: "break-word", whiteSpace: "normal"}}>{item.address}</td>
+                                                            <td style={{wordBreak: "break-word", whiteSpace: "normal"}}>{item.number}</td>
+                                                            <td style={{wordBreak: "break-word", whiteSpace: "normal"}}>{item.email}</td>
+                                                            <td style={{ width: "25%", wordBreak: "break-word", whiteSpace: "normal" }} dangerouslySetInnerHTML={{ __html: item.description }}></td>
                                                             <td className="text-center">
                                                                 <button
                                                                     onClick={() => openEditModal(item, "co")}
@@ -256,7 +204,6 @@ const Commissioner = () => {
                                                                 <button
                                                                     onClick={() => {
                                                                         setSelectedItem(item);
-                                                                        setModalType("co");
                                                                         setShowDeleteModal(true);
                                                                     }}
                                                                     className="btn btn-danger btn-sm m-t-10"
@@ -268,99 +215,12 @@ const Commissioner = () => {
                                                     ))
                                                 ) : (
                                                     <tr>
-                                                        <td colSpan="6">No Chief Officer Data Available</td>
+                                                        <td colSpan="10" className="text-center">No Commissioner Data Available</td>
                                                     </tr>
                                                 )}
                                             </tbody>
                                         </table>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="row">
-                        <div className="col-lg-12">
-                            <div className="card-box">
-                                <div className="card-block">
-                                    <div className="row">
-                                        <div className="col-sm-4 col-3">
-                                            <h4 className="page-title">Commissioner Description</h4>
-                                        </div>
-                                        <div className="col-sm-8 col-9 text-right m-b-20">
-                                            <Link
-                                                to="/add-commissioner-desc"
-                                                className="btn btn-primary btn-rounded float-right"
-                                            >
-                                                <i className="fa fa-plus"></i> Add Desc
-                                            </Link>
-                                        </div>
-                                    </div>
-                                    <div className="table-responsive">
-                                        <table className="table table-bordered m-b-0">
-                                            <thead>
-                                                <tr>
-                                                    <th width="10%" className="text-center">Sr. No.</th>
-                                                    <th>Commissioner Description</th>
-                                                    <th width="15%" className="text-center">Action</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {currentPageData.length > 0 ? (
-                                                    currentPageData.map((item, index) => (
-                                                        <tr key={item.id}>
-                                                            <td className="text-center">{index + 1 + (currentPage - 1) * itemsPerPage}</td>
-                                                            <td>{item.description}</td>
-                                                            <td className="text-center">
-                                                                <button
-                                                                    onClick={() => openEditModal(item, "history")}
-                                                                    className="btn btn-success btn-sm m-t-10"
-                                                                >
-                                                                    Edit
-                                                                </button>
-                                                                <button
-                                                                    onClick={() => {
-                                                                        setSelectedItem(item);
-                                                                        setModalType("history");
-                                                                        setShowDeleteModal(true);
-                                                                    }}
-                                                                    className="btn btn-danger btn-sm m-t-10"
-                                                                >
-                                                                    Delete
-                                                                </button>
-                                                            </td>
-                                                        </tr>
-                                                    ))
-                                                ) : (
-                                                    <tr>
-                                                        <td colSpan="3">No History Data Available</td>
-                                                    </tr>
-                                                )}
-                                            </tbody>
-                                        </table>
-                                    </div>
-
-                                    <div className="mt-4">
-                                        <ul className="pagination">
-                                            <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
-                                                <button className="page-link" onClick={() => handlePageChange(currentPage - 1)}>
-                                                    Previous
-                                                </button>
-                                            </li>
-                                            {Array.from({ length: totalPages }, (_, i) => (
-                                                <li key={i + 1} className={`page-item ${currentPage === i + 1 ? "active" : ""}`}>
-                                                    <button className="page-link" onClick={() => handlePageChange(i + 1)}>
-                                                        {i + 1}
-                                                    </button>
-                                                </li>
-                                            ))}
-                                            <li className={`page-item ${currentPage === totalPages ? "disabled" : ""}`}>
-                                                <button className="page-link" onClick={() => handlePageChange(currentPage + 1)}>
-                                                    Next
-                                                </button>
-                                            </li>
-                                        </ul>
-                                    </div>
-
                                 </div>
                             </div>
                         </div>
@@ -380,168 +240,154 @@ const Commissioner = () => {
                                 <div className="modal-content">
                                     <div className="modal-header">
                                         <h5 className="modal-title">
-                                            {modalType === "history"
-                                                ? "Edit History"
-                                                : "Edit Chief Officer"}
+                                            Edit Commissioner Data
                                         </h5>
                                     </div>
                                     <div className="modal-body">
-                                        {modalType === "history" ? (
-                                            <>
-                                                <div className="form-group">
-                                                    <label htmlFor="language_code">
-                                                        Select Language
-                                                    </label>
+                                        <>
+                                            <div className="form-group">
+                                                <label htmlFor="language_code">
+                                                    Select Language
+                                                </label>
 
-                                                    <select
-                                                        className="form-control"
-                                                        name="language_code"
-                                                        value={editData.language_code}
-                                                        onChange={(e) =>
-                                                            setEditData({
-                                                                ...editData,
-                                                                language_code: e.target.value,
-                                                            })
-                                                        }
-                                                    >
-                                                        <option value="" disabled>Select Language</option>
-                                                        <option value="en">English</option>
-                                                        <option value="mr">Marathi</option>
-                                                    </select>
-                                                </div>
-                                                <div className="form-group">
-                                                    <label htmlFor="description">Commissioner Description</label>
-                                                    <textarea
-                                                        className="form-control"
-                                                        id="description"
-                                                        value={editData.description}
-                                                        onChange={(e) =>
-                                                            setEditData({
-                                                                ...editData,
-                                                                description: e.target.value,
-                                                            })
-                                                        }
+                                                <select
+                                                    className="form-control"
+                                                    name="language_code"
+                                                    value={editData.language_code}
+                                                    onChange={(e) =>
+                                                        setEditData({
+                                                            ...editData,
+                                                            language_code: e.target.value,
+                                                        })
+                                                    }
+                                                >
+                                                    <option value="" disabled>Select Language</option>
+                                                    <option value="en">English</option>
+                                                    <option value="mr">Marathi</option>
+                                                </select>
+                                            </div>
+                                            <div className="form-group">
+                                                <label htmlFor="coName">Commissioner Name</label>
+                                                <input
+                                                    type="text"
+                                                    className="form-control"
+                                                    id="coName"
+                                                    value={editData.coName}
+                                                    onChange={(e) =>
+                                                        setEditData({ ...editData, coName: e.target.value })
+                                                    }
+                                                />
+                                            </div>
+                                            <div className="form-group">
+                                                <label htmlFor="designation">Designation</label>
+                                                <input
+                                                    type="text"
+                                                    className="form-control"
+                                                    id="designation"
+                                                    value={editData.designation}
+                                                    onChange={(e) =>
+                                                        setEditData({ ...editData, designation: e.target.value })
+                                                    }
+                                                />
+                                            </div>
+                                            <div className="form-group">
+                                                <label htmlFor="qualification">Education Qualification</label>
+                                                <input
+                                                    type="text"
+                                                    className="form-control"
+                                                    id="qualification"
+                                                    value={editData.qualification}
+                                                    onChange={(e) =>
+                                                        setEditData({ ...editData, qualification: e.target.value })
+                                                    }
+                                                />
+                                            </div>
+                                            <div className="form-group">
+                                                <label htmlFor="address">Office Address</label>
+                                                <input
+                                                    type="text"
+                                                    className="form-control"
+                                                    id="address"
+                                                    value={editData.address}
+                                                    onChange={(e) =>
+                                                        setEditData({ ...editData, address: e.target.value })
+                                                    }
+                                                />
+                                            </div>
+                                            <div className="form-group">
+                                                <label htmlFor="number">Contact Number</label>
+                                                <input
+                                                    type="text"
+                                                    className="form-control"
+                                                    id="number"
+                                                    value={editData.number}
+                                                    onChange={(e) =>
+                                                        setEditData({ ...editData, number: e.target.value })
+                                                    }
+                                                />
+                                            </div>
+                                            <div className="form-group">
+                                                <label htmlFor="email">Mail ID</label>
+                                                <input
+                                                    type="email"
+                                                    className="form-control"
+                                                    id="email"
+                                                    value={editData.email}
+                                                    onChange={(e) =>
+                                                        setEditData({ ...editData, email: e.target.value })
+                                                    }
+                                                />
+                                            </div>
+                                            <div className="form-group">
+                                                <label htmlFor="description">Commissioner Description</label>
+                                                <ReactQuill
+                                                    theme="snow"
+                                                    value={editData.description}
+                                                    onChange={(value) =>
+                                                        setEditData({ ...editData, description: value })
+                                                    }
+                                                    modules={{
+                                                        toolbar: [
+                                                            [{ header: [1, 2, 3, false] }],
+                                                            ["bold", "italic", "underline", "strike"],
+                                                            [{ list: "ordered" }, { list: "bullet" }],
+                                                            [{ align: [] }],
+                                                            [{ color: [] }, { background: [] }],
+                                                            ["link", "image"],
+                                                            ["clean"],
+                                                        ],
+                                                    }}
+                                                    formats={[
+                                                        "header",
+                                                        "bold", "italic", "underline", "strike",
+                                                        "list", "bullet",
+                                                        "align", "color", "background",
+                                                        "link", "image",
+                                                    ]}
+                                                />
+                                            </div>
+                                            <div className="form-group">
+                                                <label htmlFor="coImage">Commissioner Image</label>
+                                                <input
+                                                    type="file"
+                                                    className="form-control"
+                                                    id="coImage"
+                                                    accept="image/*"
+                                                    onChange={handleImageChange}
+                                                />
+                                                {imagePreview && (
+                                                    <img
+                                                        src={imagePreview}
+                                                        alt="Preview"
+                                                        style={{
+                                                            width: "100px",
+                                                            height: "100px",
+                                                            marginTop: "10px",
+                                                        }}
                                                     />
-                                                </div>
-                                            </>
-                                        ) : (
-                                            <>
-                                                <div className="form-group">
-                                                    <label htmlFor="language_code">
-                                                        Select Language
-                                                    </label>
-
-                                                    <select
-                                                        className="form-control"
-                                                        name="language_code"
-                                                        value={editData.language_code}
-                                                        onChange={(e) =>
-                                                            setEditData({
-                                                                ...editData,
-                                                                language_code: e.target.value,
-                                                            })
-                                                        }
-                                                    >
-                                                        <option value="" disabled>Select Language</option>
-                                                        <option value="en">English</option>
-                                                        <option value="mr">Marathi</option>
-                                                    </select>
-                                                </div>
-                                                <div className="form-group">
-                                                    <label htmlFor="coName">Commissioner Name</label>
-                                                    <input
-                                                        type="text"
-                                                        className="form-control"
-                                                        id="coName"
-                                                        value={editData.coName}
-                                                        onChange={(e) =>
-                                                            setEditData({ ...editData, coName: e.target.value })
-                                                        }
-                                                    />
-                                                </div>
-                                                <div className="form-group">
-                                                    <label htmlFor="designation">Designation</label>
-                                                    <input
-                                                        type="text"
-                                                        className="form-control"
-                                                        id="designation"
-                                                        value={editData.designation}
-                                                        onChange={(e) =>
-                                                            setEditData({ ...editData, designation: e.target.value })
-                                                        }
-                                                    />
-                                                </div>
-                                                <div className="form-group">
-                                                    <label htmlFor="qualification">Education Qualification</label>
-                                                    <input
-                                                        type="text"
-                                                        className="form-control"
-                                                        id="qualification"
-                                                        value={editData.qualification}
-                                                        onChange={(e) =>
-                                                            setEditData({ ...editData, qualification: e.target.value })
-                                                        }
-                                                    />
-                                                </div>
-                                                <div className="form-group">
-                                                    <label htmlFor="address">Office Address</label>
-                                                    <input
-                                                        type="text"
-                                                        className="form-control"
-                                                        id="address"
-                                                        value={editData.address}
-                                                        onChange={(e) =>
-                                                            setEditData({ ...editData, address: e.target.value })
-                                                        }
-                                                    />
-                                                </div>
-                                                <div className="form-group">
-                                                    <label htmlFor="number">Contact Number</label>
-                                                    <input
-                                                        type="text"
-                                                        className="form-control"
-                                                        id="number"
-                                                        value={editData.number}
-                                                        onChange={(e) =>
-                                                            setEditData({ ...editData, number: e.target.value })
-                                                        }
-                                                    />
-                                                </div>
-                                                <div className="form-group">
-                                                    <label htmlFor="email">Mail ID</label>
-                                                    <input
-                                                        type="email"
-                                                        className="form-control"
-                                                        id="email"
-                                                        value={editData.email}
-                                                        onChange={(e) =>
-                                                            setEditData({ ...editData, email: e.target.value })
-                                                        }
-                                                    />
-                                                </div>
-                                                <div className="form-group">
-                                                    <label htmlFor="coImage">Commissioner Image</label>
-                                                    <input
-                                                        type="file"
-                                                        className="form-control"
-                                                        id="coImage"
-                                                        accept="image/*"
-                                                        onChange={handleImageChange}
-                                                    />
-                                                    {imagePreview && (
-                                                        <img
-                                                            src={imagePreview}
-                                                            alt="Preview"
-                                                            style={{
-                                                                width: "100px",
-                                                                height: "100px",
-                                                                marginTop: "10px",
-                                                            }}
-                                                        />
-                                                    )}
-                                                </div>
-                                            </>
-                                        )}
+                                                )}
+                                            </div>
+                                        </>
                                     </div>
                                     <div className="modal-footer">
                                         <button
@@ -590,7 +436,7 @@ const Commissioner = () => {
                                         <button
                                             type="button"
                                             className="btn btn-danger btn-sm"
-                                            onClick={() => handleDelete(selectedItem.id, modalType)}
+                                            onClick={() => handleDelete(selectedItem.id)}
                                         >
                                             Delete
                                         </button>
