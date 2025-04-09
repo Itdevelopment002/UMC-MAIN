@@ -58,18 +58,14 @@ import AddDataTable1 from "./components/Location/AddDataTable1";
 import AddDataTable2 from "./components/Location/AddDataTable2";
 import AddDataTable3 from "./components/Location/AddDataTable3";
 import AddDataTable4 from "./components/Location/AddDataTable4";
-import AddCommissionerDetails from "./components/Commissioner/AddCommissionerDetails";
-import AddCommissionerDesc from "./components/Commissioner/AddCommissionerDesc";
+import AddCommissionerData from "./components/Commissioner/AddCommissionerData";
 import Commissioner from "./components/Commissioner/Commissioner";
+import AddAddtCommissionerData from "./components/AddtCommissioner/AddAddtCommissionerData";
 import AddtCommissioner from "./components/AddtCommissioner/AddtCommissioner";
-import AddAddtCommissionerDetails from "./components/AddtCommissioner/AddAddtCommissionerDetails";
-import AddAddtCommissionerDesc from "./components/AddtCommissioner/AddAddtCommissionerDesc";
+import AddAsstCommissionerData from "./components/AsstCommissioner/AddAsstCommissionerData";
 import AsstCommissioner from "./components/AsstCommissioner/AsstCommissioner";
-import AddAsstCommissionerDetails from "./components/AsstCommissioner/AddAsstCommissionerDetails";
-import AddAsstCommissionerDesc from "./components/AsstCommissioner/AddAsstCommissionerDesc";
+import AddDeptCommissionerData from "./components/DeptCommissioner/AddDeptCommissionerData";
 import DeptCommissioner from "./components/DeptCommissioner/DeptCommissioner";
-import AddDeptCommissionerDesc from "./components/DeptCommissioner/AddDeptCommissionerDesc";
-import AddDeptCommissionerDetails from "./components/DeptCommissioner/AddDeptCommissionerDetails";
 import UmcHistory from "./components/UmcHistory/UmcHistory";
 import AddHistoryImage from "./components/UmcHistory/AddHistoryImage";
 import Tourism from "./components/Tourism/Tourism";
@@ -210,6 +206,7 @@ function App() {
     }, 1000);
 
     return () => clearInterval(interval);
+    //eslint-disable-next-line
   }, [isAuthenticated, navigate]);
 
   useEffect(() => {
@@ -339,17 +336,13 @@ function App() {
                         <Route path="/add-datatable3" element={<AddDataTable3 />} />
                         <Route path="/add-datatable4" element={<AddDataTable4 />} />
                         <Route path="/commissioner" element={<Commissioner />} />
-                        <Route path="/add-commissioner-details" element={<AddCommissionerDetails />} />
-                        <Route path="/add-commissioner-desc" element={<AddCommissionerDesc />} />
+                        <Route path="/add-commissioner-data" element={<AddCommissionerData />} />
                         <Route path="/additional-commissioner" element={<AddtCommissioner />} />
-                        <Route path="/add-addt-commissioner-details" element={<AddAddtCommissionerDetails />} />
-                        <Route path="/add-addt-commissioner-desc" element={<AddAddtCommissionerDesc />} />
+                        <Route path="/add-addt-commissioner-data" element={<AddAddtCommissionerData />} />
                         <Route path="/deputy-commissioner" element={<DeptCommissioner />} />
-                        <Route path="/add-dept-commissioner-details" element={<AddDeptCommissionerDetails />} />
-                        <Route path="/add-dept-commissioner-desc" element={<AddDeptCommissionerDesc />} />
+                        <Route path="/add-dept-commissioner-data" element={<AddDeptCommissionerData />} />
                         <Route path="/assistant-commissioner" element={<AsstCommissioner />} />
-                        <Route path="/add-asst-commissioner-details" element={<AddAsstCommissionerDetails />} />
-                        <Route path="/add-asst-commissioner-desc" element={<AddAsstCommissionerDesc />} />
+                        <Route path="/add-asst-commissioner-data" element={<AddAsstCommissionerData />} />
                         <Route path="/history" element={<UmcHistory />} />
                         <Route path="/add-historyImage" element={<AddHistoryImage />} />
                         <Route path="/tourism" element={<Tourism />} />
@@ -481,7 +474,7 @@ function App() {
                         <Route path="/edit-profile" element={<EditProfile />} />
 
                         {/* Last Visited */}
-                        <Route path="*" element={<Navigate to="/home" replace/>} />
+                        <Route path="*" element={<Navigate to="/home" replace />} />
                       </>
                     )}
 

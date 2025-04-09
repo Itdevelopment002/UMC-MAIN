@@ -12,32 +12,21 @@ import { useTranslation } from "react-i18next";
 
 const Commissioner = () => {
   const [coData, setCoData] = useState([]);
-  const [descData, setDescData] = useState([]);
   const [bgImage, setBgImage] = useState("");
   const { i18n, t } = useTranslation();
 
   useEffect(() => {
     fetchCoData();
-    fetchDescData();
     fetchHeaderImage();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [i18n.language]);
 
   const fetchCoData = async () => {
     try {
-      const response = await api.get(`/commissioner-details?lang=${i18n.language}`);
+      const response = await api.get(`/commissioner-data?lang=${i18n.language}`);
       setCoData(response.data);
     } catch (error) {
       console.error("Failed to fetch Commissioner Details data!");
-    }
-  };
-
-  const fetchDescData = async () => {
-    try {
-      const response = await api.get(`/commissioner-desc?lang=${i18n.language}`);
-      setDescData(response.data);
-    } catch (error) {
-      console.error("Failed to fetch Commissioner description data!");
     }
   };
 
@@ -67,7 +56,6 @@ const Commissioner = () => {
 
   return (
     <>
-
       <div
         className="history-header-image"
         style={{
@@ -187,12 +175,8 @@ const Commissioner = () => {
               <div className="commisioner-overview">
                 <h4>{t("commisioner-overview")}</h4>
               </div>
-              {descData.length > 0 ? (
-                descData.map((item, index) => (
-                  <p key={index} style={{ color: "#666565" }}>
-                    {item.description}
-                  </p>
-                ))
+              {coData.length > 0 ? (
+                  <p style={{ color: "#666565" }} dangerouslySetInnerHTML={{ __html: coData[0].description }}></p>
               ) : (
                 <p style={{ color: "#666565" }}>Loading data...</p>
               )}
