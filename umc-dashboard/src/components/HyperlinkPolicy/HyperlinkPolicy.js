@@ -3,12 +3,14 @@ import { Link } from "react-router-dom";
 import api from "../api";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 
 const HyperlinkPolicy = () => {
   const [conditionsData, setConditionsData] = useState([]);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
-  const [selectedCondition, setSelectedCondition] = useState(null);
+  const [selectedCondition, setSelectedCondition] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
 
@@ -72,6 +74,10 @@ const HyperlinkPolicy = () => {
     setSelectedCondition({ ...selectedCondition, [name]: value });
   };
 
+  const handleDescriptionChange = (value) => {
+    setSelectedCondition({ ...selectedCondition, description: value });
+  };
+
   const currentPageData = conditionsData.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
@@ -126,7 +132,7 @@ const HyperlinkPolicy = () => {
                               <td className="text-center">
                                 {(currentPage - 1) * itemsPerPage + index + 1}
                               </td>
-                              <td>{condition.description}</td>
+                              <td dangerouslySetInnerHTML={{ __html: condition.description }}></td>
                               <td className="text-center">
                                 <button
                                   className="btn btn-success btn-sm m-t-10"
@@ -283,13 +289,30 @@ const HyperlinkPolicy = () => {
                         </select>
                       </div>
                       <div className="mb-3">
-                        <label className="form-label">Policy Description</label>
-                        <textarea
-                          className="form-control form-control-md"
-                          name="description"
-                          value={selectedCondition?.description || ""}
-                          onChange={handleEditChange}
-                        ></textarea>
+                        <label className="form-label">Commissioner Description</label>
+                        <ReactQuill
+                          theme="snow"
+                          value={selectedCondition.description || ""}
+                          onChange={handleDescriptionChange}
+                          modules={{
+                            toolbar: [
+                              [{ header: [1, 2, 3, false] }],
+                              ["bold", "italic", "underline", "strike"],
+                              [{ list: "ordered" }, { list: "bullet" }],
+                              [{ align: [] }],
+                              [{ color: [] }, { background: [] }],
+                              ["link", "image"],
+                              ["clean"],
+                            ],
+                          }}
+                          formats={[
+                            "header",
+                            "bold", "italic", "underline", "strike",
+                            "list", "bullet",
+                            "align", "color", "background",
+                            "link", "image",
+                          ]}
+                        />
                       </div>
                     </form>
                   </div>

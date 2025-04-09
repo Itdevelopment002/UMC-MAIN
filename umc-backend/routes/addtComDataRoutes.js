@@ -20,15 +20,15 @@ const upload = multer({
 });
 
 
-router.get("/dept-commissioner-details", (req, res) => {
+router.get("/addt-commissioner-data", (req, res) => {
   const language = req.query.lang;
   let query;
   let params = [];
   if (language) {
-    query = `SELECT * FROM dept_commissioner_details WHERE language_code = ?`;
+    query = `SELECT * FROM addt_commissioner_details WHERE language_code = ?`;
     params.push(language);
   } else {
-    query = "SELECT * FROM dept_commissioner_details";
+    query = "SELECT * FROM addt_commissioner_details";
   }
   db.query(query,params, (err, results) => {
     if (err) {
@@ -39,24 +39,24 @@ router.get("/dept-commissioner-details", (req, res) => {
 });
 
 
-router.get("/dept-commissioner-details/:id", (req, res) => {
+router.get("/addt-commissioner-data/:id", (req, res) => {
   const { id } = req.params;
-  const sql = "SELECT * FROM dept_commissioner_details WHERE id = ?";
+  const sql = "SELECT * FROM addt_commissioner_details WHERE id = ?";
   db.query(sql, [id], (err, result) => {
     if (err) {
       return res.status(500).json({ message: "Database error", error: err });
     }
     if (result.length === 0) {
-      return res.status(404).json({ message: "Deputy Commissioner not found" });
+      return res.status(404).json({ message: "Additional Commissioner not found" });
     }
     res.status(200).json(result[0]);
   });
 });
 
 
-router.post("/dept-commissioner-details", upload.single("coImage"), (req, res) => {
-  const { coName, designation, qualification, address, number, email, language_code } = req.body;
-  if (!coName || !designation || !qualification || !address || !number || !email || !language_code) {
+router.post("/addt-commissioner-data", upload.single("coImage"), (req, res) => {
+  const { coName, designation, qualification, address, number, email, description, language_code } = req.body;
+  if (!coName || !designation || !qualification || !address || !number || !email || !description || !language_code) {
     return res
       .status(400)
       .json({ message: "All fields are required" });
@@ -65,24 +65,24 @@ router.post("/dept-commissioner-details", upload.single("coImage"), (req, res) =
   const imagePath = req.file ? `/uploads/${req.file.filename}` : null;
 
   const sql = `
-    INSERT INTO dept_commissioner_details 
-    (coName, designation, qualification, address, number, email, language_code, image_path) 
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    INSERT INTO addt_commissioner_details 
+    (coName, designation, qualification, address, number, email, description, language_code, image_path) 
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
   `;
-  db.query(sql, [coName, designation, qualification, address, number, email, language_code, imagePath], (err, result) => {
+  db.query(sql, [coName, designation, qualification, address, number, email, description, language_code, imagePath], (err, result) => {
     if (err) {
       return res.status(500).json({ message: "Database error", error: err });
     }
-    res.status(200).json({ message: "Deputy Commissioner added successfully", id: result.insertId });
+    res.status(200).json({ message: "Additional Commissioner added successfully", id: result.insertId });
   });
 });
 
 
-router.put("/dept-commissioner-details/:id", upload.single("coImage"), (req, res) => {
+router.put("/addt-commissioner-data/:id", upload.single("coImage"), (req, res) => {
   const { id } = req.params;
-  const { coName, designation, qualification, address, number, email, language_code } = req.body;
+  const { coName, designation, qualification, address, number, email, description, language_code } = req.body;
 
-  let updateSql = "UPDATE dept_commissioner_details SET";
+  let updateSql = "UPDATE addt_commissioner_details SET";
   const updateParams = [];
 
   if (coName) {
@@ -109,6 +109,10 @@ router.put("/dept-commissioner-details/:id", upload.single("coImage"), (req, res
     updateSql += updateParams.length > 0 ? ", email = ?" : " email = ?";
     updateParams.push(email);
   }
+  if (description) {
+    updateSql += updateParams.length > 0 ? ", description = ?" : " description = ?";
+    updateParams.push(description);
+  }
   if (language_code) {
     updateSql += updateParams.length > 0 ? ", language_code = ?" : " language_code = ?";
     updateParams.push(language_code);
@@ -128,13 +132,13 @@ router.put("/dept-commissioner-details/:id", upload.single("coImage"), (req, res
   updateSql += " WHERE id = ?";
   updateParams.push(id);
 
-  const selectSql = "SELECT image_path FROM dept_commissioner_details WHERE id = ?";
+  const selectSql = "SELECT image_path FROM addt_commissioner_details WHERE id = ?";
   db.query(selectSql, [id], (err, result) => {
     if (err) {
       return res.status(500).json({ message: "Database error", error: err });
     }
     if (result.length === 0) {
-      return res.status(404).json({ message: "Deputy Commissioner not found" });
+      return res.status(404).json({ message: "Additional Commissioner not found" });
     }
 
     const oldImagePath = result[0].image_path;
@@ -153,27 +157,27 @@ router.put("/dept-commissioner-details/:id", upload.single("coImage"), (req, res
         });
       }
 
-      res.status(200).json({ message: "Deputy Commissioner updated successfully" });
+      res.status(200).json({ message: "Additional Commissioner updated successfully" });
     });
   });
 });
 
 
-router.delete("/dept-commissioner-details/:id", (req, res) => {
+router.delete("/addt-commissioner-data/:id", (req, res) => {
   const { id } = req.params;
 
-  const selectSql = "SELECT image_path FROM dept_commissioner_details WHERE id = ?";
+  const selectSql = "SELECT image_path FROM addt_commissioner_details WHERE id = ?";
   db.query(selectSql, [id], (err, result) => {
     if (err) {
       return res.status(500).json({ message: "Database error", error: err });
     }
     if (result.length === 0) {
-      return res.status(404).json({ message: "Deputy Commissioner not found" });
+      return res.status(404).json({ message: "Additional Commissioner not found" });
     }
 
     const imagePath = result[0].image_path;
 
-    const deleteSql = "DELETE FROM dept_commissioner_details WHERE id = ?";
+    const deleteSql = "DELETE FROM addt_commissioner_details WHERE id = ?";
     db.query(deleteSql, [id], (err, deleteResult) => {
       if (err) {
         return res.status(500).json({ message: "Database error", error: err });
@@ -187,7 +191,7 @@ router.delete("/dept-commissioner-details/:id", (req, res) => {
         });
       }
 
-      res.status(200).json({ message: "Deputy Commissioner deleted successfully" });
+      res.status(200).json({ message: "Additional Commissioner deleted successfully" });
     });
   });
 });

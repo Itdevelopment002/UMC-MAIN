@@ -258,7 +258,7 @@ const EServices = () => {
                   <div className="initiatives-layout row mt-3">
                     {initiatives.map((initiative, index) => (
                       <div className="col-md-6 mb-3 initiative-hover">
-                        <Link to={initiative.link} className="text-decoration-none" style={{ color: "#000000" }} target="_blank">
+                        <Link to={initiative.link} className="text-decoration-none" style={{ color: "#000000" }} target={initiative.link.startsWith("http") ? "_blank" : ""}>
                           <div className="initiative-item d-flex align-items-center border rounded">
                             <div className="img-container img-with-border">
                               <img
