@@ -4,6 +4,96 @@
     --accessibility-font-size: 14px;
 }
 
+/* Add these styles to your existing CSS */
+
+.search-container {
+    flex: 1;
+    max-width: 400px;
+    margin: 0 20px;
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    background-color: white;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    overflow: hidden;
+    height: 32px;
+    border-radius: 8px;
+}
+
+.search-input {
+    flex: 1;
+    border: none;
+    padding: 8px 12px;
+    font-size: 14px;
+    outline: none;
+}
+
+.search-button {
+    background: linear-gradient(to right, #F57F42 0%, #F55570 100%);
+    color: #ffffff;
+    border: none;
+    padding: 0 12px;
+    height: 100%;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.search-button:hover {
+    background-color: #e0e0e0;
+}
+
+.search-icon {
+    color: #ffffff;
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+    .top-bar {
+        flex-wrap: wrap;
+        padding: 0.5rem 1rem;
+    }
+    
+    .search-container {
+        order: 3;
+        flex: 1 1 100%;
+        max-width: 100%;
+        margin: 8px 0 0 0;
+    }
+    
+    .helpline, .accessibility {
+        flex: 1;
+        min-width: 50%;
+    }
+}
+
+@media (max-width: 576px) {
+    .helpline, .accessibility {
+        min-width: 100%;
+    }
+    
+    .helpline {
+        margin-bottom: 8px;
+    }
+    
+    .accessibility {
+        flex-wrap: wrap;
+        gap: 4px;
+    }
+    
+    .divider {
+        display: none;
+    }
+}
+
+
+
+
 @media (min-width: 1153px) {
     :root {
         --nav-link-font-size: 16px;
