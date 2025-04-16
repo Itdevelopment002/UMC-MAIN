@@ -228,7 +228,12 @@ const Tourism = () => {
                                                         <td>{tourism.name}</td>
                                                         <td>{tourism.address}</td>
                                                         <td>{tourism.hours}</td>
-                                                        <td>{tourism.description}</td>
+                                                        <td>
+                                                            {tourism.description.length > 100
+                                                                ? `${tourism.description.slice(0, 100)}...`
+                                                                : tourism.description}
+                                                        </td>
+
                                                         <td>
                                                             <Link to={tourism.location_link} target="_blank" rel="noopener noreferrer" style={{ color: 'black' }}>
                                                                 {tourism.location_link}
