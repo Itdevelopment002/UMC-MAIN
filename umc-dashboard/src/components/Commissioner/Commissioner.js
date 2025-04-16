@@ -119,6 +119,18 @@ const Commissioner = () => {
         }
     };
 
+    const stripHtml = (html) => {
+        const div = document.createElement("div");
+        div.innerHTML = html;
+        return div.textContent || div.innerText || "";
+    };
+
+    const truncatedText = (html, maxLength = 100) => {
+        const text = stripHtml(html);
+        return text.length > maxLength ? text.slice(0, maxLength) + "..." : text;
+    };
+
+
     return (
         <div>
             <div className="page-wrapper">
@@ -187,13 +199,15 @@ const Commissioner = () => {
                                                                     />
                                                                 </Link>
                                                             </td>
-                                                            <td style={{wordBreak: "break-word", whiteSpace: "normal"}}>{item.coName}</td>
-                                                            <td style={{wordBreak: "break-word", whiteSpace: "normal"}}>{item.designation}</td>
-                                                            <td style={{wordBreak: "break-word", whiteSpace: "normal"}}>{item.qualification}</td>
-                                                            <td style={{wordBreak: "break-word", whiteSpace: "normal"}}>{item.address}</td>
-                                                            <td style={{wordBreak: "break-word", whiteSpace: "normal"}}>{item.number}</td>
-                                                            <td style={{wordBreak: "break-word", whiteSpace: "normal"}}>{item.email}</td>
-                                                            <td style={{ width: "25%", wordBreak: "break-word", whiteSpace: "normal" }} dangerouslySetInnerHTML={{ __html: item.description }}></td>
+                                                            <td style={{ wordBreak: "break-word", whiteSpace: "normal" }}>{item.coName}</td>
+                                                            <td style={{ wordBreak: "break-word", whiteSpace: "normal" }}>{item.designation}</td>
+                                                            <td style={{ wordBreak: "break-word", whiteSpace: "normal" }}>{item.qualification}</td>
+                                                            <td style={{ wordBreak: "break-word", whiteSpace: "normal" }}>{item.address}</td>
+                                                            <td style={{ wordBreak: "break-word", whiteSpace: "normal" }}>{item.number}</td>
+                                                            <td style={{ wordBreak: "break-word", whiteSpace: "normal" }}>{item.email}</td>
+                                                            <td style={{ width: "25%", wordBreak: "break-word", whiteSpace: "normal" }}>
+                                                                {truncatedText(item.description, 100)}
+                                                            </td>
                                                             <td className="text-center">
                                                                 <button
                                                                     onClick={() => openEditModal(item, "co")}
