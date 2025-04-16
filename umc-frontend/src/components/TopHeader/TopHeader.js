@@ -8,6 +8,7 @@ import facebook from '../../assets/images/header-img/facebook.png';
 import instagram from '../../assets/images/header-img/instagram (2).png';
 import youtube from '../../assets/images/header-img/Youtube.png';
 import { useTranslation } from "react-i18next";
+import { RiSearchLine } from "react-icons/ri";
 
 const TopHeader = () => {
     const [selectedLanguage, setSelectedLanguage] = useState("mr");
@@ -39,7 +40,7 @@ const TopHeader = () => {
         }
         styleTag.innerHTML = `* { font-family: var(--global-font-family) !important; }`;
     };
-    
+
     const handleLanguageChange = (language) => {
         setSelectedLanguage(language);
         i18n.changeLanguage(language);
@@ -95,6 +96,19 @@ const TopHeader = () => {
                         <img src={phoneicon} alt="Phone Icon" className="helpline-icon" />
                         {t("header.helpline")}
                     </Link>
+                </div>
+                <div className="search-container">
+                    <div className="search-bar mt-2">
+                        <input
+                            type="text"
+                            placeholder="Search..."
+                            className="search-input"
+                            aria-label="Search"
+                        />
+                        <button className="search-button" aria-label="Submit search">
+                            <RiSearchLine size={18} className="search-icon" />
+                        </button>
+                    </div>
                 </div>
 
                 <div className="accessibility ">
