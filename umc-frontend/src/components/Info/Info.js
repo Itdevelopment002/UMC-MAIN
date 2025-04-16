@@ -33,7 +33,7 @@ const Info = () => {
 
   const fetchCoData = async () => {
     try {
-      const response = await api.get(`/commissioner-details?lang=${i18n.language}`);
+      const response = await api.get(`/commissioner-data?lang=${i18n.language}`);
       setCoData(response.data);
     } catch (error) {
       console.error("Failed to fetch Commissioner Details data!", error);
