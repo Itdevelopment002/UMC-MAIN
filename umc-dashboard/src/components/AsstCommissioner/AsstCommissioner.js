@@ -117,6 +117,17 @@ const AsstCommissioner = () => {
         }
     };
 
+    const stripHtml = (html) => {
+        const div = document.createElement("div");
+        div.innerHTML = html;
+        return div.textContent || div.innerText || "";
+    };
+
+    const truncatedText = (html, maxLength = 100) => {
+        const text = stripHtml(html);
+        return text.length > maxLength ? text.slice(0, maxLength) + "..." : text;
+    };
+
     return (
         <div>
             <div className="page-wrapper">
@@ -191,8 +202,9 @@ const AsstCommissioner = () => {
                                                             <td style={{ wordBreak: "break-word", whiteSpace: "normal" }}>{item.address}</td>
                                                             <td style={{ wordBreak: "break-word", whiteSpace: "normal" }}>{item.number}</td>
                                                             <td style={{ wordBreak: "break-word", whiteSpace: "normal" }}>{item.email}</td>
-                                                            <td style={{ width: "25%", wordBreak: "break-word", whiteSpace: "normal" }} dangerouslySetInnerHTML={{ __html: item.description }}></td>
-                                                            <td className="text-center">
+                                                            <td style={{ width: "25%", wordBreak: "break-word", whiteSpace: "normal" }}>
+                                                                {truncatedText(item.description, 100)}
+                                                            </td>                                                            <td className="text-center">
                                                                 <button
                                                                     onClick={() => openEditModal(item, "co")}
                                                                     className="btn btn-success btn-sm m-t-10"
