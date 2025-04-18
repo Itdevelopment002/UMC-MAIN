@@ -6,24 +6,19 @@ import api, { baseURL } from "../api";
 import './EditProfile.css';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Modal, Button } from "react-bootstrap";
 
 const EditProfile = () => {
     const navigate = useNavigate();
-    const [user, setUser] = useState(null);
     const [fullname, setFullname] = useState("");
     const [email, setEmail] = useState("");
     const [image, setImage] = useState(null);
     const [previewImage, setPreviewImage] = useState(null);
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
-    const [oldPassword, setOldPassword] = useState("");
     const [errors, setErrors] = useState({});
-    const [showModal, setShowModal] = useState(false);
     const [isChanged, setIsChanged] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-    const [showOldPassword, setShowOldPassword] = useState(false);
     const userData = JSON.parse(localStorage.getItem("userData"));
     const id = userData?.id;
 
@@ -36,8 +31,6 @@ const EditProfile = () => {
         try {
             const response = await api.get(`/users/${id}`);
             const userData = response.data;
-
-            setUser(userData);
             setFullname(userData.fullname || "");
             setEmail(userData.email || "");
             setPreviewImage(userData.userImage ? `${baseURL}/${userData.userImage}` : "https://via.placeholder.com/150");
@@ -74,12 +67,18 @@ const EditProfile = () => {
 
     const validateForm = () => {
         let newErrors = {};
+        const trimmedPassword = password.trim();
+        const trimmedConfirmPassword = confirmPassword.trim();
 
-        if (password.length < 8) {
+        if (!trimmedPassword) {
+            newErrors.password = "Password is required.";
+        } else if (trimmedPassword.length < 8) {
             newErrors.password = "Password must be at least 8 characters.";
         }
 
-        if (password !== confirmPassword) {
+        if (!trimmedConfirmPassword) {
+            newErrors.confirmPassword = "Please confirm your password.";
+        } else if (trimmedPassword !== trimmedConfirmPassword) {
             newErrors.confirmPassword = "Passwords do not match.";
         }
 
@@ -87,28 +86,16 @@ const EditProfile = () => {
         return Object.keys(newErrors).length === 0;
     };
 
-    const handleSubmit = (e) => {
+    const handleVerifyAndUpdatePassword = async (e) => {
         e.preventDefault();
-        if (validateForm()) {
-            setShowModal(true);
-        }
-    };
-
-    const handleVerifyAndUpdatePassword = async () => {
-        const storedPassword = user?.password;
-
-        if (oldPassword !== storedPassword) {
-            toast.error("Old password is incorrect.");
+        if (!validateForm()) {
             return;
         }
-
         try {
-            await api.put(`/users/${id}`, { password });
+            await api.patch(`/users/${id}/update-password`, { newPassword: password });
             toast.success("Password updated successfully!");
             setPassword("");
             setConfirmPassword("");
-            setOldPassword("");
-            setShowModal(false);
             setTimeout(() => {
                 localStorage.removeItem("authToken");
                 localStorage.removeItem("userData");
@@ -204,7 +191,7 @@ const EditProfile = () => {
                                     <h4 className="page-title">Change Password</h4>
                                 </div>
                             </div>
-                            <form onSubmit={handleSubmit}>
+                            <form onSubmit={handleVerifyAndUpdatePassword}>
                                 <div className="form-group row">
                                     <label className="col-form-label col-md-2"><strong>New Password:</strong></label>
                                     <div className="col-md-4 position-relative">
@@ -250,7 +237,7 @@ const EditProfile = () => {
                         </div>
                     </div>
                 </div>
-                <Modal show={showModal} onHide={() => setShowModal(false)} centered>
+                {/* <Modal show={showModal} onHide={() => setShowModal(false)} centered>
                     <Modal.Header closeButton>
                         <Modal.Title textCenter>Verify Old Password</Modal.Title>
                     </Modal.Header>
@@ -277,7 +264,7 @@ const EditProfile = () => {
                         <Button variant="secondary" size="sm" onClick={() => setShowModal(false)}>Cancel</Button>
                         <Button variant="primary" size="sm" onClick={handleVerifyAndUpdatePassword}>Verify & Update</Button>
                     </Modal.Footer>
-                </Modal>
+                </Modal> */}
             </div>
             <ToastContainer />
         </div>
