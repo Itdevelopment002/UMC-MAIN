@@ -140,6 +140,7 @@
         ]
     },
     "viewallDepartment": "View All Departments",
+    "history-main-title": "History",
     "history-title1": "History",
     "history-title2": " of UMC",
     "commisioner-overview": "Brief Overview of the Commissioner",
@@ -366,9 +367,9 @@
         "highlight-text": "Department"
     },
     "itDept": {
-        "title": "Computer Department",
-        "highlight": "Computer",
-        "highlight-text": "Department"
+        "title": "Information and Technology Department",
+        "highlight": "Information",
+        "highlight-text": "and Technology Department"
     },
     "womenDept": {
         "title": "Women and Child Development",

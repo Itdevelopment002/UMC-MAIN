@@ -78,7 +78,7 @@ const History = () => {
             <Link to="#" className="breadcrumb-item text-decoration-none">
               {t('location.aboutumc')}
             </Link>
-            <span className="breadcrumb-item active1">{t("history-title2")}</span>
+            <span className="breadcrumb-item active1">{t("history-main-title")}</span>
           </nav>
 
           <div className="row mt-5">

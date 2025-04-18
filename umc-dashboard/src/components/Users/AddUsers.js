@@ -1,8 +1,7 @@
-import React, { useState, useRef, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import api from "../api";
-import { Link } from "react-router-dom";
-import './AddUsers.css'
+import './AddUsers.css';
 
 const AddUsers = () => {
   const [departments, setDepartments] = useState([]);
@@ -19,6 +18,7 @@ const AddUsers = () => {
   const [selectedPermission, setSelectedPermission] = useState([]);
   const [previewImage, setPreviewImage] = useState(null);
   const [errors, setErrors] = useState({});
+  const [submitAttempted, setSubmitAttempted] = useState(false);
   const navigate = useNavigate();
   const [permissionDropdownOpen, setPermissionDropdownOpen] = useState(false);
 
@@ -59,21 +59,29 @@ const AddUsers = () => {
   };
 
   const checkUsernameExists = () => {
-    if (!username) return;
+    if (!username) return false;
     const userExists = users.some((user) => user.username === username);
     setErrors((prev) => ({
       ...prev,
-      username: userExists ? "Username already exists." : "",
+      username: userExists ? "Username already exists. Please choose a different one." : "",
     }));
+    if (userExists) {
+      setUsername("");
+    }
+    return userExists;
   };
 
   const checkEmailExists = () => {
-    if (!email) return;
+    if (!email) return false;
     const emailExists = users.some((user) => user.email === email);
     setErrors((prev) => ({
       ...prev,
-      email: emailExists ? "Email Address already exists." : "",
+      email: emailExists ? "Email address already exists. Please use a different email." : "",
     }));
+    if (emailExists) {
+      setEmail("");
+    }
+    return emailExists;
   };
 
   const handleRoleChange = (e) => {
@@ -101,30 +109,72 @@ const AddUsers = () => {
 
   const validateForm = () => {
     const newErrors = {};
-    if (!username) newErrors.username = "Username is required.";
-    if (!fullname) newErrors.fullname = "Full name is required.";
-    if (!role) newErrors.role = "Role is required.";
+    let isValid = true;
+
+    if (!username) {
+      newErrors.username = "Username is required.";
+      isValid = false;
+    } else if (username.length < 3) {
+      newErrors.username = "Username must be at least 3 characters.";
+      isValid = false;
+    } else if (checkUsernameExists()) {
+      isValid = false;
+    }
+
+    if (!fullname) {
+      newErrors.fullname = "Full name is required.";
+      isValid = false;
+    } else if (fullname.length < 3) {
+      newErrors.fullname = "Full name must be at least 3 characters.";
+      isValid = false;
+    }
+
+    if (!role) {
+      newErrors.role = "Role is required.";
+      isValid = false;
+    }
+
     if (!email) {
       newErrors.email = "Email is required.";
+      isValid = false;
     } else if (!/\S+@\S+\.\S+/.test(email)) {
       newErrors.email = "Invalid email format.";
+      isValid = false;
+    } else if (checkEmailExists()) {
+      isValid = false;
     }
-    if (!password || password.length < 8) {
+
+    // Password validation
+    if (!password) {
+      newErrors.password = "Password is required.";
+      isValid = false;
+    } else if (password.length < 8) {
       newErrors.password = "Password must be at least 8 characters.";
+      isValid = false;
     }
+
+    // Confirm password validation
     if (password !== cnfpassword) {
       newErrors.cnfpassword = "Passwords do not match.";
+      isValid = false;
     }
+
+    // Permission validation for Admin role
     if (role === "Admin" && selectedPermission.length === 0) {
-      newErrors.selectedPermission = "Permission must be selected.";
+      newErrors.selectedPermission = "At least one permission must be selected for Admin role.";
+      isValid = false;
     }
+
     setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    return isValid;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!validateForm()) return;
+    setSubmitAttempted(true);
+
+    const isValid = validateForm();
+    if (!isValid) return;
 
     const formData = new FormData();
     formData.append("username", username);
@@ -145,6 +195,7 @@ const AddUsers = () => {
       }
     } catch (error) {
       console.error("Error adding user:", error);
+      setErrors({ submit: "Failed to add user. Please try again." });
     }
   };
 
@@ -153,6 +204,7 @@ const AddUsers = () => {
     if (file) {
       setImage(file);
       setPreviewImage(URL.createObjectURL(file));
+      setErrors((prev) => ({ ...prev, image: "" }));
     }
   };
 
@@ -169,6 +221,13 @@ const AddUsers = () => {
             <div className="card-box">
               <div className="card-block">
                 <h4 className="page-title">Add User</h4>
+
+                {errors.submit && (
+                  <div className="alert alert-danger">
+                    {errors.submit}
+                  </div>
+                )}
+
                 <form onSubmit={handleSubmit}>
                   <div className="form-group">
                     <label>
@@ -185,7 +244,11 @@ const AddUsers = () => {
                       }}
                       onBlur={checkUsernameExists}
                     />
-                    {errors.username && <small className="text-danger">{errors.username}</small>}
+                    {errors.username && (
+                      <div className="invalid-feedback d-block">
+                        {errors.username}
+                      </div>
+                    )}
                   </div>
 
                   <div className="form-group">
@@ -202,7 +265,11 @@ const AddUsers = () => {
                         setErrors((prev) => ({ ...prev, fullname: "" }));
                       }}
                     />
-                    {errors.fullname && <small className="invalid-feedback">{errors.fullname}</small>}
+                    {errors.fullname && (
+                      <div className="invalid-feedback d-block">
+                        {errors.fullname}
+                      </div>
+                    )}
                   </div>
 
                   <div className="form-group">
@@ -220,7 +287,11 @@ const AddUsers = () => {
                       }}
                       onBlur={checkEmailExists}
                     />
-                    {errors.email && <small className="text-danger">{errors.email}</small>}
+                    {errors.email && (
+                      <div className="invalid-feedback d-block">
+                        {errors.email}
+                      </div>
+                    )}
                   </div>
 
                   <div className="form-group">
@@ -231,7 +302,11 @@ const AddUsers = () => {
                       accept="image/*"
                       onChange={handleImageChange}
                     />
-                    {errors.image && <small className="text-danger">{errors.image}</small>}
+                    {errors.image && (
+                      <div className="invalid-feedback d-block">
+                        {errors.image}
+                      </div>
+                    )}
                   </div>
 
                   {previewImage && (
@@ -244,16 +319,24 @@ const AddUsers = () => {
                     <label>
                       Role <span className="text-danger">*</span>
                     </label>
-                    <select className={`form-control ${errors.role ? "is-invalid" : ""}`} value={role} onChange={handleRoleChange}>
+                    <select
+                      className={`form-control ${errors.role ? "is-invalid" : ""}`}
+                      value={role}
+                      onChange={handleRoleChange}
+                    >
                       <option value="" disabled>Select Role</option>
                       <option value="Superadmin">Superadmin</option>
                       <option value="Admin">Admin</option>
                     </select>
-                    {errors.role && <small className="text-danger">{errors.role}</small>}
+                    {errors.role && (
+                      <div className="invalid-feedback d-block">
+                        {errors.role}
+                      </div>
+                    )}
                   </div>
 
                   {role === "Admin" && (
-                    <div className="dropdown custom-dropdown">
+                    <div className="dropdown custom-dropdown mb-3">
                       <button
                         type="button"
                         className="btn w-100 text-start d-flex justify-content-between align-items-center"
@@ -284,7 +367,11 @@ const AddUsers = () => {
                           ))}
                         </div>
                       )}
-                      {errors.selectedPermission && <span>{errors.selectedPermission}</span>}
+                      {errors.selectedPermission && (
+                        <div className="text-danger small mt-1">
+                          {errors.selectedPermission}
+                        </div>
+                      )}
                     </div>
                   )}
 
@@ -320,7 +407,11 @@ const AddUsers = () => {
                       <small className="text-muted d-block mt-1">
                         Use at least 8 characters, including uppercase, lowercase, numbers, and special characters (@, #, $, etc.).
                       </small>
-                      {errors.password && <small className="text-danger">{errors.password}</small>}
+                      {errors.password && (
+                        <div className="invalid-feedback d-block">
+                          {errors.password}
+                        </div>
+                      )}
                     </div>
 
                     <div className="form-group position-relative mt-3">
@@ -346,11 +437,17 @@ const AddUsers = () => {
                           <i className={`fas ${showCnfPassword ? "fa-eye-slash" : "fa-eye"}`}></i>
                         </span>
                       </div>
-                      {errors.cnfpassword && <small className="text-danger">{errors.cnfpassword}</small>}
+                      {errors.cnfpassword && (
+                        <div className="invalid-feedback d-block">
+                          {errors.cnfpassword}
+                        </div>
+                      )}
                     </div>
                   </div>
 
-                  <button type="submit" className="btn btn-sm btn-primary">Submit</button>
+                  <button type="submit" className="btn btn-sm btn-primary mt-3">
+                    Submit
+                  </button>
                 </form>
               </div>
             </div>
