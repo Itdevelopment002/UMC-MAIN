@@ -1,18 +1,24 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import '../Header/Header.css';
-import { RiArrowDropDownLine } from "react-icons/ri";
+import './TopHeader.css';
+import { RiArrowDropDownLine, RiSearchLine } from "react-icons/ri";
 import phoneicon from "../../assets/images/header-img/telephone.png";
 import twitter from '../../assets/images/header-img/twitter.png';
 import facebook from '../../assets/images/header-img/facebook.png';
 import instagram from '../../assets/images/header-img/instagram (2).png';
 import youtube from '../../assets/images/header-img/Youtube.png';
 import { useTranslation } from "react-i18next";
-import { RiSearchLine } from "react-icons/ri";
+import { searchablePages } from "./SearchPages";
+ // ✅ Import your route titles
 
 const TopHeader = () => {
     const [selectedLanguage, setSelectedLanguage] = useState("mr");
     const { i18n, t } = useTranslation();
+
+    const [searchText, setSearchText] = useState('');
+    const [searchResults, setSearchResults] = useState([]);
+    const navigate = useNavigate(); // ✅ For route navigation
 
     useEffect(() => {
         const observer = new MutationObserver(() => {
@@ -25,7 +31,6 @@ const TopHeader = () => {
         });
 
         observer.observe(document.documentElement, { attributes: true });
-
         return () => observer.disconnect();
     }, []);
 
@@ -52,6 +57,7 @@ const TopHeader = () => {
         if (selectedLanguage === "mr") return "मराठी";
         return "English";
     };
+
     const [defaultfontSize, setDefaultFontSize] = useState(16);
     const [fontSize, setFontSize] = useState({
         helpline: 14,
@@ -88,6 +94,20 @@ const TopHeader = () => {
         }));
     };
 
+    // ✅ New search effect based on route titles
+    useEffect(() => {
+        if (!searchText.trim()) {
+            setSearchResults([]);
+            return;
+        }
+
+        const filtered = searchablePages.filter((page) =>
+            page.title.toLowerCase().includes(searchText.toLowerCase())
+        );
+
+        setSearchResults(filtered);
+    }, [searchText]);
+
     return (
         <>
             <div className="top-bar">
@@ -97,6 +117,8 @@ const TopHeader = () => {
                         {t("header.helpline")}
                     </Link>
                 </div>
+
+                {/* 🌟 Search */}
                 <div className="search-container">
                     <div className="search-bar mt-2">
                         <input
@@ -104,18 +126,39 @@ const TopHeader = () => {
                             placeholder="Search..."
                             className="search-input"
                             aria-label="Search"
+                            value={searchText}
+                            onChange={(e) => setSearchText(e.target.value)}
                         />
                         <button className="search-button" aria-label="Submit search">
                             <RiSearchLine size={18} className="search-icon" />
                         </button>
                     </div>
+
+                    {/* ✅ Route-based results */}
+                    {searchText && (
+                        <div className="search-suggestions">
+                            {searchResults.length > 0 ? (
+                                searchResults.map((result, index) => (
+                                    <div
+                                        key={index}
+                                        className="search-suggestion-item"
+                                        onClick={() => {
+                                            navigate(result.path);
+                                            setSearchText('');
+                                            setSearchResults([]);
+                                        }}
+                                    >
+                                        {result.title}
+                                    </div>
+                                ))
+                            ) : (
+                                <div className="search-no-results">No results found</div>
+                            )}
+                        </div>
+                    )}
                 </div>
 
-                <div className="accessibility ">
-                    {/* <Link to="/rts-act-2015">
-                        <button className="rts-act-button">{t("header.rtsAct")}</button>
-                    </Link> 
-                    <span className="divider">|</span>*/}
+                <div className="accessibility">
                     <span
                         onClick={() => {
                             const mainContent = document.getElementById("main-content");
@@ -123,7 +166,8 @@ const TopHeader = () => {
                                 mainContent.scrollIntoView({ behavior: "smooth" });
                             }
                         }}
-                        role="button" tabIndex="0"
+                        role="button"
+                        tabIndex="0"
                         style={{ cursor: "pointer" }}
                     >
                         {t("header.skipContent")}
@@ -143,7 +187,6 @@ const TopHeader = () => {
                             <span>{getLanguageText()}</span>
                             <RiArrowDropDownLine size={25} className="arrow" />
                         </div>
-
                         <div className="dropdown-options">
                             <div
                                 className={`dropdown-option ${selectedLanguage === "en" ? "selected" : ""}`}
@@ -161,23 +204,22 @@ const TopHeader = () => {
                     </div>
 
                     <div className="social-icons top-bar-social-media d-flex">
-                        <Link to="https://twitter.com/my_umcofficial" target="_blank" aria-label="Follow us on Twitter (Opens in a new tab)" className="social-link">
+                        <Link to="https://twitter.com/my_umcofficial" target="_blank" aria-label="Follow us on Twitter" className="social-link">
                             <img src={twitter} alt="Twitter" className="twitter-icon" />
                         </Link>
                         <span className="divider">|</span>
-                        <Link to="https://www.facebook.com/myumc/" target="_blank" aria-label="Follow us on Facebook (Opens in a new tab)" className="social-link">
+                        <Link to="https://www.facebook.com/myumc/" target="_blank" aria-label="Follow us on Facebook" className="social-link">
                             <img src={facebook} alt="Facebook" className="facebook-icon" />
                         </Link>
                         <span className="divider">|</span>
-                        <Link to="https://www.instagram.com/my_umc/" target="_blank" aria-label="Follow us on Instagram (Opens in a new tab)" className="social-link">
+                        <Link to="https://www.instagram.com/my_umc/" target="_blank" aria-label="Follow us on Instagram" className="social-link">
                             <img src={instagram} alt="Instagram" className="insta-icon" />
                         </Link>
                         <span className="divider">|</span>
-                        <Link to="https://www.youtube.com/channel/UCPZN5zAMeNHt3hTfdCO4n8A" aria-label="Follow us on Youtube (Opens in a new tab)" target="_blank" className="social-link">
+                        <Link to="https://www.youtube.com/channel/UCPZN5zAMeNHt3hTfdCO4n8A" target="_blank" aria-label="Follow us on YouTube" className="social-link">
                             <img src={youtube} alt="YouTube" className="youtube-icon" />
                         </Link>
                     </div>
-
                 </div>
             </div>
         </>

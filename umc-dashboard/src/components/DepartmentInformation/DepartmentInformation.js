@@ -746,7 +746,7 @@ const DepartmentInformation = ({ user }) => {
                                 <div className="card-block">
                                     <div className="row">
                                         <div className="col-6">
-                                            <h4 className="page-title">Hod Details</h4>
+                                            <h4 className="page-title">HOD Details</h4>
                                         </div>
                                         <div className="col-6 text-right m-b-20">
                                             <Link
@@ -762,13 +762,13 @@ const DepartmentInformation = ({ user }) => {
                                             <thead>
                                                 <tr>
                                                     <th width="10%" className="text-center">Sr. No.</th>
-                                                    <th>Hod Name</th>
+                                                    <th>Name</th>
                                                     <th>Designation</th>
                                                     <th>Education Qualification</th>
                                                     <th>Office Address</th>
                                                     <th>Phone Number</th>
                                                     <th>Email Address</th>
-                                                    <th className="text-center">Hod Image</th>
+                                                    <th className="text-center">Image</th>
                                                     <th width="15%" className="text-center">Action</th>
                                                 </tr>
                                             </thead>
@@ -821,7 +821,7 @@ const DepartmentInformation = ({ user }) => {
                                                     ))
                                                 ) : (
                                                     <tr>
-                                                        <td colSpan={9} className="text-center">No Hod Data Available</td>
+                                                        <td colSpan={9} className="text-center">No HOD Data Available</td>
                                                     </tr>
                                                 )
                                                 }

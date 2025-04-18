@@ -70,7 +70,7 @@ const ComputerDepartment = () => {
     return pageNumbers;
   };
 
-  const department_name = (i18n.language === 'en') ? "Computer Department" : "माहिती व तंत्रज्ञान विभाग"
+  const department_name = (i18n.language === 'en') ? "Information and Technology Department" : "माहिती व तंत्रज्ञान विभाग"
 
   const fetchBanner = async () => {
     try {

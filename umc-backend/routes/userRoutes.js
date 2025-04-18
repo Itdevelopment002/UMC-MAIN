@@ -103,7 +103,7 @@ router.post("/users", upload.single("userImage"), async (req, res) => {
 // Update a user
 router.put("/users/:id", upload.single("userImage"), async (req, res) => {
   const { id } = req.params;
-  const { fullname, role, permission, status } = req.body;
+  const { fullname, email, role, permission, status, password } = req.body;
   const imagePath = req.file ? `uploads/${req.file.filename}` : null;
 
   try {
@@ -119,19 +119,23 @@ router.put("/users/:id", upload.single("userImage"), async (req, res) => {
       let user = results[0];
 
       const updatedFullname = fullname || user.fullname;
+      const updatedEmail = email || user.email;
       const updatedRole = role || user.role;
       const updatedPermission = permission ? (Array.isArray(permission) ? permission.join(",") : permission) : user.permission;
       const updatedStatus = status || user.status;
       const updatedImage = imagePath || user.userImage;
+      const updatedPassword = password || user.password;
 
       const query =
-        "UPDATE users SET fullname = ?, role = ?, permission = ?, status = ?, userImage = ? WHERE id = ?";
+        "UPDATE users SET fullname = ?, email = ?, role = ?, permission = ?, status = ?, userImage = ?, password = ? WHERE id = ?";
       const values = [
         updatedFullname,
+        updatedEmail,
         updatedRole,
         updatedPermission,
         updatedStatus,
         updatedImage,
+        updatedPassword,
         id,
       ];
 
@@ -139,12 +143,6 @@ router.put("/users/:id", upload.single("userImage"), async (req, res) => {
         if (err) {
           console.error("Error updating user:", err);
           return res.status(500).json({ message: "Error updating user" });
-        }
-
-        if (imagePath && user.userImage) {
-          fs.unlink(user.userImage, (err) => {
-            if (err) console.error("Error deleting old image:", err);
-          });
         }
 
         res.json({

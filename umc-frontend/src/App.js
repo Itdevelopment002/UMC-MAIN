@@ -135,7 +135,7 @@ function App() {
     "/accounts-department": "Accounts Department | Ulhasnagar Municipal Corporation",
     "/audit-department": "Audit Department | Ulhasnagar Municipal Corporation",
     "/census-aadhar-center": "Census Aadhar Center | Ulhasnagar Municipal Corporation",
-    "/computer-department": "Computer Department | Ulhasnagar Municipal Corporation",
+    "/computer-department": "Information and Technology Department | Ulhasnagar Municipal Corporation",
     "/disaster-management-department": "Disaster Management Department | Ulhasnagar Municipal Corporation",
     "/education-department": "Education Department | Ulhasnagar Municipal Corporation",
     "/election-department": "Election Department | Ulhasnagar Municipal Corporation",
@@ -337,7 +337,7 @@ function App() {
               <Route path="/accounts-department" element={<AccountsDepartment data-aos="zoom-in-up" />} />
               <Route path="/audit-department" element={<AuditDepartment data-aos="fade-right" />} />
               <Route path="/census-aadhar-center" element={<CensusDepartment />} />
-              <Route path="/computer-department" element={<ComputerIt data-aos="fade-left" />} />
+              <Route path="/information-and-technology-department" element={<ComputerIt data-aos="fade-left" />} />
               <Route path="/disaster-management-department" element={<DisasterManagement data-aos="fade-right" />} />
               <Route path="/education-department" element={<EducationDept />} />
               <Route path="/election-department" element={<ElectionDept />} />
