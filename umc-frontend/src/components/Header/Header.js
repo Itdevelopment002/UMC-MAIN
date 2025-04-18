@@ -56,11 +56,20 @@ const Navbar = () => {
             "गॅलरी"
         ];
 
+        // Toggle the active link
+        const newActiveLink = activeLink === link ? null : link;
+        setActiveLink(newActiveLink);
+        
+        // For non-navigable links, we don't collapse the nav
         if (!nonNavigableLinks.includes(link)) {
             setIsNavCollapsed(true);
-            localStorage.setItem("activeLink", link);
+            localStorage.setItem("activeLink", newActiveLink || "");
         }
-        setActiveLink(link);
+        
+        // For navigable links, we want to collapse the mobile nav
+        if (window.innerWidth <= 992 && !nonNavigableLinks.includes(link)) {
+            setIsNavCollapsed(true);
+        }
     };
 
     useEffect(() => {
@@ -80,6 +89,8 @@ const Navbar = () => {
     const handleClickOutside = (event) => {
         if (navRef.current && !navRef.current.contains(event.target)) {
             setIsNavCollapsed(true);
+            // Close all dropdowns when clicking outside
+            setActiveLink(null);
         }
     };
 
@@ -118,24 +129,26 @@ const Navbar = () => {
 
     const renderDropdown = (menu) => {
         const dropdownClass = generateDropdownClass(menu.mainMenu);
+        const isActive = activeLink === menu.mainMenu;
+        
         if (menu.mainMenu === "Departments" || menu.mainMenu === "Corporation" || menu.mainMenu === "Online Services" || menu.mainMenu === "विभाग" || menu.mainMenu === "महानगरपालिका" || menu.mainMenu === "ऑनलाइन सेवा") {
             const columnCount = (menu.mainMenu === "Online Services" || menu.mainMenu === "ऑनलाइन सेवा") ? 2 : 3;
             const columns = splitIntoColumns(menu.subMenus, columnCount);
             return (
-                <li className={`nav-item dropdown ${dropdownClass} ${activeLink === menu.mainMenu ? "active" : ""}`}>
+                <li className={`nav-item dropdown ${dropdownClass} ${isActive ? "active" : ""}`}>
                     <Link
                         to="#"
-                        className={`nav-link dropdown-toggle d-flex align-items-center ${activeLink === menu.mainMenu ? "active" : ""}`}
+                        className={`nav-link dropdown-toggle d-flex align-items-center ${isActive ? "active" : ""}`}
                         onClick={() => handleNavClick(menu.mainMenu)}
                         id={`${menu.mainMenu}Dropdown`}
                         role="button"
-                        aria-expanded="false"
+                        aria-expanded={isActive ? "true" : "false"}
                         aria-haspopup="true"
                     >
                         <span className="me-1">{menu.mainMenu}</span>
                         <i className="dropdown-icon"></i>
                     </Link>
-                    <ul className="dropdown-menu custom-dropdown-menu1" aria-labelledby={`${menu.mainMenu}Dropdown`}>
+                    <ul className={`dropdown-menu custom-dropdown-menu1 ${isActive ? "show" : ""}`} aria-labelledby={`${menu.mainMenu}Dropdown`}>
                         <div className="dropdown-container">
                             {columns.map((column, columnIndex) => (
                                 <div className="dropdown-column" key={columnIndex}>
@@ -146,7 +159,10 @@ const Navbar = () => {
                                                 target={subMenu.subLink.includes("http") ? "_blank" : "_self"}
                                                 rel={subMenu.subLink.includes("http") ? "noopener noreferrer" : ""}
                                                 className={`dropdown-item ${activeLink === subMenu.subMenu ? "active" : ""}`}
-                                                onClick={() => handleNavClick(subMenu.subMenu)}
+                                                onClick={() => {
+                                                    handleNavClick(subMenu.subMenu);
+                                                    setIsNavCollapsed(true);
+                                                }}
                                             >
                                                 {subMenu.subMenu}
                                             </Link>
@@ -164,26 +180,25 @@ const Navbar = () => {
                                 </div>
                             ))}
                         </div>
-
                     </ul>
                 </li>
             );
         } else {
             return (
-                <li className={`nav-item dropdown ${dropdownClass} ${activeLink === menu.mainMenu ? "active" : ""}`}>
+                <li className={`nav-item dropdown ${dropdownClass} ${isActive ? "active" : ""}`}>
                     <Link
                         to="#"
-                        className={`nav-link dropdown-toggle d-flex align-items-center ${activeLink === menu.mainMenu ? "active" : ""}`}
+                        className={`nav-link dropdown-toggle d-flex align-items-center ${isActive ? "active" : ""}`}
                         onClick={() => handleNavClick(menu.mainMenu)}
                         id={`dropdown-${menu.id}`}
                         role="button"
-                        aria-expanded="false"
+                        aria-expanded={isActive ? "true" : "false"}
                         aria-haspopup="true"
                     >
                         <span className="me-1">{menu.mainMenu}</span>
                         <i className="dropdown-icon"></i>
                     </Link>
-                    <ul className="dropdown-menu" aria-labelledby={`dropdown-${menu.id}`}>
+                    <ul className={`dropdown-menu ${isActive ? "show" : ""}`} aria-labelledby={`dropdown-${menu.id}`}>
                         {menu.subMenus.map((subMenu) => (
                             <li key={subMenu.id}>
                                 <Link
@@ -191,7 +206,10 @@ const Navbar = () => {
                                     target={subMenu.subLink.includes("http") ? "_blank" : "_self"}
                                     rel={subMenu.subLink.includes("http") ? "noopener noreferrer" : ""}
                                     className={`dropdown-item ${activeLink === subMenu.subMenu ? "active" : ""}`}
-                                    onClick={() => handleNavClick(subMenu.subMenu)}
+                                    onClick={() => {
+                                        handleNavClick(subMenu.subMenu);
+                                        setIsNavCollapsed(true);
+                                    }}
                                 >
                                     {subMenu.subMenu}
                                 </Link>
@@ -287,7 +305,6 @@ const Navbar = () => {
                                 </React.Fragment>
                             ))}
                         </ul>
-
                     </nav>
                 </div>
             </header>

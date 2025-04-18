@@ -2,9 +2,9 @@
   font-family: "Inter" !important;
 }
 
-.initiative-hover {
+/* .initiative-hover {
   transition: transform 0.3s ease-in-out;
-}
+} */
 
 .initiative-hover:hover {
   transform: scale(1.01);

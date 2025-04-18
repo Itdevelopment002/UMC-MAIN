@@ -4,7 +4,7 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import api, { baseURL } from "../api";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination, Autoplay, EffectFade } from "swiper/modules";
+import { Pagination, Autoplay, EffectFade } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
