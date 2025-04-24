@@ -223,91 +223,99 @@ const MunicipalMeeting = () => {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {currentData.map((item, index) => (
-                                            <tr key={index}>
-                                                <td className="font-large text-center">
-                                                    {(() => {
-                                                        const language = i18n.language;
-
-                                                        const toMarathiNumbers = (num) => {
-                                                            const marathiDigits = ["०", "१", "२", "३", "४", "५", "६", "७", "८", "९"];
-                                                            return num
-                                                                .toString()
-                                                                .split("")
-                                                                .map((digit) => marathiDigits[parseInt(digit, 10)])
-                                                                .join("");
-                                                        };
-
-                                                        const number = startEntry + index
-                                                        return language === "mr" ? toMarathiNumbers(number) : number;
-                                                    })()}
-                                                </td>
-                                                <td>{item.year}</td>
-                                                <td className="text-center">
-                                                    {item.pdf_link1 && item.pdf_link1 !== "#" ? (
-                                                        <Link
-                                                            to={item.pdf_link1}
-                                                            target="_blank"
-                                                            rel="noopener noreferrer"
-                                                        >
-                                                            <img
-                                                                src={pdficon}
-                                                                alt="PDF"
-                                                                style={{
-                                                                    width: "18px",
-                                                                    height: "18px",
-                                                                    verticalAlign: "middle",
-                                                                }}
-                                                            />
-                                                        </Link>
-                                                    ) : (
-                                                        "-"
-                                                    )}
-                                                </td>
-                                                <td className="text-center">
-                                                    {item.pdf_link2 && item.pdf_link2 !== "#" ? (
-                                                        <Link
-                                                            to={item.pdf_link2}
-                                                            target="_blank"
-                                                            rel="noopener noreferrer"
-                                                        >
-                                                            <img
-                                                                src={pdficon}
-                                                                alt="PDF"
-                                                                style={{
-                                                                    width: "18px",
-                                                                    height: "18px",
-                                                                    verticalAlign: "middle",
-                                                                }}
-                                                            />
-                                                        </Link>
-                                                    ) : (
-                                                        "-"
-                                                    )}
-                                                </td>
-                                                <td className="text-center">
-                                                    {item.pdf_link3 && item.pdf_link3 !== "#" ? (
-                                                        <Link
-                                                            to={item.pdf_link3}
-                                                            target="_blank"
-                                                            rel="noopener noreferrer"
-                                                        >
-                                                            <img
-                                                                src={pdficon}
-                                                                alt="PDF"
-                                                                style={{
-                                                                    width: "18px",
-                                                                    height: "18px",
-                                                                    verticalAlign: "middle",
-                                                                }}
-                                                            />
-                                                        </Link>
-                                                    ) : (
-                                                        "-"
-                                                    )}
+                                        {filteredData.length === 0 ? (
+                                            <tr>
+                                                <td colSpan="5" className="text-center py-4">
+                                                    {t('corporation.noResults')}
                                                 </td>
                                             </tr>
-                                        ))}
+                                        ) : (
+                                            currentData.map((item, index) => (
+                                                <tr key={index}>
+                                                    <td className="font-large text-center">
+                                                        {(() => {
+                                                            const language = i18n.language;
+
+                                                            const toMarathiNumbers = (num) => {
+                                                                const marathiDigits = ["०", "१", "२", "३", "४", "५", "६", "७", "८", "९"];
+                                                                return num
+                                                                    .toString()
+                                                                    .split("")
+                                                                    .map((digit) => marathiDigits[parseInt(digit, 10)])
+                                                                    .join("");
+                                                            };
+
+                                                            const number = startEntry + index
+                                                            return language === "mr" ? toMarathiNumbers(number) : number;
+                                                        })()}
+                                                    </td>
+                                                    <td>{item.year}</td>
+                                                    <td className="text-center">
+                                                        {item.pdf_link1 && item.pdf_link1 !== "#" ? (
+                                                            <Link
+                                                                to={item.pdf_link1}
+                                                                target="_blank"
+                                                                rel="noopener noreferrer"
+                                                            >
+                                                                <img
+                                                                    src={pdficon}
+                                                                    alt="PDF"
+                                                                    style={{
+                                                                        width: "18px",
+                                                                        height: "18px",
+                                                                        verticalAlign: "middle",
+                                                                    }}
+                                                                />
+                                                            </Link>
+                                                        ) : (
+                                                            "-"
+                                                        )}
+                                                    </td>
+                                                    <td className="text-center">
+                                                        {item.pdf_link2 && item.pdf_link2 !== "#" ? (
+                                                            <Link
+                                                                to={item.pdf_link2}
+                                                                target="_blank"
+                                                                rel="noopener noreferrer"
+                                                            >
+                                                                <img
+                                                                    src={pdficon}
+                                                                    alt="PDF"
+                                                                    style={{
+                                                                        width: "18px",
+                                                                        height: "18px",
+                                                                        verticalAlign: "middle",
+                                                                    }}
+                                                                />
+                                                            </Link>
+                                                        ) : (
+                                                            "-"
+                                                        )}
+                                                    </td>
+                                                    <td className="text-center">
+                                                        {item.pdf_link3 && item.pdf_link3 !== "#" ? (
+                                                            <Link
+                                                                to={item.pdf_link3}
+                                                                target="_blank"
+                                                                rel="noopener noreferrer"
+                                                            >
+                                                                <img
+                                                                    src={pdficon}
+                                                                    alt="PDF"
+                                                                    style={{
+                                                                        width: "18px",
+                                                                        height: "18px",
+                                                                        verticalAlign: "middle",
+                                                                    }}
+                                                                />
+                                                            </Link>
+                                                        ) : (
+                                                            "-"
+                                                        )}
+                                                    </td>
+                                                </tr>
+                                            ))
+                                        )}
                                     </tbody>
                                 </table>
                             </div>
