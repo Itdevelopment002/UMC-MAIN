@@ -224,7 +224,8 @@
         "wardphNo": "Mobile Number",
         "landline": "Landline Number",
         "wardarea": "Area in Ward",
-        "wardNo": "Ward No."
+        "wardNo": "Ward No.",
+        "noResults": "No search result found"
     },
     "administration": {
         "heading": "Administration",
