@@ -39,7 +39,7 @@ const AnnualFinancialStatement = () => {
         }
     };
 
-    const totalPages = Math.ceil(annualData.length / itemsPerPage);
+    const totalPages = Math.ceil(filteredData.length / itemsPerPage);
     const startIndex = (currentPage - 1) * itemsPerPage;
     const currentData = filteredData.slice(startIndex, startIndex + itemsPerPage);
 
@@ -93,7 +93,7 @@ const AnnualFinancialStatement = () => {
         }
     };
 
-    const updatedtotalEntries = annualData.length;
+    const updatedtotalEntries = filteredData.length;
     const startEntry = (currentPage - 1) * itemsPerPage + 1;
     const endEntry = Math.min(currentPage * itemsPerPage, updatedtotalEntries);
 
@@ -123,12 +123,10 @@ const AnnualFinancialStatement = () => {
 
     return (
         <>
-
             <div
                 className="history-header-image"
                 style={{
                     backgroundImage: `url(${bgImage})`,
-
                 }}
             ></div>
 
@@ -170,7 +168,6 @@ const AnnualFinancialStatement = () => {
                                     <span className="entries-text">{t('corporation.entries')}</span>
                                 </div>
 
-
                                 <div className="input-group d-flex align-items-center" style={{ width: "270px" }}>
                                     <label
                                         htmlFor="searchInput"
@@ -201,89 +198,99 @@ const AnnualFinancialStatement = () => {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {currentData.map((item, index) => (
-                                            <tr key={index}>
-                                                <td className="font-large text-center">
-                                                    {(() => {
-                                                        const language = i18n.language;
-
-                                                        const toMarathiNumbers = (num) => {
-                                                            const marathiDigits = ["०", "१", "२", "३", "४", "५", "६", "७", "८", "९"];
-                                                            return num
-                                                                .toString()
-                                                                .split("")
-                                                                .map((digit) => marathiDigits[parseInt(digit, 10)])
-                                                                .join("");
-                                                        };
-
-                                                        const number = startIndex + index + 1;
-                                                        return language === "mr" ? toMarathiNumbers(number) : number;
-                                                    })()}
-                                                </td>
-                                                <td>{item.heading}</td>
-                                                <td
-                                                    width="20%"
-                                                    style={{
-                                                        textAlign: "center",
-                                                    }}
-                                                >
-                                                    <Link
-                                                        to={item.link}
-                                                        className="text-decoration-none"
-                                                        target={item.link === "#" ? "" : "_blank"}
-                                                        style={{ color: "#333333" }}
-                                                        onClick={(e) => handleClick(item.link, e)}
-                                                    >
-                                                        <img
-                                                            src={pdficon}
-                                                            alt="PDF Icon"
-                                                            style={{
-                                                                width: "18px",
-                                                                height: "18px",
-                                                                marginRight: "8px",
-                                                                verticalAlign: "middle",
-                                                            }}
-                                                        />
-                                                        {t('departments.view')}
-                                                    </Link>
+                                        {filteredData.length === 0 ? (
+                                            <tr>
+                                                <td colSpan="3" className="text-center py-4">
+                                                    {t('corporation.noResults')}
                                                 </td>
                                             </tr>
-                                        ))}
+                                        ) : (
+                                            currentData.map((item, index) => (
+                                                <tr key={index}>
+                                                    <td className="font-large text-center">
+                                                        {(() => {
+                                                            const language = i18n.language;
+
+                                                            const toMarathiNumbers = (num) => {
+                                                                const marathiDigits = ["०", "१", "२", "३", "४", "५", "६", "७", "८", "९"];
+                                                                return num
+                                                                    .toString()
+                                                                    .split("")
+                                                                    .map((digit) => marathiDigits[parseInt(digit, 10)])
+                                                                    .join("");
+                                                            };
+
+                                                            const number = startIndex + index + 1;
+                                                            return language === "mr" ? toMarathiNumbers(number) : number;
+                                                        })()}
+                                                    </td>
+                                                    <td>{item.heading}</td>
+                                                    <td
+                                                        width="20%"
+                                                        style={{
+                                                            textAlign: "center",
+                                                        }}
+                                                    >
+                                                        <Link
+                                                            to={item.link}
+                                                            className="text-decoration-none"
+                                                            target={item.link === "#" ? "" : "_blank"}
+                                                            style={{ color: "#333333" }}
+                                                            onClick={(e) => handleClick(item.link, e)}
+                                                        >
+                                                            <img
+                                                                src={pdficon}
+                                                                alt="PDF Icon"
+                                                                style={{
+                                                                    width: "18px",
+                                                                    height: "18px",
+                                                                    marginRight: "8px",
+                                                                    verticalAlign: "middle",
+                                                                }}
+                                                            />
+                                                            {t('departments.view')}
+                                                        </Link>
+                                                    </td>
+                                                </tr>
+                                            ))
+                                        )}
                                     </tbody>
                                 </table>
                             </div>
-                            <div className="d-flex">
-                                <nav aria-label="Page navigation" className="d-flex justify-content-start">
-                                    <ul className="pagination custom-pagination">
-                                        <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
-                                            <button
-                                                className="page-link"
-                                                onClick={() => handlePageChange(currentPage - 1)}
-                                            >
-                                                {t('departments.previous')}
-                                            </button>
-                                        </li>
-                                        {renderPageNumbers()}
-                                        <li className={`page-item ${currentPage === totalPages ? "disabled" : ""}`}>
-                                            <button
-                                                className="page-link"
-                                                onClick={() => handlePageChange(currentPage + 1)}
-                                            >
-                                                {t('departments.next')}
-                                            </button>
-                                        </li>
-                                    </ul>
-                                </nav>
+                            {filteredData.length > 0 && (
+                                <div className="d-flex">
+                                    <nav aria-label="Page navigation" className="d-flex justify-content-start">
+                                        <ul className="pagination custom-pagination">
+                                            <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
+                                                <button
+                                                    className="page-link"
+                                                    onClick={() => handlePageChange(currentPage - 1)}
+                                                >
+                                                    {t('departments.previous')}
+                                                </button>
+                                            </li>
+                                            {renderPageNumbers()}
+                                            <li className={`page-item ${currentPage === totalPages ? "disabled" : ""}`}>
+                                                <button
+                                                    className="page-link"
+                                                    onClick={() => handlePageChange(currentPage + 1)}
+                                                >
+                                                    {t('departments.next')}
+                                                </button>
+                                            </li>
+                                        </ul>
+                                    </nav>
 
-                                <div className="last-updated-container">
-                                    <p className="last-updated-text">
-                                        <b>{t('corporation.showing')} {startEntry} {t('corporation.to')} {endEntry} {t('corporation.of')} {totalEntries} {t('corporation.entries')}</b>
-                                    </p>
+                                    <div className="last-updated-container">
+                                        <p className="last-updated-text">
+                                            <b>{t('corporation.showing')} {startEntry} {t('corporation.to')} {endEntry} {t('corporation.of')} {updatedtotalEntries} {t('corporation.entries')}</b>
+                                        </p>
+                                    </div>
                                 </div>
-                            </div>
+                            )}
                         </div>
                     </div>
-                </div >
+                </div>
             </div>
         </>
     );

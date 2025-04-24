@@ -416,6 +416,16 @@
   }
 }
 
+@keyframes custom-scroll-loop {
+  0% {
+    transform: translateY(10%);
+  }
+
+  100% {
+    transform: translateY(-30%);
+  }
+}
+
 .project-item {
   display: flex;
   align-items: center;
@@ -549,4 +559,11 @@
   .news-list {
     max-height: 280px;
   }
+}
+
+
+.custom-scroll-wrapper {
+  max-height: 300px;
+  overflow-y: auto;
+  overflow-x: hidden;
 }

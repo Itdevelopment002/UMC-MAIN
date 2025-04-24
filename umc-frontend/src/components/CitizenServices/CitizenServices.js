@@ -27,7 +27,7 @@ const CitizenServices = () => {
     if (scrollContainerRef.current) {
       scrollContainerRef.current.style.animation = "none";
       void scrollContainerRef.current.offsetHeight;
-      scrollContainerRef.current.style.animation = "scroll-loop 25s linear infinite";
+      scrollContainerRef.current.style.animation = "custom-scroll-loop 40s linear infinite";
     }
   }, [information]);
 
@@ -37,7 +37,7 @@ const CitizenServices = () => {
     if (scrollContainerRef.current) {
       scrollContainerRef.current.style.animation = "none";
       void scrollContainerRef.current.offsetHeight;
-      scrollContainerRef.current.style.animation = "scroll-loop 50s linear infinite";
+      scrollContainerRef.current.style.animation = "custom-scroll-loop 70s linear infinite";
     }
   }, [information]);
 
@@ -139,7 +139,7 @@ const CitizenServices = () => {
           <div className="col-xl-3 col-lg-6 col-md-6 col-sm-12 e-services-margin right-section-font">
             <div className="upcoming-projects bg-white p-2">
               <h5 className="p-2 h5-styling-div">{t("home.information")}</h5>
-              <div className="scroll-wrapper">
+              <div className="scroll-wrapper custom-scroll-wrapper ">
                 <div
                   className="info-scroll-container"
                   ref={scrollContainerRef}
