@@ -78,7 +78,7 @@ const Location = () => {
             <div className="col-xl-12 col-lg-12 col-md-12 col-sm-12 mx-auto location-styling">
               <iframe
                 title="UMC Location"
-                src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d57828.41779303888!2d73.16582725457208!3d19.227109041239448!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be79442948bba51%3A0x28d43fde3c21dbf7!2sUlhasnagar%2C%20Maharashtra!5e0!3m2!1sen!2sin!4v1735840024338!5m2!1sen!2sin"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3767.1717732053835!2d73.15359077503149!3d19.231344182005493!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7943e643c5051%3A0x9f3cb696966d87f4!2sUlhasnagar%20Municipal%20Corporation!5e0!3m2!1sen!2sin!4v1745489393221!5m2!1sen!2sin"
                 width="100%"
                 height="100%"
                 allowFullScreen=""
