@@ -187,6 +187,39 @@ router.patch("/users/:id/update-password", async (req, res) => {
   });
 });
 
+// Verify password
+router.post("/users/:id/verify-password", async (req, res) => {
+  const { id } = req.params;
+  const { password } = req.body;
+
+  if (!password) {
+    return res.status(400).json({ message: "Password is required" });
+  }
+
+  const query = "SELECT password FROM users WHERE id = ?";
+  db.query(query, [id], async (err, results) => {
+    if (err) {
+      console.error("Error fetching user password:", err);
+      return res.status(500).json({ message: "Error verifying password" });
+    }
+
+    if (results.length === 0) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const storedHashedPassword = results[0].password;
+
+    const isMatch = await bcrypt.compare(password, storedHashedPassword);
+
+    if (isMatch) {
+      res.json({ valid: true, message: "Password is correct" });
+    } else {
+      res.status(401).json({ valid: false, message: "Invalid password" });
+    }
+  });
+});
+
+
 // Delete a user
 router.delete("/users/:id", (req, res) => {
   const { id } = req.params;
