@@ -133,18 +133,9 @@ const Footer = () => {
                     />
                     <div className="contact-text">
                       <p className="contact-title">{contact.heading}</p>
-                      {contact.heading === "Phone" || contact.heading === "दूरध्वनी" ? (
-                        <Link to={`tel:${contact.description}`} className="contact-detail">
-                          {contact.description}
-                        </Link>
-                      ) : contact.heading === "Email" || contact.heading === "ईमेल" ? (
-                        <Link to={`mailto:${contact.description}`} className="contact-detail">
-                          {contact.description}
-                        </Link>
-                      ) : (
-                        <span className="contact-detail">{contact.description}</span>
-                      )}
+                      <span className="contact-detail">{contact.description}</span>
                     </div>
+
                   </div>
                 </li>
               ))}

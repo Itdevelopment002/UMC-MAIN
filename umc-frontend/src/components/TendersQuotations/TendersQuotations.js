@@ -76,32 +76,52 @@ const TendersQuotations = () => {
         setCurrentPage(1);
     };
 
+    const convertToLocalizedDigits = (number) => {
+        const digits = t('digits', { returnObjects: true });
+        return number
+            .toString()
+            .split('')
+            .map((d) => digits[parseInt(d)] || d)
+            .join('');
+    };
+
     const renderPageNumbers = () => {
         const pageNumbers = [];
+        let hasLeftEllipsis = false;
+        let hasRightEllipsis = false;
+
         for (let i = 1; i <= totalPages; i++) {
             if (i === 1 || i === totalPages || Math.abs(i - currentPage) <= 1) {
+                const displayNumber = convertToLocalizedDigits(String(i).padStart(2, '0'));
                 pageNumbers.push(
                     <li
                         key={i}
-                        className={`page-item ${currentPage === i ? "active" : ""}`}
+                        className={`page-item ${currentPage === i ? 'active' : ''}`}
                         onClick={() => handlePageChange(i)}
                     >
-                        <button className="page-link">{String(i).padStart(2, "0")}</button>
+                        <button className="page-link">{displayNumber}</button>
                     </li>
                 );
-            } else if (
-                pageNumbers[pageNumbers.length - 1]?.key !== "ellipsis" &&
-                (i < currentPage - 1 || i > currentPage + 1)
-            ) {
+            } else if (i < currentPage - 1 && !hasLeftEllipsis) {
                 pageNumbers.push(
-                    <li key="ellipsis" className="page-item ellipsis">
+                    <li key="left-ellipsis" className="page-item ellipsis">
                         <span className="page-link">...</span>
                     </li>
                 );
+                hasLeftEllipsis = true;
+            } else if (i > currentPage + 1 && !hasRightEllipsis) {
+                pageNumbers.push(
+                    <li key="right-ellipsis" className="page-item ellipsis">
+                        <span className="page-link">...</span>
+                    </li>
+                );
+                hasRightEllipsis = true;
             }
         }
+
         return pageNumbers;
     };
+
 
     const handleClick = (link, e) => {
         if (link === "#") {
