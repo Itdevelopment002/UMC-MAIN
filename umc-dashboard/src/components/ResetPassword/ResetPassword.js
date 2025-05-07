@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./ResetPassword.css";
 import img from "../../assets/img/umclogo.png";
 import { useNavigate } from "react-router-dom";
@@ -11,7 +11,26 @@ const ResetPassword = ({ onLogin }) => {
   });
   const [errors, setErrors] = useState({});
   const [serverError, setServerError] = useState("");
-  const [loading, setLoading] = useState(false);  // Loader state
+  const [infoMessage, setInfoMessage] = useState("");
+
+  const [loading, setLoading] = useState(false);
+  const [retryAfter, setRetryAfter] = useState(null); // Time remaining in seconds
+  const [attemptsRemaining, setAttemptsRemaining] = useState(3); // Initial attempts
+
+  // Countdown timer effect
+  useEffect(() => {
+    let timer;
+    if (retryAfter > 0) {
+      timer = setTimeout(() => {
+        setRetryAfter(retryAfter - 1);
+      }, 1000);
+    } else if (retryAfter === 0) {
+      // Reset attempts when timer expires
+      setAttemptsRemaining(3);
+      setRetryAfter(null);
+    }
+    return () => clearTimeout(timer);
+  }, [retryAfter]);
 
   const handleChange = (e) => {
     setData({
@@ -25,6 +44,9 @@ const ResetPassword = ({ onLogin }) => {
   const validateForm = () => {
     const newErrors = {};
     if (!userData.email) newErrors.email = "Email Address is required";
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(userData.email)) {
+      newErrors.email = "Please enter a valid email address";
+    }
     return newErrors;
   };
 
@@ -36,26 +58,48 @@ const ResetPassword = ({ onLogin }) => {
       return;
     }
 
-    setLoading(true);  // Start loader
+    setLoading(true);
 
     try {
       const response = await api.post("/reset-password", userData);
       if (response.data.message === "OTP sent successfully") {
-        navigate("/reset-password-verification", { state: { email: userData.email } });
+        setAttemptsRemaining(prev => prev - 1);
+        navigate("/reset-password-verification", {
+          state: {
+            email: userData.email,
+            attemptsRemaining: attemptsRemaining - 1
+          }
+        });
       }
     } catch (err) {
       if (err.response) {
         if (err.response.status === 400) {
-          setServerError("Invalid email, Please write a valid email.");
+          setInfoMessage("If your email is registered with us, you will receive an OTP.");
+          setServerError(""); // Clear any existing error
+        } else if (err.response.status === 429) {
+          const retryAfterSeconds = parseInt(err.response.headers['retry-after']) || 1800;
+          setRetryAfter(retryAfterSeconds);
+          setAttemptsRemaining(0);
+          setServerError(`You've exceeded OTP attempts. Please try again after ${formatTime(retryAfterSeconds)}.`);
+          setInfoMessage(""); // Clear info message if error
         } else {
           setServerError("Server error. Please try again later.");
+          setInfoMessage("");
         }
       } else {
         setServerError("Network error. Check your connection.");
+        setInfoMessage("");
       }
+
     } finally {
-      setLoading(false);  // Stop loader
+      setLoading(false);
     }
+  };
+
+  const formatTime = (seconds) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
   };
 
   return (
@@ -67,7 +111,9 @@ const ResetPassword = ({ onLogin }) => {
             <h4 className="text-center">Reset Password</h4>
             <p className="text-center text-muted">Enter email for verification code.</p>
 
-            {serverError && <div className="alert alert-danger">{serverError}</div>}
+            {/* {serverError && <div className="alert alert-danger">{serverError}</div>} */}
+            {infoMessage && <p className="text-info">{infoMessage}</p>}
+
 
             <form onSubmit={onSubmit} className="mt-4">
               <div className="mb-3 text-start">
@@ -76,23 +122,30 @@ const ResetPassword = ({ onLogin }) => {
                 </label>
                 <input
                   type="email"
-                  className="form-control form-control1"
+                  className={`form-control form-control1 ${errors.email ? 'is-invalid' : ''}`}
                   name="email"
                   value={userData.email}
                   onChange={handleChange}
                   placeholder="Enter email address"
                   required
+                  disabled={retryAfter > 0}
                 />
-                {errors.email && <small className="text-danger">{errors.email}</small>}
+                {errors.email && <div className="invalid-feedback">{errors.email}</div>}
+                {attemptsRemaining > 0 && retryAfter === null && (
+                  <small className="text-muted d-block mt-1">
+                    Attempts remaining: {attemptsRemaining}
+                  </small>
+                )}
               </div>
 
               <hr className="mt-4" />
 
               <div className="custom-button-container12">
                 <button
+                  type="button"
                   onClick={() => navigate("/")}
                   className="custom-btn12 custom-cancel12"
-                  disabled={loading} 
+                  disabled={loading}
                 >
                   Cancel
                 </button>
@@ -100,12 +153,12 @@ const ResetPassword = ({ onLogin }) => {
                 <button
                   type="submit"
                   className="custom-btn12 custom-verify12"
-                  disabled={loading} 
+                  disabled={loading || retryAfter > 0}
                 >
-                  {loading ? "Sending OTP..." : "Confirm"}  
+                  {loading ? "Sending OTP..." :
+                    retryAfter > 0 ? `Try again in ${formatTime(retryAfter)}` : "Confirm"}
                 </button>
               </div>
-
             </form>
           </div>
         </div>

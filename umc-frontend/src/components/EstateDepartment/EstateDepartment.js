@@ -42,32 +42,52 @@ const EstateDepartment = () => {
     }
   };
 
+  const convertToLocalizedDigits = (number) => {
+    const digits = t('digits', { returnObjects: true });
+    return number
+      .toString()
+      .split('')
+      .map((d) => digits[parseInt(d)] || d)
+      .join('');
+  };
   const renderPageNumbers = () => {
     const pageNumbers = [];
+    let leftEllipsisAdded = false;
+    let rightEllipsisAdded = false;
+
     for (let i = 1; i <= totalPages; i++) {
       if (i === 1 || i === totalPages || Math.abs(i - currentPage) <= 1) {
+        const displayNumber = convertToLocalizedDigits(String(i).padStart(2, '0'));
         pageNumbers.push(
           <li
             key={i}
-            className={`page-item ${currentPage === i ? "active" : ""}`}
+            className={`page-item ${currentPage === i ? 'active' : ''}`}
             onClick={() => handlePageChange(i)}
           >
-            <button className="page-link">{String(i).padStart(2, "0")}</button>
+            <button className="page-link">{displayNumber}</button>
           </li>
         );
-      } else if (
-        pageNumbers[pageNumbers.length - 1]?.key !== "ellipsis" &&
-        (i < currentPage - 1 || i > currentPage + 1)
-      ) {
+      } else if (i < currentPage - 1 && !leftEllipsisAdded) {
         pageNumbers.push(
-          <li key="ellipsis" className="page-item ellipsis">
+          <li key="left-ellipsis" className="page-item ellipsis">
             <span className="page-link">...</span>
           </li>
         );
+        leftEllipsisAdded = true;
+      } else if (i > currentPage + 1 && !rightEllipsisAdded) {
+        pageNumbers.push(
+          <li key="right-ellipsis" className="page-item ellipsis">
+            <span className="page-link">...</span>
+          </li>
+        );
+        rightEllipsisAdded = true;
       }
+      // Skip further rendering for this iteration
     }
+
     return pageNumbers;
   };
+
 
   const department_name = (i18n.language === 'en') ? "Estate Department" : "मालमत्ता विभाग"
 
@@ -171,12 +191,34 @@ const EstateDepartment = () => {
                         {item.description}
                       </li>
                       {subDescriptions.length > 0 && (
-                        <ol type="a">
-                          {subDescriptions.map((subItem, subIndex) => (
-                            <li key={subIndex}>
-                              {subItem}
-                            </li>
-                          ))}
+                        <ol style={{ listStyleType: 'none', paddingLeft: '1em' }}>
+                          {(() => {
+                            const currentLang = i18n.language;
+                            const MarathiLetters = [
+                              'अ', 'ब', 'क', 'ड', 'इ', 'फ', 'ग', 'ह', 'ई', 'ज',
+                              'क', 'ल', 'म', 'न', 'ओ', 'प', 'क़', 'र', 'स', 'त',
+                              'उ', 'व', 'व', 'क्ष', 'य', 'ज़'
+                            ];
+
+                            return subDescriptions.map((subItem, subIndex) => (
+                              <li
+                                key={subIndex}
+                                style={{
+                                  display: 'flex',
+                                  alignItems: 'flex-start',
+                                  marginBottom: '0.5em'
+                                }}
+                              >
+                                <span style={{ width: '2em', flexShrink: 0 }}>
+                                  {currentLang === 'mr'
+                                    ? (MarathiLetters[subIndex] || subIndex + 1)
+                                    : String.fromCharCode(97 + subIndex)}
+                                  .
+                                </span>
+                                <span>{subItem}</span>
+                              </li>
+                            ));
+                          })()}
                         </ol>
                       )}
                     </>
