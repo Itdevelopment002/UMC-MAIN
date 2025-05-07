@@ -6,6 +6,7 @@ import api, { baseURL } from "../api";
 import './EditProfile.css';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Modal, Button } from "react-bootstrap";
 
 const EditProfile = () => {
     const navigate = useNavigate();
@@ -15,16 +16,20 @@ const EditProfile = () => {
     const [previewImage, setPreviewImage] = useState(null);
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
+    const [oldPassword, setOldPassword] = useState("");
     const [errors, setErrors] = useState({});
     const [isChanged, setIsChanged] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    const [showOldPassword, setShowOldPassword] = useState(false);
+    const [showModal, setShowModal] = useState(false);
+
     const userData = JSON.parse(localStorage.getItem("userData"));
     const id = userData?.id;
 
     useEffect(() => {
         fetchUser();
-        //eslint-disable-next-line
+        // eslint-disable-next-line
     }, [id]);
 
     const fetchUser = async () => {
@@ -56,7 +61,9 @@ const EditProfile = () => {
             formData.append("email", email);
             if (image) formData.append("userImage", image);
 
-            await api.put(`/users/${id}`, formData, { headers: { "Content-Type": "multipart/form-data" } });
+            await api.put(`/users/${id}`, formData, {
+                headers: { "Content-Type": "multipart/form-data" },
+            });
             toast.success("Profile updated successfully!");
             fetchUser();
         } catch (error) {
@@ -65,15 +72,30 @@ const EditProfile = () => {
         }
     };
 
+    const getPasswordStrength = (password) => {
+        const strongRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+        const moderateRegex = /^(?=.*[a-zA-Z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$/;
+
+        if (strongRegex.test(password)) {
+            return { message: "✅ Strong password", color: "success" };
+        } else if (moderateRegex.test(password)) {
+            return { message: "⚠️ Moderate password", color: "warning" };
+        } else {
+            return { message: "❌ Weak password", color: "danger" };
+        }
+    };
+
     const validateForm = () => {
         let newErrors = {};
         const trimmedPassword = password.trim();
         const trimmedConfirmPassword = confirmPassword.trim();
+        const strongRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
         if (!trimmedPassword) {
             newErrors.password = "Password is required.";
-        } else if (trimmedPassword.length < 8) {
-            newErrors.password = "Password must be at least 8 characters.";
+        } else if (!strongRegex.test(trimmedPassword)) {
+            newErrors.password =
+                "Password must be strong (min 8 characters, 1 uppercase, 1 lowercase, 1 digit, 1 special character).";
         }
 
         if (!trimmedConfirmPassword) {
@@ -86,25 +108,28 @@ const EditProfile = () => {
         return Object.keys(newErrors).length === 0;
     };
 
-    const handleVerifyAndUpdatePassword = async (e) => {
+    const handleVerifyOldPasswordAndUpdate = async (e) => {
         e.preventDefault();
-        if (!validateForm()) {
-            return;
-        }
         try {
-            await api.patch(`/users/${id}/update-password`, { newPassword: password });
-            toast.success("Password updated successfully!");
-            setPassword("");
-            setConfirmPassword("");
-            setTimeout(() => {
-                localStorage.removeItem("authToken");
-                localStorage.removeItem("userData");
-                localStorage.removeItem("lastVisitedRoute");
-                window.location.href = "/";
-            }, 2000);
+            const res = await api.post(`/users/${id}/verify-password`, { password: oldPassword });
+
+            if (res.data.valid) {
+                await api.patch(`/users/${id}/update-password`, { newPassword: password });
+                toast.success("Password updated successfully!");
+                setPassword("");
+                setConfirmPassword("");
+                setOldPassword("");
+                setShowModal(false);
+                setTimeout(() => {
+                    localStorage.clear();
+                    window.location.href = "/";
+                }, 2000);
+            } else {
+                toast.error("Old password is incorrect.");
+            }
         } catch (error) {
-            console.error("Error updating password:", error);
-            toast.error("Failed to update password.");
+            console.error("Error verifying old password:", error);
+            toast.error("Failed to verify password.");
         }
     };
 
@@ -112,8 +137,14 @@ const EditProfile = () => {
         const value = e.target.value;
         if (field === "fullname") setFullname(value);
         if (field === "email") setEmail(value);
-
         setIsChanged(true);
+    };
+
+    const handlePasswordFormSubmit = (e) => {
+        e.preventDefault();
+        if (validateForm()) {
+            setShowModal(true);
+        }
     };
 
     return (
@@ -121,14 +152,12 @@ const EditProfile = () => {
             <div className="content">
                 <nav aria-label="breadcrumb">
                     <ol className="breadcrumb">
-                        <li className="breadcrumb-item">
-                            <Link to="/home">Home</Link>
-                        </li>
-                        <li className="breadcrumb-item active" aria-current="page">
-                            Edit Profile
-                        </li>
+                        <li className="breadcrumb-item"><Link to="/home">Home</Link></li>
+                        <li className="breadcrumb-item active" aria-current="page">Edit Profile</li>
                     </ol>
                 </nav>
+
+                {/* Profile Edit Section */}
                 <div className="card mb-4 p-4">
                     <div className="row align-items-center">
                         <div className="col-md-4 text-center position-relative">
@@ -169,29 +198,19 @@ const EditProfile = () => {
                                 </div>
                             </div>
                             <div className="mt-4 d-flex justify-content-end">
-                                <button
-                                    className="btn btn-success mx-2 btn-sm"
-                                    onClick={handleSaveProfile}
-                                    disabled={!isChanged}
-                                >
-                                    Save Changes
-                                </button>
-                                <button className="btn btn-secondary mx-2 btn-sm" onClick={() => navigate(-1)}>
-                                    Cancel
-                                </button>
+                                <button className="btn btn-success mx-2 btn-sm" onClick={handleSaveProfile} disabled={!isChanged}>Save Changes</button>
+                                <button className="btn btn-secondary mx-2 btn-sm" onClick={() => navigate(-1)}>Cancel</button>
                             </div>
                         </div>
                     </div>
                 </div>
+
+                {/* Change Password Section */}
                 <div className="card p-4">
                     <div className="row">
                         <div className="col-lg-12">
-                            <div className="row">
-                                <div className="col-12">
-                                    <h4 className="page-title">Change Password</h4>
-                                </div>
-                            </div>
-                            <form onSubmit={handleVerifyAndUpdatePassword}>
+                            <h4 className="page-title">Change Password</h4>
+                            <form onSubmit={handlePasswordFormSubmit}>
                                 <div className="form-group row">
                                     <label className="col-form-label col-md-2"><strong>New Password:</strong></label>
                                     <div className="col-md-4 position-relative">
@@ -210,6 +229,11 @@ const EditProfile = () => {
                                             {showPassword ? <FaEyeSlash /> : <FaEye />}
                                         </span>
                                         {errors.password && <div className="invalid-feedback">{errors.password}</div>}
+                                        {password && (
+                                            <small className={`text-${getPasswordStrength(password).color}`}>
+                                                {getPasswordStrength(password).message}
+                                            </small>
+                                        )}
                                     </div>
                                 </div>
                                 <div className="form-group row">
@@ -237,9 +261,11 @@ const EditProfile = () => {
                         </div>
                     </div>
                 </div>
-                {/* <Modal show={showModal} onHide={() => setShowModal(false)} centered>
+
+                {/* Modal for old password verification */}
+                <Modal show={showModal} onHide={() => setShowModal(false)} centered>
                     <Modal.Header closeButton>
-                        <Modal.Title textCenter>Verify Old Password</Modal.Title>
+                        <Modal.Title>Verify Old Password</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                         <div className="form-group position-relative">
@@ -262,9 +288,9 @@ const EditProfile = () => {
                     </Modal.Body>
                     <Modal.Footer>
                         <Button variant="secondary" size="sm" onClick={() => setShowModal(false)}>Cancel</Button>
-                        <Button variant="primary" size="sm" onClick={handleVerifyAndUpdatePassword}>Verify & Update</Button>
+                        <Button variant="primary" size="sm" onClick={handleVerifyOldPasswordAndUpdate}>Verify & Update</Button>
                     </Modal.Footer>
-                </Modal> */}
+                </Modal>
             </div>
             <ToastContainer />
         </div>
