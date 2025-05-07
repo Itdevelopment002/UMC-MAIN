@@ -160,3 +160,25 @@
     background-position: left;
   }
 }
+.captcha-display {
+  min-width: 120px;
+  font-size: 1rem;
+  letter-spacing: 2px;
+  border: 2px dashed #999;
+  border-radius: 5px 0 0 5px;
+  background-color: #f5f5f5;
+  padding: 3px 8px;
+  user-select: none;
+  text-align: center;
+}
+
+.btn-captcha-refresh {
+  height: 38px;
+  padding: 0 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0 5px 5px 0;
+  border-left: none;
+}
+
