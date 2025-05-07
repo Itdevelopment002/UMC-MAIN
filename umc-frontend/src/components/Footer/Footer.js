@@ -197,13 +197,14 @@ const Footer = () => {
 
         </div>
         <hr className="footer-divider" />
-        <div className="footer-bottom p-0">
+        
+        <div className="footer-bottom d-flex justify-content-between align-items-center flex-wrap p-0">
           <span className="footer-sapn1">
-            &copy; {new Date().toLocaleString(i18n.language === "mr" ? "mr-IN" : "en-US", { year: "numeric" })}
-            {" "}{t("footer.copyWrite")}
+            &copy; {new Date().toLocaleString(i18n.language === "mr" ? "mr-IN" : "en-US", { year: "numeric" })}{" "}
+            {t("footer.copyWrite")}
           </span>
-
-          <span className="fw-bold ">
+ 
+          <span className="fw-bold">
             {t("footer.totalVisitors")}:{" "}
             {visitorCount !== null ? (
               <Link to="#." className="count-style">
@@ -217,7 +218,29 @@ const Footer = () => {
               t("footer.loading")
             )}
           </span>
-
+ 
+          <span className="footer-sapn-updated fw-bold">
+            {t("footer.lastUpdated")}:{" "}
+            {(() => {
+              const date = new Date();
+              const day = String(date.getDate()).padStart(2, "0");
+              const month = String(date.getMonth() + 1).padStart(2, "0");
+              const year = date.getFullYear();
+              const formattedDate = `${day}-${month}-${year}`;
+ 
+              if (i18n.language === "mr") {
+                const marathiDate = date.toLocaleDateString("mr-IN", {
+                  day: "2-digit",
+                  month: "2-digit",
+                  year: "numeric",
+                });
+                return marathiDate.replace(/\//g, "-");
+              }
+ 
+              return formattedDate;
+            })()}
+          </span>
+ 
           <span className="footer-sapn2">
             <img className="img1" src={img2} alt="w32" />
             <img className="img2" src={img1} alt="w3c" />
