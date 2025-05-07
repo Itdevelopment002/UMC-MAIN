@@ -169,7 +169,7 @@ function App() {
   const [userData, setUserData] = useState({});
   const [loading, setLoading] = useState(false);
   const location = useLocation();
-  const LOGOUT_TIME = 24 * 60 * 60 * 1000;
+  const LOGOUT_TIME = 20 * 60 * 1000;
   const navigate = useNavigate();
 
   const handleAutoLogout = () => {

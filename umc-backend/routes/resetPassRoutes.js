@@ -6,7 +6,7 @@ const nodemailer = require("nodemailer");
 const cron = require("node-cron");
 // const bcrypt = require("bcrypt");
 const bcrypt = require("bcryptjs");
-
+const rateLimit = require('express-rate-limit');
 
 // Configure nodemailer transporter
 const transporter = nodemailer.createTransport({
@@ -17,7 +17,28 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-router.post("/reset-password", async (req, res) => {
+const otpRateLimiter = rateLimit({
+  windowMs: 30 * 60 * 1000, // 30 minutes
+  max: 3, // Limit each email to 3 OTP requests per windowMs
+  message: 'Too many OTP requests from this email, please try again after 30 minutes',
+  standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+  legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+  keyGenerator: (req) => {
+    // Use email as the key for rate limiting
+    if (!req.body.email) {
+      throw new Error('Email is required for rate limiting');
+    }
+    return req.body.email.toLowerCase(); // Case insensitive
+  },
+  handler: (req, res, next, options) => {
+    res.status(429).json({
+      error: options.message,
+      retryAfter: options.windowMs / 1000 // Convert to seconds
+    });
+  }
+});
+
+router.post('/reset-password', otpRateLimiter, async (req, res) => {
   const { email } = req.body;
 
   // Check if email exists in the users table
@@ -31,6 +52,7 @@ router.post("/reset-password", async (req, res) => {
     if (results.length === 0) {
       return res.status(400).json({ message: "Invalid email, Please write a valid email." });
     }
+    
 
     const user = results[0];
 
@@ -67,41 +89,60 @@ router.post("/reset-password", async (req, res) => {
 });
 
 cron.schedule("*/5 * * * *", () => {
-    const query = "DELETE FROM reset_pass WHERE created_at < NOW() - INTERVAL 5 MINUTE";
-    db.query(query, (err, results) => {
-      if (err) {
-        console.error("Error deleting old OTPs:", err);
-      } else {
-        console.log("Deleted old OTPs:", results.affectedRows);
-      }
-    });
+  const query = "DELETE FROM reset_pass WHERE created_at < NOW() - INTERVAL 5 MINUTE";
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error("Error deleting old OTPs:", err);
+    } else {
+      console.log("Deleted old OTPs:", results.affectedRows);
+    }
   });
+});
 
 // Verify OTP
 
+
+const CryptoJS = require('crypto-js');
+const SECRET_KEY = process.env.ENCRYPTION_KEY || "your-secret-key-here";
+
 router.post("/verify-otp", async (req, res) => {
-    const { otp, email } = req.body;
-  
+  try {
+    const { data } = req.body;
+    
+    if (!data) {
+      return res.status(400).json({ message: "Encrypted data is required" });
+    }
+
+    // Decrypt the data
+    const bytes = CryptoJS.AES.decrypt(data, SECRET_KEY);
+    const decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+    
+    const { otp, email } = decryptedData;
+
     if (!otp || !email) {
       return res.status(400).json({ message: "OTP and email are required" });
     }
-  
+
     const query = "SELECT * FROM reset_pass WHERE code = ? AND email = ?";
     db.query(query, [otp, email], (err, results) => {
       if (err) {
         console.error("Error verifying OTP:", err);
         return res.status(500).json({ message: "Error verifying OTP" });
       }
-  
+
       if (results.length === 0) {
         return res.status(400).json({ message: "Invalid OTP" });
       }
-  
+
       const { userId } = results[0];
       res.json({ message: "OTP verified successfully", userId });
     });
-  });
-  
+  } catch (error) {
+    console.error("Decryption error:", error);
+    res.status(400).json({ message: "Invalid data format" });
+  }
+});
+
 
 
 router.post("/resend-otp", async (req, res) => {
