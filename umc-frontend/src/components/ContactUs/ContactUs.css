@@ -97,6 +97,9 @@
 #contact-css .custom-email{
     word-break: break-word;
 }
+#contact-css .custom-contact-text{
+    color: #67748E;
+}
 
 @media (max-width:700px){
     #contact-css .card-header {
