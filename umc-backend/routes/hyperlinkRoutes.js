@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../config/db.js");
-
+const {verifyToken} = require('../middleware/jwtMiddleware.js');
 
 router.get("/hyperlink-policy", (req, res) => {
   const language = req.query.lang;
@@ -21,7 +21,7 @@ router.get("/hyperlink-policy", (req, res) => {
 });
 
 
-router.post("/hyperlink-policy", (req, res) => {
+router.post("/hyperlink-policy", verifyToken, (req, res) => {
   const { description, language_code } = req.body;
 
   const sql = "INSERT INTO hyperlinkpolicy (description, language_code) VALUES (?, ?)";
@@ -37,7 +37,7 @@ router.post("/hyperlink-policy", (req, res) => {
 });
 
 
-router.put("/hyperlink-policy/:id", (req, res) => {
+router.put("/hyperlink-policy/:id", verifyToken, (req, res) => {
   const { id } = req.params;
   const { description, language_code } = req.body;
   const sql = "UPDATE hyperlinkpolicy SET description = ?, language_code = ? WHERE id = ?";
@@ -53,7 +53,7 @@ router.put("/hyperlink-policy/:id", (req, res) => {
 });
 
 
-router.delete("/hyperlink-policy/:id", (req, res) => {
+router.delete("/hyperlink-policy/:id", verifyToken, (req, res) => {
   const { id } = req.params;
   const sql = "DELETE FROM hyperlinkpolicy WHERE id = ?";
   db.query(sql, [id], (err, result) => {

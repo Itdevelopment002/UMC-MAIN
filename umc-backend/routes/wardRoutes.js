@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../config/db.js");
-
+const {verifyToken} = require('../middleware/jwtMiddleware.js');
 
 router.get("/ward-info", (req, res) => {
   const language = req.query.lang;
@@ -38,7 +38,7 @@ router.get("/ward-info/:id", (req, res) => {
 });
 
 
-router.post("/ward-info", (req, res) => {
+router.post("/ward-info", verifyToken, (req, res) => {
   const { office, address, phone, email, language_code } = req.body;
   if (!office || !address || !phone || !email || !language_code) {
     return res.status(400).json({ message: "Office, Address, Phone and email are required" });
@@ -58,7 +58,7 @@ router.post("/ward-info", (req, res) => {
 });
 
 
-router.put("/ward-info/:id", (req, res) => {
+router.put("/ward-info/:id", verifyToken, (req, res) => {
   const { id } = req.params;
   const { office, address, phone, email, language_code } = req.body;
   if (!office || !address || !phone || !email || !language_code) {
@@ -77,7 +77,7 @@ router.put("/ward-info/:id", (req, res) => {
 });
 
 
-router.delete("/ward-info/:id", (req, res) => {
+router.delete("/ward-info/:id", verifyToken, (req, res) => {
   const { id } = req.params;
   const sql = "DELETE FROM wardinfo WHERE id = ?";
   db.query(sql, [id], (err, result) => {

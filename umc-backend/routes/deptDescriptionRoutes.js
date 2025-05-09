@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../config/db.js");
+const {verifyToken} = require('../middleware/jwtMiddleware.js');
 
 
 router.get("/department-description", (req, res) => {
@@ -66,7 +67,7 @@ router.get("/department-description/:id/sub-descriptions", (req, res) => {
 });
 
 
-router.post("/department-description", (req, res) => {
+router.post("/department-description", verifyToken, (req, res) => {
   const { department, description, subDescriptions, language_code } = req.body;
   const sql = "INSERT INTO deptdescription (department, description, language_code) VALUES (?, ?, ?)";
 
@@ -89,7 +90,7 @@ router.post("/department-description", (req, res) => {
 });
 
 
-router.put("/department-description/:id", (req, res) => {
+router.put("/department-description/:id", verifyToken, (req, res) => {
   const { department, description, subDescriptions, language_code } = req.body;
   const sql = "UPDATE deptdescription SET department = ?, description = ?, language_code = ? WHERE id = ?";
 
@@ -115,7 +116,7 @@ router.put("/department-description/:id", (req, res) => {
   });
 });
 
-router.delete("/department-description/:id", (req, res) => {
+router.delete("/department-description/:id", verifyToken, (req, res) => {
   const deleteSubDescriptionsSql = "DELETE FROM dept_subdescription WHERE dept_id = ?";
   db.query(deleteSubDescriptionsSql, [req.params.id], (err) => {
     if (err) throw err;

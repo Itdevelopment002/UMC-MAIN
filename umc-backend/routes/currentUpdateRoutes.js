@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../config/db.js");
-
+const {verifyToken} = require('../middleware/jwtMiddleware.js');
 
 router.get("/current-update", (req, res) => {
   const language = req.query.lang;
@@ -51,7 +51,7 @@ router.get("/current-update/:id?", (req, res) => {
 });
 
 
-router.post("/current-update", (req, res) => {
+router.post("/current-update", verifyToken, (req, res) => {
   const { description, language_code } = req.body;
 
   if (!description || !language_code) {
@@ -72,7 +72,7 @@ router.post("/current-update", (req, res) => {
 });
 
 
-router.put("/current-update/:id", (req, res) => {
+router.put("/current-update/:id", verifyToken, (req, res) => {
   const { description, language_code } = req.body;
   const sql = "UPDATE currentupdate SET description = ?, language_code= ? WHERE id = ?";
   db.query(sql, [description, language_code, req.params.id], (err, result) => {
@@ -82,7 +82,7 @@ router.put("/current-update/:id", (req, res) => {
 });
 
 
-router.delete("/current-update/:id", (req, res) => {
+router.delete("/current-update/:id", verifyToken, (req, res) => {
   const { id } = req.params;
 
   const sql = "DELETE FROM currentupdate WHERE id = ?";

@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../config/db.js");
-
+const {verifyToken} = require('../middleware/jwtMiddleware.js');
 
 router.get("/structure-tab1", (req, res) => {
   const language = req.query.lang;
@@ -20,7 +20,7 @@ router.get("/structure-tab1", (req, res) => {
 });
 
 
-router.post("/structure-tab1", (req, res) => {
+router.post("/structure-tab1", verifyToken, (req, res) => {
   const { heading1, heading2, language_code } = req.body;
   const sql = "INSERT INTO structuretab1 (heading1, heading2, language_code) VALUES (?, ?, ?)";
   db.query(sql, [heading1, heading2, language_code], (err, result) => {
@@ -30,7 +30,7 @@ router.post("/structure-tab1", (req, res) => {
 });
 
 
-router.put("/structure-tab1/:id", (req, res) => {
+router.put("/structure-tab1/:id", verifyToken, (req, res) => {
   const { heading1, heading2, language_code } = req.body;
   const sql = "UPDATE structuretab1 SET heading1 = ?, heading2 = ?, language_code = ? WHERE id = ?";
   db.query(sql, [heading1, heading2, language_code, req.params.id], (err, result) => {
@@ -40,7 +40,7 @@ router.put("/structure-tab1/:id", (req, res) => {
 });
 
 
-router.delete("/structure-tab1/:id", (req, res) => {
+router.delete("/structure-tab1/:id", verifyToken, (req, res) => {
   const sql = "DELETE FROM structuretab1 WHERE id = ?";
   db.query(sql, [req.params.id], (err, result) => {
     if (err) throw err;
