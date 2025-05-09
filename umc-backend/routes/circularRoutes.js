@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../config/db");
+const {verifyToken} = require('../middleware/jwtMiddleware.js');
 
 const convertToMySQLDate = (dateString) => {
   const [day, month, year] = dateString.split("-");
@@ -41,7 +42,7 @@ router.get("/circular-info/:id", (req, res) => {
 });
 
 
-router.post("/circular-info", (req, res) => {
+router.post("/circular-info", verifyToken, (req, res) => {
   const { description, number, publishDate, link, language_code } = req.body;
 
   const formattedDate = convertToMySQLDate(publishDate);
@@ -68,7 +69,7 @@ router.post("/circular-info", (req, res) => {
 });
 
 
-router.put("/circular-info/:id", (req, res) => {
+router.put("/circular-info/:id", verifyToken, (req, res) => {
   const { id } = req.params;
   const { description, number, publish_date, link, language_code } = req.body;
 
@@ -118,7 +119,7 @@ router.put("/circular-info/:id", (req, res) => {
 });
 
 
-router.delete("/circular-info/:id", (req, res) => {
+router.delete("/circular-info/:id", verifyToken, (req, res) => {
   const { id } = req.params;
 
   const deleteSql = "DELETE FROM circulars WHERE id = ?";

@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../config/db.js");
+const {verifyToken} = require('../middleware/jwtMiddleware.js');
 
 
 router.get("/celebration", (req, res) => {
@@ -24,7 +25,7 @@ router.get("/celebration/:id", (req, res) => {
 });
 
 
-router.put("/celebration/:id", (req, res) => {
+router.put("/celebration/:id", verifyToken, (req, res) => {
     const { id } = req.params;
     const { status } = req.body;
     const sql = "UPDATE celebration SET status = ? WHERE id = ?";

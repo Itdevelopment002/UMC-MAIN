@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../config/db.js");
+const {verifyToken} = require('../middleware/jwtMiddleware.js');
 
 const convertToMySQLDate = (dateString) => {
   const [day, month, year] = dateString.split("-");
@@ -26,7 +27,7 @@ router.get("/muncipal_meetings", (req, res) => {
 });
 
 
-router.post("/muncipal_meetings", (req, res) => {
+router.post("/muncipal_meetings", verifyToken, (req, res) => {
   const { name, year, pdf_link1, pdf_link2, pdf_link3, issue_date, language_code } = req.body;
   const formattedDate = convertToMySQLDate(issue_date);
   const sql =
@@ -46,7 +47,7 @@ router.post("/muncipal_meetings", (req, res) => {
 });
 
 
-router.put("/muncipal_meetings/:id", (req, res) => {
+router.put("/muncipal_meetings/:id", verifyToken, (req, res) => {
   const { name, year, pdf_link1, pdf_link2, pdf_link3, issue_date, language_code } = req.body;
   const formattedDate = issue_date ? convertToMySQLDate(issue_date) : null;
   const sql =
@@ -62,7 +63,7 @@ router.put("/muncipal_meetings/:id", (req, res) => {
 });
 
 
-router.delete("/muncipal_meetings/:id", (req, res) => {
+router.delete("/muncipal_meetings/:id", verifyToken, (req, res) => {
   const sql = "DELETE FROM muncipal_meeting WHERE id = ?";
   db.query(sql, [req.params.id], (err, result) => {
     if (err) throw err;

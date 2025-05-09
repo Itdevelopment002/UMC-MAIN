@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../config/db.js");
+const {verifyToken} = require('../middleware/jwtMiddleware.js');
 
 const convertToMySQLDate = (dateString) => {
   const [day, month, year] = dateString.split("-");
@@ -26,7 +27,7 @@ router.get("/agenda_data", (req, res) => {
 });
 
 
-router.post("/agenda_data", (req, res) => {
+router.post("/agenda_data", verifyToken, (req, res) => {
   const { Department_Name, Agenda_No_Date, Schedule_Date_of_Meeting, Adjournment_Notice,language_code, pdf_link } = req.body;
   const formattedDate = convertToMySQLDate(Schedule_Date_of_Meeting);
   const sql = `
@@ -49,7 +50,7 @@ router.post("/agenda_data", (req, res) => {
 });
 
 
-router.put("/agenda_data/:Sr_No", (req, res) => {
+router.put("/agenda_data/:Sr_No", verifyToken, (req, res) => {
   const { Department_Name, Agenda_No_Date, Schedule_Date_of_Meeting, Adjournment_Notice, pdf_link,language_code } = req.body;
   const formattedDate = Schedule_Date_of_Meeting ? convertToMySQLDate(Schedule_Date_of_Meeting) : null;
   const sql = `
@@ -71,7 +72,7 @@ router.put("/agenda_data/:Sr_No", (req, res) => {
 });
 
 
-router.delete("/agenda_data/:Sr_No", (req, res) => {
+router.delete("/agenda_data/:Sr_No", verifyToken, (req, res) => {
   const sql = "DELETE FROM agenda WHERE Sr_No = ?";
   db.query(sql, [req.params.Sr_No], (err, result) => {
     if (err) {

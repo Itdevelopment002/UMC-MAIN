@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../config/db");
+const {verifyToken} = require('../middleware/jwtMiddleware.js');
 
 const convertToMySQLDate = (dateString) => {
   const [day, month, year] = dateString.split("-");
@@ -34,7 +35,7 @@ router.get("/home-video/:id", (req, res) => {
 });
 
 
-router.put("/home-video/:id", (req, res) => {
+router.put("/home-video/:id", verifyToken, (req, res) => {
   const { id } = req.params;
   const { video_url } = req.body;
 
@@ -58,7 +59,7 @@ router.put("/home-video/:id", (req, res) => {
 });
 
 
-router.delete("/home-video/:id", (req, res) => {
+router.delete("/home-video/:id", verifyToken, (req, res) => {
   const { id } = req.params;
 
   const deleteSql = "DELETE FROM home_video WHERE id = ?";
