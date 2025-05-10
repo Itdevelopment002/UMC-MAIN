@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../config/db.js");
+const {verifyToken} = require('../middleware/jwtMiddleware.js');
 
 
 router.get("/location-info", (req, res) => {
@@ -21,7 +22,7 @@ router.get("/location-info", (req, res) => {
 });
 
 
-router.post("/location-info", (req, res) => {
+router.post("/location-info", verifyToken, (req, res) => {
   const { heading, description, type, language_code } = req.body;
 
   if (!type || !heading || !description || !language_code) {
@@ -39,7 +40,7 @@ router.post("/location-info", (req, res) => {
 });
 
 
-router.put("/location-info/:id", (req, res) => {
+router.put("/location-info/:id", verifyToken, (req, res) => {
   const { id } = req.params;
   const { heading, description, language_code } = req.body;
   const sql = "UPDATE location_info SET heading = ?, description = ?, language_code = ? WHERE id = ?";
@@ -53,7 +54,7 @@ router.put("/location-info/:id", (req, res) => {
 });
 
 
-router.delete("/location-info/:id", (req, res) => {
+router.delete("/location-info/:id", verifyToken, (req, res) => {
   const { id } = req.params;
   const sql = "DELETE FROM location_info WHERE id = ?";
   db.query(sql, [id], (err, result) => {

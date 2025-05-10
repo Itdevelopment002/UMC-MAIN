@@ -7,6 +7,7 @@ const cron = require("node-cron");
 // const bcrypt = require("bcrypt");
 const bcrypt = require("bcryptjs");
 const rateLimit = require('express-rate-limit');
+const {verifyToken} = require('../middleware/jwtMiddleware.js');
 
 // Configure nodemailer transporter
 const transporter = nodemailer.createTransport({
@@ -38,7 +39,7 @@ const otpRateLimiter = rateLimit({
   }
 });
 
-router.post('/reset-password', otpRateLimiter, async (req, res) => {
+router.post('/reset-password', verifyToken, otpRateLimiter, async (req, res) => {
   const { email } = req.body;
 
   // Check if email exists in the users table
@@ -105,7 +106,7 @@ cron.schedule("*/5 * * * *", () => {
 const CryptoJS = require('crypto-js');
 const SECRET_KEY = process.env.ENCRYPTION_KEY || "your-secret-key-here";
 
-router.post("/verify-otp", async (req, res) => {
+router.post("/verify-otp", verifyToken, async (req, res) => {
   try {
     const { data } = req.body;
     
@@ -145,7 +146,7 @@ router.post("/verify-otp", async (req, res) => {
 
 
 
-router.post("/resend-otp", async (req, res) => {
+router.post("/resend-otp", verifyToken, async (req, res) => {
   const { email } = req.body;
 
   // Check if email exists in the users table
@@ -227,7 +228,7 @@ const generateAndStoreOTP = (email, userId, res) => {
 
 
 // chnage Password
-router.post("/change-password", async (req, res) => {
+router.post("/change-password", verifyToken, async (req, res) => {
   const { userId, newPassword } = req.body;
 
   if (!userId || !newPassword) {
@@ -254,7 +255,7 @@ router.post("/change-password", async (req, res) => {
   }
 });
 
-router.delete("/delete-otp", (req, res) => {
+router.delete("/delete-otp", verifyToken, (req, res) => {
   const { email } = req.body; // Get email from the request body
 
   const deleteQuery = "DELETE FROM reset_pass WHERE email = ?";

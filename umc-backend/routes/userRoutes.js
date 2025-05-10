@@ -6,6 +6,7 @@ const router = express.Router();
 const db = require("../config/db.js");
 // const bcrypt = require("bcrypt");
 const bcrypt = require("bcryptjs");
+const {verifyToken} = require('../middleware/jwtMiddleware.js');
 
 
 const storage = multer.diskStorage({
@@ -52,17 +53,19 @@ router.get("/users/:id", (req, res) => {
     if (results.length === 0) {
       return res.status(404).json({ message: "User not found" });
     }
-    // Convert permission string to array
     const user = {
       ...results[0],
       permission: results[0].permission ? results[0].permission.split(",") : [],
     };
+    // Exclude the password field
+    delete user.password;
+
     res.json(user);
   });
 });
 
 // Add a new user
-router.post("/users", upload.single("userImage"), async (req, res) => {
+router.post("/users", verifyToken, upload.single("userImage"), async (req, res) => {
   const { username, fullname, role, email, password, permission } = req.body;
   const defaultImage = "uploads/image.jpg";
   const userImage = req.file ? `uploads/${req.file.filename}` : defaultImage;
@@ -101,7 +104,7 @@ router.post("/users", upload.single("userImage"), async (req, res) => {
 });
 
 // Update a user
-router.put("/users/:id", upload.single("userImage"), async (req, res) => {
+router.put("/users/:id", verifyToken, upload.single("userImage"), async (req, res) => {
   const { id } = req.params;
   const { fullname, email, role, permission, status, password } = req.body;
   const imagePath = req.file ? `uploads/${req.file.filename}` : null;
@@ -162,7 +165,7 @@ router.put("/users/:id", upload.single("userImage"), async (req, res) => {
 });
 
 // Update password alone
-router.patch("/users/:id/update-password", async (req, res) => {
+router.patch("/users/:id/update-password", verifyToken, async (req, res) => {
   const { id } = req.params;
   const { newPassword } = req.body;
 
@@ -188,7 +191,7 @@ router.patch("/users/:id/update-password", async (req, res) => {
 });
 
 // Verify password
-router.post("/users/:id/verify-password", async (req, res) => {
+router.post("/users/:id/verify-password", verifyToken, async (req, res) => {
   const { id } = req.params;
   const { password } = req.body;
 
@@ -221,7 +224,7 @@ router.post("/users/:id/verify-password", async (req, res) => {
 
 
 // Delete a user
-router.delete("/users/:id", (req, res) => {
+router.delete("/users/:id", verifyToken, (req, res) => {
   const { id } = req.params;
 
   const query = "DELETE FROM users WHERE id = ?";

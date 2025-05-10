@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../config/db.js");
+const {verifyToken} = require('../middleware/jwtMiddleware.js');
 
 
 router.get("/administration", (req, res) => {
@@ -21,7 +22,7 @@ router.get("/administration", (req, res) => {
 });
 
 
-router.post("/administration", (req, res) => {
+router.post("/administration", verifyToken, (req, res) => {
   const { name, designation, phone,language_code } = req.body;
   const sql = "INSERT INTO administration (name, designation,phone,language_code) VALUES (?, ?, ?, ?)";
   db.query(sql, [name, designation, phone,language_code], (err, result) => {
@@ -31,7 +32,7 @@ router.post("/administration", (req, res) => {
 });
 
 
-router.put("/administration/:id", (req, res) => {
+router.put("/administration/:id", verifyToken, (req, res) => {
   const { name, designation, phone, language_code } = req.body;
   const sql = "UPDATE administration SET name = ?, designation = ?, phone = ?, language_code = ? WHERE id = ?";
   db.query(sql, [name, designation, phone,language_code, req.params.id], (err, result) => {
@@ -41,7 +42,7 @@ router.put("/administration/:id", (req, res) => {
 });
 
 
-router.delete("/administration/:id", (req, res) => {
+router.delete("/administration/:id", verifyToken, (req, res) => {
   const sql = "DELETE FROM administration WHERE id = ?";
   db.query(sql, [req.params.id], (err, result) => {
     if (err) throw err;

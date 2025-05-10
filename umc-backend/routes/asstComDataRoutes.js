@@ -4,6 +4,7 @@ const path = require("path");
 const fs = require("fs");
 const router = express.Router();
 const db = require("../config/db.js");
+const {verifyToken} = require('../middleware/jwtMiddleware.js');
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -54,7 +55,7 @@ router.get("/asst-commissioner-data/:id", (req, res) => {
 });
 
 
-router.post("/asst-commissioner-data", upload.single("coImage"), (req, res) => {
+router.post("/asst-commissioner-data", verifyToken, upload.single("coImage"), (req, res) => {
   const { coName, designation, qualification, address, number, email, description, language_code } = req.body;
   if (!coName || !designation || !qualification || !address || !number || !email | !description || !language_code) {
     return res
@@ -78,7 +79,7 @@ router.post("/asst-commissioner-data", upload.single("coImage"), (req, res) => {
 });
 
 
-router.put("/asst-commissioner-data/:id", upload.single("coImage"), (req, res) => {
+router.put("/asst-commissioner-data/:id", verifyToken, upload.single("coImage"), (req, res) => {
   const { id } = req.params;
   const { coName, designation, qualification, address, number, email, description, language_code } = req.body;
 
@@ -163,7 +164,7 @@ router.put("/asst-commissioner-data/:id", upload.single("coImage"), (req, res) =
 });
 
 
-router.delete("/asst-commissioner-data/:id", (req, res) => {
+router.delete("/asst-commissioner-data/:id", verifyToken, (req, res) => {
   const { id } = req.params;
 
   const selectSql = "SELECT image_path FROM asst_commissioner_details WHERE id = ?";

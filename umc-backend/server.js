@@ -289,7 +289,7 @@ app.use('/api', adminNotificationRoutes);
 app.use('/api', notifyStatusRoutes);
 
 
-const PORT = process.env.PORT || 6002;
+const PORT = process.env.PORT || 5011;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });

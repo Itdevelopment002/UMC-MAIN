@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../config/db.js");
+const {verifyToken} = require('../middleware/jwtMiddleware.js');
 
 const convertToMySQLDate = (dateString) => {
   const [day, month, year] = dateString.split("-");
@@ -26,7 +27,7 @@ router.get("/sub-rti", (req, res) => {
 });
 
 
-router.post("/sub-rti", (req, res) => {
+router.post("/sub-rti", verifyToken, (req, res) => {
   const { description, link, issue_date, language_code } = req.body;
   const formattedDate = convertToMySQLDate(issue_date);
   const sql = "INSERT INTO subrti (description, link, issue_date, language_code) VALUES (?, ?, ?, ?)";
@@ -37,7 +38,7 @@ router.post("/sub-rti", (req, res) => {
 });
 
 
-router.put("/sub-rti/:id", (req, res) => {
+router.put("/sub-rti/:id", verifyToken, (req, res) => {
   const { description, link, issue_date, language_code } = req.body;
   const formattedDate = convertToMySQLDate(issue_date);
   const sql = "UPDATE subrti SET description = ?, link = ?, issue_date = ?, language_code = ? WHERE id = ?";
@@ -48,7 +49,7 @@ router.put("/sub-rti/:id", (req, res) => {
 });
 
 
-router.delete("/sub-rti/:id", (req, res) => {
+router.delete("/sub-rti/:id", verifyToken, (req, res) => {
   const sql = "DELETE FROM subrti WHERE id = ?";
   db.query(sql, [req.params.id], (err, result) => {
     if (err) throw err;

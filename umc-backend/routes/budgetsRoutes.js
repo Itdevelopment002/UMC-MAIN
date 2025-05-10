@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../config/db.js");
+const {verifyToken} = require('../middleware/jwtMiddleware.js');
 
 const convertToMySQLDate = (dateString) => {
   const [day, month, year] = dateString.split("-");
@@ -26,7 +27,7 @@ router.get("/budgets_data", (req, res) => {
 });
 
 
-router.post("/budgets_data", (req, res) => {
+router.post("/budgets_data", verifyToken, (req, res) => {
   const { year, heading, link , issue_date, language_code} = req.body;
   const formattedDate = convertToMySQLDate(issue_date);
   const sql = "INSERT INTO budgets (year, heading, link, issue_date, language_code) VALUES (?, ?, ?, ?, ?)";
@@ -37,7 +38,7 @@ router.post("/budgets_data", (req, res) => {
 });
 
 
-router.put("/budgets_data/:id", (req, res) => {
+router.put("/budgets_data/:id", verifyToken, (req, res) => {
   const { year, heading, link, issue_date, language_code } = req.body;
   const formattedDate = issue_date ? convertToMySQLDate(issue_date) : null;
   const sql = "UPDATE budgets SET year = ?, heading = ?, link = ?, issue_date = ?, language_code = ? WHERE id = ?";
@@ -48,7 +49,7 @@ router.put("/budgets_data/:id", (req, res) => {
 });
 
 
-router.delete("/budgets_data/:id", (req, res) => {
+router.delete("/budgets_data/:id", verifyToken, (req, res) => {
   const sql = "DELETE FROM budgets WHERE id = ?";
   db.query(sql, [req.params.id], (err, result) => {
     if (err) throw err;

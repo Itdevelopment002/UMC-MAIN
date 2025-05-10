@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../config/db.js");
+const {verifyToken} = require('../middleware/jwtMiddleware.js');
 
 
 router.get("/main-menus", (req, res) => {
@@ -48,7 +49,7 @@ router.get("/main-menus", (req, res) => {
 });
 
 
-router.post("/add-main-menu", (req, res) => {
+router.post("/add-main-menu", verifyToken, (req, res) => {
   const { menuItems } = req.body;
 
   if (!menuItems || menuItems.length === 0) {
@@ -106,7 +107,7 @@ router.post("/add-main-menu", (req, res) => {
 });
 
 
-router.put("/update-main-menu/:id", (req, res) => {
+router.put("/update-main-menu/:id", verifyToken, (req, res) => {
   const mainMenuId = req.params.id;
   const { mainMenu, mainMenuLink, subMenus, language_code } = req.body;
 
@@ -177,7 +178,7 @@ router.put("/update-main-menu/:id", (req, res) => {
 });
 
 
-router.delete("/delete-main-menu/:id", (req, res) => {
+router.delete("/delete-main-menu/:id", verifyToken, (req, res) => {
   const mainMenuId = req.params.id;
 
   const deleteSubMenuQuery = "DELETE FROM sub_menu WHERE mainMenuId = ?";
