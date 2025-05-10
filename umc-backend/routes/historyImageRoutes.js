@@ -4,6 +4,7 @@ const path = require('path');
 const fs = require('fs');
 const router = express.Router();
 const db = require('../config/db.js');
+const {verifyToken} = require('../middleware/jwtMiddleware.js');
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -70,7 +71,7 @@ router.get('/history-img/:id', (req, res) => {
 });
 
 
-router.post('/history-img', upload.single('image'), (req, res) => {
+router.post('/history-img', verifyToken, upload.single('image'), (req, res) => {
     if (!req.file) {
         return res.status(400).json({ message: 'No file uploaded' });
     }
@@ -95,7 +96,7 @@ router.post('/history-img', upload.single('image'), (req, res) => {
 });
 
 
-router.put('/history-img/:id', upload.single('image'), (req, res) => {
+router.put('/history-img/:id', verifyToken, upload.single('image'), (req, res) => {
     const { id } = req.params;
     const { photo_name } = req.body; 
 
@@ -151,7 +152,7 @@ router.put('/history-img/:id', upload.single('image'), (req, res) => {
 });
 
 
-router.delete('/history-img/:id', (req, res) => {
+router.delete('/history-img/:id', verifyToken, (req, res) => {
     const { id } = req.params;
 
     const selectSql = 'SELECT file_path FROM history_img WHERE id = ?';

@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const db = require("../config/db.js");
 router.use(express.json());
+const {verifyToken} = require('../middleware/jwtMiddleware.js');
 
 
 router.get("/admin-notifications", (req, res) => {
@@ -15,7 +16,7 @@ router.get("/admin-notifications", (req, res) => {
 });
 
 
-router.post("/admin-notifications", (req, res) => {
+router.post("/admin-notifications", verifyToken, (req, res) => {
   const { new_id, description, role, name, date, time, remark } = req.body;
 
   if (!new_id || !description || !role || !name || !date || !time) {
@@ -47,7 +48,7 @@ router.post("/admin-notifications", (req, res) => {
 });
 
 
-router.put("/admin-notifications/:id", (req, res) => {
+router.put("/admin-notifications/:id", verifyToken, (req, res) => {
   const { id } = req.params;
   const { remark } = req.body;
 
@@ -68,7 +69,7 @@ router.put("/admin-notifications/:id", (req, res) => {
 });
 
 
-router.delete("/admin-notifications/:id", (req, res) => {
+router.delete("/admin-notifications/:id", verifyToken, (req, res) => {
   const { id } = req.params;
   const query = "DELETE FROM admin_notification WHERE id = ?";
   db.query(query, [id], (err, results) => {

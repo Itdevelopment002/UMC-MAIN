@@ -4,6 +4,7 @@ const path = require("path");
 const fs = require("fs");
 const router = express.Router();
 const db = require("../config/db.js");
+const {verifyToken} = require('../middleware/jwtMiddleware.js');
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -74,7 +75,7 @@ router.get("/hod-details/:id?", (req, res) => {
 });
 
 
-router.post("/hod-details", upload.single("hodImage"), (req, res) => {
+router.post("/hod-details", verifyToken, upload.single("hodImage"), (req, res) => {
   if (!req.file) {
     return res.status(400).json({ message: "No file uploaded" });
   }
@@ -99,7 +100,7 @@ router.post("/hod-details", upload.single("hodImage"), (req, res) => {
 });
 
 
-router.put("/hod-details/:id", upload.single("hodImage"), (req, res) => {
+router.put("/hod-details/:id", verifyToken, upload.single("hodImage"), (req, res) => {
   const { id } = req.params;
   const { department, name, designation, education, address, number, email, language_code } = req.body;
 
@@ -197,7 +198,7 @@ router.put("/hod-details/:id", upload.single("hodImage"), (req, res) => {
 });
 
 
-router.delete("/hod-details/:id", (req, res) => {
+router.delete("/hod-details/:id", verifyToken, (req, res) => {
   const { id } = req.params;
 
   const selectSql = "SELECT file_path FROM depthod WHERE id = ?";

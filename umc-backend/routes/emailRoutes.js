@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const nodemailer = require("nodemailer");
 require("dotenv").config();
+const {verifyToken} = require('../middleware/jwtMiddleware.js');
 
 const transporter = nodemailer.createTransport({
   service: "gmail",
@@ -41,7 +42,7 @@ const createEmailTemplate = (data) => {
 };
 
 
-router.post("/email", async (req, res) => {
+router.post("/email", verifyToken, async (req, res) => {
   const { rating, opinion, comment } = req.body;
 
   if (!rating || !opinion || !comment) {
