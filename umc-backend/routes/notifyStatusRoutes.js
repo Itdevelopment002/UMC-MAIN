@@ -1,9 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../config/db.js");
+const {verifyToken} = require('../middleware/jwtMiddleware.js');
 
-
-router.put("/edit_:name/:id", (req, res) => {
+router.put("/edit_:name/:id", verifyToken, (req, res) => {
   const { name, id } = req.params;
   const { status } = req.body;
 

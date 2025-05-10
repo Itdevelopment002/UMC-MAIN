@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../config/db.js");
-
+const {verifyToken} = require('../middleware/jwtMiddleware.js');
 
 router.get("/women-committee", (req, res) => {
   const language = req.query.lang;
@@ -21,7 +21,7 @@ router.get("/women-committee", (req, res) => {
 });
 
 
-router.post("/women-committee", (req, res) => {
+router.post("/women-committee", verifyToken, (req, res) => {
   const { heading, language_code } = req.body;
   const sql = "INSERT INTO womencommittee (heading, language_code) VALUES (?, ?)";
   db.query(sql, [heading, language_code], (err, result) => {
@@ -31,7 +31,7 @@ router.post("/women-committee", (req, res) => {
 });
 
 
-router.put("/women-committee/:id", (req, res) => {
+router.put("/women-committee/:id", verifyToken, (req, res) => {
   const { heading, language_code } = req.body;
   const sql = "UPDATE womencommittee SET heading = ?, language_code = ? WHERE id = ?";
   db.query(sql, [heading, language_code, req.params.id], (err, result) => {
@@ -41,7 +41,7 @@ router.put("/women-committee/:id", (req, res) => {
 });
 
 
-router.delete("/women-committee/:id", (req, res) => {
+router.delete("/women-committee/:id", verifyToken, (req, res) => {
   const sql = "DELETE FROM womencommittee WHERE id = ?";
   db.query(sql, [req.params.id], (err, result) => {
     if (err) throw err;

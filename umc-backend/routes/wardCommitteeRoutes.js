@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../config/db.js");
-
+const {verifyToken} = require('../middleware/jwtMiddleware.js');
 
 router.get("/ward-committee", (req, res) => {
   const language = req.query.lang;
@@ -21,7 +21,7 @@ router.get("/ward-committee", (req, res) => {
 });
 
 
-router.post("/ward-committee", (req, res) => {
+router.post("/ward-committee", verifyToken, (req, res) => {
   const { ward, heading , language_code} = req.body;
   const sql = "INSERT INTO wardcommittee (ward, heading, language_code) VALUES (?, ?, ?)";
   db.query(sql, [ward, heading, language_code], (err, result) => {
@@ -31,7 +31,7 @@ router.post("/ward-committee", (req, res) => {
 });
 
 
-router.put("/ward-committee/:id", (req, res) => {
+router.put("/ward-committee/:id", verifyToken, (req, res) => {
   const { ward, heading, language_code } = req.body;
   const sql = "UPDATE wardcommittee SET ward = ?, heading = ?, language_code = ? WHERE id = ?";
   db.query(sql, [ward, heading, language_code, req.params.id], (err, result) => {
@@ -41,7 +41,7 @@ router.put("/ward-committee/:id", (req, res) => {
 });
 
 
-router.delete("/ward-committee/:id", (req, res) => {
+router.delete("/ward-committee/:id", verifyToken, (req, res) => {
   const sql = "DELETE FROM wardcommittee WHERE id = ?";
   db.query(sql, [req.params.id], (err, result) => {
     if (err) throw err;

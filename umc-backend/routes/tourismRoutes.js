@@ -4,6 +4,7 @@ const path = require("path");
 const fs = require("fs");
 const router = express.Router();
 const db = require("../config/db.js");
+const {verifyToken} = require('../middleware/jwtMiddleware.js');
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -69,7 +70,7 @@ router.get("/tourism/name/:name", (req, res) => {
 });
 
 
-router.post("/tourism", uploadFields, (req, res) => {
+router.post("/tourism", verifyToken, uploadFields, (req, res) => {
   const { name, address, hours, description, locationLink, language_code } = req.body;
 
   if (!name || !address || !hours || !description || !locationLink || !language_code || !req.files.main_image) {
@@ -103,7 +104,7 @@ router.post("/tourism", uploadFields, (req, res) => {
 });
 
 
-router.put("/tourism/:id", uploadFields, (req, res) => {
+router.put("/tourism/:id", verifyToken, uploadFields, (req, res) => {
   const { id } = req.params;
   const { name, address, hours, description, locationLink, language_code } = req.body;
 
@@ -168,7 +169,7 @@ router.put("/tourism/:id", uploadFields, (req, res) => {
 });
 
 
-router.delete("/tourism/:id", (req, res) => {
+router.delete("/tourism/:id", verifyToken, (req, res) => {
   const { id } = req.params;
 
   const selectSql = "SELECT gallery, main_image FROM ad_tourism WHERE id = ?";

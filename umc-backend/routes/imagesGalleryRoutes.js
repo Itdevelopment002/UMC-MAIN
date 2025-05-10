@@ -4,6 +4,7 @@ const path = require("path");
 const fs = require("fs");
 const router = express.Router();
 const db = require("../config/db.js");
+const {verifyToken} = require('../middleware/jwtMiddleware.js');
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -37,7 +38,7 @@ router.get("/categories", (req, res) => {
 });
 
 
-router.post("/categories", (req, res) => {
+router.post("/categories", verifyToken, (req, res) => {
   const { categoryName, language_code } = req.body;
   if (!categoryName || !language_code) return res.status(400).json({ error: "Category name is required" });
 
@@ -48,7 +49,7 @@ router.post("/categories", (req, res) => {
 });
 
 
-router.put("/categories/:id", (req, res) => {
+router.put("/categories/:id", verifyToken, (req, res) => {
   const { id } = req.params;
   const { name, language_code } = req.body;
 
@@ -63,7 +64,7 @@ router.put("/categories/:id", (req, res) => {
 });
 
 
-router.delete("/categories/:id", (req, res) => {
+router.delete("/categories/:id", verifyToken, (req, res) => {
   const { id } = req.params;
 
   db.query("DELETE FROM categories WHERE id = ?", [id], (err, result) => {
@@ -83,7 +84,7 @@ router.get("/category-images/:category_id", (req, res) => {
 });
 
 
-router.post("/category-images", upload.single("image"), (req, res) => {
+router.post("/category-images", verifyToken, upload.single("image"), (req, res) => {
   const { category_id } = req.body;
   const image_url = req.file ? `/uploads/${req.file.filename}` : null;
 
@@ -97,7 +98,7 @@ router.post("/category-images", upload.single("image"), (req, res) => {
   });
 });
 
-router.put("/category-images/:id", upload.single("image"), (req, res) => {
+router.put("/category-images/:id", verifyToken, upload.single("image"), (req, res) => {
   const { id } = req.params;
 
   if (!req.file) return res.status(400).json({ error: "Image upload required" });
@@ -124,7 +125,7 @@ router.put("/category-images/:id", upload.single("image"), (req, res) => {
 });
 
 
-router.delete("/category-images/:id", (req, res) => {
+router.delete("/category-images/:id", verifyToken, (req, res) => {
   const { id } = req.params;
 
   db.query("SELECT image_url FROM category_images WHERE id = ?", [id], (err, results) => {
