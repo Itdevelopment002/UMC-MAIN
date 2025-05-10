@@ -4,6 +4,7 @@ const path = require("path");
 const fs = require("fs").promises;
 const router = express.Router();
 const db = require("../config/db.js");
+const {verifyToken} = require('../middleware/jwtMiddleware.js');
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -65,7 +66,7 @@ router.get("/projects/:id", (req, res) => {
 
 
 router.post(
-  "/projects",
+  "/projects", verifyToken,
   upload.fields([{ name: "mainIcon" }]),
   async (req, res) => {
     const { heading, description, link, language_code } = req.body;
@@ -107,7 +108,7 @@ router.post(
 
 
 router.put(
-  "/projects/:id",
+  "/projects/:id", verifyToken,
   upload.fields([{ name: "mainIcon" }]),
   async (req, res) => {
     const { id } = req.params;
@@ -195,7 +196,7 @@ router.put(
 );
 
 
-router.delete("/projects/:id", async (req, res) => {
+router.delete("/projects/:id", verifyToken, async (req, res) => {
   const { id } = req.params;
 
   const selectSql =

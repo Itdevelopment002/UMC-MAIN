@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../config/db.js");
-
+const {verifyToken} = require('../middleware/jwtMiddleware.js');
 
 router.get("/video-categories", (req, res) => {
     const language = req.query.lang;
@@ -20,7 +20,7 @@ router.get("/video-categories", (req, res) => {
 });
 
 
-router.post("/video-categories", (req, res) => {
+router.post("/video-categories", verifyToken, (req, res) => {
     const { categoryName, language_code } = req.body;
     if (!categoryName || !language_code) return res.status(400).json({ error: "Category name and language code are required" });
 
@@ -31,7 +31,7 @@ router.post("/video-categories", (req, res) => {
 });
 
 
-router.put("/video-categories/:id", (req, res) => {
+router.put("/video-categories/:id", verifyToken, (req, res) => {
     const { id } = req.params;
     const { name, language_code } = req.body;
 
@@ -46,7 +46,7 @@ router.put("/video-categories/:id", (req, res) => {
 });
 
 
-router.delete("/video-categories/:id", (req, res) => {
+router.delete("/video-categories/:id", verifyToken, (req, res) => {
     const { id } = req.params;
 
     db.query("DELETE FROM videocategories WHERE id = ?", [id], (err, result) => {
@@ -66,7 +66,7 @@ router.get("/category-videos/:category_id", (req, res) => {
 });
 
 
-router.post("/category-videos", (req, res) => {
+router.post("/category-videos", verifyToken, (req, res) => {
     const { category_id, link } = req.body;
 
     if (!link) {
@@ -80,7 +80,7 @@ router.post("/category-videos", (req, res) => {
 });
 
 
-router.put("/category-videos/:id", (req, res) => {
+router.put("/category-videos/:id", verifyToken, (req, res) => {
     const { video_url } = req.body;
     const sql = "UPDATE category_videos SET video_url = ? WHERE id = ?";
     db.query(sql, [video_url, req.params.id], (err, result) => {
@@ -90,7 +90,7 @@ router.put("/category-videos/:id", (req, res) => {
 });
 
 
-router.delete("/category-videos/:id", (req, res) => {
+router.delete("/category-videos/:id", verifyToken, (req, res) => {
     const { id } = req.params;
 
     db.query("DELETE FROM category_videos WHERE id = ?", [id], (err, result) => {

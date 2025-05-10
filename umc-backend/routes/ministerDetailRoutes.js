@@ -4,6 +4,7 @@ const path = require("path");
 const fs = require("fs");
 const router = express.Router();
 const db = require("../config/db.js");
+const {verifyToken} = require('../middleware/jwtMiddleware.js');
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -65,7 +66,7 @@ router.get("/minister-details/:id?", (req, res) => {
 });
 
 
-router.post("/minister-details", upload.single("image"), (req, res) => {
+router.post("/minister-details", verifyToken, upload.single("image"), (req, res) => {
   const { name, designation, language_code } = req.body;
 
   if (!name || !designation || !language_code) {
@@ -90,7 +91,7 @@ router.post("/minister-details", upload.single("image"), (req, res) => {
 });
 
 
-router.put("/minister-details/:id", upload.single("image"), (req, res) => {
+router.put("/minister-details/:id", verifyToken, upload.single("image"), (req, res) => {
   const { id } = req.params;
   const { name, designation, language_code } = req.body;
 
@@ -163,7 +164,7 @@ router.put("/minister-details/:id", upload.single("image"), (req, res) => {
 });
 
 
-router.delete("/minister-details/:id", (req, res) => {
+router.delete("/minister-details/:id", verifyToken, (req, res) => {
   const { id } = req.params;
 
   const selectSql = "SELECT image_path FROM minister WHERE id = ?";

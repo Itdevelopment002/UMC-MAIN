@@ -4,6 +4,7 @@ const path = require("path");
 const fs = require("fs");
 const router = express.Router();
 const db = require("../config/db.js");
+const {verifyToken} = require('../middleware/jwtMiddleware.js');
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -50,7 +51,7 @@ router.get("/bottom-sliders/:id", (req, res) => {
 });
 
 
-router.post("/bottom-sliders", upload.single("websitelogo"), (req, res) => {
+router.post("/bottom-sliders", verifyToken, upload.single("websitelogo"), (req, res) => {
   const { websitelink } = req.body;
 
   if (!req.file) {
@@ -76,7 +77,7 @@ router.post("/bottom-sliders", upload.single("websitelogo"), (req, res) => {
 });
 
 
-router.put("/bottom-sliders/:id", upload.single("websitelogo"), (req, res) => {
+router.put("/bottom-sliders/:id", verifyToken, upload.single("websitelogo"), (req, res) => {
   const { id } = req.params;
   const { websitelink } = req.body;
 
@@ -133,7 +134,7 @@ router.put("/bottom-sliders/:id", upload.single("websitelogo"), (req, res) => {
 });
 
 
-router.delete("/bottom-sliders/:id", (req, res) => {
+router.delete("/bottom-sliders/:id", verifyToken, (req, res) => {
   const { id } = req.params;
 
   const selectSql = "SELECT websitelogo FROM bottom_slider WHERE id = ?";

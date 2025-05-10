@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../config/db.js");
+const {verifyToken} = require('../middleware/jwtMiddleware.js');
 
 const convertToMySQLDate = (dateString) => {
   const [day, month, year] = dateString.split("-");
@@ -26,7 +27,7 @@ router.get("/property-dept", (req, res) => {
 });
 
 
-router.post("/property-dept", (req, res) => {
+router.post("/property-dept", verifyToken, (req, res) => {
   const { description, link, issue_date, language_code } = req.body;
   const formattedDate = convertToMySQLDate(issue_date);
   const sql = "INSERT INTO property_dept (description, link, issue_date, language_code) VALUES (?, ?, ?, ?)";
@@ -37,7 +38,7 @@ router.post("/property-dept", (req, res) => {
 });
 
 
-router.put("/property-dept/:id", (req, res) => {
+router.put("/property-dept/:id", verifyToken, (req, res) => {
   const { description, link, issue_date, language_code } = req.body;
   const formattedDate = issue_date ? convertToMySQLDate(issue_date) : null;
   const sql = "UPDATE property_dept SET description = ?, link = ?, issue_date = ?, language_code = ? WHERE id = ?";
@@ -48,7 +49,7 @@ router.put("/property-dept/:id", (req, res) => {
 });
 
 
-router.delete("/property-dept/:id", (req, res) => {
+router.delete("/property-dept/:id", verifyToken, (req, res) => {
   const sql = "DELETE FROM property_dept WHERE id = ?";
   db.query(sql, [req.params.id], (err, result) => {
     if (err) throw err;

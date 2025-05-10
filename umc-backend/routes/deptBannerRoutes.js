@@ -4,6 +4,8 @@ const path = require("path");
 const fs = require("fs");
 const router = express.Router();
 const db = require("../config/db.js");
+const {verifyToken} = require('../middleware/jwtMiddleware.js');
+
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -57,7 +59,7 @@ router.get("/department-banner/:id", (req, res) => {
 });
 
 
-router.post("/department-banner", upload.single("bannerImage"), (req, res) => {
+router.post("/department-banner", verifyToken, upload.single("bannerImage"), (req, res) => {
   if (!req.file) {
     return res.status(400).json({ message: "No file uploaded" });
   }
@@ -82,7 +84,7 @@ router.post("/department-banner", upload.single("bannerImage"), (req, res) => {
 });
 
 
-router.put("/department-banner/:id", upload.single("bannerImage"), (req, res) => {
+router.put("/department-banner/:id", verifyToken, upload.single("bannerImage"), (req, res) => {
   const { id } = req.params;
   const { name } = req.body;
 
@@ -138,7 +140,7 @@ router.put("/department-banner/:id", upload.single("bannerImage"), (req, res) =>
 });
 
 
-router.delete("/department-banner/:id", (req, res) => {
+router.delete("/department-banner/:id", verifyToken, (req, res) => {
   const { id } = req.params;
 
   const selectSql = "SELECT file_path FROM deptbanner WHERE id = ?";

@@ -4,6 +4,7 @@ const path = require("path");
 const fs = require("fs");
 const router = express.Router();
 const db = require("../config/db.js");
+const {verifyToken} = require('../middleware/jwtMiddleware.js');
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -58,7 +59,7 @@ router.get("/project-category/heading/:heading", (req, res) => {
 });
 
 
-router.post("/project-category", upload.array("images"), (req, res) => {
+router.post("/project-category", verifyToken, upload.array("images"), (req, res) => {
   const { heading, language_code } = req.body;
 
   if (!heading || !language_code) {
@@ -85,7 +86,7 @@ router.post("/project-category", upload.array("images"), (req, res) => {
 });
 
 
-router.put("/project-category/:id", upload.array("images"), (req, res) => {
+router.put("/project-category/:id", verifyToken, upload.array("images"), (req, res) => {
   const { id } = req.params;
   const { heading, language_code } = req.body;
 
@@ -125,7 +126,7 @@ router.put("/project-category/:id", upload.array("images"), (req, res) => {
 });
 
 
-router.delete("/project-category/:id", (req, res) => {
+router.delete("/project-category/:id", verifyToken, (req, res) => {
   const { id } = req.params;
 
   const selectSql = "SELECT images FROM project_images WHERE id = ?";

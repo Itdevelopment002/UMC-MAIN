@@ -4,6 +4,7 @@ const path = require("path");
 const fs = require("fs");
 const router = express.Router();
 const db = require("../config/db.js");
+const {verifyToken} = require('../middleware/jwtMiddleware.js');
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -54,7 +55,7 @@ router.get("/contact-info/:id", (req, res) => {
 });
 
 
-router.post("/contact-info", upload.single("contactIcon"), (req, res) => {
+router.post("/contact-info", verifyToken, upload.single("contactIcon"), (req, res) => {
   const { heading, description, language_code } = req.body;
 
   if (!heading || !description || !language_code) {
@@ -78,7 +79,7 @@ router.post("/contact-info", upload.single("contactIcon"), (req, res) => {
 });
 
 
-router.put("/contact-info/:id", upload.single("contactIcon"), (req, res) => {
+router.put("/contact-info/:id", verifyToken, upload.single("contactIcon"), (req, res) => {
   const { id } = req.params;
   const { heading, description, language_code } = req.body;
 
@@ -152,7 +153,7 @@ router.put("/contact-info/:id", upload.single("contactIcon"), (req, res) => {
 });
 
 
-router.delete("/contact-info/:id", (req, res) => {
+router.delete("/contact-info/:id", verifyToken, (req, res) => {
   const { id } = req.params;
 
   const selectSql = "SELECT image_path FROM contactinfo WHERE id = ?";

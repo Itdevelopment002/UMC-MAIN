@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../config/db.js");
-
+const {verifyToken} = require('../middleware/jwtMiddleware.js');
 
 router.get("/structure-tab4", (req, res) => {
     const language = req.query.lang;
@@ -23,7 +23,7 @@ router.get("/structure-tab4", (req, res) => {
 });
 
 
-router.post("/structure-tab4", (req, res) => {
+router.post("/structure-tab4", verifyToken, (req, res) => {
     const { ward, officer, language_code } = req.body;
 
     if (!ward || !officer || !language_code) {
@@ -41,7 +41,7 @@ router.post("/structure-tab4", (req, res) => {
 });
 
 
-router.put("/structure-tab4/:id", (req, res) => {
+router.put("/structure-tab4/:id", verifyToken, (req, res) => {
     const { ward, officer, language_code } = req.body;
     const id = req.params.id;
 
@@ -60,7 +60,7 @@ router.put("/structure-tab4/:id", (req, res) => {
 });
 
 
-router.delete("/structure-tab4/:id", (req, res) => {
+router.delete("/structure-tab4/:id", verifyToken, (req, res) => {
     const sql = "DELETE FROM structuretab4 WHERE id = ?";
     db.query(sql, [req.params.id], (err, result) => {
         if (err) {

@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../config/db.js");
+const {verifyToken} = require('../middleware/jwtMiddleware.js');
 
 
 router.get("/notification", (req, res) => {
@@ -26,7 +27,7 @@ router.get("/notification/:id", (req, res) => {
 });
 
 
-router.post("/notification", (req, res) => {
+router.post("/notification", verifyToken, (req, res) => {
   const { heading, description, role, readed } = req.body;
 
   if (!heading || !description || !role) {
@@ -49,7 +50,7 @@ router.post("/notification", (req, res) => {
 });
 
 
-router.put("/update/:id", (req, res) => {
+router.put("/update/:id", verifyToken, (req, res) => {
   const notificationId = req.params.id;
   const { readed } = req.body;
 
@@ -69,7 +70,7 @@ router.put("/update/:id", (req, res) => {
 });
 
 
-router.delete("/notification/:id", (req, res) => {
+router.delete("/notification/:id", verifyToken, (req, res) => {
   const { id } = req.params;
   const sql = "DELETE FROM notification WHERE id = ?";
   db.query(sql, [id], (err) => {
