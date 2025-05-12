@@ -5,6 +5,7 @@ import "glightbox/dist/css/glightbox.min.css";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import api, { baseURL } from "../api";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import './AddUsers.css'
 
 const Users = () => {
@@ -18,6 +19,15 @@ const Users = () => {
   const [selectedUserForPasswordChange, setSelectedUserForPasswordChange] = useState(null);
   const [newPassword, setNewPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [passwordStrength, setPasswordStrength] = useState({
+    length: false,
+    upper: false,
+    lower: false,
+    number: false,
+    special: false,
+    notCommon: true,
+    notContextual: true
+  });
 
   useEffect(() => {
     fetchDepartments();
@@ -89,9 +99,96 @@ const Users = () => {
     setNewPassword("");
   };
 
+  const commonPasswords = [
+    'password', '123456', '12345678', '1234', 'qwerty', '12345',
+    'dragon', 'baseball', 'football', 'letmein', 'monkey'
+  ];
+
+  useEffect(() => {
+    if (newPassword) {
+      checkPasswordStrength(newPassword);
+    }
+  }, [newPassword]);
+
+  const checkPasswordStrength = (pwd) => {
+    const hasMinLength = pwd.length >= 8;
+    const hasUpper = /[A-Z]/.test(pwd);
+    const hasLower = /[a-z]/.test(pwd);
+    const hasNumber = /[0-9]/.test(pwd);
+    const hasSpecial = /[@$!%*?&]/.test(pwd);
+    const isNotCommon = !commonPasswords.includes(pwd.toLowerCase());
+    const isNotContextual = selectedUserForPasswordChange &&
+      !pwd.toLowerCase().includes(selectedUserForPasswordChange.fullname.toLowerCase()) &&
+      !pwd.toLowerCase().includes(selectedUserForPasswordChange.email.split('@')[0].toLowerCase());
+
+    setPasswordStrength({
+      length: hasMinLength,
+      upper: hasUpper,
+      lower: hasLower,
+      number: hasNumber,
+      special: hasSpecial,
+      notCommon: isNotCommon,
+      notContextual: isNotContextual
+    });
+  };
+
+  const getPasswordStrength = () => {
+    const { length, upper, lower, number, special, notCommon, notContextual } = passwordStrength;
+
+    if (!length || !upper || !lower || !number || !special || !notCommon || !notContextual) {
+      return { message: "❌ Weak password - doesn't meet all requirements", color: "danger" };
+    }
+
+    return { message: "✅ Strong password - meets all requirements", color: "success" };
+  };
+
+  const validatePassword = () => {
+    const { length, upper, lower, number, special, notCommon, notContextual } = passwordStrength;
+    return length && upper && lower && number && special && notCommon && notContextual;
+  };
+
+  const renderPasswordRequirements = () => {
+    const { length, upper, lower, number, special, notCommon, notContextual } = passwordStrength;
+
+    return (
+      <div className="password-requirements mt-2">
+        <small>Password must meet these requirements:</small>
+        <ul className="list-unstyled">
+          <li className={length ? "text-success" : "text-danger"}>
+            {length ? "✓" : "✗"} At least 8 characters
+          </li>
+          <li className={upper ? "text-success" : "text-danger"}>
+            {upper ? "✓" : "✗"} At least one uppercase letter
+          </li>
+          <li className={lower ? "text-success" : "text-danger"}>
+            {lower ? "✓" : "✗"} At least one lowercase letter
+          </li>
+          <li className={number ? "text-success" : "text-danger"}>
+            {number ? "✓" : "✗"} At least one number
+          </li>
+          <li className={special ? "text-success" : "text-danger"}>
+            {special ? "✓" : "✗"} At least one special character (@$!%*?&)
+          </li>
+          <li className={notCommon ? "text-success" : "text-danger"}>
+            {notCommon ? "✓" : "✗"} Not a common password
+          </li>
+          <li className={notContextual ? "text-success" : "text-danger"}>
+            {notContextual ? "✓" : "✗"} Doesn't contain user's name or email
+          </li>
+        </ul>
+      </div>
+    );
+  };
+
+
   const handleChangePasswordSubmit = async () => {
     if (!newPassword) {
       toast.error("Please enter a new password.");
+      return;
+    }
+
+    if (!validatePassword()) {
+      toast.error("Password doesn't meet all requirements.");
       return;
     }
 
@@ -563,28 +660,35 @@ const Users = () => {
               <div className="modal-dialog modal-dialog-centered">
                 <div className="modal-content">
                   <div className="modal-header">
-                    <h5 className="modal-title">Change Password</h5>
+                    <h5 className="modal-title">Change Password for {selectedUserForPasswordChange?.fullname}</h5>
                   </div>
                   <div className="modal-body">
                     <form>
                       <div className="form-group">
                         <label>New Password</label>
-                        <div className="input-group">
+                        <div className="input-group position-relative">
                           <input
                             type={showPassword ? "text" : "password"}
-                            className="form-control"
+                            className="form-control form-control-md"
                             value={newPassword}
                             onChange={(e) => setNewPassword(e.target.value)}
                             placeholder="Enter new password"
+                            style={{ paddingRight: "35px" }}
                           />
                           <span
-                            className="input-group-text"
+                            className="position-absolute end-0 translate-middle-y me-2"
+                            style={{ cursor: "pointer", right: "10px", top: "12px" }}
                             onClick={() => setShowPassword(!showPassword)}
-                            style={{ cursor: "pointer" }}
                           >
-                            <i className={`fas ${showPassword ? "fa-eye-slash" : "fa-eye"}`}></i>
+                            {showPassword ? <FaEyeSlash /> : <FaEye />}
                           </span>
                         </div>
+                        {newPassword && (
+                          <small className={`text-${getPasswordStrength().color}`}>
+                            {getPasswordStrength().message}
+                          </small>
+                        )}
+                        {newPassword && renderPasswordRequirements()}
                       </div>
                     </form>
                   </div>
@@ -600,6 +704,7 @@ const Users = () => {
                       type="button"
                       className="btn btn-sm btn-primary"
                       onClick={handleChangePasswordSubmit}
+                      disabled={!newPassword || !validatePassword()}
                     >
                       Update Password
                     </button>
