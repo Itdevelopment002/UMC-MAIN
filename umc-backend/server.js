@@ -10,6 +10,7 @@ app.use(bodyParser.json());
 
 {/* Main Menu */}
 const mainMenuRoutes = require('./routes/mainMenuRoutes');
+<<<<<<< HEAD
 
 {/* Home */}
 const ministerDetailRoutes = require('./routes/ministerDetailRoutes');
@@ -32,6 +33,30 @@ const pressNotesRoutes = require('./routes/pressNotesRoutes');
 const propertyDeptRoutes = require('./routes/propertyDeptRoutes');
 const empInfoRoutes = require('./routes/empInfoRoutes');
 
+=======
+
+{/* Home */}
+const ministerDetailRoutes = require('./routes/ministerDetailRoutes');
+const sliderRoutes = require('./routes/sliderRoutes');
+const currentUpdateRoutes = require('./routes/currentUpdateRoutes') ;
+const umcNewsRoutes = require('./routes/umcNewsRoutes');
+const initiativeRoutes = require('./routes/initiativeRoutes');
+const eServicesRoutes = require('./routes/eServicesRoutes');
+const informationRoutes = require('./routes/informationRoutes');
+const citizenServicesRoutes = require('./routes/citizenServicesRoutes');
+const homeVideosRoutes = require('./routes/homeVideosRoutes');
+const homeGalleryRoutes = require('./routes/homeGalleryRoutes');
+const portalServicesRoutes = require('./routes/portalServicesRoutes');
+const emergencyServicesRoutes = require('./routes/emergencyServicesRoutes');
+const homeService1Routes = require('./routes/homeService1Routes');
+const homeServices2Routes = require('./routes/homeServices2Routes');
+const bottomSliderRoutes = require('./routes/bottomSliderRoutes');
+const swmsRoutes = require('./routes/swmsRoutes');
+const pressNotesRoutes = require('./routes/pressNotesRoutes');
+const propertyDeptRoutes = require('./routes/propertyDeptRoutes');
+const empInfoRoutes = require('./routes/empInfoRoutes');
+
+>>>>>>> 6e99625f0c6384061908f773ee4cd7a641a0f470
 {/* About UMC */}
 const locationRoutes = require('./routes/locationRoutes');
 const commissionerDataRoutes = require('./routes/commissionerDataRoutes');
@@ -145,6 +170,141 @@ const visitorRoutes = require('./routes/visitorRoutes');
 
 {/* Main Menu */}
 app.use('/api', mainMenuRoutes);
+<<<<<<< HEAD
+=======
+
+{/* Home */}
+app.use('/api', ministerDetailRoutes);
+app.use('/api', sliderRoutes);
+app.use('/api', currentUpdateRoutes);
+app.use('/api', umcNewsRoutes);
+app.use('/api', initiativeRoutes);
+app.use('/api', eServicesRoutes);
+app.use('/api', informationRoutes);
+app.use('/api', citizenServicesRoutes);
+app.use('/api', homeVideosRoutes);
+app.use('/api', homeGalleryRoutes);
+app.use('/api', portalServicesRoutes);
+app.use('/api', emergencyServicesRoutes);
+app.use('/api', homeService1Routes);
+app.use('/api', homeServices2Routes);
+app.use('/api', bottomSliderRoutes);
+app.use('/api', swmsRoutes);
+app.use('/api', pressNotesRoutes);
+app.use('/api', propertyDeptRoutes);
+app.use('/api', empInfoRoutes);
+
+{/* About UMC */}
+app.use('/api', locationRoutes);
+app.use('/api', commissionerDataRoutes);
+app.use('/api', addtComDataRoutes);
+app.use('/api', asstComDataRoutes);
+app.use('/api', deptComDataRoutes);
+app.use('/api', historyImageRoutes);
+app.use('/api', historyDescRoutes);
+app.use('/api', tourismRoutes);
+
+{/* Administrative Wings */}
+app.use('/api', tableHeadingRoutes);
+app.use('/api', structureTab1Routes);
+app.use('/api', structureTab2Routes);
+app.use('/api', structureTab3Routes);
+app.use('/api', structureTab4Routes);
+
+{/* Corporation */}
+app.use('/api', administrationRoutes);
+app.use('/api', annualfinancialRoutes);
+app.use('/api', electedMemberRoutes);
+app.use('/api', eNewsRoutes);
+app.use('/api', muncipalMeetingRoutes);
+app.use('/api', agendaRoutes);
+app.use('/api', budgetsRoutes);
+app.use('/api', standingRoutes);
+app.use('/api', wardCommitteeRoutes);
+app.use('/api', womenRoutes);
+app.use('/api', policiesRoutes);
+app.use('/api', resolutionRoutes);
+app.use('/api', wardOfficeRoutes);
+
+{/* Departments */}
+app.use('/api', departmentPageRoutes);
+app.use('/api', deptBannerRoutes);
+app.use('/api', deptDescriptionRoutes);
+app.use('/api', deptHodRoutes);
+app.use('/api', deptPdfRoutes);
+app.use('/api', auditDeptRoutes);
+
+{/* Tenders and Quotations */}
+app.use('/api', tenderQuotationRoutes);
+
+{/* Right to Service */}
+app.use('/api', rtsRoutes);
+
+{/* Circulars */}
+app.use('/api', circularRoutes);
+
+{/* Online Services */}
+app.use('/api', onlineServiceRoutes);
+
+{/* Gallery */}
+app.use('/api', imagesGalleryRoutes);
+app.use('/api', videoGalleryRoutes);
+
+{/* Upcoming Projects */}
+app.use('/api', projectRoutes);
+app.use('/api', projectDetailsRoutes);
+app.use('/api', projectDescriptionRoutes);
+
+{/* Right to Information */}
+app.use('/api', rtiRoutes);
+app.use('/api', proactiveDisclosureRoutes);
+app.use('/api', subRtiRoutes);
+
+{/* Recruitment */}
+app.use('/api', recruitmentRoutes);
+
+{/* Banner */}
+app.use('/api', bannerRoutes);
+
+{/* Visitor */}
+app.use('/api', screenReaderRoutes);
+
+{/* Contact Us */}
+app.use('/api', contactUsRoutes);
+app.use('/api', wardRoutes);
+
+{/* Privacy Policy */}
+app.use('/api', policyRoutes);
+
+{/* Hyperlink Policy */}
+app.use('/api', hyperlinkRoutes);
+
+{/* Celebration */}
+app.use('/api', curtainRoutes);
+app.use('/api', ribbonRoutes);
+
+{/* Footer */}
+app.use('/api', contactInfoRoutes);
+app.use('/api', quickLinksRoutes);
+app.use('/api', helpLinksRoutes);
+app.use('/api', onlineServicesRoutes);
+
+{/* Profile */}
+app.use('/api', userRoutes);
+
+{/* Feedback */}
+app.use('/api', emailRoutes);
+
+{/* Login */}
+app.use('/api', loginRoutes);
+
+{/* Reset Password */}
+app.use('/api', resetPassRoutes);
+
+{/* Visitor */}
+app.use('/api', visitorRoutes);
+
+>>>>>>> 6e99625f0c6384061908f773ee4cd7a641a0f470
 
 {/* Home */}
 app.use('/api', ministerDetailRoutes);
