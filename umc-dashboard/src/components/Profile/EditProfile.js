@@ -23,6 +23,15 @@ const EditProfile = () => {
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [showOldPassword, setShowOldPassword] = useState(false);
     const [showModal, setShowModal] = useState(false);
+    const [passwordStrength, setPasswordStrength] = useState({
+        length: false,
+        upper: false,
+        lower: false,
+        number: false,
+        special: false,
+        notCommon: true,
+        notContextual: true
+    });
 
     const userData = JSON.parse(localStorage.getItem("userData"));
     const id = userData?.id;
@@ -31,6 +40,49 @@ const EditProfile = () => {
         fetchUser();
         // eslint-disable-next-line
     }, [id]);
+
+    // Common passwords list (in a real app, this should be more extensive or server-side)
+    const commonPasswords = [
+        'password', '123456', '12345678', '1234', 'qwerty', '12345', 
+        'dragon', 'baseball', 'football', 'letmein', 'monkey'
+    ];
+
+    useEffect(() => {
+        if (password) {
+            checkPasswordStrength(password);
+        }
+    }, [password]);
+
+    const checkPasswordStrength = (pwd) => {
+        const hasMinLength = pwd.length >= 8;
+        const hasUpper = /[A-Z]/.test(pwd);
+        const hasLower = /[a-z]/.test(pwd);
+        const hasNumber = /[0-9]/.test(pwd);
+        const hasSpecial = /[@$!%*?&]/.test(pwd);
+        const isNotCommon = !commonPasswords.includes(pwd.toLowerCase());
+        const isNotContextual = !pwd.toLowerCase().includes(fullname.toLowerCase()) && 
+                              !pwd.toLowerCase().includes(email.split('@')[0].toLowerCase());
+
+        setPasswordStrength({
+            length: hasMinLength,
+            upper: hasUpper,
+            lower: hasLower,
+            number: hasNumber,
+            special: hasSpecial,
+            notCommon: isNotCommon,
+            notContextual: isNotContextual
+        });
+    };
+
+    const getPasswordStrength = () => {
+        const { length, upper, lower, number, special, notCommon, notContextual } = passwordStrength;
+        
+        if (!length || !upper || !lower || !number || !special || !notCommon || !notContextual) {
+            return { message: "❌ Weak password - doesn't meet all requirements", color: "danger" };
+        }
+        
+        return { message: "✅ Strong password - meets all requirements", color: "success" };
+    };
 
     const fetchUser = async () => {
         try {
@@ -72,35 +124,29 @@ const EditProfile = () => {
         }
     };
 
-    const getPasswordStrength = (password) => {
-        const strongRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-        const moderateRegex = /^(?=.*[a-zA-Z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$/;
-
-        if (strongRegex.test(password)) {
-            return { message: "✅ Strong password", color: "success" };
-        } else if (moderateRegex.test(password)) {
-            return { message: "⚠️ Moderate password", color: "warning" };
-        } else {
-            return { message: "❌ Weak password", color: "danger" };
-        }
-    };
-
     const validateForm = () => {
         let newErrors = {};
         const trimmedPassword = password.trim();
         const trimmedConfirmPassword = confirmPassword.trim();
-        const strongRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-
+        
+        // Check all password requirements
         if (!trimmedPassword) {
             newErrors.password = "Password is required.";
-        } else if (!strongRegex.test(trimmedPassword)) {
-            newErrors.password =
-                "Password must be strong (min 8 characters, 1 uppercase, 1 lowercase, 1 digit, 1 special character).";
+        } else {
+            const { length, upper, lower, number, special, notCommon, notContextual } = passwordStrength;
+            
+            if (!length) newErrors.password = "Password must be at least 8 characters long.";
+            else if (!upper) newErrors.password = "Password must contain at least one uppercase letter.";
+            else if (!lower) newErrors.password = "Password must contain at least one lowercase letter.";
+            else if (!number) newErrors.password = "Password must contain at least one number.";
+            else if (!special) newErrors.password = "Password must contain at least one special character (@$!%*?&).";
+            else if (!notCommon) newErrors.password = "Password is too common. Please choose a more unique password.";
+            else if (!notContextual) newErrors.password = "Password should not contain your name or email.";
         }
 
         if (!trimmedConfirmPassword) {
             newErrors.confirmPassword = "Please confirm your password.";
-        } else if (trimmedPassword !== trimmedConfirmPassword) {
+        } else if (password !== confirmPassword) {
             newErrors.confirmPassword = "Passwords do not match.";
         }
 
@@ -114,6 +160,12 @@ const EditProfile = () => {
             const res = await api.post(`/users/${id}/verify-password`, { password: oldPassword });
 
             if (res.data.valid) {
+                // Check if new password is different from old password
+                if (password === oldPassword) {
+                    toast.error("New password must be different from old password.");
+                    return;
+                }
+                
                 await api.patch(`/users/${id}/update-password`, { newPassword: password });
                 toast.success("Password updated successfully!");
                 setPassword("");
@@ -145,6 +197,39 @@ const EditProfile = () => {
         if (validateForm()) {
             setShowModal(true);
         }
+    };
+
+    const renderPasswordRequirements = () => {
+        const { length, upper, lower, number, special, notCommon, notContextual } = passwordStrength;
+        
+        return (
+            <div className="password-requirements mt-2">
+                <small>Password must meet these requirements:</small>
+                <ul className="list-unstyled">
+                    <li className={length ? "text-success" : "text-danger"}>
+                        {length ? "✓" : "✗"} At least 8 characters
+                    </li>
+                    <li className={upper ? "text-success" : "text-danger"}>
+                        {upper ? "✓" : "✗"} At least one uppercase letter
+                    </li>
+                    <li className={lower ? "text-success" : "text-danger"}>
+                        {lower ? "✓" : "✗"} At least one lowercase letter
+                    </li>
+                    <li className={number ? "text-success" : "text-danger"}>
+                        {number ? "✓" : "✗"} At least one number
+                    </li>
+                    <li className={special ? "text-success" : "text-danger"}>
+                        {special ? "✓" : "✗"} At least one special character (@$!%*?&)
+                    </li>
+                    <li className={notCommon ? "text-success" : "text-danger"}>
+                        {notCommon ? "✓" : "✗"} Not a common password
+                    </li>
+                    <li className={notContextual ? "text-success" : "text-danger"}>
+                        {notContextual ? "✓" : "✗"} Doesn't contain your name or email
+                    </li>
+                </ul>
+            </div>
+        );
     };
 
     return (
@@ -213,7 +298,7 @@ const EditProfile = () => {
                             <form onSubmit={handlePasswordFormSubmit}>
                                 <div className="form-group row">
                                     <label className="col-form-label col-md-2"><strong>New Password:</strong></label>
-                                    <div className="col-md-4 position-relative">
+                                    <div className="col-md-6 position-relative">
                                         <input
                                             type={showPassword ? "text" : "password"}
                                             className={`form-control custom-input-edit-profile ${errors.password ? "is-invalid" : ""}`}
@@ -230,15 +315,16 @@ const EditProfile = () => {
                                         </span>
                                         {errors.password && <div className="invalid-feedback">{errors.password}</div>}
                                         {password && (
-                                            <small className={`text-${getPasswordStrength(password).color}`}>
-                                                {getPasswordStrength(password).message}
+                                            <small className={`text-${getPasswordStrength().color}`}>
+                                                {getPasswordStrength().message}
                                             </small>
                                         )}
+                                        {password && renderPasswordRequirements()}
                                     </div>
                                 </div>
                                 <div className="form-group row">
                                     <label className="col-form-label col-md-2"><strong>Confirm Password:</strong></label>
-                                    <div className="col-md-4 position-relative">
+                                    <div className="col-md-6 position-relative">
                                         <input
                                             type={showConfirmPassword ? "text" : "password"}
                                             className={`form-control custom-input-edit-profile ${errors.confirmPassword ? "is-invalid" : ""}`}
@@ -256,7 +342,12 @@ const EditProfile = () => {
                                         {errors.confirmPassword && <div className="invalid-feedback">{errors.confirmPassword}</div>}
                                     </div>
                                 </div>
-                                <input type="submit" className="btn btn-primary btn-sm" value="Submit" />
+                                <input 
+                                    type="submit" 
+                                    className="btn btn-primary btn-sm" 
+                                    value="Submit" 
+                                    disabled={!password || !confirmPassword || Object.values(passwordStrength).some(val => !val)}
+                                />
                             </form>
                         </div>
                     </div>
