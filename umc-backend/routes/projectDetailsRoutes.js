@@ -86,7 +86,7 @@ router.post("/project-category", verifyToken, upload.array("images"), (req, res)
 });
 
 
-router.put("/project-category/:id", verifyToken, upload.array("images"), (req, res) => {
+router.post("/edit-project-category/:id", verifyToken, upload.array("images"), (req, res) => {
   const { id } = req.params;
   const { heading, language_code } = req.body;
 
@@ -126,7 +126,7 @@ router.put("/project-category/:id", verifyToken, upload.array("images"), (req, r
 });
 
 
-router.delete("/project-category/:id", verifyToken, (req, res) => {
+router.post("/delete-project-category/:id", verifyToken, (req, res) => {
   const { id } = req.params;
 
   const selectSql = "SELECT images FROM project_images WHERE id = ?";

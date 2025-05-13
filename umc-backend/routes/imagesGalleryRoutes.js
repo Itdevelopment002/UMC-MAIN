@@ -49,7 +49,7 @@ router.post("/categories", verifyToken, (req, res) => {
 });
 
 
-router.put("/categories/:id", verifyToken, (req, res) => {
+router.post("/edit-categories/:id", verifyToken, (req, res) => {
   const { id } = req.params;
   const { name, language_code } = req.body;
 
@@ -64,7 +64,7 @@ router.put("/categories/:id", verifyToken, (req, res) => {
 });
 
 
-router.delete("/categories/:id", verifyToken, (req, res) => {
+router.post("/delete-categories/:id", verifyToken, (req, res) => {
   const { id } = req.params;
 
   db.query("DELETE FROM categories WHERE id = ?", [id], (err, result) => {
@@ -98,7 +98,7 @@ router.post("/category-images", verifyToken, upload.single("image"), (req, res) 
   });
 });
 
-router.put("/category-images/:id", verifyToken, upload.single("image"), (req, res) => {
+router.post("/edit-category-images/:id", verifyToken, upload.single("image"), (req, res) => {
   const { id } = req.params;
 
   if (!req.file) return res.status(400).json({ error: "Image upload required" });
@@ -125,7 +125,7 @@ router.put("/category-images/:id", verifyToken, upload.single("image"), (req, re
 });
 
 
-router.delete("/category-images/:id", verifyToken, (req, res) => {
+router.post("/delete-category-images/:id", verifyToken, (req, res) => {
   const { id } = req.params;
 
   db.query("SELECT image_url FROM category_images WHERE id = ?", [id], (err, results) => {

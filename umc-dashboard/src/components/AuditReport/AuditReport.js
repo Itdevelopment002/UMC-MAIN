@@ -56,7 +56,7 @@ const AuditReport = () => {
 
     const handleDelete = async () => {
         try {
-            await api.delete(`/audit-report/${selectedMeeting.id}`);
+            await api.post(`/delete-audit-report/${selectedMeeting.id}`);
             setMunicipalMeetingsData(municipalMeetingsData.filter((meeting) => meeting.id !== selectedMeeting.id));
             setShowDeleteModal(false);
             toast.success("Audit Report deleted successfully!");
@@ -71,7 +71,7 @@ const AuditReport = () => {
       ? formatDate(selectedMeeting.issue_date)
       : "";
         try {
-            await api.put(`/audit-report/${selectedMeeting.id}`, {
+            await api.post(`/edit-audit-report/${selectedMeeting.id}`, {
                 name: selectedMeeting.name,
                 year: selectedMeeting.year,
                 pdf_link: selectedMeeting.pdf_link,

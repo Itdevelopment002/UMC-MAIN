@@ -4,7 +4,7 @@ const path = require("path");
 const fs = require("fs");
 const router = express.Router();
 const db = require("../config/db.js");
-const {verifyToken} = require('../middleware/jwtMiddleware.js');
+const { verifyToken } = require('../middleware/jwtMiddleware.js');
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -69,7 +69,7 @@ router.post("/sliders", verifyToken, upload.single("image"), (req, res) => {
 });
 
 
-router.put("/sliders/:id", verifyToken, upload.single("image"), (req, res) => {
+router.post("/edit-sliders/:id", verifyToken, upload.single("image"), (req, res) => {
   const { id } = req.params;
   const { name } = req.body;
 
@@ -131,7 +131,7 @@ router.put("/sliders/:id", verifyToken, upload.single("image"), (req, res) => {
 });
 
 
-router.delete("/sliders/:id", verifyToken, (req, res) => {
+router.post("/delete-sliders/:id", verifyToken, (req, res) => {
   const { id } = req.params;
 
   const selectSql = "SELECT image_path FROM slider WHERE id = ?";

@@ -35,7 +35,7 @@ const ENews = () => {
 
     const handleDelete = async () => {
         try {
-            await api.delete(`/enews_data/${selectedAgenda.id}`);
+            await api.post(`/delete-enews_data/${selectedAgenda.id}`);
             setEnewsList(
                 enewsList.filter((agenda) => agenda.id !== selectedAgenda.id)
             );
@@ -52,7 +52,7 @@ const ENews = () => {
             ? formatDate(selectedAgenda.issue_date)
             : "";
         try {
-            await api.put(`/enews_data/${selectedAgenda.id}`, {
+            await api.post(`/edit-enews_data/${selectedAgenda.id}`, {
                 info: selectedAgenda.info,
                 issue_date: formattedPublishDate,
                 pdf_link: selectedAgenda.pdf_link,

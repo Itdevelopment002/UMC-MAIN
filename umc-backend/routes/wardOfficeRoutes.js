@@ -1,7 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../config/db.js");
-const {verifyToken} = require('../middleware/jwtMiddleware.js');
+const { verifyToken } = require('../middleware/jwtMiddleware.js');
+
 
 router.get("/ward-offices", (req, res) => {
   const language = req.query.lang;
@@ -22,7 +23,7 @@ router.get("/ward-offices", (req, res) => {
 
 
 router.post("/ward-offices", verifyToken, (req, res) => {
-  const { ward_no, ward_name, officer_name, address, email, mobile, landline, areas, map_url,language_code } = req.body;
+  const { ward_no, ward_name, officer_name, address, email, mobile, landline, areas, map_url, language_code } = req.body;
 
   const sql = `
     INSERT INTO WardOffices (ward_no, ward_name, officer_name, address, email, mobile, landline, areas, map_url,language_code)
@@ -31,7 +32,7 @@ router.post("/ward-offices", verifyToken, (req, res) => {
 
   db.query(
     sql,
-    [ward_no, ward_name, officer_name, address, email, mobile, landline, areas,language_code, map_url],
+    [ward_no, ward_name, officer_name, address, email, mobile, landline, areas, language_code, map_url],
     (err, result) => {
       if (err) {
         console.error(err);
@@ -56,8 +57,8 @@ router.post("/ward-offices", verifyToken, (req, res) => {
 });
 
 
-router.put("/ward-offices/:id", verifyToken, (req, res) => {
-  const { ward_no, ward_name, officer_name, address, email, mobile, landline, areas, map_url,language_code } = req.body;
+router.post("/edit-ward-offices/:id", verifyToken, (req, res) => {
+  const { ward_no, ward_name, officer_name, address, email, mobile, landline, areas, map_url, language_code } = req.body;
 
   const sql = `
     UPDATE WardOffices 
@@ -67,7 +68,7 @@ router.put("/ward-offices/:id", verifyToken, (req, res) => {
 
   db.query(
     sql,
-    [ward_no, ward_name, officer_name, address, email, mobile, landline, areas, map_url,language_code, req.params.id],
+    [ward_no, ward_name, officer_name, address, email, mobile, landline, areas, map_url, language_code, req.params.id],
     (err, result) => {
       if (err) {
         console.error(err);
@@ -80,7 +81,7 @@ router.put("/ward-offices/:id", verifyToken, (req, res) => {
 });
 
 
-router.delete("/ward-offices/:id", verifyToken, (req, res) => {
+router.post("/delete-ward-offices/:id", verifyToken, (req, res) => {
   const sql = "DELETE FROM WardOffices WHERE id = ?";
 
   db.query(sql, [req.params.id], (err, result) => {

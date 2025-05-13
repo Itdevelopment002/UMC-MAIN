@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import api from "../api";
 import { Link, useNavigate } from "react-router-dom";
+import { getImageValidationError } from "../../validation/ImageValidation";
 
 const AddSlider = () => {
   const [sliderName, setSliderName] = useState("");
@@ -9,8 +10,16 @@ const AddSlider = () => {
   const navigate = useNavigate();
 
   const handleFileChange = (e) => {
-    setSelectedFile(e.target.files[0]);
-    setErrors((prev) => ({ ...prev, selectedFile: "" }));
+    const file = e.target.files[0];
+    const error = getImageValidationError(file);
+
+    if (error) {
+      setErrors((prev) => ({ ...prev, selectedFile: error }));
+      setSelectedFile(null);
+    } else {
+      setSelectedFile(file);
+      setErrors((prev) => ({ ...prev, selectedFile: "" }));
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -35,8 +44,7 @@ const AddSlider = () => {
     formData.append("sliderName", sliderName);
 
     try {
-      // eslint-disable-next-line
-      const response = await api.post("/sliders", formData, {
+      await api.post("/sliders", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -92,12 +100,11 @@ const AddSlider = () => {
                           }}
                         />
                         {errors.sliderName && (
-                          <div className="invalid-feedback">
-                            {errors.sliderName}
-                          </div>
+                          <div className="invalid-feedback">{errors.sliderName}</div>
                         )}
                       </div>
                     </div>
+
                     <div className="form-group row">
                       <label className="col-form-label col-lg-2 col-md-3">
                         Slider Image <span className="text-danger">*</span>
@@ -114,9 +121,7 @@ const AddSlider = () => {
                             onChange={handleFileChange}
                           />
                           {errors.selectedFile && (
-                            <div className="invalid-feedback">
-                              {errors.selectedFile}
-                            </div>
+                            <div className="invalid-feedback">{errors.selectedFile}</div>
                           )}
                         </div>
                         <small className="text-muted">

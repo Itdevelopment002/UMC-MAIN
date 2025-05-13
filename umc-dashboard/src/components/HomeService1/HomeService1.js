@@ -47,7 +47,7 @@ const HomeService1 = () => {
 
   const handleDelete = async () => {
     try {
-      await api.delete(`/home-services1/${selectedInitiative.id}`);
+      await api.post(`/delete-home-services1/${selectedInitiative.id}`);
       setInfo(
         info.filter((initiative) => initiative.id !== selectedInitiative.id)
       );
@@ -81,7 +81,7 @@ const HomeService1 = () => {
       formData.append("mainIcon", selectedInitiative.mainIcon);
 
     try {
-      await api.put(`/home-services1/${selectedInitiative.id}`, formData);
+      await api.post(`/edit-home-services1/${selectedInitiative.id}`, formData);
       fetchInitiatives();
       setShowEditModal(false);
       toast.success("Home Service updated successfully");

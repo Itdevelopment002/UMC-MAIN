@@ -38,7 +38,7 @@ router.post("/policies_data", verifyToken, (req, res) => {
 });
 
 
-router.put("/policies_data/:id", verifyToken, (req, res) => {
+router.post("/edit-policies_data/:id", verifyToken, (req, res) => {
   const { heading, link, issue_date, language_code } = req.body;
   const formattedDate = issue_date ? convertToMySQLDate(issue_date) : null;
   const sql = "UPDATE policies SET heading = ?, link = ?, issue_date = ?, language_code = ? WHERE id = ?";
@@ -49,7 +49,7 @@ router.put("/policies_data/:id", verifyToken, (req, res) => {
 });
 
 
-router.delete("/policies_data/:id", verifyToken, (req, res) => {
+router.post("/delete-policies_data/:id", verifyToken, (req, res) => {
   const sql = "DELETE FROM policies WHERE id = ?";
   db.query(sql, [req.params.id], (err, result) => {
     if (err) throw err;

@@ -107,7 +107,7 @@ router.post("/add-main-menu", verifyToken, (req, res) => {
 });
 
 
-router.put("/update-main-menu/:id", verifyToken, (req, res) => {
+router.post("/update-main-menu/:id", verifyToken, (req, res) => {
   const mainMenuId = req.params.id;
   const { mainMenu, mainMenuLink, subMenus, language_code } = req.body;
 
@@ -178,7 +178,7 @@ router.put("/update-main-menu/:id", verifyToken, (req, res) => {
 });
 
 
-router.delete("/delete-main-menu/:id", verifyToken, (req, res) => {
+router.post("/delete-main-menu/:id", verifyToken, (req, res) => {
   const mainMenuId = req.params.id;
 
   const deleteSubMenuQuery = "DELETE FROM sub_menu WHERE mainMenuId = ?";

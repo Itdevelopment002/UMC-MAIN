@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import api, { baseURL } from "../api";
 import { Link } from "react-router-dom";
 import GLightbox from "glightbox";
 import "glightbox/dist/css/glightbox.min.css";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { getImageValidationError } from "../../validation/ImageValidation";
 
 const Banner = () => {
   const [banners, setBanners] = useState([]);
@@ -14,8 +15,10 @@ const Banner = () => {
   const [selectedBanner, setSelectedBanner] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [editErrors, setEditErrors] = useState({});
   const itemsPerPage = 10;
   let lightbox = null;
+  const fileInputRef = useRef(null);
 
   useEffect(() => {
     fetchBanners();
@@ -49,7 +52,7 @@ const Banner = () => {
 
   const confirmDelete = async () => {
     try {
-      await api.delete(`/banner/${selectedBanner.id}`);
+      await api.post(`/delete-banner/${selectedBanner.id}`);
       setBanners(banners.filter((banner) => banner.id !== selectedBanner.id));
       toast.success("Banner deleted successfully!");
       setShowDeleteModal(false);
@@ -65,19 +68,40 @@ const Banner = () => {
     setShowEditModal(true);
     setImagePreview(`${baseURL}/${banner.file_path}`);
     setSelectedFile(null);
+    setEditErrors({});
+  };
+
+  const validateEditForm = () => {
+    const newErrors = {};
+    
+    if (!selectedBanner?.banner_name?.trim()) {
+      newErrors.bannerName = "Banner name is required";
+    }
+
+    if (selectedFile) {
+      const imageError = getImageValidationError(selectedFile);
+      if (imageError) {
+        newErrors.image = imageError;
+      }
+    }
+
+    setEditErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleSaveEdit = async () => {
-    const formData = new FormData();
-    if (selectedBanner.banner_name) {
-      formData.append("banner_name", selectedBanner.banner_name);
+    if (!validateEditForm()) {
+      return;
     }
+
+    const formData = new FormData();
+    formData.append("banner_name", selectedBanner.banner_name);
     if (selectedFile) {
       formData.append("image", selectedFile);
     }
 
     try {
-      await api.put(`/banner/${selectedBanner.id}`, formData, {
+      await api.post(`/edit-banner/${selectedBanner.id}`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
       fetchBanners();
@@ -91,10 +115,25 @@ const Banner = () => {
   };
 
   const handleFileChange = (e) => {
-    setSelectedFile(e.target.files[0]);
-    if (e.target.files[0]) {
-      const imageUrl = URL.createObjectURL(e.target.files[0]);
-      setSelectedBanner({ ...selectedBanner, image: imageUrl });
+    const file = e.target.files[0];
+    
+    if (file) {
+      const errorMessage = getImageValidationError(file);
+      
+      if (errorMessage) {
+        setEditErrors({ ...editErrors, image: errorMessage });
+        // Clear the file input if invalid file is selected
+        if (fileInputRef.current) {
+          fileInputRef.current.value = "";
+        }
+        setSelectedFile(null);
+        return;
+      }
+
+      setSelectedFile(file);
+      setEditErrors({ ...editErrors, image: "" });
+      
+      const imageUrl = URL.createObjectURL(file);
       setImagePreview(imageUrl);
     }
   };
@@ -322,7 +361,7 @@ const Banner = () => {
                       <label>Banner Name</label>
                       <input
                         type="text"
-                        className="form-control"
+                        className={`form-control ${editErrors.bannerName ? "is-invalid" : ""}`}
                         value={selectedBanner?.banner_name || ""}
                         onChange={(e) =>
                           setSelectedBanner({
@@ -331,15 +370,25 @@ const Banner = () => {
                           })
                         }
                       />
+                      {editErrors.bannerName && (
+                        <div className="invalid-feedback">{editErrors.bannerName}</div>
+                      )}
                     </div>
                     <div className="form-group">
                       <label>Banner Image</label>
                       <input
                         type="file"
-                        accept="image/*"
-                        className="form-control"
+                        accept=".jpg,.jpeg,.png"
+                        className={`form-control ${editErrors.image ? "is-invalid" : ""}`}
                         onChange={handleFileChange}
+                        ref={fileInputRef}
                       />
+                      {editErrors.image && (
+                        <div className="invalid-feedback">{editErrors.image}</div>
+                      )}
+                      <small className="text-muted">
+                        Allowed formats: JPG, JPEG, PNG. No multiple extensions or null bytes allowed.
+                      </small>
                     </div>
                     {imagePreview && (
                       <img

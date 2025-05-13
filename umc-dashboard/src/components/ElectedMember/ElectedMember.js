@@ -35,7 +35,7 @@ const ElectedMember = () => {
 
     const handleDelete = async () => {
         try {
-            await api.delete(`/elected_data/${selectedServices.id}`);
+            await api.post(`/delete-elected_data/${selectedServices.id}`);
             setElecteddata(electeddata.filter((w) => w.id !== selectedServices.id));
             setShowDeleteModal(false);
             toast.success("Elected member data deleted successfully!");
@@ -50,7 +50,7 @@ const ElectedMember = () => {
             ? formatDate(selectedServices.issue_date)
             : "";
         try {
-            await api.put(`/elected_data/${selectedServices.id}`, {
+            await api.post(`/edit-elected_data/${selectedServices.id}`, {
                 heading: selectedServices.heading,
                 link: selectedServices.link,
                 issue_date: formattedIssueDate,

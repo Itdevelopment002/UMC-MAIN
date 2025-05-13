@@ -1,7 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../config/db.js");
-const {verifyToken} = require('../middleware/jwtMiddleware.js');
+const { verifyToken } = require('../middleware/jwtMiddleware.js');
+
 
 router.get("/screen-reader", (req, res) => {
     const language = req.query.lang;
@@ -35,7 +36,7 @@ router.post("/screen-reader", verifyToken, (req, res) => {
 });
 
 
-router.put("/screen-reader/:id", verifyToken, (req, res) => {
+router.post("/edit-screen-reader/:id", verifyToken, (req, res) => {
     const { id } = req.params;
     const { name, website, available, language_code } = req.body;
     const sql = "UPDATE screen_reader SET name = ?, website = ?, available = ?, language_code = ? WHERE id = ?";
@@ -49,7 +50,7 @@ router.put("/screen-reader/:id", verifyToken, (req, res) => {
 });
 
 
-router.delete("/screen-reader/:id", verifyToken, (req, res) => {
+router.post("/delete-screen-reader/:id", verifyToken, (req, res) => {
     const { id } = req.params;
     const sql = "DELETE FROM screen_reader WHERE id = ?";
     db.query(sql, [id], (err, result) => {

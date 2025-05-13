@@ -71,7 +71,7 @@ const Circulars = () => {
         ? formatDate(selectedCircular.publish_date)
         : "";
 
-      await api.put(`/circular-info/${selectedCircular.id}`, {
+      await api.post(`/edit-circular-info/${selectedCircular.id}`, {
         description,
         number,
         publish_date: formattedPublishDate,
@@ -92,7 +92,7 @@ const Circulars = () => {
   const handleDeleteCircular = async () => {
     try {
       setIsLoading(true);
-      await api.delete(`/circular-info/${selectedCircular.id}`);
+      await api.post(`/delete-circular-info/${selectedCircular.id}`);
       toast.success("Circular deleted successfully");
       fetchCircular();
     } catch (error) {

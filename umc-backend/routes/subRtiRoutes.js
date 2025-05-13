@@ -38,7 +38,7 @@ router.post("/sub-rti", verifyToken, (req, res) => {
 });
 
 
-router.put("/sub-rti/:id", verifyToken, (req, res) => {
+router.post("/edit-sub-rti/:id", verifyToken, (req, res) => {
   const { description, link, issue_date, language_code } = req.body;
   const formattedDate = convertToMySQLDate(issue_date);
   const sql = "UPDATE subrti SET description = ?, link = ?, issue_date = ?, language_code = ? WHERE id = ?";
@@ -49,7 +49,7 @@ router.put("/sub-rti/:id", verifyToken, (req, res) => {
 });
 
 
-router.delete("/sub-rti/:id", verifyToken, (req, res) => {
+router.post("/delete-sub-rti/:id", verifyToken, (req, res) => {
   const sql = "DELETE FROM subrti WHERE id = ?";
   db.query(sql, [req.params.id], (err, result) => {
     if (err) throw err;

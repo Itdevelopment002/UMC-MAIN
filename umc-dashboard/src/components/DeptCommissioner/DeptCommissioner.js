@@ -39,7 +39,7 @@ const DeptCommissioner = () => {
 
     const handleDelete = async (id) => {
         try {
-            await api.delete(`/dept-commissioner-data/${id}`);
+            await api.post(`/delete-dept-commissioner-data/${id}`);
             setCoData((prevData) => prevData.filter((item) => item.id !== id));
             toast.success(
                 `Deputy Commissioner Data deleted successfully!`
@@ -96,7 +96,7 @@ const DeptCommissioner = () => {
                 formData.append("coImage", editData.imageFile);
             }
 
-            await api.put(`/dept-commissioner-data/${selectedItem.id}`, formData, {
+            await api.post(`/edit-dept-commissioner-data/${selectedItem.id}`, formData, {
                 headers: {
                     "Content-Type": "multipart/form-data",
                 },

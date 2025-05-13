@@ -35,7 +35,7 @@ const ProactiveDisclosure = () => {
 
   const handleDelete = async () => {
     try {
-      await api.delete(`/proactive-disclosure/${selectedRti.id}`);
+      await api.post(`/delete-proactive-disclosure/${selectedRti.id}`);
       setRti(rti.filter((w) => w.id !== selectedRti.id));
       setShowDeleteModal(false);
       toast.success("Proactive disclosure deleted successfully!");
@@ -50,7 +50,7 @@ const ProactiveDisclosure = () => {
       ? formatDate(selectedRti.issue_date)
       : "";
     try {
-      await api.put(`/proactive-disclosure/${selectedRti.id}`, {
+      await api.post(`/edit-proactive-disclosure/${selectedRti.id}`, {
         description: selectedRti.description,
         link: selectedRti.link,
         issue_date: formattedIssueDate,

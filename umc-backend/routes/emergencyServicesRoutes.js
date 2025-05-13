@@ -118,8 +118,8 @@ router.post(
 );
 
 
-router.put(
-  "/emergency-services/:id", verifyToken,
+router.post(
+  "/edit-emergency-services/:id", verifyToken,
   upload.fields([{ name: "emergencyImage" }]),
   async (req, res) => {
     const { id } = req.params;
@@ -201,7 +201,7 @@ router.put(
 );
 
 
-router.delete("/emergency-services/:id", verifyToken, async (req, res) => {
+router.post("/delete-emergency-services/:id", verifyToken, async (req, res) => {
   const { id } = req.params;
 
   const selectSql =

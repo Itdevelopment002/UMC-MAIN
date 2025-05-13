@@ -69,7 +69,7 @@ router.post("/circular-info", verifyToken, (req, res) => {
 });
 
 
-router.put("/circular-info/:id", verifyToken, (req, res) => {
+router.post("/edit-circular-info/:id", verifyToken, (req, res) => {
   const { id } = req.params;
   const { description, number, publish_date, link, language_code } = req.body;
 
@@ -119,7 +119,7 @@ router.put("/circular-info/:id", verifyToken, (req, res) => {
 });
 
 
-router.delete("/circular-info/:id", verifyToken, (req, res) => {
+router.post("/delete-circular-info/:id", verifyToken, (req, res) => {
   const { id } = req.params;
 
   const deleteSql = "DELETE FROM circulars WHERE id = ?";

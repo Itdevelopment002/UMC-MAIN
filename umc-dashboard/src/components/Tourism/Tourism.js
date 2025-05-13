@@ -142,7 +142,7 @@ const Tourism = () => {
             selectedFiles.forEach((file) => {
                 formData.append("gallery", file);
             });
-            await api.put(`/tourism/${selectedGarden.id}`, formData);
+            await api.post(`/edit-tourism/${selectedGarden.id}`, formData);
             const response = await api.get("/tourism");
             setGardensData(response.data);
             setShowEditModal(false);
@@ -153,7 +153,7 @@ const Tourism = () => {
 
     const handleDeleteConfirm = async () => {
         try {
-            await api.delete(`/tourism/${selectedGarden.id}`);
+            await api.post(`/delete-tourism/${selectedGarden.id}`);
             setGardensData(
                 gardensData.filter((garden) => garden.id !== selectedGarden.id)
             );

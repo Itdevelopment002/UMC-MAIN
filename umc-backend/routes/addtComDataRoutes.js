@@ -4,7 +4,7 @@ const path = require("path");
 const fs = require("fs");
 const router = express.Router();
 const db = require("../config/db.js");
-const {verifyToken} = require('../middleware/jwtMiddleware.js');
+const { verifyToken } = require('../middleware/jwtMiddleware.js');
 
 
 const storage = multer.diskStorage({
@@ -32,7 +32,7 @@ router.get("/addt-commissioner-data", (req, res) => {
   } else {
     query = "SELECT * FROM addt_commissioner_details";
   }
-  db.query(query,params, (err, results) => {
+  db.query(query, params, (err, results) => {
     if (err) {
       return res.status(500).json({ message: "Database error", error: err });
     }
@@ -80,7 +80,7 @@ router.post("/addt-commissioner-data", verifyToken, upload.single("coImage"), (r
 });
 
 
-router.put("/addt-commissioner-data/:id", verifyToken, upload.single("coImage"), (req, res) => {
+router.post("/edit-addt-commissioner-data/:id", verifyToken, upload.single("coImage"), (req, res) => {
   const { id } = req.params;
   const { coName, designation, qualification, address, number, email, description, language_code } = req.body;
 
@@ -165,7 +165,7 @@ router.put("/addt-commissioner-data/:id", verifyToken, upload.single("coImage"),
 });
 
 
-router.delete("/addt-commissioner-data/:id", verifyToken, (req, res) => {
+router.post("/delete-addt-commissioner-data/:id", verifyToken, (req, res) => {
   const { id } = req.params;
 
   const selectSql = "SELECT image_path FROM addt_commissioner_details WHERE id = ?";

@@ -28,7 +28,7 @@ const Administration = () => {
 
   const handleDelete = async () => {
     try {
-      await api.delete(`/administration/${selectedAdministration.id}`);
+      await api.post(`/delete-administration/${selectedAdministration.id}`);
       setAdministration(administration.filter((w) => w.id !== selectedAdministration.id));
       setShowDeleteModal(false);
       toast.success("Administration deleted successfully!");
@@ -40,7 +40,7 @@ const Administration = () => {
 
   const handleEditSave = async () => {
     try {
-      await api.put(`/administration/${selectedAdministration.id}`, {
+      await api.post(`/edit-administration/${selectedAdministration.id}`, {
         name: selectedAdministration.name,
         designation: selectedAdministration.designation,
         phone: selectedAdministration.phone,

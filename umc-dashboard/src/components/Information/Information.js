@@ -35,7 +35,7 @@ const Information = () => {
 
   const handleDelete = async () => {
     try {
-      await api.delete(`/information/${selectedInfo.id}`);
+      await api.post(`/delete-information/${selectedInfo.id}`);
       setInfo(info.filter((w) => w.id !== selectedInfo.id));
       setShowDeleteModal(false);
       toast.success("Information deleted successfully!");
@@ -50,7 +50,7 @@ const Information = () => {
       ? formatDate(selectedInfo.issue_date)
       : "";
     try {
-      await api.put(`/information/${selectedInfo.id}`, {
+      await api.post(`/edit-information/${selectedInfo.id}`, {
         heading: selectedInfo.heading,
         link: selectedInfo.link,
         issue_date: formattedIssueDate,

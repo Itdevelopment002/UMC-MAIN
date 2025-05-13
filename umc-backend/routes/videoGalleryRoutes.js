@@ -1,7 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../config/db.js");
-const {verifyToken} = require('../middleware/jwtMiddleware.js');
+const { verifyToken } = require('../middleware/jwtMiddleware.js');
+
 
 router.get("/video-categories", (req, res) => {
     const language = req.query.lang;
@@ -13,7 +14,7 @@ router.get("/video-categories", (req, res) => {
     } else {
         query = "SELECT * FROM videocategories";
     }
-    db.query(query, params,(err, results) => {
+    db.query(query, params, (err, results) => {
         if (err) return res.status(500).json({ error: err.message });
         res.json(results);
     });
@@ -31,7 +32,7 @@ router.post("/video-categories", verifyToken, (req, res) => {
 });
 
 
-router.put("/video-categories/:id", verifyToken, (req, res) => {
+router.post("/edit-video-categories/:id", verifyToken, (req, res) => {
     const { id } = req.params;
     const { name, language_code } = req.body;
 
@@ -46,7 +47,7 @@ router.put("/video-categories/:id", verifyToken, (req, res) => {
 });
 
 
-router.delete("/video-categories/:id", verifyToken, (req, res) => {
+router.post("/delete-video-categories/:id", verifyToken, (req, res) => {
     const { id } = req.params;
 
     db.query("DELETE FROM videocategories WHERE id = ?", [id], (err, result) => {
@@ -80,7 +81,7 @@ router.post("/category-videos", verifyToken, (req, res) => {
 });
 
 
-router.put("/category-videos/:id", verifyToken, (req, res) => {
+router.post("/edit-category-videos/:id", verifyToken, (req, res) => {
     const { video_url } = req.body;
     const sql = "UPDATE category_videos SET video_url = ? WHERE id = ?";
     db.query(sql, [video_url, req.params.id], (err, result) => {
@@ -90,7 +91,7 @@ router.put("/category-videos/:id", verifyToken, (req, res) => {
 });
 
 
-router.delete("/category-videos/:id", verifyToken, (req, res) => {
+router.post("/delete-category-videos/:id", verifyToken, (req, res) => {
     const { id } = req.params;
 
     db.query("DELETE FROM category_videos WHERE id = ?", [id], (err, result) => {

@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../config/db.js');
-const {verifyToken} = require('../middleware/jwtMiddleware.js');
+const { verifyToken } = require('../middleware/jwtMiddleware.js');
+
 
 router.get('/visitor-count', (req, res) => {
     db.query('SELECT count FROM visitor_count', (err, results) => {

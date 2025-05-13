@@ -53,10 +53,10 @@ const VideoGallery = () => {
   const handleDelete = async (id, type) => {
     try {
       if (type === "category") {
-        await api.delete(`/video-categories/${id}`);
+        await api.post(`/delete-video-categories/${id}`);
         setCategoryVideoData(prevData => prevData.filter(item => item.id !== id));
       } else if (type === "categoryVideo") {
-        await api.delete(`/category-videos/${id}`);
+        await api.post(`/delete-category-videos/${id}`);
         setVideos(prevData => prevData.filter(item => item.id !== id));
         handleCategoryChange(selectedCategory);
       }
@@ -89,7 +89,7 @@ const VideoGallery = () => {
   const handleSaveChanges = async () => {
     try {
       if (modalType === "category") {
-        await api.put(`/video-categories/${selectedItem.id}`, {
+        await api.post(`/edit-video-categories/${selectedItem.id}`, {
           name: editData.name,
           language_code: editData.language_code,
         });
@@ -103,7 +103,7 @@ const VideoGallery = () => {
         fetchCategoryVideoData();
       }
       else if (modalType === "categoryVideo") {
-        await api.put(`/category-videos/${selectedItem.id}`, { video_url: editData.video_url });
+        await api.post(`/edit-category-videos/${selectedItem.id}`, { video_url: editData.video_url });
         setVideos(
           videos.map((item) =>
             item.id === selectedItem.id ? { ...item, video_url: editData.video_url } : item

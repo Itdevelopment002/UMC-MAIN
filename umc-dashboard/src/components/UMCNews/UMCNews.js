@@ -35,7 +35,7 @@ const UMCNews = () => {
 
   const handleDelete = async () => {
     try {
-      await api.delete(`/umc-news/${selectedNews.id}`);
+      await api.post(`/delete-umc-news/${selectedNews.id}`);
       setNews(news.filter((w) => w.id !== selectedNews.id));
       setShowDeleteModal(false);
       toast.success("News deleted successfully!");
@@ -50,7 +50,7 @@ const UMCNews = () => {
       ? formatDate(selectedNews.issue_date)
       : "";
     try {
-      await api.put(`/umc-news/${selectedNews.id}`, {
+      await api.post(`/edit-umc-news/${selectedNews.id}`, {
         heading: selectedNews.heading,
         link: selectedNews.link,
         issue_date: formattedIssueDate,

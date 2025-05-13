@@ -193,7 +193,7 @@ const Users = () => {
     }
 
     try {
-      await api.patch(`/users/${selectedUserForPasswordChange.id}/update-password`, {
+      await api.post(`/edit-users/${selectedUserForPasswordChange.id}/update-password`, {
         newPassword,
       });
       toast.success("Password updated successfully!");
@@ -236,7 +236,7 @@ const Users = () => {
 
   const handleDelete = () => {
     api
-      .delete(`/users/${selectedUser.id}`)
+      .post(`/delete-users/${selectedUser.id}`)
       .then(() => {
         setUsers(users.filter((user) => user.id !== selectedUser.id));
         setShowDeleteModal(false);
@@ -262,7 +262,7 @@ const Users = () => {
     }
 
     try {
-      await api.put(`/users/${editData.id}`, formData, {
+      await api.post(`/edit-users/${editData.id}`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 

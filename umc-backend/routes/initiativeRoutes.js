@@ -118,8 +118,8 @@ router.post(
 );
 
 
-router.put(
-  "/initiatives/:id", verifyToken,
+router.post(
+  "/edit-initiatives/:id", verifyToken,
   upload.fields([{ name: "mainIcon" }]),
   async (req, res) => {
     const { id } = req.params;
@@ -201,7 +201,7 @@ router.put(
 );
 
 
-router.delete("/initiatives/:id", verifyToken, async (req, res) => {
+router.post("/delete-initiatives/:id", verifyToken, async (req, res) => {
   const { id } = req.params;
 
   const selectSql =

@@ -60,7 +60,7 @@ const MinisterDetails = () => {
 
   const handleDelete = () => {
     api
-      .delete(`/minister-details/${selectedMinister.id}`)
+      .post(`/delete-minister-details/${selectedMinister.id}`)
       .then(() => {
         setMinisters(
           ministers.filter((minister) => minister.id !== selectedMinister.id)
@@ -85,7 +85,7 @@ const MinisterDetails = () => {
     }
 
     try {
-      await api.put(`/minister-details/${editData.id}`, formData, {
+      await api.post(`/edit-minister-details/${editData.id}`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
@@ -290,7 +290,6 @@ const MinisterDetails = () => {
               </div>
             </div>
           </div>
-
           {showDeleteModal && (
             <div className="modal fade show d-block" tabIndex="-1">
               <div className="modal-dialog modal-dialog-centered">
@@ -428,3 +427,4 @@ const MinisterDetails = () => {
 };
 
 export default MinisterDetails;
+

@@ -35,7 +35,7 @@ const Policies = () => {
 
     const handleDelete = async () => {
         try {
-            await api.delete(`/policies_data/${selectedServices.id}`);
+            await api.post(`/delete-policies_data/${selectedServices.id}`);
             setPoliciesdata(policiesdata.filter((w) => w.id !== selectedServices.id));
             setShowDeleteModal(false);
             toast.success("Policies deleted successfully!");
@@ -50,7 +50,7 @@ const Policies = () => {
             ? formatDate(selectedServices.issue_date)
             : "";
         try {
-            await api.put(`/policies_data/${selectedServices.id}`, {
+            await api.post(`/edit-policies_data/${selectedServices.id}`, {
                 heading: selectedServices.heading,
                 link: selectedServices.link,
                 issue_date: formattedIssueDate,

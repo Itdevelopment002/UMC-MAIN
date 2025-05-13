@@ -63,7 +63,7 @@ const Initiatives = () => {
 
   const handleDelete = async () => {
     try {
-      await api.delete(`/initiatives/${selectedInitiative.id}`);
+      await api.post(`/delete-initiatives/${selectedInitiative.id}`);
       setInitiatives(
         initiatives.filter((initiative) => initiative.id !== selectedInitiative.id)
       );
@@ -97,7 +97,7 @@ const Initiatives = () => {
     if (selectedInitiative.mainIcon)
       formData.append("mainIcon", selectedInitiative.mainIcon);
     try {
-      await api.put(`/initiatives/${selectedInitiative.id}`, formData);
+      await api.post(`/edit-initiatives/${selectedInitiative.id}`, formData);
       fetchInitiatives();
       setShowEditModal(false);
       toast.success("Initiative updated successfully");
