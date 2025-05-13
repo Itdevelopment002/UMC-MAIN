@@ -77,7 +77,7 @@ router.post("/bottom-sliders", verifyToken, upload.single("websitelogo"), (req, 
 });
 
 
-router.put("/bottom-sliders/:id", verifyToken, upload.single("websitelogo"), (req, res) => {
+router.post("/edit-bottom-sliders/:id", verifyToken, upload.single("websitelogo"), (req, res) => {
   const { id } = req.params;
   const { websitelink } = req.body;
 
@@ -134,7 +134,7 @@ router.put("/bottom-sliders/:id", verifyToken, upload.single("websitelogo"), (re
 });
 
 
-router.delete("/bottom-sliders/:id", verifyToken, (req, res) => {
+router.post("/delete-bottom-sliders/:id", verifyToken, (req, res) => {
   const { id } = req.params;
 
   const selectSql = "SELECT websitelogo FROM bottom_slider WHERE id = ?";

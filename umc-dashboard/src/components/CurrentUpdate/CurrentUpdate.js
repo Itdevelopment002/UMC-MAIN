@@ -33,7 +33,7 @@ const CurrentUpdate = () => {
 
   const handleDeleteConfirm = async () => {
     try {
-      await api.delete(`/current-update/${selectedUpdates}`);
+      await api.post(`/delete-current-update/${selectedUpdates}`);
       setUpdates(updates.filter((item) => item.id !== selectedUpdates));
       setModalType(null);
       setSelectedUpdates(null);
@@ -52,7 +52,7 @@ const CurrentUpdate = () => {
 
   const handleSaveEdit = async () => {
     try {
-      await api.put(`/current-update/${selectedUpdates}`, editedData);
+      await api.post(`/edit-current-update/${selectedUpdates}`, editedData);
       setUpdates(
         updates.map((item) =>
           item.id === selectedUpdates ? { ...item, ...editedData } : item

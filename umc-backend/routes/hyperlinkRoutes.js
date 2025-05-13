@@ -37,7 +37,7 @@ router.post("/hyperlink-policy", verifyToken, (req, res) => {
 });
 
 
-router.put("/hyperlink-policy/:id", verifyToken, (req, res) => {
+router.post("/edit-hyperlink-policy/:id", verifyToken, (req, res) => {
   const { id } = req.params;
   const { description, language_code } = req.body;
   const sql = "UPDATE hyperlinkpolicy SET description = ?, language_code = ? WHERE id = ?";
@@ -53,7 +53,7 @@ router.put("/hyperlink-policy/:id", verifyToken, (req, res) => {
 });
 
 
-router.delete("/hyperlink-policy/:id", verifyToken, (req, res) => {
+router.post("/delete-hyperlink-policy/:id", verifyToken, (req, res) => {
   const { id } = req.params;
   const sql = "DELETE FROM hyperlinkpolicy WHERE id = ?";
   db.query(sql, [id], (err, result) => {

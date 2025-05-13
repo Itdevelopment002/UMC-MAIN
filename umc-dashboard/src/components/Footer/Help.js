@@ -28,7 +28,7 @@ const Help = () => {
 
     const handleDelete = async () => {
         try {
-            await api.delete(`/helps/${selectedServices.id}`);
+            await api.post(`/delete-helps/${selectedServices.id}`);
             setHelpLinks(helplinks.filter((w) => w.id !== selectedServices.id));
             setShowDeleteModal(false);
             toast.success("Help Data deleted successfully!");
@@ -40,7 +40,7 @@ const Help = () => {
 
     const handleEditSave = async () => {
         try {
-            await api.put(`/helps/${selectedServices.id}`, {
+            await api.post(`/edit-helps/${selectedServices.id}`, {
                 heading: selectedServices.heading,
                 link: selectedServices.link,
                 language_code: selectedServices.language_code,

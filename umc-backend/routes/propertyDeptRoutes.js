@@ -38,7 +38,7 @@ router.post("/property-dept", verifyToken, (req, res) => {
 });
 
 
-router.put("/property-dept/:id", verifyToken, (req, res) => {
+router.post("/edit-property-dept/:id", verifyToken, (req, res) => {
   const { description, link, issue_date, language_code } = req.body;
   const formattedDate = issue_date ? convertToMySQLDate(issue_date) : null;
   const sql = "UPDATE property_dept SET description = ?, link = ?, issue_date = ?, language_code = ? WHERE id = ?";
@@ -49,7 +49,7 @@ router.put("/property-dept/:id", verifyToken, (req, res) => {
 });
 
 
-router.delete("/property-dept/:id", verifyToken, (req, res) => {
+router.post("/delete-property-dept/:id", verifyToken, (req, res) => {
   const sql = "DELETE FROM property_dept WHERE id = ?";
   db.query(sql, [req.params.id], (err, result) => {
     if (err) throw err;

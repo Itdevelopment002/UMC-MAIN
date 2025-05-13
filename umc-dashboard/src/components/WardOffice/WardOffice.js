@@ -28,7 +28,7 @@ const WardOffice = () => {
 
   const handleDelete = async () => {
     try {
-      await api.delete(`/ward-offices/${selectedWardOffice.id}`);
+      await api.post(`/delete-ward-offices/${selectedWardOffice.id}`);
       setWardOffices(wardOffices.filter((w) => w.id !== selectedWardOffice.id));
       setShowDeleteModal(false);
       toast.success("Ward office deleted successfully!");
@@ -40,7 +40,7 @@ const WardOffice = () => {
 
   const handleEditSave = async () => {
     try {
-      await api.put(`/ward-offices/${selectedWardOffice.id}`, {
+      await api.post(`/edit-ward-offices/${selectedWardOffice.id}`, {
         ward_no: selectedWardOffice.ward_no,
         ward_name: selectedWardOffice.ward_name,
         officer_name: selectedWardOffice.officer_name,

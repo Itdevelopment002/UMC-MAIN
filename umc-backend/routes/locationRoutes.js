@@ -40,7 +40,7 @@ router.post("/location-info", verifyToken, (req, res) => {
 });
 
 
-router.put("/location-info/:id", verifyToken, (req, res) => {
+router.post("/edit-location-info/:id", verifyToken, (req, res) => {
   const { id } = req.params;
   const { heading, description, language_code } = req.body;
   const sql = "UPDATE location_info SET heading = ?, description = ?, language_code = ? WHERE id = ?";
@@ -54,7 +54,7 @@ router.put("/location-info/:id", verifyToken, (req, res) => {
 });
 
 
-router.delete("/location-info/:id", verifyToken, (req, res) => {
+router.post("/delete-location-info/:id", verifyToken, (req, res) => {
   const { id } = req.params;
   const sql = "DELETE FROM location_info WHERE id = ?";
   db.query(sql, [id], (err, result) => {

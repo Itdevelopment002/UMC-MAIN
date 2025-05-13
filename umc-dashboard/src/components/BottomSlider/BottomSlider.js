@@ -24,8 +24,6 @@ const BottomSlider = () => {
     currentPage * itemsPerPage
   );
 
-  const API_URL = "/bottom-sliders";
-
   useEffect(() => {
     fetchLinks();
   }, []);
@@ -42,7 +40,7 @@ const BottomSlider = () => {
 
   const fetchLinks = () => {
     api
-      .get(API_URL)
+      .get('/bottom-sliders')
       .then((response) => {
         setLinks(response.data);
       })
@@ -54,7 +52,7 @@ const BottomSlider = () => {
   const handleDeleteConfirm = () => {
     if (selectedLinkId) {
       api
-        .delete(`${API_URL}/${selectedLinkId}`)
+        .post(`/delete-bottom-sliders/${selectedLinkId}`)
         .then(() => {
           setLinks(
             links.filter((websitelink) => websitelink.id !== selectedLinkId)
@@ -91,7 +89,7 @@ const BottomSlider = () => {
     setLinks(updatedLinks);
 
     api
-      .put(`${API_URL}/${editLinkData.id}`, formData)
+      .post(`/edit-bottom-sliders/${editLinkData.id}`, formData)
       .then((response) => {
         setLinks(
           links.map((websitelink) =>

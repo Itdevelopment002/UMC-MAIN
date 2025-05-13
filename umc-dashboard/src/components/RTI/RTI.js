@@ -35,7 +35,7 @@ const RTI = () => {
 
   const handleDelete = async () => {
     try {
-      await api.delete(`/rti-info/${selectedRti.id}`);
+      await api.post(`/delete-rti-info/${selectedRti.id}`);
       setRti(rti.filter((w) => w.id !== selectedRti.id));
       setShowDeleteModal(false);
       toast.success("Right to Information deleted successfully!");
@@ -50,7 +50,7 @@ const RTI = () => {
       ? formatDate(selectedRti.issue_date)
       : "";
     try {
-      await api.put(`/rti-info/${selectedRti.id}`, {
+      await api.post(`/edit-rti-info/${selectedRti.id}`, {
         description: selectedRti.description,
         link: selectedRti.link,
         issue_date: formattedIssueDate,

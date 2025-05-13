@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../config/db.js");
-const {verifyToken} = require('../middleware/jwtMiddleware.js');
+const { verifyToken } = require('../middleware/jwtMiddleware.js');
 
 router.get("/table-heading", (req, res) => {
   const language = req.query.lang;
@@ -30,7 +30,7 @@ router.post("/table-heading", verifyToken, (req, res) => {
 });
 
 
-router.put("/table-heading/:id", verifyToken, (req, res) => {
+router.post("/edit-table-heading/:id", verifyToken, (req, res) => {
   const { tablename, heading, language_code } = req.body;
   const sql = "UPDATE table_heading SET tablename = ?, heading = ?, language_code = ? WHERE id = ?";
   db.query(sql, [tablename, heading, language_code, req.params.id], (err, result) => {
@@ -40,7 +40,7 @@ router.put("/table-heading/:id", verifyToken, (req, res) => {
 });
 
 
-router.delete("/table-heading/:id", verifyToken, (req, res) => {
+router.post("/delete-table-heading/:id", verifyToken, (req, res) => {
   const sql = "DELETE FROM table_heading WHERE id = ?";
   db.query(sql, [req.params.id], (err, result) => {
     if (err) throw err;

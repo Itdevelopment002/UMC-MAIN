@@ -65,7 +65,7 @@ const HistoryContent = () => {
 
     const handleDeleteConfirm = async () => {
         try {
-            await api.delete(`/history_desc/${selectedWork.id}`);
+            await api.post(`/delete-history_desc/${selectedWork.id}`);
             setDesc(desc.filter((work) => work.id !== selectedWork.id));
             toast.success("History Description deleted successfully!");
         } catch (error) {
@@ -82,7 +82,7 @@ const HistoryContent = () => {
 
     const handleEditSubmit = async () => {
         try {
-            const response = await api.put(`/history_desc/${editData.id}`, {
+            const response = await api.post(`/edit-history_desc/${editData.id}`, {
                 description: editData.description,
                 language_code: editData.language_code,
             });

@@ -58,7 +58,7 @@ const HomeGallery = () => {
 
   const confirmDelete = async () => {
     try {
-      await api.delete(`/home-gallerys/${selectedGallery.id}`);
+      await api.post(`/delete-home-gallerys/${selectedGallery.id}`);
       setGallerys(gallerys.filter((gallery) => gallery.id !== selectedGallery.id));
       toast.success("Home gallery deleted successfully!");
       setShowDeleteModal(false);
@@ -88,7 +88,7 @@ const HomeGallery = () => {
     }
 
     try {
-      await api.put(`/home-gallerys/${selectedGallery.id}`, formData, {
+      await api.post(`/edit-home-gallerys/${selectedGallery.id}`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

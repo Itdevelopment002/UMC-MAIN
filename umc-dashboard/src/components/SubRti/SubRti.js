@@ -35,7 +35,7 @@ const SubRti = () => {
 
   const handleDelete = async () => {
     try {
-      await api.delete(`/sub-rti/${selectedRti.id}`);
+      await api.post(`/delete-sub-rti/${selectedRti.id}`);
       setRti(rti.filter((w) => w.id !== selectedRti.id));
       setShowDeleteModal(false);
       toast.success("Sub RTI deleted successfully!");
@@ -50,7 +50,7 @@ const SubRti = () => {
       ? formatDate(selectedRti.issue_date)
       : "";
     try {
-      await api.put(`/sub-rti/${selectedRti.id}`, {
+      await api.post(`/edit-sub-rti/${selectedRti.id}`, {
         description: selectedRti.description,
         link: selectedRti.link,
         issue_date: formattedIssueDate,

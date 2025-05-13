@@ -113,7 +113,7 @@ const EditProfile = () => {
             formData.append("email", email);
             if (image) formData.append("userImage", image);
 
-            await api.put(`/users/${id}`, formData, {
+            await api.post(`/edit-users/${id}`, formData, {
                 headers: { "Content-Type": "multipart/form-data" },
             });
             toast.success("Profile updated successfully!");
@@ -166,7 +166,7 @@ const EditProfile = () => {
                     return;
                 }
                 
-                await api.patch(`/users/${id}/update-password`, { newPassword: password });
+                await api.post(`/edit-users/${id}/update-password`, { newPassword: password });
                 toast.success("Password updated successfully!");
                 setPassword("");
                 setConfirmPassword("");

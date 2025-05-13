@@ -1,7 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../config/db.js");
-const {verifyToken} = require('../middleware/jwtMiddleware.js');
+const { verifyToken } = require('../middleware/jwtMiddleware.js');
+
 
 router.get("/ward-info", (req, res) => {
   const language = req.query.lang;
@@ -13,7 +14,7 @@ router.get("/ward-info", (req, res) => {
   } else {
     query = "SELECT * FROM wardinfo";
   }
-  
+
   db.query(query, params, (err, results) => {
     if (err) {
       return res.status(500).json({ message: "Database error", error: err });
@@ -58,7 +59,7 @@ router.post("/ward-info", verifyToken, (req, res) => {
 });
 
 
-router.put("/ward-info/:id", verifyToken, (req, res) => {
+router.post("/edit-ward-info/:id", verifyToken, (req, res) => {
   const { id } = req.params;
   const { office, address, phone, email, language_code } = req.body;
   if (!office || !address || !phone || !email || !language_code) {
@@ -77,7 +78,7 @@ router.put("/ward-info/:id", verifyToken, (req, res) => {
 });
 
 
-router.delete("/ward-info/:id", verifyToken, (req, res) => {
+router.post("/delete-ward-info/:id", verifyToken, (req, res) => {
   const { id } = req.params;
   const sql = "DELETE FROM wardinfo WHERE id = ?";
   db.query(sql, [id], (err, result) => {

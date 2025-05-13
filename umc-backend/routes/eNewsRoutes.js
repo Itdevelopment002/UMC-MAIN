@@ -51,7 +51,7 @@ router.post("/enews_data", verifyToken, (req, res) => {
 });
 
 
-router.put("/enews_data/:id", verifyToken, (req, res) => {
+router.post("/edit-enews_data/:id", verifyToken, (req, res) => {
   const { info, issue_date, pdf_link ,language_code} = req.body;
   const formattedDate = issue_date ? convertToMySQLDate(issue_date) : null;
   const sql = `
@@ -70,7 +70,7 @@ router.put("/enews_data/:id", verifyToken, (req, res) => {
 });
 
 
-router.delete("/enews_data/:id", verifyToken, (req, res) => {
+router.post("/delete-enews_data/:id", verifyToken, (req, res) => {
   const sql = "DELETE FROM e_news WHERE id = ?";
   db.query(sql, [req.params.id], (err, result) => {
     if (err) {

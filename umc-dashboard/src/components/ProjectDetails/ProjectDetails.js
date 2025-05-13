@@ -79,7 +79,7 @@ const ProjectDetails = () => {
 
   const handleDelete = async (id, type) => {
     try {
-      await api.delete(`/${type === "category" ? "project-category" : "project-description"}/${id}`);
+      await api.post(`/delete-${type === "category" ? "project-category" : "project-description"}/${id}`);
 
       if (type === "category") {
         setDepartments((prev) => prev.filter((item) => item.id !== id));
@@ -151,7 +151,7 @@ const ProjectDetails = () => {
   const handleSaveChanges = async () => {
     try {
       if (modalType === "description") {
-        await api.put(`/project-description/${selectedItem.id}`, {
+        await api.post(`/edit-project-description/${selectedItem.id}`, {
           heading: editData.heading,
           description: editData.description,
           language_code: editData.language_code,
@@ -174,7 +174,7 @@ const ProjectDetails = () => {
           formData.append("images", file); // Change "image" to "images"
         });
 
-        await api.put(`/project-category/${selectedItem.id}`, formData, {
+        await api.post(`/edit-project-category/${selectedItem.id}`, formData, {
           headers: { "Content-Type": "multipart/form-data" },
         });
 

@@ -1,32 +1,55 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import api from "../api";
 import { Link, useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { getImageValidationError } from "../../validation/ImageValidation";
 
 const AddBanner = () => {
   const [bannerName, setBannerName] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
+  const fileInputRef = useRef(null);
 
   const handleFileChange = (e) => {
-    setSelectedFile(e.target.files[0]);
-    setErrors((prev) => ({ ...prev, selectedFile: "" }));
+    const file = e.target.files[0];
+    setSelectedFile(file);
+
+    // Validate the file immediately when selected
+    const errorMessage = getImageValidationError(file);
+    if (errorMessage) {
+      setErrors({ ...errors, selectedFile: errorMessage });
+      // Clear the file input if invalid
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+    } else {
+      setErrors({ ...errors, selectedFile: "" });
+    }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const validateForm = () => {
     const newErrors = {};
-
+    
     if (!bannerName.trim()) {
       newErrors.bannerName = "Banner name is required.";
     }
 
-    if (!selectedFile) {
-      newErrors.selectedFile = "Banner image is required.";
+    // Use the global validation function
+    const imageError = getImageValidationError(selectedFile);
+    if (imageError) {
+      newErrors.selectedFile = imageError;
     }
 
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!validateForm()) {
       return;
     }
 
@@ -35,17 +58,32 @@ const AddBanner = () => {
     formData.append("bannerName", bannerName);
 
     try {
-      // eslint-disable-next-line
       const response = await api.post("/banner", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
+      
+      toast.success("Banner added successfully!", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+
+      // Reset form
       setBannerName("");
       setSelectedFile(null);
-      document.getElementById("image").value = "";
+      setErrors({});
+      
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+      
       navigate("/banner");
     } catch (error) {
+      toast.error("Failed to add banner. Try again.", {
+        position: "top-right",
+        autoClose: 3000,
+      });
       console.error("Error uploading file:", error);
     }
   };
@@ -82,13 +120,12 @@ const AddBanner = () => {
                       <div className="col-md-4">
                         <input
                           type="text"
-                          className={`form-control ${errors.bannerName ? "is-invalid" : ""
-                            }`}
+                          className={`form-control ${errors.bannerName ? "is-invalid" : ""}`}
                           value={bannerName}
                           placeholder="Enter Banner Name"
                           onChange={(e) => {
                             setBannerName(e.target.value);
-                            setErrors((prev) => ({ ...prev, bannerName: "" }));
+                            setErrors({ ...errors, bannerName: "" });
                           }}
                         />
                         {errors.bannerName && (
@@ -108,10 +145,10 @@ const AddBanner = () => {
                             type="file"
                             id="image"
                             name="image"
-                            accept="image/*"
-                            className={`form-control ${errors.selectedFile ? "is-invalid" : ""
-                              }`}
+                            accept=".jpg,.jpeg,.png"
+                            className={`form-control ${errors.selectedFile ? "is-invalid" : ""}`}
                             onChange={handleFileChange}
+                            ref={fileInputRef}
                           />
                           {errors.selectedFile && (
                             <div className="invalid-feedback">
@@ -119,14 +156,16 @@ const AddBanner = () => {
                             </div>
                           )}
                         </div>
-                        <small className="text-muted">📌 Note: Only image files are allowed (JPG, PNG, etc.).</small>
+                        
                       </div>
                     </div>
-                    <input
-                      type="submit"
-                      className="btn btn-primary btn-sm"
-                      value="Submit"
-                    />
+                    <div className="form-group row">
+                      <div className="col-md-4 offset-md-2">
+                        <button type="submit" className="btn btn-primary btn-sm">
+                          Submit
+                        </button>
+                      </div>
+                    </div>
                   </form>
                 </div>
               </div>
@@ -134,6 +173,7 @@ const AddBanner = () => {
           </div>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };

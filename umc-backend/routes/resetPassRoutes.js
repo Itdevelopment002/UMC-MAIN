@@ -4,12 +4,10 @@ const db = require("../config/db");
 require("dotenv").config();
 const nodemailer = require("nodemailer");
 const cron = require("node-cron");
-// const bcrypt = require("bcrypt");
 const bcrypt = require("bcryptjs");
 const rateLimit = require('express-rate-limit');
-const {verifyToken} = require('../middleware/jwtMiddleware.js');
+const { verifyToken } = require('../middleware/jwtMiddleware.js');
 
-// Configure nodemailer transporter
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
@@ -19,30 +17,28 @@ const transporter = nodemailer.createTransport({
 });
 
 const otpRateLimiter = rateLimit({
-  windowMs: 30 * 60 * 1000, // 30 minutes
-  max: 3, // Limit each email to 3 OTP requests per windowMs
+  windowMs: 30 * 60 * 1000,
+  max: 3,
   message: 'Too many OTP requests from this email, please try again after 30 minutes',
-  standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
-  legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+  standardHeaders: true,
+  legacyHeaders: false,
   keyGenerator: (req) => {
-    // Use email as the key for rate limiting
     if (!req.body.email) {
       throw new Error('Email is required for rate limiting');
     }
-    return req.body.email.toLowerCase(); // Case insensitive
+    return req.body.email.toLowerCase();
   },
   handler: (req, res, next, options) => {
     res.status(429).json({
       error: options.message,
-      retryAfter: options.windowMs / 1000 // Convert to seconds
+      retryAfter: options.windowMs / 1000
     });
   }
 });
 
-router.post('/reset-password', verifyToken, otpRateLimiter, async (req, res) => {
-  const { email } = req.body;
 
-  // Check if email exists in the users table
+router.post('/reset-password', otpRateLimiter, async (req, res) => {
+  const { email } = req.body;
   const userQuery = "SELECT * FROM users WHERE email = ?";
   db.query(userQuery, [email], async (err, results) => {
     if (err) {
@@ -53,14 +49,8 @@ router.post('/reset-password', verifyToken, otpRateLimiter, async (req, res) => 
     if (results.length === 0) {
       return res.status(400).json({ message: "Invalid email, Please write a valid email." });
     }
-    
-
     const user = results[0];
-
-    // Generate a 4-digit OTP
     const otp = Math.floor(1000 + Math.random() * 9000);
-
-    // Store the OTP in the reset_pass table
     const insertQuery = `INSERT INTO reset_pass (email, userId, code, created_at) 
   VALUES (?, ?, ?, NOW())`;
     db.query(insertQuery, [email, user.id, otp], (err, results) => {
@@ -68,8 +58,6 @@ router.post('/reset-password', verifyToken, otpRateLimiter, async (req, res) => 
         console.error("Error storing OTP:", err);
         return res.status(500).json({ message: "Error storing OTP" });
       }
-
-      // Send OTP to the user's email
       const mailOptions = {
         from: `no reply <${process.env.USER1}>`,
         to: email,
@@ -94,22 +82,20 @@ cron.schedule("*/5 * * * *", () => {
   db.query(query, (err, results) => {
     if (err) {
       console.error("Error deleting old OTPs:", err);
-    } else {
-      console.log("Deleted old OTPs:", results.affectedRows);
     }
   });
 });
 
-// Verify OTP
 
+// Verify OTP
 
 const CryptoJS = require('crypto-js');
 const SECRET_KEY = process.env.ENCRYPTION_KEY || "your-secret-key-here";
 
-router.post("/verify-otp", verifyToken, async (req, res) => {
+router.post("/verify-otp", async (req, res) => {
   try {
     const { data } = req.body;
-    
+
     if (!data) {
       return res.status(400).json({ message: "Encrypted data is required" });
     }
@@ -117,7 +103,7 @@ router.post("/verify-otp", verifyToken, async (req, res) => {
     // Decrypt the data
     const bytes = CryptoJS.AES.decrypt(data, SECRET_KEY);
     const decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
-    
+
     const { otp, email } = decryptedData;
 
     if (!otp || !email) {
@@ -145,11 +131,8 @@ router.post("/verify-otp", verifyToken, async (req, res) => {
 });
 
 
-
-router.post("/resend-otp", verifyToken, async (req, res) => {
+router.post("/resend-otp", async (req, res) => {
   const { email } = req.body;
-
-  // Check if email exists in the users table
   const userQuery = "SELECT * FROM users WHERE email = ?";
   db.query(userQuery, [email], async (err, results) => {
     if (err) {
@@ -163,7 +146,6 @@ router.post("/resend-otp", verifyToken, async (req, res) => {
 
     const user = results[0];
 
-    // Check if a record already exists for this email in the reset_pass table
     const checkQuery = "SELECT * FROM reset_pass WHERE email = ?";
     db.query(checkQuery, [email], (err, results) => {
       if (err) {
@@ -171,7 +153,6 @@ router.post("/resend-otp", verifyToken, async (req, res) => {
         return res.status(500).json({ message: "Error checking existing OTP" });
       }
 
-      // If a record exists, delete it
       if (results.length > 0) {
         const deleteQuery = "DELETE FROM reset_pass WHERE email = ?";
         db.query(deleteQuery, [email], (err, results) => {
@@ -180,23 +161,17 @@ router.post("/resend-otp", verifyToken, async (req, res) => {
             return res.status(500).json({ message: "Error deleting existing OTP" });
           }
 
-          // Proceed to generate and store a new OTP
           generateAndStoreOTP(email, user.id, res);
         });
       } else {
-        // If no record exists, proceed to generate and store a new OTP
         generateAndStoreOTP(email, user.id, res);
       }
     });
   });
 });
 
-// Helper function to generate and store OTP
 const generateAndStoreOTP = (email, userId, res) => {
-  // Generate a 4-digit OTP
   const otp = Math.floor(1000 + Math.random() * 9000);
-
-  // Store the OTP in the reset_pass table
   const insertQuery = `
     INSERT INTO reset_pass (email, userId, code, created_at) 
     VALUES (?, ?, ?, NOW())
@@ -206,8 +181,6 @@ const generateAndStoreOTP = (email, userId, res) => {
       console.error("Error storing OTP:", err);
       return res.status(500).json({ message: "Error storing OTP" });
     }
-
-    // Send OTP to the user's email
     const mailOptions = {
       from: `no reply <${process.env.USER1}>`,
       to: email,
@@ -227,8 +200,7 @@ const generateAndStoreOTP = (email, userId, res) => {
 };
 
 
-// chnage Password
-router.post("/change-password", verifyToken, async (req, res) => {
+router.post("/change-password", async (req, res) => {
   const { userId, newPassword } = req.body;
 
   if (!userId || !newPassword) {
@@ -255,7 +227,7 @@ router.post("/change-password", verifyToken, async (req, res) => {
   }
 });
 
-router.delete("/delete-otp", verifyToken, (req, res) => {
+router.post("/delete-otp", (req, res) => {
   const { email } = req.body; // Get email from the request body
 
   const deleteQuery = "DELETE FROM reset_pass WHERE email = ?";

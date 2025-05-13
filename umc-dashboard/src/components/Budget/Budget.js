@@ -58,7 +58,7 @@ const Budget = () => {
 
     const handleDelete = async () => {
         try {
-            await api.delete(`/budgets_data/${selectedBudget.id}`);
+            await api.post(`/delete-budgets_data/${selectedBudget.id}`);
             setBudgetsData(budgetsData.filter((budget) => budget.id !== selectedBudget.id));
             setShowDeleteModal(false);
             toast.success("Budget deleted successfully!");
@@ -73,7 +73,7 @@ const Budget = () => {
             ? formatDate(selectedBudget.issue_date)
             : "";
         try {
-            await api.put(`/budgets_data/${selectedBudget.id}`, {
+            await api.post(`/edit-budgets_data/${selectedBudget.id}`, {
                 year: selectedBudget.year,
                 heading: selectedBudget.heading,
                 link: selectedBudget.link,

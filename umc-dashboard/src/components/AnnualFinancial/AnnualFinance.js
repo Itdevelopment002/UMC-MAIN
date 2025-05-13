@@ -35,7 +35,7 @@ const Annual = () => {
 
   const handleDelete = async () => {
     try {
-      await api.delete(`/annual-finance/${selectedAnnual.id}`);
+      await api.post(`/delete-annual-finance/${selectedAnnual.id}`);
       setAnnual(annual.filter((w) => w.id !== selectedAnnual.id));
       setShowDeleteModal(false);
       toast.success("Annual Financial Statement deleted successfully!");
@@ -50,7 +50,7 @@ const Annual = () => {
       ? formatDate(selectedAnnual.issue_date)
       : "";
     try {
-      await api.put(`/annual-finance/${selectedAnnual.id}`, {
+      await api.post(`/edit-annual-finance/${selectedAnnual.id}`, {
         heading: selectedAnnual.heading,
         link: selectedAnnual.link,
         issue_date: formattedIssueDate,

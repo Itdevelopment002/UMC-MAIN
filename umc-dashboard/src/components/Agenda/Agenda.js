@@ -35,7 +35,7 @@ const Agenda = () => {
 
     const handleDelete = async () => {
         try {
-            await api.delete(`/agenda_data/${selectedResolution.Sr_No}`);
+            await api.post(`/delete-agenda_data/${selectedResolution.Sr_No}`);
             setResolutions(
                 resolutions.filter((r) => r.Sr_No !== selectedResolution.Sr_No)
             );
@@ -52,7 +52,7 @@ const Agenda = () => {
             ? formatDate(selectedResolution.Schedule_Date_of_Meeting)
             : "";
         try {
-            await api.put(`/agenda_data/${selectedResolution.Sr_No}`, {
+            await api.post(`/edit-agenda_data/${selectedResolution.Sr_No}`, {
                 Department_Name: selectedResolution.Department_Name,
                 Agenda_No_Date: selectedResolution.Agenda_No_Date,
                 Schedule_Date_of_Meeting: formattedPublishDate,

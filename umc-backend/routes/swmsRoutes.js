@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../config/db.js");
-const {verifyToken} = require('../middleware/jwtMiddleware.js');
+const { verifyToken } = require('../middleware/jwtMiddleware.js');
 
 const convertToMySQLDate = (dateString) => {
   const [day, month, year] = dateString.split("-");
@@ -38,7 +38,7 @@ router.post("/swms", verifyToken, (req, res) => {
 });
 
 
-router.put("/swms/:id", verifyToken, (req, res) => {
+router.post("/edit-swms/:id", verifyToken, (req, res) => {
   const { description, link, issue_date, language_code } = req.body;
   const formattedDate = issue_date ? convertToMySQLDate(issue_date) : null;
   const sql = "UPDATE swms SET description = ?, link = ?, issue_date = ?, language_code = ? WHERE id = ?";
@@ -49,7 +49,7 @@ router.put("/swms/:id", verifyToken, (req, res) => {
 });
 
 
-router.delete("/swms/:id", verifyToken, (req, res) => {
+router.post("/delete-swms/:id", verifyToken, (req, res) => {
   const sql = "DELETE FROM swms WHERE id = ?";
   db.query(sql, [req.params.id], (err, result) => {
     if (err) throw err;

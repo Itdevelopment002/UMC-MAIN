@@ -28,7 +28,7 @@ const DataTable1 = () => {
 
   const handleDelete = async () => {
     try {
-      await api.delete(`/location-info/${selectedPolicy.id}`);
+      await api.post(`/delete-location-info/${selectedPolicy.id}`);
       setPolicyData((prevData) =>
         prevData.filter((policy) => policy.id !== selectedPolicy.id)
       );
@@ -42,7 +42,7 @@ const DataTable1 = () => {
 
   const handleEditSave = async () => {
     try {
-      await api.put(`/location-info/${selectedPolicy.id}`, {
+      await api.post(`/edit-location-info/${selectedPolicy.id}`, {
         heading: selectedPolicy.heading,
         description: selectedPolicy.description,
         language_code: selectedPolicy.language_code,

@@ -10,7 +10,8 @@ const ChangePassword = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [message, setMessage] = useState({ text: "", type: "" }); // Error/Success message
+  const [message, setMessage] = useState({ text: "", type: "" });
+  const [passwordErrors, setPasswordErrors] = useState([]);
   const navigate = useNavigate();
   const location = useLocation();
   const { userId } = location.state || {};
@@ -23,35 +24,96 @@ const ChangePassword = () => {
     setShowConfirmPassword((prev) => !prev);
   };
 
-  // Clear the error message on typing
   const handlePasswordChange = (setter) => (e) => {
-    setter(e.target.value);
+    const value = e.target.value;
+    setter(value);
+    if (setter === setNewPassword) {
+      validatePassword(value);
+    }
     if (message.type === "error") {
       setMessage({ text: "", type: "" });
     }
   };
 
+  // Common passwords list (in a real app, this should be more extensive)
+  const commonPasswords = [
+    'password', '123456', '12345678', '1234', 'qwerty',
+    'letmein', 'admin', 'welcome', 'password1', '12345'
+  ];
+
+  const validatePassword = (password) => {
+    const errors = [];
+    // Minimum length
+    if (password.length < 8) {
+      errors.push("Password must be at least 8 characters long");
+    }
+    // Uppercase letter
+    if (!/[A-Z]/.test(password)) {
+      errors.push("Password must contain at least one uppercase letter");
+    }
+    // Lowercase letter
+    if (!/[a-z]/.test(password)) {
+      errors.push("Password must contain at least one lowercase letter");
+    }
+    // Number
+    if (!/[0-9]/.test(password)) {
+      errors.push("Password must contain at least one number");
+    }
+    // Special character
+    if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+      errors.push("Password must contain at least one special character");
+    }
+    // Common password check
+    if (commonPasswords.includes(password.toLowerCase())) {
+      errors.push("Password is too common or easily guessable");
+    }
+    setPasswordErrors(errors);
+    return errors.length === 0;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Validate passwords match
     if (newPassword !== confirmPassword) {
       setMessage({ text: "Passwords do not match.", type: "error" });
       return;
     }
 
+    // Validate password strength
+    if (!validatePassword(newPassword)) {
+      setMessage({
+        text: "Password does not meet requirements.",
+        type: "error"
+      });
+      return;
+    }
+
     try {
-      const response = await api.post("/change-password", { userId, newPassword });
+      const response = await api.post("/change-password", {
+        userId,
+        newPassword,
+        currentPassword: "" // You might want to add current password for logged-in users
+      });
 
       if (response.data.message === "Password updated successfully") {
-        setMessage({ text: "Password updated successfully.", type: "success" });
-
-        setTimeout(() => navigate("/login"), 2000);  // Redirect to login after 2 seconds
+        setMessage({
+          text: "Password updated successfully. Redirecting to login...",
+          type: "success"
+        });
+        setTimeout(() => navigate("/login"), 2000);
       }
     } catch (err) {
       if (err.response) {
-        setMessage({ text: err.response.data.message || "Error updating password", type: "error" });
+        setMessage({
+          text: err.response.data.message || "Error updating password",
+          type: "error"
+        });
       } else {
-        setMessage({ text: "Network error. Please try again.", type: "error" });
+        setMessage({
+          text: "Network error. Please try again.",
+          type: "error"
+        });
       }
     }
   };
@@ -87,6 +149,16 @@ const ChangePassword = () => {
                     className="custom-password-icon"
                   />
                 </div>
+                {passwordErrors.length > 0 && (
+                  <div className="password-requirements">
+                    <small className="text-muted">Password must:</small>
+                    <ul className="password-error-list">
+                      {passwordErrors.map((error, index) => (
+                        <li key={index} className="text-danger">{error}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
               </div>
 
               {/* Confirm Password */}
@@ -109,12 +181,12 @@ const ChangePassword = () => {
               </div>
               <div
                 className="custom-button-container12"
-                style={{ display: "flex", justifyContent: "center", gap: "20px", marginTop: "20px", borderRadius:'7px' }}
+                style={{ display: "flex", justifyContent: "center", gap: "20px", marginTop: "20px", borderRadius: '7px' }}
               >
-                <button type="submit" className="btn btn-primary ">
+                <button type="submit" className="btn btn-primary">
                   Change Password
                 </button>
-                </div>
+              </div>
             </form>
           </div>
         </div>

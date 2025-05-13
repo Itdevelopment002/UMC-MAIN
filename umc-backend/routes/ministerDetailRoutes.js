@@ -91,7 +91,7 @@ router.post("/minister-details", verifyToken, upload.single("image"), (req, res)
 });
 
 
-router.put("/minister-details/:id", verifyToken, upload.single("image"), (req, res) => {
+router.post("/edit-minister-details/:id", verifyToken, upload.single("image"), (req, res) => {
   const { id } = req.params;
   const { name, designation, language_code } = req.body;
 
@@ -164,7 +164,7 @@ router.put("/minister-details/:id", verifyToken, upload.single("image"), (req, r
 });
 
 
-router.delete("/minister-details/:id", verifyToken, (req, res) => {
+router.post("/delete-minister-details/:id", verifyToken, (req, res) => {
   const { id } = req.params;
 
   const selectSql = "SELECT image_path FROM minister WHERE id = ?";

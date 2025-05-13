@@ -35,7 +35,7 @@ const EmployeeInfo = () => {
 
   const handleDelete = async () => {
     try {
-      await api.delete(`/emp-info/${selectedEmp.id}`);
+      await api.post(`/delete-emp-info/${selectedEmp.id}`);
       setEmp(emp.filter((w) => w.id !== selectedEmp.id));
       setShowDeleteModal(false);
       toast.success("Employee Information deleted successfully!");
@@ -50,7 +50,7 @@ const EmployeeInfo = () => {
       ? formatDate(selectedEmp.issue_date)
       : "";
     try {
-      await api.put(`/emp-info/${selectedEmp.id}`, {
+      await api.post(`/edit-emp-info/${selectedEmp.id}`, {
         description: selectedEmp.description,
         link: selectedEmp.link,
         issue_date: formattedIssueDate,

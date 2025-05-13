@@ -3,6 +3,7 @@ const router = express.Router();
 const db = require("../config/db.js");
 const {verifyToken} = require('../middleware/jwtMiddleware.js');
 
+
 router.get("/quick-link", (req, res) => {
   const language = req.query.lang;
   let query;
@@ -30,7 +31,7 @@ router.post("/quick-link", verifyToken, (req, res) => {
 });
 
 
-router.put("/quick-link/:id", verifyToken, (req, res) => {
+router.post("/edit-quick-link/:id", verifyToken, (req, res) => {
   const { heading, link, language_code } = req.body;
   const sql = "UPDATE quick_links SET heading = ?, link = ?, language_code = ? WHERE id = ?";
   db.query(sql, [heading, link, language_code, req.params.id], (err, result) => {
@@ -40,7 +41,7 @@ router.put("/quick-link/:id", verifyToken, (req, res) => {
 });
 
 
-router.delete("/quick-link/:id", verifyToken, (req, res) => {
+router.post("/delete-quick-link/:id", verifyToken, (req, res) => {
   const sql = "DELETE FROM quick_links WHERE id = ?";
   db.query(sql, [req.params.id], (err, result) => {
     if (err) throw err;

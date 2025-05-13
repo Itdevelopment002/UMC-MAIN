@@ -29,7 +29,7 @@ const HyperlinkPolicy = () => {
 
   const handleDelete = async () => {
     try {
-      await api.delete(`/hyperlink-policy/${selectedCondition.id}`);
+      await api.post(`/delete-hyperlink-policy/${selectedCondition.id}`);
       setConditionsData((prevData) =>
         prevData.filter((func) => func.id !== selectedCondition.id)
       );
@@ -43,7 +43,7 @@ const HyperlinkPolicy = () => {
 
   const handleEditSave = async () => {
     try {
-      await api.put(`/hyperlink-policy/${selectedCondition.id}`, {
+      await api.postt(`/edit-hyperlink-policy/${selectedCondition.id}`, {
         description: selectedCondition.description,
         language_code: selectedCondition.language_code,
       });

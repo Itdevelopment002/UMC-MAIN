@@ -4,7 +4,7 @@ const path = require("path");
 const fs = require("fs");
 const router = express.Router();
 const db = require("../config/db.js");
-const {verifyToken} = require('../middleware/jwtMiddleware.js');
+const { verifyToken } = require('../middleware/jwtMiddleware.js');
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -31,7 +31,7 @@ router.get("/contact-info", (req, res) => {
   } else {
     query = "SELECT * FROM contactinfo";
   }
-  db.query(query, params,(err, results) => {
+  db.query(query, params, (err, results) => {
     if (err) {
       return res.status(500).json({ message: "Database error", error: err });
     }
@@ -79,7 +79,7 @@ router.post("/contact-info", verifyToken, upload.single("contactIcon"), (req, re
 });
 
 
-router.put("/contact-info/:id", verifyToken, upload.single("contactIcon"), (req, res) => {
+router.post("/edit-contact-info/:id", verifyToken, upload.single("contactIcon"), (req, res) => {
   const { id } = req.params;
   const { heading, description, language_code } = req.body;
 
@@ -153,7 +153,7 @@ router.put("/contact-info/:id", verifyToken, upload.single("contactIcon"), (req,
 });
 
 
-router.delete("/contact-info/:id", verifyToken, (req, res) => {
+router.post("/delete-contact-info/:id", verifyToken, (req, res) => {
   const { id } = req.params;
 
   const selectSql = "SELECT image_path FROM contactinfo WHERE id = ?";

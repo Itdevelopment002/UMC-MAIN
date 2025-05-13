@@ -3,6 +3,7 @@ const router = express.Router();
 const db = require("../config/db.js");
 const {verifyToken} = require('../middleware/jwtMiddleware.js');
 
+
 router.get("/history_desc", (req, res) => {
   const language = req.query.lang;
   let query;
@@ -36,7 +37,7 @@ router.post("/history_desc", verifyToken, (req, res) => {
 });
 
 
-router.put("/history_desc/:id", verifyToken, (req, res) => {
+router.post("/edit-history_desc/:id", verifyToken, (req, res) => {
   const { description, language_code } = req.body;
   const sql = "UPDATE history_desc SET description = ?, language_code= ? WHERE id = ?";
   db.query(sql, [description, language_code, req.params.id], (err, result) => {
@@ -46,7 +47,7 @@ router.put("/history_desc/:id", verifyToken, (req, res) => {
 });
 
 
-router.delete("/history_desc/:id", verifyToken, (req, res) => {
+router.post("/delete-history_desc/:id", verifyToken, (req, res) => {
   const { id } = req.params;
 
   const query = "DELETE FROM history_desc WHERE id = ?";

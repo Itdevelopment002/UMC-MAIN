@@ -52,10 +52,10 @@ const ContactUs = () => {
   const handleDelete = async (id, type) => {
     try {
       if (type === "contact") {
-        await api.delete(`/contact-info/${id}`);
+        await api.post(`/delete-contact-info/${id}`);
         setContactData((prevData) => prevData.filter((item) => item.id !== id));
       } else if (type === "ward") {
-        await api.delete(`/ward-info/${id}`);
+        await api.post(`/delete-ward-info/${id}`);
         setWardData((prevData) => prevData.filter((item) => item.id !== id));
       }
       toast.success(
@@ -89,7 +89,7 @@ const ContactUs = () => {
   const handleSaveChanges = async () => {
     try {
       if (modalType === "ward") {
-        await api.put(`/ward-info/${selectedItem.id}`, {
+        await api.post(`/edit-ward-info/${selectedItem.id}`, {
           office: editData.office,
           address: editData.address,
           phone: editData.phone,
@@ -114,7 +114,7 @@ const ContactUs = () => {
           formData.append("contactIcon", editData.imageFile);
         }
 
-        await api.put(`/contact-info/${selectedItem.id}`, formData, {
+        await api.post(`/edit-contact-info/${selectedItem.id}`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },

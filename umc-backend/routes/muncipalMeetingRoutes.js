@@ -47,7 +47,7 @@ router.post("/muncipal_meetings", verifyToken, (req, res) => {
 });
 
 
-router.put("/muncipal_meetings/:id", verifyToken, (req, res) => {
+router.post("/edit-muncipal_meetings/:id", verifyToken, (req, res) => {
   const { name, year, pdf_link1, pdf_link2, pdf_link3, issue_date, language_code } = req.body;
   const formattedDate = issue_date ? convertToMySQLDate(issue_date) : null;
   const sql =
@@ -63,7 +63,7 @@ router.put("/muncipal_meetings/:id", verifyToken, (req, res) => {
 });
 
 
-router.delete("/muncipal_meetings/:id", verifyToken, (req, res) => {
+router.post("/delete-muncipal_meetings/:id", verifyToken, (req, res) => {
   const sql = "DELETE FROM muncipal_meeting WHERE id = ?";
   db.query(sql, [req.params.id], (err, result) => {
     if (err) throw err;

@@ -118,8 +118,8 @@ router.post(
 );
 
 
-router.put(
-  "/home-services1/:id", verifyToken,
+router.post(
+  "/edit-home-services1/:id", verifyToken,
   upload.fields([{ name: "mainIcon" }]),
   async (req, res) => {
     const { id } = req.params;
@@ -201,7 +201,7 @@ router.put(
 );
 
 
-router.delete("/home-services1/:id", verifyToken, async (req, res) => {
+router.post("/delete-home-services1/:id", verifyToken, async (req, res) => {
   const { id } = req.params;
 
   const selectSql =

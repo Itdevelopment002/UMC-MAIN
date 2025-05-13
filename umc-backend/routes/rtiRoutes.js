@@ -38,7 +38,7 @@ router.post("/rti-info", verifyToken, (req, res) => {
 });
 
 
-router.put("/rti-info/:id", verifyToken, (req, res) => {
+router.post("/edit-rti-info/:id", verifyToken, (req, res) => {
   const { description, link, issue_date, language_code } = req.body;
   const formattedDate = issue_date ? convertToMySQLDate(issue_date) : null;
   const sql = "UPDATE rti SET description = ?, link = ?, issue_date = ?, language_code = ? WHERE id = ?";
@@ -49,7 +49,7 @@ router.put("/rti-info/:id", verifyToken, (req, res) => {
 });
 
 
-router.delete("/rti-info/:id", verifyToken, (req, res) => {
+router.post("/delete-rti-info/:id", verifyToken, (req, res) => {
   const sql = "DELETE FROM rti WHERE id = ?";
   db.query(sql, [req.params.id], (err, result) => {
     if (err) throw err;

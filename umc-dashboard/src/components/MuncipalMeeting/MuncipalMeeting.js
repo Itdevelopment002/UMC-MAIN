@@ -56,7 +56,7 @@ const MuncipalMeeting = () => {
 
     const handleDelete = async () => {
         try {
-            await api.delete(`/muncipal_meetings/${selectedMeeting.id}`);
+            await api.post(`/delete-muncipal_meetings/${selectedMeeting.id}`);
             setMunicipalMeetingsData(municipalMeetingsData.filter((meeting) => meeting.id !== selectedMeeting.id));
             setShowDeleteModal(false);
             toast.success("Municipal meeting deleted successfully!");
@@ -71,7 +71,7 @@ const MuncipalMeeting = () => {
             ? formatDate(selectedMeeting.issue_date)
             : "";
         try {
-            await api.put(`/muncipal_meetings/${selectedMeeting.id}`, {
+            await api.post(`/edit-muncipal_meetings/${selectedMeeting.id}`, {
                 name: selectedMeeting.name,
                 year: selectedMeeting.year,
                 pdf_link1: selectedMeeting.pdf_link1,

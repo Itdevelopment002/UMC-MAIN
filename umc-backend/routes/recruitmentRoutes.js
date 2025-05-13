@@ -1,12 +1,13 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../config/db");
-const {verifyToken} = require('../middleware/jwtMiddleware.js');
+const { verifyToken } = require('../middleware/jwtMiddleware.js');
 
 const convertToMySQLDate = (dateString) => {
   const [day, month, year] = dateString.split("-");
   return `${year}-${month}-${day}`;
 };
+
 
 router.get("/recruitment", (req, res) => {
   const language = req.query.lang;
@@ -68,7 +69,7 @@ router.post("/recruitment", verifyToken, (req, res) => {
 });
 
 
-router.put("/recruitment/:id", verifyToken, (req, res) => {
+router.post("/edit-recruitment/:id", verifyToken, (req, res) => {
   const { id } = req.params;
   const { heading, description, link, issue_date, language_code } = req.body;
 
@@ -119,7 +120,7 @@ router.put("/recruitment/:id", verifyToken, (req, res) => {
 });
 
 
-router.delete("/recruitment/:id", verifyToken, (req, res) => {
+router.post("/delete-recruitment/:id", verifyToken, (req, res) => {
   const { id } = req.params;
 
   const deleteSql = "DELETE FROM recruitments WHERE id = ?";

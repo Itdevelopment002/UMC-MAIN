@@ -63,7 +63,7 @@ const HomeProjects = () => {
 
   const handleDelete = async () => {
     try {
-      await api.delete(`/projects/${selectedProject.id}`);
+      await api.post(`/delete-projects/${selectedProject.id}`);
       setProjects(
         projects.filter((project) => project.id !== selectedProject.id)
       );
@@ -99,7 +99,7 @@ const HomeProjects = () => {
       formData.append("mainIcon", selectedProject.mainIcon);
 
     try {
-      await api.put(`/projects/${selectedProject.id}`, formData);
+      await api.post(`/edit-projects/${selectedProject.id}`, formData);
       fetchProjects();
       setShowEditModal(false);
       setImagePreview(null);

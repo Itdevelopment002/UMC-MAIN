@@ -116,8 +116,8 @@ router.post(
 );
 
 
-router.put(
-  "/department-info/:id", verifyToken,
+router.post(
+  "/edit-department-info/:id", verifyToken,
   upload.fields([{ name: "mainIcon" }]),
   async (req, res) => {
     const { id } = req.params;
@@ -199,7 +199,7 @@ router.put(
 );
 
 
-router.delete("/department-info/:id", verifyToken, async (req, res) => {
+router.post("/delete-department-info/:id", verifyToken, async (req, res) => {
   const { id } = req.params;
 
   const selectSql =

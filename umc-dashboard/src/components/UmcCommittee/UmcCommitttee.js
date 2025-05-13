@@ -61,13 +61,13 @@ const UmcCommittee = () => {
   const handleDelete = async (id, type) => {
     try {
       if (type === "standing") {
-        await api.delete(`/standing-committee/${id}`);
+        await api.post(`/delete-standing-committee/${id}`);
         setStandingData((prevData) => prevData.filter((item) => item.id !== id));
       } else if (type === "ward") {
-        await api.delete(`/ward-committee/${id}`);
+        await api.post(`/delete-ward-committee/${id}`);
         setWardData((prevData) => prevData.filter((item) => item.id !== id));
       } else if (type === "women") {
-        await api.delete(`/women-committee/${id}`);
+        await api.post(`/delete-women-committee/${id}`);
         setWomenData((prevData) => prevData.filter((item) => item.id !== id));
       }
       toast.success(
@@ -99,7 +99,7 @@ const UmcCommittee = () => {
   const handleSaveChanges = async () => {
     try {
       if (modalType === "standing") {
-        await api.put(`/standing-committee/${selectedItem.id}`, {
+        await api.post(`/edit-standing-committee/${selectedItem.id}`, {
           heading: editData.heading,
           language_code: editData.language_code,
         });
@@ -112,7 +112,7 @@ const UmcCommittee = () => {
         );
         fetchStandingData();
       } else if (modalType === "women") {
-        await api.put(`/women-committee/${selectedItem.id}`, {
+        await api.post(`/edit-women-committee/${selectedItem.id}`, {
           heading: editData.heading,
           language_code: editData.language_code,
         });
@@ -125,7 +125,7 @@ const UmcCommittee = () => {
         );
         fetchWomenData();
       } else if (modalType === "ward") {
-        await api.put(`/ward-committee/${selectedItem.id}`, {
+        await api.post(`/edit-ward-committee/${selectedItem.id}`, {
           ward: editData.ward,
           heading: editData.heading,
           language_code: editData.language_code,

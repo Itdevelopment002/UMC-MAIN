@@ -38,7 +38,7 @@ router.post("/annual-finance", verifyToken, (req, res) => {
 });
 
 
-router.put("/annual-finance/:id", verifyToken, (req, res) => {
+router.post("/edit-annual-finance/:id", verifyToken, (req, res) => {
   const { heading, link ,issue_date, language_code} = req.body;
   const formattedDate = issue_date ? convertToMySQLDate(issue_date) : null;
   const sql = "UPDATE annualfinance SET heading = ?, link = ?, issue_date = ?, language_code = ? WHERE id = ?";
@@ -49,7 +49,7 @@ router.put("/annual-finance/:id", verifyToken, (req, res) => {
 });
 
 
-router.delete("/annual-finance/:id", verifyToken, (req, res) => {
+router.post("/delete-annual-finance/:id", verifyToken, (req, res) => {
   const sql = "DELETE FROM annualfinance WHERE id = ?";
   db.query(sql, [req.params.id], (err, result) => {
     if (err) throw err;

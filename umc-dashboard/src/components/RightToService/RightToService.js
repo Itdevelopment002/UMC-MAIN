@@ -35,7 +35,7 @@ const RightToService = () => {
 
   const handleDelete = async () => {
     try {
-      await api.delete(`/rts/${selectedRts.id}`);
+      await api.post(`/delete-rts/${selectedRts.id}`);
       setRts(rts.filter((w) => w.id !== selectedRts.id));
       setShowDeleteModal(false);
       toast.success("Rts deleted successfully!");
@@ -50,7 +50,7 @@ const RightToService = () => {
       ? formatDate(selectedRts.issue_date)
       : "";
     try {
-      await api.put(`/rts/${selectedRts.id}`, {
+      await api.post(`/edit-rts/${selectedRts.id}`, {
         heading: selectedRts.heading,
         link: selectedRts.link,
         issue_date: formattedIssueDate,

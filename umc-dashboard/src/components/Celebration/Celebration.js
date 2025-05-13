@@ -34,7 +34,7 @@ const Celebration = () => {
     const handleCurtainUpdate = async (e) => {
         e.preventDefault();
         try {
-            await api.put("/celebration/1", { status: curtainStatus });
+            await api.post("/edit-celebration/1", { status: curtainStatus });
             toast.success("Curtain status updated successfully!");
         } catch (error) {
             toast.error("Failed to update curtain status!");
@@ -44,7 +44,7 @@ const Celebration = () => {
     const handleRibbonUpdate = async (e) => {
         e.preventDefault();
         try {
-            await api.put("/cutting/1", { status: ribbonStatus });
+            await api.post("/edit-cutting/1", { status: ribbonStatus });
             toast.success("Ribbon status updated successfully!");
         } catch (error) {
             toast.error("Failed to update ribbon status!");

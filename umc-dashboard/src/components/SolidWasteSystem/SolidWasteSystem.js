@@ -35,7 +35,7 @@ const SolidWasteSystem = () => {
 
   const handleDelete = async () => {
     try {
-      await api.delete(`/swms/${selectedSwms.id}`);
+      await api.post(`/delete-swms/${selectedSwms.id}`);
       setSwms(swms.filter((w) => w.id !== selectedSwms.id));
       setShowDeleteModal(false);
       toast.success("Swms deleted successfully!");
@@ -50,7 +50,7 @@ const SolidWasteSystem = () => {
       ? formatDate(selectedSwms.issue_date)
       : "";
     try {
-      await api.put(`/swms/${selectedSwms.id}`, {
+      await api.post(`/edit-swms/${selectedSwms.id}`, {
         description: selectedSwms.description,
         link: selectedSwms.link,
         issue_date: formattedIssueDate,

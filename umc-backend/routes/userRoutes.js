@@ -4,10 +4,8 @@ const path = require("path");
 const fs = require("fs");
 const router = express.Router();
 const db = require("../config/db.js");
-// const bcrypt = require("bcrypt");
 const bcrypt = require("bcryptjs");
-const {verifyToken} = require('../middleware/jwtMiddleware.js');
-
+const { verifyToken } = require('../middleware/jwtMiddleware.js');
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -23,7 +21,7 @@ const upload = multer({
   limits: { fileSize: 10 * 1024 * 1024 },
 });
 
-// Fetch all users
+
 router.get("/users", (req, res) => {
   const query = "SELECT * FROM users";
   db.query(query, (err, results) => {
@@ -31,16 +29,17 @@ router.get("/users", (req, res) => {
       console.error("Error fetching users:", err);
       return res.status(500).json({ message: "Error fetching users" });
     }
-    // Convert permission string to array
-    const users = results.map((user) => ({
+
+    const users = results.map(({ password, ...user }) => ({
       ...user,
       permission: user.permission ? user.permission.split(",") : [],
     }));
+
     res.json(users);
   });
 });
 
-// Fetch a single user by ID
+
 router.get("/users/:id", (req, res) => {
   const { id } = req.params;
 
@@ -57,23 +56,18 @@ router.get("/users/:id", (req, res) => {
       ...results[0],
       permission: results[0].permission ? results[0].permission.split(",") : [],
     };
-    // Exclude the password field
     delete user.password;
-
     res.json(user);
   });
 });
 
-// Add a new user
+
 router.post("/users", verifyToken, upload.single("userImage"), async (req, res) => {
   const { username, fullname, role, email, password, permission } = req.body;
   const defaultImage = "uploads/image.jpg";
   const userImage = req.file ? `uploads/${req.file.filename}` : defaultImage;
 
-  // Convert permission array to comma-separated string
   const permissionString = Array.isArray(permission) ? permission.join(",") : permission;
-
-  // Hash the password
   const saltRounds = 10;
   const hashedPassword = await bcrypt.hash(password, saltRounds);
 
@@ -103,8 +97,8 @@ router.post("/users", verifyToken, upload.single("userImage"), async (req, res) 
   );
 });
 
-// Update a user
-router.put("/users/:id", verifyToken, upload.single("userImage"), async (req, res) => {
+
+router.post("/edit-users/:id", verifyToken, upload.single("userImage"), async (req, res) => {
   const { id } = req.params;
   const { fullname, email, role, permission, status, password } = req.body;
   const imagePath = req.file ? `uploads/${req.file.filename}` : null;
@@ -164,8 +158,8 @@ router.put("/users/:id", verifyToken, upload.single("userImage"), async (req, re
   }
 });
 
-// Update password alone
-router.patch("/users/:id/update-password", verifyToken, async (req, res) => {
+
+router.post("/edit-users/:id/update-password", verifyToken, async (req, res) => {
   const { id } = req.params;
   const { newPassword } = req.body;
 
@@ -173,7 +167,6 @@ router.patch("/users/:id/update-password", verifyToken, async (req, res) => {
     return res.status(400).json({ message: "New password is required" });
   }
 
-  // Hash the new password
   const saltRounds = 10;
   const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
 
@@ -190,7 +183,7 @@ router.patch("/users/:id/update-password", verifyToken, async (req, res) => {
   });
 });
 
-// Verify password
+
 router.post("/users/:id/verify-password", verifyToken, async (req, res) => {
   const { id } = req.params;
   const { password } = req.body;
@@ -223,8 +216,7 @@ router.post("/users/:id/verify-password", verifyToken, async (req, res) => {
 });
 
 
-// Delete a user
-router.delete("/users/:id", verifyToken, (req, res) => {
+router.post("/delete-users/:id", verifyToken, (req, res) => {
   const { id } = req.params;
 
   const query = "DELETE FROM users WHERE id = ?";
@@ -236,5 +228,6 @@ router.delete("/users/:id", verifyToken, (req, res) => {
     res.json({ message: "User deleted successfully" });
   });
 });
+
 
 module.exports = router;

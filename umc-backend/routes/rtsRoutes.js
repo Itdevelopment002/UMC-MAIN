@@ -1,22 +1,23 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../config/db.js");
-const {verifyToken} = require('../middleware/jwtMiddleware.js');
+const { verifyToken } = require('../middleware/jwtMiddleware.js');
 
 const convertToMySQLDate = (dateString) => {
   const [day, month, year] = dateString.split("-");
   return `${year}-${month}-${day}`;
 };
 
+
 router.get("/rts", (req, res) => {
   const language = req.query.lang;
   let query;
   let params = [];
   if (language) {
-      query = `SELECT * FROM rts WHERE language_code = ?`;
-      params.push(language);
+    query = `SELECT * FROM rts WHERE language_code = ?`;
+    params.push(language);
   } else {
-      query = "SELECT * FROM rts";
+    query = "SELECT * FROM rts";
   }
   db.query(query, params, (err, results) => {
     if (err) throw err;
@@ -36,7 +37,7 @@ router.post("/rts", verifyToken, (req, res) => {
 });
 
 
-router.put("/rts/:id", verifyToken, (req, res) => {
+router.post("/edit-rts/:id", verifyToken, (req, res) => {
   const { heading, link, issue_date, language_code } = req.body;
   const formattedDate = issue_date ? convertToMySQLDate(issue_date) : null;
   const sql = "UPDATE rts SET heading = ?, link = ?, issue_date = ?, language_code = ? WHERE id = ?";
@@ -47,7 +48,7 @@ router.put("/rts/:id", verifyToken, (req, res) => {
 });
 
 
-router.delete("/rts/:id", verifyToken, (req, res) => {
+router.post("/delete-rts/:id", verifyToken, (req, res) => {
   const sql = "DELETE FROM rts WHERE id = ?";
   db.query(sql, [req.params.id], (err, result) => {
     if (err) throw err;

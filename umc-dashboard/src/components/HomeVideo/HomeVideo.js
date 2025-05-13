@@ -53,7 +53,7 @@ const HomeVideo = () => {
     try {
       setIsLoading(true);
       const { video_url } = selectedVideo;
-      await api.put(`/home-video/${selectedVideo.id}`, {
+      await api.post(`/edit-home-video/${selectedVideo.id}`, {
         video_url
       });
       toast.success("Video updated successfully");
@@ -70,7 +70,7 @@ const HomeVideo = () => {
   const handleDeleteVideo = async () => {
     try {
       setIsLoading(true);
-      await api.delete(`/home-video/${selectedVideo.id}`);
+      await api.post(`/delete-home-video/${selectedVideo.id}`);
       toast.success("Video deleted successfully");
       fetchVideos();
     } catch (error) {

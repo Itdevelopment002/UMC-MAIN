@@ -38,7 +38,7 @@ router.post("/information", verifyToken, (req, res) => {
 });
 
 
-router.put("/information/:id", verifyToken, (req, res) => {
+router.post("/edit-information/:id", verifyToken, (req, res) => {
   const { heading, link, issue_date, language_code } = req.body;
   const formattedDate = issue_date ? convertToMySQLDate(issue_date) : null;
   const sql = "UPDATE information SET heading = ?, link = ?, issue_date = ?, language_code= ? WHERE id = ?";
@@ -49,7 +49,7 @@ router.put("/information/:id", verifyToken, (req, res) => {
 });
 
 
-router.delete("/information/:id", verifyToken, (req, res) => {
+router.post("/delete-information/:id", verifyToken, (req, res) => {
   const sql = "DELETE FROM information WHERE id = ?";
   db.query(sql, [req.params.id], (err, result) => {
     if (err) throw err;

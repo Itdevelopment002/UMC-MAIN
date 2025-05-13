@@ -39,7 +39,7 @@ const AddtCommissioner = () => {
 
     const handleDelete = async (id) => {
         try {
-            await api.delete(`/addt-commissioner-data/${id}`);
+            await api.post(`/delete-addt-commissioner-data/${id}`);
             setCoData((prevData) => prevData.filter((item) => item.id !== id));
             toast.success(
                 `Additional Commissioner Data deleted successfully!`
@@ -96,7 +96,7 @@ const AddtCommissioner = () => {
                 formData.append("coImage", editData.imageFile);
             }
 
-            await api.put(`/addt-commissioner-data/${selectedItem.id}`, formData, {
+            await api.post(`/edit-addt-commissioner-data/${selectedItem.id}`, formData, {
                 headers: {
                     "Content-Type": "multipart/form-data",
                 },
