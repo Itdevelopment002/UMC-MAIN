@@ -142,12 +142,6 @@ const resetPassRoutes = require('./routes/resetPassRoutes');
 {/* Visitor */}
 const visitorRoutes = require('./routes/visitorRoutes');
 
-{/* Notification */}
-const notificationRoutes = require('./routes/notificationRoutes');
-const adminNotificationRoutes = require('./routes/adminNotificationRoutes');
-const notifyStatusRoutes = require('./routes/notifyStatusRoutes');
-
-
 
 {/* Main Menu */}
 app.use('/api', mainMenuRoutes);
@@ -282,11 +276,6 @@ app.use('/api', resetPassRoutes);
 
 {/* Visitor */}
 app.use('/api', visitorRoutes);
-
-{/* Notification */}
-app.use('/api', notificationRoutes);
-app.use('/api', adminNotificationRoutes);
-app.use('/api', notifyStatusRoutes);
 
 
 const PORT = process.env.PORT || 6002;

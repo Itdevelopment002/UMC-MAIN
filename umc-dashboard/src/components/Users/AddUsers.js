@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import api from "../api";
 import './AddUsers.css';
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const AddUsers = () => {
   const [departments, setDepartments] = useState([]);
@@ -45,18 +46,97 @@ const AddUsers = () => {
     }
   };
 
-  const getPasswordStrength = (password) => {
-    const strongRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-    const moderateRegex = /^(?=.*[a-zA-Z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$/;
+  const [passwordStrength, setPasswordStrength] = useState({
+    length: false,
+    upper: false,
+    lower: false,
+    number: false,
+    special: false,
+    notCommon: true,
+    notContextual: true
+  });
 
-    if (strongRegex.test(password)) {
-      return { message: "✅ Strong password", color: "success" };
-    } else if (moderateRegex.test(password)) {
-      return { message: "⚠️ Moderate password", color: "warning" };
-    } else {
-      return { message: "❌ Weak password", color: "danger" };
+  // Common passwords list (in a real app, this should be more extensive or server-side)
+  const commonPasswords = [
+    'password', '123456', '12345678', '1234', 'qwerty', '12345',
+    'dragon', 'baseball', 'football', 'letmein', 'monkey'
+  ];
+
+  useEffect(() => {
+    if (password) {
+      checkPasswordStrength(password);
     }
+  }, [password, fullname, email]);
+
+  const checkPasswordStrength = (pwd) => {
+    const hasMinLength = pwd.length >= 8;
+    const hasUpper = /[A-Z]/.test(pwd);
+    const hasLower = /[a-z]/.test(pwd);
+    const hasNumber = /[0-9]/.test(pwd);
+    const hasSpecial = /[@$!%*?&]/.test(pwd);
+    const isNotCommon = !commonPasswords.includes(pwd.toLowerCase());
+    const isNotContextual = !pwd.toLowerCase().includes(fullname.toLowerCase()) &&
+      !pwd.toLowerCase().includes(email.split('@')[0].toLowerCase());
+
+    setPasswordStrength({
+      length: hasMinLength,
+      upper: hasUpper,
+      lower: hasLower,
+      number: hasNumber,
+      special: hasSpecial,
+      notCommon: isNotCommon,
+      notContextual: isNotContextual
+    });
   };
+
+  const validatePassword = () => {
+    const { length, upper, lower, number, special, notCommon, notContextual } = passwordStrength;
+    return length && upper && lower && number && special && notCommon && notContextual;
+  };
+
+  const getPasswordStrength = () => {
+    const { length, upper, lower, number, special, notCommon, notContextual } = passwordStrength;
+
+    if (!length || !upper || !lower || !number || !special || !notCommon || !notContextual) {
+      return { message: "❌ Weak password - doesn't meet all requirements", color: "danger" };
+    }
+
+    return { message: "✅ Strong password - meets all requirements", color: "success" };
+  };
+
+  const renderPasswordRequirements = () => {
+    const { length, upper, lower, number, special, notCommon, notContextual } = passwordStrength;
+
+    return (
+      <div className="password-requirements mt-2">
+        <small>Password must meet these requirements:</small>
+        <ul className="list-unstyled">
+          <li className={length ? "text-success" : "text-danger"}>
+            {length ? "✓" : "✗"} At least 8 characters
+          </li>
+          <li className={upper ? "text-success" : "text-danger"}>
+            {upper ? "✓" : "✗"} At least one uppercase letter
+          </li>
+          <li className={lower ? "text-success" : "text-danger"}>
+            {lower ? "✓" : "✗"} At least one lowercase letter
+          </li>
+          <li className={number ? "text-success" : "text-danger"}>
+            {number ? "✓" : "✗"} At least one number
+          </li>
+          <li className={special ? "text-success" : "text-danger"}>
+            {special ? "✓" : "✗"} At least one special character (@$!%*?&)
+          </li>
+          <li className={notCommon ? "text-success" : "text-danger"}>
+            {notCommon ? "✓" : "✗"} Not a common password
+          </li>
+          <li className={notContextual ? "text-success" : "text-danger"}>
+            {notContextual ? "✓" : "✗"} Doesn't contain your name or email
+          </li>
+        </ul>
+      </div>
+    );
+  };
+
 
   const checkUsernameExists = () => {
     if (!username) return false;
@@ -144,12 +224,11 @@ const AddUsers = () => {
       isValid = false;
     }
 
-    // Password validation
     if (!password) {
       newErrors.password = "Password is required.";
       isValid = false;
-    } else if (password.length < 8) {
-      newErrors.password = "Password must be at least 8 characters.";
+    } else if (!validatePassword()) {
+      newErrors.password = "Password doesn't meet all requirements.";
       isValid = false;
     }
 
@@ -396,17 +475,15 @@ const AddUsers = () => {
                           onClick={() => setShowPassword(!showPassword)}
                           style={{ cursor: "pointer" }}
                         >
-                          <i className={`fas ${showPassword ? "fa-eye-slash" : "fa-eye"}`}></i>
+                          {showPassword ? <FaEyeSlash /> : <FaEye />}
                         </span>
                       </div>
                       {password && (
-                        <small className={`text-${getPasswordStrength(password).color}`}>
-                          {getPasswordStrength(password).message}
+                        <small className={`text-${getPasswordStrength().color}`}>
+                          {getPasswordStrength().message}
                         </small>
                       )}
-                      <small className="text-muted d-block mt-1">
-                        Use at least 8 characters, including uppercase, lowercase, numbers, and special characters (@, #, $, etc.).
-                      </small>
+                      {password && renderPasswordRequirements()}
                       {errors.password && (
                         <div className="invalid-feedback d-block">
                           {errors.password}
@@ -434,7 +511,7 @@ const AddUsers = () => {
                           onClick={() => setShowCnfPassword(!showCnfPassword)}
                           style={{ cursor: "pointer" }}
                         >
-                          <i className={`fas ${showCnfPassword ? "fa-eye-slash" : "fa-eye"}`}></i>
+                          {showCnfPassword ? <FaEyeSlash /> : <FaEye />}
                         </span>
                       </div>
                       {errors.cnfpassword && (
@@ -445,7 +522,11 @@ const AddUsers = () => {
                     </div>
                   </div>
 
-                  <button type="submit" className="btn btn-sm btn-primary mt-3">
+                  <button
+                    type="submit"
+                    className="btn btn-sm btn-primary mt-3"
+                    disabled={!validatePassword() || password !== cnfpassword}
+                  >
                     Submit
                   </button>
                 </form>

@@ -14,46 +14,7 @@ const Header = ({ onLogout, userDepartment }) => {
   const [user, setUser] = useState([]);
   // eslint-disable-next-line
   const [isScreenLarge, setIsScreenLarge] = useState(window.innerWidth > 990);
-  const [isNotificationDropdownOpen, setIsNotificationDropdownOpen] =
-    useState(false);
   const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
-  const [notifications, setNotifications] = useState([]);
-  //eslint-disable-next-line
-  const [unreadCount, setUnreadCount] = useState(0);
-  const [showAll, setShowAll] = useState(false);
-
-  const notificationsToShow = showAll
-    ? notifications
-    : notifications.slice(0, 5);
-
-  const fetchNotify = async () => {
-    try {
-      const response = await api.get("/notification");
-      const data = response.data.reverse();
-      const filteredNotifications = data.filter(
-        (notification) => notification.role === userDepartment.department
-      );
-
-      setNotifications(filteredNotifications);
-
-      const unreadCount = filteredNotifications.filter(
-        (notification) => notification.readed === 0
-      ).length;
-
-      setUnreadCount(unreadCount);
-    } catch (error) {
-      console.error("Error fetching notifications:", error);
-    }
-  };
-
-  useEffect(() => {
-    if (userDepartment) {
-      fetchNotify();
-      const interval = setInterval(fetchNotify, 3000);
-      return () => clearInterval(interval);
-    }
-    // eslint-disable-next-line
-  }, [userDepartment]);
 
 
   const fetchUser = async () => {
@@ -76,33 +37,6 @@ const Header = ({ onLogout, userDepartment }) => {
     //eslint-disable-next-line
   }, [userDepartment]);
 
-  const handleDeleteNotification = async (id) => {
-    try {
-      await api.delete(`/notification/${id}`);
-      setNotifications(
-        notifications.filter((notification) => notification.id !== id)
-      );
-      fetchNotify();
-    } catch (error) {
-      console.error("Error deleting notification", error);
-    }
-  };
-
-  const handleMarkAsRead = async (id) => {
-    try {
-      await api.put(`/update/${id}`, { readed: 1 });
-      const updatedNotifications = notifications.map((notification) =>
-        notification.id === id ? { ...notification, readed: 1 } : notification
-      );
-      setNotifications(updatedNotifications);
-      setUnreadCount(
-        updatedNotifications.filter((notification) => notification.readed === 0)
-          .length
-      );
-    } catch (error) {
-      console.error("Error updating notification status", error);
-    }
-  };
   const toggleSidebar = () => {
     setIsSidebarOpen((prev) => !prev);
   };
@@ -130,7 +64,6 @@ const Header = ({ onLogout, userDepartment }) => {
         !event.target.closest(".dropdown-toggle") &&
         !event.target.closest(".dropdown-menu")
       ) {
-        setIsNotificationDropdownOpen(false);
         setIsUserDropdownOpen(false);
       }
     };
@@ -172,86 +105,6 @@ const Header = ({ onLogout, userDepartment }) => {
             <i className="fa fa-bars"></i>
           </Link>
           <ul className="nav user-menu float-right">
-            <li className="nav-item dropdown d-none d-sm-block">
-              {/* <Link
-                to="#."
-                className="dropdown-toggle nav-link"
-                onClick={(e) => {
-                  e.preventDefault();
-                  setIsNotificationDropdownOpen((prev) => !prev);
-                  setIsUserDropdownOpen(false);
-                }}
-              >
-                <i className="fa fa-bell-o"></i>
-                <span className="badge badge-pill bg-danger float-right">
-                  {unreadCount}
-                </span>
-              </Link> */}
-              {isNotificationDropdownOpen && (
-                <div className="dropdown-menu notifications show notification-keep-visible">
-                  <div className="topnav-dropdown-header">
-                    <span >Notifications</span>
-                  </div>
-                  <div className="drop-scroll">
-                    <ul className="notification-list">
-                      {notificationsToShow.map((notification) => (
-                        <li
-                          key={notification.id}
-                          className={`notification-message ${notification.readed === 0 ? "unread" : ""
-                            }`}
-                        >
-                          <Link
-                            to="#."
-                            onClick={() => handleMarkAsRead(notification.id)}
-                          >
-                            <div className="media">
-                              <span className="avatar">
-                                <img
-                                  alt="Notification"
-                                  src={notification.avatar || img}
-                                  className="img-fluid"
-                                  style={{ width: "40px", height: "40px" }}
-                                />
-                              </span>
-                              <div className="media-body">
-                                <p className="noti-details">
-                                  <span className="noti-title">
-                                    {notification.heading}
-                                  </span>
-                                  : {notification.description}
-                                </p>
-                                <p className="noti-time">
-                                  <span className="notification-time">
-                                    {formatDistanceToNow(
-                                      new Date(notification.created_at),
-                                      { addSuffix: true }
-                                    )}
-                                  </span>
-                                </p>
-                              </div>
-                              <button
-                                className="btn-close"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  handleDeleteNotification(notification.id);
-                                }}
-                              >
-                                &times;
-                              </button>
-                            </div>
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                  <div className="topnav-dropdown-footer">
-                    <Link to="#." onClick={() => setShowAll((prev) => !prev)}>
-                      {showAll ? "Show Less" : "View All Notifications"}
-                    </Link>
-                  </div>
-                </div>
-              )}
-            </li>
             <li className="nav-item dropdown d-none d-sm-block mx-1">
               <Link
                 to="#."
@@ -259,7 +112,6 @@ const Header = ({ onLogout, userDepartment }) => {
                 onClick={(e) => {
                   e.preventDefault();
                   setIsUserDropdownOpen((prev) => !prev);
-                  setIsNotificationDropdownOpen(false);
                 }}
               >
                 <span className="user-img">
