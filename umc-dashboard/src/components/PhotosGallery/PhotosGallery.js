@@ -69,12 +69,12 @@ const PhotosGallery = () => {
   const handleDelete = async (id, type) => {
     try {
       if (type === "category") {
-        await api.delete(`/categories/${id}`);
+        await api.post(`/delete-categories/${id}`);
         setCategoryImageData((prevData) => prevData.filter((item) => item.id !== id));
         fetchCategoryImageData();
       }
       else if (type === "categoryImage") {
-        await api.delete(`/category-images/${id}`);
+        await api.post(`/delete-category-images/${id}`);
         setImages(images.filter((img) => img.id !== id));
         handleCategoryChange(selectedCategory);
         fetchCategoryImageData()
@@ -110,7 +110,7 @@ const PhotosGallery = () => {
   const handleSaveChanges = async () => {
     try {
       if (modalType === "category") {
-        await api.put(`/categories/${selectedItem.id}`, {
+        await api.post(`/edit-categories/${selectedItem.id}`, {
           name: editData.name,
           language_code: editData.language_code,
         });
@@ -130,7 +130,7 @@ const PhotosGallery = () => {
           formData.append("image", editData.imageFile);
         }
 
-        await api.put(`/category-images/${selectedItem.id}`, formData, {
+        await api.post(`/edit-category-images/${selectedItem.id}`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },

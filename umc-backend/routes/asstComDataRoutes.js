@@ -79,7 +79,7 @@ router.post("/asst-commissioner-data", verifyToken, upload.single("coImage"), (r
 });
 
 
-router.put("/asst-commissioner-data/:id", verifyToken, upload.single("coImage"), (req, res) => {
+router.post("/edit-asst-commissioner-data/:id", verifyToken, upload.single("coImage"), (req, res) => {
   const { id } = req.params;
   const { coName, designation, qualification, address, number, email, description, language_code } = req.body;
 
@@ -164,7 +164,7 @@ router.put("/asst-commissioner-data/:id", verifyToken, upload.single("coImage"),
 });
 
 
-router.delete("/asst-commissioner-data/:id", verifyToken, (req, res) => {
+router.post("/delete-asst-commissioner-data/:id", verifyToken, (req, res) => {
   const { id } = req.params;
 
   const selectSql = "SELECT image_path FROM asst_commissioner_details WHERE id = ?";

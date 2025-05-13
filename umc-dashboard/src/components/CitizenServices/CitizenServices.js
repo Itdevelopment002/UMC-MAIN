@@ -63,7 +63,7 @@ const CitizeServices = () => {
 
   const handleDelete = async () => {
     try {
-      await api.delete(`/citizen-services/${selectedService.id}`);
+      await api.post(`/delete-citizen-services/${selectedService.id}`);
       setCitizenServices(
         citzenServices.filter((service) => service.id !== selectedService.id)
       );
@@ -99,7 +99,7 @@ const CitizeServices = () => {
       formData.append("hoverIcon", selectedService.hoverIcon);
 
     try {
-      await api.put(`/citizen-services/${selectedService.id}`, formData);
+      await api.post(`/edit-citizen-services/${selectedService.id}`, formData);
       fetchServices();
       setShowEditModal(false);
       toast.success("Citizen service updated successfully");

@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../config/db.js");
-const {verifyToken} = require('../middleware/jwtMiddleware.js');
+const { verifyToken } = require('../middleware/jwtMiddleware.js');
 
 router.get("/helps", (req, res) => {
   const language = req.query.lang;
@@ -30,7 +30,7 @@ router.post("/helps", verifyToken, (req, res) => {
 });
 
 
-router.put("/helps/:id", verifyToken, (req, res) => {
+router.post("/edit-helps/:id", verifyToken, (req, res) => {
   const { heading, link, language_code } = req.body;
   const sql = "UPDATE help SET heading = ?, link = ?, language_code = ? WHERE id = ?";
   db.query(sql, [heading, link, language_code, req.params.id], (err, result) => {
@@ -40,7 +40,7 @@ router.put("/helps/:id", verifyToken, (req, res) => {
 });
 
 
-router.delete("/helps/:id", verifyToken, (req, res) => {
+router.post("/delete-helps/:id", verifyToken, (req, res) => {
   const sql = "DELETE FROM help WHERE id = ?";
   db.query(sql, [req.params.id], (err, result) => {
     if (err) throw err;

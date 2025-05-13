@@ -60,7 +60,7 @@ const DepartmentPage = () => {
 
   const handleDelete = async () => {
     try {
-      await api.delete(`/department-info/${selectedDepartment.id}`);
+      await api.post(`/delete-department-info/${selectedDepartment.id}`);
       setDepartments(
         departments.filter((department) => department.id !== selectedDepartment.id)
       );
@@ -95,7 +95,7 @@ const DepartmentPage = () => {
       formData.append("mainIcon", selectedDepartment.mainIcon);
 
     try {
-      await api.put(`/department-info/${selectedDepartment.id}`, formData);
+      await api.post(`/edit-department-info/${selectedDepartment.id}`, formData);
       fetchDepartments();
       setShowEditModal(false);
       toast.success("Department updated successfully");

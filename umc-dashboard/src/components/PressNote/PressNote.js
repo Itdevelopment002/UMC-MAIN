@@ -35,7 +35,7 @@ const PressNote = () => {
 
   const handleDelete = async () => {
     try {
-      await api.delete(`/press-note/${selectedNote.id}`);
+      await api.post(`/delete-press-note/${selectedNote.id}`);
       setNote(note.filter((w) => w.id !== selectedNote.id));
       setShowDeleteModal(false);
       toast.success("Press Note deleted successfully!");
@@ -50,7 +50,7 @@ const PressNote = () => {
       ? formatDate(selectedNote.issue_date)
       : "";
     try {
-      await api.put(`/press-note/${selectedNote.id}`, {
+      await api.post(`/edit-press-note/${selectedNote.id}`, {
         description: selectedNote.description,
         link: selectedNote.link,
         language_code: selectedNote.language_code,

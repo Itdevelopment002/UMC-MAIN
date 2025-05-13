@@ -58,7 +58,7 @@ const Slider = () => {
 
   const handleDelete = () => {
     api
-      .delete(`/sliders/${selectedSlider.id}`)
+      .post(`/delete-sliders/${selectedSlider.id}`)
       .then(() => {
         setSliders(
           sliders.filter((slider) => slider.id !== selectedSlider.id)
@@ -81,7 +81,7 @@ const Slider = () => {
     }
 
     try {
-      await api.put(`/sliders/${editData.id}`, formData, {
+      await api.post(`/edit-sliders/${editData.id}`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 

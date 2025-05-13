@@ -32,7 +32,7 @@ router.post("/administration", verifyToken, (req, res) => {
 });
 
 
-router.put("/administration/:id", verifyToken, (req, res) => {
+router.post("/edit-administration/:id", verifyToken, (req, res) => {
   const { name, designation, phone, language_code } = req.body;
   const sql = "UPDATE administration SET name = ?, designation = ?, phone = ?, language_code = ? WHERE id = ?";
   db.query(sql, [name, designation, phone,language_code, req.params.id], (err, result) => {
@@ -42,7 +42,7 @@ router.put("/administration/:id", verifyToken, (req, res) => {
 });
 
 
-router.delete("/administration/:id", verifyToken, (req, res) => {
+router.post("/delete-administration/:id", verifyToken, (req, res) => {
   const sql = "DELETE FROM administration WHERE id = ?";
   db.query(sql, [req.params.id], (err, result) => {
     if (err) throw err;

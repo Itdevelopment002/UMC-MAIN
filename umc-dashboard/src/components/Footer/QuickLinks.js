@@ -28,7 +28,7 @@ const QuickLinks = () => {
 
     const handleDelete = async () => {
         try {
-            await api.delete(`/quick-link/${selectedServices.id}`);
+            await api.post(`/delete-quick-link/${selectedServices.id}`);
             setQuickLinks(quicklinks.filter((w) => w.id !== selectedServices.id));
             setShowDeleteModal(false);
             toast.success("Quick Links deleted successfully!");
@@ -40,7 +40,7 @@ const QuickLinks = () => {
 
     const handleEditSave = async () => {
         try {
-            await api.put(`/quick-link/${selectedServices.id}`, {
+            await api.post(`/edit-quick-link/${selectedServices.id}`, {
                 heading: selectedServices.heading,
                 link: selectedServices.link,
                 language_code: selectedServices.language_code,

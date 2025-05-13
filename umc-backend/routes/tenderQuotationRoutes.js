@@ -38,7 +38,7 @@ router.post("/tenders-quotations", verifyToken, (req, res) => {
 });
 
 
-router.put("/tenders-quotations/:id", verifyToken, (req, res) => {
+router.post("/edit-tenders-quotations/:id", verifyToken, (req, res) => {
   const { heading, department, link, issue_date, language_code } = req.body;
   const formattedDate = issue_date ? convertToMySQLDate(issue_date) : null;
   const sql = "UPDATE tenders_quotations SET heading = ?, department = ?, link = ?, issue_date = ?, language_code = ? WHERE id = ?";
@@ -49,7 +49,7 @@ router.put("/tenders-quotations/:id", verifyToken, (req, res) => {
 });
 
 
-router.delete("/tenders-quotations/:id", verifyToken, (req, res) => {
+router.post("/delete-tenders-quotations/:id", verifyToken, (req, res) => {
   const sql = "DELETE FROM tenders_quotations WHERE id = ?";
   db.query(sql, [req.params.id], (err, result) => {
     if (err) throw err;

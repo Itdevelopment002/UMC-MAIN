@@ -100,7 +100,7 @@ router.post("/hod-details", verifyToken, upload.single("hodImage"), (req, res) =
 });
 
 
-router.put("/hod-details/:id", verifyToken, upload.single("hodImage"), (req, res) => {
+router.post("/edit-hod-details/:id", verifyToken, upload.single("hodImage"), (req, res) => {
   const { id } = req.params;
   const { department, name, designation, education, address, number, email, language_code } = req.body;
 
@@ -198,7 +198,7 @@ router.put("/hod-details/:id", verifyToken, upload.single("hodImage"), (req, res
 });
 
 
-router.delete("/hod-details/:id", verifyToken, (req, res) => {
+router.post("/delete-hod-details/:id", verifyToken, (req, res) => {
   const { id } = req.params;
 
   const selectSql = "SELECT file_path FROM depthod WHERE id = ?";

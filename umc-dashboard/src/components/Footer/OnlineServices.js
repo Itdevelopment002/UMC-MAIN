@@ -28,7 +28,7 @@ const OnlineServices = () => {
 
     const handleDelete = async () => {
         try {
-            await api.delete(`/online_service/${selectedServices.id}`);
+            await api.post(`/delete-online_service/${selectedServices.id}`);
             setOnlineServices(onlineservices.filter((w) => w.id !== selectedServices.id));
             setShowDeleteModal(false);
             toast.success("Online services deleted successfully!");
@@ -40,7 +40,7 @@ const OnlineServices = () => {
 
     const handleEditSave = async () => {
         try {
-            await api.put(`/online_service/${selectedServices.id}`, {
+            await api.post(`/edit-online_service/${selectedServices.id}`, {
                 heading: selectedServices.heading,
                 link: selectedServices.link,
                 language_code: selectedServices.language_code,

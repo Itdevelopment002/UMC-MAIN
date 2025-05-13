@@ -52,10 +52,10 @@ const CitizenCommunication = () => {
     const handleDelete = async (id, type) => {
         try {
             if (type === "portal") {
-                await api.delete(`/portal-services/${id}`);
+                await api.post(`/delete-portal-services/${id}`);
                 setPortalData((prevData) => prevData.filter((item) => item.id !== id));
             } else if (type === "emergency") {
-                await api.delete(`/emergency-services/${id}`);
+                await api.post(`/delete-emergency-services/${id}`);
                 setEmergencyData((prevData) => prevData.filter((item) => item.id !== id));
             }
             toast.success(
@@ -98,7 +98,7 @@ const CitizenCommunication = () => {
                     formData.append("portalImage", editData.imageFile);
                 }
 
-                await api.put(`/portal-services/${selectedItem.id}`, formData, {
+                await api.post(`/edit-portal-services/${selectedItem.id}`, formData, {
                     headers: {
                         "Content-Type": "multipart/form-data",
                     },
@@ -119,7 +119,7 @@ const CitizenCommunication = () => {
                     formData.append("emergencyImage", editData.imageFile);
                 }
 
-                await api.put(`/emergency-services/${selectedItem.id}`, formData, {
+                await api.post(`/edit-emergency-services/${selectedItem.id}`, formData, {
                     headers: {
                         "Content-Type": "multipart/form-data",
                     },

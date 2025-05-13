@@ -35,7 +35,7 @@ const PropertyTaxDept = () => {
 
   const handleDelete = async () => {
     try {
-      await api.delete(`/property-dept/${selectedTax.id}`);
+      await api.post(`/delete-property-dept/${selectedTax.id}`);
       setTax(tax.filter((w) => w.id !== selectedTax.id));
       setShowDeleteModal(false);
       toast.success("Tax deleted successfully!");
@@ -50,7 +50,7 @@ const PropertyTaxDept = () => {
       ? formatDate(selectedTax.issue_date)
       : "";
     try {
-      await api.put(`/property-dept/${selectedTax.id}`, {
+      await api.post(`/edit-property-dept/${selectedTax.id}`, {
         description: selectedTax.description,
         link: selectedTax.link,
         issue_date: formattedIssueDate,

@@ -47,7 +47,7 @@ const Tenders = () => {
 
   const handleDelete = async () => {
     try {
-      await api.delete(`/tenders-quotations/${selectedTender.id}`);
+      await api.post(`/delete-tenders-quotations/${selectedTender.id}`);
       setTender(tender.filter((w) => w.id !== selectedTender.id));
       setShowDeleteModal(false);
       toast.success("Tender and Quotation deleted successfully!");
@@ -62,7 +62,7 @@ const Tenders = () => {
       ? formatDate(selectedTender.issue_date)
       : "";
     try {
-      await api.put(`/tenders-quotations/${selectedTender.id}`, {
+      await api.post(`/edit-tenders-quotations/${selectedTender.id}`, {
         heading: selectedTender.heading,
         department: selectedTender.department,
         link: selectedTender.link,

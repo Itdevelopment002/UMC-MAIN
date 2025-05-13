@@ -77,7 +77,7 @@ router.post("/contacts-info", verifyToken, upload.single("image"), (req, res) =>
 });
 
 
-router.put("/contacts-info/:id", verifyToken, upload.single("image"), (req, res) => {
+router.post("/edit-contacts-info/:id", verifyToken, upload.single("image"), (req, res) => {
   const { id } = req.params;
   const { heading, description, language_code } = req.body;
 
@@ -149,7 +149,7 @@ router.put("/contacts-info/:id", verifyToken, upload.single("image"), (req, res)
 });
 
 
-router.delete("/contacts-info/:id", verifyToken, (req, res) => {
+router.post("/delete-contacts-info/:id", verifyToken, (req, res) => {
   const { id } = req.params;
 
   const selectSql = "SELECT image_path FROM contact_info WHERE id = ?";

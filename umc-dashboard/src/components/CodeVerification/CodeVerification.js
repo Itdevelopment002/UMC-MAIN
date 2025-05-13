@@ -126,7 +126,7 @@ const CustomCodeVerification = () => {
     const encryptedData = encryptData({ email });
 
     try {
-      const response = await api.delete("/delete-otp", { data: { data: encryptedData } });
+      const response = await api.post("/delete-delete-otp", { data: { data: encryptedData } });
 
       if (response.data.message === "OTP data deleted successfully") {
         navigate("/");

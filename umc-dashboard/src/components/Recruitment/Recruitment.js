@@ -62,7 +62,7 @@ const Recruitment = () => {
         ? formatDate(selectedRecruitment.issue_date)
         : "";
 
-      await api.put(`/recruitment/${selectedRecruitment.id}`, {
+      await api.post(`/edit-recruitment/${selectedRecruitment.id}`, {
         heading: selectedRecruitment.heading,
         description: selectedRecruitment.description,
         link: selectedRecruitment.link,
@@ -83,7 +83,7 @@ const Recruitment = () => {
   const handleDeleteRecruitment = async () => {
     try {
       setIsLoading(true);
-      await api.delete(`/recruitment/${selectedRecruitment.id}`);
+      await api.post(`/delete-recruitment/${selectedRecruitment.id}`);
       toast.success("Recruitment deleted successfully");
       fetchRecruitment();
     } catch (error) {

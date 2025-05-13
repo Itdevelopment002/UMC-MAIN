@@ -38,7 +38,7 @@ router.post("/press-note", verifyToken, (req, res) => {
 });
 
 
-router.put("/press-note/:id", verifyToken, (req, res) => {
+router.post("/edit-press-note/:id", verifyToken, (req, res) => {
   const { description, link, issue_date, language_code } = req.body;
   const formattedDate = issue_date ? convertToMySQLDate(issue_date) : null;
   const sql = "UPDATE pressnotes SET description = ?, link = ?, issue_date = ?, language_code = ? WHERE id = ?";
@@ -49,7 +49,7 @@ router.put("/press-note/:id", verifyToken, (req, res) => {
 });
 
 
-router.delete("/press-note/:id", verifyToken, (req, res) => {
+router.post("/delete-press-note/:id", verifyToken, (req, res) => {
   const sql = "DELETE FROM pressnotes WHERE id = ?";
   db.query(sql, [req.params.id], (err, result) => {
     if (err) throw err;

@@ -60,7 +60,7 @@ const MainMenu = () => {
         })),
       };
 
-      await api.put(`/update-main-menu/${selectedMenu.id}`, payload);
+      await api.post(`/update-main-menu/${selectedMenu.id}`, payload);
 
       setShowEditModal(false);
       fetchMenuData();
@@ -108,7 +108,7 @@ const MainMenu = () => {
 
   const handleConfirmDelete = async () => {
     try {
-      await api.delete(`/delete-main-menu/${selectedMenu.id}`);
+      await api.post(`/delete-main-menu/${selectedMenu.id}`);
       setShowDeleteModal(false);
       fetchMenuData();
       toast.success("Main menu deleted successfully!");

@@ -4,11 +4,11 @@ const path = require('path');
 const fs = require('fs');
 const router = express.Router();
 const db = require('../config/db.js');
-const {verifyToken} = require('../middleware/jwtMiddleware.js');
+const { verifyToken } = require('../middleware/jwtMiddleware.js');
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, 'uploads/');  
+        cb(null, 'uploads/');
     },
     filename: (req, file, cb) => {
         cb(null, Date.now() + path.extname(file.originalname));
@@ -19,7 +19,7 @@ const upload = multer({ storage });
 
 
 router.get('/home-gallerys', (req, res) => {
-    const sql = 'SELECT * FROM home_gallery'; 
+    const sql = 'SELECT * FROM home_gallery';
     db.query(sql, (err, results) => {
         if (err) {
             return res.status(500).json({ message: 'Database error', error: err });
@@ -35,8 +35,8 @@ router.get('/home-gallerys', (req, res) => {
 
             return {
                 id: row.id,
-                photo_name: row.photo_name,  
-                file_path: row.file_path, 
+                photo_name: row.photo_name,
+                file_path: row.file_path,
                 uploaded_at: row.uploaded_at,
                 formattedId: formattedId,
             };
@@ -76,14 +76,14 @@ router.post('/home-gallerys', verifyToken, upload.single('image'), (req, res) =>
         return res.status(400).json({ message: 'No file uploaded' });
     }
 
-    const filePath = `/uploads/${req.file.filename}`; 
-    const photoName = req.body.photoName; 
+    const filePath = `/uploads/${req.file.filename}`;
+    const photoName = req.body.photoName;
 
     if (!photoName) {
         return res.status(400).json({ message: 'photo name is required' });
     }
 
-    const sql = 'INSERT INTO home_gallery (photo_name, file_path) VALUES (?, ?)'; 
+    const sql = 'INSERT INTO home_gallery (photo_name, file_path) VALUES (?, ?)';
     db.query(sql, [photoName, filePath], (err, result) => {
         if (err) {
             return res.status(500).json({ message: 'Database error', error: err });
@@ -96,9 +96,9 @@ router.post('/home-gallerys', verifyToken, upload.single('image'), (req, res) =>
 });
 
 
-router.put('/home-gallerys/:id', verifyToken, upload.single('image'), (req, res) => {
+router.post('/edit-home-gallerys/:id', verifyToken, upload.single('image'), (req, res) => {
     const { id } = req.params;
-    const { photo_name } = req.body; 
+    const { photo_name } = req.body;
 
     let updateSql = 'UPDATE home_gallery SET';
     const updateParams = [];
@@ -110,7 +110,7 @@ router.put('/home-gallerys/:id', verifyToken, upload.single('image'), (req, res)
 
     if (req.file) {
         const newFilePath = `/uploads/${req.file.filename}`;
-        updateSql += updateParams.length > 0 ? ', file_path = ?' : ' file_path = ?'; 
+        updateSql += updateParams.length > 0 ? ', file_path = ?' : ' file_path = ?';
         updateParams.push(newFilePath);
     }
 
@@ -152,7 +152,7 @@ router.put('/home-gallerys/:id', verifyToken, upload.single('image'), (req, res)
 });
 
 
-router.delete('/home-gallerys/:id', verifyToken, (req, res) => {
+router.post('/delete-home-gallerys/:id', verifyToken, (req, res) => {
     const { id } = req.params;
 
     const selectSql = 'SELECT file_path FROM home_gallery WHERE id = ?';

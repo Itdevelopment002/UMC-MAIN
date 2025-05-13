@@ -59,7 +59,7 @@ const ContactInfo = () => {
 
   const handleDelete = () => {
     api
-      .delete(`/contacts-info/${selectedContact.id}`)
+      .post(`/delete-contacts-info/${selectedContact.id}`)
       .then(() => {
         setContacts(
           contacts.filter((contact) => contact.id !== selectedContact.id)
@@ -84,7 +84,7 @@ const ContactInfo = () => {
     }
 
     try {
-      await api.put(`/contacts-info/${editData.id}`, formData, {
+      await api.post(`/edit-contacts-info/${editData.id}`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 

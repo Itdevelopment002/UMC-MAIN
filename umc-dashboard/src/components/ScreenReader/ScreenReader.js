@@ -27,7 +27,7 @@ const ScreenReader = () => {
 
   const handleDelete = async () => {
     try {
-      await api.delete(`/screen-reader/${selectedReader.id}`);
+      await api.post(`/delete-screen-reader/${selectedReader.id}`);
       setReaderData((prevData) =>
         prevData.filter((reader) => reader.id !== selectedReader.id)
       );
@@ -41,7 +41,7 @@ const ScreenReader = () => {
 
   const handleEditSave = async () => {
     try {
-      await api.put(`/screen-reader/${selectedReader.id}`, {
+      await api.post(`/edit-screen-reader/${selectedReader.id}`, {
         name: selectedReader.name,
         website: selectedReader.website,
         available: selectedReader.available,

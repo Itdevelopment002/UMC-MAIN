@@ -3,7 +3,10 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import api from "../api";
-
+// import { validateImageFile, getImageValidationError } from "../../validation/ImageValidation";
+import { getImageValidationError } from "../../validation/ImageValidation";
+ 
+ 
 const AddMinisterDetails = () => {
   const navigate = useNavigate();
   const fileInputRef = useRef(null);
@@ -13,59 +16,69 @@ const AddMinisterDetails = () => {
     language_code: "",
     image: null,
   });
-
+ 
   const [errors, setErrors] = useState({
     name: "",
     designation: "",
     language_code: "",
     image: "",
   });
-
+ 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
-
+ 
     if (name === "image") {
       const file = files[0];
-
+ 
       if (file) {
-        if (!file.type.startsWith("image/")) {
-
+        // Use our global validation function
+        const errorMessage = getImageValidationError(file);
+       
+        if (errorMessage) {
+          // Clear the file input if invalid file is selected
           if (fileInputRef.current) {
             fileInputRef.current.value = "";
           }
+          // Set error message
+          setErrors({ ...errors, image: errorMessage });
           return;
         }
-
+ 
         setFormData({ ...formData, image: file });
         setErrors({ ...errors, image: "" });
       }
     } else {
       setFormData({ ...formData, [name]: value });
-
+ 
       if (value) {
         setErrors({ ...errors, [name]: "" });
       }
     }
   };
-
+ 
   const validateForm = () => {
     const newErrors = {};
     if (!formData.name) newErrors.name = "Minister Name is required";
     if (!formData.designation) newErrors.designation = "Designation is required";
     if (!formData.language_code) newErrors.language_code = "Language selection is required";
-    if (!formData.image) newErrors.image = "Minister Image is required";
-
+   
+    // Use our global validation function
+    const imageError = getImageValidationError(formData.image);
+    if (imageError) {
+      newErrors.image = imageError;
+    }
+ 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
-
+ 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+ 
     if (!validateForm()) {
       return;
     }
-
+ 
     const formDataToSend = new FormData();
     formDataToSend.append("name", formData.name);
     formDataToSend.append("designation", formData.designation);
@@ -73,29 +86,29 @@ const AddMinisterDetails = () => {
     if (formData.image) {
       formDataToSend.append("image", formData.image);
     }
-
+ 
     try {
       const response = await api.post("/minister-details", formDataToSend, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-
+ 
       if (response.status === 200) {
         toast.success("Minister added successfully!", {
           position: "top-right",
           autoClose: 3000,
         });
-
+ 
         setFormData({
           name: "",
           designation: "",
           language_code: "",
           image: null,
         });
-
+ 
         if (fileInputRef.current) {
           fileInputRef.current.value = "";
         }
-
+ 
         navigate("/minister");
       }
     } catch (error) {
@@ -106,7 +119,7 @@ const AddMinisterDetails = () => {
       console.error("Error adding minister:", error);
     }
   };
-
+ 
   return (
     <>
       <div className="page-wrapper">
@@ -194,16 +207,21 @@ const AddMinisterDetails = () => {
                             type="file"
                             className={`form-control ${errors.image ? "is-invalid" : ""}`}
                             name="image"
-                            accept="image/*"
+                            accept=".jpg,.jpeg,.png"
                             onChange={handleChange}
                             ref={fileInputRef}
                           />
                         </div>
                         {errors.image && <small className="text-danger">{errors.image}</small>}
-                        <small className="text-muted">📌 Note: Only image files are allowed (JPG, PNG, etc.).</small>
                       </div>
                     </div>
-                    <input type="submit" className="btn btn-primary btn-sm" value="Submit" />
+                    <div className="form-group row">
+                      <div className="col-md-4 offset-md-2">
+                        <button type="submit" className="btn btn-primary btn-sm">
+                          Submit
+                        </button>
+                      </div>
+                    </div>
                   </form>
                 </div>
               </div>
@@ -215,5 +233,5 @@ const AddMinisterDetails = () => {
     </>
   );
 };
-
+ 
 export default AddMinisterDetails;

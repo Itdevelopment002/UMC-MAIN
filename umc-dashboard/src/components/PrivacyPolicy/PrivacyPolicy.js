@@ -27,7 +27,7 @@ const PrivacyPolicy = () => {
 
   const handleDelete = async () => {
     try {
-      await api.delete(`/privacy-policy/${selectedPolicy.id}`);
+      await api.post(`/delete-privacy-policy/${selectedPolicy.id}`);
       setPolicyData((prevData) =>
         prevData.filter((policy) => policy.id !== selectedPolicy.id)
       );
@@ -41,7 +41,7 @@ const PrivacyPolicy = () => {
 
   const handleEditSave = async () => {
     try {
-      await api.put(`/privacy-policy/${selectedPolicy.id}`, {
+      await api.post(`/edit-privacy-policy/${selectedPolicy.id}`, {
         heading: selectedPolicy.heading,
         description: selectedPolicy.description,
         language_code: selectedPolicy.language_code,

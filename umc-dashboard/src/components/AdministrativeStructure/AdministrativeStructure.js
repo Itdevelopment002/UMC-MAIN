@@ -79,19 +79,19 @@ const AdministrativeStructure = () => {
     const handleDelete = async (id, type) => {
         try {
             if (type === "structure1") {
-                await api.delete(`/structure-tab1/${id}`);
+                await api.post(`/delete-structure-tab1/${id}`);
                 setStructureData1((prevData) => prevData.filter((item) => item.id !== id));
             } else if (type === "structure2") {
-                await api.delete(`/structure-tab2/${id}`);
+                await api.post(`/delete-structure-tab2/${id}`);
                 setStructureData2((prevData) => prevData.filter((item) => item.id !== id));
             } else if (type === "structure3") {
-                await api.delete(`/structure-tab3/${id}`);
+                await api.post(`/delete-structure-tab3/${id}`);
                 setStructureData3((prevData) => prevData.filter((item) => item.id !== id));
             } else if (type === "structure4") {
-                await api.delete(`/structure-tab4/${id}`);
+                await api.post(`/delete-structure-tab4/${id}`);
                 setStructureData4((prevData) => prevData.filter((item) => item.id !== id));
             } else if (type === "table") {
-                await api.delete(`/table-heading/${id}`);
+                await api.post(`/delete-table-heading/${id}`);
                 setTableData((prevData) => prevData.filter((item) => item.id !== id));
             }
 
@@ -144,7 +144,7 @@ const AdministrativeStructure = () => {
         try {
             if (modalType === "structure1") {
 
-                await api.put(`/structure-tab1/${selectedItem.id}`, {
+                await api.post(`/edit-structure-tab1/${selectedItem.id}`, {
                     heading1: editData.heading1,
                     heading2: editData.heading2,
                     language_code: editData.language_code
@@ -157,7 +157,7 @@ const AdministrativeStructure = () => {
                 fetchStructureData1();
             } else if (modalType === "structure2") {
 
-                await api.put(`/structure-tab2/${selectedItem.id}`, {
+                await api.post(`/edit-structure-tab2/${selectedItem.id}`, {
                     heading1: editData.heading1,
                     heading2: editData.heading2,
                     heading3: editData.heading3,
@@ -171,7 +171,7 @@ const AdministrativeStructure = () => {
                 );
                 fetchStructureData2();
             } else if (modalType === "structure3") {
-                await api.put(`/structure-tab3/${selectedItem.id}`, {
+                await api.post(`/edit-structure-tab3/${selectedItem.id}`, {
                     heading1: editData.heading1,
                     heading2: editData.heading2,
                     heading3: editData.heading3,
@@ -185,7 +185,7 @@ const AdministrativeStructure = () => {
                 );
                 fetchStructureData3();
             } else if (modalType === "structure4") {
-                await api.put(`/structure-tab4/${selectedItem.id}`, {
+                await api.post(`/edit-structure-tab4/${selectedItem.id}`, {
                     ward: editData.ward,
                     officer: editData.officer,
                     language_code: editData.language_code
@@ -197,7 +197,7 @@ const AdministrativeStructure = () => {
                 );
                 fetchStructureData4();
             } else if (modalType === "table") {
-                await api.put(`/table-heading/${selectedItem.id}`, {
+                await api.post(`/edit-table-heading/${selectedItem.id}`, {
                     tablename: editData.tablename,
                     heading: editData.heading,
                     language_code: editData.language_code

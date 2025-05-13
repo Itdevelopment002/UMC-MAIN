@@ -121,16 +121,16 @@ const DepartmentInformation = ({ user }) => {
     const handleDelete = async (id, type) => {
         try {
             if (type === "banner") {
-                await api.delete(`/department-banner/${id}`);
+                await api.post(`/delete-department-banner/${id}`);
                 setBannerData((prevData) => prevData.filter((item) => item.id !== id));
             } else if (type === "description") {
-                await api.delete(`/department-description/${id}`);
+                await api.post(`/delete-department-description/${id}`);
                 setDescriptionData((prevData) => prevData.filter((item) => item.id !== id));
             } else if (type === "hod") {
-                await api.delete(`/hod-details/${id}`);
+                await api.post(`/delete-hod-details/${id}`);
                 setHodData((prevData) => prevData.filter((item) => item.id !== id));
             } else if (type === "pdf") {
-                await api.delete(`/department-pdfs/${id}`);
+                await api.post(`/delete-department-pdfs/${id}`);
                 setPdfData((prevData) => prevData.filter((item) => item.id !== id));
             }
             toast.success(
@@ -187,7 +187,7 @@ const DepartmentInformation = ({ user }) => {
                     formData.append("bannerImage", editData.imageFile);
                 }
 
-                await api.put(`/department-banner/${selectedItem.id}`, formData, {
+                await api.post(`/edit-department-banner/${selectedItem.id}`, formData, {
                     headers: {
                         "Content-Type": "multipart/form-data",
                     },
@@ -200,7 +200,7 @@ const DepartmentInformation = ({ user }) => {
                 fetchBannerData();
             }
             else if (modalType === "description") {
-                await api.put(`/department-description/${selectedItem.id}`, {
+                await api.post(`/edit-department-description/${selectedItem.id}`, {
                     department: editData.department,
                     description: editData.description,
                     language_code: editData.language_code,
@@ -229,7 +229,7 @@ const DepartmentInformation = ({ user }) => {
                     formData.append("hodImage", editData.imageFile);
                 }
 
-                await api.put(`/hod-details/${selectedItem.id}`, formData, {
+                await api.post(`/edit-hod-details/${selectedItem.id}`, formData, {
                     headers: {
                         "Content-Type": "multipart/form-data",
                     },
@@ -243,7 +243,7 @@ const DepartmentInformation = ({ user }) => {
             }
             else if (modalType === "pdf") {
                 const formattedIssueDate = editData.issue_date ? formatDate(editData.issue_date) : "";
-                await api.put(`/department-pdfs/${selectedItem.id}`, {
+                await api.post(`/edit-department-pdfs/${selectedItem.id}`, {
                     department: editData.department,
                     heading: editData.heading,
                     link: editData.link,

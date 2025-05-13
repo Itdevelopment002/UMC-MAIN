@@ -96,7 +96,7 @@ router.post('/history-img', verifyToken, upload.single('image'), (req, res) => {
 });
 
 
-router.put('/history-img/:id', verifyToken, upload.single('image'), (req, res) => {
+router.post('/edit-history-img/:id', verifyToken, upload.single('image'), (req, res) => {
     const { id } = req.params;
     const { photo_name } = req.body; 
 
@@ -152,7 +152,7 @@ router.put('/history-img/:id', verifyToken, upload.single('image'), (req, res) =
 });
 
 
-router.delete('/history-img/:id', verifyToken, (req, res) => {
+router.post('/delete-history-img/:id', verifyToken, (req, res) => {
     const { id } = req.params;
 
     const selectSql = 'SELECT file_path FROM history_img WHERE id = ?';

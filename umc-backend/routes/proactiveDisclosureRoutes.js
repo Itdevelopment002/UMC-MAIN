@@ -38,7 +38,7 @@ router.post("/proactive-disclosure", verifyToken, (req, res) => {
 });
 
 
-router.put("/proactive-disclosure/:id", verifyToken, (req, res) => {
+router.post("/edit-proactive-disclosure/:id", verifyToken, (req, res) => {
   const { description, link, issue_date, language_code } = req.body;
   const formattedDate = issue_date ? convertToMySQLDate(issue_date) : null;
   const sql = "UPDATE proactive_disclosure SET description = ?, link = ?, issue_date = ?, language_code = ? WHERE id = ?";
@@ -49,7 +49,7 @@ router.put("/proactive-disclosure/:id", verifyToken, (req, res) => {
 });
 
 
-router.delete("/proactive-disclosure/:id", verifyToken, (req, res) => {
+router.post("/delete-proactive-disclosure/:id", verifyToken, (req, res) => {
   const sql = "DELETE FROM proactive_disclosure WHERE id = ?";
   db.query(sql, [req.params.id], (err, result) => {
     if (err) throw err;

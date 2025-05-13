@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../config/db.js");
-const {verifyToken} = require('../middleware/jwtMiddleware.js');
+const { verifyToken } = require('../middleware/jwtMiddleware.js');
 
 router.get("/project-description", (req, res) => {
   const language = req.query.lang;
@@ -33,7 +33,7 @@ router.get("/project-description", (req, res) => {
 
     const processedResults = results.map(item => ({
       ...item,
-      subDescriptions: item.subDescriptions ? item.subDescriptions.split(',') : [] 
+      subDescriptions: item.subDescriptions ? item.subDescriptions.split(',') : []
     }));
 
     res.json(processedResults);
@@ -86,7 +86,7 @@ router.post("/project-description", verifyToken, (req, res) => {
 });
 
 
-router.put("/project-description/:id", verifyToken, (req, res) => {
+router.post("/edit-project-description/:id", verifyToken, (req, res) => {
   const { heading, description, language_code, subDescriptions } = req.body;
   const sql = "UPDATE descriptions SET heading = ?, description = ?, language_code = ? WHERE id = ?";
 
@@ -113,7 +113,7 @@ router.put("/project-description/:id", verifyToken, (req, res) => {
 });
 
 
-router.delete("/project-description/:id", verifyToken, (req, res) => {
+router.post("/delete-project-description/:id", verifyToken, (req, res) => {
   const deleteSubDescriptionsSql = "DELETE FROM sub_descriptions WHERE dept_id = ?";
   db.query(deleteSubDescriptionsSql, [req.params.id], (err) => {
     if (err) throw err;

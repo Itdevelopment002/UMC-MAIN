@@ -60,7 +60,7 @@ const HistoryImage = () => {
 
   const confirmDelete = async () => {
     try {
-      await api.delete(`/history-img/${selectedGallery.id}`);
+      await api.post(`/delete-history-img/${selectedGallery.id}`);
       setGallerys(gallerys.filter((gallery) => gallery.id !== selectedGallery.id));
       toast.success("History Image deleted successfully!");
       setShowDeleteModal(false);
@@ -90,7 +90,7 @@ const HistoryImage = () => {
     }
 
     try {
-      await api.put(`/history-img/${selectedGallery.id}`, formData, {
+      await api.post(`/edit-history-img/${selectedGallery.id}`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

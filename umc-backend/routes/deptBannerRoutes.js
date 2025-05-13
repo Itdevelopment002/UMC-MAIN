@@ -84,7 +84,7 @@ router.post("/department-banner", verifyToken, upload.single("bannerImage"), (re
 });
 
 
-router.put("/department-banner/:id", verifyToken, upload.single("bannerImage"), (req, res) => {
+router.post("/edit-department-banner/:id", verifyToken, upload.single("bannerImage"), (req, res) => {
   const { id } = req.params;
   const { name } = req.body;
 
@@ -140,7 +140,7 @@ router.put("/department-banner/:id", verifyToken, upload.single("bannerImage"), 
 });
 
 
-router.delete("/department-banner/:id", verifyToken, (req, res) => {
+router.post("/delete-department-banner/:id", verifyToken, (req, res) => {
   const { id } = req.params;
 
   const selectSql = "SELECT file_path FROM deptbanner WHERE id = ?";
