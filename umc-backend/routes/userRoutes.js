@@ -1,26 +1,13 @@
 const express = require("express");
-const multer = require("multer");
-const path = require("path");
-const fs = require("fs");
 const router = express.Router();
 const db = require("../config/db.js");
 const bcrypt = require("bcryptjs");
 const { verifyToken } = require('../middleware/jwtMiddleware.js');
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "uploads/");
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname));
-  },
-});
-
-const upload = multer({
-  storage,
-  limits: { fileSize: 10 * 1024 * 1024 },
-});
-
+const commonPasswords = [
+  'password', '123456', '12345678', '1234', 'qwerty', '12345',
+  'dragon', 'baseball', 'football', 'letmein', 'monkey'
+];
 
 router.get("/users", (req, res) => {
   const query = "SELECT * FROM users";
@@ -62,23 +49,94 @@ router.get("/users/:id", (req, res) => {
 });
 
 
-router.post("/users", verifyToken, upload.single("userImage"), async (req, res) => {
+router.post("/users", verifyToken, async (req, res) => {
   const { username, fullname, role, email, password, permission } = req.body;
-  const defaultImage = "uploads/image.jpg";
-  const userImage = req.file ? `uploads/${req.file.filename}` : defaultImage;
+
+  if (!username || !fullname || !role || !email || !password || !permission) {
+    return res.status(400).json({ message: "All fields are required" });
+  }
+
+  try {
+    const usernameCheck = await new Promise((resolve, reject) => {
+      db.query(
+        "SELECT * FROM users WHERE username = ?",
+        [username],
+        (err, results) => {
+          if (err) return reject(err);
+          resolve(results.length > 0);
+        }
+      );
+    });
+
+    if (usernameCheck) {
+      return res.status(400).json({
+        message: "Username already exists. Please choose a different one.",
+        field: "username"
+      });
+    }
+
+    const emailCheck = await new Promise((resolve, reject) => {
+      db.query(
+        "SELECT * FROM users WHERE email = ?",
+        [email],
+        (err, results) => {
+          if (err) return reject(err);
+          resolve(results.length > 0);
+        }
+      );
+    });
+
+    if (emailCheck) {
+      return res.status(400).json({
+        message: "Email address already exists. Please use a different email.",
+        field: "email"
+      });
+    }
+  } catch (err) {
+    console.error("Error checking user existence:", err);
+    return res.status(500).json({ message: "Error checking user data" });
+  }
+
+  const hasMinLength = password.length >= 8;
+  const hasUpper = /[A-Z]/.test(password);
+  const hasLower = /[a-z]/.test(password);
+  const hasNumber = /[0-9]/.test(password);
+  const hasSpecial = /[@$!%*?&]/.test(password);
+  const isNotCommon = !commonPasswords.includes(password.toLowerCase());
+  const emailPrefix = email ? email.split('@')[0].toLowerCase() : '';
+  const isNotContextual = fullname && email
+    ? !password.toLowerCase().includes(fullname.toLowerCase()) &&
+    !password.toLowerCase().includes(emailPrefix)
+    : true;
+
+  if (!hasMinLength || !hasUpper || !hasLower || !hasNumber ||
+    !hasSpecial || !isNotCommon || !isNotContextual) {
+    return res.status(400).json({
+      message: "Weak password - doesn't meet all requirements",
+      requirements: {
+        minLength: hasMinLength,
+        hasUpper: hasUpper,
+        hasLower: hasLower,
+        hasNumber: hasNumber,
+        hasSpecial: hasSpecial,
+        notCommon: isNotCommon,
+        notContextual: isNotContextual
+      }
+    });
+  }
 
   const permissionString = Array.isArray(permission) ? permission.join(",") : permission;
   const saltRounds = 10;
   const hashedPassword = await bcrypt.hash(password, saltRounds);
 
   const query = `
-    INSERT INTO users (username, fullname, role, email, password, permission, userImage) 
-    VALUES (?, ?, ?, ?, ?, ?, ?)
+    INSERT INTO users (username, fullname, role, email, password, permission) 
+    VALUES (?, ?, ?, ?, ?, ?)
   `;
 
   db.query(
     query,
-    [username, fullname, role, email, hashedPassword, permissionString, userImage],
+    [username, fullname, role, email, hashedPassword, permissionString],
     (err, results) => {
       if (err) {
         console.error("Error adding user:", err);
@@ -91,17 +149,15 @@ router.post("/users", verifyToken, upload.single("userImage"), async (req, res) 
         role,
         email,
         permission: permissionString.split(","),
-        userImage,
       });
     }
   );
 });
 
 
-router.post("/edit-users/:id", verifyToken, upload.single("userImage"), async (req, res) => {
+router.post("/edit-users/:id", verifyToken, async (req, res) => {
   const { id } = req.params;
   const { fullname, email, role, permission, status, password } = req.body;
-  const imagePath = req.file ? `uploads/${req.file.filename}` : null;
 
   try {
     db.query("SELECT * FROM users WHERE id = ?", [id], async (err, results) => {
@@ -120,18 +176,16 @@ router.post("/edit-users/:id", verifyToken, upload.single("userImage"), async (r
       const updatedRole = role || user.role;
       const updatedPermission = permission ? (Array.isArray(permission) ? permission.join(",") : permission) : user.permission;
       const updatedStatus = status || user.status;
-      const updatedImage = imagePath || user.userImage;
       const updatedPassword = password || user.password;
 
       const query =
-        "UPDATE users SET fullname = ?, email = ?, role = ?, permission = ?, status = ?, userImage = ?, password = ? WHERE id = ?";
+        "UPDATE users SET fullname = ?, email = ?, role = ?, permission = ?, status = ?, password = ? WHERE id = ?";
       const values = [
         updatedFullname,
         updatedEmail,
         updatedRole,
         updatedPermission,
         updatedStatus,
-        updatedImage,
         updatedPassword,
         id,
       ];
@@ -148,7 +202,6 @@ router.post("/edit-users/:id", verifyToken, upload.single("userImage"), async (r
           role: updatedRole,
           permission: updatedPermission.split(","),
           status: updatedStatus,
-          userImage: updatedImage,
         });
       });
     });
@@ -167,21 +220,70 @@ router.post("/edit-users/:id/update-password", verifyToken, async (req, res) => 
     return res.status(400).json({ message: "New password is required" });
   }
 
-  const saltRounds = 10;
-  const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
+  const hasMinLength = newPassword.length >= 8;
+  const hasUpper = /[A-Z]/.test(newPassword);
+  const hasLower = /[a-z]/.test(newPassword);
+  const hasNumber = /[0-9]/.test(newPassword);
+  const hasSpecial = /[@$!%*?&]/.test(newPassword);
+  const isNotCommon = !commonPasswords.includes(newPassword.toLowerCase());
 
-  const query = "UPDATE users SET password = ? WHERE id = ?";
-  db.query(query, [hashedPassword, id], (err, results) => {
+  if (!hasMinLength || !hasUpper || !hasLower || !hasNumber ||
+    !hasSpecial || !isNotCommon) {
+    return res.status(400).json({
+      message: "Weak password - doesn't meet all requirements",
+      requirements: {
+        minLength: hasMinLength,
+        hasUpper: hasUpper,
+        hasLower: hasLower,
+        hasNumber: hasNumber,
+        hasSpecial: hasSpecial,
+        notCommon: isNotCommon
+      }
+    });
+  }
+
+  const selectQuery = "SELECT password FROM users WHERE id = ?";
+  db.query(selectQuery, [id], async (err, results) => {
     if (err) {
-      console.error("Error updating password:", err);
-      return res.status(500).json({ message: "Error updating password" });
+      console.error("Error fetching user password:", err);
+      return res.status(500).json({ message: "Error verifying password" });
     }
-    if (results.affectedRows === 0) {
+
+    if (results.length === 0) {
       return res.status(404).json({ message: "User not found" });
     }
-    res.json({ message: "Password updated successfully" });
+
+    const storedHashedPassword = results[0].password;
+
+    const isSameAsOld = await bcrypt.compare(newPassword, storedHashedPassword);
+    if (isSameAsOld) {
+      return res.status(400).json({ message: "New password must be different from the old password" });
+    }
+
+    try {
+      const saltRounds = 10;
+      const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
+
+      const updateQuery = "UPDATE users SET password = ? WHERE id = ?";
+      db.query(updateQuery, [hashedPassword, id], (err, results) => {
+        if (err) {
+          console.error("Error updating password:", err);
+          return res.status(500).json({ message: "Error updating password" });
+        }
+
+        if (results.affectedRows === 0) {
+          return res.status(404).json({ message: "User not found" });
+        }
+
+        res.json({ message: "Password updated successfully" });
+      });
+    } catch (err) {
+      console.error("Error hashing password:", err);
+      return res.status(500).json({ message: "Error processing password" });
+    }
   });
 });
+
 
 
 router.post("/users/:id/verify-password", verifyToken, async (req, res) => {

@@ -15,9 +15,7 @@ const AddUsers = () => {
   const [cnfpassword, setCnfpassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showCnfPassword, setShowCnfPassword] = useState(false);
-  const [image, setImage] = useState(null);
   const [selectedPermission, setSelectedPermission] = useState([]);
-  const [previewImage, setPreviewImage] = useState(null);
   const [errors, setErrors] = useState({});
   const [submitAttempted, setSubmitAttempted] = useState(false);
   const navigate = useNavigate();
@@ -255,35 +253,49 @@ const AddUsers = () => {
     const isValid = validateForm();
     if (!isValid) return;
 
-    const formData = new FormData();
-    formData.append("username", username);
-    formData.append("fullname", fullname);
-    formData.append("role", role);
-    formData.append("email", email);
-    formData.append("password", password);
-    formData.append("permission", selectedPermission.join(","));
-    if (image) formData.append("userImage", image);
+    const payload = {
+      username,
+      fullname,
+      role,
+      email,
+      password,
+      permission: selectedPermission.join(","),
+    };
 
     try {
-      const response = await api.post("/users", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      const response = await api.post("/users", payload);
 
       if (response.status === 201) {
         navigate("/users");
       }
     } catch (error) {
       console.error("Error adding user:", error);
-      setErrors({ submit: "Failed to add user. Please try again." });
-    }
-  };
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setImage(file);
-      setPreviewImage(URL.createObjectURL(file));
-      setErrors((prev) => ({ ...prev, image: "" }));
+      if (error.response && error.response.status === 400) {
+        const data = error.response.data;
+        if (data.field && data.message) {
+          setErrors({ [data.field]: data.message });
+        }
+        else if (data.requirements) {
+          const reqs = data.requirements;
+          let passwordMessage = "Password must have:";
+          if (!reqs.minLength) passwordMessage += " at least 8 characters,";
+          if (!reqs.hasUpper) passwordMessage += " an uppercase letter,";
+          if (!reqs.hasLower) passwordMessage += " a lowercase letter,";
+          if (!reqs.hasNumber) passwordMessage += " a number,";
+          if (!reqs.hasSpecial) passwordMessage += " a special character,";
+          if (!reqs.notCommon) passwordMessage += " not be too common,";
+          if (!reqs.notContextual) passwordMessage += " not include your name or email.";
+
+          setErrors({ password: passwordMessage.replace(/,$/, ".") });
+        }
+        else if (data.message) {
+          setErrors({ submit: data.message });
+        }
+
+      } else {
+        setErrors({ submit: "Something went wrong. Please try again later." });
+      }
     }
   };
 
@@ -372,27 +384,6 @@ const AddUsers = () => {
                       </div>
                     )}
                   </div>
-
-                  <div className="form-group">
-                    <label>User Image</label>
-                    <input
-                      type="file"
-                      className={`form-control ${errors.image ? "is-invalid" : ""}`}
-                      accept="image/*"
-                      onChange={handleImageChange}
-                    />
-                    {errors.image && (
-                      <div className="invalid-feedback d-block">
-                        {errors.image}
-                      </div>
-                    )}
-                  </div>
-
-                  {previewImage && (
-                    <div className="mt-2">
-                      <img src={previewImage} alt="Preview" className="img-thumbnail" width="150" />
-                    </div>
-                  )}
 
                   <div className="form-group">
                     <label>
