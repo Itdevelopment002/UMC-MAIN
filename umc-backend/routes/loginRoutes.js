@@ -7,6 +7,8 @@ const rateLimit = require("express-rate-limit");
 const jwt = require("jsonwebtoken");
 const svgCaptcha = require("svg-captcha");
 require("dotenv").config();
+const { verifyToken } = require('../middleware/jwtMiddleware.js');
+const CryptoJS = require('crypto-js');
 
 const loginLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
@@ -20,8 +22,7 @@ const loginLimiter = rateLimit({
   }
 });
 
-const JWT_SECRET = process.env.JWT_SECRET || "your_jwt_secret_key";
-const JWT_EXPIRATION = process.env.JWT_EXPIRATION || "24h";
+const JWT_SECRET = process.env.JWT_SECRET;
 
 const generateUniqueId = (req, res, next) => {
   req.uniqueId = uuidv4();
@@ -29,16 +30,34 @@ const generateUniqueId = (req, res, next) => {
 };
 
 router.post("/login", loginLimiter, generateUniqueId, async (req, res) => {
-  const { username, password } = req.body;
-
-  if (!username || !password) {
-    return res.status(400).json({
-      message: "Username and password are required",
-      errorType: "missing_fields"
-    });
-  }
-
   try {
+    const { encryptedData, salt } = req.body;
+
+    if (!encryptedData || !salt) {
+      return res.status(400).json({
+        message: "Username and password are required",
+        errorType: "missing_fields"
+      });
+    }
+
+    const saltedKey = CryptoJS.PBKDF2(
+      process.env.ENCRYPTION_KEY,
+      salt,
+      { keySize: 512 / 32, iterations: 1000 }
+    );
+
+    const bytes = CryptoJS.AES.decrypt(encryptedData, saltedKey.toString());
+    const decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+
+    const { username, password } = decryptedData;
+
+    if (!username || !password) {
+      return res.status(400).json({
+        message: "Username and password are required",
+        errorType: "missing_fields"
+      });
+    }
+
     const query = `
       SELECT id, username, email, password, role, permission, status
       FROM users
@@ -105,7 +124,7 @@ router.post("/login", loginLimiter, generateUniqueId, async (req, res) => {
   }
 });
 
-router.post("/logout", (req, res) => {
+router.post("/logout", verifyToken, (req, res) => {
   res.clearCookie("authToken");
   res.status(200).json({ message: "Logout successful" });
 });

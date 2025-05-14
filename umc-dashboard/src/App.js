@@ -160,6 +160,7 @@ import Users from "./components/Users/Users";
 import ResetPassword from "./components/ResetPassword/ResetPassword";
 import CodeVerification from "./components/CodeVerification/CodeVerification";
 import ChangePassword from "./components/ChangePassword/ChangePassword";
+import api from "../src/components/api";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(
@@ -225,13 +226,18 @@ function App() {
     }, 1000);
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem("authToken");
-    localStorage.removeItem("userData");
-    localStorage.removeItem("lastVisitedRoute");
-    localStorage.removeItem("loginTime");
-    setUserData({});
-    setIsAuthenticated(false);
+  const handleLogout = async () => {
+    try {
+      await api.post("/logout", {});
+      localStorage.removeItem("authToken");
+      localStorage.removeItem("userData");
+      localStorage.removeItem("lastVisitedRoute");
+      localStorage.removeItem("loginTime");
+      setUserData({});
+      setIsAuthenticated(false);
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
   };
 
   useEffect(() => {
@@ -470,7 +476,7 @@ function App() {
                         {/* Profile */}
                         <Route path="/users" element={<Users />} />
                         <Route path="/add-users" element={<AddUsers />} />
-                        <Route path="/view-profile" element={<ViewProfile />} />
+                        <Route path="/view-profile" element={<ViewProfile onLogout={handleLogout} />} />
                         <Route path="/edit-profile" element={<EditProfile />} />
 
                         {/* Last Visited */}
@@ -485,7 +491,7 @@ function App() {
                         <Route path="/add-department-description" element={<AddDeptDescription user={userData} />} />
                         <Route path="/add-hod-details" element={<AddHodDetails user={userData} />} />
                         <Route path="/add-department-pdfs" element={<AddDeptPdfs user={userData} />} />
-                        <Route path="/view-profile" element={<ViewProfile />} />
+                        <Route path="/view-profile" element={<ViewProfile onLogout={handleLogout} />} />
                         <Route path="/edit-profile" element={<EditProfile />} />
 
                         {userData?.permission?.includes("Audit Department") && (

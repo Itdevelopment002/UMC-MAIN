@@ -93,7 +93,6 @@ const ChangePassword = () => {
       const response = await api.post("/change-password", {
         userId,
         newPassword,
-        currentPassword: "" // You might want to add current password for logged-in users
       });
 
       if (response.data.message === "Password updated successfully") {

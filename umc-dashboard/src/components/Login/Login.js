@@ -71,7 +71,7 @@
 //     const newErrors = {};
 //     if (!userData.username.trim()) newErrors.username = "Username is required";
 //     if (!userData.password) newErrors.password = "Password is required";
-    
+
 //     // Enhanced CAPTCHA validation messages
 //     if (!userData.captchaInput) {
 //       newErrors.captchaInput = "Please fill in the CAPTCHA code";
@@ -593,7 +593,8 @@ import img from "../../assets/img/umclogo.png";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../api";
 import { FaEye, FaEyeSlash, FaRedo } from "react-icons/fa";
- 
+import CryptoJS from 'crypto-js';
+
 const Login = ({ onLogin }) => {
   const navigate = useNavigate();
   const [userData, setData] = useState({
@@ -612,22 +613,36 @@ const Login = ({ onLogin }) => {
   });
   const [isBlocked, setIsBlocked] = useState(false);
   const [blockTimeRemaining, setBlockTimeRemaining] = useState(0);
- 
+
+  const generateSalt = () => {
+    return CryptoJS.lib.WordArray.random(128 / 8).toString();
+  };
+
+  const encryptWithSalt = (data, secretKey, salt) => {
+    const saltedKey = CryptoJS.PBKDF2(secretKey, salt, {
+      keySize: 512 / 32,
+      iterations: 1000
+    });
+
+    return {
+      ciphertext: CryptoJS.AES.encrypt(JSON.stringify(data), saltedKey.toString()).toString(),
+      salt: salt
+    };
+  };
+
   useEffect(() => {
     const now = Date.now();
     const blockedUntil = localStorage.getItem("blockedUntil");
- 
+
     if (blockedUntil && now < parseInt(blockedUntil)) {
       setIsBlocked(true);
       setBlockTimeRemaining(Math.ceil((parseInt(blockedUntil) - now) / 1000 / 60));
     } else if (blockedUntil) {
       localStorage.removeItem("blockedUntil");
     }
- 
-    // Fetch new CAPTCHA when component mounts
     fetchNewCaptcha();
   }, []);
- 
+
   const fetchNewCaptcha = async () => {
     try {
       const response = await api.get("/generate-captcha");
@@ -640,7 +655,7 @@ const Login = ({ onLogin }) => {
       setServerError("Failed to load CAPTCHA. Please refresh the page.");
     }
   };
- 
+
   const handleChange = (e) => {
     setData({
       ...userData,
@@ -649,25 +664,25 @@ const Login = ({ onLogin }) => {
     setErrors({ ...errors, [e.target.name]: "" });
     setServerError("");
   };
- 
+
   const refreshCaptcha = () => {
     fetchNewCaptcha();
     setData({ ...userData, captchaInput: "" });
   };
- 
+
   const validateForm = () => {
     const newErrors = {};
     if (!userData.username.trim()) newErrors.username = "Username is required";
     if (!userData.password) newErrors.password = "Password is required";
     if (!userData.captchaInput) newErrors.captchaInput = "Please fill in the CAPTCHA code";
- 
+
     return newErrors;
   };
- 
+
   const updateFailedAttempts = (username) => {
     const now = Date.now();
     const newAttempts = { ...loginAttempts };
- 
+
     if (!newAttempts[username]) {
       newAttempts[username] = { count: 1, lastAttempt: now };
     } else {
@@ -678,10 +693,10 @@ const Login = ({ onLogin }) => {
         newAttempts[username].lastAttempt = now;
       }
     }
- 
+
     setLoginAttempts(newAttempts);
     localStorage.setItem("loginAttempts", JSON.stringify(newAttempts));
- 
+
     if (newAttempts[username].count >= 3) {
       const blockedUntil = now + 5 * 60 * 1000;
       localStorage.setItem("blockedUntil", blockedUntil.toString());
@@ -689,15 +704,15 @@ const Login = ({ onLogin }) => {
       setBlockTimeRemaining(5);
     }
   };
- 
+
   const onSubmit = async (e) => {
     e.preventDefault();
- 
+
     if (isBlocked) {
       setServerError(`Too many failed attempts. Please try again in ${blockTimeRemaining} minutes.`);
       return;
     }
- 
+
     setIsClicked(true);
     const validationErrors = validateForm();
     if (Object.keys(validationErrors).length > 0) {
@@ -705,34 +720,42 @@ const Login = ({ onLogin }) => {
       setIsClicked(false);
       return;
     }
- 
+
     try {
       // First verify the CAPTCHA
       const captchaResponse = await api.post("/verify-captcha", {
         captchaId: captcha.id,
         userInput: userData.captchaInput
       });
- 
+
       if (!captchaResponse.data.success) {
         throw new Error("CAPTCHA verification failed");
       }
- 
-      // Only proceed with login if CAPTCHA is verified
-      const loginData = {
-        username: userData.username,
-        password: userData.password
-      };
- 
-      const response = await api.post("/login", loginData);
- 
+
+      const salt = generateSalt();
+
+      const encryptedData = encryptWithSalt(
+        {
+          username: userData.username,
+          password: userData.password
+        },
+        process.env.REACT_APP_ENCRYPTION_KEY,
+        salt
+      );
+
+      const response = await api.post("/login", {
+        encryptedData: encryptedData.ciphertext,
+        salt: encryptedData.salt
+      });
+
       setData({ username: "", password: "", captchaInput: "" });
       fetchNewCaptcha();
- 
+
       const newAttempts = { ...loginAttempts };
       delete newAttempts[userData.username];
       setLoginAttempts(newAttempts);
       localStorage.setItem("loginAttempts", JSON.stringify(newAttempts));
- 
+
       const { token, user } = response.data;
       localStorage.setItem("authToken", token);
       localStorage.setItem("userData", JSON.stringify({
@@ -740,9 +763,9 @@ const Login = ({ onLogin }) => {
         role: user.role,
         permission: user.permission
       }));
- 
+
       onLogin();
- 
+
       if (user.role === "Superadmin") {
         navigate("/home");
       } else {
@@ -752,7 +775,7 @@ const Login = ({ onLogin }) => {
       setIsClicked(false);
       refreshCaptcha();
       updateFailedAttempts(userData.username);
- 
+
       if (err.response) {
         if (err.response.status === 400 && err.response.data.message === "Invalid CAPTCHA") {
           setServerError("Invalid CAPTCHA code. Please try again.");
@@ -774,7 +797,7 @@ const Login = ({ onLogin }) => {
       }
     }
   };
- 
+
   return (
     <div className="login-page">
       <div className="row row1 m-0 h-100">
@@ -891,5 +914,5 @@ const Login = ({ onLogin }) => {
     </div>
   );
 };
- 
+
 export default Login;

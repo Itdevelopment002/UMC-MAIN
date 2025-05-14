@@ -7,13 +7,12 @@ import './EditProfile.css';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Modal, Button } from "react-bootstrap";
+import image from "../../assets/img/profile-image.jpg"
 
 const EditProfile = () => {
     const navigate = useNavigate();
     const [fullname, setFullname] = useState("");
     const [email, setEmail] = useState("");
-    const [image, setImage] = useState(null);
-    const [previewImage, setPreviewImage] = useState(null);
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [oldPassword, setOldPassword] = useState("");
@@ -90,32 +89,20 @@ const EditProfile = () => {
             const userData = response.data;
             setFullname(userData.fullname || "");
             setEmail(userData.email || "");
-            setPreviewImage(userData.userImage ? `${baseURL}/${userData.userImage}` : "https://via.placeholder.com/150");
             setIsChanged(false);
         } catch (error) {
             console.error("Error fetching user data:", error);
         }
     };
 
-    const handleImageChange = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            setImage(file);
-            setPreviewImage(URL.createObjectURL(file));
-            setIsChanged(true);
-        }
-    };
-
     const handleSaveProfile = async () => {
         try {
-            const formData = new FormData();
-            formData.append("fullname", fullname);
-            formData.append("email", email);
-            if (image) formData.append("userImage", image);
+            const formData = {
+                fullname,
+                email,
+            }
 
-            await api.post(`/edit-users/${id}`, formData, {
-                headers: { "Content-Type": "multipart/form-data" },
-            });
+            await api.post(`/edit-users/${id}`, formData);
             toast.success("Profile updated successfully!");
             fetchUser();
         } catch (error) {
@@ -248,15 +235,11 @@ const EditProfile = () => {
                         <div className="col-md-4 text-center position-relative">
                             <div className="position-relative" style={{ width: "150px", height: "150px", display: "inline-block" }}>
                                 <img
-                                    src={previewImage}
+                                    src={image}
                                     alt="User Avatar"
                                     className="rounded-circle img-fluid"
                                     style={{ width: "100%", height: "100%", objectFit: "cover" }}
                                 />
-                                <label className="position-absolute" style={{ top: "10px", right: "10px", cursor: "pointer" }}>
-                                    <FiEdit className="bg-white shadow" style={{ fontSize: "25px", padding: "2px", borderRadius: "10px", color: "#E3435A" }} />
-                                    <input type="file" className="d-none" onChange={handleImageChange} />
-                                </label>
                             </div>
                         </div>
                         <div className="col-md-8 mt-4">

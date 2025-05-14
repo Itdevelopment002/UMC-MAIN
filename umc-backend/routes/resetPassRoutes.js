@@ -36,6 +36,10 @@ const otpRateLimiter = rateLimit({
   }
 });
 
+const commonPasswords = [
+  'password', '123456', '12345678', '1234', 'qwerty', '12345',
+  'dragon', 'baseball', 'football', 'letmein', 'monkey'
+];
 
 router.post('/reset-password', otpRateLimiter, async (req, res) => {
   const { email } = req.body;
@@ -205,6 +209,28 @@ router.post("/change-password", async (req, res) => {
 
   if (!userId || !newPassword) {
     return res.status(400).json({ message: "User ID and password are required" });
+  }
+
+  const hasMinLength = newPassword.length >= 8;
+  const hasUpper = /[A-Z]/.test(newPassword);
+  const hasLower = /[a-z]/.test(newPassword);
+  const hasNumber = /[0-9]/.test(newPassword);
+  const hasSpecial = /[@$!%*?&]/.test(newPassword);
+  const isNotCommon = !commonPasswords.includes(newPassword.toLowerCase());
+
+  if (!hasMinLength || !hasUpper || !hasLower || !hasNumber ||
+    !hasSpecial || !isNotCommon) {
+    return res.status(400).json({
+      message: "Weak password - doesn't meet all requirements",
+      requirements: {
+        minLength: hasMinLength,
+        hasUpper: hasUpper,
+        hasLower: hasLower,
+        hasNumber: hasNumber,
+        hasSpecial: hasSpecial,
+        notCommon: isNotCommon
+      }
+    });
   }
 
   try {

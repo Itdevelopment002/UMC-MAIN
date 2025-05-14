@@ -9,6 +9,7 @@
 /src/components/api.js
 # testing
 /coverage
+.env
 
 # production
 /build

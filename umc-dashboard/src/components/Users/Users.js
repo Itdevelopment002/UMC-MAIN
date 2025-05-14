@@ -47,15 +47,12 @@ const Users = () => {
     fullname: "",
     permission: [],
     status: "",
-    userImage: null,
   });
-  const [imagePreview, setImagePreview] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
   const totalItems = users.length;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
   const indexOfLastItem = currentPage * itemsPerPage;
-
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentUsers = users.slice(indexOfFirstItem, indexOfLastItem);
 
@@ -200,7 +197,12 @@ const Users = () => {
       handleCloseChangePasswordModal();
     } catch (error) {
       console.error("Error updating password:", error);
-      toast.error("Failed to update password.");
+
+      if (error.response && error.response.status === 400) {
+        toast.error(error.response.data.message || "Invalid password update request.");
+      } else {
+        toast.error("Failed to update password.");
+      }
     }
   };
 
@@ -219,7 +221,6 @@ const Users = () => {
     }
   };
 
-
   const handleDeleteModalOpen = (user) => {
     setSelectedUser(user);
     setShowDeleteModal(true);
@@ -230,7 +231,6 @@ const Users = () => {
       ...user,
       permission: user.permission,
     });
-    setImagePreview(`${baseURL}/${user.userImage}`);
     setShowEditModal(true);
   };
 
@@ -250,22 +250,17 @@ const Users = () => {
   };
 
   const handleEditSubmit = async () => {
-    const formData = new FormData();
-    formData.append("fullname", editData.fullname);
-    formData.append("email", editData.email);
-    formData.append("role", editData.role);
-    formData.append("permission", editData.permission.join(","));
-    formData.append("status", editData.status);
-    formData.append("password", editData.password);
-    if (editData.userImage) {
-      formData.append("userImage", editData.userImage);
-    }
+    const payload = {
+      fullname: editData.fullname,
+      email: editData.email,
+      role: editData.role,
+      permission: editData.permission.join(","),
+      status: editData.status,
+      password: editData.password,
+    };
 
     try {
-      await api.post(`/edit-users/${editData.id}`, formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
-
+      await api.post(`/edit-users/${editData.id}`, payload);
       fetchUsers();
       setShowEditModal(false);
       toast.success("User is updated successfully!");
@@ -283,17 +278,7 @@ const Users = () => {
       fullname: "",
       permission: [],
       status: "",
-      userImage: null,
     });
-    setImagePreview(null);
-  };
-
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setEditData({ ...editData, userImage: file });
-      setImagePreview(URL.createObjectURL(file));
-    }
   };
 
   const handlePageChange = (page) => {
@@ -336,7 +321,6 @@ const Users = () => {
                       <thead>
                         <tr>
                           <th className="text-center">Sr. No.</th>
-                          <th className="text-center">User Image</th>
                           <th>Username</th>
                           <th>Full name</th>
                           <th>Email</th>
@@ -349,19 +333,6 @@ const Users = () => {
                         {currentUsers.map((user, index) => (
                           <tr key={user.id}>
                             <td className="text-center">{indexOfFirstItem + index + 1}</td>
-                            <td className="text-center">
-                              <Link
-                                to={`${baseURL}/${user.userImage}`}
-                                className="glightbox"
-                                data-gallery="user-images"
-                              >
-                                <img
-                                  width="50px"
-                                  src={`${baseURL}/${user.userImage}`}
-                                  alt={`user-img/${user.userImage}`}
-                                />
-                              </Link>
-                            </td>
                             <td>{user.username}</td>
                             <td>{user.fullname}</td>
                             <td>{user.email}</td>
@@ -614,23 +585,6 @@ const Users = () => {
                           <option value="Active">Active</option>
                           <option value="Deactive">Deactive</option>
                         </select>
-                      </div>
-                      <div className="form-group">
-                        <label>Image</label>
-                        <input
-                          type="file"
-                          className="form-control"
-                          accept="image/*"
-                          onChange={handleImageChange}
-                        />
-                        {imagePreview && (
-                          <img
-                            src={imagePreview}
-                            alt="preview"
-                            width="100px"
-                            className="mt-2"
-                          />
-                        )}
                       </div>
                     </form>
                   </div>
