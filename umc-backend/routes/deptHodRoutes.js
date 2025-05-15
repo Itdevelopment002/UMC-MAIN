@@ -4,20 +4,10 @@ const path = require("path");
 const fs = require("fs");
 const router = express.Router();
 const db = require("../config/db.js");
-const {verifyToken} = require('../middleware/jwtMiddleware.js');
+const { verifyToken } = require('../middleware/jwtMiddleware.js');
+const { getMulterConfig, handleMulterError } = require("../utils/uploadValidation");
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "uploads/");
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname));
-  },
-});
-
-const upload = multer({ storage,
- limits: { fileSize: 10 * 1024 * 1024 },
-});
+const upload = multer(getMulterConfig());
 
 
 router.get("/hod-details", (req, res) => {
@@ -75,8 +65,11 @@ router.get("/hod-details/:id?", (req, res) => {
 });
 
 
-router.post("/hod-details", verifyToken, upload.single("hodImage"), (req, res) => {
+router.post("/hod-details", verifyToken, upload.single("hodImage"), handleMulterError, (req, res) => {
   if (!req.file) {
+    if (req.file) {
+      fs.unlink(path.join(__dirname, "..", "uploads", req.file.filename), () => { });
+    }
     return res.status(400).json({ message: "No file uploaded" });
   }
 
@@ -84,12 +77,18 @@ router.post("/hod-details", verifyToken, upload.single("hodImage"), (req, res) =
   const { department, hodName, designation, education, address, number, email, language_code } = req.body;
 
   if (!department || !hodName || !designation || !education || !address || !number || !email || !language_code) {
+    if (req.file) {
+      fs.unlink(path.join(__dirname, "..", "uploads", req.file.filename), () => { });
+    }
     return res.status(400).json({ message: "Department, Hod name, designation, education, address, number and email are required" });
   }
 
   const sql = "INSERT INTO depthod (department, name, designation, education, address, number, email, language_code, file_path) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
   db.query(sql, [department, hodName, designation, education, address, number, email, language_code, filePath], (err, result) => {
     if (err) {
+      if (req.file) {
+        fs.unlink(path.join(__dirname, "..", "uploads", req.file.filename), () => { });
+      }
       return res.status(500).json({ message: "Database error", error: err });
     }
     res.status(201).json({
@@ -100,7 +99,7 @@ router.post("/hod-details", verifyToken, upload.single("hodImage"), (req, res) =
 });
 
 
-router.post("/edit-hod-details/:id", verifyToken, upload.single("hodImage"), (req, res) => {
+router.post("/edit-hod-details/:id", verifyToken, upload.single("hodImage"), handleMulterError, (req, res) => {
   const { id } = req.params;
   const { department, name, designation, education, address, number, email, language_code } = req.body;
 
@@ -154,13 +153,17 @@ router.post("/edit-hod-details/:id", verifyToken, upload.single("hodImage"), (re
     updateParams.push(language_code);
   }
 
+  let imagePath;
   if (req.file) {
-    const newFilePath = `/uploads/${req.file.filename}`;
+    imagePath = `/uploads/${req.file.filename}`;
     updateSql += updateParams.length > 0 ? ", file_path = ?" : " file_path = ?";
-    updateParams.push(newFilePath);
+    updateParams.push(imagePath);
   }
 
   if (updateParams.length === 0) {
+    if (req.file) {
+      fs.unlink(path.join(__dirname, "..", "uploads", req.file.filename), () => { });
+    }
     return res.status(400).json({ message: "No fields to update" });
   }
 
@@ -170,10 +173,16 @@ router.post("/edit-hod-details/:id", verifyToken, upload.single("hodImage"), (re
   const selectSql = "SELECT file_path FROM depthod WHERE id = ?";
   db.query(selectSql, [id], (err, result) => {
     if (err) {
+      if (req.file) {
+        fs.unlink(path.join(__dirname, "..", "uploads", req.file.filename), () => { });
+      }
       return res.status(500).json({ message: "Database error", error: err });
     }
 
     if (result.length === 0) {
+      if (req.file) {
+        fs.unlink(path.join(__dirname, "..", "uploads", req.file.filename), () => { });
+      }
       return res.status(404).json({ message: "Hod Detail not found" });
     }
 
@@ -181,11 +190,18 @@ router.post("/edit-hod-details/:id", verifyToken, upload.single("hodImage"), (re
 
     db.query(updateSql, updateParams, (err, updateResult) => {
       if (err) {
+        if (req.file) {
+          fs.unlink(path.join(__dirname, "..", "uploads", req.file.filename), () => { });
+        }
         return res.status(500).json({ message: "Database error", error: err });
       }
 
-      if (req.file) {
-        fs.unlink(path.join(__dirname, "..", oldFilePath), (fsErr) => {
+      if (req.file && oldFilePath) {
+        fs.unlink(path.join(
+          __dirname,
+          "..",
+          oldFilePath.replace(/^\//, "")
+        ), (fsErr) => {
           if (fsErr) {
             console.error("Error deleting old file:", fsErr);
           }
