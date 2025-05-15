@@ -4,22 +4,20 @@ const path = require("path");
 const fs = require("fs").promises;
 const router = express.Router();
 const db = require("../config/db.js");
-const {verifyToken} = require('../middleware/jwtMiddleware.js');
+const { verifyToken } = require('../middleware/jwtMiddleware.js');
+const { getMulterConfig, handleMulterError } = require('../utils/uploadValidation');
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "uploads/");
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname));
-  },
-});
-
-const upload = multer({ storage });
+// Create upload middleware using global config
+const upload = multer(getMulterConfig({
+  fields: [{ name: "mainIcon", maxCount: 1 }]
+}));
 
 const deleteFileIfExists = async (filePath) => {
   try {
-    await fs.unlink(filePath);
+    if (filePath) {
+      const fullPath = path.join(__dirname, "../", filePath);
+      await fs.unlink(fullPath);
+    }
   } catch (err) {
     if (err.code !== "ENOENT") {
       console.error(`Error deleting file ${filePath}:`, err);
@@ -27,7 +25,7 @@ const deleteFileIfExists = async (filePath) => {
   }
 };
 
-
+// Routes
 router.get("/initiatives", (req, res) => {
   const language = req.query.lang;
   let query;
@@ -46,7 +44,6 @@ router.get("/initiatives", (req, res) => {
     res.status(200).json(results);
   });
 });
-
 
 router.get("/initiatives/:id?", (req, res) => {
   const { id } = req.params;
@@ -76,99 +73,137 @@ router.get("/initiatives/:id?", (req, res) => {
   });
 });
 
-
 router.post(
-  "/initiatives", verifyToken,
-  upload.fields([{ name: "mainIcon" }]),
+  "/initiatives",
+  verifyToken,
+  upload.fields([{ name: "mainIcon", maxCount: 1 }]),
+  handleMulterError,
   async (req, res) => {
     const { heading, link, language_code } = req.body;
+    
     if (!heading || !link || !language_code) {
-      return res
-        .status(400)
-        .json({ message: "Initiative heading, link and language code are required" });
+      // Clean up uploaded files if validation fails
+      if (req.files?.mainIcon) {
+        await deleteFileIfExists(req.files.mainIcon[0].path);
+      }
+      return res.status(400).json({ 
+        message: "Initiative heading, link and language code are required" 
+      });
     }
 
-    let mainIconPath = null;
-
-    if (req.files["mainIcon"]) {
-      mainIconPath = path.join("uploads", req.files["mainIcon"][0].filename);
+    if (!req.files?.mainIcon) {
+      return res.status(400).json({ message: "Main icon is required" });
     }
 
-    const insertSql =
-      "INSERT INTO initiatives (heading, link, language_code, main_icon_path) VALUES (?, ?, ?, ?)";
-    const insertParams = [
-      heading,
-      link,
-      language_code,
-      mainIconPath,
-    ];
+    const mainIconPath = path.join("uploads", req.files.mainIcon[0].filename);
 
-    db.query(insertSql, insertParams, (err, result) => {
+    const insertSql = `
+      INSERT INTO initiatives 
+      (heading, link, language_code, main_icon_path) 
+      VALUES (?, ?, ?, ?)
+    `;
+    const insertParams = [heading, link, language_code, mainIconPath];
+
+    db.query(insertSql, insertParams, async (err, result) => {
       if (err) {
+        await deleteFileIfExists(mainIconPath);
         return res.status(500).json({ message: "Database error", error: err });
       }
-      res
-        .status(201)
-        .json({
-          message: "Initiatives added successfully",
-          initiativeId: result.insertId,
-        });
+      
+      res.status(201).json({
+        message: "Initiative added successfully",
+        initiativeId: result.insertId,
+      });
     });
   }
 );
 
-
 router.post(
-  "/edit-initiatives/:id", verifyToken,
-  upload.fields([{ name: "mainIcon" }]),
+  "/edit-initiatives/:id",
+  verifyToken,
+  upload.fields([{ name: "mainIcon", maxCount: 1 }]),
+  handleMulterError,
   async (req, res) => {
     const { id } = req.params;
     const { heading, link, language_code } = req.body;
 
+    if (!heading && !link && !language_code && !req.files?.mainIcon) {
+      if (req.files?.mainIcon) {
+        await deleteFileIfExists(req.files.mainIcon[0].path);
+      }
+      return res.status(400).json({ message: "No fields to update" });
+    }
+
     let updateSql = "UPDATE initiatives SET";
     const updateParams = [];
+    const updates = [];
 
     if (heading) {
-      updateSql += " heading = ?";
+      updates.push("heading = ?");
       updateParams.push(heading);
     }
 
     if (link) {
-      updateSql +=
-        updateParams.length > 0 ? ", link = ?" : " link = ?";
+      updates.push("link = ?");
       updateParams.push(link);
     }
 
     if (language_code) {
-      updateSql +=
-        updateParams.length > 0 ? ", language_code = ?" : " language_code = ?";
+      updates.push("language_code = ?");
       updateParams.push(language_code);
     }
 
-    if (req.files["mainIcon"]) {
-      const newMainIconPath = path.join(
-        "uploads",
-        req.files["mainIcon"][0].filename
-      );
-      updateSql +=
-        updateParams.length > 0
-          ? ", main_icon_path = ?"
-          : " main_icon_path = ?";
+    let newMainIconPath;
+    if (req.files?.mainIcon) {
+      newMainIconPath = path.join("uploads", req.files.mainIcon[0].filename);
+      updates.push("main_icon_path = ?");
       updateParams.push(newMainIconPath);
     }
 
-    if (updateParams.length === 0) {
-      return res.status(400).json({ message: "No fields to update" });
-    }
-
-    updateSql += " WHERE id = ?";
+    updateSql += " " + updates.join(", ") + " WHERE id = ?";
     updateParams.push(id);
 
-    const selectSql =
-      "SELECT main_icon_path FROM initiatives WHERE id = ?";
+    const selectSql = "SELECT main_icon_path FROM initiatives WHERE id = ?";
+    db.query(selectSql, [id], async (err, result) => {
+      if (err || result.length === 0) {
+        if (req.files?.mainIcon) {
+          await deleteFileIfExists(newMainIconPath);
+        }
+        return res.status(err ? 500 : 404).json({ 
+          message: err ? "Database error" : "Initiative not found",
+          error: err 
+        });
+      }
+
+      const oldMainIconPath = result[0].main_icon_path;
+
+      db.query(updateSql, updateParams, async (err) => {
+        if (err) {
+          if (req.files?.mainIcon) {
+            await deleteFileIfExists(newMainIconPath);
+          }
+          return res.status(500).json({ message: "Database error", error: err });
+        }
+
+        if (req.files?.mainIcon && oldMainIconPath) {
+          await deleteFileIfExists(oldMainIconPath);
+        }
+
+        res.status(200).json({ message: "Initiative updated successfully" });
+      });
+    });
+  }
+);
+
+router.post(
+  "/delete-initiatives/:id", 
+  verifyToken, 
+  async (req, res) => {
+    const { id } = req.params;
+
+    const selectSql = "SELECT main_icon_path FROM initiatives WHERE id = ?";
     db.query(selectSql, [id], async (err, result) => {
       if (err) {
-        console.error("Database Selection Error:", err);
         return res.status(500).json({ message: "Database error", error: err });
       }
 
@@ -176,60 +211,20 @@ router.post(
         return res.status(404).json({ message: "Initiative not found" });
       }
 
-      const {
-        main_icon_path: oldMainIconPath,
-      } = result[0];
+      const mainIconPath = result[0].main_icon_path;
+      const deleteSql = "DELETE FROM initiatives WHERE id = ?";
 
-      db.query(updateSql, updateParams, async (err) => {
+      db.query(deleteSql, [id], async (err) => {
         if (err) {
-          console.error("Database Update Error:", err);
-          return res
-            .status(500)
-            .json({ message: "Database error", error: err });
+          return res.status(500).json({ message: "Database error", error: err });
         }
 
-        if (req.files["mainIcon"]) {
-          await deleteFileIfExists(
-            path.join(__dirname, "../", oldMainIconPath)
-          );
-        }
+        await deleteFileIfExists(mainIconPath);
 
-        res.status(200).json({ message: "Initiatives updated successfully" });
+        res.status(200).json({ message: "Initiative deleted successfully" });
       });
     });
   }
 );
-
-
-router.post("/delete-initiatives/:id", verifyToken, async (req, res) => {
-  const { id } = req.params;
-
-  const selectSql =
-    "SELECT main_icon_path FROM initiatives WHERE id = ?";
-  db.query(selectSql, [id], async (err, result) => {
-    if (err) {
-      return res.status(500).json({ message: "Database error", error: err });
-    }
-
-    if (result.length === 0) {
-      return res.status(404).json({ message: "Initiative not found" });
-    }
-
-    const { main_icon_path: mainIconPath } =
-      result[0];
-
-    const deleteSql = "DELETE FROM initiatives WHERE id = ?";
-    db.query(deleteSql, [id], async (err) => {
-      if (err) {
-        return res.status(500).json({ message: "Database error", error: err });
-      }
-
-      await deleteFileIfExists(path.join(__dirname, "../", mainIconPath));
-
-      res.status(200).json({ message: "Initiative deleted successfully" });
-    });
-  });
-});
-
 
 module.exports = router;

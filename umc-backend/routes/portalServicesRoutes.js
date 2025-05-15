@@ -5,28 +5,23 @@ const fs = require("fs").promises;
 const router = express.Router();
 const db = require("../config/db.js");
 const { verifyToken } = require('../middleware/jwtMiddleware.js');
+const { getMulterConfig, handleMulterError } = require('../utils/uploadValidation');
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "uploads/");
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname));
-  },
-});
-
-const upload = multer({ storage });
+// Create upload middleware using global config
+const upload = multer(getMulterConfig());
 
 const deleteFileIfExists = async (filePath) => {
   try {
-    await fs.unlink(filePath);
+    if (filePath) {
+      const fullPath = path.join(__dirname, '..', filePath);
+      await fs.unlink(fullPath);
+    }
   } catch (err) {
     if (err.code !== "ENOENT") {
       console.error(`Error deleting file ${filePath}:`, err);
     }
   }
 };
-
 
 router.get("/portal-services", (req, res) => {
   const language = req.query.lang;
@@ -46,7 +41,6 @@ router.get("/portal-services", (req, res) => {
     res.status(200).json(results);
   });
 });
-
 
 router.get("/portal-services/:id?", (req, res) => {
   const { id } = req.params;
@@ -76,22 +70,26 @@ router.get("/portal-services/:id?", (req, res) => {
   });
 });
 
-
 router.post(
-  "/portal-services", verifyToken,
-  upload.fields([{ name: "portalImage" }]),
+  "/portal-services", 
+  verifyToken,
+  upload.fields([{ name: "portalImage", maxCount: 1 }]),
+  handleMulterError,
   async (req, res) => {
     const { heading, description, link, language_code } = req.body;
     if (!heading || !description || !link || !language_code) {
-      return res
-        .status(400)
-        .json({ message: "Portal Service heading, description, language code and link are required" });
+      // Clean up uploaded files if validation fails
+      if (req.files?.portalImage) {
+        await deleteFileIfExists(`/uploads/${req.files.portalImage[0].filename}`);
+      }
+      return res.status(400).json({ 
+        message: "Portal Service heading, description, language code and link are required" 
+      });
     }
 
     let mainIconPath = null;
-
-    if (req.files["portalImage"]) {
-      mainIconPath = path.join("uploads", req.files["portalImage"][0].filename);
+    if (req.files?.portalImage) {
+      mainIconPath = `/uploads/${req.files.portalImage[0].filename}`;
     }
 
     const insertSql =
@@ -104,101 +102,92 @@ router.post(
       mainIconPath,
     ];
 
-    db.query(insertSql, insertParams, (err, result) => {
+    db.query(insertSql, insertParams, async (err, result) => {
       if (err) {
+        if (mainIconPath) {
+          await deleteFileIfExists(mainIconPath);
+        }
         return res.status(500).json({ message: "Database error", error: err });
       }
-      res
-        .status(201)
-        .json({
-          message: "Portal Service added successfully",
-          portalId: result.insertId,
-        });
+      res.status(201).json({
+        message: "Portal Service added successfully",
+        portalId: result.insertId,
+      });
     });
   }
 );
 
-
 router.post(
-  "/edit-portal-services/:id", verifyToken,
-  upload.fields([{ name: "portalImage" }]),
+  "/edit-portal-services/:id", 
+  verifyToken,
+  upload.fields([{ name: "portalImage", maxCount: 1 }]),
+  handleMulterError,
   async (req, res) => {
     const { id } = req.params;
     const { heading, description, link, language_code } = req.body;
 
+    if (!heading && !description && !link && !language_code && !req.files?.portalImage) {
+      return res.status(400).json({ message: "No fields to update" });
+    }
+
     let updateSql = "UPDATE portalservices SET";
     const updateParams = [];
+    const updates = [];
 
     if (heading) {
-      updateSql += " heading = ?";
+      updates.push("heading = ?");
       updateParams.push(heading);
     }
 
     if (description) {
-      updateSql +=
-        updateParams.length > 0 ? ", description = ?" : " description = ?";
+      updates.push("description = ?");
       updateParams.push(description);
     }
 
     if (link) {
-      updateSql +=
-        updateParams.length > 0 ? ", link = ?" : " link = ?";
+      updates.push("link = ?");
       updateParams.push(link);
     }
 
     if (language_code) {
-      updateSql +=
-        updateParams.length > 0 ? ", language_code = ?" : " language_code = ?";
+      updates.push("language_code = ?");
       updateParams.push(language_code);
     }
 
-    if (req.files["portalImage"]) {
-      const newMainIconPath = path.join(
-        "uploads",
-        req.files["portalImage"][0].filename
-      );
-      updateSql +=
-        updateParams.length > 0
-          ? ", main_icon_path = ?"
-          : " main_icon_path = ?";
+    let newMainIconPath;
+    if (req.files?.portalImage) {
+      newMainIconPath = `/uploads/${req.files.portalImage[0].filename}`;
+      updates.push("main_icon_path = ?");
       updateParams.push(newMainIconPath);
     }
 
-    if (updateParams.length === 0) {
-      return res.status(400).json({ message: "No fields to update" });
-    }
-
-    updateSql += " WHERE id = ?";
+    updateSql += ' ' + updates.join(', ') + ' WHERE id = ?';
     updateParams.push(id);
 
-    const selectSql =
-      "SELECT main_icon_path FROM portalservices WHERE id = ?";
+    const selectSql = "SELECT main_icon_path FROM portalservices WHERE id = ?";
     db.query(selectSql, [id], async (err, result) => {
-      if (err) {
-        console.error("Database Selection Error:", err);
-        return res.status(500).json({ message: "Database error", error: err });
+      if (err || result.length === 0) {
+        if (req.files?.portalImage) {
+          await deleteFileIfExists(newMainIconPath);
+        }
+        return res.status(err ? 500 : 404).json({ 
+          message: err ? 'Database error' : 'Portal Service not found',
+          error: err 
+        });
       }
 
-      if (result.length === 0) {
-        return res.status(404).json({ message: "Portal Service not found" });
-      }
+      const oldMainIconPath = result[0].main_icon_path;
 
-      const {
-        main_icon_path: oldMainIconPath,
-      } = result[0];
-
-      db.query(updateSql, updateParams, async (err) => {
+      db.query(updateSql, updateParams, async (err, updateResult) => {
         if (err) {
-          console.error("Database Update Error:", err);
-          return res
-            .status(500)
-            .json({ message: "Database error", error: err });
+          if (req.files?.portalImage) {
+            await deleteFileIfExists(newMainIconPath);
+          }
+          return res.status(500).json({ message: "Database error", error: err });
         }
 
-        if (req.files["mainIcon"]) {
-          await deleteFileIfExists(
-            path.join(__dirname, "../", oldMainIconPath)
-          );
+        if (req.files?.portalImage && oldMainIconPath) {
+          await deleteFileIfExists(oldMainIconPath);
         }
 
         res.status(200).json({ message: "Portal Service updated successfully" });
@@ -207,12 +196,10 @@ router.post(
   }
 );
 
-
 router.post("/delete-portal-services/:id", verifyToken, async (req, res) => {
   const { id } = req.params;
 
-  const selectSql =
-    "SELECT main_icon_path FROM portalservices WHERE id = ?";
+  const selectSql = "SELECT main_icon_path FROM portalservices WHERE id = ?";
   db.query(selectSql, [id], async (err, result) => {
     if (err) {
       return res.status(500).json({ message: "Database error", error: err });
@@ -222,21 +209,19 @@ router.post("/delete-portal-services/:id", verifyToken, async (req, res) => {
       return res.status(404).json({ message: "Portal Service not found" });
     }
 
-    const { main_icon_path: mainIconPath } =
-      result[0];
-
+    const mainIconPath = result[0].main_icon_path;
     const deleteSql = "DELETE FROM portalservices WHERE id = ?";
-    db.query(deleteSql, [id], async (err) => {
+
+    db.query(deleteSql, [id], async (err, deleteResult) => {
       if (err) {
         return res.status(500).json({ message: "Database error", error: err });
       }
 
-      await deleteFileIfExists(path.join(__dirname, "../", mainIconPath));
+      await deleteFileIfExists(mainIconPath);
 
       res.status(200).json({ message: "Portal Service deleted successfully" });
     });
   });
 });
-
 
 module.exports = router;

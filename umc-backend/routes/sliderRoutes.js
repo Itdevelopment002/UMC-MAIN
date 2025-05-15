@@ -1,64 +1,53 @@
+// routes/sliderRoutes.js
 const express = require("express");
+const router = express.Router();
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
-const router = express.Router();
 const db = require("../config/db.js");
 const { verifyToken } = require('../middleware/jwtMiddleware.js');
+const { getMulterConfig, handleMulterError } = require("../utils/uploadValidation");
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "uploads/");
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname));
-  },
-});
+// Create upload middleware using global config
+const upload = multer(getMulterConfig());
 
-const upload = multer({ storage });
-
-
+// Routes
 router.get("/sliders", (req, res) => {
   const sql = "SELECT * FROM slider";
   db.query(sql, (err, results) => {
-    if (err) {
-      return res.status(500).json({ message: "Database error", error: err });
-    }
+    if (err) return res.status(500).json({ message: "Database error", error: err });
     res.status(200).json(results);
   });
 });
-
 
 router.get("/sliders/:id", (req, res) => {
   const { id } = req.params;
   const sql = "SELECT * FROM slider WHERE id = ?";
   db.query(sql, [id], (err, result) => {
-    if (err) {
-      return res.status(500).json({ message: "Database error", error: err });
-    }
-    if (result.length === 0) {
-      return res.status(404).json({ message: "Slider not found" });
-    }
+    if (err) return res.status(500).json({ message: "Database error", error: err });
+    if (result.length === 0) return res.status(404).json({ message: "Slider not found" });
     res.status(200).json(result[0]);
   });
 });
 
-
-router.post("/sliders", verifyToken, upload.single("image"), (req, res) => {
+router.post("/sliders", verifyToken, upload.single("image"), handleMulterError, (req, res) => {
   const { sliderName } = req.body;
 
-  if (!sliderName) {
-    return res
-      .status(400)
-      .json({ message: "Slider Name is required" });
+  if (!sliderName || !req.file) {
+    if (req.file) {
+      fs.unlink(path.join(__dirname, "..", "uploads", req.file.filename), () => {});
+    }
+    return res.status(400).json({ 
+      message: !sliderName ? "Slider Name is required" : "Image file is required" 
+    });
   }
 
-  const imagePath = req.file ? `/uploads/${req.file.filename}` : null;
-
-  const sql =
-    "INSERT INTO slider (name, image_path) VALUES (?, ?)";
+  const imagePath = `/uploads/${req.file.filename}`;
+  const sql = "INSERT INTO slider (name, image_path) VALUES (?, ?)";
+  
   db.query(sql, [sliderName, imagePath], (err, result) => {
     if (err) {
+      fs.unlink(path.join(__dirname, "..", "uploads", req.file.filename), () => {});
       return res.status(500).json({ message: "Database error", error: err });
     }
     res.status(200).json({
@@ -68,29 +57,28 @@ router.post("/sliders", verifyToken, upload.single("image"), (req, res) => {
   });
 });
 
-
-router.post("/edit-sliders/:id", verifyToken, upload.single("image"), (req, res) => {
+router.post("/edit-sliders/:id", verifyToken, upload.single("image"), handleMulterError, (req, res) => {
   const { id } = req.params;
   const { name } = req.body;
 
+  if (!name && !req.file) {
+    if (req.file) {
+      fs.unlink(path.join(__dirname, "..", "uploads", req.file.filename), () => {});
+    }
+    return res.status(400).json({ message: "No fields to update" });
+  }
+
   let updateSql = "UPDATE slider SET";
   const updateParams = [];
-
+  
   if (name) {
     updateSql += " name = ?";
     updateParams.push(name);
   }
 
-  let imagePath;
   if (req.file) {
-    imagePath = `/uploads/${req.file.filename}`;
-    updateSql +=
-      updateParams.length > 0 ? ", image_path = ?" : " image_path = ?";
-    updateParams.push(imagePath);
-  }
-
-  if (updateParams.length === 0) {
-    return res.status(400).json({ message: "No fields to update" });
+    updateSql += updateParams.length > 0 ? ", image_path = ?" : " image_path = ?";
+    updateParams.push(`/uploads/${req.file.filename}`);
   }
 
   updateSql += " WHERE id = ?";
@@ -98,30 +86,28 @@ router.post("/edit-sliders/:id", verifyToken, upload.single("image"), (req, res)
 
   const selectSql = "SELECT image_path FROM slider WHERE id = ?";
   db.query(selectSql, [id], (err, result) => {
-    if (err) {
-      return res.status(500).json({ message: "Database error", error: err });
-    }
-    if (result.length === 0) {
-      return res.status(404).json({ message: "Slider not found" });
+    if (err || result.length === 0) {
+      if (req.file) {
+        fs.unlink(path.join(__dirname, "..", "uploads", req.file.filename), () => {});
+      }
+      return res.status(err ? 500 : 404).json({ 
+        message: err ? "Database error" : "Slider not found",
+        error: err
+      });
     }
 
     const oldImagePath = result[0].image_path;
-
     db.query(updateSql, updateParams, (err, updateResult) => {
       if (err) {
+        if (req.file) {
+          fs.unlink(path.join(__dirname, "..", "uploads", req.file.filename), () => {});
+        }
         return res.status(500).json({ message: "Database error", error: err });
       }
 
       if (req.file && oldImagePath) {
-        const fullPath = path.join(
-          __dirname,
-          "..",
-          oldImagePath.replace(/^\//, "")
-        );
-        fs.unlink(fullPath, (fsErr) => {
-          if (fsErr) {
-            console.error("Error deleting old image:", fsErr);
-          }
+        fs.unlink(path.join(__dirname, "..", oldImagePath.replace(/^\//, "")), (fsErr) => {
+          if (fsErr) console.error("Error deleting old image:", fsErr);
         });
       }
 
@@ -130,32 +116,23 @@ router.post("/edit-sliders/:id", verifyToken, upload.single("image"), (req, res)
   });
 });
 
-
 router.post("/delete-sliders/:id", verifyToken, (req, res) => {
   const { id } = req.params;
 
   const selectSql = "SELECT image_path FROM slider WHERE id = ?";
   db.query(selectSql, [id], (err, result) => {
-    if (err) {
-      return res.status(500).json({ message: "Database error", error: err });
-    }
-    if (result.length === 0) {
-      return res.status(404).json({ message: "Slider not found" });
-    }
+    if (err) return res.status(500).json({ message: "Database error", error: err });
+    if (result.length === 0) return res.status(404).json({ message: "Slider not found" });
 
     const imagePath = result[0].image_path;
-
     const deleteSql = "DELETE FROM slider WHERE id = ?";
-    db.query(deleteSql, [id], (err, deleteResult) => {
-      if (err) {
-        return res.status(500).json({ message: "Database error", error: err });
-      }
 
+    db.query(deleteSql, [id], (err, deleteResult) => {
+      if (err) return res.status(500).json({ message: "Database error", error: err });
+      
       if (imagePath) {
         fs.unlink(path.join(__dirname, "..", imagePath), (fsErr) => {
-          if (fsErr) {
-            console.error("Error deleting image:", fsErr);
-          }
+          if (fsErr) console.error("Error deleting image:", fsErr);
         });
       }
 
@@ -163,6 +140,5 @@ router.post("/delete-sliders/:id", verifyToken, (req, res) => {
     });
   });
 });
-
 
 module.exports = router;
