@@ -4,24 +4,16 @@ const path = require("path");
 const fs = require("fs");
 const router = express.Router();
 const db = require("../config/db.js");
-const {verifyToken} = require('../middleware/jwtMiddleware.js');
+const { verifyToken } = require('../middleware/jwtMiddleware.js');
+const { getMulterConfig, handleMulterError } = require("../utils/uploadValidation");
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "uploads/");
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname));
-  },
-});
-
-const upload = multer({ storage });
-
+// Create upload middleware with the shared configuration
+const upload = multer(getMulterConfig());
 
 router.get("/minister-details", (req, res) => {
   const language = req.query.lang;
   let query;
-  let params = [];
+  let params = []
   if (language) {
     query = `SELECT * FROM minister WHERE language_code = ?`;
     params.push(language);
@@ -35,7 +27,6 @@ router.get("/minister-details", (req, res) => {
     res.status(200).json(results);
   });
 });
-
 
 router.get("/minister-details/:id?", (req, res) => {
   const { id } = req.params;
@@ -65,22 +56,26 @@ router.get("/minister-details/:id?", (req, res) => {
   });
 });
 
-
-router.post("/minister-details", verifyToken, upload.single("image"), (req, res) => {
+router.post("/minister-details", verifyToken, upload.single("image"), handleMulterError, (req, res) => {
   const { name, designation, language_code } = req.body;
 
   if (!name || !designation || !language_code) {
-    return res
-      .status(400)
-      .json({ message: "Name and designation are required" });
+    // Clean up uploaded file if validation fails
+    if (req.file) {
+      fs.unlink(path.join(__dirname, "..", "uploads", req.file.filename), () => {});
+    }
+    return res.status(400).json({ message: "Name, designation and language code are required" });
   }
 
   const imagePath = req.file ? `/uploads/${req.file.filename}` : null;
 
-  const sql =
-    "INSERT INTO minister (name, designation, language_code, image_path) VALUES (?, ?, ?, ?)";
+  const sql = "INSERT INTO minister (name, designation, language_code, image_path) VALUES (?, ?, ?, ?)";
   db.query(sql, [name, designation, language_code, imagePath], (err, result) => {
     if (err) {
+      // Clean up uploaded file if DB operation fails
+      if (req.file) {
+        fs.unlink(path.join(__dirname, "..", "uploads", req.file.filename), () => {});
+      }
       return res.status(500).json({ message: "Database error", error: err });
     }
     res.status(200).json({
@@ -90,8 +85,7 @@ router.post("/minister-details", verifyToken, upload.single("image"), (req, res)
   });
 });
 
-
-router.post("/edit-minister-details/:id", verifyToken, upload.single("image"), (req, res) => {
+router.post("/edit-minister-details/:id", verifyToken, upload.single("image"), handleMulterError, (req, res) => {
   const { id } = req.params;
   const { name, designation, language_code } = req.body;
 
@@ -113,16 +107,18 @@ router.post("/edit-minister-details/:id", verifyToken, upload.single("image"), (
     updateParams.push(language_code);
   }
 
-
   let imagePath;
   if (req.file) {
     imagePath = `/uploads/${req.file.filename}`;
-    updateSql +=
-      updateParams.length > 0 ? ", image_path = ?" : " image_path = ?";
+    updateSql += updateParams.length > 0 ? ", image_path = ?" : " image_path = ?";
     updateParams.push(imagePath);
   }
 
   if (updateParams.length === 0) {
+    // Clean up uploaded file if no fields to update
+    if (req.file) {
+      fs.unlink(path.join(__dirname, "..", "uploads", req.file.filename), () => {});
+    }
     return res.status(400).json({ message: "No fields to update" });
   }
 
@@ -132,9 +128,17 @@ router.post("/edit-minister-details/:id", verifyToken, upload.single("image"), (
   const selectSql = "SELECT image_path FROM minister WHERE id = ?";
   db.query(selectSql, [id], (err, result) => {
     if (err) {
+      // Clean up uploaded file if DB operation fails
+      if (req.file) {
+        fs.unlink(path.join(__dirname, "..", "uploads", req.file.filename), () => {});
+      }
       return res.status(500).json({ message: "Database error", error: err });
     }
     if (result.length === 0) {
+      // Clean up uploaded file if minister not found
+      if (req.file) {
+        fs.unlink(path.join(__dirname, "..", "uploads", req.file.filename), () => {});
+      }
       return res.status(404).json({ message: "Minister not found" });
     }
 
@@ -142,15 +146,15 @@ router.post("/edit-minister-details/:id", verifyToken, upload.single("image"), (
 
     db.query(updateSql, updateParams, (err, updateResult) => {
       if (err) {
+        // Clean up uploaded file if DB operation fails
+        if (req.file) {
+          fs.unlink(path.join(__dirname, "..", "uploads", req.file.filename), () => {});
+        }
         return res.status(500).json({ message: "Database error", error: err });
       }
 
       if (req.file && oldImagePath) {
-        const fullPath = path.join(
-          __dirname,
-          "..",
-          oldImagePath.replace(/^\//, "")
-        );
+        const fullPath = path.join(__dirname, "..", oldImagePath.replace(/^\//, ""));
         fs.unlink(fullPath, (fsErr) => {
           if (fsErr) {
             console.error("Error deleting old image:", fsErr);
@@ -162,7 +166,6 @@ router.post("/edit-minister-details/:id", verifyToken, upload.single("image"), (
     });
   });
 });
-
 
 router.post("/delete-minister-details/:id", verifyToken, (req, res) => {
   const { id } = req.params;
@@ -196,6 +199,5 @@ router.post("/delete-minister-details/:id", verifyToken, (req, res) => {
     });
   });
 });
-
 
 module.exports = router;

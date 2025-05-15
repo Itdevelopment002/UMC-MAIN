@@ -1,46 +1,75 @@
+const multer = require('multer');
 const path = require('path');
 
-// Allowed image extensions
-const allowedExtensions = ['.jpg', '.jpeg', '.png'];
-const maxFileSize = 5 * 1024 * 1024; // 5MB
-
-/**
- * Validates image files with strict checks
- * @param {Object} file - The file to validate
- * @returns {Object} - { isValid: boolean, error: string }
- */
+// Validation function matching client-side
 const validateImageFile = (file) => {
-  if (!file) {
-    return { isValid: false, error: "No file provided" };
-  }
+  if (!file) return false;
+
+  // Allowed extensions (case insensitive)
+  const allowedExtensions = ['.jpg', '.jpeg', '.png', '.webp'];
 
   // Get file name and convert to lowercase
   const fileName = file.originalname.toLowerCase();
 
   // Check for null bytes in filename (indicates potential attack)
-  if (fileName.includes('%00') || fileName.includes('\0')) {
-    return { isValid: false, error: "Invalid filename (null bytes detected)" };
+  if (fileName.includes('%00')) {
+    return false;
   }
 
   // Check for double/triple extensions
   const parts = fileName.split('.');
-  if (parts.length > 2) {
-    return { isValid: false, error: "Files with multiple extensions are not allowed" };
+  if (parts.length > 2) { // More than one dot means multiple extensions
+    return false;
   }
 
   // Get the actual extension (last part after dot)
   const extension = '.' + parts.pop();
 
   // Check if extension is allowed
-  if (!allowedExtensions.includes(extension)) {
-    return { isValid: false, error: `Only ${allowedExtensions.join(', ')} files are allowed` };
-  }
+  return allowedExtensions.includes(extension);
+};
 
-  return { isValid: true };
+// Custom file filter for multer
+const fileFilter = (req, file, cb) => {
+  if (!validateImageFile(file)) {
+    return cb(new Error('Only JPG, JPEG, PNG or WEBP files are allowed. Files with multiple extensions or null bytes are not allowed.'), false);
+  }
+  cb(null, true);
+};
+
+// Multer configuration generator
+const getMulterConfig = (options = {}) => {
+  const defaults = {
+    storage: multer.diskStorage({
+      destination: (req, file, cb) => {
+        cb(null, "uploads/");
+      },
+      filename: (req, file, cb) => {
+        cb(null, Date.now() + path.extname(file.originalname));
+      },
+    }),
+    fileFilter,
+    limits: {
+      fileSize: 5 * 1024 * 1024 // 5MB limit
+    }
+  };
+
+  return { ...defaults, ...options };
+};
+
+// Error handling middleware for multer
+const handleMulterError = (err, req, res, next) => {
+  if (err instanceof multer.MulterError) {
+    return res.status(400).json({ message: err.message });
+  } else if (err) {
+    return res.status(400).json({ message: err.message });
+  }
+  next();
 };
 
 module.exports = {
   validateImageFile,
-  allowedExtensions,
-  maxFileSize
+  fileFilter,
+  getMulterConfig,
+  handleMulterError
 };
