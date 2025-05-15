@@ -5,6 +5,7 @@ import GLightbox from "glightbox";
 import "glightbox/dist/css/glightbox.min.css";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { getImageValidationError } from "../../validation/ImageValidation";
 
 const HomeService1 = () => {
   const [info, setInfo] = useState([]);
@@ -13,6 +14,7 @@ const HomeService1 = () => {
   const [selectedInitiative, setSelectedInitiative] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [imagePreview, setImagePreview] = useState(null);
+  const [errors, setErrors] = useState({});
   const infoPerPage = 10;
 
   useEffect(() => {
@@ -38,6 +40,7 @@ const HomeService1 = () => {
       const response = await api.get(`/home-services1/${initiativeId}`);
       setSelectedInitiative(response.data);
       setImagePreview(`${baseURL}/${response.data.main_icon_path}`);
+      setErrors({});
       setShowEditModal(true);
     } catch (error) {
       console.error("Error fetching home services:", error);
@@ -67,18 +70,36 @@ const HomeService1 = () => {
   const handleCloseEditModal = () => {
     setShowEditModal(false);
     setSelectedInitiative(null);
+    setErrors({});
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+    if (!selectedInitiative?.heading) newErrors.heading = "Service Heading is required.";
+    if (!selectedInitiative?.link) newErrors.link = "Service Link is required.";
+    if (!selectedInitiative?.language_code) newErrors.language_code = "Language selection is required.";
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleSaveEdit = async () => {
+    if (!validateForm()) {
+              toast.error("Please fix errors before submitting.");
+      return;
+    }
+    if (errors.heading || errors.link || errors.mainIcon || errors.language_code) {
+        toast.error("Please fix errors before submitting.");
+        return;
+    }
+
     const formData = new FormData();
-    if (selectedInitiative.heading)
-      formData.append("heading", selectedInitiative.heading);
-    if (selectedInitiative.link)
-      formData.append("link", selectedInitiative.link);
-    if (selectedInitiative.language_code)
-      formData.append("language_code", selectedInitiative.language_code);
-    if (selectedInitiative.mainIcon)
+    formData.append("heading", selectedInitiative.heading);
+    formData.append("link", selectedInitiative.link);
+    formData.append("language_code", selectedInitiative.language_code);
+    if (selectedInitiative.mainIcon) {
       formData.append("mainIcon", selectedInitiative.mainIcon);
+    }
 
     try {
       await api.post(`/edit-home-services1/${selectedInitiative.id}`, formData);
@@ -94,9 +115,25 @@ const HomeService1 = () => {
   const handleFileChange = (e, field) => {
     const file = e.target.files[0];
     if (file) {
+      const errorMessage = getImageValidationError(file);
+      if (errorMessage) {
+        setErrors({ ...errors, [field]: errorMessage });
+        return;
+      }
+      
       setSelectedInitiative((prevInitiative) => ({ ...prevInitiative, [field]: file }));
       setImagePreview(URL.createObjectURL(file));
+      setErrors({ ...errors, [field]: "" });
     }
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setSelectedInitiative({
+      ...selectedInitiative,
+      [name]: value
+    });
+    setErrors({ ...errors, [name]: "" });
   };
 
   const indexOfLastServices = currentPage * infoPerPage;
@@ -352,52 +389,43 @@ const HomeService1 = () => {
                     <form>
                       <div className="mb-3">
                         <label className="form-label">
-                          Select Language
+                          Select Language <span className="text-danger">*</span>
                         </label>
                         <select
-                          className="form-control"
+                          className={`form-control ${errors.language_code ? 'is-invalid' : ''}`}
                           value={selectedInitiative?.language_code || ""}
-                          onChange={(e) =>
-                            setSelectedInitiative({
-                              ...selectedInitiative,
-                              language_code: e.target.value,
-                            })
-                          }
+                          name="language_code"
+                          onChange={handleInputChange}
                         >
                           <option value="" disabled>Select Language</option>
                           <option value="en">English</option>
                           <option value="mr">Marathi</option>
                         </select>
+                        {errors.language_code && <div className="invalid-feedback">{errors.language_code}</div>}
                       </div>
                       <div className="mb-3">
-                        <label className="form-label">Service Heading</label>
+                        <label className="form-label">Service Heading <span className="text-danger">*</span></label>
                         <input
                           type="text"
-                          className="form-control"
-                          placeholder="Initiative Heading"
+                          className={`form-control ${errors.heading ? 'is-invalid' : ''}`}
+                          placeholder="Service Heading"
                           value={selectedInitiative?.heading || ""}
-                          onChange={(e) =>
-                            setSelectedInitiative({
-                              ...selectedInitiative,
-                              heading: e.target.value,
-                            })
-                          }
+                          name="heading"
+                          onChange={handleInputChange}
                         />
+                        {errors.heading && <div className="invalid-feedback">{errors.heading}</div>}
                       </div>
                       <div className="mb-3">
-                        <label className="form-label">Service Link</label>
+                        <label className="form-label">Service Link <span className="text-danger">*</span></label>
                         <input
                           type="text"
-                          className="form-control"
-                          placeholder="Initiative Link"
+                          className={`form-control ${errors.link ? 'is-invalid' : ''}`}
+                          placeholder="Service Link"
                           value={selectedInitiative?.link || ""}
-                          onChange={(e) =>
-                            setSelectedInitiative({
-                              ...selectedInitiative,
-                              link: e.target.value,
-                            })
-                          }
+                          name="link"
+                          onChange={handleInputChange}
                         />
+                        {errors.link && <div className="invalid-feedback">{errors.link}</div>}
                       </div>
                       <div className="mb-3">
                         <label className="form-label">
@@ -405,10 +433,11 @@ const HomeService1 = () => {
                         </label>
                         <input
                           type="file"
-                          className="form-control"
+                          className={`form-control ${errors.mainIcon ? 'is-invalid' : ''}`}
                           accept="image/*"
                           onChange={(e) => handleFileChange(e, "mainIcon")}
                         />
+                        {errors.mainIcon && <div className="invalid-feedback">{errors.mainIcon}</div>}
                         {imagePreview && (
                           <img
                             src={imagePreview}

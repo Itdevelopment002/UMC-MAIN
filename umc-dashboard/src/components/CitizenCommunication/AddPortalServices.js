@@ -1,37 +1,57 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import api from '../api';
 import { useNavigate } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Link } from "react-router-dom";
+import { getImageValidationError } from "../../validation/ImageValidation";
 
 const AddPortalServices = () => {
     const [heading, setHeading] = useState('');
     const [description, setDescription] = useState('');
     const [link, setLink] = useState('');
-    const [language, setLanguage] = useState('');
+    const [language, setLanguage] = useState("");
     const [portalImage, setPortalImage] = useState(null);
     const [errors, setErrors] = useState({});
     const navigate = useNavigate();
+    const fileInputRef = useRef(null);
 
     const validateForm = () => {
-        const errors = {};
-        if (!heading) errors.heading = "Service Heading is required.";
-        if (!description) errors.description = "Service Description is required.";
-        if (!link) errors.link = "Service Link is required.";
-        if (!language) errors.language = "Language Selection is required.";
-        if (!portalImage) errors.portalImage = "Service Image is required.";
-        setErrors(errors);
-        return Object.keys(errors).length === 0;
+        const newErrors = {};
+        if (!heading) newErrors.heading = "Service Heading is required.";
+        if (!description) newErrors.description = "Service Description is required.";
+        if (!link) newErrors.link = "Service Link is required.";
+        if (!language) newErrors.language = "Language selection is required.";
+        
+        // Use our global validation function
+        const imageError = getImageValidationError(portalImage);
+        if (imageError) {
+            newErrors.portalImage = imageError;
+        }
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
     };
 
-    const handleFileChange = (e, setFile, fieldName) => {
+    const handleFileChange = (e) => {
         const file = e.target.files[0];
-        if (file && file.type.startsWith('image/')) {
-            setFile(file);
-            setErrors((prev) => ({ ...prev, [fieldName]: null }));
-        } else {
-            setErrors((prev) => ({ ...prev, [fieldName]: "Please upload a valid image file." }));
+
+        if (file) {
+            // Use our global validation function
+            const errorMessage = getImageValidationError(file);
+           
+            if (errorMessage) {
+                // Clear the file input if invalid file is selected
+                if (fileInputRef.current) {
+                    fileInputRef.current.value = "";
+                }
+                // Set error message
+                setErrors({ ...errors, portalImage: errorMessage });
+                return;
+            }
+
+            setPortalImage(file);
+            setErrors({ ...errors, portalImage: "" });
         }
     };
 
@@ -65,17 +85,28 @@ const AddPortalServices = () => {
                 },
             });
 
-            toast.success(response.data.message);
+            toast.success(response.data.message, {
+                position: "top-right",
+                autoClose: 3000,
+            });
+            
             setHeading('');
             setDescription('');
             setLink('');
             setLanguage('');
             setPortalImage(null);
-            document.getElementById('portalImageInput').value = '';
+            
+            if (fileInputRef.current) {
+                fileInputRef.current.value = "";
+            }
+            
             navigate('/citizen-communication');
         } catch (error) {
             console.error('Error uploading file:', error);
-            toast.error('Failed to add project. Please try again.');
+            toast.error('Failed to add portal service. Please try again.', {
+                position: "top-right",
+                autoClose: 3000,
+            });
         }
     };
 
@@ -138,7 +169,7 @@ const AddPortalServices = () => {
                                                     className={`form-control form-control-md ${errors.description ? 'is-invalid' : ''}`}
                                                     value={description}
                                                     name="description"
-                                                    placeholder='Enter Service Heading'
+                                                    placeholder='Enter Service Description'
                                                     onChange={handleChange}
                                                 />
                                                 {errors.description && <span className="invalid-feedback">{errors.description}</span>}
@@ -149,7 +180,7 @@ const AddPortalServices = () => {
                                             <div className="col-md-4">
                                                 <input
                                                     type="text"
-                                                    className={`form-control form-control-md ${errors.link ? 'is-invalid' : ''}`}
+                                                    className={`form-control ${errors.link ? 'is-invalid' : ''}`}
                                                     value={link}
                                                     name="link"
                                                     placeholder='Enter Service Link'
@@ -167,11 +198,11 @@ const AddPortalServices = () => {
                                                     id="portalImageInput"
                                                     name="portalImage"
                                                     className={`form-control form-control-md ${errors.portalImage ? 'is-invalid' : ''}`}
-                                                    accept="image/*"
-                                                    onChange={(e) => handleFileChange(e, setPortalImage, 'portalImage')}
+                                                    accept=".jpg,.jpeg,.png"
+                                                    onChange={handleFileChange}
+                                                    ref={fileInputRef}
                                                 />
                                                 {errors.portalImage && <span className="invalid-feedback">{errors.portalImage}</span>}
-                                                <small className="text-muted">📌 Note: Only image files are allowed (JPG, PNG, etc.).</small>
                                             </div>
                                         </div>
                                         <input type="submit" className="btn btn-primary btn-sm" value="Submit" />

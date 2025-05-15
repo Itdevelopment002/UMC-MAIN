@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import api, { baseURL } from "../api";
 import GLightbox from "glightbox";
 import "glightbox/dist/css/glightbox.min.css";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { getImageValidationError } from "../../validation/ImageValidation";
 
 const CitizeServices = () => {
   const [citzenServices, setCitizenServices] = useState([]);
@@ -13,6 +14,9 @@ const CitizeServices = () => {
   const [selectedService, setSelectedService] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [imagePreview, setImagePreview] = useState(null);
+  const [errors, setErrors] = useState({});
+  const fileInputRef = useRef(null);
+
   const itemsPerPage = 10;
   const totalItems = citzenServices.length;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
@@ -23,7 +27,6 @@ const CitizeServices = () => {
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  //eslint-disable-next-line
   const currentServices = citzenServices.slice(indexOfFirstItem, indexOfLastItem);
 
   useEffect(() => {
@@ -55,6 +58,7 @@ const CitizeServices = () => {
       setSelectedService(response.data);
       setImagePreview(`${baseURL}/${response.data.main_icon_path}`);
       setShowEditModal(true);
+      setErrors({}); // Reset errors when opening modal
     } catch (error) {
       console.error("Error fetching citizen service:", error);
       toast.error("Failed to fetch citizen service details");
@@ -83,20 +87,81 @@ const CitizeServices = () => {
   const handleCloseEditModal = () => {
     setShowEditModal(false);
     setSelectedService(null);
+    setErrors({});
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+    if (!selectedService?.service_heading) newErrors.serviceHeading = "Service Heading is required.";
+    if (!selectedService?.service_link) newErrors.serviceLink = "Service Link is required.";
+    if (!selectedService?.language_code) newErrors.language = "Language Selection is required.";
+
+    // Only validate image if a new one was selected
+    if (!selectedService?.mainIcon) {
+      newErrors.mainIcon = "Initiative Image is required";
+    } else if (selectedService.mainIcon instanceof File) {
+      const imageError = getImageValidationError(selectedService.mainIcon);
+      if (imageError) {
+        newErrors.mainIcon = imageError;
+      }
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleFileChange = (e, field) => {
+    const file = e.target.files[0];
+
+    if (file) {
+      const errorMessage = getImageValidationError(file);
+
+      if (errorMessage) {
+        // Clear the file input if invalid file is selected
+        if (fileInputRef.current) {
+          fileInputRef.current.value = "";
+        }
+        setErrors({ ...errors, mainIcon: errorMessage });
+        return;
+      }
+
+      setSelectedService(prevService => ({ ...prevService, [field]: file }));
+      setImagePreview(URL.createObjectURL(file));
+      setErrors({ ...errors, mainIcon: "" });
+    }
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setSelectedService(prevService => ({ ...prevService, [name]: value }));
+    setErrors(prev => ({ ...prev, [name]: null }));
   };
 
   const handleSaveEdit = async () => {
+    if (!validateForm()) {
+      if (errors.mainIcon) {
+        toast.error("Please fix image errors before submitting", {
+          position: "top-right",
+          autoClose: 3000,
+        });
+      } else {
+        toast.error("Please fill all required fields correctly", {
+          position: "top-right",
+          autoClose: 3000,
+        });
+      }
+      return;
+    }
+
     const formData = new FormData();
-    if (selectedService.service_heading)
-      formData.append("serviceHeading", selectedService.service_heading);
-    if (selectedService.service_link)
-      formData.append("serviceLink", selectedService.service_link);
-    if (selectedService.language_code)
-      formData.append("language_code", selectedService.language_code);
-    if (selectedService.mainIcon)
+    formData.append("serviceHeading", selectedService.service_heading);
+    formData.append("serviceLink", selectedService.service_link);
+    formData.append("language_code", selectedService.language_code);
+
+    // Only append the icon if a new one was selected
+    if (selectedService.mainIcon instanceof File) {
       formData.append("mainIcon", selectedService.mainIcon);
-    if (selectedService.hoverIcon)
-      formData.append("hoverIcon", selectedService.hoverIcon);
+    }
 
     try {
       await api.post(`/edit-citizen-services/${selectedService.id}`, formData);
@@ -106,14 +171,6 @@ const CitizeServices = () => {
     } catch (error) {
       console.error("Error updating citizen service:", error);
       toast.error("Failed to update citizen service");
-    }
-  };
-
-  const handleFileChange = (e, field) => {
-    const file = e.target.files[0];
-    if (file) {
-      setSelectedService((prevService) => ({ ...prevService, [field]: file }));
-      setImagePreview(URL.createObjectURL(file));
     }
   };
 
@@ -328,7 +385,7 @@ const CitizeServices = () => {
             </div>
           )}
 
-          {showEditModal && (
+          {showEditModal && selectedService && (
             <div
               className="modal fade show d-block"
               tabIndex="-1"
@@ -344,53 +401,47 @@ const CitizeServices = () => {
                     <form>
                       <div className="mb-3">
                         <label className="form-label">
-                          Select Language
+                          Select Language <span className="text-danger">*</span>
                         </label>
-
                         <select
-                          className="form-control"
-                          value={selectedService?.language_code || ""}
-                          onChange={(e) =>
-                            setSelectedService({
-                              ...selectedService,
-                              language_code: e.target.value,
-                            })
-                          }
+                          className={`form-control ${errors.language ? 'is-invalid' : ''}`}
+                          value={selectedService.language_code || ""}
+                          name="language_code"
+                          onChange={handleInputChange}
                         >
                           <option value="" disabled>Select Language</option>
                           <option value="en">English</option>
                           <option value="mr">Marathi</option>
                         </select>
+                        {errors.language && <div className="invalid-feedback">{errors.language}</div>}
                       </div>
                       <div className="mb-3">
-                        <label className="form-label">Service Heading</label>
+                        <label className="form-label">
+                          Service Heading <span className="text-danger">*</span>
+                        </label>
                         <input
                           type="text"
-                          className="form-control"
+                          className={`form-control ${errors.serviceHeading ? 'is-invalid' : ''}`}
                           placeholder="Service Heading"
-                          value={selectedService?.service_heading || ""}
-                          onChange={(e) =>
-                            setSelectedService({
-                              ...selectedService,
-                              service_heading: e.target.value,
-                            })
-                          }
+                          value={selectedService.service_heading || ""}
+                          name="service_heading"
+                          onChange={handleInputChange}
                         />
+                        {errors.serviceHeading && <div className="invalid-feedback">{errors.serviceHeading}</div>}
                       </div>
                       <div className="mb-3">
-                        <label className="form-label">Service Link</label>
+                        <label className="form-label">
+                          Service Link <span className="text-danger">*</span>
+                        </label>
                         <input
                           type="text"
-                          className="form-control"
+                          className={`form-control ${errors.serviceLink ? 'is-invalid' : ''}`}
                           placeholder="Service Link"
-                          value={selectedService?.service_link || ""}
-                          onChange={(e) =>
-                            setSelectedService({
-                              ...selectedService,
-                              service_link: e.target.value,
-                            })
-                          }
+                          value={selectedService.service_link || ""}
+                          name="service_link"
+                          onChange={handleInputChange}
                         />
+                        {errors.serviceLink && <div className="invalid-feedback">{errors.serviceLink}</div>}
                       </div>
                       <div className="mb-3">
                         <label className="form-label">
@@ -398,19 +449,21 @@ const CitizeServices = () => {
                         </label>
                         <input
                           type="file"
-                          className="form-control"
-                          accept="image/*"
+                          className={`form-control ${errors.mainIcon ? 'is-invalid' : ''}`}
+                          accept=".jpg,.jpeg,.png"
                           onChange={(e) => handleFileChange(e, "mainIcon")}
+                          ref={fileInputRef}
                         />
-                        {imagePreview && (
-                          <img
-                            src={imagePreview}
-                            alt="preview"
-                            width="100"
-                            className="mt-2"
-                          />
-                        )}
+                        {errors.mainIcon && <div className="invalid-feedback">{errors.mainIcon}</div>}
                       </div>
+                      {imagePreview && (
+                        <img
+                          src={imagePreview}
+                          alt="preview"
+                          width="100"
+                          className="mt-2"
+                        />
+                      )}
                     </form>
                   </div>
 

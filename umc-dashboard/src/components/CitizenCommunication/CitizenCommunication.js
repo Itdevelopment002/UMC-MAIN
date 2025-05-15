@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import api, { baseURL } from "../api";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import GLightbox from "glightbox";
 import "glightbox/dist/css/glightbox.min.css";
+import { getImageValidationError } from "../../validation/ImageValidation";
 
 const CitizenCommunication = () => {
     const [portalData, setPortalData] = useState([]);
@@ -15,7 +16,9 @@ const CitizenCommunication = () => {
     const [selectedItem, setSelectedItem] = useState(null);
     const [editData, setEditData] = useState({});
     const [imagePreview, setImagePreview] = useState("");
+    const [errors, setErrors] = useState({});
     const navigate = useNavigate();
+    const fileInputRef = useRef(null);
 
     useEffect(() => {
         fetchPortalData();
@@ -76,6 +79,7 @@ const CitizenCommunication = () => {
         setImagePreview(type === "emergency" ? `${baseURL}/${item.main_icon_path}` : `${baseURL}/${item.main_icon_path}`);
         setModalType(type);
         setShowEditModal(true);
+        setErrors({});
     };
 
     const closeModal = () => {
@@ -84,75 +88,132 @@ const CitizenCommunication = () => {
         setSelectedItem(null);
         setEditData({});
         setImagePreview("");
+        setErrors({});
+        if (fileInputRef.current) {
+            fileInputRef.current.value = "";
+        }
     };
+    
+const validateForm = () => {
+    const newErrors = {};
 
-    const handleSaveChanges = async () => {
-        try {
-            if (modalType === "portal") {
-                const formData = new FormData();
-                formData.append("heading", editData.heading);
-                formData.append("description", editData.description);
-                formData.append("link", editData.link);
-                formData.append("language_code", editData.language_code);
-                if (editData.imageFile) {
-                    formData.append("portalImage", editData.imageFile);
-                }
+    if (modalType === "portal") {
+        if (!editData.heading?.trim()) newErrors.heading = "Service Heading is required.";
+        if (!editData.description?.trim()) newErrors.description = "Service Description is required.";
+        if (!editData.link?.trim()) newErrors.link = "Service Link is required.";
+        if (!editData.language_code) newErrors.language_code = "Language selection is required.";
+    } else if (modalType === "emergency") {
+        if (!editData.heading?.trim()) newErrors.heading = "Service Heading is required.";
+        if (!editData.number?.trim()) newErrors.number = "Service Number is required.";
+        if (!editData.language_code) newErrors.language_code = "Language selection is required.";
+    }
 
-                await api.post(`/edit-portal-services/${selectedItem.id}`, formData, {
-                    headers: {
-                        "Content-Type": "multipart/form-data",
-                    },
-                });
-                setPortalData(
-                    portalData.map((item) =>
-                        item.id === selectedItem.id ? { ...item, ...editData } : item
-                    )
-                );
-                fetchPortalData();
+    setErrors(newErrors);
+
+    if (Object.keys(newErrors).length > 0) {
+        toast.error("Please fix errors before submitting.", {
+            position: "top-right",
+            autoClose: 3000,
+        });
+    }
+
+    return Object.keys(newErrors).length === 0;
+};
+
+const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+        const errorMessage = getImageValidationError(file);
+        if (errorMessage) {
+            setErrors({ ...errors, imageFile: errorMessage });
+            if (fileInputRef.current) {
+                fileInputRef.current.value = "";
             }
-            else if (modalType === "emergency") {
-                const formData = new FormData();
-                formData.append("heading", editData.heading);
-                formData.append("number", editData.number);
-                formData.append("language_code", editData.language_code);
-                if (editData.imageFile) {
-                    formData.append("emergencyImage", editData.imageFile);
-                }
+            return;
+        }
 
-                await api.post(`/edit-emergency-services/${selectedItem.id}`, formData, {
-                    headers: {
-                        "Content-Type": "multipart/form-data",
-                    },
-                });
-                setEmergencyData(
-                    emergencyData.map((item) =>
-                        item.id === selectedItem.id ? { ...item, ...editData } : item
-                    )
-                );
-                fetchEmergencyData();
-            }
-            toast.success(
-                `${modalType === "portal" ? "Portal Services" : "Emergency Services"} updated successfully!`
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            setImagePreview(reader.result);
+            setEditData({ ...editData, imageFile: file });
+            setErrors({ ...errors, imageFile: "" });
+        };
+        reader.readAsDataURL(file);
+    } else {
+        setErrors({ ...errors, imageFile: "Image is required" });
+        toast.error("Image is required", {
+            position: "top-right",
+            autoClose: 3000,
+        });
+    }
+};
+
+const handleSaveChanges = async () => {
+    if (!validateForm()) {
+        return;
+    }
+
+    if (errors.imageFile || errors.heading || errors.description || errors.link || errors.number || errors.language_code) {
+        toast.error("Please fix errors before submitting.", {
+            position: "top-right",
+            autoClose: 3000,
+        });
+        return;
+    }
+
+    try {
+        const formData = new FormData();
+        formData.append("heading", editData.heading);
+
+        if (modalType === "portal") {
+            formData.append("description", editData.description);
+            formData.append("link", editData.link);
+        } else if (modalType === "emergency") {
+            formData.append("number", editData.number);
+        }
+
+        formData.append("language_code", editData.language_code);
+
+        if (editData.imageFile) {
+            formData.append(
+                modalType === "portal" ? "portalImage" : "emergencyImage",
+                editData.imageFile
             );
-            navigate("/citizen-communication");
-        } catch (error) {
-            console.error(error);
-            toast.error("Failed to update the entry!");
         }
-        closeModal();
-    };
 
-    const handleImageChange = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setImagePreview(reader.result);
-                setEditData({ ...editData, imageFile: file });
-            };
-            reader.readAsDataURL(file);
+        await api.post(
+            `/${modalType === "portal" ? "edit-portal-services" : "edit-emergency-services"}/${selectedItem.id}`,
+            formData,
+            {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            }
+        );
+
+        if (modalType === "portal") {
+            fetchPortalData();
+        } else {
+            fetchEmergencyData();
         }
-    };
+
+        toast.success(
+            `${modalType === "portal" ? "Portal Services" : "Emergency Services"} updated successfully!`,
+            {
+                position: "top-right",
+                autoClose: 3000,
+            }
+        );
+        closeModal();
+    } catch (error) {
+        console.error(error);
+        toast.error("Failed to update the entry!", {
+            position: "top-right",
+            autoClose: 3000,
+        });
+    }
+};
+
 
     return (
         <div>
@@ -246,7 +307,7 @@ const CitizenCommunication = () => {
                                                     ))
                                                 ) : (
                                                     <tr>
-                                                        <td colSpan="3">No Portal Service Data Available</td>
+                                                        <td colSpan="6">No Portal Service Data Available</td>
                                                     </tr>
                                                 )}
                                             </tbody>
@@ -332,7 +393,7 @@ const CitizenCommunication = () => {
                                                     ))
                                                 ) : (
                                                     <tr>
-                                                        <td colSpan="6">No Emergency Service Data Available</td>
+                                                        <td colSpan="5">No Emergency Service Data Available</td>
                                                     </tr>
                                                 )}
                                             </tbody>
@@ -367,10 +428,10 @@ const CitizenCommunication = () => {
                                             <>
                                                 <div className="form-group">
                                                     <label htmlFor="language_code">
-                                                        Select Language
+                                                        Select Language <span className="text-danger">*</span>
                                                     </label>
                                                     <select
-                                                        className="form-control"
+                                                        className={`form-control ${errors.language_code ? 'is-invalid' : ''}`}
                                                         id="language_code"
                                                         value={editData.language_code}
                                                         onChange={(e) =>
@@ -384,12 +445,13 @@ const CitizenCommunication = () => {
                                                         <option value="en">English</option>
                                                         <option value="mr">Marathi</option>
                                                     </select>
+                                                    {errors.language_code && <div className="invalid-feedback">{errors.language_code}</div>}
                                                 </div>
                                                 <div className="form-group">
-                                                    <label htmlFor="heading">Service Heading</label>
+                                                    <label htmlFor="heading">Service Heading <span className="text-danger">*</span></label>
                                                     <input
                                                         type="text"
-                                                        className="form-control"
+                                                        className={`form-control ${errors.heading ? 'is-invalid' : ''}`}
                                                         id="heading"
                                                         value={editData.heading}
                                                         onChange={(e) =>
@@ -399,11 +461,12 @@ const CitizenCommunication = () => {
                                                             })
                                                         }
                                                     />
+                                                    {errors.heading && <div className="invalid-feedback">{errors.heading}</div>}
                                                 </div>
                                                 <div className="form-group">
-                                                    <label htmlFor="description">Description</label>
+                                                    <label htmlFor="description">Description <span className="text-danger">*</span></label>
                                                     <textarea
-                                                        className="form-control"
+                                                        className={`form-control ${errors.description ? 'is-invalid' : ''}`}
                                                         id="description"
                                                         value={editData.description}
                                                         onChange={(e) =>
@@ -413,12 +476,13 @@ const CitizenCommunication = () => {
                                                             })
                                                         }
                                                     />
+                                                    {errors.description && <div className="invalid-feedback">{errors.description}</div>}
                                                 </div>
                                                 <div className="form-group">
-                                                    <label htmlFor="link">Service Link</label>
+                                                    <label htmlFor="link">Service Link <span className="text-danger">*</span></label>
                                                     <input
                                                         type="text"
-                                                        className="form-control"
+                                                        className={`form-control ${errors.link ? 'is-invalid' : ''}`}
                                                         id="link"
                                                         value={editData.link}
                                                         onChange={(e) =>
@@ -428,16 +492,19 @@ const CitizenCommunication = () => {
                                                             })
                                                         }
                                                     />
+                                                    {errors.link && <div className="invalid-feedback">{errors.link}</div>}
                                                 </div>
                                                 <div className="form-group">
                                                     <label htmlFor="portalImage">Service Image</label>
                                                     <input
                                                         type="file"
-                                                        className="form-control"
+                                                        className={`form-control ${errors.imageFile ? 'is-invalid' : ''}`}
                                                         id="portalImage"
-                                                        accept="image/*"
+                                                        accept=".jpg,.jpeg,.png"
                                                         onChange={handleImageChange}
+                                                        ref={fileInputRef}
                                                     />
+                                                    {errors.imageFile && <div className="invalid-feedback">{errors.imageFile}</div>}
                                                     {imagePreview && (
                                                         <img
                                                             src={imagePreview}
@@ -455,10 +522,10 @@ const CitizenCommunication = () => {
                                             <>
                                                 <div className="form-group">
                                                     <label htmlFor="language_code">
-                                                        Select Language
+                                                        Select Language <span className="text-danger">*</span>
                                                     </label>
                                                     <select
-                                                        className="form-control"
+                                                        className={`form-control ${errors.language_code ? 'is-invalid' : ''}`}
                                                         id="language_code"
                                                         value={editData.language_code}
                                                         onChange={(e) =>
@@ -472,12 +539,13 @@ const CitizenCommunication = () => {
                                                         <option value="en">English</option>
                                                         <option value="mr">Marathi</option>
                                                     </select>
+                                                    {errors.language_code && <div className="invalid-feedback">{errors.language_code}</div>}
                                                 </div>
                                                 <div className="form-group">
-                                                    <label htmlFor="heading">Service Heading</label>
+                                                    <label htmlFor="heading">Service Heading <span className="text-danger">*</span></label>
                                                     <input
                                                         type="text"
-                                                        className="form-control"
+                                                        className={`form-control ${errors.heading ? 'is-invalid' : ''}`}
                                                         id="heading"
                                                         value={editData.heading}
                                                         onChange={(e) =>
@@ -487,12 +555,13 @@ const CitizenCommunication = () => {
                                                             })
                                                         }
                                                     />
+                                                    {errors.heading && <div className="invalid-feedback">{errors.heading}</div>}
                                                 </div>
                                                 <div className="form-group">
-                                                    <label htmlFor="number">Service Number</label>
+                                                    <label htmlFor="number">Service Number <span className="text-danger">*</span></label>
                                                     <input
                                                         type="text"
-                                                        className="form-control"
+                                                        className={`form-control ${errors.number ? 'is-invalid' : ''}`}
                                                         id="number"
                                                         value={editData.number}
                                                         onChange={(e) =>
@@ -502,16 +571,19 @@ const CitizenCommunication = () => {
                                                             })
                                                         }
                                                     />
+                                                    {errors.number && <div className="invalid-feedback">{errors.number}</div>}
                                                 </div>
                                                 <div className="form-group">
-                                                    <label htmlFor="coImage">Service Image</label>
+                                                    <label htmlFor="emergencyImage">Service Image</label>
                                                     <input
                                                         type="file"
-                                                        className="form-control"
+                                                        className={`form-control ${errors.imageFile ? 'is-invalid' : ''}`}
                                                         id="emergencyImage"
-                                                        accept="image/*"
+                                                        accept=".jpg,.jpeg,.png"
                                                         onChange={handleImageChange}
+                                                        ref={fileInputRef}
                                                     />
+                                                    {errors.imageFile && <div className="invalid-feedback">{errors.imageFile}</div>}
                                                     {imagePreview && (
                                                         <img
                                                             src={imagePreview}
@@ -524,6 +596,7 @@ const CitizenCommunication = () => {
                                                         />
                                                     )}
                                                 </div>
+
                                             </>
                                         )}
                                     </div>
@@ -585,7 +658,7 @@ const CitizenCommunication = () => {
                     )}
                 </div>
             </div>
-            <ToastContainer />
+            <ToastContainer position="top-right" autoClose={3000} />
         </div>
     );
 };

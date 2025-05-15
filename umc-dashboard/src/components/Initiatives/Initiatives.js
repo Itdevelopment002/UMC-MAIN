@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import api, { baseURL } from "../api";
 import GLightbox from "glightbox";
 import "glightbox/dist/css/glightbox.min.css";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { getImageValidationError } from "../../validation/ImageValidation";
 
 const Initiatives = () => {
   const [initiatives, setInitiatives] = useState([]);
@@ -13,6 +14,8 @@ const Initiatives = () => {
   const [showEditModal, setShowEditModal] = useState(false);
   const [selectedInitiative, setSelectedInitiative] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [errors, setErrors] = useState({});
+  const fileInputRef = useRef(null);
   const itemsPerPage = 10;
   const totalItems = initiatives.length;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
@@ -55,6 +58,7 @@ const Initiatives = () => {
       setSelectedInitiative(response.data);
       setImagePreview(`${baseURL}/${response.data.main_icon_path}`);
       setShowEditModal(true);
+      setErrors({}); // Reset errors when opening modal
     } catch (error) {
       console.error("Error fetching initiative:", error);
       toast.error("Failed to fetch initiative details");
@@ -84,36 +88,100 @@ const Initiatives = () => {
     setShowEditModal(false);
     setImagePreview(null);
     setSelectedInitiative(null);
+    setErrors({});
   };
 
-  const handleSaveEdit = async () => {
-    const formData = new FormData();
-    if (selectedInitiative.heading)
-      formData.append("heading", selectedInitiative.heading);
-    if (selectedInitiative.link)
-      formData.append("link", selectedInitiative.link);
-    if (selectedInitiative.language_code)
-      formData.append("language_code", selectedInitiative.language_code);
-    if (selectedInitiative.mainIcon)
-      formData.append("mainIcon", selectedInitiative.mainIcon);
-    try {
-      await api.post(`/edit-initiatives/${selectedInitiative.id}`, formData);
-      fetchInitiatives();
-      setShowEditModal(false);
-      toast.success("Initiative updated successfully");
-    } catch (error) {
-      console.error("Error updating initiative:", error);
-      toast.error("Failed to update initiative");
-    }
-  };
+const validateEditForm = () => {
+  const newErrors = {};
 
-  const handleFileChange = (e, field) => {
-    const file = e.target.files[0];
-    if (file) {
-      setSelectedInitiative((prevInitiative) => ({ ...prevInitiative, [field]: file }));
-      setImagePreview(URL.createObjectURL(file));
+  // Validate fields
+  if (!selectedInitiative?.heading) newErrors.heading = "Initiative Heading is required";
+  if (!selectedInitiative?.link) newErrors.link = "Initiative Link is required";
+  if (!selectedInitiative?.language_code) newErrors.language_code = "Language selection is required";
+
+  // Validate image (required and valid)
+  if (!selectedInitiative?.mainIcon) {
+    newErrors.mainIcon = "Initiative Image is required";
+  } else if (selectedInitiative.mainIcon instanceof File) {
+    const imageError = getImageValidationError(selectedInitiative.mainIcon);
+    if (imageError) {
+      newErrors.mainIcon = imageError;
     }
-  };
+  }
+
+  setErrors(newErrors);
+  return Object.keys(newErrors).length === 0;
+};
+
+const handleSaveEdit = async () => {
+  if (!validateEditForm()) {
+    if (errors.mainIcon) {
+      toast.error("Please fix image errors before submitting", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+    } else {
+      toast.error("Please fill all required fields correctly", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+    }
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append("heading", selectedInitiative.heading);
+  formData.append("link", selectedInitiative.link);
+  formData.append("language_code", selectedInitiative.language_code);
+
+  if (selectedInitiative.mainIcon instanceof File) {
+    formData.append("mainIcon", selectedInitiative.mainIcon);
+  }
+
+  try {
+    await api.post(`/edit-initiatives/${selectedInitiative.id}`, formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+    fetchInitiatives();
+    setShowEditModal(false);
+    toast.success("Initiative updated successfully", {
+      position: "top-right",
+      autoClose: 3000,
+    });
+  } catch (error) {
+    console.error("Error updating initiative:", error);
+    toast.error("Failed to update initiative", {
+      position: "top-right",
+      autoClose: 3000,
+    });
+  }
+};
+
+// File change handler with validation
+const handleFileChange = (e) => {
+  const file = e.target.files[0];
+
+  if (file) {
+    const errorMessage = getImageValidationError(file);
+    if (errorMessage) {
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+      setErrors({ ...errors, mainIcon: errorMessage });
+      return;
+    }
+
+    setSelectedInitiative((prev) => ({ ...prev, mainIcon: file }));
+    setImagePreview(URL.createObjectURL(file));
+    setErrors((prev) => ({ ...prev, mainIcon: "" }));
+  } else {
+    // Clear image if no file is selected
+    setSelectedInitiative((prev) => ({ ...prev, mainIcon: "" }));
+    setImagePreview(null);
+    setErrors((prev) => ({ ...prev, mainIcon: "Initiative Image is required" }));
+  }
+};
+
 
   return (
     <>
@@ -343,10 +411,10 @@ const Initiatives = () => {
                     <form>
                       <div className="mb-3">
                         <label className="form-label">
-                          Select Language
+                          Select Language <span className="text-danger">*</span>
                         </label>
                         <select
-                          className="form-control"
+                          className={`form-control ${errors.language_code ? "is-invalid" : ""}`}
                           value={selectedInitiative?.language_code || ""}
                           onChange={(e) =>
                             setSelectedInitiative({
@@ -359,12 +427,13 @@ const Initiatives = () => {
                           <option value="en">English</option>
                           <option value="mr">Marathi</option>
                         </select>
+                        {errors.language_code && <div className="invalid-feedback">{errors.language_code}</div>}
                       </div>
                       <div className="mb-3">
-                        <label className="form-label">Initiative Heading</label>
+                        <label className="form-label">Initiative Heading <span className="text-danger">*</span></label>
                         <input
                           type="text"
-                          className="form-control"
+                          className={`form-control ${errors.heading ? "is-invalid" : ""}`}
                           placeholder="Initiative Heading"
                           value={selectedInitiative?.heading || ""}
                           onChange={(e) =>
@@ -374,12 +443,13 @@ const Initiatives = () => {
                             })
                           }
                         />
+                        {errors.heading && <div className="invalid-feedback">{errors.heading}</div>}
                       </div>
                       <div className="mb-3">
-                        <label className="form-label">Initiative Link</label>
+                        <label className="form-label">Initiative Link <span className="text-danger">*</span></label>
                         <input
                           type="text"
-                          className="form-control"
+                          className={`form-control ${errors.link ? "is-invalid" : ""}`}
                           placeholder="Initiative Link"
                           value={selectedInitiative?.link || ""}
                           onChange={(e) =>
@@ -389,6 +459,7 @@ const Initiatives = () => {
                             })
                           }
                         />
+                        {errors.link && <div className="invalid-feedback">{errors.link}</div>}
                       </div>
                       <div className="mb-3">
                         <label className="form-label">
@@ -396,19 +467,21 @@ const Initiatives = () => {
                         </label>
                         <input
                           type="file"
-                          className="form-control"
-                          accept="image/*"
-                          onChange={(e) => handleFileChange(e, "mainIcon")}
+                          className={`form-control ${errors.mainIcon ? "is-invalid" : ""}`}
+                          accept=".jpg,.jpeg,.png"
+                          onChange={handleFileChange}
+                          ref={fileInputRef}
                         />
-                        {imagePreview && (
-                          <img
-                            src={imagePreview}
-                            alt="preview"
-                            width="70"
-                            className="mt-2"
-                          />
-                        )}
+                        {errors.mainIcon && <div className="invalid-feedback">{errors.mainIcon}</div>}
                       </div>
+                      {imagePreview && (
+                        <img
+                          src={imagePreview}
+                          alt="preview"
+                          width="70"
+                          className="mt-2"
+                        />
+                      )}
                     </form>
                   </div>
 

@@ -5,6 +5,7 @@ import "glightbox/dist/css/glightbox.min.css";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import api, { baseURL } from "../api";
+import { getImageValidationError } from "../../validation/ImageValidation";
 
 const Slider = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -15,6 +16,10 @@ const Slider = () => {
     name: "",
     image: null,
   });
+  const [editErrors, setEditErrors] = useState({
+    name: "",
+    image: ""
+  });
   const [imagePreview, setImagePreview] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
@@ -23,7 +28,6 @@ const Slider = () => {
   const indexOfLastItem = currentPage * itemsPerPage;
 
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  //eslint-disable-next-line
   const currentSliders = sliders.slice(indexOfFirstItem, indexOfLastItem);
 
   useEffect(() => {
@@ -51,8 +55,13 @@ const Slider = () => {
   };
 
   const handleEditModalOpen = (slider) => {
-    setEditData(slider);
+    setEditData({
+      id: slider.id,
+      name: slider.name,
+      image: null
+    });
     setImagePreview(`${baseURL}${slider.image_path}`);
+    setEditErrors({ name: "", image: "" });
     setShowEditModal(true);
   };
 
@@ -60,9 +69,7 @@ const Slider = () => {
     api
       .post(`/delete-sliders/${selectedSlider.id}`)
       .then(() => {
-        setSliders(
-          sliders.filter((slider) => slider.id !== selectedSlider.id)
-        );
+        setSliders(sliders.filter((slider) => slider.id !== selectedSlider.id));
         setShowDeleteModal(false);
         setSelectedSlider(null);
         toast.success("Slider deleted successfully!");
@@ -73,14 +80,68 @@ const Slider = () => {
       });
   };
 
-  const handleEditSubmit = async () => {
-    const formData = new FormData();
-    formData.append("name", editData.name);
-    if (editData.image) {
-      formData.append("image", editData.image);
+  const validateForm = () => {
+    const newErrors = {};
+    let isValid = true;
+
+    // Validate name
+    if (!editData.name.trim()) {
+      newErrors.name = "Slider name is required.";
+      isValid = false;
     }
 
+    // Validate image (must not be empty and must be valid)
+    if (!editData.image) {
+      newErrors.image = "Image is required.";
+      isValid = false;
+    } else {
+      const error = getImageValidationError(editData.image);
+      if (error) {
+        newErrors.image = error;
+        isValid = false;
+      }
+    }
+
+    setEditErrors(newErrors);
+    return isValid;
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const error = getImageValidationError(file);
+      if (error) {
+        setEditErrors((prev) => ({ ...prev, image: error }));
+        setEditData((prev) => ({ ...prev, image: null }));
+        setImagePreview(null);
+      } else {
+        setEditData((prev) => ({ ...prev, image: file }));
+        setImagePreview(URL.createObjectURL(file));
+        setEditErrors((prev) => ({ ...prev, image: "" }));
+      }
+    } else {
+      setEditData((prev) => ({ ...prev, image: null }));
+      setEditErrors((prev) => ({ ...prev, image: "Image is required." }));
+    }
+  };
+
+  const handleEditSubmit = async (e) => {
+    e.preventDefault();
+
+    // Validate form
+    if (!validateForm()) {
+      toast.error("Please fix form errors before submitting.");
+      return;
+    }
+
+    // Only proceed if no errors
     try {
+      const formData = new FormData();
+      formData.append("name", editData.name);
+      if (editData.image) {
+        formData.append("image", editData.image);
+      }
+
       await api.post(`/edit-sliders/${editData.id}`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
@@ -89,24 +150,20 @@ const Slider = () => {
       setShowEditModal(false);
       toast.success("Slider updated successfully!");
     } catch (error) {
-      console.error("Error updating slider!", error);
-      toast.error("Failed to update slider.");
+      console.error("Error updating slider:", error);
+      toast.error("Failed to update slider. Please try again.");
     }
   };
 
+
+
   const handleCloseDeleteModal = () => setShowDeleteModal(false);
+
   const handleCloseEditModal = () => {
     setShowEditModal(false);
     setEditData({ name: "", image: null });
     setImagePreview(null);
-  };
-
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setEditData({ ...editData, image: file });
-      setImagePreview(URL.createObjectURL(file));
-    }
+    setEditErrors({ name: "", image: "" });
   };
 
   const handlePageChange = (page) => {
@@ -314,75 +371,70 @@ const Slider = () => {
           )}
 
           {showEditModal && (
-            <div className="modal fade show d-block"
-              style={{
-                overflowY: "auto",
-                maxHeight: "100vh",
-                scrollbarWidth: "none",
-              }} tabIndex="-1">
+            <div className="modal fade show d-block" style={{ overflowY: "auto", maxHeight: "100vh" }} tabIndex="-1">
               <div className="modal-dialog modal-dialog-centered">
                 <div className="modal-content">
                   <div className="modal-header">
                     <h5 className="modal-title">Edit Slider</h5>
+                    <button type="button" className="close" onClick={handleCloseEditModal}>
+                      <span>&times;</span>
+                    </button>
                   </div>
-                  <div className="modal-body">
-                    <form>
+                  <form onSubmit={handleEditSubmit}>
+                    <div className="modal-body">
                       <div className="form-group">
-                        <label>Slider Name</label>
+                        <label>Slider Name <span className="text-danger">*</span></label>
                         <input
                           type="text"
-                          className="form-control"
+                          className={`form-control ${editErrors.name ? "is-invalid" : ""}`}
                           value={editData.name}
-                          onChange={(e) =>
-                            setEditData({
-                              ...editData,
-                              name: e.target.value,
-                            })
-                          }
+                          onChange={(e) => {
+                            setEditData(prev => ({ ...prev, name: e.target.value }));
+                            if (editErrors.name) {
+                              setEditErrors(prev => ({ ...prev, name: "" }));
+                            }
+                          }}
                         />
+                        {editErrors.name && (
+                          <div className="invalid-feedback d-block">{editErrors.name}</div>
+                        )}
                       </div>
+
                       <div className="form-group">
                         <label>Slider Image</label>
                         <input
                           type="file"
-                          className="form-control"
+                          id="editImage"
+                          className={`form-control ${editErrors.image ? "is-invalid" : ""}`}
                           accept="image/*"
                           onChange={handleImageChange}
                         />
-                        {imagePreview && (
-                          <img
-                            src={imagePreview}
-                            alt="preview"
-                            width="100px"
-                            className="mt-2"
-                          />
+                        {editErrors.image && (
+                          <div className="invalid-feedback d-block">{editErrors.image}</div>
                         )}
+                        <small className="text-muted d-block mt-1">
+                          📌 Note: Image must be 2018×787 pixels
+                        </small>
                       </div>
-                    </form>
-                  </div>
-                  <div className="modal-footer">
-                    <button
-                      type="button"
-                      className="btn btn-sm btn-secondary"
-                      onClick={handleCloseEditModal}
-                    >
-                      Close
-                    </button>
-                    <button
-                      type="button"
-                      className="btn btn-sm btn-primary"
-                      onClick={handleEditSubmit}
-                    >
-                      Save changes
-                    </button>
-                  </div>
+                      {imagePreview && (
+                          <img src={imagePreview} alt="preview" width="100" className="mt-2" />
+                        )}
+                    </div>
+                    <div className="modal-footer">
+                      <button type="button" className="btn btn-secondary" onClick={handleCloseEditModal}>
+                        Cancel
+                      </button>
+                      <button type="submit" className="btn btn-primary">
+                        Save Changes
+                      </button>
+                    </div>
+                  </form>
                 </div>
               </div>
             </div>
           )}
         </div>
       </div>
-
       <ToastContainer />
     </>
   );

@@ -1,35 +1,55 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import api from '../api';
 import { useNavigate } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Link } from "react-router-dom";
+import { getImageValidationError } from "../../validation/ImageValidation";
 
 const AddEmergencyServices = () => {
     const [heading, setHeading] = useState('');
     const [number, setNumber] = useState('');
-    const [language, setLanguage] = useState('');
+    const [language, setLanguage] = useState("");
     const [emergencyImage, setEmergencyImage] = useState(null);
     const [errors, setErrors] = useState({});
     const navigate = useNavigate();
+    const fileInputRef = useRef(null);
 
     const validateForm = () => {
-        const errors = {};
-        if (!heading) errors.heading = "Service Heading is required.";
-        if (!number) errors.number = "Service Number is required.";
-        if (!language) errors.language = "Language Selection is required.";
-        if (!emergencyImage) errors.emergencyImage = "Service Image is required.";
-        setErrors(errors);
-        return Object.keys(errors).length === 0;
+        const newErrors = {};
+        if (!heading) newErrors.heading = "Service Heading is required.";
+        if (!number) newErrors.number = "Service Number is required.";
+        if (!language) newErrors.language = "Language selection is required.";
+        
+        // Use our global validation function
+        const imageError = getImageValidationError(emergencyImage);
+        if (imageError) {
+            newErrors.emergencyImage = imageError;
+        }
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
     };
 
-    const handleFileChange = (e, setFile, fieldName) => {
+    const handleFileChange = (e) => {
         const file = e.target.files[0];
-        if (file && file.type.startsWith('image/')) {
-            setFile(file);
-            setErrors((prev) => ({ ...prev, [fieldName]: null }));
-        } else {
-            setErrors((prev) => ({ ...prev, [fieldName]: "Please upload a valid image file." }));
+
+        if (file) {
+            // Use our global validation function
+            const errorMessage = getImageValidationError(file);
+           
+            if (errorMessage) {
+                // Clear the file input if invalid file is selected
+                if (fileInputRef.current) {
+                    fileInputRef.current.value = "";
+                }
+                // Set error message
+                setErrors({ ...errors, emergencyImage: errorMessage });
+                return;
+            }
+
+            setEmergencyImage(file);
+            setErrors({ ...errors, emergencyImage: "" });
         }
     };
 
@@ -61,16 +81,27 @@ const AddEmergencyServices = () => {
                 },
             });
 
-            toast.success(response.data.message);
+            toast.success(response.data.message, {
+                position: "top-right",
+                autoClose: 3000,
+            });
+            
             setHeading('');
             setNumber('');
             setLanguage('');
             setEmergencyImage(null);
-            document.getElementById('emergencyImageInput').value = '';
+            
+            if (fileInputRef.current) {
+                fileInputRef.current.value = "";
+            }
+            
             navigate('/citizen-communication');
         } catch (error) {
             console.error('Error uploading file:', error);
-            toast.error('Failed to add project. Please try again.');
+            toast.error('Failed to add emergency service. Please try again.', {
+                position: "top-right",
+                autoClose: 3000,
+            });
         }
     };
 
@@ -122,7 +153,7 @@ const AddEmergencyServices = () => {
                                                     placeholder='Enter Service Heading'
                                                     onChange={handleChange}
                                                 />
-                                                {errors.heading && <span className="text-danger">{errors.heading}</span>}
+                                                {errors.heading && <span className="invalid-feedback">{errors.heading}</span>}
                                             </div>
                                         </div>
                                         <div className="form-group row">
@@ -130,15 +161,16 @@ const AddEmergencyServices = () => {
                                             <div className="col-md-4">
                                                 <input
                                                     type="text"
-                                                    className={`form-control form-control-md ${errors.number ? 'is-invalid' : ''}`}
+                                                    className={`form-control ${errors.number ? 'is-invalid' : ''}`}
                                                     value={number}
                                                     name="number"
                                                     placeholder='Enter Service Number'
                                                     onChange={handleChange}
                                                 />
-                                                {errors.number && <span className="text-danger">{errors.number}</span>}
+                                                {errors.number && <span className="invalid-feedback">{errors.number}</span>}
                                             </div>
                                         </div>
+
                                         <div className="form-group row">
                                             <label className="col-form-label col-lg-3 col-md-3">Service Image <span className="text-danger">*</span></label>
                                             <div className="col-md-4">
@@ -147,14 +179,14 @@ const AddEmergencyServices = () => {
                                                     id="emergencyImageInput"
                                                     name="emergencyImage"
                                                     className={`form-control form-control-md ${errors.emergencyImage ? 'is-invalid' : ''}`}
-                                                    accept="image/*"
-                                                    onChange={(e) => handleFileChange(e, setEmergencyImage, 'emergencyImage')}
+                                                    accept=".jpg,.jpeg,.png"
+                                                    onChange={handleFileChange}
+                                                    ref={fileInputRef}
                                                 />
-                                                {errors.emergencyImage && <span className="text-danger">{errors.emergencyImage}</span>}
-                                                <small className="text-muted">📌 Note: Only image files are allowed (JPG, PNG, etc.).</small>
+                                                {errors.emergencyImage && <span className="invalid-feedback">{errors.emergencyImage}</span>}
                                             </div>
                                         </div>
-                                        <input type="submit" className="btn btn-primary" value="Submit" />
+                                        <input type="submit" className="btn btn-primary btn-sm" value="Submit" />
                                     </form>
                                     <ToastContainer />
                                 </div>

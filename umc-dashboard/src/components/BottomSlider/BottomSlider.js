@@ -1,8 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import api, { baseURL } from "../api";
 import { Link } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import GLightbox from "glightbox";
 import "glightbox/dist/css/glightbox.css";
+import { getImageValidationError } from "../../validation/ImageValidation";
 
 const BottomSlider = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -15,6 +18,11 @@ const BottomSlider = () => {
   });
   const [links, setLinks] = useState([]);
   const [selectedLinkId, setSelectedLinkId] = useState(null);
+  const [errors, setErrors] = useState({
+    websitelink: "",
+    websitelogo: "",
+  });
+  const fileInputRef = useRef(null);
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
@@ -46,7 +54,30 @@ const BottomSlider = () => {
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
+        toast.error("Failed to fetch slider data", {
+          position: "top-right",
+          autoClose: 3000,
+        });
       });
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+    if (!editLinkData.websitelink.trim()) {
+      newErrors.websitelink = "Slider Link is required";
+    }
+
+    if (editLinkData.websitelogo instanceof File) {
+      const imageError = getImageValidationError(editLinkData.websitelogo);
+      if (imageError) {
+        newErrors.websitelogo = imageError;
+      }
+    } else if (!editLinkData.websitelogo) {
+      newErrors.websitelogo = "Slider Image is required";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleDeleteConfirm = () => {
@@ -54,19 +85,36 @@ const BottomSlider = () => {
       api
         .post(`/delete-bottom-sliders/${selectedLinkId}`)
         .then(() => {
-          setLinks(
-            links.filter((websitelink) => websitelink.id !== selectedLinkId)
-          );
+          setLinks(links.filter((websitelink) => websitelink.id !== selectedLinkId));
           setShowDeleteModal(false);
+          toast.success("Slider deleted successfully!", {
+            position: "top-right",
+            autoClose: 3000,
+          });
         })
         .catch((error) => {
           console.error("Error deleting slider link:", error);
+          toast.error("Failed to delete slider", {
+            position: "top-right",
+            autoClose: 3000,
+          });
         });
     }
   };
 
   const handleEditSubmit = (e) => {
     e.preventDefault();
+
+    if (!validateForm()) {
+      toast.error("Please fix errors before submitting.");
+      return;
+    }
+    if (errors.websitelink || errors.websitelogo || errors.websitelogo) {
+      toast.error("Please fix errors before submitting.");
+      return;
+    }
+
+
     const formData = new FormData();
     formData.append("websitelink", editLinkData.websitelink);
 
@@ -74,33 +122,28 @@ const BottomSlider = () => {
       formData.append("websitelogo", editLinkData.websitelogo);
     }
 
-    const updatedLinks = links.map((websitelink) =>
-      websitelink.id === editLinkData.id
-        ? {
-          ...websitelink,
-          websitelink: editLinkData.websitelink,
-          websitelogo:
-            editLinkData.websitelogo instanceof File
-              ? URL.createObjectURL(editLinkData.websitelogo)
-              : websitelink.websitelogo,
-        }
-        : websitelink
-    );
-    setLinks(updatedLinks);
-
     api
       .post(`/edit-bottom-sliders/${editLinkData.id}`, formData)
       .then((response) => {
-        setLinks(
-          links.map((websitelink) =>
-            websitelink.id === editLinkData.id ? response.data : websitelink
-          )
-        );
+        setLinks(links.map((websitelink) =>
+          websitelink.id === editLinkData.id ? response.data : websitelink
+        ));
         setShowEditModal(false);
+        toast.success("Slider updated successfully!", {
+          position: "top-right",
+          autoClose: 3000,
+        });
         fetchLinks();
       })
       .catch((error) => {
         console.error("Error updating slider link:", error);
+        toast.error(
+          error.response?.data?.message || "Failed to update slider",
+          {
+            position: "top-right",
+            autoClose: 3000,
+          }
+        );
       });
   };
 
@@ -111,12 +154,30 @@ const BottomSlider = () => {
       websitelogo: websitelink.websitelogo,
       websitelogoPreview: `${baseURL}${websitelink.websitelogo}`,
     });
+    setErrors({
+      websitelink: "",
+      websitelogo: "",
+    });
     setShowEditModal(true);
   };
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
+
     if (file) {
+      // Validate the image file
+      const errorMessage = getImageValidationError(file);
+
+      if (errorMessage) {
+        // Clear the file input if invalid file is selected
+        if (fileInputRef.current) {
+          fileInputRef.current.value = "";
+        }
+        // Set error message
+        setErrors({ ...errors, websitelogo: errorMessage });
+        return;
+      }
+
       const reader = new FileReader();
       reader.onloadend = () => {
         setEditLinkData({
@@ -124,6 +185,7 @@ const BottomSlider = () => {
           websitelogo: file,
           websitelogoPreview: reader.result,
         });
+        setErrors({ ...errors, websitelogo: "" });
       };
       reader.readAsDataURL(file);
     } else {
@@ -234,33 +296,11 @@ const BottomSlider = () => {
                         Previous
                       </button>
                     </li>
-                    {currentPage > 2 && (
-                      <li className={`page-item ${currentPage === 1 ? "active" : ""}`}>
-                        <button className="page-link" onClick={() => setCurrentPage(1)}>
-                          1
-                        </button>
-                      </li>
-                    )}
-                    {currentPage > 3 && (
-                      <li className={`page-item ${currentPage === 2 ? "active" : ""}`}>
-                        <button className="page-link" onClick={() => setCurrentPage(2)}>
-                          2
-                        </button>
-                      </li>
-                    )}
-                    {currentPage > 4 && (
-                      <li className="page-item disabled">
-                        <span className="page-link">...</span>
-                      </li>
-                    )}
                     {Array.from(
                       { length: Math.ceil(links.length / itemsPerPage) },
                       (_, i) => i + 1
                     )
-                      .filter(
-                        (page) =>
-                          page >= currentPage - 1 && page <= currentPage + 1
-                      )
+                      .slice(0, 5)
                       .map((page) => (
                         <li
                           className={`page-item ${currentPage === page ? "active" : ""}`}
@@ -274,43 +314,9 @@ const BottomSlider = () => {
                           </button>
                         </li>
                       ))}
-                    {currentPage < Math.ceil(links.length / itemsPerPage) - 3 && (
+                    {Math.ceil(links.length / itemsPerPage) > 5 && (
                       <li className="page-item disabled">
                         <span className="page-link">...</span>
-                      </li>
-                    )}
-                    {currentPage < Math.ceil(links.length / itemsPerPage) - 2 && (
-                      <li
-                        className={`page-item ${currentPage === Math.ceil(links.length / itemsPerPage) - 1
-                          ? "active"
-                          : ""
-                          }`}
-                      >
-                        <button
-                          className="page-link"
-                          onClick={() =>
-                            setCurrentPage(Math.ceil(links.length / itemsPerPage) - 1)
-                          }
-                        >
-                          {Math.ceil(links.length / itemsPerPage) - 1}
-                        </button>
-                      </li>
-                    )}
-                    {currentPage < Math.ceil(links.length / itemsPerPage) - 1 && (
-                      <li
-                        className={`page-item ${currentPage === Math.ceil(links.length / itemsPerPage)
-                          ? "active"
-                          : ""
-                          }`}
-                      >
-                        <button
-                          className="page-link"
-                          onClick={() =>
-                            setCurrentPage(Math.ceil(links.length / itemsPerPage))
-                          }
-                        >
-                          {Math.ceil(links.length / itemsPerPage)}
-                        </button>
                       </li>
                     )}
                     <li
@@ -332,6 +338,7 @@ const BottomSlider = () => {
             </div>
           </div>
 
+          {/* Delete Confirmation Modal */}
           <div
             className={`modal fade ${showDeleteModal ? "show" : ""}`}
             style={{ display: showDeleteModal ? "block" : "none" }}
@@ -344,7 +351,7 @@ const BottomSlider = () => {
             <div className="modal-dialog modal-dialog-centered" role="document">
               <div className="modal-content">
                 <div className="modal-body text-center">
-                  <h5>Are you sure you want to delete this item?</h5>
+                  <h5>Are you sure you want to delete this slider?</h5>
                 </div>
                 <div className="modal-footer text-center">
                   <button
@@ -366,52 +373,84 @@ const BottomSlider = () => {
             </div>
           </div>
 
+          {/* Edit Modal */}
           {showEditModal && (
             <div className="modal fade show d-block"
               style={{
                 overflowY: "auto",
                 maxHeight: "100vh",
                 scrollbarWidth: "none",
-              }} tabIndex="-1">
+                backgroundColor: "rgba(0,0,0,0.5)"
+              }}
+              tabIndex="-1"
+              onClick={(e) => {
+                if (e.target === e.currentTarget) {
+                  setShowEditModal(false);
+                }
+              }}
+            >
               <div className="modal-dialog modal-dialog-centered">
                 <div className="modal-content">
                   <div className="modal-header">
                     <h5 className="modal-title">Edit Bottom Slider</h5>
+                    <button
+                      type="button"
+                      className="close"
+                      onClick={() => setShowEditModal(false)}
+                    >
+                      <span>&times;</span>
+                    </button>
                   </div>
                   <div className="modal-body">
                     <form>
                       <div className="form-group">
-                        <label htmlFor="websitelink">Slider Link</label>
+                        <label htmlFor="websitelink">Slider Link <span className="text-danger">*</span></label>
                         <input
                           type="text"
                           id="websitelink"
-                          className="form-control"
+                          className={`form-control ${errors.websitelink ? "is-invalid" : ""}`}
                           value={editLinkData.websitelink}
-                          onChange={(e) =>
+                          onChange={(e) => {
                             setEditLinkData({
                               ...editLinkData,
                               websitelink: e.target.value,
-                            })
-                          }
+                            });
+                            if (errors.websitelink) {
+                              setErrors({ ...errors, websitelink: "" });
+                            }
+                          }}
                         />
+                        {errors.websitelink && (
+                          <div className="invalid-feedback">{errors.websitelink}</div>
+                        )}
                       </div>
                       <div className="form-group">
-                        <label htmlFor="websitelogo">Slider Image</label>
+                        <label htmlFor="websitelogo">Slider Image <span className="text-danger">*</span></label>
                         <input
                           type="file"
                           id="websitelogo"
-                          accept="image/*"
-                          className="form-control"
+                          accept=".jpg,.jpeg,.png"
+                          className={`form-control ${errors.websitelogo ? "is-invalid" : ""}`}
                           onChange={handleFileChange}
+                          ref={fileInputRef}
                         />
-                        {editLinkData.websitelogoPreview && (
-                          <img
-                            src={editLinkData.websitelogoPreview}
-                            alt="Preview"
-                            width="100px"
-                            className="mt-2"
-                          />
+                        {errors.websitelogo && (
+                          <div className="invalid-feedback">{errors.websitelogo}</div>
                         )}
+                        <small className="text-muted d-block mt-1">
+                          📌 Note: Image Max size: 2MB.
+                        </small>
+                        {editLinkData.websitelogoPreview && (
+                          <div className="mt-2">
+                            <img
+                              src={editLinkData.websitelogoPreview}
+                              alt="Preview"
+                              width="100px"
+                              className="img-thumbnail"
+                            />
+                          </div>
+                        )}
+
                       </div>
                     </form>
                   </div>
@@ -423,7 +462,11 @@ const BottomSlider = () => {
                     >
                       Close
                     </button>
-                    <button type="submit" className="btn btn-sm btn-primary" onClick={handleEditSubmit}>
+                    <button
+                      type="button"
+                      className="btn btn-sm btn-primary"
+                      onClick={handleEditSubmit}
+                    >
                       Save changes
                     </button>
                   </div>
@@ -433,6 +476,7 @@ const BottomSlider = () => {
           )}
         </div>
       </div>
+      <ToastContainer />
     </>
   );
 };

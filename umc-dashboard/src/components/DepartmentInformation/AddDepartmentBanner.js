@@ -1,6 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import api from "../api";
 import { Link, useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { getImageValidationError } from "../../validation/ImageValidation";
 
 const AddDepartmentBanner = () => {
     const [departments, setDepartments] = useState([]);
@@ -9,6 +12,7 @@ const AddDepartmentBanner = () => {
     const [errors, setErrors] = useState({});
     const navigate = useNavigate();
     const userData = JSON.parse(localStorage.getItem("userData"));
+    const fileInputRef = useRef(null);
 
     const fetchDepartments = async () => {
         try {
@@ -32,44 +36,73 @@ const AddDepartmentBanner = () => {
     }, []);
 
     const handleFileChange = (e) => {
-        setSelectedFile(e.target.files[0]);
-        setErrors((prev) => ({ ...prev, selectedFile: "" }));
+        const file = e.target.files[0];
+
+        if (file) {
+            // Use our global validation function
+            const errorMessage = getImageValidationError(file);
+
+            if (errorMessage) {
+                // Clear the file input if invalid file is selected
+                if (fileInputRef.current) {
+                    fileInputRef.current.value = "";
+                }
+                // Set error message
+                setErrors({ ...errors, selectedFile: errorMessage });
+                setSelectedFile(null);
+                return;
+            }
+
+            setSelectedFile(file);
+            setErrors({ ...errors, selectedFile: "" });
+        }
+    };
+
+    const validateForm = () => {
+        const newErrors = {};
+        if (!departmentName) newErrors.departmentName = "Department Name is required";
+
+        // Use our global validation function
+        const imageError = getImageValidationError(selectedFile);
+        if (imageError) {
+            newErrors.selectedFile = imageError;
+        }
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const newErrors = {};
 
-        if (!departmentName) {
-            newErrors.departmentName = "Department Name is required.";
-        }
-
-        if (!selectedFile) {
-            newErrors.selectedFile = "Department Banner is required.";
-        }
-
-        if (Object.keys(newErrors).length > 0) {
-            setErrors(newErrors);
+        if (!validateForm()) {
             return;
         }
 
-        const formData = new FormData();
-        formData.append("bannerImage", selectedFile);
-        formData.append("departmentName", departmentName);
+        const formDataToSend = new FormData();
+        formDataToSend.append("bannerImage", selectedFile);
+        formDataToSend.append("departmentName", departmentName);
 
         try {
-            // eslint-disable-next-line
-            const response = await api.post("/department-banner", formData, {
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                },
+            const response = await api.post("/department-banner", formDataToSend, {
+                headers: { "Content-Type": "multipart/form-data" },
             });
+
+
             setDepartmentName("");
             setSelectedFile(null);
-            document.getElementById("bannerImage").value = "";
+            if (fileInputRef.current) {
+                fileInputRef.current.value = "";
+            }
+
             navigate("/department-information");
+
         } catch (error) {
-            console.error("Error uploading file:", error);
+            toast.error("Failed to add department banner. Try again.", {
+                position: "top-right",
+                autoClose: 3000,
+            });
+            console.error("Error adding department banner:", error);
         }
     };
 
@@ -135,24 +168,26 @@ const AddDepartmentBanner = () => {
                                                     type="file"
                                                     id="bannerImage"
                                                     name="bannerImage"
-                                                    accept="image/*"
-                                                    className={`form-control ${errors.selectedFile ? "is-invalid" : ""
-                                                        }`}
+                                                    accept=".jpg,.jpeg,.png"
+                                                    className={`form-control ${errors.selectedFile ? "is-invalid" : ""}`}
                                                     onChange={handleFileChange}
+                                                    ref={fileInputRef}
                                                 />
                                                 {errors.selectedFile && (
                                                     <div className="invalid-feedback">
                                                         {errors.selectedFile}
                                                     </div>
                                                 )}
-                                                <small className="text-muted">📌 Note: Only image files are allowed (JPG, PNG, etc.).</small>
+                                                <small className="text-muted">📌 Note: Image Max size: 2MB</small>
                                             </div>
                                         </div>
-                                        <input
-                                            type="submit"
-                                            className="btn btn-primary btn-sm"
-                                            value="Submit"
-                                        />
+                                        <div className="form-group row">
+                                            <div className="col-md-4 offset-md-2">
+                                                <button type="submit" className="btn btn-primary btn-sm">
+                                                    Submit
+                                                </button>
+                                            </div>
+                                        </div>
                                     </form>
                                 </div>
                             </div>
@@ -160,6 +195,7 @@ const AddDepartmentBanner = () => {
                     </div>
                 </div>
             </div>
+            <ToastContainer />
         </div>
     );
 };
