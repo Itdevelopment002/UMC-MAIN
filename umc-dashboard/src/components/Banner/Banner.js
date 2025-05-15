@@ -73,7 +73,7 @@ const Banner = () => {
 
   const validateEditForm = () => {
     const newErrors = {};
-    
+
     if (!selectedBanner?.banner_name?.trim()) {
       newErrors.bannerName = "Banner name is required";
     }
@@ -91,6 +91,14 @@ const Banner = () => {
 
   const handleSaveEdit = async () => {
     if (!validateEditForm()) {
+      return;
+    }
+
+    if (editErrors.image ) {
+      toast.error("Please fix errors before submitting.", {
+        position: "top-right",
+        autoClose: 3000,
+      });
       return;
     }
 
@@ -116,10 +124,10 @@ const Banner = () => {
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
-    
+
     if (file) {
       const errorMessage = getImageValidationError(file);
-      
+
       if (errorMessage) {
         setEditErrors({ ...editErrors, image: errorMessage });
         // Clear the file input if invalid file is selected
@@ -132,7 +140,7 @@ const Banner = () => {
 
       setSelectedFile(file);
       setEditErrors({ ...editErrors, image: "" });
-      
+
       const imageUrl = URL.createObjectURL(file);
       setImagePreview(imageUrl);
     }
