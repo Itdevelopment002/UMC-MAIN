@@ -1,6 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import api from "../api";
 import { Link, useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { getImageValidationError } from "../../validation/ImageValidation";
 
 const AddHodDetails = () => {
     const [departments, setDepartments] = useState([]);
@@ -16,7 +19,7 @@ const AddHodDetails = () => {
     const [errors, setErrors] = useState({});
     const navigate = useNavigate();
     const userData = JSON.parse(localStorage.getItem("userData"));
-
+    const fileInputRef = useRef(null);
 
     const fetchDepartments = async () => {
         try {
@@ -40,80 +43,101 @@ const AddHodDetails = () => {
     }, []);
 
     const handleFileChange = (e) => {
-        setSelectedFile(e.target.files[0]);
-        setErrors((prev) => ({ ...prev, selectedFile: "" }));
+        const file = e.target.files[0];
+
+        if (file) {
+            // Use our global validation function
+            const errorMessage = getImageValidationError(file);
+           
+            if (errorMessage) {
+                // Clear the file input if invalid file is selected
+                if (fileInputRef.current) {
+                    fileInputRef.current.value = "";
+                }
+                // Set error message
+                setErrors({ ...errors, selectedFile: errorMessage });
+                setSelectedFile(null);
+                return;
+            }
+
+            setSelectedFile(file);
+            setErrors({ ...errors, selectedFile: "" });
+        }
+    };
+
+    const validateForm = () => {
+        const newErrors = {};
+        if (!hodName) newErrors.hodName = "Hod name is required";
+        if (!department) newErrors.department = "Department Name is required";
+        if (!designation) newErrors.designation = "Designation is required";
+        if (!education) newErrors.education = "Education qualification is required";
+        if (!address) newErrors.address = "Office address is required";
+        if (!number) newErrors.number = "Phone number is required";
+        if (!email) newErrors.email = "Email address is required";
+        if (!language) newErrors.language = "Language selection is required";
+        
+        // Use our global validation function
+        const imageError = getImageValidationError(selectedFile);
+        if (imageError) {
+            newErrors.selectedFile = imageError;
+        }
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const newErrors = {};
 
-        if (!hodName) {
-            newErrors.hodName = "Hod name is required.";
-        }
-        if (!department) {
-            newErrors.department = "Department Name is required.";
-        }
-        if (!designation) {
-            newErrors.designation = "Designation is required.";
-        }
-        if (!education) {
-            newErrors.education = "Education qualification is required.";
-        }
-        if (!address) {
-            newErrors.address = "Office address is required.";
-        }
-        if (!number) {
-            newErrors.number = "Phone number is required.";
-        }
-        if (!email) {
-            newErrors.email = "Email address is required.";
-        }
-
-        if (!language) {
-            newErrors.language = "Language selection is required";
-        }
-
-        if (!selectedFile) {
-            newErrors.selectedFile = "Hod Image is required.";
-        }
-
-        if (Object.keys(newErrors).length > 0) {
-            setErrors(newErrors);
+        if (!validateForm()) {
             return;
         }
 
-        const formData = new FormData();
-        formData.append("hodImage", selectedFile);
-        formData.append("hodName", hodName);
-        formData.append("department", department);
-        formData.append("designation", designation);
-        formData.append("education", education);
-        formData.append("address", address);
-        formData.append("number", number);
-        formData.append("email", email);
-        formData.append("language_code", language);
+        const formDataToSend = new FormData();
+        formDataToSend.append("hodImage", selectedFile);
+        formDataToSend.append("hodName", hodName);
+        formDataToSend.append("department", department);
+        formDataToSend.append("designation", designation);
+        formDataToSend.append("education", education);
+        formDataToSend.append("address", address);
+        formDataToSend.append("number", number);
+        formDataToSend.append("email", email);
+        formDataToSend.append("language_code", language);
 
         try {
-            // eslint-disable-next-line
-            const response = await api.post("/hod-details", formData, {
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                },
+            const response = await api.post("/hod-details", formDataToSend, {
+                headers: { "Content-Type": "multipart/form-data" },
             });
-            setHodName("");
-            setDepartment("");
-            setDesignation("");
-            setEducation("");
-            setAddress("");
-            setNumber("");
-            setEmail("");
-            setLanguage("");
-            setSelectedFile(null);
-            document.getElementById("hodImage").value = "";
-            navigate("/department-information");
+
+            if (response.status === 200) {
+                toast.success("HOD details added successfully!", {
+                    position: "top-right",
+                    autoClose: 3000,
+                });
+
+                // Reset form fields
+                setHodName("");
+                setDepartment("");
+                setDesignation("");
+                setEducation("");
+                setAddress("");
+                setNumber("");
+                setEmail("");
+                setLanguage("");
+                setSelectedFile(null);
+                
+                if (fileInputRef.current) {
+                    fileInputRef.current.value = "";
+                }
+
+                navigate("/department-information");
+            }
         } catch (error) {
-            console.error("Error uploading file:", error);
+            toast.error("Failed to add HOD details. Try again.", {
+                position: "top-right",
+                autoClose: 3000,
+            });
+            console.error("Error adding HOD details:", error);
         }
     };
 
@@ -302,24 +326,26 @@ const AddHodDetails = () => {
                                                     type="file"
                                                     id="hodImage"
                                                     name="hodImage"
-                                                    accept="image/*"
-                                                    className={`form-control ${errors.selectedFile ? "is-invalid" : ""
-                                                        }`}
+                                                    accept=".jpg,.jpeg,.png"
+                                                    className={`form-control ${errors.selectedFile ? "is-invalid" : ""}`}
                                                     onChange={handleFileChange}
+                                                    ref={fileInputRef}
                                                 />
                                                 {errors.selectedFile && (
                                                     <span className="invalid-feedback">
                                                         {errors.selectedFile}
                                                     </span>
                                                 )}
-                                                <small className="text-muted">📌 Note: Only image files are allowed (JPG, PNG, etc.).</small>
+                                                <small className="text-muted">📌 Note: Image Max size: 2MB</small>
                                             </div>
                                         </div>
-                                        <input
-                                            type="submit"
-                                            className="btn btn-primary btn-sm"
-                                            value="Submit"
-                                        />
+                                        <div className="form-group row">
+                                            <div className="col-md-4 offset-md-3">
+                                                <button type="submit" className="btn btn-primary btn-sm">
+                                                    Submit
+                                                </button>
+                                            </div>
+                                        </div>
                                     </form>
                                 </div>
                             </div>
@@ -327,6 +353,7 @@ const AddHodDetails = () => {
                     </div>
                 </div>
             </div>
+            <ToastContainer />
         </div>
     );
 };

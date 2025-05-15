@@ -1,3 +1,4 @@
+//minister
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import GLightbox from "glightbox";
@@ -5,6 +6,7 @@ import "glightbox/dist/css/glightbox.min.css";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import api, { baseURL } from "../api";
+import { getImageValidationError } from "../../validation/ImageValidation";
 
 const MinisterDetails = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -19,13 +21,13 @@ const MinisterDetails = () => {
   });
   const [imagePreview, setImagePreview] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [imageError, setImageError] = useState(""); // Only for image validation
+
   const itemsPerPage = 5;
   const totalItems = ministers.length;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
   const indexOfLastItem = currentPage * itemsPerPage;
-
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  //eslint-disable-next-line
   const currentMinisters = ministers.slice(indexOfFirstItem, indexOfLastItem);
 
   useEffect(() => {
@@ -53,8 +55,15 @@ const MinisterDetails = () => {
   };
 
   const handleEditModalOpen = (minister) => {
-    setEditData(minister);
+    setEditData({
+      id: minister.id,
+      name: minister.name,
+      designation: minister.designation,
+      language_code: minister.language_code,
+      image: null,
+    });
     setImagePreview(`${baseURL}${minister.image_path}`);
+    setImageError(""); // Reset image error when opening modal
     setShowEditModal(true);
   };
 
@@ -76,6 +85,12 @@ const MinisterDetails = () => {
   };
 
   const handleEditSubmit = async () => {
+    // Only check for image error before submission
+    if (imageError) {
+      toast.error("Please fix image errors before submitting");
+      return;
+    }
+
     const formData = new FormData();
     formData.append("name", editData.name);
     formData.append("designation", editData.designation);
@@ -103,13 +118,23 @@ const MinisterDetails = () => {
     setShowEditModal(false);
     setEditData({ name: "", designation: "", image: null });
     setImagePreview(null);
+    setImageError("");
   };
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
+      // Use our global validation function
+      const errorMessage = getImageValidationError(file);
+
+      if (errorMessage) {
+        setImageError(errorMessage);
+        return;
+      }
+
       setEditData({ ...editData, image: file });
       setImagePreview(URL.createObjectURL(file));
+      setImageError(""); // Clear error if validation passes
     }
   };
 
@@ -290,6 +315,7 @@ const MinisterDetails = () => {
               </div>
             </div>
           </div>
+
           {showDeleteModal && (
             <div className="modal fade show d-block" tabIndex="-1">
               <div className="modal-dialog modal-dialog-centered">
@@ -383,19 +409,22 @@ const MinisterDetails = () => {
                         <label>Image</label>
                         <input
                           type="file"
-                          className="form-control"
-                          accept="image/*"
+                          className={`form-control ${imageError ? "is-invalid" : ""}`}
+                          accept=".jpg,.jpeg,.png"
                           onChange={handleImageChange}
                         />
-                        {imagePreview && (
-                          <img
-                            src={imagePreview}
-                            alt="preview"
-                            width="100px"
-                            className="mt-2"
-                          />
+                        {imageError && (
+                          <small className="text-danger">{imageError}</small>
                         )}
                       </div>
+                      {imagePreview && (
+                        <img
+                          src={imagePreview}
+                          alt="preview"
+                          width="100px"
+                          className="mt-2"
+                        />
+                      )}
                     </form>
                   </div>
                   <div className="modal-footer">
@@ -427,4 +456,3 @@ const MinisterDetails = () => {
 };
 
 export default MinisterDetails;
-

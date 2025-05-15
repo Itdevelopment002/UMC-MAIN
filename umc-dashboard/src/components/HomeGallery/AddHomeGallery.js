@@ -1,16 +1,36 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import api from "../api";
 import { Link, useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { getImageValidationError } from "../../validation/ImageValidation";
 
 const AddHomeGallery = () => {
   const [photoName, setPhotoName] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
-  const navigate = useNavigate();
   const [errors, setErrors] = useState({});
+  const navigate = useNavigate();
+  const fileInputRef = useRef(null);
 
   const handleFileChange = (e) => {
-    setSelectedFile(e.target.files[0]);
+    const file = e.target.files[0];
+    
+    if (file) {
+      const errorMessage = getImageValidationError(file);
+      
+      if (errorMessage) {
+        // Clear the file input if invalid file is selected
+        if (fileInputRef.current) {
+          fileInputRef.current.value = "";
+        }
+        // Set error message
+        setErrors({ ...errors, selectedFile: errorMessage });
+        return;
+      }
+
+      setSelectedFile(file);
+      setErrors({ ...errors, selectedFile: "" });
+    }
   };
 
   const validateForm = () => {
@@ -20,7 +40,14 @@ const AddHomeGallery = () => {
     }
     if (!selectedFile) {
       newErrors.selectedFile = "Photo gallery image is required";
+    } else {
+      // Validate the image if one is selected
+      const imageError = getImageValidationError(selectedFile);
+      if (imageError) {
+        newErrors.selectedFile = imageError;
+      }
     }
+    
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -37,19 +64,30 @@ const AddHomeGallery = () => {
     formData.append("photoName", photoName);
 
     try {
-      //eslint-disable-next-line
       const response = await api.post("/home-gallerys", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
+      
+      toast.success("Home gallery added successfully", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+      
       setPhotoName("");
       setSelectedFile(null);
-      document.getElementById("image").value = "";
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
 
       navigate("/home-gallery");
     } catch (error) {
       console.error("Error uploading file:", error);
+      toast.error("Failed to add home gallery. Please try again.", {
+        position: "top-right",
+        autoClose: 3000,
+      });
     }
   };
 
@@ -86,8 +124,9 @@ const AddHomeGallery = () => {
                       <div className="col-md-4">
                         <input
                           type="text"
-                          className={`form-control form-control-md ${errors.photoName ? "is-invalid" : ""
-                            }`}
+                          className={`form-control form-control-md ${
+                            errors.photoName ? "is-invalid" : ""
+                          }`}
                           placeholder="Enter Photo Gallery Name"
                           value={photoName}
                           onChange={(e) => {
@@ -116,9 +155,11 @@ const AddHomeGallery = () => {
                             type="file"
                             id="image"
                             name="image"
-                            accept="image/*"
-                            className={`form-control form-control-md col-md-12 col-xs-12 userfile ${errors.selectedFile ? "is-invalid" : ""
-                              }`}
+                            ref={fileInputRef}
+                            accept=".jpg,.jpeg,.png"
+                            className={`form-control form-control-md col-md-12 col-xs-12 userfile ${
+                              errors.selectedFile ? "is-invalid" : ""
+                            }`}
                             onChange={(e) => {
                               handleFileChange(e);
                               if (e.target.files[0]) {
@@ -135,7 +176,9 @@ const AddHomeGallery = () => {
                             </div>
                           )}
                         </div>
-                        <small className="text-muted">📌 Note: Only image files are allowed (JPG, PNG, etc.).</small>
+                        <small className="text-muted">
+                          📌 Note: Max image size: 2 MB.
+                        </small>
                       </div>
                     </div>
                     <input
@@ -150,6 +193,7 @@ const AddHomeGallery = () => {
           </div>
         </div>
       </div>
+      <ToastContainer />
     </>
   );
 };

@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import api from '../api';
 import { useNavigate } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Link } from "react-router-dom";
+import { getImageValidationError } from "../../validation/ImageValidation";
 
 const AddCitizeServices = () => {
     const [serviceHeading, setServiceHeading] = useState('');
@@ -12,24 +13,43 @@ const AddCitizeServices = () => {
     const [mainIcon, setMainIcon] = useState(null);
     const [errors, setErrors] = useState({});
     const navigate = useNavigate();
+    const fileInputRef = useRef(null);
 
     const validateForm = () => {
-        const errors = {};
-        if (!serviceHeading) errors.serviceHeading = "Service Heading is required.";
-        if (!serviceLink) errors.serviceLink = "Service Link is required.";
-        if (!language) errors.language = "Language Selection is required.";
-        if (!mainIcon) errors.mainIcon = "Service Icon is required.";
-        setErrors(errors);
-        return Object.keys(errors).length === 0;
+        const newErrors = {};
+        if (!serviceHeading) newErrors.serviceHeading = "Service Heading is required.";
+        if (!serviceLink) newErrors.serviceLink = "Service Link is required.";
+        if (!language) newErrors.language = "Language Selection is required.";
+        
+        // Use our global validation function
+        const imageError = getImageValidationError(mainIcon);
+        if (imageError) {
+            newErrors.mainIcon = imageError;
+        }
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
     };
 
-    const handleFileChange = (e, setFile, fieldName) => {
+    const handleFileChange = (e) => {
         const file = e.target.files[0];
-        if (file && file.type.startsWith('image/')) {
-            setFile(file);
-            setErrors((prev) => ({ ...prev, [fieldName]: null }));
-        } else {
-            setErrors((prev) => ({ ...prev, [fieldName]: "Please upload a valid image file." }));
+
+        if (file) {
+            // Use our global validation function
+            const errorMessage = getImageValidationError(file);
+           
+            if (errorMessage) {
+                // Clear the file input if invalid file is selected
+                if (fileInputRef.current) {
+                    fileInputRef.current.value = "";
+                }
+                // Set error message
+                setErrors({ ...errors, mainIcon: errorMessage });
+                return;
+            }
+
+            setMainIcon(file);
+            setErrors({ ...errors, mainIcon: "" });
         }
     };
 
@@ -60,16 +80,28 @@ const AddCitizeServices = () => {
                     'Content-Type': 'multipart/form-data',
                 },
             });
-            toast.success(response.data.message);
+
+            toast.success(response.data.message, {
+                position: "top-right",
+                autoClose: 3000,
+            });
+            
             setServiceHeading('');
             setServiceLink('');
-            setLanguage("");
+            setLanguage('');
             setMainIcon(null);
-            document.getElementById('mainIconInput').value = '';
+            
+            if (fileInputRef.current) {
+                fileInputRef.current.value = "";
+            }
+            
             navigate('/citizen-services');
         } catch (error) {
             console.error('Error uploading file:', error);
-            toast.error('Failed to add service. Please try again.');
+            toast.error('Failed to add service. Please try again.', {
+                position: "top-right",
+                autoClose: 3000,
+            });
         }
     };
 
@@ -146,11 +178,12 @@ const AddCitizeServices = () => {
                                                     id="mainIconInput"
                                                     name="mainIcon"
                                                     className={`form-control form-control-md ${errors.mainIcon ? 'is-invalid' : ''}`}
-                                                    accept="image/*"
-                                                    onChange={(e) => handleFileChange(e, setMainIcon, 'mainIcon')}
+                                                    accept=".jpg,.jpeg,.png"
+                                                    onChange={handleFileChange}
+                                                    ref={fileInputRef}
                                                 />
                                                 {errors.mainIcon && <span className="invalid-feedback">{errors.mainIcon}</span>}
-                                                <small className="text-muted">📌 Note: Only image files are allowed (JPG, PNG, etc.).</small>
+                                                <small className="text-muted">📌 Note: Only JPG, JPEG, PNG images are allowed.</small>
                                             </div>
                                         </div>
                                         <input type="submit" className="btn btn-primary btn-sm" value="Submit" />

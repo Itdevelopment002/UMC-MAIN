@@ -1,21 +1,51 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import api from "../api";
+import { getImageValidationError } from "../../validation/ImageValidation";
 
 const AddBottomSlider = () => {
+  const navigate = useNavigate();
+  const fileInputRef = useRef(null);
   const [websitelink, setLink] = useState("");
   const [websitelogo, setLogo] = useState(null);
   const [errors, setErrors] = useState({ websitelink: "", websitelogo: "" });
-  const navigate = useNavigate();
+
+  const handleLogoChange = (e) => {
+    const file = e.target.files[0];
+
+    if (file) {
+      // Use our global validation function
+      const errorMessage = getImageValidationError(file);
+     
+      if (errorMessage) {
+        // Clear the file input if invalid file is selected
+        if (fileInputRef.current) {
+          fileInputRef.current.value = "";
+        }
+        // Set error message
+        setErrors({ ...errors, websitelogo: errorMessage });
+        return;
+      }
+
+      setLogo(file);
+      setErrors({ ...errors, websitelogo: "" });
+    }
+  };
 
   const validateForm = () => {
     const newErrors = {};
     if (!websitelink.trim()) {
       newErrors.websitelink = "Slider Link is required.";
     }
-    if (!websitelogo) {
-      newErrors.websitelogo = "Slider Image is required.";
+    
+    // Use our global validation function
+    const imageError = getImageValidationError(websitelogo);
+    if (imageError) {
+      newErrors.websitelogo = imageError;
     }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -23,11 +53,6 @@ const AddBottomSlider = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) {
-      return;
-    }
-
-    if (!websitelink || !websitelogo) {
-      alert("Please provide both the Slider link and logo.");
       return;
     }
 
@@ -43,20 +68,34 @@ const AddBottomSlider = () => {
       });
 
       if (response.status === 201) {
+        toast.success("Bottom slider added successfully!", {
+          position: "top-right",
+          autoClose: 3000,
+        });
+
+        setLink("");
+        setLogo(null);
+        
+        if (fileInputRef.current) {
+          fileInputRef.current.value = "";
+        }
+
         navigate("/bottom-slider", { replace: true });
       } else {
-        alert("Failed to add Slider link. Please try again.");
+        toast.error("Failed to add slider. Please try again.", {
+          position: "top-right",
+          autoClose: 3000,
+        });
       }
     } catch (error) {
       console.error("Error uploading Slider link:", error);
-      if (error.response) {
-        alert(
-          `Error: ${error.response.data.message || "Failed to upload the Slider link."
-          }`
-        );
-      } else {
-        alert("Error: Unable to connect to the server.");
-      }
+      toast.error(
+        error.response?.data?.message || "Failed to upload the slider.",
+        {
+          position: "top-right",
+          autoClose: 3000,
+        }
+      );
     }
   };
 
@@ -93,8 +132,7 @@ const AddBottomSlider = () => {
                       <div className="col-md-4">
                         <input
                           type="text"
-                          className={`form-control ${errors.websitelink ? "is-invalid" : ""
-                            }`}
+                          className={`form-control ${errors.websitelink ? "is-invalid" : ""}`}
                           placeholder="Enter Slider Link"
                           value={websitelink}
                           onChange={(e) => {
@@ -122,15 +160,10 @@ const AddBottomSlider = () => {
                             type="file"
                             id="userfile"
                             name="websitelogo"
-                            accept="image/*"
-                            className={`form-control col-md-12 col-xs-12 ${errors.websitelogo ? "is-invalid" : ""
-                              }`}
-                            onChange={(e) => {
-                              setLogo(e.target.files[0]);
-                              if (errors.websitelogo) {
-                                setErrors({ ...errors, websitelogo: "" });
-                              }
-                            }}
+                            accept=".jpg,.jpeg,.png"
+                            className={`form-control col-md-12 col-xs-12 ${errors.websitelogo ? "is-invalid" : ""}`}
+                            onChange={handleLogoChange}
+                            ref={fileInputRef}
                           />
                           {errors.websitelogo && (
                             <div className="invalid-feedback">
@@ -138,14 +171,18 @@ const AddBottomSlider = () => {
                             </div>
                           )}
                         </div>
-                        <small className="text-muted">📌 Note: Only image files are allowed (JPG, PNG, etc.).</small>
+                        <small className="text-muted d-block mt-1">
+                          📌 Note: Image Max size: 2MB.
+                        </small>
                       </div>
                     </div>
-                    <input
-                      type="submit"
-                      className="btn btn-primary btn-sm"
-                      value="Submit"
-                    />
+                    <div className="form-group row">
+                      <div className="col-md-4 offset-md-2">
+                        <button type="submit" className="btn btn-primary btn-sm">
+                          Submit
+                        </button>
+                      </div>
+                    </div>
                   </form>
                 </div>
               </div>
@@ -153,6 +190,7 @@ const AddBottomSlider = () => {
           </div>
         </div>
       </div>
+      <ToastContainer />
     </>
   );
 };

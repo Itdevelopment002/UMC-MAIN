@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import api, { baseURL } from "../api";
 import { Link } from "react-router-dom";
 import GLightbox from "glightbox";
 import "glightbox/dist/css/glightbox.min.css";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { getImageValidationError } from "../../validation/ImageValidation";
 
 const HomeGallery = () => {
   const [gallerys, setGallerys] = useState([]);
@@ -14,6 +15,8 @@ const HomeGallery = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [imagePreview, setImagePreview] = useState(null);
+  const [errors, setErrors] = useState({});
+  const fileInputRef = useRef(null);
   const itemsPerPage = 10;
 
   useEffect(() => {
@@ -36,6 +39,7 @@ const HomeGallery = () => {
       setGallerys(response.data);
     } catch (error) {
       console.error("Error fetching home gallery:", error);
+      toast.error("Failed to fetch home gallery data");
     }
   };
 
@@ -74,42 +78,88 @@ const HomeGallery = () => {
     setShowEditModal(true);
     setImagePreview(`${baseURL}${gallery.file_path}`);
     setSelectedFile(null);
+    setErrors({});
   };
 
-  const handleSaveEdit = async () => {
-    const formData = new FormData();
+const validateForm = () => {
+    const newErrors = {};
 
-    if (selectedGallery.photo_name) {
-      formData.append("photo_name", selectedGallery.photo_name);
+    if (!selectedGallery?.photo_name?.trim()) {
+        newErrors.photoName = "Photo gallery name is required";
     }
 
     if (selectedFile) {
-      formData.append("image", selectedFile);
+        const imageError = getImageValidationError(selectedFile);
+        if (imageError) {
+            newErrors.selectedFile = imageError;
+        }
+    } else if (!selectedGallery?.image) {
+        newErrors.selectedFile = "Image is required";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+};
+
+const handleFileChange = (e) => {
+    const file = e.target.files[0];
+
+    if (file) {
+        const errorMessage = getImageValidationError(file);
+
+        if (errorMessage) {
+            if (fileInputRef.current) {
+                fileInputRef.current.value = "";
+            }
+            setErrors({ ...errors, selectedFile: errorMessage });
+            setSelectedFile(null);
+            setSelectedGallery({ ...selectedGallery, image: "" });
+            return;
+        }
+
+        setSelectedFile(file);
+        setErrors({ ...errors, selectedFile: "" });
+        const imageUrl = URL.createObjectURL(file);
+        setSelectedGallery({ ...selectedGallery, image: imageUrl });
+        setImagePreview(imageUrl);
+    } else {
+        setSelectedFile(null);
+        setSelectedGallery({ ...selectedGallery, image: "" });
+        setErrors({ ...errors, selectedFile: "Image is required" });
+        toast.error("Please select an image.");
+    }
+};
+
+const handleSaveEdit = async () => {
+    if (!validateForm()) {
+        toast.error("Please fix errors before submitting.");
+        return;
+    }
+
+    if (errors.selectedFile || errors.photoName) {
+        toast.error("Please fix errors before submitting.");
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append("photo_name", selectedGallery.photo_name);
+
+    if (selectedFile) {
+        formData.append("image", selectedFile);
     }
 
     try {
-      await api.post(`/edit-home-gallerys/${selectedGallery.id}`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-      fetchGallerys();
-      toast.success("Home gallery updated successfully!");
-      setShowEditModal(false);
+        await api.post(`/edit-home-gallerys/${selectedGallery.id}`, formData, {
+            headers: { "Content-Type": "multipart/form-data" }
+        });
+        fetchGallerys();
+        toast.success("Home gallery updated successfully!");
+        setShowEditModal(false);
     } catch (error) {
-      console.error("Error updating home gallery:", error);
-      toast.error("Error updating home gallery!");
+        console.error("Error updating home gallery:", error);
+        toast.error("Error updating home gallery!");
     }
-  };
-
-  const handleFileChange = (e) => {
-    setSelectedFile(e.target.files[0]);
-    if (e.target.files[0]) {
-      const imageUrl = URL.createObjectURL(e.target.files[0]);
-      setSelectedGallery({ ...selectedGallery, image: imageUrl });
-      setImagePreview(URL.createObjectURL(e.target.files[0]));
-    }
-  };
+};
 
   return (
     <>
@@ -183,7 +233,6 @@ const HomeGallery = () => {
                               >
                                 Delete
                               </button>
-
                             </td>
                           </tr>
                         ))}
@@ -317,7 +366,7 @@ const HomeGallery = () => {
           )}
 
           {/* Edit Modal */}
-          {showEditModal && (
+          {showEditModal && selectedGallery && (
             <div className="modal fade show" style={{ display: "block" }} tabIndex="-1" role="dialog">
               <div className="modal-dialog modal-dialog-centered" role="document">
                 <div className="modal-content">
@@ -326,27 +375,36 @@ const HomeGallery = () => {
                   </div>
                   <div className="modal-body">
                     <div className="form-group">
-                      <label>Gallery Name</label>
+                      <label>Gallery Name <span className="text-danger">*</span></label>
                       <input
                         type="text"
-                        className="form-control"
-                        value={selectedGallery?.photo_name || ""}
-                        onChange={(e) =>
+                        className={`form-control ${errors.photoName ? 'is-invalid' : ''}`}
+                        value={selectedGallery.photo_name || ""}
+                        onChange={(e) => {
                           setSelectedGallery({
                             ...selectedGallery,
                             photo_name: e.target.value,
-                          })
-                        }
+                          });
+                          setErrors({ ...errors, photoName: '' });
+                        }}
                       />
+                      {errors.photoName && (
+                        <div className="invalid-feedback">{errors.photoName}</div>
+                      )}
                     </div>
                     <div className="form-group">
                       <label>Gallery Image</label>
                       <input
                         type="file"
-                        accept="image/*"
-                        className="form-control"
+                        ref={fileInputRef}
+                        accept=".jpg,.jpeg,.png"
+                        className={`form-control ${errors.selectedFile ? 'is-invalid' : ''}`}
                         onChange={handleFileChange}
                       />
+                      {errors.selectedFile && (
+                        <div className="invalid-feedback">{errors.selectedFile}</div>
+                      )}
+                      <small className="text-muted">📌 Note: Max image size: 2 MB.</small>
                     </div>
                     {imagePreview && (
                       <img
@@ -365,7 +423,11 @@ const HomeGallery = () => {
                     >
                       Close
                     </button>
-                    <button type="button" className="btn btn-sm btn-primary" onClick={handleSaveEdit}>
+                    <button
+                      type="button"
+                      className="btn btn-sm btn-primary"
+                      onClick={handleSaveEdit}
+                    >
                       Save Changes
                     </button>
                   </div>

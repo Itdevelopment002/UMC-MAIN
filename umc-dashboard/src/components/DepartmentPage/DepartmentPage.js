@@ -1,25 +1,32 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import api, { baseURL } from "../api";
 import GLightbox from "glightbox";
 import "glightbox/dist/css/glightbox.min.css";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { getImageValidationError } from "../../validation/ImageValidation";
 
 const DepartmentPage = () => {
   const [departments, setDepartments] = useState([]);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [selectedDepartment, setSelectedDepartment] = useState(null);
+  const [errors, setErrors] = useState({
+    heading: "",
+    link: "",
+    language_code: "",
+    mainIcon: ""
+  });
   const itemsPerPage = 10;
   const totalItems = departments.length;
   const [currentPage, setCurrentPage] = useState(1);
   const totalPages = Math.ceil(totalItems / itemsPerPage);
   const indexOfLastItem = currentPage * itemsPerPage;
   const [imagePreview, setImagePreview] = useState(null);
+  const fileInputRef = useRef(null);
 
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  //eslint-disable-next-line
   const currentDepartments = departments.slice(indexOfFirstItem, indexOfLastItem);
 
   useEffect(() => {
@@ -38,7 +45,34 @@ const DepartmentPage = () => {
       setDepartments(sortedData);
     } catch (error) {
       console.error("Error fetching departments:", error);
+      toast.error("Failed to fetch departments", {
+        position: "top-right",
+        autoClose: 3000,
+      });
     }
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+    if (!selectedDepartment?.heading?.trim()) {
+      newErrors.heading = "Department Name is required";
+    }
+    if (!selectedDepartment?.link?.trim()) {
+      newErrors.link = "Department Link is required";
+    }
+    if (!selectedDepartment?.language_code) {
+      newErrors.language_code = "Language selection is required";
+    }
+
+    if (selectedDepartment?.mainIcon instanceof File) {
+      const imageError = getImageValidationError(selectedDepartment.mainIcon);
+      if (imageError) {
+        newErrors.mainIcon = imageError;
+      }
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleDeleteModalOpen = (department) => {
@@ -51,10 +85,19 @@ const DepartmentPage = () => {
       const response = await api.get(`/department-info/${departmentId}`);
       setSelectedDepartment(response.data);
       setImagePreview(`${baseURL}/${response.data.main_icon_path}`);
+      setErrors({
+        heading: "",
+        link: "",
+        language_code: "",
+        mainIcon: ""
+      });
       setShowEditModal(true);
     } catch (error) {
       console.error("Error fetching department:", error);
-      toast.error("Failed to fetch department details");
+      toast.error("Failed to fetch department details", {
+        position: "top-right",
+        autoClose: 3000,
+      });
     }
   };
 
@@ -65,10 +108,16 @@ const DepartmentPage = () => {
         departments.filter((department) => department.id !== selectedDepartment.id)
       );
       setShowDeleteModal(false);
-      toast.success("Department deleted successfully");
+      toast.success("Department deleted successfully", {
+        position: "top-right",
+        autoClose: 3000,
+      });
     } catch (error) {
       console.error("Error deleting department:", error);
-      toast.error("Failed to delete department");
+      toast.error("Failed to delete department", {
+        position: "top-right",
+        autoClose: 3000,
+      });
     }
   };
 
@@ -81,35 +130,77 @@ const DepartmentPage = () => {
     setShowEditModal(false);
     setSelectedDepartment(null);
     setImagePreview(null);
-  };
-
-  const handleSaveEdit = async () => {
-    const formData = new FormData();
-    if (selectedDepartment.heading)
-      formData.append("heading", selectedDepartment.heading);
-    if (selectedDepartment.link)
-      formData.append("link", selectedDepartment.link);
-    if (selectedDepartment.language_code)
-      formData.append("language_code", selectedDepartment.language_code);
-    if (selectedDepartment.mainIcon)
-      formData.append("mainIcon", selectedDepartment.mainIcon);
-
-    try {
-      await api.post(`/edit-department-info/${selectedDepartment.id}`, formData);
-      fetchDepartments();
-      setShowEditModal(false);
-      toast.success("Department updated successfully");
-    } catch (error) {
-      console.error("Error updating department:", error);
-      toast.error("Failed to update department");
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
     }
   };
 
-  const handleFileChange = (e, field) => {
+  const handleSaveEdit = async () => {
+    if (!validateForm()) {
+      toast.error("Please fix errors before submitting.");
+      return;
+    }
+    if (errors.mainIcon) {
+      toast.error("Please fix errors before submitting.");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("heading", selectedDepartment.heading);
+    formData.append("link", selectedDepartment.link);
+    formData.append("language_code", selectedDepartment.language_code);
+
+    if (selectedDepartment.mainIcon instanceof File) {
+      formData.append("mainIcon", selectedDepartment.mainIcon);
+    }
+
+    try {
+      await api.post(`/edit-department-info/${selectedDepartment.id}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      fetchDepartments();
+      setShowEditModal(false);
+      toast.success("Department updated successfully", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+    } catch (error) {
+      console.error("Error updating department:", error);
+      toast.error(
+        error.response?.data?.message || "Failed to update department",
+        {
+          position: "top-right",
+          autoClose: 3000,
+        }
+      );
+    }
+  };
+
+  const handleFileChange = (e) => {
     const file = e.target.files[0];
+
     if (file) {
-      setSelectedDepartment((prevDepartment) => ({ ...prevDepartment, [field]: file }));
+      // Validate the image file
+      const errorMessage = getImageValidationError(file);
+
+      if (errorMessage) {
+        // Clear the file input if invalid file is selected
+        if (fileInputRef.current) {
+          fileInputRef.current.value = "";
+        }
+        // Set error message
+        setErrors({ ...errors, mainIcon: errorMessage });
+        return;
+      }
+
+      setSelectedDepartment({
+        ...selectedDepartment,
+        mainIcon: file
+      });
       setImagePreview(URL.createObjectURL(file));
+      setErrors({ ...errors, mainIcon: "" });
     }
   };
 
@@ -164,7 +255,11 @@ const DepartmentPage = () => {
                           <tr key={department.id}>
                             <td className="text-center">{indexOfFirstItem + index + 1}</td>
                             <td>{department.heading}</td>
-                            <td>{department.link}</td>
+                            <td>
+                              <a href={department.link} target="_blank" rel="noopener noreferrer">
+                                {department.link}
+                              </a>
+                            </td>
                             <td className="text-center">
                               <Link
                                 to={`${baseURL}/${department.main_icon_path}`}
@@ -175,6 +270,7 @@ const DepartmentPage = () => {
                                   width="35px"
                                   src={`${baseURL}/${department.main_icon_path}`}
                                   alt={department.heading}
+                                  className="img-thumbnail"
                                 />
                               </Link>
                             </td>
@@ -207,25 +303,6 @@ const DepartmentPage = () => {
                       Previous
                     </button>
                   </li>
-                  {currentPage > 2 && (
-                    <li className={`page-item ${currentPage === 1 ? "active" : ""}`}>
-                      <button className="page-link" onClick={() => handlePageChange(1)}>
-                        1
-                      </button>
-                    </li>
-                  )}
-                  {currentPage > 3 && (
-                    <li className={`page-item ${currentPage === 2 ? "active" : ""}`}>
-                      <button className="page-link" onClick={() => handlePageChange(2)}>
-                        2
-                      </button>
-                    </li>
-                  )}
-                  {currentPage > 4 && (
-                    <li className="page-item disabled">
-                      <span className="page-link">...</span>
-                    </li>
-                  )}
                   {Array.from({ length: totalPages }, (_, i) => i + 1)
                     .filter(
                       (page) =>
@@ -297,13 +374,14 @@ const DepartmentPage = () => {
               tabIndex="-1"
               aria-hidden="true"
               role="dialog"
+              style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
             >
               <div className="modal-dialog modal-dialog-centered">
                 <div className="modal-content">
                   <div className="modal-body text-center">
-                    <h5>Are you sure you want to delete this item?</h5>
+                    <h5>Are you sure you want to delete this department?</h5>
                   </div>
-                  <div className="modal-footer justify-content-right">
+                  <div className="modal-footer">
                     <button
                       type="button"
                       className="btn btn-sm btn-secondary"
@@ -330,63 +408,97 @@ const DepartmentPage = () => {
               tabIndex="-1"
               aria-hidden="true"
               role="dialog"
+              style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
+              onClick={(e) => {
+                if (e.target === e.currentTarget) {
+                  handleCloseEditModal();
+                }
+              }}
             >
               <div className="modal-dialog modal-dialog-centered">
                 <div className="modal-content">
                   <div className="modal-header">
                     <h5 className="modal-title">Edit Department</h5>
+                    <button
+                      type="button"
+                      className="close"
+                      onClick={handleCloseEditModal}
+                    >
+                      <span>&times;</span>
+                    </button>
                   </div>
                   <div className="modal-body">
                     <form>
                       <div className="mb-3">
                         <label className="form-label">
-                          Select Language
+                          Select Language <span className="text-danger">*</span>
                         </label>
-
                         <select
-                          className="form-control"
+                          className={`form-control ${errors.language_code ? "is-invalid" : ""}`}
                           value={selectedDepartment?.language_code || ""}
-                          onChange={(e) =>
+                          onChange={(e) => {
                             setSelectedDepartment({
                               ...selectedDepartment,
                               language_code: e.target.value,
-                            })
-                          }
+                            });
+                            if (errors.language_code) {
+                              setErrors({ ...errors, language_code: "" });
+                            }
+                          }}
                         >
                           <option value="" disabled>Select Language</option>
                           <option value="en">English</option>
                           <option value="mr">Marathi</option>
                         </select>
+                        {errors.language_code && (
+                          <div className="invalid-feedback">{errors.language_code}</div>
+                        )}
                       </div>
                       <div className="mb-3">
-                        <label className="form-label">Department Nmae</label>
+                        <label className="form-label">
+                          Department Name <span className="text-danger">*</span>
+                        </label>
                         <input
                           type="text"
-                          className="form-control"
+                          className={`form-control ${errors.heading ? "is-invalid" : ""}`}
                           placeholder="Department Name"
                           value={selectedDepartment?.heading || ""}
-                          onChange={(e) =>
+                          onChange={(e) => {
                             setSelectedDepartment({
                               ...selectedDepartment,
                               heading: e.target.value,
-                            })
-                          }
+                            });
+                            if (errors.heading) {
+                              setErrors({ ...errors, heading: "" });
+                            }
+                          }}
                         />
+                        {errors.heading && (
+                          <div className="invalid-feedback">{errors.heading}</div>
+                        )}
                       </div>
                       <div className="mb-3">
-                        <label className="form-label">Department Link</label>
+                        <label className="form-label">
+                          Department Link <span className="text-danger">*</span>
+                        </label>
                         <input
                           type="text"
-                          className="form-control"
+                          className={`form-control ${errors.link ? "is-invalid" : ""}`}
                           placeholder="Department Link"
                           value={selectedDepartment?.link || ""}
-                          onChange={(e) =>
+                          onChange={(e) => {
                             setSelectedDepartment({
                               ...selectedDepartment,
                               link: e.target.value,
-                            })
-                          }
+                            });
+                            if (errors.link) {
+                              setErrors({ ...errors, link: "" });
+                            }
+                          }}
                         />
+                        {errors.link && (
+                          <div className="invalid-feedback">{errors.link}</div>
+                        )}
                       </div>
                       <div className="mb-3">
                         <label className="form-label">
@@ -394,22 +506,31 @@ const DepartmentPage = () => {
                         </label>
                         <input
                           type="file"
-                          className="form-control"
-                          accept="image/*"
-                          onChange={(e) => handleFileChange(e, "mainIcon")}
+                          className={`form-control ${errors.mainIcon ? "is-invalid" : ""}`}
+                          accept=".jpg,.jpeg,.png"
+                          onChange={handleFileChange}
+                          ref={fileInputRef}
                         />
-                        {imagePreview && (
-                          <img
-                            src={imagePreview}
-                            alt="preview"
-                            width="100px"
-                            className="mt-2"
-                          />
+                        {errors.mainIcon && (
+                          <div className="invalid-feedback">{errors.mainIcon}</div>
                         )}
+                        <small className="text-muted d-block mt-1">
+                          📌 Note: Image Max size: 2MB.
+                        </small>
+                        {imagePreview && (
+                          <div className="mt-2">
+                            <img
+                              src={imagePreview}
+                              alt="preview"
+                              width="100px"
+                              className="img-thumbnail"
+                            />
+                          </div>
+                        )}
+
                       </div>
                     </form>
                   </div>
-
                   <div className="modal-footer">
                     <button
                       type="button"
