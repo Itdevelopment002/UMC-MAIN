@@ -23,6 +23,7 @@ const loginLimiter = rateLimit({
 });
 
 const JWT_SECRET = process.env.JWT_SECRET;
+const JWT_EXPIRATION = process.env.JWT_EXPIRATION;
 
 const generateUniqueId = (req, res, next) => {
   req.uniqueId = uuidv4();
@@ -95,7 +96,7 @@ router.post("/login", loginLimiter, generateUniqueId, async (req, res) => {
           permission: user.permission,
         },
         JWT_SECRET,
-        { expiresIn: '1h' }
+        { expiresIn: JWT_EXPIRATION }
       );
 
       res.cookie("authToken", token, {
@@ -124,7 +125,7 @@ router.post("/login", loginLimiter, generateUniqueId, async (req, res) => {
   }
 });
 
-router.post("/logout", verifyToken, (req, res) => {
+router.post("/logout", (req, res) => {
   res.clearCookie("authToken");
   res.status(200).json({ message: "Logout successful" });
 });
@@ -143,12 +144,11 @@ router.get("/generate-captcha", (req, res) => {
   });
 
   const captchaId = uuidv4();
-  captchaStore.set(captchaId, captcha.text.toLowerCase());
-
+  captchaStore.set(captchaId, captcha.text);
   setTimeout(() => captchaStore.delete(captchaId), 5 * 60 * 1000);
-
   res.json({ captchaId, svg: captcha.data });
 });
+
 
 router.post("/verify-captcha", (req, res) => {
   const { captchaId, userInput } = req.body;
@@ -163,7 +163,7 @@ router.post("/verify-captcha", (req, res) => {
     return res.status(400).json({ success: false, message: "CAPTCHA expired or invalid" });
   }
 
-  if (storedCode !== userInput.trim().toLowerCase()) {
+  if (storedCode !== userInput.trim()) {
     return res.status(400).json({ success: false, message: "Invalid CAPTCHA" });
   }
 

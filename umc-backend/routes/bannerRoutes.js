@@ -5,20 +5,9 @@ const fs = require("fs");
 const router = express.Router();
 const db = require("../config/db.js");
 const { verifyToken } = require('../middleware/jwtMiddleware.js');
+const { getMulterConfig, handleMulterError } = require("../utils/uploadValidation");
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "uploads/");
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname));
-  },
-});
-
-const upload = multer({
-  storage,
-  limits: { fileSize: 10 * 1024 * 1024 },
-});
+const upload = multer(getMulterConfig());
 
 router.get("/banner", (req, res) => {
   const sql = "SELECT * FROM banner";
@@ -76,21 +65,23 @@ router.get("/banner/:id", (req, res) => {
 });
 
 
-router.post("/banner", verifyToken, upload.single("image"), (req, res) => {
-  if (!req.file) {
-    return res.status(400).json({ message: "No file uploaded" });
-  }
-
-  const filePath = `/uploads/${req.file.filename}`;
+router.post("/banner", verifyToken, upload.single("image"), handleMulterError, (req, res) => {
   const bannerName = req.body.bannerName;
-
   if (!bannerName) {
+    if (req.file) {
+      fs.unlink(path.join(__dirname, "..", "uploads", req.file.filename), () => { });
+    }
     return res.status(400).json({ message: "Banner name is required" });
   }
+
+  const filePath = req.file ? `/uploads/${req.file.filename}` : null;
 
   const sql = "INSERT INTO banner (banner_name, file_path) VALUES (?, ?)";
   db.query(sql, [bannerName, filePath], (err, result) => {
     if (err) {
+      if (req.file) {
+        fs.unlink(path.join(__dirname, "..", "uploads", req.file.filename), () => { });
+      }
       return res.status(500).json({ message: "Database error", error: err });
     }
     res.status(201).json({
@@ -101,7 +92,7 @@ router.post("/banner", verifyToken, upload.single("image"), (req, res) => {
 });
 
 
-router.post("/edit-banner/:id", verifyToken, upload.single("image"), (req, res) => {
+router.post("/edit-banner/:id", verifyToken, upload.single("image"), handleMulterError, (req, res) => {
   const { id } = req.params;
   const { banner_name } = req.body;
 
@@ -120,6 +111,9 @@ router.post("/edit-banner/:id", verifyToken, upload.single("image"), (req, res) 
   }
 
   if (updateParams.length === 0) {
+    if (req.file) {
+          fs.unlink(path.join(__dirname, "..", "uploads", req.file.filename), () => {});
+        }
     return res.status(400).json({ message: "No fields to update" });
   }
 
@@ -129,10 +123,16 @@ router.post("/edit-banner/:id", verifyToken, upload.single("image"), (req, res) 
   const selectSql = "SELECT file_path FROM banner WHERE id = ?";
   db.query(selectSql, [id], (err, result) => {
     if (err) {
+      if (req.file) {
+              fs.unlink(path.join(__dirname, "..", "uploads", req.file.filename), () => {});
+            }
       return res.status(500).json({ message: "Database error", error: err });
     }
 
     if (result.length === 0) {
+      if (req.file) {
+              fs.unlink(path.join(__dirname, "..", "uploads", req.file.filename), () => {});
+            }
       return res.status(404).json({ message: "Banner not found" });
     }
 
@@ -140,6 +140,9 @@ router.post("/edit-banner/:id", verifyToken, upload.single("image"), (req, res) 
 
     db.query(updateSql, updateParams, (err, updateResult) => {
       if (err) {
+        if (req.file) {
+                  fs.unlink(path.join(__dirname, "..", "uploads", req.file.filename), () => {});
+                }
         return res.status(500).json({ message: "Database error", error: err });
       }
 

@@ -9,7 +9,7 @@ const commonPasswords = [
   'dragon', 'baseball', 'football', 'letmein', 'monkey'
 ];
 
-router.get("/users", (req, res) => {
+router.get("/users", verifyToken, (req, res) => {
   const query = "SELECT * FROM users";
   db.query(query, (err, results) => {
     if (err) {
@@ -27,7 +27,7 @@ router.get("/users", (req, res) => {
 });
 
 
-router.get("/users/:id", (req, res) => {
+router.get("/users/:id", verifyToken, (req, res) => {
   const { id } = req.params;
 
   const query = "SELECT * FROM users WHERE id = ?";
