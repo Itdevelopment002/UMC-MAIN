@@ -28,7 +28,7 @@ router.get("/minister-details", (req, res) => {
   });
 });
 
-router.get("/minister-details/:id?", (req, res) => {
+router.get("/minister-details/:id", (req, res) => {
   const { id } = req.params;
   const { lang } = req.query;
 

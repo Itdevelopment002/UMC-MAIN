@@ -42,7 +42,7 @@ router.get("/emergency-services", (req, res) => {
   });
 });
 
-router.get("/emergency-services/:id?", (req, res) => {
+router.get("/emergency-services/:id", (req, res) => {
   const { id } = req.params;
   const { lang } = req.query;
 

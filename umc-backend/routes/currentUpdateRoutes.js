@@ -22,7 +22,7 @@ router.get("/current-update", (req, res) => {
 });
 
 
-router.get("/current-update/:id?", (req, res) => {
+router.get("/current-update/:id", (req, res) => {
   const { id } = req.params;
   const { lang } = req.query;
 

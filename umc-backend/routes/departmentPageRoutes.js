@@ -39,7 +39,7 @@ router.get("/department-info", (req, res) => {
 });
 
 
-router.get("/department-info/:id?", (req, res) => {
+router.get("/department-info/:id", (req, res) => {
   const { id } = req.params;
   const { lang } = req.query;
 
