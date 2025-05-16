@@ -45,7 +45,7 @@ router.get("/initiatives", (req, res) => {
   });
 });
 
-router.get("/initiatives/:id?", (req, res) => {
+router.get("/initiatives/:id", (req, res) => {
   const { id } = req.params;
   const { lang } = req.query;
 

@@ -42,7 +42,7 @@ router.get("/portal-services", (req, res) => {
   });
 });
 
-router.get("/portal-services/:id?", (req, res) => {
+router.get("/portal-services/:id", (req, res) => {
   const { id } = req.params;
   const { lang } = req.query;
 

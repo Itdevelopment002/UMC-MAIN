@@ -48,7 +48,7 @@ router.get("/home-services1", (req, res) => {
 });
 
 
-router.get("/home-services1/:id?", (req, res) => {
+router.get("/home-services1/:id", (req, res) => {
   const { id } = req.params;
   const { lang } = req.query;
 

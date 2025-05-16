@@ -38,7 +38,7 @@ router.get("/hod-details", (req, res) => {
 });
 
 
-router.get("/hod-details/:id?", (req, res) => {
+router.get("/hod-details/:id", (req, res) => {
   const { id } = req.params;
   const { lang } = req.query;
 
