@@ -1,18 +1,11 @@
 const mysql = require('mysql');
 require('dotenv').config();
 
-// const db = mysql.createConnection({
-//     host: "127.0.0.1",
-//     user: "umc_DB",
-//     password: "^U,*4^cQR(BU",
-//     database: "umc_DB"
-// });
-
 const db = mysql.createConnection({
-    host: "127.0.0.1",
-    user: "root",
-    password: "",
-    database: "umc_DB"
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME
 });
 
 db.connect((err) => {
