@@ -4,21 +4,10 @@ const path = require("path");
 const fs = require("fs");
 const router = express.Router();
 const db = require("../config/db.js");
-const {verifyToken} = require('../middleware/jwtMiddleware.js');
+const { verifyToken } = require('../middleware/jwtMiddleware.js');
+const { getMulterConfig, handleMulterError } = require("../utils/uploadValidation");
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "uploads/");
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname));
-  },
-});
-
-const upload = multer({
-  storage,
-  limits: { fileSize: 10 * 1024 * 1024 },
-});
+const upload = multer(getMulterConfig());
 
 
 router.get("/categories", (req, res) => {
@@ -84,42 +73,74 @@ router.get("/category-images/:category_id", (req, res) => {
 });
 
 
-router.post("/category-images", verifyToken, upload.single("image"), (req, res) => {
+router.post("/category-images", verifyToken, upload.single("image"), handleMulterError, (req, res) => {
   const { category_id } = req.body;
   const image_url = req.file ? `/uploads/${req.file.filename}` : null;
 
   if (!image_url) {
+    if (req.file) {
+      fs.unlink(path.join(__dirname, "..", "uploads", req.file.filename), () => { });
+    }
     return res.status(400).json({ error: "Image upload failed" });
   }
 
   db.query("INSERT INTO category_images (category_id, image_url) VALUES (?, ?)", [category_id, image_url], (err, result) => {
-    if (err) return res.status(500).json({ error: err.message });
+    if (err) {
+      if (req.file) {
+        fs.unlink(path.join(__dirname, "..", "uploads", req.file.filename), () => { });
+      }
+      return res.status(500).json({ error: err.message });
+    }
     res.json({ message: "Image uploaded successfully", id: result.insertId, image_url });
   });
 });
 
-router.post("/edit-category-images/:id", verifyToken, upload.single("image"), (req, res) => {
+router.post("/edit-category-images/:id", verifyToken, upload.single("image"), handleMulterError, (req, res) => {
   const { id } = req.params;
 
-  if (!req.file) return res.status(400).json({ error: "Image upload required" });
+  if (!req.file) {
+    if (req.file) {
+      fs.unlink(path.join(__dirname, "..", "uploads", req.file.filename), () => { });
+    }
+    return res.status(400).json({ error: "Image upload required" });
+  }
 
   const newImageUrl = `/uploads/${req.file.filename}`;
   db.query("SELECT image_url FROM category_images WHERE id = ?", [id], (err, results) => {
-    if (err) return res.status(500).json({ error: err.message });
+    if (err) {
+      if (req.file) {
+        fs.unlink(path.join(__dirname, "..", "uploads", req.file.filename), () => { });
+      }
+      return res.status(500).json({ error: err.message });
+    }
 
     if (results.length === 0) {
+      if (req.file) {
+        fs.unlink(path.join(__dirname, "..", "uploads", req.file.filename), () => { });
+      }
       return res.status(404).json({ error: "Image not found" });
     }
 
-    const oldImagePath = `.${results[0].image_url}`;
+    const oldImagePath = results[0].image_url;
 
-    db.query("UPDATE category_images SET image_url = ? WHERE id = ?", [newImageUrl, id], (updateErr) => {
-      if (updateErr) return res.status(500).json({ error: updateErr.message });
+    db.query("UPDATE category_images SET image_url = ? WHERE id = ?", [newImageUrl, id], (err) => {
+      if (err) {
+        return res.status(500).json({ message: "Database error", error: err });
+      }
 
-      fs.unlink(oldImagePath, (unlinkErr) => {
-        if (unlinkErr) console.error("Failed to delete old image:", unlinkErr);
-        res.json({ message: "Image updated successfully", image_url: newImageUrl });
-      });
+      if (req.file && oldImagePath) {
+        fs.unlink(path.join(
+          __dirname,
+          "..",
+          oldImagePath.replace(/^\//, "")
+        ), (fsErr) => {
+          if (fsErr) {
+            console.error("Error deleting old file:", fsErr);
+          }
+        });
+      }
+
+      res.status(200).json({ message: "Images updated successfully" });
     });
   });
 });

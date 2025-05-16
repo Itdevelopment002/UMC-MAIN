@@ -4,22 +4,10 @@ const path = require("path");
 const fs = require("fs");
 const router = express.Router();
 const db = require("../config/db.js");
-const {verifyToken} = require('../middleware/jwtMiddleware.js');
+const { verifyToken } = require('../middleware/jwtMiddleware.js');
+const { getMulterConfig, handleMulterError } = require("../utils/uploadValidation");
 
-
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "uploads/");
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname));
-  },
-});
-
-const upload = multer({
-  storage,
-  limits: { fileSize: 10 * 1024 * 1024 },
-});
+const upload = multer(getMulterConfig());
 
 
 router.get("/department-banner", (req, res) => {
@@ -59,7 +47,7 @@ router.get("/department-banner/:id", (req, res) => {
 });
 
 
-router.post("/department-banner", verifyToken, upload.single("bannerImage"), (req, res) => {
+router.post("/department-banner", verifyToken, upload.single("bannerImage"), handleMulterError, (req, res) => {
   if (!req.file) {
     return res.status(400).json({ message: "No file uploaded" });
   }
@@ -68,12 +56,18 @@ router.post("/department-banner", verifyToken, upload.single("bannerImage"), (re
   const departmentName = req.body.departmentName;
 
   if (!departmentName) {
+    if (req.file) {
+      fs.unlink(path.join(__dirname, "..", "uploads", req.file.filename), () => { });
+    }
     return res.status(400).json({ message: "Department name is required" });
   }
 
   const sql = "INSERT INTO deptbanner (name, file_path) VALUES (?, ?)";
   db.query(sql, [departmentName, filePath], (err, result) => {
     if (err) {
+      if (req.file) {
+        fs.unlink(path.join(__dirname, "..", "uploads", req.file.filename), () => { });
+      }
       return res.status(500).json({ message: "Database error", error: err });
     }
     res.status(201).json({
@@ -84,7 +78,7 @@ router.post("/department-banner", verifyToken, upload.single("bannerImage"), (re
 });
 
 
-router.post("/edit-department-banner/:id", verifyToken, upload.single("bannerImage"), (req, res) => {
+router.post("/edit-department-banner/:id", verifyToken, upload.single("bannerImage"), handleMulterError, (req, res) => {
   const { id } = req.params;
   const { name } = req.body;
 
@@ -103,6 +97,9 @@ router.post("/edit-department-banner/:id", verifyToken, upload.single("bannerIma
   }
 
   if (updateParams.length === 0) {
+    if (req.file) {
+      fs.unlink(path.join(__dirname, "..", "uploads", req.file.filename), () => { });
+    }
     return res.status(400).json({ message: "No fields to update" });
   }
 
@@ -112,10 +109,16 @@ router.post("/edit-department-banner/:id", verifyToken, upload.single("bannerIma
   const selectSql = "SELECT file_path FROM deptbanner WHERE id = ?";
   db.query(selectSql, [id], (err, result) => {
     if (err) {
+      if (req.file) {
+        fs.unlink(path.join(__dirname, "..", "uploads", req.file.filename), () => { });
+      }
       return res.status(500).json({ message: "Database error", error: err });
     }
 
     if (result.length === 0) {
+      if (req.file) {
+        fs.unlink(path.join(__dirname, "..", "uploads", req.file.filename), () => { });
+      }
       return res.status(404).json({ message: "Banner not found" });
     }
 
@@ -123,11 +126,18 @@ router.post("/edit-department-banner/:id", verifyToken, upload.single("bannerIma
 
     db.query(updateSql, updateParams, (err, updateResult) => {
       if (err) {
+        if (req.file) {
+          fs.unlink(path.join(__dirname, "..", "uploads", req.file.filename), () => { });
+        }
         return res.status(500).json({ message: "Database error", error: err });
       }
 
-      if (req.file) {
-        fs.unlink(path.join(__dirname, "..", oldFilePath), (fsErr) => {
+      if (req.file && oldFilePath) {
+        fs.unlink(path.join(
+          __dirname,
+          "..",
+          oldFilePath.replace(/^\//, "")
+        ), (fsErr) => {
           if (fsErr) {
             console.error("Error deleting old file:", fsErr);
           }

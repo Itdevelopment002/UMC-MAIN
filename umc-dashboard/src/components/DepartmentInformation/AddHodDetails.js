@@ -109,7 +109,7 @@ const AddHodDetails = () => {
                 headers: { "Content-Type": "multipart/form-data" },
             });
 
-            if (response.status === 200) {
+            if (response.status === 201) {
                 toast.success("HOD details added successfully!", {
                     position: "top-right",
                     autoClose: 3000,
