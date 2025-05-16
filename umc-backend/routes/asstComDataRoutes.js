@@ -7,7 +7,6 @@ const db = require("../config/db.js");
 const { verifyToken } = require('../middleware/jwtMiddleware.js');
 const { getMulterConfig, handleMulterError } = require('../utils/uploadValidation');
 
-// Create upload middleware using global config
 const upload = multer(getMulterConfig());
 
 const deleteFileIfExists = async (filePath) => {
@@ -23,14 +22,13 @@ const deleteFileIfExists = async (filePath) => {
   }
 };
 
-// Validation function for assistant commissioner data
 const validateAssistantCommissionerData = (data) => {
   const requiredFields = [
-    'coName', 'designation', 'qualification', 
-    'address', 'number', 'email', 
+    'coName', 'designation', 'qualification',
+    'address', 'number', 'email',
     'description', 'language_code'
   ];
-  
+
   const missingFields = requiredFields.filter(field => !data[field]);
   if (missingFields.length > 0) {
     return {
@@ -48,7 +46,6 @@ const validateAssistantCommissionerData = (data) => {
     };
   }
 
-  // Validate phone number (basic validation)
   const phoneRegex = /^[0-9]{10,15}$/;
   if (!phoneRegex.test(data.number)) {
     return {
@@ -93,20 +90,23 @@ router.get("/asst-commissioner-data/:id", (req, res) => {
 });
 
 router.post(
-  "/asst-commissioner-data", 
-  verifyToken, 
-  upload.single("coImage"), 
+  "/asst-commissioner-data",
+  verifyToken,
+  upload.single("coImage"),
   handleMulterError,
   async (req, res) => {
-    const { 
-      coName, 
-      designation, 
-      qualification, 
-      address, 
-      number, 
-      email, 
-      description, 
-      language_code 
+    if (req.user?.role === "Admin") {
+      return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+    }
+    const {
+      coName,
+      designation,
+      qualification,
+      address,
+      number,
+      email,
+      description,
+      language_code
     } = req.body;
 
     // Validate input data
@@ -125,55 +125,58 @@ router.post(
       (coName, designation, qualification, address, number, email, description, language_code, image_path) 
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
     `;
-    
+
     db.query(sql, [
-      coName, 
-      designation, 
-      qualification, 
-      address, 
-      number, 
-      email, 
-      description, 
-      language_code, 
+      coName,
+      designation,
+      qualification,
+      address,
+      number,
+      email,
+      description,
+      language_code,
       imagePath
     ], async (err, result) => {
       if (err) {
         if (req.file) {
           await deleteFileIfExists(imagePath);
         }
-        return res.status(500).json({ 
-          message: "Database error", 
-          error: err 
+        return res.status(500).json({
+          message: "Database error",
+          error: err
         });
       }
-      res.status(201).json({ 
-        message: "Assistant Commissioner added successfully", 
-        id: result.insertId 
+      res.status(201).json({
+        message: "Assistant Commissioner added successfully",
+        id: result.insertId
       });
     });
   }
 );
 
 router.post(
-  "/edit-asst-commissioner-data/:id", 
-  verifyToken, 
-  upload.single("coImage"), 
+  "/edit-asst-commissioner-data/:id",
+  verifyToken,
+  upload.single("coImage"),
   handleMulterError,
   async (req, res) => {
+    if (req.user?.role === "Admin") {
+      return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+    }
     const { id } = req.params;
-    const { 
-      coName, 
-      designation, 
-      qualification, 
-      address, 
-      number, 
-      email, 
-      description, 
-      language_code 
+    const {
+      coName,
+      designation,
+      qualification,
+      address,
+      number,
+      email,
+      description,
+      language_code
     } = req.body;
 
-    if (!coName && !designation && !qualification && !address && 
-        !number && !email && !description && !language_code && !req.file) {
+    if (!coName && !designation && !qualification && !address &&
+      !number && !email && !description && !language_code && !req.file) {
       return res.status(400).json({ message: "No fields to update" });
     }
 
@@ -230,9 +233,9 @@ router.post(
         if (req.file) {
           await deleteFileIfExists(newImagePath);
         }
-        return res.status(err ? 500 : 404).json({ 
+        return res.status(err ? 500 : 404).json({
           message: err ? 'Database error' : 'Assistant Commissioner not found',
-          error: err 
+          error: err
         });
       }
 
@@ -243,9 +246,9 @@ router.post(
           if (req.file) {
             await deleteFileIfExists(newImagePath);
           }
-          return res.status(500).json({ 
-            message: "Database error", 
-            error: err 
+          return res.status(500).json({
+            message: "Database error",
+            error: err
           });
         }
 
@@ -253,8 +256,8 @@ router.post(
           await deleteFileIfExists(oldImagePath);
         }
 
-        res.status(200).json({ 
-          message: "Assistant Commissioner updated successfully" 
+        res.status(200).json({
+          message: "Assistant Commissioner updated successfully"
         });
       });
     });
@@ -262,22 +265,25 @@ router.post(
 );
 
 router.post(
-  "/delete-asst-commissioner-data/:id", 
-  verifyToken, 
+  "/delete-asst-commissioner-data/:id",
+  verifyToken,
   async (req, res) => {
+    if (req.user?.role === "Admin") {
+      return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+    }
     const { id } = req.params;
 
     const selectSql = "SELECT image_path FROM asst_commissioner_details WHERE id = ?";
     db.query(selectSql, [id], async (err, result) => {
       if (err) {
-        return res.status(500).json({ 
-          message: "Database error", 
-          error: err 
+        return res.status(500).json({
+          message: "Database error",
+          error: err
         });
       }
       if (result.length === 0) {
-        return res.status(404).json({ 
-          message: "Assistant Commissioner not found" 
+        return res.status(404).json({
+          message: "Assistant Commissioner not found"
         });
       }
 
@@ -286,9 +292,9 @@ router.post(
 
       db.query(deleteSql, [id], async (err, deleteResult) => {
         if (err) {
-          return res.status(500).json({ 
-            message: "Database error", 
-            error: err 
+          return res.status(500).json({
+            message: "Database error",
+            error: err
           });
         }
 
@@ -296,8 +302,8 @@ router.post(
           await deleteFileIfExists(imagePath);
         }
 
-        res.status(200).json({ 
-          message: "Assistant Commissioner deleted successfully" 
+        res.status(200).json({
+          message: "Assistant Commissioner deleted successfully"
         });
       });
     });

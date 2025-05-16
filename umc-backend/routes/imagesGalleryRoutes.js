@@ -28,6 +28,12 @@ router.get("/categories", (req, res) => {
 
 
 router.post("/categories", verifyToken, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const { categoryName, language_code } = req.body;
   if (!categoryName || !language_code) return res.status(400).json({ error: "Category name is required" });
 
@@ -39,6 +45,9 @@ router.post("/categories", verifyToken, (req, res) => {
 
 
 router.post("/edit-categories/:id", verifyToken, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const { id } = req.params;
   const { name, language_code } = req.body;
 
@@ -54,6 +63,9 @@ router.post("/edit-categories/:id", verifyToken, (req, res) => {
 
 
 router.post("/delete-categories/:id", verifyToken, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const { id } = req.params;
 
   db.query("DELETE FROM categories WHERE id = ?", [id], (err, result) => {
@@ -74,6 +86,9 @@ router.get("/category-images/:category_id", (req, res) => {
 
 
 router.post("/category-images", verifyToken, upload.single("image"), handleMulterError, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const { category_id } = req.body;
   const image_url = req.file ? `/uploads/${req.file.filename}` : null;
 
@@ -96,6 +111,9 @@ router.post("/category-images", verifyToken, upload.single("image"), handleMulte
 });
 
 router.post("/edit-category-images/:id", verifyToken, upload.single("image"), handleMulterError, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const { id } = req.params;
 
   if (!req.file) {
@@ -147,6 +165,9 @@ router.post("/edit-category-images/:id", verifyToken, upload.single("image"), ha
 
 
 router.post("/delete-category-images/:id", verifyToken, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const { id } = req.params;
 
   db.query("SELECT image_url FROM category_images WHERE id = ?", [id], (err, results) => {

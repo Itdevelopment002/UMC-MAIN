@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../config/db.js");
-const {verifyToken} = require('../middleware/jwtMiddleware.js');
+const { verifyToken } = require('../middleware/jwtMiddleware.js');
 
 const convertToMySQLDate = (dateString) => {
   const [day, month, year] = dateString.split("-");
@@ -28,14 +28,17 @@ router.get("/enews_data", (req, res) => {
 
 
 router.post("/enews_data", verifyToken, (req, res) => {
-  const { info, issue_date,  pdf_link,language_code } = req.body;
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
+  const { info, issue_date, pdf_link, language_code } = req.body;
   const formattedDate = convertToMySQLDate(issue_date);
   const sql = `
     INSERT INTO e_news 
     (info, issue_date, pdf_link,language_code) 
     VALUES (?, ?, ?, ?)
   `;
-  db.query(sql, [info, formattedDate, pdf_link,language_code], (err, result) => {
+  db.query(sql, [info, formattedDate, pdf_link, language_code], (err, result) => {
     if (err) {
       console.error(err);
       return res.status(500).json({ error: "Failed to add e-news." });
@@ -52,7 +55,10 @@ router.post("/enews_data", verifyToken, (req, res) => {
 
 
 router.post("/edit-enews_data/:id", verifyToken, (req, res) => {
-  const { info, issue_date, pdf_link ,language_code} = req.body;
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
+  const { info, issue_date, pdf_link, language_code } = req.body;
   const formattedDate = issue_date ? convertToMySQLDate(issue_date) : null;
   const sql = `
     UPDATE e_news 
@@ -71,6 +77,9 @@ router.post("/edit-enews_data/:id", verifyToken, (req, res) => {
 
 
 router.post("/delete-enews_data/:id", verifyToken, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const sql = "DELETE FROM e_news WHERE id = ?";
   db.query(sql, [req.params.id], (err, result) => {
     if (err) {

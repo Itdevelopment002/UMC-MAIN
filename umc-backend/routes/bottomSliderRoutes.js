@@ -55,11 +55,14 @@ router.get("/bottom-sliders/:id", (req, res) => {
 });
 
 router.post(
-  "/bottom-sliders", 
-  verifyToken, 
-  upload.single("websitelogo"), 
+  "/bottom-sliders",
+  verifyToken,
+  upload.single("websitelogo"),
   handleMulterError,
   async (req, res) => {
+    if (req.user?.role === "Admin") {
+      return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+    }
     const { websitelink } = req.body;
 
     if (!req.file) {
@@ -87,11 +90,14 @@ router.post(
 );
 
 router.post(
-  "/edit-bottom-sliders/:id", 
-  verifyToken, 
-  upload.single("websitelogo"), 
+  "/edit-bottom-sliders/:id",
+  verifyToken,
+  upload.single("websitelogo"),
   handleMulterError,
   async (req, res) => {
+    if (req.user?.role === "Admin") {
+      return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+    }
     const { id } = req.params;
     const { websitelink } = req.body;
 
@@ -124,9 +130,9 @@ router.post(
         if (req.file) {
           await deleteFileIfExists(newFilePath);
         }
-        return res.status(err ? 500 : 404).json({ 
+        return res.status(err ? 500 : 404).json({
           message: err ? 'Database error' : 'Slider link not found',
-          error: err 
+          error: err
         });
       }
 
@@ -151,9 +157,12 @@ router.post(
 );
 
 router.post(
-  "/delete-bottom-sliders/:id", 
-  verifyToken, 
+  "/delete-bottom-sliders/:id",
+  verifyToken,
   async (req, res) => {
+    if (req.user?.role === "Admin") {
+      return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+    }
     const { id } = req.params;
 
     const selectSql = "SELECT websitelogo FROM bottom_slider WHERE id = ?";

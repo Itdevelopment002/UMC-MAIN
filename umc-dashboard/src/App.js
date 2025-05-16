@@ -161,6 +161,7 @@ import ResetPassword from "./components/ResetPassword/ResetPassword";
 import CodeVerification from "./components/CodeVerification/CodeVerification";
 import ChangePassword from "./components/ChangePassword/ChangePassword";
 import api from "../src/components/api";
+import { jwtDecode } from "jwt-decode";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(
@@ -211,9 +212,14 @@ function App() {
   }, [isAuthenticated, navigate]);
 
   useEffect(() => {
-    const savedUser = JSON.parse(localStorage.getItem("userData"));
-    if (savedUser) {
-      setUserData(savedUser);
+    const token = localStorage.getItem("authToken");
+    if (token) {
+      try {
+        const decoded = jwtDecode(token);
+        setUserData(decoded);
+      } catch (err) {
+        console.error("Invalid token:", err);
+      }
     }
   }, [isAuthenticated]);
 
@@ -230,7 +236,6 @@ function App() {
     try {
       await api.post("/logout", {});
       localStorage.removeItem("authToken");
-      localStorage.removeItem("userData");
       localStorage.removeItem("lastVisitedRoute");
       localStorage.removeItem("loginTime");
       setUserData({});
@@ -239,13 +244,6 @@ function App() {
       console.error("Logout failed:", error);
     }
   };
-
-  useEffect(() => {
-    const savedUser = JSON.parse(localStorage.getItem("userData"));
-    if (savedUser) {
-      setUserData(savedUser);
-    }
-  }, [isAuthenticated]);
 
   useEffect(() => {
     localStorage.setItem("lastVisitedRoute", location.pathname);
@@ -290,7 +288,7 @@ function App() {
 
                     <Route path="/" element={<Navigate to="/home" replace />} />
 
-                    {userData.role === "Superadmin" && (
+                    {userData?.role === "Superadmin" && (
                       <>
                         {/* Header */}
                         <Route path="/home" element={<MainMenu />} />
@@ -484,13 +482,13 @@ function App() {
                       </>
                     )}
 
-                    {userData.role === "Admin" && (
+                    {userData?.role === "Admin" && (
                       <>
-                        <Route path="/department-information" element={<DepartmentInformation user={userData} />} />
-                        <Route path="/add-department-banner" element={<AddDepartmentBanner user={userData} />} />
-                        <Route path="/add-department-description" element={<AddDeptDescription user={userData} />} />
-                        <Route path="/add-hod-details" element={<AddHodDetails user={userData} />} />
-                        <Route path="/add-department-pdfs" element={<AddDeptPdfs user={userData} />} />
+                        <Route path="/department-information" element={<DepartmentInformation />} />
+                        <Route path="/add-department-banner" element={<AddDepartmentBanner />} />
+                        <Route path="/add-department-description" element={<AddDeptDescription />} />
+                        <Route path="/add-hod-details" element={<AddHodDetails />} />
+                        <Route path="/add-department-pdfs" element={<AddDeptPdfs />} />
                         <Route path="/view-profile" element={<ViewProfile onLogout={handleLogout} />} />
                         <Route path="/edit-profile" element={<EditProfile />} />
 

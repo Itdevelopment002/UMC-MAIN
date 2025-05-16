@@ -27,6 +27,9 @@ router.get("/rts", (req, res) => {
 
 
 router.post("/rts", verifyToken, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const { heading, link, issue_date, language_code } = req.body;
   const formattedDate = convertToMySQLDate(issue_date);
   const sql = "INSERT INTO rts (heading, link, issue_date, language_code) VALUES (?, ?, ?, ?)";
@@ -38,6 +41,9 @@ router.post("/rts", verifyToken, (req, res) => {
 
 
 router.post("/edit-rts/:id", verifyToken, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const { heading, link, issue_date, language_code } = req.body;
   const formattedDate = issue_date ? convertToMySQLDate(issue_date) : null;
   const sql = "UPDATE rts SET heading = ?, link = ?, issue_date = ?, language_code = ? WHERE id = ?";
@@ -49,6 +55,9 @@ router.post("/edit-rts/:id", verifyToken, (req, res) => {
 
 
 router.post("/delete-rts/:id", verifyToken, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const sql = "DELETE FROM rts WHERE id = ?";
   db.query(sql, [req.params.id], (err, result) => {
     if (err) throw err;

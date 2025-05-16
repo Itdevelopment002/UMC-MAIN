@@ -50,6 +50,9 @@ router.get("/main-menus", (req, res) => {
 
 
 router.post("/add-main-menu", verifyToken, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const { menuItems } = req.body;
 
   if (!menuItems || menuItems.length === 0) {
@@ -108,6 +111,9 @@ router.post("/add-main-menu", verifyToken, (req, res) => {
 
 
 router.post("/update-main-menu/:id", verifyToken, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const mainMenuId = req.params.id;
   const { mainMenu, mainMenuLink, subMenus, language_code } = req.body;
 
@@ -179,6 +185,9 @@ router.post("/update-main-menu/:id", verifyToken, (req, res) => {
 
 
 router.post("/delete-main-menu/:id", verifyToken, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const mainMenuId = req.params.id;
 
   const deleteSubMenuQuery = "DELETE FROM sub_menu WHERE mainMenuId = ?";

@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../config/db.js");
-const {verifyToken} = require('../middleware/jwtMiddleware.js');
+const { verifyToken } = require('../middleware/jwtMiddleware.js');
 
 
 router.get("/history_desc", (req, res) => {
@@ -24,6 +24,9 @@ router.get("/history_desc", (req, res) => {
 
 
 router.post("/history_desc", verifyToken, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const { description, language_code } = req.body;
   const query = "INSERT INTO history_desc (description, language_code) VALUES (?, ?)";
   db.query(query, [description, language_code], (err, result) => {
@@ -38,6 +41,9 @@ router.post("/history_desc", verifyToken, (req, res) => {
 
 
 router.post("/edit-history_desc/:id", verifyToken, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const { description, language_code } = req.body;
   const sql = "UPDATE history_desc SET description = ?, language_code= ? WHERE id = ?";
   db.query(sql, [description, language_code, req.params.id], (err, result) => {
@@ -48,6 +54,9 @@ router.post("/edit-history_desc/:id", verifyToken, (req, res) => {
 
 
 router.post("/delete-history_desc/:id", verifyToken, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const { id } = req.params;
 
   const query = "DELETE FROM history_desc WHERE id = ?";
