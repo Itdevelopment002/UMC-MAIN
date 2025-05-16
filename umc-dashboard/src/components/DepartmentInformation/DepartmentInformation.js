@@ -7,8 +7,9 @@ import GLightbox from "glightbox";
 import "glightbox/dist/css/glightbox.min.css";
 import Flatpickr from "react-flatpickr";
 import "flatpickr/dist/themes/material_blue.css";
+import { jwtDecode } from "jwt-decode";
 
-const DepartmentInformation = ({ user }) => {
+const DepartmentInformation = () => {
     const [selectedDepartmentDescription, setSelectedDepartmentDescription] = useState("");
     const [selectedDepartmentPdf, setSelectedDepartmentPdf] = useState("");
     const [bannerData, setBannerData] = useState([]);
@@ -38,7 +39,8 @@ const DepartmentInformation = ({ user }) => {
         //eslint-disable-next-line
     }, []);
 
-    const userData = JSON.parse(localStorage.getItem("userData"));
+    const token = localStorage.getItem("authToken");
+    const userData = token ? jwtDecode(token) : null;
 
     const fetchDepartments = async () => {
         try {
@@ -54,7 +56,7 @@ const DepartmentInformation = ({ user }) => {
         try {
             const response = await api.get("/department-banner");
             const sortedData = response.data.sort((a, b) => a.name.localeCompare(b.name));
-            if (userData.role === "Superadmin") {
+            if (userData?.role === "Superadmin") {
                 setBannerData(sortedData);
             } else {
                 const userPermissions = userData?.permission?.split(",").map(perm => perm.trim());
@@ -70,7 +72,7 @@ const DepartmentInformation = ({ user }) => {
         try {
             const response = await api.get("/department-description");
             const sortedData = response.data.sort((a, b) => a.department.localeCompare(b.department));
-            if (userData.role === "Superadmin") {
+            if (userData?.role === "Superadmin") {
                 setDescriptionData(sortedData);
             } else {
                 const userPermissions = userData?.permission?.split(",").map(perm => perm.trim());
@@ -86,7 +88,7 @@ const DepartmentInformation = ({ user }) => {
         try {
             const response = await api.get("/hod-details");
             const sortedData = response.data.sort((a, b) => a.department.localeCompare(b.department));
-            if (userData.role === "Superadmin") {
+            if (userData?.role === "Superadmin") {
                 setHodData(sortedData);
             } else {
                 const userPermissions = userData?.permission?.split(",").map(perm => perm.trim());
@@ -106,7 +108,7 @@ const DepartmentInformation = ({ user }) => {
                 const dateB = b.issue_date ? new Date(b.issue_date) : new Date(0);
                 return dateB - dateA;
             });
-            if (userData.role === "Superadmin") {
+            if (userData?.role === "Superadmin") {
                 setPdfData(sortedData);
             } else {
                 const userPermissions = userData?.permission?.split(",").map(perm => perm.trim());
@@ -934,7 +936,7 @@ const DepartmentInformation = ({ user }) => {
                             </div>
                         </div>
                     </div>
-                    {!(user?.permission?.includes("Audit Department") || user?.permission?.includes("लेखा परीक्षण विभाग")) && (
+                    {!(userData?.permission?.includes("Audit Department") || userData?.permission?.includes("लेखा परीक्षण विभाग")) && (
                         <div className="row">
                             <div className="col-lg-12">
                                 <div className="card-box">

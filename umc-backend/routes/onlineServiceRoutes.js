@@ -23,6 +23,9 @@ router.get("/online-services-home", (req, res) => {
 
 
 router.post("/online-services-home", verifyToken, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const { heading, link, language_code } = req.body;
   const sql = "INSERT INTO onlineservice (heading, link, language_code) VALUES (?, ?, ?)";
   db.query(sql, [heading, link, language_code], (err, result) => {
@@ -33,6 +36,9 @@ router.post("/online-services-home", verifyToken, (req, res) => {
 
 
 router.post("/edit-online-services-home/:id", verifyToken, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const { heading, link, language_code } = req.body;
   const sql = "UPDATE onlineservice SET heading = ?, link = ?, language_code = ? WHERE id = ?";
   db.query(sql, [heading, link, language_code, req.params.id], (err, result) => {
@@ -43,6 +49,9 @@ router.post("/edit-online-services-home/:id", verifyToken, (req, res) => {
 
 
 router.post("/delete-online-services-home/:id", verifyToken, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const sql = "DELETE FROM onlineservice WHERE id = ?";
   db.query(sql, [req.params.id], (err, result) => {
     if (err) throw err;

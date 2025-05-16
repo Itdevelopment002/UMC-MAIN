@@ -110,13 +110,7 @@ router.post("/login", loginLimiter, generateUniqueId, async (req, res) => {
 
       res.status(200).json({
         message: "Login successful",
-        token,
-        user: {
-          id: user.id,
-          username: user.username,
-          role: user.role,
-          permission: user.permission,
-        }
+        token
       });
     });
   } catch (error) {

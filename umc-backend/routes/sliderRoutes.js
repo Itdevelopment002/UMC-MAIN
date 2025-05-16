@@ -31,23 +31,26 @@ router.get("/sliders/:id", (req, res) => {
 });
 
 router.post("/sliders", verifyToken, upload.single("image"), handleMulterError, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const { sliderName } = req.body;
 
   if (!sliderName || !req.file) {
     if (req.file) {
-      fs.unlink(path.join(__dirname, "..", "uploads", req.file.filename), () => {});
+      fs.unlink(path.join(__dirname, "..", "uploads", req.file.filename), () => { });
     }
-    return res.status(400).json({ 
-      message: !sliderName ? "Slider Name is required" : "Image file is required" 
+    return res.status(400).json({
+      message: !sliderName ? "Slider Name is required" : "Image file is required"
     });
   }
 
   const imagePath = `/uploads/${req.file.filename}`;
   const sql = "INSERT INTO slider (name, image_path) VALUES (?, ?)";
-  
+
   db.query(sql, [sliderName, imagePath], (err, result) => {
     if (err) {
-      fs.unlink(path.join(__dirname, "..", "uploads", req.file.filename), () => {});
+      fs.unlink(path.join(__dirname, "..", "uploads", req.file.filename), () => { });
       return res.status(500).json({ message: "Database error", error: err });
     }
     res.status(200).json({
@@ -58,19 +61,22 @@ router.post("/sliders", verifyToken, upload.single("image"), handleMulterError, 
 });
 
 router.post("/edit-sliders/:id", verifyToken, upload.single("image"), handleMulterError, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const { id } = req.params;
   const { name } = req.body;
 
   if (!name && !req.file) {
     if (req.file) {
-      fs.unlink(path.join(__dirname, "..", "uploads", req.file.filename), () => {});
+      fs.unlink(path.join(__dirname, "..", "uploads", req.file.filename), () => { });
     }
     return res.status(400).json({ message: "No fields to update" });
   }
 
   let updateSql = "UPDATE slider SET";
   const updateParams = [];
-  
+
   if (name) {
     updateSql += " name = ?";
     updateParams.push(name);
@@ -88,9 +94,9 @@ router.post("/edit-sliders/:id", verifyToken, upload.single("image"), handleMult
   db.query(selectSql, [id], (err, result) => {
     if (err || result.length === 0) {
       if (req.file) {
-        fs.unlink(path.join(__dirname, "..", "uploads", req.file.filename), () => {});
+        fs.unlink(path.join(__dirname, "..", "uploads", req.file.filename), () => { });
       }
-      return res.status(err ? 500 : 404).json({ 
+      return res.status(err ? 500 : 404).json({
         message: err ? "Database error" : "Slider not found",
         error: err
       });
@@ -100,7 +106,7 @@ router.post("/edit-sliders/:id", verifyToken, upload.single("image"), handleMult
     db.query(updateSql, updateParams, (err, updateResult) => {
       if (err) {
         if (req.file) {
-          fs.unlink(path.join(__dirname, "..", "uploads", req.file.filename), () => {});
+          fs.unlink(path.join(__dirname, "..", "uploads", req.file.filename), () => { });
         }
         return res.status(500).json({ message: "Database error", error: err });
       }
@@ -117,6 +123,9 @@ router.post("/edit-sliders/:id", verifyToken, upload.single("image"), handleMult
 });
 
 router.post("/delete-sliders/:id", verifyToken, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const { id } = req.params;
 
   const selectSql = "SELECT image_path FROM slider WHERE id = ?";
@@ -129,7 +138,7 @@ router.post("/delete-sliders/:id", verifyToken, (req, res) => {
 
     db.query(deleteSql, [id], (err, deleteResult) => {
       if (err) return res.status(500).json({ message: "Database error", error: err });
-      
+
       if (imagePath) {
         fs.unlink(path.join(__dirname, "..", imagePath), (fsErr) => {
           if (fsErr) console.error("Error deleting image:", fsErr);

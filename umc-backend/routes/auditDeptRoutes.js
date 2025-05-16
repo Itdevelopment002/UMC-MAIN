@@ -28,6 +28,19 @@ router.get("/audit-report", (req, res) => {
 
 
 router.post("/audit-report", verifyToken, (req, res) => {
+  if (req.user?.role !== "Superadmin") {
+    const allowedPermissions = ["Audit Department", "ऑडिट विभाग"];
+
+    const hasAuditPermission = allowedPermissions.some((perm) =>
+      req.user?.permission?.includes(perm)
+    );
+
+    if (!hasAuditPermission) {
+      return res.status(403).json({
+        message: "Permission denied: Only users with 'Audit Department' access are allowed.",
+      });
+    }
+  }
   const { name, year, pdf_link, issue_date, language_code } = req.body;
   const formattedDate = convertToMySQLDate(issue_date);
   const sql =
@@ -46,6 +59,19 @@ router.post("/audit-report", verifyToken, (req, res) => {
 
 
 router.post("/edit-audit-report/:id", verifyToken, (req, res) => {
+  if (req.user?.role !== "Superadmin") {
+    const allowedPermissions = ["Audit Department", "ऑडिट विभाग"];
+
+    const hasAuditPermission = allowedPermissions.some((perm) =>
+      req.user?.permission?.includes(perm)
+    );
+
+    if (!hasAuditPermission) {
+      return res.status(403).json({
+        message: "Permission denied: Only users with 'Audit Department' access are allowed.",
+      });
+    }
+  }
   const { name, year, pdf_link, issue_date, language_code } = req.body;
   const formattedDate = issue_date ? convertToMySQLDate(issue_date) : null;
   const sql =
@@ -62,6 +88,19 @@ router.post("/edit-audit-report/:id", verifyToken, (req, res) => {
 
 
 router.post("/delete-audit-report/:id", verifyToken, (req, res) => {
+  if (req.user?.role !== "Superadmin") {
+    const allowedPermissions = ["Audit Department", "ऑडिट विभाग"];
+
+    const hasAuditPermission = allowedPermissions.some((perm) =>
+      req.user?.permission?.includes(perm)
+    );
+
+    if (!hasAuditPermission) {
+      return res.status(403).json({
+        message: "Permission denied: Only users with 'Audit Department' access are allowed.",
+      });
+    }
+  }
   const sql = "DELETE FROM audit_dept WHERE id = ?";
   db.query(sql, [req.params.id], (err, result) => {
     if (err) throw err;

@@ -77,15 +77,17 @@ router.post(
   upload.fields([{ name: "mainIcon", maxCount: 1 }]),
   handleMulterError,
   async (req, res) => {
+    if (req.user?.role === "Admin") {
+      return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+    }
     const { serviceHeading, serviceLink, language_code } = req.body;
-    
+
     if (!serviceHeading || !serviceLink || !language_code) {
-      // Clean up uploaded files if validation fails
       if (req.files?.mainIcon) {
         await deleteFileIfExists(req.files.mainIcon[0].path);
       }
-      return res.status(400).json({ 
-        message: "Service heading, link and language code are required" 
+      return res.status(400).json({
+        message: "Service heading, link and language code are required"
       });
     }
 
@@ -107,7 +109,7 @@ router.post(
         await deleteFileIfExists(mainIconPath);
         return res.status(500).json({ message: "Database error", error: err });
       }
-      
+
       res.status(201).json({
         message: "Citizen Service added successfully",
         serviceId: result.insertId,
@@ -122,6 +124,9 @@ router.post(
   upload.fields([{ name: "mainIcon", maxCount: 1 }]),
   handleMulterError,
   async (req, res) => {
+    if (req.user?.role === "Admin") {
+      return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+    }
     const { id } = req.params;
     const { serviceHeading, serviceLink, language_code } = req.body;
 
@@ -167,9 +172,9 @@ router.post(
         if (req.files?.mainIcon) {
           await deleteFileIfExists(newMainIconPath);
         }
-        return res.status(err ? 500 : 404).json({ 
+        return res.status(err ? 500 : 404).json({
           message: err ? "Database error" : "Citizen Service not found",
-          error: err 
+          error: err
         });
       }
 
@@ -194,9 +199,12 @@ router.post(
 );
 
 router.post(
-  "/delete-citizen-services/:id", 
-  verifyToken, 
+  "/delete-citizen-services/:id",
+  verifyToken,
   async (req, res) => {
+    if (req.user?.role === "Admin") {
+      return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+    }
     const { id } = req.params;
 
     const selectSql = "SELECT main_icon_path FROM citizen_services WHERE id = ?";

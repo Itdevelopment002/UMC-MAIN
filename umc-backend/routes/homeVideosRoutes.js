@@ -36,6 +36,9 @@ router.get("/home-video/:id", (req, res) => {
 
 
 router.post("/edit-home-video/:id", verifyToken, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const { id } = req.params;
   const { video_url } = req.body;
 
@@ -60,6 +63,9 @@ router.post("/edit-home-video/:id", verifyToken, (req, res) => {
 
 
 router.post("/delete-home-video/:id", verifyToken, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const { id } = req.params;
 
   const deleteSql = "DELETE FROM home_video WHERE id = ?";

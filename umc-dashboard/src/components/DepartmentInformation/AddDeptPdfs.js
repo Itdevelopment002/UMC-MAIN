@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Flatpickr from "react-flatpickr";
 import "flatpickr/dist/themes/material_blue.css";
 import api from "../api";
+import { jwtDecode } from "jwt-decode";
 
 const AddDeptPdfs = () => {
   const [heading, setHeading] = useState("");
@@ -13,7 +14,8 @@ const AddDeptPdfs = () => {
   const [departments, setDepartments] = useState([]);
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
-  const userData = JSON.parse(localStorage.getItem("userData"));
+  const token = localStorage.getItem("authToken");
+  const userData = token ? jwtDecode(token) : null;
 
 
   const formatDate = (date) => {
@@ -53,19 +55,19 @@ const AddDeptPdfs = () => {
 
   const fetchDepartments = async () => {
     try {
-        const response = await api.get("/department-info");
-        const sortedData = response.data.sort((a, b) => a.heading.localeCompare(b.heading));
-        if (userData.role === "Superadmin") {
-            setDepartments(sortedData);
-        } else {
-            const userPermissions = userData?.permission?.split(",").map(perm => perm.trim());
-            const filteredData = sortedData.filter(item => userPermissions.includes(item.heading));
-            setDepartments(filteredData);
-        }
+      const response = await api.get("/department-info");
+      const sortedData = response.data.sort((a, b) => a.heading.localeCompare(b.heading));
+      if (userData?.role === "Superadmin") {
+        setDepartments(sortedData);
+      } else {
+        const userPermissions = userData?.permission?.split(",").map(perm => perm.trim());
+        const filteredData = sortedData.filter(item => userPermissions.includes(item.heading));
+        setDepartments(filteredData);
+      }
     } catch (error) {
-        console.error("Error fetching departments:", error);
+      console.error("Error fetching departments:", error);
     }
-};
+  };
 
   useEffect(() => {
     fetchDepartments();

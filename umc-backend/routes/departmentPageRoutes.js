@@ -74,6 +74,9 @@ router.post(
   upload.fields([{ name: "mainIcon" }]),
   handleMulterError,
   (req, res) => {
+    if (req.user?.role === "Admin") {
+      return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+    }
     const { heading, link, language_code } = req.body;
 
     if (!heading || !link || !language_code) {
@@ -115,6 +118,9 @@ router.post(
   upload.fields([{ name: "mainIcon" }]),
   handleMulterError,
   (req, res) => {
+    if (req.user?.role === "Admin") {
+      return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+    }
     const { id } = req.params;
     const { heading, link, language_code } = req.body;
 
@@ -199,6 +205,9 @@ router.post(
 
 
 router.post("/delete-department-info/:id", verifyToken, async (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const { id } = req.params;
 
   const selectSql =

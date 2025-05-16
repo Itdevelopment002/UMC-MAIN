@@ -45,6 +45,9 @@ router.get("/recruitment/:id", (req, res) => {
 
 
 router.post("/recruitment", verifyToken, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const { heading, description, link, issue_date, language_code } = req.body;
 
   if (!heading || !description || !link || !issue_date || !language_code) {
@@ -70,6 +73,9 @@ router.post("/recruitment", verifyToken, (req, res) => {
 
 
 router.post("/edit-recruitment/:id", verifyToken, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const { id } = req.params;
   const { heading, description, link, issue_date, language_code } = req.body;
 
@@ -121,6 +127,9 @@ router.post("/edit-recruitment/:id", verifyToken, (req, res) => {
 
 
 router.post("/delete-recruitment/:id", verifyToken, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const { id } = req.params;
 
   const deleteSql = "DELETE FROM recruitments WHERE id = ?";

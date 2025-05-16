@@ -20,12 +20,12 @@ const Header = ({ onLogout, userDepartment }) => {
 
 
   const fetchUser = async () => {
-    if (!userDepartment || !userDepartment.id) {
+    if (!userDepartment || !userDepartment.userId) {
       return;
     }
 
     try {
-      const response = await api.get(`/users/${userDepartment.id}`);
+      const response = await api.get(`/users/${userDepartment.userId}`);
       setUser(response.data);
     } catch (error) {
       console.error("Error fetching user data:", error);

@@ -22,6 +22,9 @@ router.get("/quick-link", (req, res) => {
 
 
 router.post("/quick-link", verifyToken, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const { heading, link, language_code } = req.body;
   const sql = "INSERT INTO quick_links (heading, link, language_code) VALUES (?, ?, ?)";
   db.query(sql, [heading, link, language_code], (err, result) => {
@@ -32,6 +35,9 @@ router.post("/quick-link", verifyToken, (req, res) => {
 
 
 router.post("/edit-quick-link/:id", verifyToken, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const { heading, link, language_code } = req.body;
   const sql = "UPDATE quick_links SET heading = ?, link = ?, language_code = ? WHERE id = ?";
   db.query(sql, [heading, link, language_code, req.params.id], (err, result) => {
@@ -42,6 +48,9 @@ router.post("/edit-quick-link/:id", verifyToken, (req, res) => {
 
 
 router.post("/delete-quick-link/:id", verifyToken, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const sql = "DELETE FROM quick_links WHERE id = ?";
   db.query(sql, [req.params.id], (err, result) => {
     if (err) throw err;

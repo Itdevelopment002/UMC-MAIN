@@ -45,6 +45,9 @@ router.get("/contact-info/:id", (req, res) => {
 
 
 router.post("/contact-info", verifyToken, upload.single("contactIcon"), handleMulterError, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const { heading, description, language_code } = req.body;
 
   if (!heading || !description || !language_code) {
@@ -75,6 +78,9 @@ router.post("/contact-info", verifyToken, upload.single("contactIcon"), handleMu
 
 
 router.post("/edit-contact-info/:id", verifyToken, upload.single("contactIcon"), handleMulterError, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const { id } = req.params;
   const { heading, description, language_code } = req.body;
 
@@ -160,6 +166,9 @@ router.post("/edit-contact-info/:id", verifyToken, upload.single("contactIcon"),
 
 
 router.post("/delete-contact-info/:id", verifyToken, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const { id } = req.params;
 
   const selectSql = "SELECT image_path FROM contactinfo WHERE id = ?";

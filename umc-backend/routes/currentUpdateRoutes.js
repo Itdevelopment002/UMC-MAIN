@@ -52,6 +52,9 @@ router.get("/current-update/:id", (req, res) => {
 
 
 router.post("/current-update", verifyToken, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const { description, language_code } = req.body;
 
   if (!description || !language_code) {
@@ -73,6 +76,9 @@ router.post("/current-update", verifyToken, (req, res) => {
 
 
 router.post("/edit-current-update/:id", verifyToken, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const { description, language_code } = req.body;
   const sql = "UPDATE currentupdate SET description = ?, language_code= ? WHERE id = ?";
   db.query(sql, [description, language_code, req.params.id], (err, result) => {
@@ -83,6 +89,9 @@ router.post("/edit-current-update/:id", verifyToken, (req, res) => {
 
 
 router.post("/delete-current-update/:id", verifyToken, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const { id } = req.params;
 
   const sql = "DELETE FROM currentupdate WHERE id = ?";

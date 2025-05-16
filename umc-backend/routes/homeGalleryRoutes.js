@@ -11,16 +11,16 @@ const { getMulterConfig, handleMulterError } = require('../utils/uploadValidatio
 const upload = multer(getMulterConfig());
 
 const deleteFileIfExists = async (filePath) => {
-  try {
-    if (filePath) {
-      const fullPath = path.join(__dirname, '..', filePath);
-      await fs.unlink(fullPath);
+    try {
+        if (filePath) {
+            const fullPath = path.join(__dirname, '..', filePath);
+            await fs.unlink(fullPath);
+        }
+    } catch (err) {
+        if (err.code !== 'ENOENT') {
+            console.error(`Error deleting file ${filePath}:`, err);
+        }
     }
-  } catch (err) {
-    if (err.code !== 'ENOENT') {
-      console.error(`Error deleting file ${filePath}:`, err);
-    }
-  }
 };
 
 router.get('/home-gallerys', (req, res) => {
@@ -74,11 +74,14 @@ router.get('/home-gallerys/:id', (req, res) => {
     });
 });
 
-router.post('/home-gallerys', 
-    verifyToken, 
-    upload.single('image'), 
+router.post('/home-gallerys',
+    verifyToken,
+    upload.single('image'),
     handleMulterError,
     async (req, res) => {
+        if (req.user?.role === "Admin") {
+            return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+        }
         if (!req.file) {
             return res.status(400).json({ message: 'No file uploaded' });
         }
@@ -105,11 +108,14 @@ router.post('/home-gallerys',
     }
 );
 
-router.post('/edit-home-gallerys/:id', 
-    verifyToken, 
-    upload.single('image'), 
+router.post('/edit-home-gallerys/:id',
+    verifyToken,
+    upload.single('image'),
     handleMulterError,
     async (req, res) => {
+        if (req.user?.role === "Admin") {
+            return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+        }
         const { id } = req.params;
         const { photo_name } = req.body;
 
@@ -142,9 +148,9 @@ router.post('/edit-home-gallerys/:id',
                 if (req.file) {
                     await deleteFileIfExists(newFilePath);
                 }
-                return res.status(err ? 500 : 404).json({ 
+                return res.status(err ? 500 : 404).json({
                     message: err ? 'Database error' : 'Gallery not found',
-                    error: err 
+                    error: err
                 });
             }
 
@@ -168,9 +174,12 @@ router.post('/edit-home-gallerys/:id',
     }
 );
 
-router.post('/delete-home-gallerys/:id', 
-    verifyToken, 
+router.post('/delete-home-gallerys/:id',
+    verifyToken,
     async (req, res) => {
+        if (req.user?.role === "Admin") {
+            return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+        }
         const { id } = req.params;
 
         const selectSql = 'SELECT file_path FROM home_gallery WHERE id = ?';

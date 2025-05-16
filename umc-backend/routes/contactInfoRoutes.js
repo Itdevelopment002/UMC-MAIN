@@ -45,6 +45,9 @@ router.get("/contacts-info/:id", (req, res) => {
 
 
 router.post("/contacts-info", verifyToken, upload.single("image"), handleMulterError, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const { name, designation, language_code } = req.body;
 
   if (!name || !designation || !language_code) {
@@ -76,6 +79,9 @@ router.post("/contacts-info", verifyToken, upload.single("image"), handleMulterE
 
 
 router.post("/edit-contacts-info/:id", verifyToken, upload.single("image"), handleMulterError, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const { id } = req.params;
   const { heading, description, language_code } = req.body;
 
@@ -106,7 +112,7 @@ router.post("/edit-contacts-info/:id", verifyToken, upload.single("image"), hand
 
   if (updateParams.length === 0) {
     if (req.file) {
-      fs.unlink(path.join(__dirname, "..", "uploads", req.file.filename), () => {});
+      fs.unlink(path.join(__dirname, "..", "uploads", req.file.filename), () => { });
     }
     return res.status(400).json({ message: "No fields to update" });
   }
@@ -118,13 +124,13 @@ router.post("/edit-contacts-info/:id", verifyToken, upload.single("image"), hand
   db.query(selectSql, [id], (err, result) => {
     if (err) {
       if (req.file) {
-        fs.unlink(path.join(__dirname, "..", "uploads", req.file.filename), () => {});
+        fs.unlink(path.join(__dirname, "..", "uploads", req.file.filename), () => { });
       }
       return res.status(500).json({ message: "Database error", error: err });
     }
     if (result.length === 0) {
       if (req.file) {
-        fs.unlink(path.join(__dirname, "..", "uploads", req.file.filename), () => {});
+        fs.unlink(path.join(__dirname, "..", "uploads", req.file.filename), () => { });
       }
       return res.status(404).json({ message: "Contact Info not found" });
     }
@@ -134,7 +140,7 @@ router.post("/edit-contacts-info/:id", verifyToken, upload.single("image"), hand
     db.query(updateSql, updateParams, (err, updateResult) => {
       if (err) {
         if (req.file) {
-          fs.unlink(path.join(__dirname, "..", "uploads", req.file.filename), () => {});
+          fs.unlink(path.join(__dirname, "..", "uploads", req.file.filename), () => { });
         }
         return res.status(500).json({ message: "Database error", error: err });
       }
@@ -159,6 +165,9 @@ router.post("/edit-contacts-info/:id", verifyToken, upload.single("image"), hand
 
 
 router.post("/delete-contacts-info/:id", verifyToken, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const { id } = req.params;
 
   const selectSql = "SELECT image_path FROM contact_info WHERE id = ?";

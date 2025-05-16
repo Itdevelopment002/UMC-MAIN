@@ -25,6 +25,9 @@ router.get("/structure-tab4", (req, res) => {
 
 
 router.post("/structure-tab4", verifyToken, (req, res) => {
+    if (req.user?.role === "Admin") {
+        return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+    }
     const { ward, officer, language_code } = req.body;
 
     if (!ward || !officer || !language_code) {
@@ -43,6 +46,9 @@ router.post("/structure-tab4", verifyToken, (req, res) => {
 
 
 router.post("/edit-structure-tab4/:id", verifyToken, (req, res) => {
+    if (req.user?.role === "Admin") {
+        return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+    }
     const { ward, officer, language_code } = req.body;
     const id = req.params.id;
 
@@ -62,6 +68,9 @@ router.post("/edit-structure-tab4/:id", verifyToken, (req, res) => {
 
 
 router.post("/delete-structure-tab4/:id", verifyToken, (req, res) => {
+    if (req.user?.role === "Admin") {
+        return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+    }
     const sql = "DELETE FROM structuretab4 WHERE id = ?";
     db.query(sql, [req.params.id], (err, result) => {
         if (err) {

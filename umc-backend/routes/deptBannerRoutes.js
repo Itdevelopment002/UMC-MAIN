@@ -62,6 +62,18 @@ router.post("/department-banner", verifyToken, upload.single("bannerImage"), han
     return res.status(400).json({ message: "Department name is required" });
   }
 
+  if (req.user?.role !== "Superadmin") {
+    const allowedDepartments = req.user?.permission?.split(",") || [];
+    const trimmedDepartments = allowedDepartments.map((d) => d.trim());
+
+    if (!trimmedDepartments.includes(departmentName)) {
+      fs.unlink(path.join(__dirname, "..", "uploads", req.file.filename), () => { });
+      return res.status(403).json({
+        message: `Access denied: You don't have permission to upload for '${departmentName}'`,
+      });
+    }
+  }
+
   const sql = "INSERT INTO deptbanner (name, file_path) VALUES (?, ?)";
   db.query(sql, [departmentName, filePath], (err, result) => {
     if (err) {
@@ -106,7 +118,7 @@ router.post("/edit-department-banner/:id", verifyToken, upload.single("bannerIma
   updateSql += " WHERE id = ?";
   updateParams.push(id);
 
-  const selectSql = "SELECT file_path FROM deptbanner WHERE id = ?";
+ const selectSql = "SELECT name, file_path FROM deptbanner WHERE id = ?";
   db.query(selectSql, [id], (err, result) => {
     if (err) {
       if (req.file) {
@@ -123,6 +135,20 @@ router.post("/edit-department-banner/:id", verifyToken, upload.single("bannerIma
     }
 
     const oldFilePath = result[0].file_path;
+    const currentDeptName = result[0].name;
+
+    if (req.user?.role !== "Superadmin") {
+      const allowedDepartments = req.user?.permission?.split(",").map(d => d.trim()) || [];
+
+      if (!allowedDepartments.includes(currentDeptName)) {
+        if (req.file) {
+          fs.unlink(path.join(__dirname, "..", "uploads", req.file.filename), () => { });
+        }
+        return res.status(403).json({
+          message: `Access denied: You don't have permission to edit '${currentDeptName}' banner.`,
+        });
+      }
+    }
 
     db.query(updateSql, updateParams, (err, updateResult) => {
       if (err) {
@@ -153,7 +179,7 @@ router.post("/edit-department-banner/:id", verifyToken, upload.single("bannerIma
 router.post("/delete-department-banner/:id", verifyToken, (req, res) => {
   const { id } = req.params;
 
-  const selectSql = "SELECT file_path FROM deptbanner WHERE id = ?";
+  const selectSql = "SELECT name, file_path FROM deptbanner WHERE id = ?";
   db.query(selectSql, [id], (err, result) => {
     if (err) {
       return res.status(500).json({ message: "Database error", error: err });
@@ -164,6 +190,17 @@ router.post("/delete-department-banner/:id", verifyToken, (req, res) => {
     }
 
     const filePath = result[0].file_path;
+    const departmentName = result[0].name;
+
+    if (req.user?.role !== "Superadmin") {
+      const allowedDepartments = req.user?.permission?.split(",").map(p => p.trim()) || [];
+
+      if (!allowedDepartments.includes(departmentName)) {
+        return res.status(403).json({
+          message: `Access denied: You don't have permission to delete '${departmentName}' banner.`,
+        });
+      }
+    }
 
     const deleteSql = "DELETE FROM deptbanner WHERE id = ?";
     db.query(deleteSql, [id], (err, deleteResult) => {

@@ -71,19 +71,22 @@ router.get("/portal-services/:id", (req, res) => {
 });
 
 router.post(
-  "/portal-services", 
+  "/portal-services",
   verifyToken,
   upload.fields([{ name: "portalImage", maxCount: 1 }]),
   handleMulterError,
   async (req, res) => {
+    if (req.user?.role === "Admin") {
+      return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+    }
     const { heading, description, link, language_code } = req.body;
     if (!heading || !description || !link || !language_code) {
       // Clean up uploaded files if validation fails
       if (req.files?.portalImage) {
         await deleteFileIfExists(`/uploads/${req.files.portalImage[0].filename}`);
       }
-      return res.status(400).json({ 
-        message: "Portal Service heading, description, language code and link are required" 
+      return res.status(400).json({
+        message: "Portal Service heading, description, language code and link are required"
       });
     }
 
@@ -118,11 +121,14 @@ router.post(
 );
 
 router.post(
-  "/edit-portal-services/:id", 
+  "/edit-portal-services/:id",
   verifyToken,
   upload.fields([{ name: "portalImage", maxCount: 1 }]),
   handleMulterError,
   async (req, res) => {
+    if (req.user?.role === "Admin") {
+      return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+    }
     const { id } = req.params;
     const { heading, description, link, language_code } = req.body;
 
@@ -170,9 +176,9 @@ router.post(
         if (req.files?.portalImage) {
           await deleteFileIfExists(newMainIconPath);
         }
-        return res.status(err ? 500 : 404).json({ 
+        return res.status(err ? 500 : 404).json({
           message: err ? 'Database error' : 'Portal Service not found',
-          error: err 
+          error: err
         });
       }
 
@@ -197,6 +203,9 @@ router.post(
 );
 
 router.post("/delete-portal-services/:id", verifyToken, async (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const { id } = req.params;
 
   const selectSql = "SELECT main_icon_path FROM portalservices WHERE id = ?";

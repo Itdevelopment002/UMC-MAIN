@@ -21,6 +21,9 @@ router.get("/table-heading", (req, res) => {
 
 
 router.post("/table-heading", verifyToken, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const { tablename, heading, language_code } = req.body;
   const sql = "INSERT INTO table_heading (tablename, heading, language_code) VALUES (?, ?, ?)";
   db.query(sql, [tablename, heading, language_code], (err, result) => {
@@ -31,6 +34,9 @@ router.post("/table-heading", verifyToken, (req, res) => {
 
 
 router.post("/edit-table-heading/:id", verifyToken, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const { tablename, heading, language_code } = req.body;
   const sql = "UPDATE table_heading SET tablename = ?, heading = ?, language_code = ? WHERE id = ?";
   db.query(sql, [tablename, heading, language_code, req.params.id], (err, result) => {
@@ -41,6 +47,9 @@ router.post("/edit-table-heading/:id", verifyToken, (req, res) => {
 
 
 router.post("/delete-table-heading/:id", verifyToken, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const sql = "DELETE FROM table_heading WHERE id = ?";
   db.query(sql, [req.params.id], (err, result) => {
     if (err) throw err;

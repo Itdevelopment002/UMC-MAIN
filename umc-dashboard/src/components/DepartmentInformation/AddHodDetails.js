@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { getImageValidationError } from "../../validation/ImageValidation";
+import { jwtDecode } from "jwt-decode";
 
 const AddHodDetails = () => {
     const [departments, setDepartments] = useState([]);
@@ -18,14 +19,15 @@ const AddHodDetails = () => {
     const [selectedFile, setSelectedFile] = useState(null);
     const [errors, setErrors] = useState({});
     const navigate = useNavigate();
-    const userData = JSON.parse(localStorage.getItem("userData"));
+    const token = localStorage.getItem("authToken");
+    const userData = token ? jwtDecode(token) : null;
     const fileInputRef = useRef(null);
 
     const fetchDepartments = async () => {
         try {
             const response = await api.get("/department-info");
             const sortedData = response.data.sort((a, b) => a.heading.localeCompare(b.heading));
-            if (userData.role === "Superadmin") {
+            if (userData?.role === "Superadmin") {
                 setDepartments(sortedData);
             } else {
                 const userPermissions = userData?.permission?.split(",").map(perm => perm.trim());
@@ -48,7 +50,7 @@ const AddHodDetails = () => {
         if (file) {
             // Use our global validation function
             const errorMessage = getImageValidationError(file);
-           
+
             if (errorMessage) {
                 // Clear the file input if invalid file is selected
                 if (fileInputRef.current) {
@@ -75,7 +77,7 @@ const AddHodDetails = () => {
         if (!number) newErrors.number = "Phone number is required";
         if (!email) newErrors.email = "Email address is required";
         if (!language) newErrors.language = "Language selection is required";
-        
+
         // Use our global validation function
         const imageError = getImageValidationError(selectedFile);
         if (imageError) {
@@ -125,7 +127,7 @@ const AddHodDetails = () => {
                 setEmail("");
                 setLanguage("");
                 setSelectedFile(null);
-                
+
                 if (fileInputRef.current) {
                     fileInputRef.current.value = "";
                 }

@@ -2,11 +2,13 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import api, { baseURL } from "../api";
 import image from "../../assets/img/profile-image.jpg"
+import { jwtDecode } from "jwt-decode";
 
 const ViewProfile = ({ onLogout }) => {
     const [user, setUser] = useState(null);
-    const userData = JSON.parse(localStorage.getItem("userData"));
-    const id = userData?.id;
+    const token = localStorage.getItem("authToken");
+    const userData = token ? jwtDecode(token) : null;
+    const id = userData?.userId;
 
     const fetchUser = async () => {
         try {

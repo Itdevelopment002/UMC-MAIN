@@ -57,12 +57,15 @@ router.get("/minister-details/:id", (req, res) => {
 });
 
 router.post("/minister-details", verifyToken, upload.single("image"), handleMulterError, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const { name, designation, language_code } = req.body;
 
   if (!name || !designation || !language_code) {
     // Clean up uploaded file if validation fails
     if (req.file) {
-      fs.unlink(path.join(__dirname, "..", "uploads", req.file.filename), () => {});
+      fs.unlink(path.join(__dirname, "..", "uploads", req.file.filename), () => { });
     }
     return res.status(400).json({ message: "Name, designation and language code are required" });
   }
@@ -74,7 +77,7 @@ router.post("/minister-details", verifyToken, upload.single("image"), handleMult
     if (err) {
       // Clean up uploaded file if DB operation fails
       if (req.file) {
-        fs.unlink(path.join(__dirname, "..", "uploads", req.file.filename), () => {});
+        fs.unlink(path.join(__dirname, "..", "uploads", req.file.filename), () => { });
       }
       return res.status(500).json({ message: "Database error", error: err });
     }
@@ -86,6 +89,9 @@ router.post("/minister-details", verifyToken, upload.single("image"), handleMult
 });
 
 router.post("/edit-minister-details/:id", verifyToken, upload.single("image"), handleMulterError, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const { id } = req.params;
   const { name, designation, language_code } = req.body;
 
@@ -117,7 +123,7 @@ router.post("/edit-minister-details/:id", verifyToken, upload.single("image"), h
   if (updateParams.length === 0) {
     // Clean up uploaded file if no fields to update
     if (req.file) {
-      fs.unlink(path.join(__dirname, "..", "uploads", req.file.filename), () => {});
+      fs.unlink(path.join(__dirname, "..", "uploads", req.file.filename), () => { });
     }
     return res.status(400).json({ message: "No fields to update" });
   }
@@ -130,14 +136,14 @@ router.post("/edit-minister-details/:id", verifyToken, upload.single("image"), h
     if (err) {
       // Clean up uploaded file if DB operation fails
       if (req.file) {
-        fs.unlink(path.join(__dirname, "..", "uploads", req.file.filename), () => {});
+        fs.unlink(path.join(__dirname, "..", "uploads", req.file.filename), () => { });
       }
       return res.status(500).json({ message: "Database error", error: err });
     }
     if (result.length === 0) {
       // Clean up uploaded file if minister not found
       if (req.file) {
-        fs.unlink(path.join(__dirname, "..", "uploads", req.file.filename), () => {});
+        fs.unlink(path.join(__dirname, "..", "uploads", req.file.filename), () => { });
       }
       return res.status(404).json({ message: "Minister not found" });
     }
@@ -148,7 +154,7 @@ router.post("/edit-minister-details/:id", verifyToken, upload.single("image"), h
       if (err) {
         // Clean up uploaded file if DB operation fails
         if (req.file) {
-          fs.unlink(path.join(__dirname, "..", "uploads", req.file.filename), () => {});
+          fs.unlink(path.join(__dirname, "..", "uploads", req.file.filename), () => { });
         }
         return res.status(500).json({ message: "Database error", error: err });
       }
@@ -168,6 +174,9 @@ router.post("/edit-minister-details/:id", verifyToken, upload.single("image"), h
 });
 
 router.post("/delete-minister-details/:id", verifyToken, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const { id } = req.params;
 
   const selectSql = "SELECT image_path FROM minister WHERE id = ?";

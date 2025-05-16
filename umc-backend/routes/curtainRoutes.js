@@ -26,6 +26,9 @@ router.get("/celebration/:id", (req, res) => {
 
 
 router.post("/edit-celebration/:id", verifyToken, (req, res) => {
+    if (req.user?.role === "Admin") {
+        return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+    }
     const { id } = req.params;
     const { status } = req.body;
     const sql = "UPDATE celebration SET status = ? WHERE id = ?";
