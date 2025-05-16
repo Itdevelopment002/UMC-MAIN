@@ -126,7 +126,7 @@ router.post("/users", verifyToken, async (req, res) => {
   }
 
   const permissionString = Array.isArray(permission) ? permission.join(",") : permission;
-  const saltRounds = 10;
+  const saltRounds = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(password, saltRounds);
 
   const query = `

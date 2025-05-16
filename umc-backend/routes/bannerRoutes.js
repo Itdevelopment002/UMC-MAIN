@@ -112,8 +112,8 @@ router.post("/edit-banner/:id", verifyToken, upload.single("image"), handleMulte
 
   if (updateParams.length === 0) {
     if (req.file) {
-          fs.unlink(path.join(__dirname, "..", "uploads", req.file.filename), () => {});
-        }
+      fs.unlink(path.join(__dirname, "..", "uploads", req.file.filename), () => { });
+    }
     return res.status(400).json({ message: "No fields to update" });
   }
 
@@ -124,15 +124,15 @@ router.post("/edit-banner/:id", verifyToken, upload.single("image"), handleMulte
   db.query(selectSql, [id], (err, result) => {
     if (err) {
       if (req.file) {
-              fs.unlink(path.join(__dirname, "..", "uploads", req.file.filename), () => {});
-            }
+        fs.unlink(path.join(__dirname, "..", "uploads", req.file.filename), () => { });
+      }
       return res.status(500).json({ message: "Database error", error: err });
     }
 
     if (result.length === 0) {
       if (req.file) {
-              fs.unlink(path.join(__dirname, "..", "uploads", req.file.filename), () => {});
-            }
+        fs.unlink(path.join(__dirname, "..", "uploads", req.file.filename), () => { });
+      }
       return res.status(404).json({ message: "Banner not found" });
     }
 
@@ -141,8 +141,8 @@ router.post("/edit-banner/:id", verifyToken, upload.single("image"), handleMulte
     db.query(updateSql, updateParams, (err, updateResult) => {
       if (err) {
         if (req.file) {
-                  fs.unlink(path.join(__dirname, "..", "uploads", req.file.filename), () => {});
-                }
+          fs.unlink(path.join(__dirname, "..", "uploads", req.file.filename), () => { });
+        }
         return res.status(500).json({ message: "Database error", error: err });
       }
 

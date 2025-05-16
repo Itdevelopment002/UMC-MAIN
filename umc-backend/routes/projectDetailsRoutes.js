@@ -4,18 +4,10 @@ const path = require("path");
 const fs = require("fs");
 const router = express.Router();
 const db = require("../config/db.js");
-const {verifyToken} = require('../middleware/jwtMiddleware.js');
+const { verifyToken } = require('../middleware/jwtMiddleware.js');
+const { getMulterConfig, handleMulterError } = require("../utils/uploadValidation");
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "uploads/");
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname));
-  },
-});
-
-const upload = multer({ storage: storage });
+const upload = multer(getMulterConfig());
 
 
 router.get("/project-category", (req, res) => {
@@ -59,10 +51,15 @@ router.get("/project-category/heading/:heading", (req, res) => {
 });
 
 
-router.post("/project-category", verifyToken, upload.array("images"), (req, res) => {
+router.post("/project-category", verifyToken, upload.array("images"), handleMulterError, (req, res) => {
   const { heading, language_code } = req.body;
 
   if (!heading || !language_code) {
+    if (req.files) {
+      req.files.forEach(file => {
+        fs.unlink(path.join(__dirname, "..", "uploads", file.filename), () => { });
+      });
+    }
     return res.status(400).json({ message: "Heading and language code are required" });
   }
 
@@ -75,6 +72,9 @@ router.post("/project-category", verifyToken, upload.array("images"), (req, res)
   const query = "INSERT INTO project_images (heading, language_code, images) VALUES (?, ?, ?)";
   db.query(query, [heading, language_code, JSON.stringify(imagePaths)], (err, result) => {
     if (err) {
+      req.files.forEach(file => {
+        fs.unlink(path.join(__dirname, "..", "uploads", file.filename), () => { });
+      });
       return res.status(500).json({ message: "Error adding project", error: err });
     }
     res.status(201).json({
@@ -86,7 +86,7 @@ router.post("/project-category", verifyToken, upload.array("images"), (req, res)
 });
 
 
-router.post("/edit-project-category/:id", verifyToken, upload.array("images"), (req, res) => {
+router.post("/edit-project-category/:id", verifyToken, upload.array("images"), handleMulterError, (req, res) => {
   const { id } = req.params;
   const { heading, language_code } = req.body;
 
@@ -104,24 +104,71 @@ router.post("/edit-project-category/:id", verifyToken, upload.array("images"), (
     updateParams.push(language_code);
   }
 
+  let newImagePaths;
   if (req.files && req.files.length > 0) {
-    const newImagePaths = req.files.map((file) => `/uploads/${file.filename}`);
+    newImagePaths = req.files.map((file) => `/uploads/${file.filename}`);
     updateFields.push(" images = ?");
     updateParams.push(JSON.stringify(newImagePaths));
   }
 
   if (updateFields.length === 0) {
+    if (req.files) {
+      req.files.forEach(file => {
+        fs.unlink(path.join(__dirname, "..", "uploads", file.filename), () => { });
+      });
+    }
     return res.status(400).json({ message: "No fields to update" });
   }
 
   updateSql += updateFields.join(",") + " WHERE id = ?";
   updateParams.push(id);
 
-  db.query(updateSql, updateParams, (err, updateResult) => {
+  const selectSql = "SELECT images FROM project_images WHERE id = ?";
+  db.query(selectSql, [id], (err, result) => {
     if (err) {
+      if (req.files) {
+        req.files.forEach(file => {
+          fs.unlink(path.join(__dirname, "..", "uploads", file.filename), () => { });
+        });
+      }
       return res.status(500).json({ message: "Database error", error: err });
     }
-    res.status(200).json({ message: "Project updated successfully" });
+
+    if (result.length === 0) {
+      if (req.files) {
+        req.files.forEach(file => {
+          fs.unlink(path.join(__dirname, "..", "uploads", file.filename), () => { });
+        });
+      }
+      return res.status(404).json({ message: "Project not found" });
+    }
+
+    const oldImages = JSON.parse(result[0].images || "[]");
+
+    db.query(updateSql, updateParams, (err, updateResult) => {
+      if (err) {
+        if (req.files) {
+          req.files.forEach(file => {
+            fs.unlink(path.join(__dirname, "..", "uploads", file.filename), () => { });
+          });
+        }
+        return res.status(500).json({ message: "Database error", error: err });
+      }
+
+      // Delete old images from disk
+      if (req.files && oldImages.length > 0) {
+        oldImages.forEach(imgPath => {
+          const fullPath = path.join(__dirname, "..", imgPath.replace(/^\//, ""));
+          fs.unlink(fullPath, (fsErr) => {
+            if (fsErr) {
+              console.error("Error deleting old image:", fsErr);
+            }
+          });
+        });
+      }
+
+      res.status(200).json({ message: "Project updated successfully" });
+    });
   });
 });
 

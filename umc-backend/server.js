@@ -6,7 +6,6 @@ require('dotenv').config();
 const app = express();
 const allowedOrigins = process.env.ALLOWED_ORIGINS.split(',');
  
-// Enable CORS
 app.use(cors({
     origin: function (origin, callback) {
         if (!origin || allowedOrigins.includes(origin)) {
@@ -15,8 +14,20 @@ app.use(cors({
             callback(new Error('Not allowed by CORS'));
         }
     },
-    credentials: true
-}))
+    methods: ['GET', 'POST'], 
+    credentials: true,
+}));
+
+app.use(express.json());
+
+app.use((req, res, next) => {
+    const allowedMethods = ['GET', 'POST'];
+    if (!allowedMethods.includes(req.method)) {
+        return res.status(405).json({ error: 'Method Not Allowed' });
+    }
+    next();
+});
+
 app.use(bodyParser.json());
  
  
@@ -288,7 +299,14 @@ app.use('/api', resetPassRoutes);
  
 {/* Visitor */ }
 app.use('/api', visitorRoutes);
- 
+
+app.use((err, req, res, next) => {
+    if (err.message === 'Not allowed by CORS') {
+        return res.status(403).json({ error: 'Access denied: CORS policy violation' });
+    }
+    console.error(err); // Optional: log for internal monitoring
+    res.status(500).json({ error: 'Internal Server Error' });
+});
  
 const PORT = process.env.PORT || 6002;
 app.listen(PORT, () => {

@@ -1,26 +1,64 @@
 const express = require("express");
 const multer = require("multer");
 const path = require("path");
-const fs = require("fs");
+const fs = require("fs").promises;
 const router = express.Router();
 const db = require("../config/db.js");
 const { verifyToken } = require('../middleware/jwtMiddleware.js');
+const { getMulterConfig, handleMulterError } = require('../utils/uploadValidation');
 
+// Create upload middleware using global config
+const upload = multer(getMulterConfig());
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "uploads/");
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname));
-  },
-});
+const deleteFileIfExists = async (filePath) => {
+  try {
+    if (filePath) {
+      const fullPath = path.join(__dirname, '..', filePath);
+      await fs.unlink(fullPath);
+    }
+  } catch (err) {
+    if (err.code !== "ENOENT") {
+      console.error(`Error deleting file ${filePath}:`, err);
+    }
+  }
+};
 
-const upload = multer({
-  storage,
-  limits: { fileSize: 10 * 1024 * 1024 },
-});
+// Validation function for commissioner data
+const validateCommissionerData = (data) => {
+  const requiredFields = [
+    'coName', 'designation', 'qualification', 
+    'address', 'number', 'email', 
+    'description', 'language_code'
+  ];
+  
+  const missingFields = requiredFields.filter(field => !data[field]);
+  if (missingFields.length > 0) {
+    return {
+      isValid: false,
+      message: `Missing required fields: ${missingFields.join(', ')}`
+    };
+  }
 
+  // Validate email format
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(data.email)) {
+    return {
+      isValid: false,
+      message: 'Invalid email format'
+    };
+  }
+
+  // Validate phone number (basic validation)
+  const phoneRegex = /^[0-9]{10,15}$/;
+  if (!phoneRegex.test(data.number)) {
+    return {
+      isValid: false,
+      message: 'Invalid phone number format (10-15 digits required)'
+    };
+  }
+
+  return { isValid: true };
+};
 
 router.get("/addt-commissioner-data", (req, res) => {
   const language = req.query.lang;
@@ -40,7 +78,6 @@ router.get("/addt-commissioner-data", (req, res) => {
   });
 });
 
-
 router.get("/addt-commissioner-data/:id", (req, res) => {
   const { id } = req.params;
   const sql = "SELECT * FROM addt_commissioner_details WHERE id = ?";
@@ -55,148 +92,216 @@ router.get("/addt-commissioner-data/:id", (req, res) => {
   });
 });
 
+router.post(
+  "/addt-commissioner-data", 
+  verifyToken, 
+  upload.single("coImage"), 
+  handleMulterError,
+  async (req, res) => {
+    const { 
+      coName, 
+      designation, 
+      qualification, 
+      address, 
+      number, 
+      email, 
+      description, 
+      language_code 
+    } = req.body;
 
-router.post("/addt-commissioner-data", verifyToken, upload.single("coImage"), (req, res) => {
-  const { coName, designation, qualification, address, number, email, description, language_code } = req.body;
-  if (!coName || !designation || !qualification || !address || !number || !email || !description || !language_code) {
-    return res
-      .status(400)
-      .json({ message: "All fields are required" });
-  }
-
-  const imagePath = req.file ? `/uploads/${req.file.filename}` : null;
-
-  const sql = `
-    INSERT INTO addt_commissioner_details 
-    (coName, designation, qualification, address, number, email, description, language_code, image_path) 
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-  `;
-  db.query(sql, [coName, designation, qualification, address, number, email, description, language_code, imagePath], (err, result) => {
-    if (err) {
-      return res.status(500).json({ message: "Database error", error: err });
-    }
-    res.status(200).json({ message: "Additional Commissioner added successfully", id: result.insertId });
-  });
-});
-
-
-router.post("/edit-addt-commissioner-data/:id", verifyToken, upload.single("coImage"), (req, res) => {
-  const { id } = req.params;
-  const { coName, designation, qualification, address, number, email, description, language_code } = req.body;
-
-  let updateSql = "UPDATE addt_commissioner_details SET";
-  const updateParams = [];
-
-  if (coName) {
-    updateSql += " coName = ?";
-    updateParams.push(coName);
-  }
-  if (designation) {
-    updateSql += updateParams.length > 0 ? ", designation = ?" : " designation = ?";
-    updateParams.push(designation);
-  }
-  if (qualification) {
-    updateSql += updateParams.length > 0 ? ", qualification = ?" : " qualification = ?";
-    updateParams.push(qualification);
-  }
-  if (address) {
-    updateSql += updateParams.length > 0 ? ", address = ?" : " address = ?";
-    updateParams.push(address);
-  }
-  if (number) {
-    updateSql += updateParams.length > 0 ? ", number = ?" : " number = ?";
-    updateParams.push(number);
-  }
-  if (email) {
-    updateSql += updateParams.length > 0 ? ", email = ?" : " email = ?";
-    updateParams.push(email);
-  }
-  if (description) {
-    updateSql += updateParams.length > 0 ? ", description = ?" : " description = ?";
-    updateParams.push(description);
-  }
-  if (language_code) {
-    updateSql += updateParams.length > 0 ? ", language_code = ?" : " language_code = ?";
-    updateParams.push(language_code);
-  }
-
-  let imagePath;
-  if (req.file) {
-    imagePath = `/uploads/${req.file.filename}`;
-    updateSql += updateParams.length > 0 ? ", image_path = ?" : " image_path = ?";
-    updateParams.push(imagePath);
-  }
-
-  if (updateParams.length === 0) {
-    return res.status(400).json({ message: "No fields to update" });
-  }
-
-  updateSql += " WHERE id = ?";
-  updateParams.push(id);
-
-  const selectSql = "SELECT image_path FROM addt_commissioner_details WHERE id = ?";
-  db.query(selectSql, [id], (err, result) => {
-    if (err) {
-      return res.status(500).json({ message: "Database error", error: err });
-    }
-    if (result.length === 0) {
-      return res.status(404).json({ message: "Additional Commissioner not found" });
-    }
-
-    const oldImagePath = result[0].image_path;
-
-    db.query(updateSql, updateParams, (err, updateResult) => {
-      if (err) {
-        return res.status(500).json({ message: "Database error", error: err });
+    // Validate input data
+    const validation = validateCommissionerData(req.body);
+    if (!validation.isValid) {
+      if (req.file) {
+        await deleteFileIfExists(`/uploads/${req.file.filename}`);
       }
+      return res.status(400).json({ message: validation.message });
+    }
 
-      if (req.file && oldImagePath) {
-        const fullPath = path.join(__dirname, "..", oldImagePath.replace(/^\//, ""));
-        fs.unlink(fullPath, (fsErr) => {
-          if (fsErr) {
-            console.error("Error deleting old image:", fsErr);
-          }
+    const imagePath = req.file ? `/uploads/${req.file.filename}` : null;
+
+    const sql = `
+      INSERT INTO addt_commissioner_details 
+      (coName, designation, qualification, address, number, email, description, language_code, image_path) 
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `;
+    
+    db.query(sql, [
+      coName, 
+      designation, 
+      qualification, 
+      address, 
+      number, 
+      email, 
+      description, 
+      language_code, 
+      imagePath
+    ], async (err, result) => {
+      if (err) {
+        if (req.file) {
+          await deleteFileIfExists(imagePath);
+        }
+        return res.status(500).json({ 
+          message: "Database error", 
+          error: err 
+        });
+      }
+      res.status(201).json({ 
+        message: "Additional Commissioner added successfully", 
+        id: result.insertId 
+      });
+    });
+  }
+);
+
+router.post(
+  "/edit-addt-commissioner-data/:id", 
+  verifyToken, 
+  upload.single("coImage"), 
+  handleMulterError,
+  async (req, res) => {
+    const { id } = req.params;
+    const { 
+      coName, 
+      designation, 
+      qualification, 
+      address, 
+      number, 
+      email, 
+      description, 
+      language_code 
+    } = req.body;
+
+    if (!coName && !designation && !qualification && !address && 
+        !number && !email && !description && !language_code && !req.file) {
+      return res.status(400).json({ message: "No fields to update" });
+    }
+
+    let updateSql = "UPDATE addt_commissioner_details SET";
+    const updateParams = [];
+    const updates = [];
+
+    if (coName) {
+      updates.push("coName = ?");
+      updateParams.push(coName);
+    }
+    if (designation) {
+      updates.push("designation = ?");
+      updateParams.push(designation);
+    }
+    if (qualification) {
+      updates.push("qualification = ?");
+      updateParams.push(qualification);
+    }
+    if (address) {
+      updates.push("address = ?");
+      updateParams.push(address);
+    }
+    if (number) {
+      updates.push("number = ?");
+      updateParams.push(number);
+    }
+    if (email) {
+      updates.push("email = ?");
+      updateParams.push(email);
+    }
+    if (description) {
+      updates.push("description = ?");
+      updateParams.push(description);
+    }
+    if (language_code) {
+      updates.push("language_code = ?");
+      updateParams.push(language_code);
+    }
+
+    let newImagePath;
+    if (req.file) {
+      newImagePath = `/uploads/${req.file.filename}`;
+      updates.push("image_path = ?");
+      updateParams.push(newImagePath);
+    }
+
+    updateSql += ' ' + updates.join(', ') + ' WHERE id = ?';
+    updateParams.push(id);
+
+    const selectSql = "SELECT image_path FROM addt_commissioner_details WHERE id = ?";
+    db.query(selectSql, [id], async (err, result) => {
+      if (err || result.length === 0) {
+        if (req.file) {
+          await deleteFileIfExists(newImagePath);
+        }
+        return res.status(err ? 500 : 404).json({ 
+          message: err ? 'Database error' : 'Additional Commissioner not found',
+          error: err 
         });
       }
 
-      res.status(200).json({ message: "Additional Commissioner updated successfully" });
-    });
-  });
-});
+      const oldImagePath = result[0].image_path;
 
-
-router.post("/delete-addt-commissioner-data/:id", verifyToken, (req, res) => {
-  const { id } = req.params;
-
-  const selectSql = "SELECT image_path FROM addt_commissioner_details WHERE id = ?";
-  db.query(selectSql, [id], (err, result) => {
-    if (err) {
-      return res.status(500).json({ message: "Database error", error: err });
-    }
-    if (result.length === 0) {
-      return res.status(404).json({ message: "Additional Commissioner not found" });
-    }
-
-    const imagePath = result[0].image_path;
-
-    const deleteSql = "DELETE FROM addt_commissioner_details WHERE id = ?";
-    db.query(deleteSql, [id], (err, deleteResult) => {
-      if (err) {
-        return res.status(500).json({ message: "Database error", error: err });
-      }
-
-      if (imagePath) {
-        fs.unlink(path.join(__dirname, "..", imagePath), (fsErr) => {
-          if (fsErr) {
-            console.error("Error deleting image:", fsErr);
+      db.query(updateSql, updateParams, async (err, updateResult) => {
+        if (err) {
+          if (req.file) {
+            await deleteFileIfExists(newImagePath);
           }
+          return res.status(500).json({ 
+            message: "Database error", 
+            error: err 
+          });
+        }
+
+        if (req.file && oldImagePath) {
+          await deleteFileIfExists(oldImagePath);
+        }
+
+        res.status(200).json({ 
+          message: "Additional Commissioner updated successfully" 
+        });
+      });
+    });
+  }
+);
+
+router.post(
+  "/delete-addt-commissioner-data/:id", 
+  verifyToken, 
+  async (req, res) => {
+    const { id } = req.params;
+
+    const selectSql = "SELECT image_path FROM addt_commissioner_details WHERE id = ?";
+    db.query(selectSql, [id], async (err, result) => {
+      if (err) {
+        return res.status(500).json({ 
+          message: "Database error", 
+          error: err 
+        });
+      }
+      if (result.length === 0) {
+        return res.status(404).json({ 
+          message: "Additional Commissioner not found" 
         });
       }
 
-      res.status(200).json({ message: "Additional Commissioner deleted successfully" });
-    });
-  });
-});
+      const imagePath = result[0].image_path;
+      const deleteSql = "DELETE FROM addt_commissioner_details WHERE id = ?";
 
+      db.query(deleteSql, [id], async (err, deleteResult) => {
+        if (err) {
+          return res.status(500).json({ 
+            message: "Database error", 
+            error: err 
+          });
+        }
+
+        if (imagePath) {
+          await deleteFileIfExists(imagePath);
+        }
+
+        res.status(200).json({ 
+          message: "Additional Commissioner deleted successfully" 
+        });
+      });
+    });
+  }
+);
 
 module.exports = router;

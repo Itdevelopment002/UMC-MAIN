@@ -4,18 +4,11 @@ const path = require("path");
 const fs = require("fs").promises;
 const router = express.Router();
 const db = require("../config/db.js");
-const {verifyToken} = require('../middleware/jwtMiddleware.js');
+const { verifyToken } = require('../middleware/jwtMiddleware.js');
+const { getMulterConfig, handleMulterError } = require("../utils/uploadValidation");
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "uploads/");
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname));
-  },
-});
+const upload = multer(getMulterConfig());
 
-const upload = multer({ storage });
 
 const deleteFileIfExists = async (filePath) => {
   try {
@@ -76,50 +69,52 @@ router.get("/department-info/:id", (req, res) => {
 
 
 router.post(
-  "/department-info", verifyToken,
+  "/department-info",
+  verifyToken,
   upload.fields([{ name: "mainIcon" }]),
-  async (req, res) => {
+  handleMulterError,
+  (req, res) => {
     const { heading, link, language_code } = req.body;
+
     if (!heading || !link || !language_code) {
-      return res
-        .status(400)
-        .json({ message: "Department heading, language code and link are required" });
+      if (req.files && req.files["mainIcon"]) {
+        fs.unlink(path.join(__dirname, "..", "uploads", req.files["mainIcon"][0].filename), () => { });
+      }
+      return res.status(400).json({
+        message: "Department heading, language code and link are required"
+      });
     }
 
-    let mainIconPath = null;
+    const mainIconPath = req.files["mainIcon"]
+      ? path.join("uploads", req.files["mainIcon"][0].filename)
+      : null;
 
-    if (req.files["mainIcon"]) {
-      mainIconPath = path.join("uploads", req.files["mainIcon"][0].filename);
-    }
-
-    const insertSql =
-      "INSERT INTO departmentinfo (heading, link, language_code, main_icon_path) VALUES (?, ?, ?, ?)";
-    const insertParams = [
-      heading,
-      link,
-      language_code,
-      mainIconPath,
-    ];
+    const insertSql = "INSERT INTO departmentinfo (heading, link, language_code, main_icon_path) VALUES (?, ?, ?, ?)";
+    const insertParams = [heading, link, language_code, mainIconPath];
 
     db.query(insertSql, insertParams, (err, result) => {
       if (err) {
+        if (req.files && req.files["mainIcon"]) {
+          fs.unlink(path.join(__dirname, "..", "uploads", req.files["mainIcon"][0].filename), () => { });
+        }
         return res.status(500).json({ message: "Database error", error: err });
       }
-      res
-        .status(201)
-        .json({
-          message: "Department added successfully",
-          initiativeId: result.insertId,
-        });
+
+      res.status(201).json({
+        message: "Department added successfully",
+        departmentPageId: result.insertId,
+      });
     });
   }
 );
 
 
 router.post(
-  "/edit-department-info/:id", verifyToken,
+  "/edit-department-info/:id",
+  verifyToken,
   upload.fields([{ name: "mainIcon" }]),
-  async (req, res) => {
+  handleMulterError,
+  (req, res) => {
     const { id } = req.params;
     const { heading, link, language_code } = req.body;
 
@@ -132,64 +127,68 @@ router.post(
     }
 
     if (link) {
-      updateSql +=
-        updateParams.length > 0 ? ", link = ?" : " link = ?";
+      updateSql += updateParams.length > 0 ? ", link = ?" : " link = ?";
       updateParams.push(link);
     }
 
     if (language_code) {
-      updateSql +=
-        updateParams.length > 0 ? ", language_code = ?" : " language_code = ?";
+      updateSql += updateParams.length > 0 ? ", language_code = ?" : " language_code = ?";
       updateParams.push(language_code);
     }
 
-    if (req.files["mainIcon"]) {
-      const newMainIconPath = path.join(
-        "uploads",
-        req.files["mainIcon"][0].filename
-      );
-      updateSql +=
-        updateParams.length > 0
-          ? ", main_icon_path = ?"
-          : " main_icon_path = ?";
+    let newMainIconPath = null;
+    if (req.files && req.files["mainIcon"]) {
+      newMainIconPath = path.join("uploads", req.files["mainIcon"][0].filename);
+      updateSql += updateParams.length > 0 ? ", main_icon_path = ?" : " main_icon_path = ?";
       updateParams.push(newMainIconPath);
     }
 
     if (updateParams.length === 0) {
+      if (req.files && req.files["mainIcon"]) {
+        fs.unlink(path.join(__dirname, "..", "uploads", req.files["mainIcon"][0].filename), () => { });
+      }
       return res.status(400).json({ message: "No fields to update" });
     }
 
     updateSql += " WHERE id = ?";
     updateParams.push(id);
 
-    const selectSql =
-      "SELECT main_icon_path FROM departmentinfo WHERE id = ?";
-    db.query(selectSql, [id], async (err, result) => {
+    const selectSql = "SELECT main_icon_path FROM departmentinfo WHERE id = ?";
+    db.query(selectSql, [id], (err, result) => {
       if (err) {
-        console.error("Database Selection Error:", err);
+        if (req.files && req.files["mainIcon"]) {
+          fs.unlink(path.join(__dirname, "..", "uploads", req.files["mainIcon"][0].filename), () => { });
+        }
         return res.status(500).json({ message: "Database error", error: err });
       }
 
       if (result.length === 0) {
+        if (req.files && req.files["mainIcon"]) {
+          fs.unlink(path.join(__dirname, "..", "uploads", req.files["mainIcon"][0].filename), () => { });
+        }
         return res.status(404).json({ message: "Department not found" });
       }
 
-      const {
-        main_icon_path: oldMainIconPath,
-      } = result[0];
+      const oldMainIconPath = result[0].main_icon_path;
 
-      db.query(updateSql, updateParams, async (err) => {
+      db.query(updateSql, updateParams, (err) => {
         if (err) {
-          console.error("Database Update Error:", err);
-          return res
-            .status(500)
-            .json({ message: "Database error", error: err });
+          if (req.files && req.files["mainIcon"]) {
+            fs.unlink(path.join(__dirname, "..", "uploads", req.files["mainIcon"][0].filename), () => { });
+          }
+          return res.status(500).json({ message: "Database error", error: err });
         }
 
-        if (req.files["mainIcon"]) {
-          await deleteFileIfExists(
-            path.join(__dirname, "../", oldMainIconPath)
-          );
+        if (newMainIconPath && oldMainIconPath) {
+          const oldPath = path.join(
+            __dirname,
+            "..",
+            oldMainIconPath.replace(/^\//, ""));
+          fs.unlink(oldPath, (fsErr) => {
+            if (fsErr) {
+              console.error("Error deleting old main icon:", fsErr);
+            }
+          });
         }
 
         res.status(200).json({ message: "Department updated successfully" });
