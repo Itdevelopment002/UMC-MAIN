@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const db = require("../config/db.js");
 const { verifyToken } = require('../middleware/jwtMiddleware.js');
+const sanitizeInput = require('../middleware/sanitizeInput.js');
 
 router.get("/privacy-policy", (req, res) => {
   const language = req.query.lang;
@@ -21,7 +22,7 @@ router.get("/privacy-policy", (req, res) => {
 });
 
 
-router.post("/privacy-policy", verifyToken, (req, res) => {
+router.post("/privacy-policy", verifyToken, sanitizeInput, (req, res) => {
   const { heading, description, language_code } = req.body;
 
   const sql = "INSERT INTO policy (heading, description, language_code) VALUES (?, ?, ?)";
@@ -35,7 +36,7 @@ router.post("/privacy-policy", verifyToken, (req, res) => {
 });
 
 
-router.post("/edit-privacy-policy/:id", verifyToken, (req, res) => {
+router.post("/edit-privacy-policy/:id", verifyToken, sanitizeInput, (req, res) => {
   const { id } = req.params;
   const { heading, description, language_code } = req.body;
   const sql = "UPDATE policy SET heading = ?, description = ?, language_code = ? WHERE id = ?";

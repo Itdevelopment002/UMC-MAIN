@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const db = require("../config/db.js");
 const { verifyToken } = require('../middleware/jwtMiddleware.js');
+const sanitizeInput = require('../middleware/sanitizeInput.js');
 
 const convertToMySQLDate = (dateString) => {
   const [day, month, year] = dateString.split("-");
@@ -27,7 +28,7 @@ router.get("/budgets_data", (req, res) => {
 });
 
 
-router.post("/budgets_data", verifyToken, (req, res) => {
+router.post("/budgets_data", verifyToken, sanitizeInput, (req, res) => {
   const { year, heading, link, issue_date, language_code } = req.body;
   const formattedDate = convertToMySQLDate(issue_date);
   const sql = "INSERT INTO budgets (year, heading, link, issue_date, language_code) VALUES (?, ?, ?, ?, ?)";
@@ -38,7 +39,7 @@ router.post("/budgets_data", verifyToken, (req, res) => {
 });
 
 
-router.post("/edit-budgets_data/:id", verifyToken, (req, res) => {
+router.post("/edit-budgets_data/:id", verifyToken, sanitizeInput, (req, res) => {
   const { year, heading, link, issue_date, language_code } = req.body;
   const formattedDate = issue_date ? convertToMySQLDate(issue_date) : null;
   const sql = "UPDATE budgets SET year = ?, heading = ?, link = ?, issue_date = ?, language_code = ? WHERE id = ?";

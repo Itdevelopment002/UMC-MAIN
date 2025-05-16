@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const db = require("../config/db.js");
 const { verifyToken } = require('../middleware/jwtMiddleware.js');
+const sanitizeInput = require('../middleware/sanitizeInput.js');
 
 const convertToMySQLDate = (dateString) => {
   const [day, month, year] = dateString.split("-");
@@ -27,7 +28,7 @@ router.get("/agenda_data", (req, res) => {
 });
 
 
-router.post("/agenda_data", verifyToken, (req, res) => {
+router.post("/agenda_data", verifyToken, sanitizeInput, (req, res) => {
   const { Department_Name, Agenda_No_Date, Schedule_Date_of_Meeting, Adjournment_Notice, language_code, pdf_link } = req.body;
   const formattedDate = convertToMySQLDate(Schedule_Date_of_Meeting);
   const sql = `
@@ -50,7 +51,7 @@ router.post("/agenda_data", verifyToken, (req, res) => {
 });
 
 
-router.post("/edit-agenda_data/:Sr_No", verifyToken, (req, res) => {
+router.post("/edit-agenda_data/:Sr_No", verifyToken, sanitizeInput, (req, res) => {
   const { Department_Name, Agenda_No_Date, Schedule_Date_of_Meeting, Adjournment_Notice, pdf_link, language_code } = req.body;
   const formattedDate = Schedule_Date_of_Meeting ? convertToMySQLDate(Schedule_Date_of_Meeting) : null;
   const sql = `

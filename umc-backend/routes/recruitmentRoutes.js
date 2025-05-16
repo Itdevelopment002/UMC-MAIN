@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const db = require("../config/db");
 const { verifyToken } = require('../middleware/jwtMiddleware.js');
+const sanitizeInput = require('../middleware/sanitizeInput.js');
 
 const convertToMySQLDate = (dateString) => {
   const [day, month, year] = dateString.split("-");
@@ -44,7 +45,7 @@ router.get("/recruitment/:id", (req, res) => {
 });
 
 
-router.post("/recruitment", verifyToken, (req, res) => {
+router.post("/recruitment", verifyToken, sanitizeInput, (req, res) => {
   const { heading, description, link, issue_date, language_code } = req.body;
 
   if (!heading || !description || !link || !issue_date || !language_code) {
@@ -69,7 +70,7 @@ router.post("/recruitment", verifyToken, (req, res) => {
 });
 
 
-router.post("/edit-recruitment/:id", verifyToken, (req, res) => {
+router.post("/edit-recruitment/:id", verifyToken, sanitizeInput, (req, res) => {
   const { id } = req.params;
   const { heading, description, link, issue_date, language_code } = req.body;
 

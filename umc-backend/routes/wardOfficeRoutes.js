@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const db = require("../config/db.js");
 const { verifyToken } = require('../middleware/jwtMiddleware.js');
-
+const sanitizeInput = require('../middleware/sanitizeInput.js');
 
 router.get("/ward-offices", (req, res) => {
   const language = req.query.lang;
@@ -22,7 +22,7 @@ router.get("/ward-offices", (req, res) => {
 });
 
 
-router.post("/ward-offices", verifyToken, (req, res) => {
+router.post("/ward-offices", verifyToken, sanitizeInput, (req, res) => {
   const { ward_no, ward_name, officer_name, address, email, mobile, landline, areas, map_url, language_code } = req.body;
 
   const sql = `
@@ -57,7 +57,7 @@ router.post("/ward-offices", verifyToken, (req, res) => {
 });
 
 
-router.post("/edit-ward-offices/:id", verifyToken, (req, res) => {
+router.post("/edit-ward-offices/:id", verifyToken, sanitizeInput, (req, res) => {
   const { ward_no, ward_name, officer_name, address, email, mobile, landline, areas, map_url, language_code } = req.body;
 
   const sql = `

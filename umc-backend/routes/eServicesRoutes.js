@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const db = require("../config/db.js");
 const { verifyToken } = require('../middleware/jwtMiddleware.js');
-
+const sanitizeInput = require('../middleware/sanitizeInput.js');
 
 router.get("/eservices", (req, res) => {
   const language = req.query.lang;
@@ -22,7 +22,7 @@ router.get("/eservices", (req, res) => {
 });
 
 
-router.post("/eservices", verifyToken, (req, res) => {
+router.post("/eservices", verifyToken, sanitizeInput, (req, res) => {
   const { heading, link, language_code } = req.body;
   const sql = "INSERT INTO eservices (heading, link, language_code) VALUES (?, ?, ?)";
   db.query(sql, [heading, link, language_code], (err, result) => {
@@ -32,7 +32,7 @@ router.post("/eservices", verifyToken, (req, res) => {
 });
 
 
-router.post("/edit-eservices/:id", verifyToken, (req, res) => {
+router.post("/edit-eservices/:id", verifyToken, sanitizeInput, (req, res) => {
   const { heading, link, language_code } = req.body;
   const sql = "UPDATE eservices SET heading = ?, link = ?, language_code = ? WHERE id = ?";
   db.query(sql, [heading, link, language_code, req.params.id], (err, result) => {

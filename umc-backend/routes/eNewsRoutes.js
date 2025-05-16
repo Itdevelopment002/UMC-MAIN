@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const db = require("../config/db.js");
 const {verifyToken} = require('../middleware/jwtMiddleware.js');
+const sanitizeInput = require('../middleware/sanitizeInput.js');
 
 const convertToMySQLDate = (dateString) => {
   const [day, month, year] = dateString.split("-");
@@ -27,7 +28,7 @@ router.get("/enews_data", (req, res) => {
 });
 
 
-router.post("/enews_data", verifyToken, (req, res) => {
+router.post("/enews_data", verifyToken, sanitizeInput, (req, res) => {
   const { info, issue_date,  pdf_link,language_code } = req.body;
   const formattedDate = convertToMySQLDate(issue_date);
   const sql = `
@@ -51,7 +52,7 @@ router.post("/enews_data", verifyToken, (req, res) => {
 });
 
 
-router.post("/edit-enews_data/:id", verifyToken, (req, res) => {
+router.post("/edit-enews_data/:id", verifyToken, sanitizeInput, (req, res) => {
   const { info, issue_date, pdf_link ,language_code} = req.body;
   const formattedDate = issue_date ? convertToMySQLDate(issue_date) : null;
   const sql = `

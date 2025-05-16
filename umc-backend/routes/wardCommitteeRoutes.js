@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const db = require("../config/db.js");
 const { verifyToken } = require('../middleware/jwtMiddleware.js');
-
+const sanitizeInput = require('../middleware/sanitizeInput.js');
 
 router.get("/ward-committee", (req, res) => {
   const language = req.query.lang;
@@ -22,7 +22,7 @@ router.get("/ward-committee", (req, res) => {
 });
 
 
-router.post("/ward-committee", verifyToken, (req, res) => {
+router.post("/ward-committee", verifyToken, sanitizeInput,  (req, res) => {
   const { ward, heading, language_code } = req.body;
   const sql = "INSERT INTO wardcommittee (ward, heading, language_code) VALUES (?, ?, ?)";
   db.query(sql, [ward, heading, language_code], (err, result) => {
@@ -32,7 +32,7 @@ router.post("/ward-committee", verifyToken, (req, res) => {
 });
 
 
-router.post("/edit-ward-committee/:id", verifyToken, (req, res) => {
+router.post("/edit-ward-committee/:id", verifyToken, sanitizeInput,  (req, res) => {
   const { ward, heading, language_code } = req.body;
   const sql = "UPDATE wardcommittee SET ward = ?, heading = ?, language_code = ? WHERE id = ?";
   db.query(sql, [ward, heading, language_code, req.params.id], (err, result) => {

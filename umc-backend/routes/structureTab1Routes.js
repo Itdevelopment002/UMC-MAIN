@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const db = require("../config/db.js");
 const {verifyToken} = require('../middleware/jwtMiddleware.js');
+const sanitizeInput = require('../middleware/sanitizeInput.js');
 
 
 router.get("/structure-tab1", (req, res) => {
@@ -21,7 +22,7 @@ router.get("/structure-tab1", (req, res) => {
 });
 
 
-router.post("/structure-tab1", verifyToken, (req, res) => {
+router.post("/structure-tab1", verifyToken, sanitizeInput, (req, res) => {
   const { heading1, heading2, language_code } = req.body;
   const sql = "INSERT INTO structuretab1 (heading1, heading2, language_code) VALUES (?, ?, ?)";
   db.query(sql, [heading1, heading2, language_code], (err, result) => {
@@ -31,7 +32,7 @@ router.post("/structure-tab1", verifyToken, (req, res) => {
 });
 
 
-router.post("/edit-structure-tab1/:id", verifyToken, (req, res) => {
+router.post("/edit-structure-tab1/:id", verifyToken, sanitizeInput, (req, res) => {
   const { heading1, heading2, language_code } = req.body;
   const sql = "UPDATE structuretab1 SET heading1 = ?, heading2 = ?, language_code = ? WHERE id = ?";
   db.query(sql, [heading1, heading2, language_code, req.params.id], (err, result) => {

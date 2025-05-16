@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const db = require("../config/db.js");
 const { verifyToken } = require('../middleware/jwtMiddleware.js');
+const sanitizeInput = require('../middleware/sanitizeInput.js');
 
 
 router.get("/standing-committee", (req, res) => {
@@ -22,7 +23,7 @@ router.get("/standing-committee", (req, res) => {
 });
 
 
-router.post("/standing-committee", verifyToken, (req, res) => {
+router.post("/standing-committee", verifyToken, sanitizeInput, (req, res) => {
   const { heading, language_code } = req.body;
   const sql = "INSERT INTO standingcommittee (heading, language_code) VALUES (?, ?)";
   db.query(sql, [heading, language_code], (err, result) => {
@@ -32,7 +33,7 @@ router.post("/standing-committee", verifyToken, (req, res) => {
 });
 
 
-router.post("/edit-standing-committee/:id", verifyToken, (req, res) => {
+router.post("/edit-standing-committee/:id", verifyToken, sanitizeInput, (req, res) => {
   const { heading, language_code } = req.body;
   const sql = "UPDATE standingcommittee SET heading = ?, language_code = ? WHERE id = ?";
   db.query(sql, [heading, language_code, req.params.id], (err, result) => {

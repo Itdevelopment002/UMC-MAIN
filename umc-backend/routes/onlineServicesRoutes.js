@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const db = require("../config/db.js");
 const { verifyToken } = require('../middleware/jwtMiddleware.js');
+const sanitizeInput = require('../middleware/sanitizeInput.js');
 
 router.get("/online_service", (req, res) => {
   const language = req.query.lang;
@@ -20,7 +21,7 @@ router.get("/online_service", (req, res) => {
 });
 
 
-router.post("/online_service", verifyToken, (req, res) => {
+router.post("/online_service", verifyToken, sanitizeInput, (req, res) => {
   const { heading, link, language_code } = req.body;
   const sql = "INSERT INTO online_services (heading, link, language_code) VALUES (?, ?, ?)";
   db.query(sql, [heading, link, language_code], (err, result) => {
@@ -30,7 +31,7 @@ router.post("/online_service", verifyToken, (req, res) => {
 });
 
 
-router.post("/edit-online_service/:id", verifyToken, (req, res) => {
+router.post("/edit-online_service/:id", verifyToken, sanitizeInput, (req, res) => {
   const { heading, link, language_code } = req.body;
   const sql = "UPDATE online_services SET heading = ?, link = ?, language_code = ? WHERE id = ?";
   db.query(sql, [heading, link, language_code, req.params.id], (err, result) => {

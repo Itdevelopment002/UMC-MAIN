@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const db = require("../config/db.js");
 const {verifyToken} = require('../middleware/jwtMiddleware.js');
+const sanitizeInput = require('../middleware/sanitizeInput.js');
 
 
 router.get("/location-info", (req, res) => {
@@ -22,7 +23,7 @@ router.get("/location-info", (req, res) => {
 });
 
 
-router.post("/location-info", verifyToken, (req, res) => {
+router.post("/location-info", verifyToken, sanitizeInput, (req, res) => {
   const { heading, description, type, language_code } = req.body;
 
   if (!type || !heading || !description || !language_code) {
@@ -40,7 +41,7 @@ router.post("/location-info", verifyToken, (req, res) => {
 });
 
 
-router.post("/edit-location-info/:id", verifyToken, (req, res) => {
+router.post("/edit-location-info/:id", verifyToken,sanitizeInput, (req, res) => {
   const { id } = req.params;
   const { heading, description, language_code } = req.body;
   const sql = "UPDATE location_info SET heading = ?, description = ?, language_code = ? WHERE id = ?";

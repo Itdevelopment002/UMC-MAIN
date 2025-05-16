@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const db = require("../config/db.js");
 const { verifyToken } = require('../middleware/jwtMiddleware.js');
-
+const sanitizeInput = require('../middleware/sanitizeInput.js');
 
 router.get("/department-description", (req, res) => {
   const language = req.query.lang;
@@ -67,7 +67,7 @@ router.get("/department-description/:id/sub-descriptions", (req, res) => {
 });
 
 
-router.post("/department-description", verifyToken, (req, res) => {
+router.post("/department-description", verifyToken, sanitizeInput, (req, res) => {
   const { department, description, subDescriptions, language_code } = req.body;
   const sql = "INSERT INTO deptdescription (department, description, language_code) VALUES (?, ?, ?)";
 
@@ -90,7 +90,7 @@ router.post("/department-description", verifyToken, (req, res) => {
 });
 
 
-router.post("/edit-department-description/:id", verifyToken, (req, res) => {
+router.post("/edit-department-description/:id", verifyToken, sanitizeInput, (req, res) => {
   const { department, description, subDescriptions, language_code } = req.body;
   const sql = "UPDATE deptdescription SET department = ?, description = ?, language_code = ? WHERE id = ?";
 

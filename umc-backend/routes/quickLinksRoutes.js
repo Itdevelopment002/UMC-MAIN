@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const db = require("../config/db.js");
 const {verifyToken} = require('../middleware/jwtMiddleware.js');
+const sanitizeInput = require('../middleware/sanitizeInput.js');
 
 
 router.get("/quick-link", (req, res) => {
@@ -21,7 +22,7 @@ router.get("/quick-link", (req, res) => {
 });
 
 
-router.post("/quick-link", verifyToken, (req, res) => {
+router.post("/quick-link", verifyToken, sanitizeInput, (req, res) => {
   const { heading, link, language_code } = req.body;
   const sql = "INSERT INTO quick_links (heading, link, language_code) VALUES (?, ?, ?)";
   db.query(sql, [heading, link, language_code], (err, result) => {
@@ -31,7 +32,7 @@ router.post("/quick-link", verifyToken, (req, res) => {
 });
 
 
-router.post("/edit-quick-link/:id", verifyToken, (req, res) => {
+router.post("/edit-quick-link/:id", verifyToken, sanitizeInput, (req, res) => {
   const { heading, link, language_code } = req.body;
   const sql = "UPDATE quick_links SET heading = ?, link = ?, language_code = ? WHERE id = ?";
   db.query(sql, [heading, link, language_code, req.params.id], (err, result) => {
