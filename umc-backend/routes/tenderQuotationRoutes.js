@@ -29,6 +29,9 @@ router.get("/tenders-quotations", (req, res) => {
 
 
 router.post("/tenders-quotations", verifyToken, sanitizeInput, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const { heading, department, link, issue_date, language_code } = req.body;
   const formattedDate = convertToMySQLDate(issue_date);
   const sql = "INSERT INTO tenders_quotations (heading, department, link, issue_date, language_code) VALUES (?, ?, ?, ?, ?)";
@@ -40,6 +43,9 @@ router.post("/tenders-quotations", verifyToken, sanitizeInput, (req, res) => {
 
 
 router.post("/edit-tenders-quotations/:id", verifyToken, sanitizeInput, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const { heading, department, link, issue_date, language_code } = req.body;
   const formattedDate = issue_date ? convertToMySQLDate(issue_date) : null;
   const sql = "UPDATE tenders_quotations SET heading = ?, department = ?, link = ?, issue_date = ?, language_code = ? WHERE id = ?";
@@ -51,6 +57,9 @@ router.post("/edit-tenders-quotations/:id", verifyToken, sanitizeInput, (req, re
 
 
 router.post("/delete-tenders-quotations/:id", verifyToken, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const sql = "DELETE FROM tenders_quotations WHERE id = ?";
   db.query(sql, [req.params.id], (err, result) => {
     if (err) throw err;

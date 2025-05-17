@@ -64,6 +64,9 @@ router.get("/project-description/:id/sub-descriptions", (req, res) => {
 
 
 router.post("/project-description", verifyToken, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const { department, description, language_code, subDescriptions } = req.body;
   const sql = "INSERT INTO descriptions (heading, description, language_code) VALUES (?, ?, ?)";
 
@@ -87,6 +90,9 @@ router.post("/project-description", verifyToken, (req, res) => {
 
 
 router.post("/edit-project-description/:id", verifyToken, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const { heading, description, language_code, subDescriptions } = req.body;
   const sql = "UPDATE descriptions SET heading = ?, description = ?, language_code = ? WHERE id = ?";
 
@@ -114,6 +120,9 @@ router.post("/edit-project-description/:id", verifyToken, (req, res) => {
 
 
 router.post("/delete-project-description/:id", verifyToken, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const deleteSubDescriptionsSql = "DELETE FROM sub_descriptions WHERE dept_id = ?";
   db.query(deleteSubDescriptionsSql, [req.params.id], (err) => {
     if (err) throw err;

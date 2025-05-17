@@ -71,19 +71,22 @@ router.get("/emergency-services/:id", (req, res) => {
 });
 
 router.post(
-  "/emergency-services", 
+  "/emergency-services",
   verifyToken,
   upload.fields([{ name: "emergencyImage", maxCount: 1 }]),
   handleMulterError,
   async (req, res) => {
+    if (req.user?.role === "Admin") {
+      return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+    }
     const { heading, number, language_code } = req.body;
     if (!heading || !number || !language_code) {
       // Clean up uploaded files if validation fails
       if (req.files?.emergencyImage) {
         await deleteFileIfExists(`/uploads/${req.files.emergencyImage[0].filename}`);
       }
-      return res.status(400).json({ 
-        message: "Emergency Service heading, language code and number are required" 
+      return res.status(400).json({
+        message: "Emergency Service heading, language code and number are required"
       });
     }
 
@@ -117,11 +120,14 @@ router.post(
 );
 
 router.post(
-  "/edit-emergency-services/:id", 
+  "/edit-emergency-services/:id",
   verifyToken,
   upload.fields([{ name: "emergencyImage", maxCount: 1 }]),
   handleMulterError,
   async (req, res) => {
+    if (req.user?.role === "Admin") {
+      return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+    }
     const { id } = req.params;
     const { heading, number, language_code } = req.body;
 
@@ -164,9 +170,9 @@ router.post(
         if (req.files?.emergencyImage) {
           await deleteFileIfExists(newMainIconPath);
         }
-        return res.status(err ? 500 : 404).json({ 
+        return res.status(err ? 500 : 404).json({
           message: err ? 'Database error' : 'Emergency Service not found',
-          error: err 
+          error: err
         });
       }
 
@@ -191,6 +197,9 @@ router.post(
 );
 
 router.post("/delete-emergency-services/:id", verifyToken, async (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const { id } = req.params;
 
   const selectSql = "SELECT main_icon_path FROM emergencyservices WHERE id = ?";

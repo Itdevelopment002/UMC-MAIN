@@ -24,6 +24,9 @@ router.get("/standing-committee", (req, res) => {
 
 
 router.post("/standing-committee", verifyToken, sanitizeInput, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const { heading, language_code } = req.body;
   const sql = "INSERT INTO standingcommittee (heading, language_code) VALUES (?, ?)";
   db.query(sql, [heading, language_code], (err, result) => {
@@ -34,6 +37,9 @@ router.post("/standing-committee", verifyToken, sanitizeInput, (req, res) => {
 
 
 router.post("/edit-standing-committee/:id", verifyToken, sanitizeInput, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const { heading, language_code } = req.body;
   const sql = "UPDATE standingcommittee SET heading = ?, language_code = ? WHERE id = ?";
   db.query(sql, [heading, language_code, req.params.id], (err, result) => {
@@ -44,6 +50,9 @@ router.post("/edit-standing-committee/:id", verifyToken, sanitizeInput, (req, re
 
 
 router.post("/delete-standing-committee/:id", verifyToken, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const sql = "DELETE FROM standingcommittee WHERE id = ?";
   db.query(sql, [req.params.id], (err, result) => {
     if (err) throw err;

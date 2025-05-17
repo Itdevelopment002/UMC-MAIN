@@ -51,6 +51,9 @@ router.get("/users/:id", verifyToken, (req, res) => {
 
 
 router.post("/users", verifyToken, sanitizeInput, async (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const { username, fullname, role, email, password, permission } = req.body;
 
   if (!username || !fullname || !role || !email || !password || !permission) {
@@ -160,6 +163,10 @@ router.post("/edit-users/:id", verifyToken, sanitizeInput, async (req, res) => {
   const { id } = req.params;
   const { fullname, email, role, permission, status, password } = req.body;
 
+  if (req.user.role !== "Superadmin" && parseInt(id) !== req.user.userId) {
+    return res.status(403).json({ message: "Unauthorized: You can only change your own password." });
+  }
+
   try {
     db.query("SELECT * FROM users WHERE id = ?", [id], async (err, results) => {
       if (err) {
@@ -217,8 +224,8 @@ router.post("/edit-users/:id/update-password", verifyToken, sanitizeInput, async
   const { id } = req.params;
   const { newPassword } = req.body;
 
-  if (!newPassword) {
-    return res.status(400).json({ message: "New password is required" });
+  if (req.user.role !== "Superadmin" && parseInt(id) !== req.user.userId) {
+    return res.status(403).json({ message: "Unauthorized: You can only change your own password." });
   }
 
   const hasMinLength = newPassword.length >= 8;
@@ -228,68 +235,54 @@ router.post("/edit-users/:id/update-password", verifyToken, sanitizeInput, async
   const hasSpecial = /[@$!%*?&]/.test(newPassword);
   const isNotCommon = !commonPasswords.includes(newPassword.toLowerCase());
 
-  if (!hasMinLength || !hasUpper || !hasLower || !hasNumber ||
-    !hasSpecial || !isNotCommon) {
+  if (!hasMinLength || !hasUpper || !hasLower || !hasNumber || !hasSpecial || !isNotCommon) {
     return res.status(400).json({
       message: "Weak password - doesn't meet all requirements",
       requirements: {
         minLength: hasMinLength,
-        hasUpper: hasUpper,
-        hasLower: hasLower,
-        hasNumber: hasNumber,
-        hasSpecial: hasSpecial,
-        notCommon: isNotCommon
-      }
+        hasUpper,
+        hasLower,
+        hasNumber,
+        hasSpecial,
+        notCommon: isNotCommon,
+      },
     });
   }
 
   const selectQuery = "SELECT password FROM users WHERE id = ?";
   db.query(selectQuery, [id], async (err, results) => {
-    if (err) {
-      console.error("Error fetching user password:", err);
-      return res.status(500).json({ message: "Error verifying password" });
-    }
-
-    if (results.length === 0) {
-      return res.status(404).json({ message: "User not found" });
-    }
+    if (err) return res.status(500).json({ message: "Error verifying password" });
+    if (results.length === 0) return res.status(404).json({ message: "User not found" });
 
     const storedHashedPassword = results[0].password;
-
     const isSameAsOld = await bcrypt.compare(newPassword, storedHashedPassword);
+
     if (isSameAsOld) {
       return res.status(400).json({ message: "New password must be different from the old password" });
     }
 
-    try {
-      const saltRounds = 10;
-      const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    const updateQuery = "UPDATE users SET password = ? WHERE id = ?";
+    db.query(updateQuery, [hashedPassword, id], (err, results) => {
+      if (err) return res.status(500).json({ message: "Error updating password" });
 
-      const updateQuery = "UPDATE users SET password = ? WHERE id = ?";
-      db.query(updateQuery, [hashedPassword, id], (err, results) => {
-        if (err) {
-          console.error("Error updating password:", err);
-          return res.status(500).json({ message: "Error updating password" });
-        }
+      if (results.affectedRows === 0) {
+        return res.status(404).json({ message: "User not found" });
+      }
 
-        if (results.affectedRows === 0) {
-          return res.status(404).json({ message: "User not found" });
-        }
-
-        res.json({ message: "Password updated successfully" });
-      });
-    } catch (err) {
-      console.error("Error hashing password:", err);
-      return res.status(500).json({ message: "Error processing password" });
-    }
+      res.json({ message: "Password updated successfully" });
+    });
   });
 });
-
 
 
 router.post("/users/:id/verify-password", verifyToken, sanitizeInput, async (req, res) => {
   const { id } = req.params;
   const { password } = req.body;
+
+  if (req.user.role !== "Superadmin" && parseInt(id) !== req.user.userId) {
+    return res.status(403).json({ message: "Unauthorized: You can only change your own password." });
+  }
 
   if (!password) {
     return res.status(400).json({ message: "Password is required" });
@@ -320,6 +313,9 @@ router.post("/users/:id/verify-password", verifyToken, sanitizeInput, async (req
 
 
 router.post("/delete-users/:id", verifyToken, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const { id } = req.params;
 
   const query = "DELETE FROM users WHERE id = ?";

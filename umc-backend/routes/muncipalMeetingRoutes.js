@@ -29,6 +29,9 @@ router.get("/muncipal_meetings", (req, res) => {
 
 
 router.post("/muncipal_meetings", verifyToken, sanitizeInput, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const { name, year, pdf_link1, pdf_link2, pdf_link3, issue_date, language_code } = req.body;
   const formattedDate = convertToMySQLDate(issue_date);
   const sql =
@@ -49,6 +52,9 @@ router.post("/muncipal_meetings", verifyToken, sanitizeInput, (req, res) => {
 
 
 router.post("/edit-muncipal_meetings/:id", verifyToken, sanitizeInput, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const { name, year, pdf_link1, pdf_link2, pdf_link3, issue_date, language_code } = req.body;
   const formattedDate = issue_date ? convertToMySQLDate(issue_date) : null;
   const sql =
@@ -65,6 +71,9 @@ router.post("/edit-muncipal_meetings/:id", verifyToken, sanitizeInput, (req, res
 
 
 router.post("/delete-muncipal_meetings/:id", verifyToken, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const sql = "DELETE FROM muncipal_meeting WHERE id = ?";
   db.query(sql, [req.params.id], (err, result) => {
     if (err) throw err;

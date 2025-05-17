@@ -23,6 +23,9 @@ router.get("/ward-offices", (req, res) => {
 
 
 router.post("/ward-offices", verifyToken, sanitizeInput, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const { ward_no, ward_name, officer_name, address, email, mobile, landline, areas, map_url, language_code } = req.body;
 
   const sql = `
@@ -58,6 +61,9 @@ router.post("/ward-offices", verifyToken, sanitizeInput, (req, res) => {
 
 
 router.post("/edit-ward-offices/:id", verifyToken, sanitizeInput, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const { ward_no, ward_name, officer_name, address, email, mobile, landline, areas, map_url, language_code } = req.body;
 
   const sql = `
@@ -82,6 +88,9 @@ router.post("/edit-ward-offices/:id", verifyToken, sanitizeInput, (req, res) => 
 
 
 router.post("/delete-ward-offices/:id", verifyToken, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const sql = "DELETE FROM WardOffices WHERE id = ?";
 
   db.query(sql, [req.params.id], (err, result) => {

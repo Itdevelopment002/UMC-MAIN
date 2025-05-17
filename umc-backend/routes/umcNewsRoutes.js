@@ -27,7 +27,10 @@ router.get("/umc-news", (req, res) => {
 });
 
 
-router.post("/umc-news", verifyToken,sanitizeInput, (req, res) => {
+router.post("/umc-news", verifyToken, sanitizeInput, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const { heading, link, issue_date, language_code } = req.body;
   const formattedDate = convertToMySQLDate(issue_date);
   const sql = "INSERT INTO umcnews (heading, link, issue_date, language_code) VALUES (?, ?, ?, ?)";
@@ -39,6 +42,9 @@ router.post("/umc-news", verifyToken,sanitizeInput, (req, res) => {
 
 
 router.post("/edit-umc-news/:id", verifyToken, sanitizeInput, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const { heading, link, issue_date, language_code } = req.body;
   const formattedDate = issue_date ? convertToMySQLDate(issue_date) : null;
   const sql = "UPDATE umcnews SET heading = ?, link = ?, issue_date = ?, language_code = ? WHERE id = ?";
@@ -50,6 +56,9 @@ router.post("/edit-umc-news/:id", verifyToken, sanitizeInput, (req, res) => {
 
 
 router.post("/delete-umc-news/:id", verifyToken, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const sql = "DELETE FROM umcnews WHERE id = ?";
   db.query(sql, [req.params.id], (err, result) => {
     if (err) throw err;

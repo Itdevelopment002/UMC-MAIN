@@ -7,7 +7,7 @@ const rateLimit = require("express-rate-limit");
 const jwt = require("jsonwebtoken");
 const svgCaptcha = require("svg-captcha");
 require("dotenv").config();
-const { verifyToken } = require('../middleware/jwtMiddleware.js');
+const { verifyToken, logout } = require('../middleware/jwtMiddleware.js');
 const CryptoJS = require('crypto-js');
 
 const loginLimiter = rateLimit({
@@ -110,13 +110,7 @@ router.post("/login", loginLimiter, generateUniqueId, async (req, res) => {
 
       res.status(200).json({
         message: "Login successful",
-        token,
-        user: {
-          id: user.id,
-          username: user.username,
-          role: user.role,
-          permission: user.permission,
-        }
+        token
       });
     });
   } catch (error) {
@@ -125,9 +119,13 @@ router.post("/login", loginLimiter, generateUniqueId, async (req, res) => {
   }
 });
 
-router.post("/logout", (req, res) => {
+router.post("/logout", async(req, res) => {
+  const token = req.headers.authorization?.split(' ')[1];
+  if (!token) return res.status(400).json({ message: 'No token provided' });
+
+  await logout(token);
   res.clearCookie("authToken");
-  res.status(200).json({ message: "Logout successful" });
+  res.status(200).json({ message: "Logged out successfully" });
 });
 
 

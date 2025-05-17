@@ -7,24 +7,23 @@ const db = require('../config/db.js');
 const { verifyToken } = require('../middleware/jwtMiddleware.js');
 const { getMulterConfig, handleMulterError } = require('../utils/uploadValidation');
 
-// Create upload middleware using global config
 const upload = multer(getMulterConfig());
 
 const deleteFileIfExists = async (filePath) => {
-  try {
-    if (filePath) {
-      const fullPath = path.join(__dirname, '..', filePath);
-      await fs.unlink(fullPath);
+    try {
+        if (filePath) {
+            const fullPath = path.join(__dirname, '..', filePath);
+            await fs.unlink(fullPath);
+        }
+    } catch (err) {
+        if (err.code !== "ENOENT") {
+            console.error(`Error deleting file ${filePath}:`, err);
+        }
     }
-  } catch (err) {
-    if (err.code !== "ENOENT") {
-      console.error(`Error deleting file ${filePath}:`, err);
-    }
-  }
 };
 
 router.get('/history-img', (req, res) => {
-    const sql = 'SELECT * FROM history_img'; 
+    const sql = 'SELECT * FROM history_img';
     db.query(sql, (err, results) => {
         if (err) {
             return res.status(500).json({ message: 'Database error', error: err });
@@ -40,8 +39,8 @@ router.get('/history-img', (req, res) => {
 
             return {
                 id: row.id,
-                photo_name: row.photo_name,  
-                file_path: row.file_path, 
+                photo_name: row.photo_name,
+                file_path: row.file_path,
                 uploaded_at: row.uploaded_at,
                 formattedId: formattedId,
             };
@@ -75,16 +74,19 @@ router.get('/history-img/:id', (req, res) => {
 });
 
 router.post(
-    '/history-img', 
-    verifyToken, 
-    upload.single('image'), 
+    '/history-img',
+    verifyToken,
+    upload.single('image'),
     handleMulterError,
     async (req, res) => {
+        if (req.user?.role === "Admin") {
+            return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+        }
         if (!req.file) {
             return res.status(400).json({ message: 'No file uploaded' });
         }
 
-        const photoName = req.body.photoName; 
+        const photoName = req.body.photoName;
         if (!photoName) {
             await deleteFileIfExists(`/uploads/${req.file.filename}`);
             return res.status(400).json({ message: 'Photo name is required' });
@@ -107,11 +109,14 @@ router.post(
 );
 
 router.post(
-    '/edit-history-img/:id', 
-    verifyToken, 
-    upload.single('image'), 
+    '/edit-history-img/:id',
+    verifyToken,
+    upload.single('image'),
     handleMulterError,
     async (req, res) => {
+        if (req.user?.role === "Admin") {
+            return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+        }
         const { id } = req.params;
         const { photo_name } = req.body;
 
@@ -144,9 +149,9 @@ router.post(
                 if (req.file) {
                     await deleteFileIfExists(newFilePath);
                 }
-                return res.status(err ? 500 : 404).json({ 
+                return res.status(err ? 500 : 404).json({
                     message: err ? 'Database error' : 'Gallery not found',
-                    error: err 
+                    error: err
                 });
             }
 
@@ -171,9 +176,12 @@ router.post(
 );
 
 router.post(
-    '/delete-history-img/:id', 
-    verifyToken, 
+    '/delete-history-img/:id',
+    verifyToken,
     async (req, res) => {
+        if (req.user?.role === "Admin") {
+            return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+        }
         const { id } = req.params;
 
         const selectSql = 'SELECT file_path FROM history_img WHERE id = ?';

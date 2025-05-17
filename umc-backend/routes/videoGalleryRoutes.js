@@ -22,6 +22,9 @@ router.get("/video-categories", (req, res) => {
 
 
 router.post("/video-categories", verifyToken, (req, res) => {
+    if (req.user?.role === "Admin") {
+        return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+    }
     const { categoryName, language_code } = req.body;
     if (!categoryName || !language_code) return res.status(400).json({ error: "Category name and language code are required" });
 
@@ -33,6 +36,9 @@ router.post("/video-categories", verifyToken, (req, res) => {
 
 
 router.post("/edit-video-categories/:id", verifyToken, (req, res) => {
+    if (req.user?.role === "Admin") {
+        return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+    }
     const { id } = req.params;
     const { name, language_code } = req.body;
 
@@ -48,6 +54,9 @@ router.post("/edit-video-categories/:id", verifyToken, (req, res) => {
 
 
 router.post("/delete-video-categories/:id", verifyToken, (req, res) => {
+    if (req.user?.role === "Admin") {
+        return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+    }
     const { id } = req.params;
 
     db.query("DELETE FROM videocategories WHERE id = ?", [id], (err, result) => {
@@ -68,6 +77,9 @@ router.get("/category-videos/:category_id", (req, res) => {
 
 
 router.post("/category-videos", verifyToken, (req, res) => {
+    if (req.user?.role === "Admin") {
+        return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+    }
     const { category_id, link } = req.body;
 
     if (!link) {
@@ -82,6 +94,9 @@ router.post("/category-videos", verifyToken, (req, res) => {
 
 
 router.post("/edit-category-videos/:id", verifyToken, (req, res) => {
+    if (req.user?.role === "Admin") {
+        return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+    }
     const { video_url } = req.body;
     const sql = "UPDATE category_videos SET video_url = ? WHERE id = ?";
     db.query(sql, [video_url, req.params.id], (err, result) => {
@@ -92,6 +107,9 @@ router.post("/edit-category-videos/:id", verifyToken, (req, res) => {
 
 
 router.post("/delete-category-videos/:id", verifyToken, (req, res) => {
+    if (req.user?.role === "Admin") {
+        return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+    }
     const { id } = req.params;
 
     db.query("DELETE FROM category_videos WHERE id = ?", [id], (err, result) => {

@@ -66,6 +66,9 @@ router.get("/banner/:id", (req, res) => {
 
 
 router.post("/banner", verifyToken, upload.single("image"), handleMulterError, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const bannerName = req.body.bannerName;
   if (!bannerName) {
     if (req.file) {
@@ -93,6 +96,9 @@ router.post("/banner", verifyToken, upload.single("image"), handleMulterError, (
 
 
 router.post("/edit-banner/:id", verifyToken, upload.single("image"), handleMulterError, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const { id } = req.params;
   const { banner_name } = req.body;
 
@@ -161,6 +167,9 @@ router.post("/edit-banner/:id", verifyToken, upload.single("image"), handleMulte
 
 
 router.post("/delete-banner/:id", verifyToken, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const { id } = req.params;
 
   const selectSql = "SELECT file_path FROM banner WHERE id = ?";

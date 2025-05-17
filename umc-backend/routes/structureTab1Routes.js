@@ -23,6 +23,9 @@ router.get("/structure-tab1", (req, res) => {
 
 
 router.post("/structure-tab1", verifyToken, sanitizeInput, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const { heading1, heading2, language_code } = req.body;
   const sql = "INSERT INTO structuretab1 (heading1, heading2, language_code) VALUES (?, ?, ?)";
   db.query(sql, [heading1, heading2, language_code], (err, result) => {
@@ -33,6 +36,9 @@ router.post("/structure-tab1", verifyToken, sanitizeInput, (req, res) => {
 
 
 router.post("/edit-structure-tab1/:id", verifyToken, sanitizeInput, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const { heading1, heading2, language_code } = req.body;
   const sql = "UPDATE structuretab1 SET heading1 = ?, heading2 = ?, language_code = ? WHERE id = ?";
   db.query(sql, [heading1, heading2, language_code, req.params.id], (err, result) => {
@@ -43,6 +49,9 @@ router.post("/edit-structure-tab1/:id", verifyToken, sanitizeInput, (req, res) =
 
 
 router.post("/delete-structure-tab1/:id", verifyToken, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const sql = "DELETE FROM structuretab1 WHERE id = ?";
   db.query(sql, [req.params.id], (err, result) => {
     if (err) throw err;

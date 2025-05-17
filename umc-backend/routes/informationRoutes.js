@@ -29,6 +29,9 @@ router.get("/information", (req, res) => {
 
 
 router.post("/information", verifyToken, sanitizeInput, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const { heading, link, issue_date, language_code } = req.body;
   const formattedDate = convertToMySQLDate(issue_date);
   const sql = "INSERT INTO information (heading, link, issue_date, language_code) VALUES (?, ?, ?, ?)";
@@ -40,6 +43,9 @@ router.post("/information", verifyToken, sanitizeInput, (req, res) => {
 
 
 router.post("/edit-information/:id", verifyToken, sanitizeInput, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const { heading, link, issue_date, language_code } = req.body;
   const formattedDate = issue_date ? convertToMySQLDate(issue_date) : null;
   const sql = "UPDATE information SET heading = ?, link = ?, issue_date = ?, language_code= ? WHERE id = ?";
@@ -51,6 +57,9 @@ router.post("/edit-information/:id", verifyToken, sanitizeInput, (req, res) => {
 
 
 router.post("/delete-information/:id", verifyToken, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const sql = "DELETE FROM information WHERE id = ?";
   db.query(sql, [req.params.id], (err, result) => {
     if (err) throw err;

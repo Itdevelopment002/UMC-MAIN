@@ -22,7 +22,10 @@ router.get("/ward-committee", (req, res) => {
 });
 
 
-router.post("/ward-committee", verifyToken, sanitizeInput,  (req, res) => {
+router.post("/ward-committee", verifyToken, sanitizeInput, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const { ward, heading, language_code } = req.body;
   const sql = "INSERT INTO wardcommittee (ward, heading, language_code) VALUES (?, ?, ?)";
   db.query(sql, [ward, heading, language_code], (err, result) => {
@@ -32,7 +35,10 @@ router.post("/ward-committee", verifyToken, sanitizeInput,  (req, res) => {
 });
 
 
-router.post("/edit-ward-committee/:id", verifyToken, sanitizeInput,  (req, res) => {
+router.post("/edit-ward-committee/:id", verifyToken, sanitizeInput, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const { ward, heading, language_code } = req.body;
   const sql = "UPDATE wardcommittee SET ward = ?, heading = ?, language_code = ? WHERE id = ?";
   db.query(sql, [ward, heading, language_code, req.params.id], (err, result) => {
@@ -43,6 +49,9 @@ router.post("/edit-ward-committee/:id", verifyToken, sanitizeInput,  (req, res) 
 
 
 router.post("/delete-ward-committee/:id", verifyToken, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const sql = "DELETE FROM wardcommittee WHERE id = ?";
   db.query(sql, [req.params.id], (err, result) => {
     if (err) throw err;

@@ -29,6 +29,9 @@ router.get("/resolution", (req, res) => {
 
 
 router.post("/resolution", verifyToken, sanitizeInput, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const { Department_Name, Resolutions_No_Date, Schedule_Date_of_Meeting, Adjournment_Notice, pdf_link, language_code } = req.body;
   const formattedDate = convertToMySQLDate(Schedule_Date_of_Meeting);
   const sql = `
@@ -52,6 +55,9 @@ router.post("/resolution", verifyToken, sanitizeInput, (req, res) => {
 
 
 router.post("/edit-resolution/:Sr_No", verifyToken, sanitizeInput, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const { Department_Name, Resolutions_No_Date, Schedule_Date_of_Meeting, Adjournment_Notice, pdf_link, language_code } = req.body;
   const formattedDate = Schedule_Date_of_Meeting ? convertToMySQLDate(Schedule_Date_of_Meeting) : null;
   const sql = `
@@ -74,6 +80,9 @@ router.post("/edit-resolution/:Sr_No", verifyToken, sanitizeInput, (req, res) =>
 
 
 router.post("/delete-resolution/:Sr_No", verifyToken, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const sql = "DELETE FROM resolution WHERE Sr_No = ?";
   db.query(sql, [req.params.Sr_No], (err, result) => {
     if (err) {

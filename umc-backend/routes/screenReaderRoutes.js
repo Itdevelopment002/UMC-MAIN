@@ -23,6 +23,9 @@ router.get("/screen-reader", (req, res) => {
 
 
 router.post("/screen-reader", verifyToken, sanitizeInput, (req, res) => {
+    if (req.user?.role === "Admin") {
+        return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+    }
     const { name, website, available, language_code } = req.body;
 
     const sql = "INSERT INTO screen_reader (name, website, available, language_code) VALUES (?, ?, ?, ?)";
@@ -37,6 +40,9 @@ router.post("/screen-reader", verifyToken, sanitizeInput, (req, res) => {
 
 
 router.post("/edit-screen-reader/:id", verifyToken, sanitizeInput, (req, res) => {
+    if (req.user?.role === "Admin") {
+        return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+    }
     const { id } = req.params;
     const { name, website, available, language_code } = req.body;
     const sql = "UPDATE screen_reader SET name = ?, website = ?, available = ?, language_code = ? WHERE id = ?";
@@ -51,6 +57,9 @@ router.post("/edit-screen-reader/:id", verifyToken, sanitizeInput, (req, res) =>
 
 
 router.post("/delete-screen-reader/:id", verifyToken, (req, res) => {
+    if (req.user?.role === "Admin") {
+        return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+    }
     const { id } = req.params;
     const sql = "DELETE FROM screen_reader WHERE id = ?";
     db.query(sql, [id], (err, result) => {

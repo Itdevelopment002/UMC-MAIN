@@ -29,7 +29,7 @@ const deleteFileIfExists = async (filePath) => {
 
 const deleteMultipleFiles = async (filePaths) => {
   if (!filePaths || !Array.isArray(filePaths)) return;
-  
+
   await Promise.all(filePaths.map(filePath => deleteFileIfExists(filePath)));
 };
 
@@ -81,11 +81,14 @@ router.get("/tourism/name/:name", (req, res) => {
 });
 
 router.post(
-  "/tourism", 
-  verifyToken, 
-  uploadFields, 
+  "/tourism",
+  verifyToken,
+  uploadFields,
   handleMulterError,
   async (req, res) => {
+    if (req.user?.role === "Admin") {
+      return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+    }
     const { name, address, hours, description, locationLink, language_code } = req.body;
 
     if (!name || !address || !hours || !description || !locationLink || !language_code || !req.files?.main_image) {
@@ -108,7 +111,7 @@ router.post(
       INSERT INTO ad_tourism (name, address, hours, description, main_image, location_link, language_code, gallery)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?)
     `;
-    
+
     db.query(
       query,
       [name, address, hours, description, mainImagePath, locationLink, language_code, JSON.stringify(imagePaths)],
@@ -119,7 +122,7 @@ router.post(
           await deleteMultipleFiles(imagePaths);
           return res.status(500).json({ message: "Error adding tourism site", error: err });
         }
-        
+
         res.status(201).json({
           message: "Tourism site added successfully",
           tourismId: result.insertId,
@@ -132,11 +135,14 @@ router.post(
 );
 
 router.post(
-  "/edit-tourism/:id", 
-  verifyToken, 
-  uploadFields, 
+  "/edit-tourism/:id",
+  verifyToken,
+  uploadFields,
   handleMulterError,
   async (req, res) => {
+    if (req.user?.role === "Admin") {
+      return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+    }
     const { id } = req.params;
     const { name, address, hours, description, locationLink, language_code } = req.body;
 
@@ -148,9 +154,9 @@ router.post(
     const selectSql = "SELECT main_image, gallery FROM ad_tourism WHERE id = ?";
     db.query(selectSql, [id], async (err, result) => {
       if (err || result.length === 0) {
-        return res.status(err ? 500 : 404).json({ 
+        return res.status(err ? 500 : 404).json({
           message: err ? "Database error" : "Tourism site not found",
-          error: err 
+          error: err
         });
       }
 
@@ -238,9 +244,12 @@ router.post(
 );
 
 router.post(
-  "/delete-tourism/:id", 
-  verifyToken, 
+  "/delete-tourism/:id",
+  verifyToken,
   async (req, res) => {
+    if (req.user?.role === "Admin") {
+      return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+    }
     const { id } = req.params;
 
     const selectSql = "SELECT gallery, main_image FROM ad_tourism WHERE id = ?";

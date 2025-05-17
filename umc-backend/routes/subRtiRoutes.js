@@ -29,6 +29,9 @@ router.get("/sub-rti", (req, res) => {
 
 
 router.post("/sub-rti", verifyToken, sanitizeInput, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const { description, link, issue_date, language_code } = req.body;
   const formattedDate = convertToMySQLDate(issue_date);
   const sql = "INSERT INTO subrti (description, link, issue_date, language_code) VALUES (?, ?, ?, ?)";
@@ -40,6 +43,9 @@ router.post("/sub-rti", verifyToken, sanitizeInput, (req, res) => {
 
 
 router.post("/edit-sub-rti/:id", verifyToken, sanitizeInput, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const { description, link, issue_date, language_code } = req.body;
   const formattedDate = convertToMySQLDate(issue_date);
   const sql = "UPDATE subrti SET description = ?, link = ?, issue_date = ?, language_code = ? WHERE id = ?";
@@ -51,6 +57,9 @@ router.post("/edit-sub-rti/:id", verifyToken, sanitizeInput, (req, res) => {
 
 
 router.post("/delete-sub-rti/:id", verifyToken, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const sql = "DELETE FROM subrti WHERE id = ?";
   db.query(sql, [req.params.id], (err, result) => {
     if (err) throw err;

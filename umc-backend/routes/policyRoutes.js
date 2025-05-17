@@ -23,6 +23,9 @@ router.get("/privacy-policy", (req, res) => {
 
 
 router.post("/privacy-policy", verifyToken, sanitizeInput, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const { heading, description, language_code } = req.body;
 
   const sql = "INSERT INTO policy (heading, description, language_code) VALUES (?, ?, ?)";
@@ -37,6 +40,9 @@ router.post("/privacy-policy", verifyToken, sanitizeInput, (req, res) => {
 
 
 router.post("/edit-privacy-policy/:id", verifyToken, sanitizeInput, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const { id } = req.params;
   const { heading, description, language_code } = req.body;
   const sql = "UPDATE policy SET heading = ?, description = ?, language_code = ? WHERE id = ?";
@@ -51,6 +57,9 @@ router.post("/edit-privacy-policy/:id", verifyToken, sanitizeInput, (req, res) =
 
 
 router.post("/delete-privacy-policy/:id", verifyToken, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const { id } = req.params;
   const sql = "DELETE FROM policy WHERE id = ?";
   db.query(sql, [id], (err, result) => {

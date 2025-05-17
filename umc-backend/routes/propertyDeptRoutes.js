@@ -29,6 +29,9 @@ router.get("/property-dept", (req, res) => {
 
 
 router.post("/property-dept", verifyToken, sanitizeInput, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const { description, link, issue_date, language_code } = req.body;
   const formattedDate = convertToMySQLDate(issue_date);
   const sql = "INSERT INTO property_dept (description, link, issue_date, language_code) VALUES (?, ?, ?, ?)";
@@ -40,6 +43,9 @@ router.post("/property-dept", verifyToken, sanitizeInput, (req, res) => {
 
 
 router.post("/edit-property-dept/:id", verifyToken, sanitizeInput, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const { description, link, issue_date, language_code } = req.body;
   const formattedDate = issue_date ? convertToMySQLDate(issue_date) : null;
   const sql = "UPDATE property_dept SET description = ?, link = ?, issue_date = ?, language_code = ? WHERE id = ?";
@@ -51,6 +57,9 @@ router.post("/edit-property-dept/:id", verifyToken, sanitizeInput, (req, res) =>
 
 
 router.post("/delete-property-dept/:id", verifyToken, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const sql = "DELETE FROM property_dept WHERE id = ?";
   db.query(sql, [req.params.id], (err, result) => {
     if (err) throw err;

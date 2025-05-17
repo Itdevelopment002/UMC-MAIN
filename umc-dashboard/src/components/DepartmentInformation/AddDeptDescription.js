@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../api";
 import { FaTrash } from "react-icons/fa";
+import { jwtDecode } from "jwt-decode";
 
 const AddDeptDescription = () => {
     const [description, setDescription] = useState("");
@@ -11,7 +12,8 @@ const AddDeptDescription = () => {
     const [departments, setDepartments] = useState([]);
     const [errors, setErrors] = useState({});
     const navigate = useNavigate();
-    const userData = JSON.parse(localStorage.getItem("userData"));
+    const token = localStorage.getItem("authToken");
+    const userData = token ? jwtDecode(token) : null;
 
 
     const validateForm = () => {
@@ -39,21 +41,21 @@ const AddDeptDescription = () => {
         return Object.keys(validationErrors).length === 0;
     };
 
-     const fetchDepartments = async () => {
-            try {
-                const response = await api.get("/department-info");
-                const sortedData = response.data.sort((a, b) => a.heading.localeCompare(b.heading));
-                if (userData.role === "Superadmin") {
-                    setDepartments(sortedData);
-                } else {
-                    const userPermissions = userData?.permission?.split(",").map(perm => perm.trim());
-                    const filteredData = sortedData.filter(item => userPermissions.includes(item.heading));
-                    setDepartments(filteredData);
-                }
-            } catch (error) {
-                console.error("Error fetching departments:", error);
+    const fetchDepartments = async () => {
+        try {
+            const response = await api.get("/department-info");
+            const sortedData = response.data.sort((a, b) => a.heading.localeCompare(b.heading));
+            if (userData?.role === "Superadmin") {
+                setDepartments(sortedData);
+            } else {
+                const userPermissions = userData?.permission?.split(",").map(perm => perm.trim());
+                const filteredData = sortedData.filter(item => userPermissions.includes(item.heading));
+                setDepartments(filteredData);
             }
-        };
+        } catch (error) {
+            console.error("Error fetching departments:", error);
+        }
+    };
 
     useEffect(() => {
         fetchDepartments();

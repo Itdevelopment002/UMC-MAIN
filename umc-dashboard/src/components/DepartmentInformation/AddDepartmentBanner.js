@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { getImageValidationError } from "../../validation/ImageValidation";
+import { jwtDecode } from "jwt-decode";
 
 const AddDepartmentBanner = () => {
     const [departments, setDepartments] = useState([]);
@@ -11,14 +12,15 @@ const AddDepartmentBanner = () => {
     const [selectedFile, setSelectedFile] = useState(null);
     const [errors, setErrors] = useState({});
     const navigate = useNavigate();
-    const userData = JSON.parse(localStorage.getItem("userData"));
+    const token = localStorage.getItem("authToken");
+    const userData = token ? jwtDecode(token) : null;
     const fileInputRef = useRef(null);
 
     const fetchDepartments = async () => {
         try {
             const response = await api.get("/department-info");
             const sortedData = response.data.sort((a, b) => a.heading.localeCompare(b.heading));
-            if (userData.role === "Superadmin") {
+            if (userData?.role === "Superadmin") {
                 setDepartments(sortedData);
             } else {
                 const userPermissions = userData?.permission?.split(",").map(perm => perm.trim());

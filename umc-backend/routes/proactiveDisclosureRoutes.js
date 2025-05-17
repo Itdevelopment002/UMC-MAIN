@@ -29,6 +29,9 @@ router.get("/proactive-disclosure", (req, res) => {
 
 
 router.post("/proactive-disclosure", verifyToken, sanitizeInput, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const { description, link, issue_date, language_code } = req.body;
   const formattedDate = convertToMySQLDate(issue_date);
   const sql = "INSERT INTO proactive_disclosure (description, link, issue_date, language_code) VALUES (?, ?, ?, ?)";
@@ -40,6 +43,9 @@ router.post("/proactive-disclosure", verifyToken, sanitizeInput, (req, res) => {
 
 
 router.post("/edit-proactive-disclosure/:id", verifyToken, sanitizeInput, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const { description, link, issue_date, language_code } = req.body;
   const formattedDate = issue_date ? convertToMySQLDate(issue_date) : null;
   const sql = "UPDATE proactive_disclosure SET description = ?, link = ?, issue_date = ?, language_code = ? WHERE id = ?";
@@ -51,6 +57,9 @@ router.post("/edit-proactive-disclosure/:id", verifyToken, sanitizeInput, (req, 
 
 
 router.post("/delete-proactive-disclosure/:id", verifyToken, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
   const sql = "DELETE FROM proactive_disclosure WHERE id = ?";
   db.query(sql, [req.params.id], (err, result) => {
     if (err) throw err;
