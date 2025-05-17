@@ -15,5 +15,17 @@ api.interceptors.request.use((config) => {
     }
     return config;
 });
+
+api.interceptors.response.use(
+    (response) => response,
+    (error) => {
+      if (error.response && error.response.status === 401) {
+        // Token expired or unauthorized
+        localStorage.removeItem("authToken");
+        window.location.href = "/admin/login"; // redirect to login
+      }
+      return Promise.reject(error);
+    }
+  );
  
 export default api;
