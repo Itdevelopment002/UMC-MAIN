@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const db = require("../config/db.js");
 const { verifyToken } = require('../middleware/jwtMiddleware.js');
+const sanitizeInput = require('../middleware/sanitizeInput.js');
 
 router.get("/current-update", (req, res) => {
   const language = req.query.lang;
@@ -51,7 +52,7 @@ router.get("/current-update/:id", (req, res) => {
 });
 
 
-router.post("/current-update", verifyToken, (req, res) => {
+router.post("/current-update", verifyToken, sanitizeInput, (req, res) => {
   if (req.user?.role === "Admin") {
     return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
   }
@@ -64,7 +65,7 @@ router.post("/current-update", verifyToken, (req, res) => {
   const sql = "INSERT INTO currentupdate (description, language_code) VALUES (?, ?)";
   db.query(sql, [description, language_code], (err, result) => {
     if (err) {
-      console.error("Database error:", err); // Debugging log
+      console.error("Database error:", err);
       return res.status(500).json({ message: "Database error", error: err });
     }
     res.status(200).json({
@@ -75,7 +76,7 @@ router.post("/current-update", verifyToken, (req, res) => {
 });
 
 
-router.post("/edit-current-update/:id", verifyToken, (req, res) => {
+router.post("/edit-current-update/:id", verifyToken, sanitizeInput, (req, res) => {
   if (req.user?.role === "Admin") {
     return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
   }

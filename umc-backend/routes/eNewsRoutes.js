@@ -1,7 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../config/db.js");
-const { verifyToken } = require('../middleware/jwtMiddleware.js');
+const {verifyToken} = require('../middleware/jwtMiddleware.js');
+const sanitizeInput = require('../middleware/sanitizeInput.js');
 
 const convertToMySQLDate = (dateString) => {
   const [day, month, year] = dateString.split("-");
@@ -27,7 +28,7 @@ router.get("/enews_data", (req, res) => {
 });
 
 
-router.post("/enews_data", verifyToken, (req, res) => {
+router.post("/enews_data", verifyToken, sanitizeInput, (req, res) => {
   if (req.user?.role === "Admin") {
     return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
   }
@@ -54,7 +55,7 @@ router.post("/enews_data", verifyToken, (req, res) => {
 });
 
 
-router.post("/edit-enews_data/:id", verifyToken, (req, res) => {
+router.post("/edit-enews_data/:id", verifyToken, sanitizeInput, (req, res) => {
   if (req.user?.role === "Admin") {
     return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
   }

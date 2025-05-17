@@ -3,6 +3,7 @@ const router = express.Router();
 const db = require("../config/db.js");
 const bcrypt = require("bcryptjs");
 const { verifyToken } = require('../middleware/jwtMiddleware.js');
+const sanitizeInput = require('../middleware/sanitizeInput.js');
 
 const commonPasswords = [
   'password', '123456', '12345678', '1234', 'qwerty', '12345',
@@ -49,7 +50,7 @@ router.get("/users/:id", verifyToken, (req, res) => {
 });
 
 
-router.post("/users", verifyToken, async (req, res) => {
+router.post("/users", verifyToken, sanitizeInput, async (req, res) => {
   if (req.user?.role === "Admin") {
     return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
   }
@@ -158,7 +159,7 @@ router.post("/users", verifyToken, async (req, res) => {
 });
 
 
-router.post("/edit-users/:id", verifyToken, async (req, res) => {
+router.post("/edit-users/:id", verifyToken, sanitizeInput, async (req, res) => {
   const { id } = req.params;
   const { fullname, email, role, permission, status, password } = req.body;
 
@@ -219,7 +220,7 @@ router.post("/edit-users/:id", verifyToken, async (req, res) => {
 });
 
 
-router.post("/edit-users/:id/update-password", verifyToken, async (req, res) => {
+router.post("/edit-users/:id/update-password", verifyToken, sanitizeInput, async (req, res) => {
   const { id } = req.params;
   const { newPassword } = req.body;
 
@@ -275,7 +276,7 @@ router.post("/edit-users/:id/update-password", verifyToken, async (req, res) => 
 });
 
 
-router.post("/users/:id/verify-password", verifyToken, async (req, res) => {
+router.post("/users/:id/verify-password", verifyToken, sanitizeInput, async (req, res) => {
   const { id } = req.params;
   const { password } = req.body;
 
