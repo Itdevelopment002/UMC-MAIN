@@ -11,6 +11,10 @@ const commonPasswords = [
 ];
 
 router.get("/users", verifyToken, (req, res) => {
+  // Only allow if user is Superadmin
+  if (req.user.role !== 'Superadmin') {
+    return res.status(403).json({ message: 'Unauthorized' });
+  }
   const query = "SELECT * FROM users";
   db.query(query, (err, results) => {
     if (err) {
@@ -30,7 +34,10 @@ router.get("/users", verifyToken, (req, res) => {
 
 router.get("/users/:id", verifyToken, (req, res) => {
   const { id } = req.params;
-
+  // Only allow if user is self or Superadmin
+  if (parseInt(id) !== req.user.userId && req.user.role !== 'Superadmin') {
+    return res.status(403).json({ message: 'Unauthorized' });
+  }
   const query = "SELECT * FROM users WHERE id = ?";
   db.query(query, [id], (err, results) => {
     if (err) {
@@ -51,8 +58,9 @@ router.get("/users/:id", verifyToken, (req, res) => {
 
 
 router.post("/users", verifyToken, sanitizeInput, async (req, res) => {
-  if (req.user?.role === "Admin") {
-    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  // Only allow if user is Superadmin
+  if (req.user.role !== 'Superadmin') {
+    return res.status(403).json({ message: 'Unauthorized' });
   }
   const { username, fullname, role, email, password, permission } = req.body;
 
@@ -161,11 +169,11 @@ router.post("/users", verifyToken, sanitizeInput, async (req, res) => {
 
 router.post("/edit-users/:id", verifyToken, sanitizeInput, async (req, res) => {
   const { id } = req.params;
-  const { fullname, email, role, permission, status, password } = req.body;
-
-  if (req.user.role !== "Superadmin" && parseInt(id) !== req.user.userId) {
-    return res.status(403).json({ message: "Unauthorized: You can only change your own password." });
+  // Only allow if user is Superadmin
+  if (req.user.role !== 'Superadmin') {
+    return res.status(403).json({ message: 'Unauthorized' });
   }
+  const { fullname, email, role, permission, status, password } = req.body;
 
   try {
     db.query("SELECT * FROM users WHERE id = ?", [id], async (err, results) => {
@@ -224,8 +232,9 @@ router.post("/edit-users/:id/update-password", verifyToken, sanitizeInput, async
   const { id } = req.params;
   const { newPassword } = req.body;
 
-  if (req.user.role !== "Superadmin" && parseInt(id) !== req.user.userId) {
-    return res.status(403).json({ message: "Unauthorized: You can only change your own password." });
+  // Only allow if user is Superadmin
+  if (req.user.role !== 'Superadmin') {
+    return res.status(403).json({ message: 'Unauthorized' });
   }
 
   const hasMinLength = newPassword.length >= 8;
@@ -280,8 +289,9 @@ router.post("/users/:id/verify-password", verifyToken, sanitizeInput, async (req
   const { id } = req.params;
   const { password } = req.body;
 
-  if (req.user.role !== "Superadmin" && parseInt(id) !== req.user.userId) {
-    return res.status(403).json({ message: "Unauthorized: You can only change your own password." });
+  // Only allow if user is self
+  if (parseInt(id) !== req.user.userId) {
+    return res.status(403).json({ message: 'Unauthorized' });
   }
 
   if (!password) {
@@ -306,15 +316,16 @@ router.post("/users/:id/verify-password", verifyToken, sanitizeInput, async (req
     if (isMatch) {
       res.json({ valid: true, message: "Password is correct" });
     } else {
-      res.status(401).json({ valid: false, message: "Invalid password" });
+      res.status(400).json({ valid: false, message: "Invalid password" });
     }
   });
 });
 
 
 router.post("/delete-users/:id", verifyToken, (req, res) => {
-  if (req.user?.role === "Admin") {
-    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  // Only allow if user is self or Superadmin
+  if (req.user.role !== 'Superadmin') {
+    return res.status(403).json({ message: 'Unauthorized' });
   }
   const { id } = req.params;
 
