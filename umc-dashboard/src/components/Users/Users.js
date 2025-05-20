@@ -4,7 +4,7 @@ import GLightbox from "glightbox";
 import "glightbox/dist/css/glightbox.min.css";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import api, { baseURL } from "../api";
+import api from "../api";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import './AddUsers.css'
 
@@ -105,6 +105,7 @@ const Users = () => {
     if (newPassword) {
       checkPasswordStrength(newPassword);
     }
+    //eslint-disable-next-line
   }, [newPassword]);
 
   const checkPasswordStrength = (pwd) => {

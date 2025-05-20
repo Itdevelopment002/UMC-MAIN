@@ -54,8 +54,8 @@ const Celebration = ({ onStart }) => {
                 setShowEffects(false);
                 try {
                     await Promise.all([
-                        api.put("/celebration/1", { status: "Disable" }),
-                        api.put("/cutting/1", { status: "No" })
+                        api.post("/edit-celebration/1", { status: "Disable" }),
+                        api.post("/edit-cutting/1", { status: "No" })
                     ]);
                     setStatus("Disable");
                     onStart();

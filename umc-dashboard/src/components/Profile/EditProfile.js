@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { FiEdit } from "react-icons/fi";
-import api, { baseURL } from "../api";
+import api from "../api";
 import './EditProfile.css';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Modal, Button } from "react-bootstrap";
 import { jwtDecode } from "jwt-decode";
 import image from "../../assets/img/profile-image.jpg"
 
@@ -22,7 +20,6 @@ const EditProfile = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [showOldPassword, setShowOldPassword] = useState(false);
-    const [showModal, setShowModal] = useState(false);
     const [passwordStrength, setPasswordStrength] = useState({
         length: false,
         upper: false,
@@ -41,7 +38,7 @@ const EditProfile = () => {
         fetchUser();
         // eslint-disable-next-line
     }, [id]);
-    
+
     const commonPasswords = [
         'password', '123456', '12345678', '1234', 'qwerty', '12345',
         'dragon', 'baseball', 'football', 'letmein', 'monkey'
@@ -51,6 +48,7 @@ const EditProfile = () => {
         if (password) {
             checkPasswordStrength(password);
         }
+        //eslint-disable-next-line
     }, [password]);
 
     const checkPasswordStrength = (pwd) => {
@@ -116,6 +114,12 @@ const EditProfile = () => {
         let newErrors = {};
         const trimmedPassword = password.trim();
         const trimmedConfirmPassword = confirmPassword.trim();
+        const trimmedOldPassword = oldPassword.trim();
+
+        // Validate old password
+        if (!trimmedOldPassword) {
+            newErrors.oldPassword = "Old password is required.";
+        }
 
         // Check all password requirements
         if (!trimmedPassword) {
@@ -144,32 +148,40 @@ const EditProfile = () => {
 
     const handleVerifyOldPasswordAndUpdate = async (e) => {
         e.preventDefault();
+
+        if (!validateForm()) return;
+
         try {
-            const res = await api.post(`/users/${id}/verify-password`, { password: oldPassword });
+            if (password === oldPassword) {
+                toast.error("New password must be different from old password.");
+                return;
+            }
 
-            if (res.data.valid) {
-                // Check if new password is different from old password
-                if (password === oldPassword) {
-                    toast.error("New password must be different from old password.");
-                    return;
-                }
+            const response = await api.post(`/users/${id}/verify-update-password`, {
+                oldPassword,
+                newPassword: password
+            });
 
-                await api.post(`/edit-users/${id}/update-password`, { newPassword: password });
+            const { message, requirements } = response.data;
+
+            if (response.data.success || message === "Password updated successfully") {
                 toast.success("Password updated successfully!");
                 setPassword("");
                 setConfirmPassword("");
                 setOldPassword("");
-                setShowModal(false);
                 setTimeout(() => {
                     localStorage.clear();
                     window.location.href = "/";
                 }, 2000);
+            } else if (message === "Weak password - doesn't meet all requirements" && requirements) {
+                toast.error("Password must meet all requirements");
             } else {
-                toast.error("Old password is incorrect.");
+                toast.error(message || "Failed to update password.");
             }
         } catch (error) {
-            console.error("Error verifying old password:", error);
-            toast.error("Failed to verify password.");
+            const errMsg = error.response?.data?.message || "Something went wrong while updating password.";
+            toast.error(`${errMsg}`);
+            console.error("Error updating password:", error);
         }
     };
 
@@ -178,13 +190,6 @@ const EditProfile = () => {
         if (field === "fullname") setFullname(value);
         if (field === "email") setEmail(value);
         setIsChanged(true);
-    };
-
-    const handlePasswordFormSubmit = (e) => {
-        e.preventDefault();
-        if (validateForm()) {
-            setShowModal(true);
-        }
     };
 
     const renderPasswordRequirements = () => {
@@ -279,7 +284,7 @@ const EditProfile = () => {
                     <div className="row">
                         <div className="col-lg-12">
                             <h4 className="page-title">Change Password</h4>
-                            <form onSubmit={handlePasswordFormSubmit}>
+                            <form onSubmit={handleVerifyOldPasswordAndUpdate}>
                                 <div className="form-group row">
                                     <label className="col-form-label col-md-2"><strong>New Password:</strong></label>
                                     <div className="col-md-6 position-relative">
@@ -326,46 +331,41 @@ const EditProfile = () => {
                                         {errors.confirmPassword && <div className="invalid-feedback">{errors.confirmPassword}</div>}
                                     </div>
                                 </div>
-                                <input
-                                    type="submit"
-                                    className="btn btn-primary btn-sm"
-                                    value="Submit"
-                                    disabled={!password || !confirmPassword || Object.values(passwordStrength).some(val => !val)}
-                                />
+                                <div className="form-group row">
+                                    <label className="col-form-label col-md-2"><strong>Old Password:</strong></label>
+                                    <div className="col-md-6 position-relative">
+                                        <input
+                                            type={showOldPassword ? "text" : "password"}
+                                            className={`form-control custom-input-edit-profile ${errors.oldPassword ? "is-invalid" : ""}`}
+                                            value={oldPassword}
+                                            onChange={(e) => setOldPassword(e.target.value)}
+                                            style={{ paddingRight: "35px" }}
+                                        />
+                                        <span
+                                            className="position-absolute end-0 translate-middle-y me-2"
+                                            style={{ cursor: "pointer", right: "20px", top: "12px" }}
+                                            onClick={() => setShowOldPassword(!showOldPassword)}
+                                        >
+                                            {showOldPassword ? <FaEyeSlash /> : <FaEye />}
+                                        </span>
+                                        {errors.oldPassword && <div className="invalid-feedback">{errors.oldPassword}</div>}
+                                    </div>
+                                </div>
+                                <div className="form-group row">
+                                    <div className="col-md-6 offset-md-2">
+                                        <button
+                                            type="submit"
+                                            className="btn btn-primary btn-sm"
+                                            disabled={!password || !confirmPassword || !oldPassword || Object.values(passwordStrength).some(val => !val)}
+                                        >
+                                            Update Password
+                                        </button>
+                                    </div>
+                                </div>
                             </form>
                         </div>
                     </div>
                 </div>
-
-                {/* Modal for old password verification */}
-                <Modal show={showModal} onHide={() => setShowModal(false)} centered>
-                    <Modal.Header closeButton>
-                        <Modal.Title>Verify Old Password</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        <div className="form-group position-relative">
-                            <label>Enter Old Password</label>
-                            <input
-                                type={showOldPassword ? "text" : "password"}
-                                className="form-control form-control-md"
-                                value={oldPassword}
-                                onChange={(e) => setOldPassword(e.target.value)}
-                                style={{ paddingRight: "35px" }}
-                            />
-                            <span
-                                className="position-absolute end-0 translate-middle-y me-2"
-                                style={{ cursor: "pointer", right: "10px", top: "43px" }}
-                                onClick={() => setShowOldPassword(!showOldPassword)}
-                            >
-                                {showOldPassword ? <FaEyeSlash /> : <FaEye />}
-                            </span>
-                        </div>
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <Button variant="secondary" size="sm" onClick={() => setShowModal(false)}>Cancel</Button>
-                        <Button variant="primary" size="sm" onClick={handleVerifyOldPasswordAndUpdate}>Verify & Update</Button>
-                    </Modal.Footer>
-                </Modal>
             </div>
             <ToastContainer />
         </div>

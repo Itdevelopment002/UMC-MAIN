@@ -86,6 +86,7 @@ const AddDepartmentBanner = () => {
         formDataToSend.append("departmentName", departmentName);
 
         try {
+            //eslint-disable-next-line
             const response = await api.post("/department-banner", formDataToSend, {
                 headers: { "Content-Type": "multipart/form-data" },
             });

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import api, { baseURL } from "../api";
+import api from "../api";
 import image from "../../assets/img/profile-image.jpg"
 import { jwtDecode } from "jwt-decode";
 
