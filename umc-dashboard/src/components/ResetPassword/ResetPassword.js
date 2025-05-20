@@ -10,14 +10,14 @@ const ResetPassword = ({ onLogin }) => {
     email: "",
   });
   const [errors, setErrors] = useState({});
+  //eslint-disable-next-line
   const [serverError, setServerError] = useState("");
   const [infoMessage, setInfoMessage] = useState("");
 
   const [loading, setLoading] = useState(false);
-  const [retryAfter, setRetryAfter] = useState(null); // Time remaining in seconds
-  const [attemptsRemaining, setAttemptsRemaining] = useState(3); // Initial attempts
+  const [retryAfter, setRetryAfter] = useState(null);
+  const [attemptsRemaining, setAttemptsRemaining] = useState(3);
 
-  // Countdown timer effect
   useEffect(() => {
     let timer;
     if (retryAfter > 0) {
@@ -75,13 +75,13 @@ const ResetPassword = ({ onLogin }) => {
       if (err.response) {
         if (err.response.status === 400) {
           setInfoMessage("If your email is registered with us, you will receive an OTP.");
-          setServerError(""); // Clear any existing error
+          setServerError("");
         } else if (err.response.status === 429) {
           const retryAfterSeconds = parseInt(err.response.headers['retry-after']) || 1800;
           setRetryAfter(retryAfterSeconds);
           setAttemptsRemaining(0);
           setServerError(`You've exceeded OTP attempts. Please try again after ${formatTime(retryAfterSeconds)}.`);
-          setInfoMessage(""); // Clear info message if error
+          setInfoMessage("");
         } else {
           setServerError("Server error. Please try again later.");
           setInfoMessage("");

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import api, { baseURL } from "../api";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -17,7 +17,6 @@ const CitizenCommunication = () => {
     const [editData, setEditData] = useState({});
     const [imagePreview, setImagePreview] = useState("");
     const [errors, setErrors] = useState({});
-    const navigate = useNavigate();
     const fileInputRef = useRef(null);
 
     useEffect(() => {

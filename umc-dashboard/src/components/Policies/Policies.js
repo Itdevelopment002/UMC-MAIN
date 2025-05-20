@@ -57,6 +57,7 @@ const Policies = () => {
                 language_code: selectedServices.language_code,
 
             });
+            //eslint-disable-next-line
             const updatedServices = policiesdata.map((services) =>
                 services.id === selectedServices.id ? selectedServices : services
             );

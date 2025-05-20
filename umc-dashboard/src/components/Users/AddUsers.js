@@ -17,7 +17,6 @@ const AddUsers = () => {
   const [showCnfPassword, setShowCnfPassword] = useState(false);
   const [selectedPermission, setSelectedPermission] = useState([]);
   const [errors, setErrors] = useState({});
-  const [submitAttempted, setSubmitAttempted] = useState(false);
   const navigate = useNavigate();
   const [permissionDropdownOpen, setPermissionDropdownOpen] = useState(false);
 
@@ -54,7 +53,6 @@ const AddUsers = () => {
     notContextual: true
   });
 
-  // Common passwords list (in a real app, this should be more extensive or server-side)
   const commonPasswords = [
     'password', '123456', '12345678', '1234', 'qwerty', '12345',
     'dragon', 'baseball', 'football', 'letmein', 'monkey'
@@ -64,6 +62,7 @@ const AddUsers = () => {
     if (password) {
       checkPasswordStrength(password);
     }
+    //eslint-disable-next-line
   }, [password, fullname, email]);
 
   const checkPasswordStrength = (pwd) => {
@@ -248,7 +247,6 @@ const AddUsers = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setSubmitAttempted(true);
 
     const isValid = validateForm();
     if (!isValid) return;
