@@ -6,6 +6,7 @@ const router = express.Router();
 const db = require("../config/db.js");
 const { verifyToken } = require('../middleware/jwtMiddleware.js');
 const { getMulterConfig, handleMulterError } = require('../utils/uploadValidation');
+const sanitizeInput = require('../middleware/sanitizeInput.js');
 
 const upload = multer(getMulterConfig());
 
@@ -93,6 +94,7 @@ router.post(
   "/asst-commissioner-data",
   verifyToken,
   upload.single("coImage"),
+  sanitizeInput,
   handleMulterError,
   async (req, res) => {
     if (req.user?.role === "Admin") {
@@ -158,6 +160,7 @@ router.post(
   "/edit-asst-commissioner-data/:id",
   verifyToken,
   upload.single("coImage"),
+  sanitizeInput,
   handleMulterError,
   async (req, res) => {
     if (req.user?.role === "Admin") {

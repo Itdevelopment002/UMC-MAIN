@@ -6,6 +6,8 @@ const router = express.Router();
 const db = require('../config/db.js');
 const { verifyToken } = require('../middleware/jwtMiddleware.js');
 const { getMulterConfig, handleMulterError } = require('../utils/uploadValidation');
+const sanitizeInput = require('../middleware/sanitizeInput.js');
+
 
 // Create upload middleware using global config
 const upload = multer(getMulterConfig());
@@ -77,6 +79,7 @@ router.get('/home-gallerys/:id', (req, res) => {
 router.post('/home-gallerys',
     verifyToken,
     upload.single('image'),
+    sanitizeInput,
     handleMulterError,
     async (req, res) => {
         if (req.user?.role === "Admin") {
@@ -111,6 +114,7 @@ router.post('/home-gallerys',
 router.post('/edit-home-gallerys/:id',
     verifyToken,
     upload.single('image'),
+    sanitizeInput,
     handleMulterError,
     async (req, res) => {
         if (req.user?.role === "Admin") {

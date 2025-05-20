@@ -6,10 +6,12 @@ const router = express.Router();
 const db = require("../config/db.js");
 const { verifyToken } = require('../middleware/jwtMiddleware.js');
 const { getMulterConfig, handleMulterError } = require('../utils/uploadValidation');
+const sanitizeInput = require('../middleware/sanitizeInput.js');
 
+ 
 // Create upload middleware using global config
 const upload = multer(getMulterConfig());
-
+ 
 const deleteFileIfExists = async (filePath) => {
   try {
     if (filePath) {
@@ -22,7 +24,7 @@ const deleteFileIfExists = async (filePath) => {
     }
   }
 };
-
+ 
 router.get("/portal-services", (req, res) => {
   const language = req.query.lang;
   let query;
@@ -33,7 +35,7 @@ router.get("/portal-services", (req, res) => {
   } else {
     query = "SELECT * FROM portalservices";
   }
-
+ 
   db.query(query, params, (err, results) => {
     if (err) {
       return res.status(500).json({ message: "Database error", error: err });
@@ -41,14 +43,14 @@ router.get("/portal-services", (req, res) => {
     res.status(200).json(results);
   });
 });
-
+ 
 router.get("/portal-services/:id", (req, res) => {
   const { id } = req.params;
   const { lang } = req.query;
-
+ 
   let query;
   let params = [];
-
+ 
   if (id) {
     query = "SELECT * FROM portalservices WHERE id = ?";
     params.push(id);
@@ -58,7 +60,7 @@ router.get("/portal-services/:id", (req, res) => {
   } else {
     query = "SELECT * FROM portalservices";
   }
-
+ 
   db.query(query, params, (err, results) => {
     if (err) {
       return res.status(500).json({ message: "Database error", error: err });
@@ -69,11 +71,12 @@ router.get("/portal-services/:id", (req, res) => {
     res.status(200).json(id ? results[0] : results);
   });
 });
-
+ 
 router.post(
   "/portal-services",
   verifyToken,
   upload.fields([{ name: "portalImage", maxCount: 1 }]),
+  sanitizeInput,
   handleMulterError,
   async (req, res) => {
     if (req.user?.role === "Admin") {
@@ -89,12 +92,12 @@ router.post(
         message: "Portal Service heading, description, language code and link are required"
       });
     }
-
+ 
     let mainIconPath = null;
     if (req.files?.portalImage) {
       mainIconPath = `/uploads/${req.files.portalImage[0].filename}`;
     }
-
+ 
     const insertSql =
       "INSERT INTO portalservices (heading, description, link, language_code, main_icon_path) VALUES (?, ?, ?, ?, ?)";
     const insertParams = [
@@ -104,7 +107,7 @@ router.post(
       language_code,
       mainIconPath,
     ];
-
+ 
     db.query(insertSql, insertParams, async (err, result) => {
       if (err) {
         if (mainIconPath) {
@@ -119,11 +122,12 @@ router.post(
     });
   }
 );
-
+ 
 router.post(
   "/edit-portal-services/:id",
   verifyToken,
   upload.fields([{ name: "portalImage", maxCount: 1 }]),
+  sanitizeInput,
   handleMulterError,
   async (req, res) => {
     if (req.user?.role === "Admin") {
@@ -131,45 +135,45 @@ router.post(
     }
     const { id } = req.params;
     const { heading, description, link, language_code } = req.body;
-
+ 
     if (!heading && !description && !link && !language_code && !req.files?.portalImage) {
       return res.status(400).json({ message: "No fields to update" });
     }
-
+ 
     let updateSql = "UPDATE portalservices SET";
     const updateParams = [];
     const updates = [];
-
+ 
     if (heading) {
       updates.push("heading = ?");
       updateParams.push(heading);
     }
-
+ 
     if (description) {
       updates.push("description = ?");
       updateParams.push(description);
     }
-
+ 
     if (link) {
       updates.push("link = ?");
       updateParams.push(link);
     }
-
+ 
     if (language_code) {
       updates.push("language_code = ?");
       updateParams.push(language_code);
     }
-
+ 
     let newMainIconPath;
     if (req.files?.portalImage) {
       newMainIconPath = `/uploads/${req.files.portalImage[0].filename}`;
       updates.push("main_icon_path = ?");
       updateParams.push(newMainIconPath);
     }
-
+ 
     updateSql += ' ' + updates.join(', ') + ' WHERE id = ?';
     updateParams.push(id);
-
+ 
     const selectSql = "SELECT main_icon_path FROM portalservices WHERE id = ?";
     db.query(selectSql, [id], async (err, result) => {
       if (err || result.length === 0) {
@@ -181,9 +185,9 @@ router.post(
           error: err
         });
       }
-
+ 
       const oldMainIconPath = result[0].main_icon_path;
-
+ 
       db.query(updateSql, updateParams, async (err, updateResult) => {
         if (err) {
           if (req.files?.portalImage) {
@@ -191,46 +195,46 @@ router.post(
           }
           return res.status(500).json({ message: "Database error", error: err });
         }
-
+ 
         if (req.files?.portalImage && oldMainIconPath) {
           await deleteFileIfExists(oldMainIconPath);
         }
-
+ 
         res.status(200).json({ message: "Portal Service updated successfully" });
       });
     });
   }
 );
-
+ 
 router.post("/delete-portal-services/:id", verifyToken, async (req, res) => {
   if (req.user?.role === "Admin") {
     return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
   }
   const { id } = req.params;
-
+ 
   const selectSql = "SELECT main_icon_path FROM portalservices WHERE id = ?";
   db.query(selectSql, [id], async (err, result) => {
     if (err) {
       return res.status(500).json({ message: "Database error", error: err });
     }
-
+ 
     if (result.length === 0) {
       return res.status(404).json({ message: "Portal Service not found" });
     }
-
+ 
     const mainIconPath = result[0].main_icon_path;
     const deleteSql = "DELETE FROM portalservices WHERE id = ?";
-
+ 
     db.query(deleteSql, [id], async (err, deleteResult) => {
       if (err) {
         return res.status(500).json({ message: "Database error", error: err });
       }
-
+ 
       await deleteFileIfExists(mainIconPath);
-
+ 
       res.status(200).json({ message: "Portal Service deleted successfully" });
     });
   });
 });
-
+ 
 module.exports = router;

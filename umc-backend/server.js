@@ -304,9 +304,16 @@ app.use((err, req, res, next) => {
     if (err.message === 'Not allowed by CORS') {
         return res.status(403).json({ error: 'Access denied: CORS policy violation' });
     }
-    console.error(err); // Optional: log for internal monitoring
-    res.status(500).json({ error: 'Internal Server Error' });
+    console.error('❌ Server Error:', err);
+    const isProduction = process.env.NODE_ENV === 'production';
+
+    res.status(500).json({
+        success: false,
+        message: isProduction ? 'Internal Server Error' : err.message,
+        ...(isProduction ? {} : { stack: err.stack })
+    });
 });
+
  
 const PORT = process.env.PORT || 6002;
 app.listen(PORT, () => {

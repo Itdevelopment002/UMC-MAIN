@@ -26,7 +26,7 @@
 
 //       if (typeof req.body[key] === "string") {
 //         const value = req.body[key].trim();
-        
+
 //         // Check for HTML/script tags
 //         if (htmlTagRegex.test(value) || scriptRegex.test(value)) {
 //           errors.push(`Invalid input in field "${key}": HTML or script tags are not allowed.`);
@@ -63,6 +63,11 @@ const sanitizeInput = (req, res, next) => {
   if (!["POST", "PUT", "PATCH"].includes(req.method)) {
     return next();
   }
+  
+  if (req.headers['content-type']?.startsWith('multipart/form-data') && !req.body) {
+    return next();
+  }
+
 
   const scriptRegex = /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi;
   const dangerousHtmlRegex = /<(?!\/|\!-)[^>]*>/g; // Allows closing tags and comments
@@ -90,7 +95,7 @@ const sanitizeInput = (req, res, next) => {
       .replace(/>/g, "&gt;")
       .replace(/"/g, "&quot;")
       .replace(/'/g, "&#x27;");
-      // Note: intentionally not escaping forward slashes
+    // Note: intentionally not escaping forward slashes
   };
 
   if (req.body) {
@@ -120,7 +125,7 @@ const sanitizeInput = (req, res, next) => {
   }
 
   if (errors.length > 0) {
-    return res.status(400).json({ 
+    return res.status(400).json({
       message: "Security validation failed",
       errors: errors,
       timestamp: new Date().toISOString()

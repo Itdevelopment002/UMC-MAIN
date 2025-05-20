@@ -6,6 +6,7 @@ const router = express.Router();
 const db = require("../config/db.js");
 const { verifyToken } = require('../middleware/jwtMiddleware.js');
 const { getMulterConfig, handleMulterError } = require("../utils/uploadValidation");
+const sanitizeInput = require("../middleware/sanitizeInput.js");
 
 const upload = multer(getMulterConfig());
 
@@ -44,7 +45,7 @@ router.get("/contact-info/:id", (req, res) => {
 });
 
 
-router.post("/contact-info", verifyToken, upload.single("contactIcon"), handleMulterError, (req, res) => {
+router.post("/contact-info", verifyToken, upload.single("contactIcon"), sanitizeInput, handleMulterError, (req, res) => {
   if (req.user?.role === "Admin") {
     return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
   }
@@ -77,7 +78,7 @@ router.post("/contact-info", verifyToken, upload.single("contactIcon"), handleMu
 });
 
 
-router.post("/edit-contact-info/:id", verifyToken, upload.single("contactIcon"), handleMulterError, (req, res) => {
+router.post("/edit-contact-info/:id", verifyToken, upload.single("contactIcon"), sanitizeInput, handleMulterError, (req, res) => {
   if (req.user?.role === "Admin") {
     return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
   }

@@ -6,6 +6,7 @@ const router = express.Router();
 const db = require("../config/db.js");
 const { verifyToken } = require('../middleware/jwtMiddleware.js');
 const { getMulterConfig, handleMulterError } = require("../utils/uploadValidation");
+const sanitizeInput = require("../middleware/sanitizeInput.js");
 
 const upload = multer(getMulterConfig());
 
@@ -65,7 +66,7 @@ router.get("/hod-details/:id", (req, res) => {
 });
 
 
-router.post("/hod-details", verifyToken, upload.single("hodImage"), handleMulterError, (req, res) => {
+router.post("/hod-details", verifyToken, upload.single("hodImage"), sanitizeInput, handleMulterError, (req, res) => {
   if (!req.file) {
     if (req.file) {
       fs.unlink(path.join(__dirname, "..", "uploads", req.file.filename), () => { });
@@ -111,7 +112,7 @@ router.post("/hod-details", verifyToken, upload.single("hodImage"), handleMulter
 });
 
 
-router.post("/edit-hod-details/:id", verifyToken, upload.single("hodImage"), handleMulterError, (req, res) => {
+router.post("/edit-hod-details/:id", verifyToken, upload.single("hodImage"), sanitizeInput, handleMulterError, (req, res) => {
   const { id } = req.params;
   const user = req.user;
   const { department, name, designation, education, address, number, email, language_code } = req.body;
