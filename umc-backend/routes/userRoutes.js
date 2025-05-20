@@ -11,6 +11,10 @@ const commonPasswords = [
 ];
 
 router.get("/users", verifyToken, (req, res) => {
+  // Only allow if user is Superadmin
+  if (req.user.role !== 'Superadmin') {
+    return res.status(403).json({ message: 'Unauthorized' });
+  }
   const query = "SELECT * FROM users";
   db.query(query, (err, results) => {
     if (err) {
@@ -30,7 +34,10 @@ router.get("/users", verifyToken, (req, res) => {
 
 router.get("/users/:id", verifyToken, (req, res) => {
   const { id } = req.params;
-
+  // Only allow if user is self or Superadmin
+  if (parseInt(id) !== req.user.userId && req.user.role !== 'Superadmin') {
+    return res.status(403).json({ message: 'Unauthorized' });
+  }
   const query = "SELECT * FROM users WHERE id = ?";
   db.query(query, [id], (err, results) => {
     if (err) {
@@ -51,8 +58,9 @@ router.get("/users/:id", verifyToken, (req, res) => {
 
 
 router.post("/users", verifyToken, sanitizeInput, async (req, res) => {
-  if (req.user?.role === "Admin") {
-    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  // Only allow if user is Superadmin
+  if (req.user.role !== 'Superadmin') {
+    return res.status(403).json({ message: 'Unauthorized' });
   }
   const { username, fullname, role, email, password, permission } = req.body;
 
@@ -168,10 +176,11 @@ router.post("/users", verifyToken, sanitizeInput, async (req, res) => {
 
 router.post("/edit-users/:id", verifyToken, sanitizeInput, async (req, res) => {
   const { id } = req.params;
-  const { fullname, email, role, permission, status } = req.body;
 
-  if (req.user.role !== "Superadmin" && parseInt(id) !== req.user.userId) {
-    return res.status(403).json({ message: "Unauthorized: You can only change your own password." });
+  const { fullname, email, role, permission, status } = req.body;
+  // Only allow if user is Superadmin
+  if (req.user.role !== 'Superadmin') {
+    return res.status(403).json({ message: 'Unauthorized' });
   }
 
   try {
@@ -228,9 +237,9 @@ router.post("/edit-users/:id", verifyToken, sanitizeInput, async (req, res) => {
 router.post("/edit-users/:id/update-password", verifyToken, sanitizeInput, async (req, res) => {
   const { id } = req.params;
   const { newPassword } = req.body;
-
-  if (req.user?.role === "Admin") {
-    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  // Only allow if user is Superadmin
+  if (req.user.role !== 'Superadmin') {
+    return res.status(403).json({ message: 'Unauthorized' });
   }
 
   const hasMinLength = newPassword.length >= 8;
@@ -286,10 +295,10 @@ router.post('/users/:id/verify-update-password', verifyToken, async (req, res) =
   try {
     const { id } = req.params;
     const { oldPassword, newPassword } = req.body;
-
-    if (parseInt(id) !== req.user?.userId) {
-      return res.status(403).json({ message: "Unauthorized: You can only change your own password." });
-    }
+  // Only allow if user is self
+  if (parseInt(id) !== req.user.userId) {
+    return res.status(403).json({ message: 'Unauthorized' });
+  }
 
     const selectQuery = "SELECT password FROM users WHERE id = ?";
     db.query(selectQuery, [id], async (err, results) => {
@@ -329,6 +338,7 @@ router.post('/users/:id/verify-update-password', verifyToken, async (req, res) =
         });
       }
 
+
       const saltRounds = await bcrypt.genSalt(10);
       const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
       const updateQuery = "UPDATE users SET password = ? WHERE id = ?";
@@ -350,8 +360,9 @@ router.post('/users/:id/verify-update-password', verifyToken, async (req, res) =
 
 
 router.post("/delete-users/:id", verifyToken, (req, res) => {
-  if (req.user?.role === "Admin") {
-    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  // Only allow if user is self or Superadmin
+  if (req.user.role !== 'Superadmin') {
+    return res.status(403).json({ message: 'Unauthorized' });
   }
   const { id } = req.params;
 
