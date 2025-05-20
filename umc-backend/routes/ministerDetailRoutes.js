@@ -6,6 +6,7 @@ const router = express.Router();
 const db = require("../config/db.js");
 const { verifyToken } = require('../middleware/jwtMiddleware.js');
 const { getMulterConfig, handleMulterError } = require("../utils/uploadValidation");
+const sanitizeInput = require('../middleware/sanitizeInput.js');
 
 // Create upload middleware with the shared configuration
 const upload = multer(getMulterConfig());
@@ -56,7 +57,8 @@ router.get("/minister-details/:id", (req, res) => {
   });
 });
 
-router.post("/minister-details", verifyToken, upload.single("image"), handleMulterError, (req, res) => {
+
+router.post("/minister-details", verifyToken, upload.single("image"), sanitizeInput, handleMulterError, (req, res) => {
   if (req.user?.role === "Admin") {
     return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
   }
@@ -88,7 +90,7 @@ router.post("/minister-details", verifyToken, upload.single("image"), handleMult
   });
 });
 
-router.post("/edit-minister-details/:id", verifyToken, upload.single("image"), handleMulterError, (req, res) => {
+router.post("/edit-minister-details/:id", verifyToken, upload.single("image"), sanitizeInput, handleMulterError, (req, res) => {
   if (req.user?.role === "Admin") {
     return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
   }

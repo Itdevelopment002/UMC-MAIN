@@ -6,6 +6,7 @@ const router = express.Router();
 const db = require("../config/db.js");
 const { verifyToken } = require('../middleware/jwtMiddleware.js');
 const { getMulterConfig, handleMulterError } = require("../utils/uploadValidation");
+const sanitizeInput = require("../middleware/sanitizeInput.js");
 
 const upload = multer(getMulterConfig());
 
@@ -27,7 +28,7 @@ router.get("/categories", (req, res) => {
 });
 
 
-router.post("/categories", verifyToken, (req, res) => {
+router.post("/categories", verifyToken, sanitizeInput, (req, res) => {
   if (req.user?.role === "Admin") {
     return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
   }
@@ -44,7 +45,7 @@ router.post("/categories", verifyToken, (req, res) => {
 });
 
 
-router.post("/edit-categories/:id", verifyToken, (req, res) => {
+router.post("/edit-categories/:id", verifyToken, sanitizeInput, (req, res) => {
   if (req.user?.role === "Admin") {
     return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
   }
@@ -85,7 +86,7 @@ router.get("/category-images/:category_id", (req, res) => {
 });
 
 
-router.post("/category-images", verifyToken, upload.single("image"), handleMulterError, (req, res) => {
+router.post("/category-images", verifyToken, upload.single("image"), sanitizeInput, handleMulterError, (req, res) => {
   if (req.user?.role === "Admin") {
     return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
   }
@@ -110,7 +111,7 @@ router.post("/category-images", verifyToken, upload.single("image"), handleMulte
   });
 });
 
-router.post("/edit-category-images/:id", verifyToken, upload.single("image"), handleMulterError, (req, res) => {
+router.post("/edit-category-images/:id", verifyToken, upload.single("image"), sanitizeInput, handleMulterError, (req, res) => {
   if (req.user?.role === "Admin") {
     return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
   }

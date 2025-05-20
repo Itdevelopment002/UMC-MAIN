@@ -3,13 +3,11 @@ import { Route, Routes, Navigate, useLocation, useNavigate } from "react-router-
 import "./App.css";
 import "./assets/css/bootstrap-datetimepicker.min.css";
 import "./assets/css/bootstrap.min.css";
-import "./assets/css/dataTables.bootstrap4.min.css";
 import "./assets/css/font-awesome.min.css";
 import "./assets/css/fullcalendar.min.css";
 import "./assets/css/select2.min.css";
 import "./assets/css/tagsinput.css";
 import loaderimage from "./assets/img/loader_trans.gif";
-// aniket
 
 import Login from "./components/Login/Login";
 import Header from "./components/Header/Header";
