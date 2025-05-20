@@ -6,6 +6,7 @@ const router = express.Router();
 const db = require('../config/db.js');
 const { verifyToken } = require('../middleware/jwtMiddleware.js');
 const { getMulterConfig, handleMulterError } = require('../utils/uploadValidation');
+const sanitizeInput = require('../middleware/sanitizeInput.js');
 
 const upload = multer(getMulterConfig());
 
@@ -77,6 +78,7 @@ router.post(
     '/history-img',
     verifyToken,
     upload.single('image'),
+    sanitizeInput,
     handleMulterError,
     async (req, res) => {
         if (req.user?.role === "Admin") {
@@ -112,6 +114,7 @@ router.post(
     '/edit-history-img/:id',
     verifyToken,
     upload.single('image'),
+    sanitizeInput,
     handleMulterError,
     async (req, res) => {
         if (req.user?.role === "Admin") {

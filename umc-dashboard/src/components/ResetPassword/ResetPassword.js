@@ -74,8 +74,14 @@ const ResetPassword = ({ onLogin }) => {
     } catch (err) {
       if (err.response) {
         if (err.response.status === 400) {
-          setInfoMessage("If your email is registered with us, you will receive an OTP.");
-          setServerError(""); // Clear any existing error
+          // setInfoMessage("If your email is registered with us, you will receive an OTP.");
+          // setServerError("");
+          navigate("/reset-password-verification", {
+            state: {
+              email: userData.email,
+              attemptsRemaining: attemptsRemaining - 1
+            }
+          });
         } else if (err.response.status === 429) {
           const retryAfterSeconds = parseInt(err.response.headers['retry-after']) || 1800;
           setRetryAfter(retryAfterSeconds);
@@ -143,7 +149,7 @@ const ResetPassword = ({ onLogin }) => {
               <div className="custom-button-container12">
                 <button
                   type="button"
-                  onClick={() => navigate("/")}
+                  onClick={() => navigate("/login")}
                   className="custom-btn12 custom-cancel12"
                   disabled={loading}
                 >

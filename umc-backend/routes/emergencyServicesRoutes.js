@@ -6,6 +6,7 @@ const router = express.Router();
 const db = require("../config/db.js");
 const { verifyToken } = require('../middleware/jwtMiddleware.js');
 const { getMulterConfig, handleMulterError } = require('../utils/uploadValidation');
+const sanitizeInput = require('../middleware/sanitizeInput.js');
 
 // Create upload middleware using global config
 const upload = multer(getMulterConfig());
@@ -74,6 +75,7 @@ router.post(
   "/emergency-services",
   verifyToken,
   upload.fields([{ name: "emergencyImage", maxCount: 1 }]),
+  sanitizeInput,
   handleMulterError,
   async (req, res) => {
     if (req.user?.role === "Admin") {
@@ -123,6 +125,7 @@ router.post(
   "/edit-emergency-services/:id",
   verifyToken,
   upload.fields([{ name: "emergencyImage", maxCount: 1 }]),
+  sanitizeInput,
   handleMulterError,
   async (req, res) => {
     if (req.user?.role === "Admin") {

@@ -6,6 +6,7 @@ const router = express.Router();
 const db = require("../config/db.js");
 const { verifyToken } = require('../middleware/jwtMiddleware.js');
 const { getMulterConfig, handleMulterError } = require("../utils/uploadValidation");
+const sanitizeInput = require("../middleware/sanitizeInput.js");
 
 const upload = multer(getMulterConfig());
 
@@ -47,7 +48,7 @@ router.get("/department-banner/:id", (req, res) => {
 });
 
 
-router.post("/department-banner", verifyToken, upload.single("bannerImage"), handleMulterError, (req, res) => {
+router.post("/department-banner", verifyToken, upload.single("bannerImage"), sanitizeInput, handleMulterError, (req, res) => {
   if (!req.file) {
     return res.status(400).json({ message: "No file uploaded" });
   }
@@ -90,7 +91,7 @@ router.post("/department-banner", verifyToken, upload.single("bannerImage"), han
 });
 
 
-router.post("/edit-department-banner/:id", verifyToken, upload.single("bannerImage"), handleMulterError, (req, res) => {
+router.post("/edit-department-banner/:id", verifyToken, upload.single("bannerImage"), sanitizeInput, handleMulterError, (req, res) => {
   const { id } = req.params;
   const { name } = req.body;
 

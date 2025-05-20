@@ -6,6 +6,7 @@ const router = express.Router();
 const db = require("../config/db.js");
 const { verifyToken } = require('../middleware/jwtMiddleware.js');
 const { getMulterConfig, handleMulterError } = require("../utils/uploadValidation");
+const sanitizeInput = require("../middleware/sanitizeInput.js");
 
 const upload = multer(getMulterConfig());
 
@@ -72,6 +73,7 @@ router.post(
   "/department-info",
   verifyToken,
   upload.fields([{ name: "mainIcon" }]),
+  sanitizeInput,
   handleMulterError,
   (req, res) => {
     if (req.user?.role === "Admin") {
@@ -116,6 +118,7 @@ router.post(
   "/edit-department-info/:id",
   verifyToken,
   upload.fields([{ name: "mainIcon" }]),
+  sanitizeInput,
   handleMulterError,
   (req, res) => {
     if (req.user?.role === "Admin") {
