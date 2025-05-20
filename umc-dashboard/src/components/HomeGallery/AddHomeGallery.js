@@ -19,11 +19,9 @@ const AddHomeGallery = () => {
       const errorMessage = getImageValidationError(file);
       
       if (errorMessage) {
-        // Clear the file input if invalid file is selected
         if (fileInputRef.current) {
           fileInputRef.current.value = "";
         }
-        // Set error message
         setErrors({ ...errors, selectedFile: errorMessage });
         return;
       }
@@ -64,6 +62,7 @@ const AddHomeGallery = () => {
     formData.append("photoName", photoName);
 
     try {
+      //eslint-disable-next-line
       const response = await api.post("/home-gallerys", formData, {
         headers: {
           "Content-Type": "multipart/form-data",

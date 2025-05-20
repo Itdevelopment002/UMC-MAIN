@@ -16,11 +16,9 @@ const AddBanner = () => {
     const file = e.target.files[0];
     setSelectedFile(file);
 
-    // Validate the file immediately when selected
     const errorMessage = getImageValidationError(file);
     if (errorMessage) {
       setErrors({ ...errors, selectedFile: errorMessage });
-      // Clear the file input if invalid
       if (fileInputRef.current) {
         fileInputRef.current.value = "";
       }
@@ -36,7 +34,6 @@ const AddBanner = () => {
       newErrors.bannerName = "Banner name is required.";
     }
 
-    // Use the global validation function
     const imageError = getImageValidationError(selectedFile);
     if (imageError) {
       newErrors.selectedFile = imageError;
@@ -58,6 +55,7 @@ const AddBanner = () => {
     formData.append("bannerName", bannerName);
 
     try {
+      //eslint-disable-next-line
       const response = await api.post("/banner", formData, {
         headers: {
           "Content-Type": "multipart/form-data",

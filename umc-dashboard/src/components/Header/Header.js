@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from "react";
-import img from "../../assets/img/user.jpg";
 import { Link } from "react-router-dom";
 import Sidebar from "../Sidebar/Sidebar";
 import "./Header.css";
-import api, { baseURL } from "../api";
-import { formatDistanceToNow } from "date-fns";
+import api from "../api";
 import headerlogo from '../../assets/img/adminheader.png'
 import { FiLogOut } from "react-icons/fi";
 import { FaEdit } from "react-icons/fa";

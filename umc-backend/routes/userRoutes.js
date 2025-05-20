@@ -68,6 +68,13 @@ router.post("/users", verifyToken, sanitizeInput, async (req, res) => {
     return res.status(400).json({ message: "All fields are required" });
   }
 
+  if (/\s/.test(username)) {
+    return res.status(400).json({
+      message: "Username cannot contain spaces",
+      field: "username"
+    });
+  }
+
   try {
     const usernameCheck = await new Promise((resolve, reject) => {
       db.query(
@@ -169,11 +176,12 @@ router.post("/users", verifyToken, sanitizeInput, async (req, res) => {
 
 router.post("/edit-users/:id", verifyToken, sanitizeInput, async (req, res) => {
   const { id } = req.params;
+
+  const { fullname, email, role, permission, status } = req.body;
   // Only allow if user is Superadmin
   if (req.user.role !== 'Superadmin') {
     return res.status(403).json({ message: 'Unauthorized' });
   }
-  const { fullname, email, role, permission, status, password } = req.body;
 
   try {
     db.query("SELECT * FROM users WHERE id = ?", [id], async (err, results) => {
@@ -192,17 +200,15 @@ router.post("/edit-users/:id", verifyToken, sanitizeInput, async (req, res) => {
       const updatedRole = role || user.role;
       const updatedPermission = permission ? (Array.isArray(permission) ? permission.join(",") : permission) : user.permission;
       const updatedStatus = status || user.status;
-      const updatedPassword = password || user.password;
 
       const query =
-        "UPDATE users SET fullname = ?, email = ?, role = ?, permission = ?, status = ?, password = ? WHERE id = ?";
+        "UPDATE users SET fullname = ?, email = ?, role = ?, permission = ?, status = ? WHERE id = ?";
       const values = [
         updatedFullname,
         updatedEmail,
         updatedRole,
         updatedPermission,
         updatedStatus,
-        updatedPassword,
         id,
       ];
 
@@ -231,7 +237,6 @@ router.post("/edit-users/:id", verifyToken, sanitizeInput, async (req, res) => {
 router.post("/edit-users/:id/update-password", verifyToken, sanitizeInput, async (req, res) => {
   const { id } = req.params;
   const { newPassword } = req.body;
-
   // Only allow if user is Superadmin
   if (req.user.role !== 'Superadmin') {
     return res.status(403).json({ message: 'Unauthorized' });
@@ -270,7 +275,8 @@ router.post("/edit-users/:id/update-password", verifyToken, sanitizeInput, async
       return res.status(400).json({ message: "New password must be different from the old password" });
     }
 
-    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    const saltRounds = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
     const updateQuery = "UPDATE users SET password = ? WHERE id = ?";
     db.query(updateQuery, [hashedPassword, id], (err, results) => {
       if (err) return res.status(500).json({ message: "Error updating password" });
@@ -285,41 +291,72 @@ router.post("/edit-users/:id/update-password", verifyToken, sanitizeInput, async
 });
 
 
-router.post("/users/:id/verify-password", verifyToken, sanitizeInput, async (req, res) => {
-  const { id } = req.params;
-  const { password } = req.body;
-
+router.post('/users/:id/verify-update-password', verifyToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { oldPassword, newPassword } = req.body;
   // Only allow if user is self
   if (parseInt(id) !== req.user.userId) {
     return res.status(403).json({ message: 'Unauthorized' });
   }
 
-  if (!password) {
-    return res.status(400).json({ message: "Password is required" });
+    const selectQuery = "SELECT password FROM users WHERE id = ?";
+    db.query(selectQuery, [id], async (err, results) => {
+      if (err) return res.status(500).json({ message: "Error fetching user data" });
+      if (results.length === 0) return res.status(404).json({ message: "User not found" });
+
+      const storedHashedPassword = results[0].password;
+
+      const isOldPasswordCorrect = await bcrypt.compare(oldPassword, storedHashedPassword);
+      if (!isOldPasswordCorrect) {
+        return res.status(400).json({ message: "Incorrect old password" });
+      }
+
+      const isSameAsOld = await bcrypt.compare(newPassword, storedHashedPassword);
+      if (isSameAsOld) {
+        return res.status(400).json({ message: "New password must be different from the old password" });
+      }
+
+      const hasMinLength = newPassword.length >= 8;
+      const hasUpper = /[A-Z]/.test(newPassword);
+      const hasLower = /[a-z]/.test(newPassword);
+      const hasNumber = /[0-9]/.test(newPassword);
+      const hasSpecial = /[@$!%*?&]/.test(newPassword);
+      const isNotCommon = !commonPasswords.includes(newPassword.toLowerCase());
+
+      if (!hasMinLength || !hasUpper || !hasLower || !hasNumber || !hasSpecial || !isNotCommon) {
+        return res.status(400).json({
+          message: "Weak password - doesn't meet all requirements",
+          requirements: {
+            minLength: hasMinLength,
+            hasUpper,
+            hasLower,
+            hasNumber,
+            hasSpecial,
+            notCommon: isNotCommon,
+          },
+        });
+      }
+
+
+      const saltRounds = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
+      const updateQuery = "UPDATE users SET password = ? WHERE id = ?";
+      db.query(updateQuery, [hashedPassword, id], (err, results) => {
+        if (err) return res.status(500).json({ message: "Error updating password" });
+
+        if (results.affectedRows === 0) {
+          return res.status(404).json({ message: "User not found during update" });
+        }
+
+        res.json({ message: "Password updated successfully" });
+      });
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
   }
-
-  const query = "SELECT password FROM users WHERE id = ?";
-  db.query(query, [id], async (err, results) => {
-    if (err) {
-      console.error("Error fetching user password:", err);
-      return res.status(500).json({ message: "Error verifying password" });
-    }
-
-    if (results.length === 0) {
-      return res.status(404).json({ message: "User not found" });
-    }
-
-    const storedHashedPassword = results[0].password;
-
-    const isMatch = await bcrypt.compare(password, storedHashedPassword);
-
-    if (isMatch) {
-      res.json({ valid: true, message: "Password is correct" });
-    } else {
-      res.status(400).json({ valid: false, message: "Invalid password" });
-    }
-  });
 });
+
 
 
 router.post("/delete-users/:id", verifyToken, (req, res) => {
