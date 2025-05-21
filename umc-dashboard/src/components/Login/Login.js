@@ -4,8 +4,8 @@ import img from "../../assets/img/umclogo.png";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../api";
 import { FaEye, FaEyeSlash, FaRedo } from "react-icons/fa";
-import CryptoJS from 'crypto-js';
 import { jwtDecode } from "jwt-decode";
+import CustomEncryption from "../../encryption/CustomEncrypt";
 
 const Login = ({ onLogin }) => {
   const navigate = useNavigate();
@@ -25,22 +25,6 @@ const Login = ({ onLogin }) => {
   });
   const [isBlocked, setIsBlocked] = useState(false);
   const [blockTimeRemaining, setBlockTimeRemaining] = useState(0);
-
-  const generateSalt = () => {
-    return CryptoJS.lib.WordArray.random(128 / 8).toString();
-  };
-
-  const encryptWithSalt = (data, secretKey, salt) => {
-    const saltedKey = CryptoJS.PBKDF2(secretKey, salt, {
-      keySize: 512 / 32,
-      iterations: 1000
-    });
-
-    return {
-      ciphertext: CryptoJS.AES.encrypt(JSON.stringify(data), saltedKey.toString()).toString(),
-      salt: salt
-    };
-  };
 
   useEffect(() => {
     const now = Date.now();
@@ -143,20 +127,15 @@ const Login = ({ onLogin }) => {
         throw new Error("CAPTCHA verification failed");
       }
 
-      const salt = generateSalt();
-
-      const encryptedData = encryptWithSalt(
-        {
-          username: userData.username,
-          password: userData.password
-        },
-        process.env.REACT_APP_ENCRYPTION_KEY,
-        salt
-      );
+      /* added Decode password start here */
+      const nonceRes = await api.get(`/nonce/${userData.username}`);
+      const { nonce } = nonceRes.data;
+      const finalPassword = CustomEncryption(userData.password, nonce);
+      /* added Decode password here */
 
       const response = await api.post("/login", {
-        encryptedData: encryptedData.ciphertext,
-        salt: encryptedData.salt
+        username: userData.username,
+        password: finalPassword
       });
 
       setData({ username: "", password: "", captchaInput: "" });
@@ -183,7 +162,7 @@ const Login = ({ onLogin }) => {
       setIsClicked(false);
       refreshCaptcha();
       updateFailedAttempts(userData.username);
-
+      console.log(err);
       if (err.response) {
         if (err.response.status === 400 && err.response.data.message === "Invalid CAPTCHA") {
           setServerError("Invalid CAPTCHA code. Please try again.");
