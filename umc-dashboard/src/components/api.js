@@ -22,7 +22,7 @@ api.interceptors.response.use(
       if (error.response && error.response.status === 401) {
         // Token expired or unauthorized
         localStorage.removeItem("authToken");
-        window.location.href = "/admin/login"; // redirect to login
+        // window.location.href = "/admin/login"; // redirect to login
       }
       return Promise.reject(error);
     }
