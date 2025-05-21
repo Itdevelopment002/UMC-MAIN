@@ -8,7 +8,7 @@ const jwt = require("jsonwebtoken");
 const svgCaptcha = require("svg-captcha");
 require("dotenv").config();
 const { verifyToken, logout } = require('../middleware/jwtMiddleware.js');
-const CryptoJS = require('crypto-js');
+const {CustomDecryption} = require("../utils/CustomDecryption.js");
 
 const loginLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
@@ -30,91 +30,75 @@ const generateUniqueId = (req, res, next) => {
   next();
 };
 
-router.post("/login", loginLimiter, generateUniqueId, async (req, res) => {
+router.post('/login', loginLimiter, generateUniqueId, (req, res) => {
   try {
-    const { encryptedData, salt } = req.body;
-
-    if (!encryptedData || !salt) {
-      return res.status(400).json({
-        message: "Username and password are required",
-        errorType: "missing_fields"
-      });
-    }
-
-    const saltedKey = CryptoJS.PBKDF2(
-      process.env.ENCRYPTION_KEY,
-      salt,
-      { keySize: 512 / 32, iterations: 1000 }
-    );
-
-    const bytes = CryptoJS.AES.decrypt(encryptedData, saltedKey.toString());
-    const decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
-
-    const { username, password } = decryptedData;
-
+    const { username, password } = req.body;
     if (!username || !password) {
-      return res.status(400).json({
-        message: "Username and password are required",
-        errorType: "missing_fields"
-      });
+      return res.status(400).json({ message: "Username and password are required" });
     }
 
-    const query = `
-      SELECT id, username, email, password, role, permission, status
-      FROM users
-      WHERE username = ? OR email = ?
-    `;
-
-    db.query(query, [username, username], async (err, result) => {
+    db.query('SELECT * FROM users WHERE username = ?', [username], (err, users) => {
       if (err) {
-        console.error("Database query error:", err);
-        return res.status(500).json({ message: "Server error" });
+        console.error('Database error:', err);
+        return res.status(500).json({ message: 'Database error' });
       }
 
-      if (result.length === 0) {
-        return res.status(401).json({ message: "Invalid credentials" });
+      if (users.length === 0) {
+        return res.status(404).json({ error: 'User not found' });
       }
 
-      const user = result[0];
-      const passwordMatch = await bcrypt.compare(password, user.password);
+      const user = users[0];
 
-      if (!passwordMatch) {
-        return res.status(401).json({ message: "Invalid credentials" });
-      }
+      db.query(
+        'SELECT * FROM nonces WHERE username = ? ORDER BY created_at DESC LIMIT 1',
+        [username],
+        async (nonceErr, nonces) => {
+          if (nonceErr) {
+            console.error('Nonce query error:', nonceErr);
+            return res.status(500).json({ message: 'Database error' });
+          }
 
-      if (user.status !== "Active") {
-        return res.status(403).json({
-          message: "Account disabled. Please contact support."
-        });
-      }
+          if (nonces.length === 0 || new Date(nonces[0].expires_at) < new Date()) {
+            return res.status(400).json({ error: 'Nonce expired or missing' });
+          }
+          /* password decoded here */
+          const nonceRow = nonces[0];
+          const decodedPassword = CustomDecryption(password, nonceRow.nonce);
 
-      const token = jwt.sign(
-        {
-          userId: user.id,
-          username: user.username,
-          role: user.role,
-          permission: user.permission,
-        },
-        JWT_SECRET,
-        { expiresIn: JWT_EXPIRATION }
+          const passwordMatch = await bcrypt.compare(decodedPassword, user.password);
+          
+          if (!passwordMatch) {
+            return res.status(401).json({ error: 'Invalid credentials' });
+          }
+          if (passwordMatch) {
+            db.query('DELETE FROM nonces WHERE id = ?', [nonceRow.id], (deleteErr) => {
+              if (deleteErr) {
+                console.error('Failed to delete nonce:', deleteErr);
+              }
+            });
+
+            delete user.password;
+
+            const token = jwt.sign(
+              {
+                userId: user.id,
+                username: user.username,
+                role: user.role,
+                permission: user.permission,
+              },
+              JWT_SECRET,
+              { expiresIn: JWT_EXPIRATION }
+            );
+
+            return res.status(200).json({ message: "Login successful", token });
+          }
+
+          return res.status(400).json({ error: 'Invalid login attempt' });
+        }
       );
-
-      res.cookie("authToken", token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "strict",
-        maxAge: 24 * 60 * 60 * 1000,
-        path: "/",
-        domain: process.env.COOKIE_DOMAIN || undefined
-      });
-
-      res.status(200).json({
-        message: "Login successful",
-        token
-      });
     });
   } catch (error) {
-    console.error("Login process error:", error);
+    console.error("Login process error:");
     res.status(500).json({ message: "Server error during authentication" });
   }
 });

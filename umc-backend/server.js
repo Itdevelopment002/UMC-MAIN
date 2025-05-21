@@ -164,7 +164,9 @@ const resetPassRoutes = require('./routes/resetPassRoutes');
  
 {/* Visitor */ }
 const visitorRoutes = require('./routes/visitorRoutes');
- 
+{/* password salt */}
+const nonce = require('./routes/nonce');
+app.use('/api', nonce);
  
 {/* Main Menu */ }
 app.use('/api', mainMenuRoutes);
