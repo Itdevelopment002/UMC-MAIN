@@ -21,6 +21,7 @@ const validateImageFile = (file) => {
   if (parts.length > 2) { // More than one dot means multiple extensions
     return false;
   }
+  
 
   // Get the actual extension (last part after dot)
   const extension = '.' + parts.pop();

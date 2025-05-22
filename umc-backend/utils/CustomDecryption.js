@@ -9,4 +9,5 @@ const CustomDecryption = ( str, nonce ) => {
     return customPasswordDecode(bytes.toString(CryptoJS.enc.Utf8));
 }
 
+
 module.exports = { customPasswordDecode, CustomDecryption};
