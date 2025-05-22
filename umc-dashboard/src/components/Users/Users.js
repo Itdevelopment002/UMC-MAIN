@@ -7,6 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 import api from "../api";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import './AddUsers.css'
+import CustomEncryption from "../../encryption/CustomEncrypt";
 
 const Users = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -190,9 +191,15 @@ const Users = () => {
       return;
     }
 
+    /* added Decode password start here */
+    const nonceRes = await api.get(`/nonce/userId/${selectedUserForPasswordChange.id}`);
+    const { nonce } = nonceRes.data;
+    const finalNewPassword = CustomEncryption(newPassword, nonce);
+    /* added Decode password here */
+
     try {
       await api.post(`/edit-users/${selectedUserForPasswordChange.id}/update-password`, {
-        newPassword,
+        finalNewPassword,
       });
       toast.success("Password updated successfully!");
       handleCloseChangePasswordModal();

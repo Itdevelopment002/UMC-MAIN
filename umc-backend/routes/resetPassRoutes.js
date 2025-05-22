@@ -7,6 +7,38 @@ const cron = require("node-cron");
 const bcrypt = require("bcryptjs");
 const rateLimit = require('express-rate-limit');
 const { verifyToken } = require('../middleware/jwtMiddleware.js');
+const {CustomDecryption} = require("../utils/CustomDecryption.js");
+
+const queryAsync = (sql, params) => {
+  return new Promise((resolve, reject) => {
+    db.query(sql, params, (err, results) => {
+      if (err) return reject(err);
+      resolve(results);
+    });
+  });
+};
+
+const nonceDecodedPassword = async (password, userId) => {
+  try {
+    const nonces = await queryAsync(
+      'SELECT * FROM nonces WHERE user_id = ? ORDER BY created_at DESC LIMIT 1',
+      [userId]
+    );
+    const nonceRow = nonces[0];
+    if (!nonceRow) {
+      throw new Error('Nonce missing');
+    }
+
+    if (new Date(nonceRow.expires_at) < new Date()) {
+      throw new Error('Nonce expired');
+    }
+
+    return CustomDecryption(password, nonceRow.nonce);
+  } catch (error) {
+    console.error('Nonce decoding error:', error);
+    throw error;
+  }
+};
 
 const transporter = nodemailer.createTransport({
   service: "gmail",
@@ -205,7 +237,9 @@ const generateAndStoreOTP = (email, userId, res) => {
 
 
 router.post("/change-password", async (req, res) => {
-  const { userId, newPassword } = req.body;
+  const { userId, finalNewPassword } = req.body;
+  // decode password
+  const newPassword = await nonceDecodedPassword(finalNewPassword, userId);
 
   if (!userId || !newPassword) {
     return res.status(400).json({ message: "User ID and password are required" });

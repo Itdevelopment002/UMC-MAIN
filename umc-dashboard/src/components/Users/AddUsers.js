@@ -3,6 +3,8 @@ import { useNavigate, Link } from "react-router-dom";
 import api from "../api";
 import './AddUsers.css';
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import CustomEncryption from "../../encryption/CustomEncrypt";
+import { jwtDecode } from 'jwt-decode';
 
 const AddUsers = () => {
   const [departments, setDepartments] = useState([]);
@@ -19,6 +21,19 @@ const AddUsers = () => {
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
   const [permissionDropdownOpen, setPermissionDropdownOpen] = useState(false);
+  const [userId, setUserId] = useState(null);
+
+  useEffect(() => {
+    const token = localStorage.getItem('authToken');
+    if (token) {
+      try {
+        const decoded = jwtDecode(token);
+        setUserId(decoded.userId);
+      } catch (err) {
+        console.error("Error decoding token:", err);
+      }
+    }
+  }, []);
 
   useEffect(() => {
     fetchDepartments();
@@ -251,12 +266,18 @@ const AddUsers = () => {
     const isValid = validateForm();
     if (!isValid) return;
 
+    /* added Decode password start here */
+    const nonceRes = await api.get(`/nonce/userId/${userId}`);
+    const { nonce } = nonceRes.data;
+    const hashPassword = CustomEncryption(password, nonce);
+    /* added Decode password here */
+
     const payload = {
       username,
       fullname,
       role,
       email,
-      password,
+      password:hashPassword,
       permission: selectedPermission.join(","),
     };
 

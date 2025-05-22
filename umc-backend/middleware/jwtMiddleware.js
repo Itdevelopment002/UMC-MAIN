@@ -18,6 +18,8 @@ const queryAsync = (sql, params = []) => {
 const verifyToken = async (req, res, next) => {
   // Clean expired tokens on every request
   await queryAsync('DELETE FROM blacklisted_tokens WHERE expires_at < NOW()');
+  // Clean expired salt nonces on every request
+  await queryAsync('DELETE FROM nonces WHERE expires_at < NOW()');
 
   const token = req.headers.authorization?.split(' ')[1];
   if (!token) return res.status(401).json({ message: 'No token provided' });

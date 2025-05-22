@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import api from "../api";
 import './ChangePassword.css';
+import CustomEncryption from "../../encryption/CustomEncrypt";
 
 const ChangePassword = () => {
   const [newPassword, setNewPassword] = useState("");
@@ -88,11 +89,15 @@ const ChangePassword = () => {
       });
       return;
     }
-
+    /* added Decode password start here */
+    const nonceRes = await api.get(`/nonce/userId/${userId}`);
+    const { nonce } = nonceRes.data;
+    const finalNewPassword = CustomEncryption(newPassword, nonce);
+    /* added Decode password here */
     try {
       const response = await api.post("/change-password", {
         userId,
-        newPassword,
+        finalNewPassword,
       });
 
       if (response.data.message === "Password updated successfully") {

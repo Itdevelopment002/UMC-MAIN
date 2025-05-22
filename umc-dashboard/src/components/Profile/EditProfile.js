@@ -7,6 +7,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { jwtDecode } from "jwt-decode";
 import image from "../../assets/img/profile-image.jpg"
+import CustomEncryption from "../../encryption/CustomEncrypt";
 
 const EditProfile = () => {
     const navigate = useNavigate();
@@ -156,10 +157,15 @@ const EditProfile = () => {
                 toast.error("New password must be different from old password.");
                 return;
             }
-
+            /* added Decode password start here */
+            const nonceRes = await api.get(`/nonce/userId/${id}`);
+            const { nonce } = nonceRes.data;
+            const finalNewPassword = CustomEncryption(password, nonce);
+            const finalOldPassword = CustomEncryption(oldPassword, nonce);
+            /* added Decode password here */
             const response = await api.post(`/users/${id}/verify-update-password`, {
-                oldPassword,
-                newPassword: password
+                finalOldPassword,
+                finalNewPassword
             });
 
             const { message, requirements } = response.data;

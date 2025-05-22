@@ -4,11 +4,43 @@ const db = require("../config/db.js");
 const bcrypt = require("bcryptjs");
 const { verifyToken } = require('../middleware/jwtMiddleware.js');
 const sanitizeInput = require('../middleware/sanitizeInput.js');
+const {CustomDecryption} = require("../utils/CustomDecryption.js");
 
 const commonPasswords = [
   'password', '123456', '12345678', '1234', 'qwerty', '12345',
   'dragon', 'baseball', 'football', 'letmein', 'monkey'
 ];
+
+const queryAsync = (sql, params) => {
+  return new Promise((resolve, reject) => {
+    db.query(sql, params, (err, results) => {
+      if (err) return reject(err);
+      resolve(results);
+    });
+  });
+};
+
+const nonceDecodedPassword = async (password, userId) => {
+  try {
+    const nonces = await queryAsync(
+      'SELECT * FROM nonces WHERE user_id = ? ORDER BY created_at DESC LIMIT 1',
+      [userId]
+    );
+    const nonceRow = nonces[0];
+    if (!nonceRow) {
+      throw new Error('Nonce missing');
+    }
+
+    if (new Date(nonceRow.expires_at) < new Date()) {
+      throw new Error('Nonce expired');
+    }
+
+    return CustomDecryption(password, nonceRow.nonce);
+  } catch (error) {
+    console.error('Nonce decoding error:', error);
+    throw error;
+  }
+};
 
 router.get("/users", verifyToken, (req, res) => {
   // Only allow if user is Superadmin
@@ -62,7 +94,10 @@ router.post("/users", verifyToken, sanitizeInput, async (req, res) => {
   if (req.user.role !== 'Superadmin') {
     return res.status(403).json({ message: 'Unauthorized' });
   }
-  const { username, fullname, role, email, password, permission } = req.body;
+  const { username, fullname, role, email, permission } = req.body;
+  // decode password
+  const id = req.user.userId;
+  password = await nonceDecodedPassword(req.body.password, id);
 
   if (!username || !fullname || !role || !email || !password || !permission) {
     return res.status(400).json({ message: "All fields are required" });
@@ -236,12 +271,13 @@ router.post("/edit-users/:id", verifyToken, sanitizeInput, async (req, res) => {
 
 router.post("/edit-users/:id/update-password", verifyToken, sanitizeInput, async (req, res) => {
   const { id } = req.params;
-  const { newPassword } = req.body;
+  const { finalNewPassword } = req.body;
   // Only allow if user is Superadmin
   if (req.user.role !== 'Superadmin') {
     return res.status(403).json({ message: 'Unauthorized' });
   }
-
+  const newPassword = await nonceDecodedPassword(finalNewPassword, id);
+ 
   const hasMinLength = newPassword.length >= 8;
   const hasUpper = /[A-Z]/.test(newPassword);
   const hasLower = /[a-z]/.test(newPassword);
@@ -294,11 +330,14 @@ router.post("/edit-users/:id/update-password", verifyToken, sanitizeInput, async
 router.post('/users/:id/verify-update-password', verifyToken, async (req, res) => {
   try {
     const { id } = req.params;
-    const { oldPassword, newPassword } = req.body;
+    const { finalOldPassword, finalNewPassword } = req.body;
   // Only allow if user is self
   if (parseInt(id) !== req.user.userId) {
     return res.status(403).json({ message: 'Unauthorized' });
   }
+  //password decode
+  const oldPassword = await nonceDecodedPassword(finalOldPassword, id);
+  const newPassword = await nonceDecodedPassword(finalNewPassword, id);
 
     const selectQuery = "SELECT password FROM users WHERE id = ?";
     db.query(selectQuery, [id], async (err, results) => {
