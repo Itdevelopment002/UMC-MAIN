@@ -12,6 +12,8 @@ const CustomCodeVerification = () => {
   const [message, setMessage] = useState({ text: "", type: "" });
   const [timer, setTimer] = useState(60);
   const [isResendDisabled, setIsResendDisabled] = useState(true);
+  const [failedAttempts, setFailedAttempts] = useState(0);
+  const [isBlocked, setIsBlocked] = useState(false); 
   const inputRefs = useRef([]);
   const navigate = useNavigate();
   const location = useLocation();
@@ -34,8 +36,29 @@ const CustomCodeVerification = () => {
     return () => clearInterval(interval);
   }, [timer]);
 
+  useEffect(() => {
+    if (failedAttempts >= 3) {
+      setIsBlocked(true);
+      const unblockTime = Date.now() + 5 * 60 * 1000;
+      localStorage.setItem("otp_blocked_until", unblockTime);
+    }
+  }, [failedAttempts]);
+
+  useEffect(() => {
+    const blockedUntil = localStorage.getItem("otp_blocked_until");
+    if (blockedUntil && Date.now() < parseInt(blockedUntil)) {
+      setIsBlocked(true);
+      const timeout = setTimeout(() => {
+        setIsBlocked(false);
+        setFailedAttempts(0);
+        localStorage.removeItem("otp_blocked_until");
+      }, parseInt(blockedUntil) - Date.now());
+      return () => clearTimeout(timeout);
+    }
+  }, []);
+
   const handleChange = (index, value) => {
-    if (/^[0-9]?$/.test(value)) {
+    if (/^[0-9]?$/.test(value) && !isBlocked) {
       const newCode = [...code];
       newCode[index] = value;
       setCode(newCode);
@@ -51,7 +74,7 @@ const CustomCodeVerification = () => {
   };
 
   const handleKeyDown = (index, e) => {
-    if (e.key === "Backspace") {
+    if (e.key === "Backspace" && !isBlocked) {
       const newCode = [...code];
 
       if (!newCode[index] && index > 0) {
@@ -76,9 +99,7 @@ const CustomCodeVerification = () => {
     }
 
     try {
-      // Encrypt the data
       const encryptedData = encryptData({ otp, email });
-
       const response = await api.post("/verify-otp", { data: encryptedData });
 
       if (response.data.message === "OTP verified successfully") {
@@ -87,52 +108,38 @@ const CustomCodeVerification = () => {
         setTimeout(() => navigate("/change-password", { state: { userId } }), 2000);
       }
     } catch (err) {
-      if (err.response) {
-        setMessage({
-          text: err.response.data.message || "Invalid OTP",
-          type: "error"
-        });
-      } else {
-        setMessage({
-          text: "Network error. Please try again.",
-          type: "error"
-        });
-      }
-      // Clear the OTP fields on error
+      setFailedAttempts((prev) => prev + 1);
+      setMessage({
+        text: err.response?.data?.message || "Invalid OTP",
+        type: "error"
+      });
       setCode(["", "", "", ""]);
       inputRefs.current[0].focus();
     }
   };
 
   const handleResendOTP = async () => {
-    // Encrypt the email before sending
     const encryptedData = encryptData({ email });
-
     try {
       const response = await api.post("/resend-otp", { data: encryptedData });
-
       if (response.data.message === "OTP resent successfully") {
         setTimer(60);
         setIsResendDisabled(true);
         setMessage({ text: "OTP resent successfully!", type: "success" });
       }
-    } catch (err) {
+    } catch {
       setMessage({ text: "Failed to resend OTP. Please try again.", type: "error" });
     }
   };
 
   const handleCancel = async () => {
-    // Encrypt the email before sending
     const encryptedData = encryptData({ email });
-
     try {
       const response = await api.post("/delete-otp", { data: { data: encryptedData } });
-
       if (response.data.message === "OTP data deleted successfully") {
         navigate("/");
       }
-    } catch (err) {
-      console.error("Error deleting OTP data:", err);
+    } catch {
       setMessage({ text: "Failed to cancel. Please try again.", type: "error" });
     }
   };
@@ -160,6 +167,7 @@ const CustomCodeVerification = () => {
                   maxLength="1"
                   className="custom-code-box"
                   value={num}
+                  disabled={isBlocked}
                   onChange={(e) => handleChange(index, e.target.value)}
                   onKeyDown={(e) => handleKeyDown(index, e)}
                   ref={(el) => (inputRefs.current[index] = el)}
@@ -171,7 +179,7 @@ const CustomCodeVerification = () => {
               {isResendDisabled ? (
                 `Resend OTP in ${timer} seconds`
               ) : (
-                <button onClick={handleResendOTP} className="btn resend-btn">
+                <button onClick={handleResendOTP} disabled={isBlocked} className="btn resend-btn">
                   Click to resend.
                 </button>
               )}

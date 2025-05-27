@@ -147,7 +147,7 @@ const ResetPassword = ({ onLogin }) => {
               <div className="custom-button-container12">
                 <button
                   type="button"
-                  onClick={() => navigate("/login")}
+                  onClick={() => navigate("/")}
                   className="custom-btn12 custom-cancel12"
                   disabled={loading}
                 >
