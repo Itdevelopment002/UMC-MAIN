@@ -8,7 +8,7 @@ const jwt = require("jsonwebtoken");
 const svgCaptcha = require("svg-captcha");
 require("dotenv").config();
 const { verifyToken, logout } = require('../middleware/jwtMiddleware.js');
-const {CustomDecryption} = require("../utils/CustomDecryption.js");
+const { CustomDecryption } = require("../utils/CustomDecryption.js");
 
 const loginLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
@@ -32,10 +32,21 @@ const generateUniqueId = (req, res, next) => {
 
 router.post('/login', loginLimiter, generateUniqueId, (req, res) => {
   try {
-    const { username, password } = req.body;
-    if (!username || !password) {
-      return res.status(400).json({ message: "Username and password are required" });
+    const { username, password, captchaId, userInput } = req.body;
+
+    if (!username || !password || !captchaId || !userInput) {
+      return res.status(400).json({ message: "All fields are required" });
     }
+
+    const storedCode = captchaStore.get(captchaId);
+    if (!storedCode) {
+      return res.status(400).json({ message: "CAPTCHA expired or invalid" });
+    }
+    if (storedCode !== userInput.trim()) {
+      return res.status(400).json({ message: "Invalid CAPTCHA" });
+    }
+
+    captchaStore.delete(captchaId);
 
     db.query('SELECT * FROM users WHERE username = ?', [username], (err, users) => {
       if (err) {
@@ -66,7 +77,7 @@ router.post('/login', loginLimiter, generateUniqueId, (req, res) => {
           const decodedPassword = CustomDecryption(password, nonceRow.nonce);
 
           const passwordMatch = await bcrypt.compare(decodedPassword, user.password);
-          
+
           if (!passwordMatch) {
             return res.status(401).json({ error: 'Invalid credentials' });
           }
@@ -103,7 +114,7 @@ router.post('/login', loginLimiter, generateUniqueId, (req, res) => {
   }
 });
 
-router.post("/logout", verifyToken, async(req, res) => {
+router.post("/logout", verifyToken, async (req, res) => {
   const token = req.headers.authorization?.split(' ')[1];
   if (!token) return res.status(400).json({ message: 'No token provided' });
 
@@ -129,29 +140,6 @@ router.get("/generate-captcha", (req, res) => {
   captchaStore.set(captchaId, captcha.text);
   setTimeout(() => captchaStore.delete(captchaId), 5 * 60 * 1000);
   res.json({ captchaId, svg: captcha.data });
-});
-
-
-router.post("/verify-captcha", (req, res) => {
-  const { captchaId, userInput } = req.body;
-
-  if (!captchaId || !userInput) {
-    return res.status(400).json({ success: false, message: "Missing captchaId or user input" });
-  }
-
-  const storedCode = captchaStore.get(captchaId);
-
-  if (!storedCode) {
-    return res.status(400).json({ success: false, message: "CAPTCHA expired or invalid" });
-  }
-
-  if (storedCode !== userInput.trim()) {
-    return res.status(400).json({ success: false, message: "Invalid CAPTCHA" });
-  }
-
-  captchaStore.delete(captchaId);
-
-  return res.status(200).json({ success: true, message: "CAPTCHA verified" });
 });
 
 
