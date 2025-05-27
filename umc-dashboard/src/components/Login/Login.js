@@ -118,24 +118,15 @@ const Login = ({ onLogin }) => {
     }
 
     try {
-      const captchaResponse = await api.post("/verify-captcha", {
-        captchaId: captcha.id,
-        userInput: userData.captchaInput
-      });
-
-      if (!captchaResponse.data.success) {
-        throw new Error("CAPTCHA verification failed");
-      }
-
-      /* added Decode password start here */
       const nonceRes = await api.get(`/nonce/${userData.username}`);
       const { nonce } = nonceRes.data;
       const finalPassword = CustomEncryption(userData.password, nonce);
-      /* added Decode password here */
 
       const response = await api.post("/login", {
         username: userData.username,
-        password: finalPassword
+        password: finalPassword,
+        captchaId: captcha.id,
+        userInput: userData.captchaInput
       });
 
       setData({ username: "", password: "", captchaInput: "" });

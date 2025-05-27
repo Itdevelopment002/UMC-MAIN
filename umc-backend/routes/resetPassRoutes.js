@@ -128,22 +128,30 @@ cron.schedule("*/5 * * * *", () => {
 const CryptoJS = require('crypto-js');
 const SECRET_KEY = process.env.ENCRYPTION_KEY || "your-secret-key-here";
 
+const MAX_ATTEMPTS = 3;
+const BLOCK_TIME = 5 * 60 * 1000;
+const otpAttempts = {};
+
 router.post("/verify-otp", async (req, res) => {
   try {
     const { data } = req.body;
-
     if (!data) {
       return res.status(400).json({ message: "Encrypted data is required" });
     }
-
-    // Decrypt the data
     const bytes = CryptoJS.AES.decrypt(data, SECRET_KEY);
     const decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
-
     const { otp, email } = decryptedData;
-
     if (!otp || !email) {
       return res.status(400).json({ message: "OTP and email are required" });
+    }
+
+    const userAttempt = otpAttempts[email];
+    const now = Date.now();
+    if (userAttempt && userAttempt.blockedUntil && userAttempt.blockedUntil > now) {
+      const timeLeft = Math.ceil((userAttempt.blockedUntil - now) / 1000);
+      return res.status(429).json({
+        message: `Too many failed attempts. Please try again in ${Math.floor(timeLeft / 60)} minutes ${timeLeft % 60} seconds.`
+      });
     }
 
     const query = "SELECT * FROM reset_pass WHERE code = ? AND email = ?";
@@ -154,11 +162,32 @@ router.post("/verify-otp", async (req, res) => {
       }
 
       if (results.length === 0) {
-        return res.status(400).json({ message: "Invalid OTP" });
+        otpAttempts[email] = otpAttempts[email] || { count: 0, blockedUntil: 0 };
+        otpAttempts[email].count++;
+
+        if (otpAttempts[email].count >= MAX_ATTEMPTS) {
+          otpAttempts[email].blockedUntil = now + BLOCK_TIME;
+          return res.status(429).json({
+            message: "Too many failed attempts. You are blocked for 5 minutes."
+          });
+        }
+
+        return res.status(400).json({
+          message: `Invalid OTP (${MAX_ATTEMPTS - otpAttempts[email].count} attempts remaining)`
+        });
       }
 
       const { userId } = results[0];
-      res.json({ message: "OTP verified successfully", userId });
+
+      delete otpAttempts[email];
+
+      const deleteQuery = "DELETE FROM reset_pass WHERE code = ? AND email = ?";
+      db.query(deleteQuery, [otp, email], (deleteErr) => {
+        if (deleteErr) {
+          console.error("Error deleting OTP after verification:", deleteErr);
+        }
+        return res.json({ message: "OTP verified successfully", userId });
+      });
     });
   } catch (error) {
     console.error("Decryption error:", error);

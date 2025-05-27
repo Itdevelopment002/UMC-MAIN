@@ -105,7 +105,7 @@ const ChangePassword = () => {
           text: "Password updated successfully. Redirecting to login...",
           type: "success"
         });
-        setTimeout(() => navigate("/login"), 2000);
+        setTimeout(() => navigate("/"), 2000);
       }
     } catch (err) {
       if (err.response) {
