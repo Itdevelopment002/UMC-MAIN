@@ -7,7 +7,7 @@ const cron = require("node-cron");
 const bcrypt = require("bcryptjs");
 const rateLimit = require('express-rate-limit');
 const { verifyToken } = require('../middleware/jwtMiddleware.js');
-const {CustomDecryption} = require("../utils/CustomDecryption.js");
+const { CustomDecryption } = require("../utils/CustomDecryption.js");
 
 const queryAsync = (sql, params) => {
   return new Promise((resolve, reject) => {
@@ -76,6 +76,7 @@ const commonPasswords = [
 router.post('/reset-password', otpRateLimiter, async (req, res) => {
   const { email } = req.body;
   const userQuery = "SELECT * FROM users WHERE email = ?";
+
   db.query(userQuery, [email], async (err, results) => {
     if (err) {
       console.error("Error fetching user:", err);
@@ -85,33 +86,46 @@ router.post('/reset-password', otpRateLimiter, async (req, res) => {
     if (results.length === 0) {
       return res.status(400).json({ message: "Invalid email, Please write a valid email." });
     }
+
     const user = results[0];
     const otp = Math.floor(1000 + Math.random() * 9000);
-    const insertQuery = `INSERT INTO reset_pass (email, userId, code, created_at) 
-  VALUES (?, ?, ?, NOW())`;
-    db.query(insertQuery, [email, user.id, otp], (err, results) => {
-      if (err) {
-        console.error("Error storing OTP:", err);
-        return res.status(500).json({ message: "Error storing OTP" });
-      }
-      const mailOptions = {
-        from: `no reply <${process.env.USER1}>`,
-        to: email,
-        subject: "Password Reset OTP",
-        text: `Your OTP for password reset is: ${otp}`,
-      };
 
-      transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-          console.error("Error sending email:", error);
-          return res.status(500).json({ message: "Error sending OTP" });
+    // First delete any existing OTP for this email
+    const deleteQuery = "DELETE FROM reset_pass WHERE email = ?";
+    db.query(deleteQuery, [email], (err) => {
+      if (err) {
+        console.error("Error deleting existing OTP:", err);
+        return res.status(500).json({ message: "Error clearing previous OTP" });
+      }
+
+      // Insert the new OTP
+      const insertQuery = `INSERT INTO reset_pass (email, userId, code, created_at) VALUES (?, ?, ?, NOW())`;
+      db.query(insertQuery, [email, user.id, otp], (err) => {
+        if (err) {
+          console.error("Error storing OTP:", err);
+          return res.status(500).json({ message: "Error storing OTP" });
         }
 
-        res.json({ message: "OTP sent successfully" });
+        const mailOptions = {
+          from: `no reply <${process.env.USER1}>`,
+          to: email,
+          subject: "Password Reset OTP",
+          text: `Your OTP for password reset is: ${otp}`,
+        };
+
+        transporter.sendMail(mailOptions, (error, info) => {
+          if (error) {
+            console.error("Error sending email:", error);
+            return res.status(500).json({ message: "Error sending OTP" });
+          }
+
+          res.json({ message: "OTP sent successfully" });
+        });
       });
     });
   });
 });
+
 
 cron.schedule("*/5 * * * *", () => {
   const query = "DELETE FROM reset_pass WHERE created_at < NOW() - INTERVAL 5 MINUTE";
