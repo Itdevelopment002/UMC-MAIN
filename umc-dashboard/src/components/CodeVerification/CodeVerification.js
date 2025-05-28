@@ -119,9 +119,8 @@ const CustomCodeVerification = () => {
   };
 
   const handleResendOTP = async () => {
-    const encryptedData = encryptData({ email });
     try {
-      const response = await api.post("/resend-otp", { data: encryptedData });
+      const response = await api.post("/resend-otp", { email });
       if (response.data.message === "OTP resent successfully") {
         setTimer(60);
         setIsResendDisabled(true);
@@ -133,9 +132,8 @@ const CustomCodeVerification = () => {
   };
 
   const handleCancel = async () => {
-    const encryptedData = encryptData({ email });
     try {
-      const response = await api.post("/delete-otp", { data: { data: encryptedData } });
+      const response = await api.post("/delete-otp", { email });
       if (response.data.message === "OTP data deleted successfully") {
         navigate("/");
       }
