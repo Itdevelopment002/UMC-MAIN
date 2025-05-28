@@ -4,26 +4,26 @@ import { useNavigate, useLocation } from "react-router-dom";
 import logo from "../../assets/img/umclogo.png";
 import api from "../api";
 import CryptoJS from "crypto-js";
-
+ 
 const SECRET_KEY = process.env.REACT_APP_ENCRYPTION_KEY || "your-secret-key-here";
-
+ 
 const CustomCodeVerification = () => {
   const [code, setCode] = useState(["", "", "", ""]);
   const [message, setMessage] = useState({ text: "", type: "" });
   const [timer, setTimer] = useState(60);
   const [isResendDisabled, setIsResendDisabled] = useState(true);
   const [failedAttempts, setFailedAttempts] = useState(0);
-  const [isBlocked, setIsBlocked] = useState(false); 
+  const [isBlocked, setIsBlocked] = useState(false);
   const inputRefs = useRef([]);
   const navigate = useNavigate();
   const location = useLocation();
   const { email } = location.state || {};
-
+ 
   // Encrypt data function
   const encryptData = (data) => {
     return CryptoJS.AES.encrypt(JSON.stringify(data), SECRET_KEY).toString();
   };
-
+ 
   useEffect(() => {
     let interval;
     if (timer > 0) {
@@ -35,7 +35,7 @@ const CustomCodeVerification = () => {
     }
     return () => clearInterval(interval);
   }, [timer]);
-
+ 
   useEffect(() => {
     if (failedAttempts >= 3) {
       setIsBlocked(true);
@@ -43,7 +43,7 @@ const CustomCodeVerification = () => {
       localStorage.setItem("otp_blocked_until", unblockTime);
     }
   }, [failedAttempts]);
-
+ 
   useEffect(() => {
     const blockedUntil = localStorage.getItem("otp_blocked_until");
     if (blockedUntil && Date.now() < parseInt(blockedUntil)) {
@@ -56,52 +56,52 @@ const CustomCodeVerification = () => {
       return () => clearTimeout(timeout);
     }
   }, []);
-
+ 
   const handleChange = (index, value) => {
     if (/^[0-9]?$/.test(value) && !isBlocked) {
       const newCode = [...code];
       newCode[index] = value;
       setCode(newCode);
-
+ 
       if (message.type === "error") {
         setMessage({ text: "", type: "" });
       }
-
+ 
       if (value && index < 3) {
         inputRefs.current[index + 1].focus();
       }
     }
   };
-
+ 
   const handleKeyDown = (index, e) => {
     if (e.key === "Backspace" && !isBlocked) {
       const newCode = [...code];
-
+ 
       if (!newCode[index] && index > 0) {
         inputRefs.current[index - 1].focus();
       }
-
+ 
       newCode[index] = "";
       setCode(newCode);
-
+ 
       if (message.type === "error") {
         setMessage({ text: "", type: "" });
       }
     }
   };
-
+ 
   const handleSubmit = async () => {
     const otp = code.join("");
-
+ 
     if (otp.length !== 4) {
       setMessage({ text: "Please enter a 4-digit OTP", type: "error" });
       return;
     }
-
+ 
     try {
       const encryptedData = encryptData({ otp, email });
       const response = await api.post("/verify-otp", { data: encryptedData });
-
+ 
       if (response.data.message === "OTP verified successfully") {
         setMessage({ text: "OTP verified successfully!", type: "success" });
         const { userId } = response.data;
@@ -117,11 +117,10 @@ const CustomCodeVerification = () => {
       inputRefs.current[0].focus();
     }
   };
-
+ 
   const handleResendOTP = async () => {
-    const encryptedData = encryptData({ email });
     try {
-      const response = await api.post("/resend-otp", { data: encryptedData });
+      const response = await api.post("/resend-otp", { email });
       if (response.data.message === "OTP resent successfully") {
         setTimer(60);
         setIsResendDisabled(true);
@@ -131,7 +130,7 @@ const CustomCodeVerification = () => {
       setMessage({ text: "Failed to resend OTP. Please try again.", type: "error" });
     }
   };
-
+ 
   const handleCancel = async () => {
     const encryptedData = encryptData({ email });
     try {
@@ -143,7 +142,7 @@ const CustomCodeVerification = () => {
       setMessage({ text: "Failed to cancel. Please try again.", type: "error" });
     }
   };
-
+ 
   return (
     <div className="login-page">
       <div className="row row1 m-0 h-100">
@@ -152,13 +151,13 @@ const CustomCodeVerification = () => {
             <img src={logo} alt="Logo" className="mb-4" />
             <h4 className="text-center">Enter verification code</h4>
             <p className="text-center text-muted">We've sent a code to {email}</p>
-
+ 
             {message.text && (
               <div className={`alert ${message.type === "error" ? "alert-danger" : "alert-success"}`}>
                 {message.text}
               </div>
             )}
-
+ 
             <div className="custom-code-inputs">
               {code.map((num, index) => (
                 <input
@@ -174,7 +173,7 @@ const CustomCodeVerification = () => {
                 />
               ))}
             </div>
-
+ 
             <p className="custom-resend-text text-center">
               {isResendDisabled ? (
                 `Resend OTP in ${timer} seconds`
@@ -184,9 +183,9 @@ const CustomCodeVerification = () => {
                 </button>
               )}
             </p>
-
+ 
             <hr className="mt-4" />
-
+ 
             <div className="custom-button-container12">
               <button onClick={handleCancel} className="custom-btn12 custom-cancel12">
                 Cancel
@@ -201,5 +200,5 @@ const CustomCodeVerification = () => {
     </div>
   );
 };
-
+ 
 export default CustomCodeVerification;
