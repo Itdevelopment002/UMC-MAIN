@@ -132,9 +132,8 @@ const CustomCodeVerification = () => {
   };
  
   const handleCancel = async () => {
-    const encryptedData = encryptData({ email });
     try {
-      const response = await api.post("/delete-otp", { data: { data: encryptedData } });
+      const response = await api.post("/delete-otp", { email });
       if (response.data.message === "OTP data deleted successfully") {
         navigate("/");
       }
