@@ -173,13 +173,37 @@ function App() {
   const navigate = useNavigate();
 
   const handleAutoLogout = () => {
+    if (checkTokenExpiration()) {
+      return;
+    }
     const loginTime = localStorage.getItem("loginTime");
     if (loginTime) {
       const currentTime = new Date().getTime();
       if (currentTime - loginTime > LOGOUT_TIME) {
         handleLogout();
-        navigate("/");
       }
+    }
+  };
+
+  const checkTokenExpiration = () => {
+    const token = localStorage.getItem("authToken");
+    if (!token) {
+      handleLogout();
+      return true;
+    }
+
+    try {
+      const decoded = jwtDecode(token);
+      const currentTime = Date.now() / 1000;
+      if (decoded.exp < currentTime) {
+        handleLogout();
+        return true;
+      }
+      return false;
+    } catch (err) {
+      console.error("Invalid token:", err);
+      handleLogout();
+      return true;
     }
   };
 
@@ -202,7 +226,9 @@ function App() {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      handleAutoLogout();
+      if (isAuthenticated) {
+        handleAutoLogout();
+      }
     }, 1000);
 
     return () => clearInterval(interval);
@@ -214,11 +240,27 @@ function App() {
     if (token) {
       try {
         const decoded = jwtDecode(token);
+
+        const currentTime = Date.now() / 1000;
+        if (decoded.exp < currentTime) {
+          handleLogout();
+          return;
+        }
+
         setUserData(decoded);
+
+        const timeout = (decoded.exp * 1000) - Date.now();
+        const timer = setTimeout(() => {
+          handleLogout();
+        }, timeout > 0 ? timeout : 0);
+
+        return () => clearTimeout(timer);
       } catch (err) {
         console.error("Invalid token:", err);
+        handleLogout();
       }
     }
+    //eslint-disable-next-line
   }, [isAuthenticated]);
 
   const handleLogin = () => {
@@ -233,13 +275,15 @@ function App() {
   const handleLogout = async () => {
     try {
       await api.post("/logout", {});
+    } catch (error) {
+      console.error("Logout failed:", error);
+    } finally {
       localStorage.removeItem("authToken");
       localStorage.removeItem("lastVisitedRoute");
       localStorage.removeItem("loginTime");
       setUserData({});
       setIsAuthenticated(false);
-    } catch (error) {
-      console.error("Logout failed:", error);
+      navigate("/");
     }
   };
 

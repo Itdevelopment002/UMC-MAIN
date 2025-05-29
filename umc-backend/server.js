@@ -19,16 +19,8 @@ app.use(cors({
 }));
 
 app.use(express.json());
-app.set('trust proxy', true);
+app.set('trust proxy', 1);
 
-const rateLimit = require('express-rate-limit');
-
-// Middleware config
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 100,
-});
-app.use(limiter);
 app.use((req, res, next) => {
     const allowedMethods = ['GET', 'POST'];
     if (!allowedMethods.includes(req.method)) {
@@ -315,11 +307,11 @@ app.use((err, req, res, next) => {
     if (err.message === 'Not allowed by CORS') {
         return res.status(403).json({ error: 'Access denied: CORS policy violation' });
     }
-    console.error('❌ Server Error:', err.message); // only log error message
+    console.error('❌ Server Error:', err.message); 
  
     res.status(500).json({
         success: false,
-        message: 'Internal Server Error' // Always show only this message
+        message: 'Internal Server Error' 
     });
 });
 
