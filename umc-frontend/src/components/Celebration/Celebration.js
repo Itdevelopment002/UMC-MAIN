@@ -12,29 +12,35 @@ const Celebration = ({ onStart }) => {
     const [fallingItems, setFallingItems] = useState([]);
     const [status, setStatus] = useState("Disable");
 
-    useEffect(() => {
-        const fetchStatuses = async () => {
-            try {
-                const [celebrationRes, cuttingRes] = await Promise.all([
-                    api.get("/celebration/1"),
-                    api.get("/cutting/1"),
-                ]);
+useEffect(() => {
+    let intervalId;
 
-                const celebrationStatus = celebrationRes.data.status;
-                setStatus(celebrationStatus);
+    const fetchStatuses = async () => {
+        try {
+            const [celebrationRes, cuttingRes] = await Promise.all([
+                api.get("/celebration/1"),
+                api.get("/cutting/1"),
+            ]);
 
-                if (celebrationStatus === "Enable" && cuttingRes.data.status === "Yes") {
-                    handleCut();
-                }
-            } catch (error) {
-                console.error("Error fetching statuses:", error);
+            const celebrationStatus = celebrationRes.data.status;
+            setStatus(celebrationStatus);
+
+            if (celebrationStatus === "Enable" && cuttingRes.data.status === "Yes") {
+                clearInterval(intervalId); 
+                handleCut();
             }
-        };
+        } catch (error) {
+            console.error("Error fetching statuses:", error);
+        }
+    };
 
-        const intervalId = setInterval(fetchStatuses, 1000);
-        return () => clearInterval(intervalId);
-        //eslint-disable-next-line
-    }, []);
+    fetchStatuses(); // initial call
+    intervalId = setInterval(fetchStatuses, 10000); 
+
+    return () => clearInterval(intervalId); 
+}, []);
+
+
 
     const playSound = () => {
         const audio = new Audio(celebrationSound);
