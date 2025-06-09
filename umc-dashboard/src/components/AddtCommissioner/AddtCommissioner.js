@@ -4,9 +4,8 @@ import api, { baseURL } from "../api";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import GLightbox from "glightbox";
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
 import "glightbox/dist/css/glightbox.min.css";
+import CKEditorComponent from "../CKEditorComponent/CKEditorComponent";
 
 const AddtCommissioner = () => {
     const [coData, setCoData] = useState([]);
@@ -343,30 +342,11 @@ const AddtCommissioner = () => {
                                         </div>
                                         <div className="form-group">
                                             <label htmlFor="description">Commissioner Description</label>
-                                            <ReactQuill
-                                                theme="snow"
+                                            <CKEditorComponent
                                                 value={editData.description}
                                                 onChange={(value) =>
                                                     setEditData({ ...editData, description: value })
                                                 }
-                                                modules={{
-                                                    toolbar: [
-                                                        [{ header: [1, 2, 3, false] }],
-                                                        ["bold", "italic", "underline", "strike"],
-                                                        [{ list: "ordered" }, { list: "bullet" }],
-                                                        [{ align: [] }],
-                                                        [{ color: [] }, { background: [] }],
-                                                        ["link", "image"],
-                                                        ["clean"],
-                                                    ],
-                                                }}
-                                                formats={[
-                                                    "header",
-                                                    "bold", "italic", "underline", "strike",
-                                                    "list", "bullet",
-                                                    "align", "color", "background",
-                                                    "link", "image",
-                                                ]}
                                             />
                                         </div>
                                         <div className="form-group">

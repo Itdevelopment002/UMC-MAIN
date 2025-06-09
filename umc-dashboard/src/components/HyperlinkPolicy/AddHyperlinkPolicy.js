@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
+import CKEditorComponent from "../CKEditorComponent/CKEditorComponent";
 import api from "../api";
 
 const AddHyperlinkPolicy = () => {
@@ -109,37 +108,15 @@ const AddHyperlinkPolicy = () => {
                       Policy Description <span className="text-danger">*</span>
                     </label>
                     <div className="col-md-8">
-                      <ReactQuill
-                        theme="snow"
+                      <CKEditorComponent
                         value={description}
-                        onChange={(value) => {
-                          setDescription(value);
+                        placeholder="Enter Description"
+                        onChange={(data) => {
+                          setDescription(data);
                           if (errors.description) {
                             setErrors({ ...errors, description: "" });
                           }
                         }}
-                        placeholder="Enter Description"
-                        className={`form-control ${errors.description ? "is-invalid" : ""
-                          }`}
-                        modules={{
-                          toolbar: [
-                            [{ header: [1, 2, 3, false] }],
-                            ["bold", "italic", "underline", "strike"],
-                            [{ list: "ordered" }, { list: "bullet" }],
-                            [{ align: [] }],
-                            [{ color: [] }, { background: [] }],
-                            [{ font: [] }],
-                            ["link", "image"],
-                            ["clean"],
-                          ],
-                        }}
-                        formats={[
-                          "header",
-                          "bold", "italic", "underline", "strike",
-                          "list", "bullet",
-                          "align", "color", "background",
-                          "font", "link", "image"
-                        ]}
                       />
                       {errors.description && (
                         <small className="text-danger">
