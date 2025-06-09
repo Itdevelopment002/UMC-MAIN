@@ -3,8 +3,7 @@ import { Link } from "react-router-dom";
 import api from "../api";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
+import CKEditorComponent from "../CKEditorComponent/CKEditorComponent";
 
 const HyperlinkPolicy = () => {
   const [conditionsData, setConditionsData] = useState([]);
@@ -43,7 +42,7 @@ const HyperlinkPolicy = () => {
 
   const handleEditSave = async () => {
     try {
-      await api.postt(`/edit-hyperlink-policy/${selectedCondition.id}`, {
+      await api.post(`/edit-hyperlink-policy/${selectedCondition.id}`, {
         description: selectedCondition.description,
         language_code: selectedCondition.language_code,
       });
@@ -290,28 +289,9 @@ const HyperlinkPolicy = () => {
                       </div>
                       <div className="mb-3">
                         <label className="form-label">Commissioner Description</label>
-                        <ReactQuill
-                          theme="snow"
+                        <CKEditorComponent
                           value={selectedCondition.description || ""}
                           onChange={handleDescriptionChange}
-                          modules={{
-                            toolbar: [
-                              [{ header: [1, 2, 3, false] }],
-                              ["bold", "italic", "underline", "strike"],
-                              [{ list: "ordered" }, { list: "bullet" }],
-                              [{ align: [] }],
-                              [{ color: [] }, { background: [] }],
-                              ["link", "image"],
-                              ["clean"],
-                            ],
-                          }}
-                          formats={[
-                            "header",
-                            "bold", "italic", "underline", "strike",
-                            "list", "bullet",
-                            "align", "color", "background",
-                            "link", "image",
-                          ]}
                         />
                       </div>
                     </form>
