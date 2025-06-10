@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export const baseURL = process.env.REACT_APP_API_BASE_URL;
+export const baseURL = 'https://umc.gov.in/api/api';
 
 const api = axios.create({
   baseURL,
