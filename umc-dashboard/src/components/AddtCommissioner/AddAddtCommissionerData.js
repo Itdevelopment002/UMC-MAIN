@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
+import CKEditorComponent from "../CKEditorComponent/CKEditorComponent";
 import api from "../api";
 
 const AddAddtCommissionerData = () => {
@@ -256,32 +255,12 @@ const AddAddtCommissionerData = () => {
                       Commissioner Description <span className="text-danger">*</span>
                     </label>
                     <div className="col-md-8">
-                      <ReactQuill
-                        theme="snow"
+                      <CKEditorComponent
                         value={formData.description}
                         onChange={handleDescriptionChange}
                         placeholder="Enter Description"
                         className={`form-control ${errors.description ? "is-invalid" : ""
                           }`}
-                        modules={{
-                          toolbar: [
-                            [{ header: [1, 2, 3, false] }],
-                            ["bold", "italic", "underline", "strike"],
-                            [{ list: "ordered" }, { list: "bullet" }],
-                            [{ align: [] }],
-                            [{ color: [] }, { background: [] }],
-                            [{ font: [] }],
-                            ["link", "image"],
-                            ["clean"],
-                          ],
-                        }}
-                        formats={[
-                          "header",
-                          "bold", "italic", "underline", "strike",
-                          "list", "bullet",
-                          "align", "color", "background",
-                          "font", "link", "image"
-                        ]}
                       />
                       {errors.description && (
                         <div className="invalid-feedback">{errors.description}</div>
