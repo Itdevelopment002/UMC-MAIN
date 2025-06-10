@@ -89,7 +89,7 @@ const HandicapWelfareScheme = () => {
   };
 
 
-  const department_name = (i18n.language === 'en') ? "Handicap Welfare Department" : "दिव्यांग कल्याणकारी विभाग"
+  const department_name = (i18n.language === 'en') ? "Persons with Disabilities Welfare Department" : "दिव्यांग कल्याणकारी विभाग"
 
   const fetchBanner = async () => {
     try {

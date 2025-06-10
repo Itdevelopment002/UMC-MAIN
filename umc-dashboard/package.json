@@ -2,7 +2,10 @@
     "name": "umc-dashboard",
     "version": "0.1.0",
     "private": true,
+    "homepage": "/admin",
     "dependencies": {
+        "@ckeditor/ckeditor5-build-classic": "^44.3.0",
+        "@ckeditor/ckeditor5-react": "^9.5.0",
         "@fortawesome/fontawesome-svg-core": "^6.7.2",
         "@fortawesome/free-solid-svg-icons": "^6.7.2",
         "@fortawesome/react-fontawesome": "^0.2.2",
@@ -28,7 +31,6 @@
         "react-google-recaptcha": "^3.1.0",
         "react-icons": "^5.5.0",
         "react-jquery-plugin": "^1.1.7",
-        "react-quill": "^2.0.0",
         "react-router-dom": "^7.6.0",
         "react-scripts": "^5.0.1",
         "react-scrollbars-custom": "^4.1.1",
@@ -41,7 +43,7 @@
         "web-vitals": "^5.0.0"
     },
     "scripts": {
-        "start": "cross-env PORT=3018 react-scripts start",
+        "start": "cross-env NODE_OPTIONS=--no-deprecation PORT=3033 react-scripts start",
         "build": "react-scripts build",
         "test": "react-scripts test",
         "eject": "react-scripts eject"
