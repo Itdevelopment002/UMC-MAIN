@@ -4,8 +4,6 @@
     "private": true,
     "homepage": "/admin",
     "dependencies": {
-        "@ckeditor/ckeditor5-build-classic": "^44.3.0",
-        "@ckeditor/ckeditor5-react": "^9.5.0",
         "@fortawesome/fontawesome-svg-core": "^6.7.2",
         "@fortawesome/free-solid-svg-icons": "^6.7.2",
         "@fortawesome/react-fontawesome": "^0.2.2",
