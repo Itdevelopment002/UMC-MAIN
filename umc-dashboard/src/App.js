@@ -56,7 +56,8 @@ import AddDataTable1 from "./components/Location/AddDataTable1";
 import AddDataTable2 from "./components/Location/AddDataTable2";
 import AddDataTable3 from "./components/Location/AddDataTable3";
 import AddDataTable4 from "./components/Location/AddDataTable4";
-import AddCommissionerData from "./components/Commissioner/AddCommissionerData";
+import AddCommissionerDetails from "./components/Commissioner/AddCommissionerDetails";
+import AddCommissionerDesc from "./components/Commissioner/AddCommissionerDesc";
 import Commissioner from "./components/Commissioner/Commissioner";
 import AddAddtCommissionerData from "./components/AddtCommissioner/AddAddtCommissionerData";
 import AddtCommissioner from "./components/AddtCommissioner/AddtCommissioner";
@@ -382,7 +383,8 @@ function App() {
                         <Route path="/add-datatable3" element={<AddDataTable3 />} />
                         <Route path="/add-datatable4" element={<AddDataTable4 />} />
                         <Route path="/commissioner" element={<Commissioner />} />
-                        <Route path="/add-commissioner-data" element={<AddCommissionerData />} />
+                        <Route path="/add-commissioner-details" element={<AddCommissionerDetails />} />
+                        <Route path="/add-commissioner-desc" element={<AddCommissionerDesc />} />
                         <Route path="/additional-commissioner" element={<AddtCommissioner />} />
                         <Route path="/add-addt-commissioner-data" element={<AddAddtCommissionerData />} />
                         <Route path="/deputy-commissioner" element={<DeptCommissioner />} />

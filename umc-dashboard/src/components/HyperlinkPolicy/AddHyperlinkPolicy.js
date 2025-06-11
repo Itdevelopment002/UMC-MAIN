@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
-import CKEditorComponent from "../CKEditorComponent/CKEditorComponent";
 import api from "../api";
 
 const AddHyperlinkPolicy = () => {
@@ -104,27 +103,28 @@ const AddHyperlinkPolicy = () => {
                   </div>
 
                   <div className="form-group row">
-                    <label className="col-form-label col-lg-2">
+                    <label className="col-form-label col-md-2">
                       Policy Description <span className="text-danger">*</span>
                     </label>
-                    <div className="col-md-8">
-                      <CKEditorComponent
-                        value={description}
+                    <div className="col-md-4">
+                      <textarea
+                        className="form-control"
                         placeholder="Enter Description"
-                        onChange={(data) => {
-                          setDescription(data);
+                        value={description}
+                        onChange={(e) => {
+                          setDescription(e.target.value);
                           if (errors.description) {
                             setErrors({ ...errors, description: "" });
                           }
                         }}
+                        rows={5} // You can adjust the height
                       />
                       {errors.description && (
-                        <small className="text-danger">
-                          {errors.description}
-                        </small>
+                        <small className="text-danger">{errors.description}</small>
                       )}
                     </div>
                   </div>
+
 
                   <input
                     type="submit"
