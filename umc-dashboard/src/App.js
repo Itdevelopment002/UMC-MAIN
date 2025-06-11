@@ -59,11 +59,14 @@ import AddDataTable4 from "./components/Location/AddDataTable4";
 import AddCommissionerDetails from "./components/Commissioner/AddCommissionerDetails";
 import AddCommissionerDesc from "./components/Commissioner/AddCommissionerDesc";
 import Commissioner from "./components/Commissioner/Commissioner";
-import AddAddtCommissionerData from "./components/AddtCommissioner/AddAddtCommissionerData";
+import AddAddtCommissionerDetails from "./components/AddtCommissioner/AddAddtCommissionerDetails";
+import AddAddtCommissionerDesc from "./components/AddtCommissioner/AddAddtCommissionerDesc";
 import AddtCommissioner from "./components/AddtCommissioner/AddtCommissioner";
-import AddAsstCommissionerData from "./components/AsstCommissioner/AddAsstCommissionerData";
+import AddAsstCommissionerDetails from "./components/AsstCommissioner/AddAsstCommissionerDetails";
+import AddAsstCommissionerDesc from "./components/AsstCommissioner/AddAsstCommissionerDesc";
 import AsstCommissioner from "./components/AsstCommissioner/AsstCommissioner";
-import AddDeptCommissionerData from "./components/DeptCommissioner/AddDeptCommissionerData";
+import AddDeptCommissionerDetails from "./components/DeptCommissioner/AddDeptCommissionerDetails";
+import AddDeptCommissionerDesc from "./components/DeptCommissioner/AddDeptCommissionerDesc";
 import DeptCommissioner from "./components/DeptCommissioner/DeptCommissioner";
 import UmcHistory from "./components/UmcHistory/UmcHistory";
 import AddHistoryImage from "./components/UmcHistory/AddHistoryImage";
@@ -386,11 +389,14 @@ function App() {
                         <Route path="/add-commissioner-details" element={<AddCommissionerDetails />} />
                         <Route path="/add-commissioner-desc" element={<AddCommissionerDesc />} />
                         <Route path="/additional-commissioner" element={<AddtCommissioner />} />
-                        <Route path="/add-addt-commissioner-data" element={<AddAddtCommissionerData />} />
+                        <Route path="/add-addt-commissioner-details" element={<AddAddtCommissionerDetails />} />
+                        <Route path="/add-addt-commissioner-desc" element={<AddAddtCommissionerDesc />} />
                         <Route path="/deputy-commissioner" element={<DeptCommissioner />} />
-                        <Route path="/add-dept-commissioner-data" element={<AddDeptCommissionerData />} />
+                        <Route path="/add-dept-commissioner-details" element={<AddDeptCommissionerDetails />} />
+                        <Route path="/add-dept-commissioner-desc" element={<AddDeptCommissionerDesc />} />
                         <Route path="/assistant-commissioner" element={<AsstCommissioner />} />
-                        <Route path="/add-asst-commissioner-data" element={<AddAsstCommissionerData />} />
+                        <Route path="/add-asst-commissioner-details" element={<AddAsstCommissionerDetails />} />
+                        <Route path="/add-asst-commissioner-desc" element={<AddAsstCommissionerDesc />} />
                         <Route path="/history" element={<UmcHistory />} />
                         <Route path="/add-historyImage" element={<AddHistoryImage />} />
                         <Route path="/tourism" element={<Tourism />} />

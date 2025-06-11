@@ -11,22 +11,28 @@ import api, { baseURL } from "../api";
 import { useTranslation } from "react-i18next";
 
 const AddtCommissioner = () => {
-  const [coData, setCoData] = useState([]);
+  const [commissioners, setCommissioners] = useState([]);
+  const [descriptions, setDescriptions] = useState([]);
   const [bgImage, setBgImage] = useState("");
   const { i18n, t } = useTranslation();
 
   useEffect(() => {
-    fetchCoData();
+    fetchCommissionerData();
     fetchHeaderImage();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [i18n.language]);
 
-  const fetchCoData = async () => {
+  const fetchCommissionerData = async () => {
     try {
-      const response = await api.get(`/addt-commissioner-data?lang=${i18n.language}`);
-      setCoData(response.data);
+      const [detailsResponse, descResponse] = await Promise.all([
+        api.get(`/addt-commissioner-details?lang=${i18n.language}`),
+        api.get(`/addt-commissioner-desc?lang=${i18n.language}`)
+      ]);
+
+      setCommissioners(detailsResponse.data);
+      setDescriptions(descResponse.data);
     } catch (error) {
-      console.error("Failed to fetch Additional Commissioner Details data!");
+      console.error("Failed to fetch Commissioner data!", error);
     }
   };
 
@@ -45,6 +51,10 @@ const AddtCommissioner = () => {
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
+
+  const getDescriptionForCommissioner = (commissionerName) => {
+    return descriptions.filter(desc => desc.commissioner_name === commissionerName);
+  };
 
   return (
     <>
@@ -71,7 +81,8 @@ const AddtCommissioner = () => {
             <span className="highlighted-text"> {t('addt-commissioner.highlight-text')}</span>
           </h2>
 
-          {coData.map((commissioner, index) => {
+          {commissioners.map((commissioner, index) => {
+            const descriptionsForThisCommissioner = getDescriptionForCommissioner(commissioner.coName);
             return (
               <React.Fragment key={index}>
                 <div className="row mt-4">
@@ -157,26 +168,33 @@ const AddtCommissioner = () => {
                   </div>
                 </div>
 
-                <div className="row mt-2">
-                  <div className="col-lg-12 col-md-12 col-sm-12 col-12">
-                    <div className="commisioner-overview">
-                      <h4>{t("addt-commisioner-overview")}</h4>
-                    </div>
-                    <p style={{ color: "#666565" }} dangerouslySetInnerHTML={{ __html: commissioner.description }}></p>
-                  </div>
-                </div>
+                {descriptionsForThisCommissioner.length > 0 && (
+                  <div className="row mt-2">
+                    <div className="col-lg-12 col-md-12 col-sm-12 col-12">
+                      <div className="commisioner-overview">
+                        <h4>{t("asst-commisioner-overview")}</h4>
+                      </div>
 
-                {index < coData.length - 1 && (
+                      {descriptionsForThisCommissioner.map((item, idx) => (
+                        <p key={idx} style={{ color: "#666565" }}>
+                          {item.description}
+                        </p>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {index < commissioners.length - 1 && (
                   <hr className="my-4" style={{ borderTop: '2px solid #666565' }} />
                 )}
               </React.Fragment>
             );
           })}
 
-          {coData.length === 0 && (
+          {commissioners.length === 0 && (
             <div className="row mt-4">
               <div className="col-12 text-center">
-                <p>No Additional commissioner data available</p>
+                <p>No commissioner data available</p>
               </div>
             </div>
           )}
