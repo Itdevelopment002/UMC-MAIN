@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import CKEditorComponent from "../CKEditorComponent/CKEditorComponent";
 import api from "../api";
 
-const AddAddtCommissionerData = () => {
+const AddAddtCommissionerDetails = () => {
   const [formData, setFormData] = useState({
     coName: "",
     designation: "",
@@ -11,7 +10,6 @@ const AddAddtCommissionerData = () => {
     address: "",
     number: "",
     email: "",
-    description: "",
     language_code: "",
     coImage: null,
   });
@@ -30,11 +28,6 @@ const AddAddtCommissionerData = () => {
     setErrors({ ...errors, coImage: "" });
   };
 
-  const handleDescriptionChange = (value) => {
-    setFormData({ ...formData, description: value });
-    setErrors({ ...errors, description: "" });
-  };
-
   const validateForm = () => {
     const newErrors = {};
     if (!formData.coName.trim()) newErrors.coName = "Commissioner Name is required.";
@@ -47,11 +40,12 @@ const AddAddtCommissionerData = () => {
     if (!formData.language_code.trim()) newErrors.language_code = "Language Selection is required.";
     if (!formData.email.trim()) {
       newErrors.email = "Email Id is required.";
+    } else if (
+      !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(formData.email)
+    ) {
+      newErrors.email = "Invalid email format.";
     }
     if (!formData.coImage) newErrors.coImage = "Commissioner Image is required.";
-    if (!formData.description || formData.description === "<p><br></p>") {
-      newErrors.description = "Commissioner Description is required.";
-    }
     return newErrors;
   };
 
@@ -71,15 +65,14 @@ const AddAddtCommissionerData = () => {
     data.append("address", formData.address);
     data.append("number", formData.number);
     data.append("email", formData.email);
-    data.append("description", formData.description);
     data.append("language_code", formData.language_code);
     if (formData.coImage) data.append("coImage", formData.coImage);
 
     try {
-      const response = await api.post("/addt-commissioner-data", data, {
+      const response = await api.post("/addt-commissioner-details", data, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-      if (response.status === 200) {
+      if (response.status === 201) {
         navigate("/additional-commissioner");
       }
     } catch (error) {
@@ -98,12 +91,12 @@ const AddAddtCommissionerData = () => {
             <li className="breadcrumb-item">
               <Link to="/additional-commissioner">Additional Commissioner</Link>
             </li>
-            <li className="breadcrumb-item active">Add Additional Commissioner Data</li>
+            <li className="breadcrumb-item active">Add Additional Commissioner Details</li>
           </ol>
           <div className="row">
             <div className="col-lg-12">
               <div className="card-box">
-                <h4 className="page-title">Add Additional Commissioner Data</h4>
+                <h4 className="page-title">Add Additional Commissioner Details</h4>
                 <form onSubmit={handleSubmit}>
                   <div className="form-group row">
                     <label className="col-form-label col-md-3">
@@ -121,9 +114,7 @@ const AddAddtCommissionerData = () => {
                         <option value="en">English</option>
                         <option value="mr">Marathi</option>
                       </select>
-                      {errors.language_code && (
-                        <div className="invalid-feedback">{errors.language_code}</div>
-                      )}
+                      {errors.language && <div className="invalid-feedback">{errors.language}</div>}
                     </div>
                   </div>
                   <div className="form-group row">
@@ -138,7 +129,7 @@ const AddAddtCommissionerData = () => {
                         name="coName"
                         value={formData.coName}
                         onChange={handleChange}
-                        placeholder="Enter Commissioner Name"
+                        placeholder="Enter CO Name"
                       />
                       {errors.coName && (
                         <div className="invalid-feedback">{errors.coName}</div>
@@ -236,7 +227,7 @@ const AddAddtCommissionerData = () => {
                     </label>
                     <div className="col-md-4">
                       <input
-                        type="text"
+                        type="email"
                         className={`form-control ${errors.email ? "is-invalid" : ""
                           }`}
                         name="email"
@@ -252,32 +243,14 @@ const AddAddtCommissionerData = () => {
 
                   <div className="form-group row">
                     <label className="col-form-label col-md-3">
-                      Commissioner Description <span className="text-danger">*</span>
-                    </label>
-                    <div className="col-md-8">
-                      <CKEditorComponent
-                        value={formData.description}
-                        onChange={handleDescriptionChange}
-                        placeholder="Enter Description"
-                        className={`form-control ${errors.description ? "is-invalid" : ""
-                          }`}
-                      />
-                      {errors.description && (
-                        <div className="invalid-feedback">{errors.description}</div>
-                      )}
-                    </div>
-                  </div>
-
-                  <div className="form-group row">
-                    <label className="col-form-label col-md-3 col-lg-3">
-                      Commissioner Image <span className="text-danger">*</span>
+                      CO Image <span className="text-danger">*</span>
                     </label>
                     <div className="col-md-4">
                       <input
                         type="file"
+                        accept="image/*"
                         className={`form-control ${errors.coImage ? "is-invalid" : ""
                           }`}
-                        accept="image/*"
                         name="coImage"
                         onChange={handleFileChange}
                       />
@@ -305,4 +278,4 @@ const AddAddtCommissionerData = () => {
   );
 };
 
-export default AddAddtCommissionerData;
+export default AddAddtCommissionerDetails;

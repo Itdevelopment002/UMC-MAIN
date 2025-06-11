@@ -25,8 +25,7 @@ const deleteFileIfExists = async (filePath) => {
 const validateAssistantCommissionerData = (data) => {
   const requiredFields = [
     'coName', 'designation', 'qualification',
-    'address', 'number', 'email',
-    'description', 'language_code'
+    'address', 'number', 'email', 'language_code'
   ];
 
   const missingFields = requiredFields.filter(field => !data[field]);
@@ -57,7 +56,8 @@ const validateAssistantCommissionerData = (data) => {
   return { isValid: true };
 };
 
-router.get("/asst-commissioner-data", (req, res) => {
+
+router.get("/asst-commissioner-details", (req, res) => {
   const language = req.query.lang;
   let query;
   let params = [];
@@ -75,7 +75,8 @@ router.get("/asst-commissioner-data", (req, res) => {
   });
 });
 
-router.get("/asst-commissioner-data/:id", (req, res) => {
+
+router.get("/asst-commissioner-details/:id", (req, res) => {
   const { id } = req.params;
   const sql = "SELECT * FROM asst_commissioner_details WHERE id = ?";
   db.query(sql, [id], (err, result) => {
@@ -89,8 +90,48 @@ router.get("/asst-commissioner-data/:id", (req, res) => {
   });
 });
 
+
+router.get("/asst-commissioner-desc", (req, res) => {
+  const { lang, commissioner } = req.query;
+  let query = "SELECT * FROM asst_commissioner_desc";
+  let params = [];
+
+  if (lang && commissioner) {
+    query += " WHERE language_code = ? AND commissioner_name = ?";
+    params.push(lang, commissioner);
+  } else if (lang) {
+    query += " WHERE language_code = ?";
+    params.push(lang);
+  } else if (commissioner) {
+    query += " WHERE commissioner_name = ?";
+    params.push(commissioner);
+  }
+
+  db.query(query, params, (err, results) => {
+    if (err) {
+      return res.status(500).json({ message: "Database error", error: err });
+    }
+    res.status(200).json(results);
+  });
+});
+
+router.get("/asst-commissioner-desc/:id", (req, res) => {
+  const { id } = req.params;
+  const sql = "SELECT * FROM asst_commissioner_desc WHERE id = ?";
+  db.query(sql, [id], (err, result) => {
+    if (err) {
+      return res.status(500).json({ message: "Database error", error: err });
+    }
+    if (result.length === 0) {
+      return res.status(404).json({ message: "Assistant Commissioner description not found" });
+    }
+    res.status(200).json(result[0]);
+  });
+});
+
+
 router.post(
-  "/asst-commissioner-data",
+  "/asst-commissioner-details",
   verifyToken,
   upload.single("coImage"),
   handleMulterError,
@@ -105,7 +146,6 @@ router.post(
       address,
       number,
       email,
-      description,
       language_code
     } = req.body;
 
@@ -122,8 +162,8 @@ router.post(
 
     const sql = `
       INSERT INTO asst_commissioner_details 
-      (coName, designation, qualification, address, number, email, description, language_code, image_path) 
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+      (coName, designation, qualification, address, number, email, language_code, image_path) 
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
     `;
 
     db.query(sql, [
@@ -133,7 +173,6 @@ router.post(
       address,
       number,
       email,
-      description,
       language_code,
       imagePath
     ], async (err, result) => {
@@ -154,8 +193,37 @@ router.post(
   }
 );
 
+
+router.post("/asst-commissioner-desc", verifyToken, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
+  const { description, language_code, commissioner_name } = req.body;
+
+  if (!description || !language_code || !commissioner_name) {
+    return res.status(400).json({ message: "All fields are required" });
+  }
+
+  const sql = `
+    INSERT INTO asst_commissioner_desc 
+    (commissioner_name, description, language_code) 
+    VALUES (?, ?, ?)
+  `;
+
+  db.query(sql, [commissioner_name, description, language_code], (err, result) => {
+    if (err) {
+      return res.status(500).json({ message: "Database error", error: err });
+    }
+    res.status(201).json({
+      message: "Assistant Commissioner description added successfully",
+      id: result.insertId
+    });
+  });
+});
+
+
 router.post(
-  "/edit-asst-commissioner-data/:id",
+  "/edit-asst-commissioner-details/:id",
   verifyToken,
   upload.single("coImage"),
   handleMulterError,
@@ -171,12 +239,11 @@ router.post(
       address,
       number,
       email,
-      description,
       language_code
     } = req.body;
 
     if (!coName && !designation && !qualification && !address &&
-      !number && !email && !description && !language_code && !req.file) {
+      !number && !email && !language_code && !req.file) {
       return res.status(400).json({ message: "No fields to update" });
     }
 
@@ -207,10 +274,6 @@ router.post(
     if (email) {
       updates.push("email = ?");
       updateParams.push(email);
-    }
-    if (description) {
-      updates.push("description = ?");
-      updateParams.push(description);
     }
     if (language_code) {
       updates.push("language_code = ?");
@@ -264,8 +327,34 @@ router.post(
   }
 );
 
+
+router.post("/edit-asst-commissioner-desc/:id", verifyToken, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
+  const { id } = req.params;
+  const { description, language_code, commissioner_name } = req.body;
+
+  const sql = `
+    UPDATE asst_commissioner_desc 
+    SET commissioner_name = ?, description = ?, language_code = ?
+    WHERE id = ?
+  `;
+
+  db.query(sql, [commissioner_name, description, language_code, id], (err, result) => {
+    if (err) {
+      return res.status(500).json({ message: "Database error", error: err });
+    }
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: "Assistant Commissioner description not found" });
+    }
+    res.status(200).json({ message: "Assistant Commissioner description updated successfully" });
+  });
+});
+
+
 router.post(
-  "/delete-asst-commissioner-data/:id",
+  "/delete-asst-commissioner-details/:id",
   verifyToken,
   async (req, res) => {
     if (req.user?.role === "Admin") {
@@ -309,5 +398,25 @@ router.post(
     });
   }
 );
+
+
+router.post("/delete-asst-commissioner-desc/:id", verifyToken, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+  }
+  const { id } = req.params;
+  const sql = "DELETE FROM asst_commissioner_desc WHERE id = ?";
+
+  db.query(sql, [id], (err, result) => {
+    if (err) {
+      return res.status(500).json({ message: "Database error", error: err });
+    }
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: "Assistant Commissioner description not found" });
+    }
+    res.status(200).json({ message: "Assistant Commissioner description deleted successfully" });
+  });
+});
+
 
 module.exports = router;
