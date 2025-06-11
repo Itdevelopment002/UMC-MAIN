@@ -137,7 +137,7 @@ const Commissioner = () => {
             }
 
             // Display success message
-            toast.success('Commissioner Information update suceessfully'
+            toast.success('Commissioner Information update successfully'
             );
 
             // Redirect to the appropriate page if needed

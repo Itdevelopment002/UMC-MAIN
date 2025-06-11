@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import api from "../api";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import CKEditorComponent from "../CKEditorComponent/CKEditorComponent";
 
 const HyperlinkPolicy = () => {
   const [conditionsData, setConditionsData] = useState([]);
