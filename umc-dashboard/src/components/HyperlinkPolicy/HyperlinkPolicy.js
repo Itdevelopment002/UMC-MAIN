@@ -289,9 +289,11 @@ const HyperlinkPolicy = () => {
                       </div>
                       <div className="mb-3">
                         <label className="form-label">Commissioner Description</label>
-                        <CKEditorComponent
+                        <textarea
+                          className="form-control"
                           value={selectedCondition.description || ""}
-                          onChange={handleDescriptionChange}
+                          onChange={(e) => handleDescriptionChange(e.target.value)}
+                          rows={5}
                         />
                       </div>
                     </form>

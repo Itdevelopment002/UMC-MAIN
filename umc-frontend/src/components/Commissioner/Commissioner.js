@@ -12,11 +12,13 @@ import { useTranslation } from "react-i18next";
 
 const Commissioner = () => {
   const [coData, setCoData] = useState([]);
+  const [coDesc, setCoDesc] = useState([]);
   const [bgImage, setBgImage] = useState("");
   const { i18n, t } = useTranslation();
 
   useEffect(() => {
     fetchCoData();
+    fetchCoDesc();
     fetchHeaderImage();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [i18n.language]);
@@ -27,6 +29,15 @@ const Commissioner = () => {
       setCoData(response.data);
     } catch (error) {
       console.error("Failed to fetch Commissioner Details data!");
+    }
+  };
+
+  const fetchCoDesc = async () => {
+    try {
+      const response = await api.get(`/commissioner-desc?lang=${i18n.language}`);
+      setCoDesc(response.data);
+    } catch (error) {
+      console.error("Failed to fetch Commissioner Description data!");
     }
   };
 
@@ -116,7 +127,7 @@ const Commissioner = () => {
                         <strong className="label">{t('commissioner.designation')} :</strong>
                         <span className="value">
                           {" "}
-                          {coData[0]?.designation}{t('commissioner.designationText')}
+                          {coData[0]?.designation} {t('commissioner.designationText')}
                         </span>
                       </div>
                     </div>
@@ -175,8 +186,12 @@ const Commissioner = () => {
               <div className="commisioner-overview">
                 <h4>{t("commisioner-overview")}</h4>
               </div>
-              {coData.length > 0 ? (
-                  <p style={{ color: "#666565" }} dangerouslySetInnerHTML={{ __html: coData[0].description }}></p>
+              {coDesc.length > 0 ? (
+                coDesc.map((policy) => (
+                  <React.Fragment key={policy.id}>
+                    <p style={{ color: "#666565" }}>{policy.description}</p>
+                  </React.Fragment>
+                ))
               ) : (
                 <p style={{ color: "#666565" }}>Loading data...</p>
               )}
