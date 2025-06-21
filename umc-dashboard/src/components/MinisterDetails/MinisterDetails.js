@@ -84,34 +84,59 @@ const MinisterDetails = () => {
       });
   };
 
-  const handleEditSubmit = async () => {
-    // Only check for image error before submission
-    if (imageError) {
-      toast.error("Please fix image errors before submitting");
-      return;
-    }
+const handleEditSubmit = async () => {
+  if (imageError) {
+    toast.error("Please fix image errors before submitting", {
+      position: "top-right",
+      autoClose: 3000,
+    });
+    return;
+  }
 
-    const formData = new FormData();
-    formData.append("name", editData.name);
-    formData.append("designation", editData.designation);
-    formData.append("language_code", editData.language_code);
-    if (editData.image) {
-      formData.append("image", editData.image);
-    }
+  const formData = new FormData();
+  formData.append("name", editData.name);
+  formData.append("designation", editData.designation);
+  formData.append("language_code", editData.language_code);
+  if (editData.image) {
+    formData.append("image", editData.image);
+  }
 
-    try {
-      await api.post(`/edit-minister-details/${editData.id}`, formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+  try {
+    const response = await api.post(`/edit-minister-details/${editData.id}`, formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
 
+    if (response.status === 200) {
       fetchMinisters();
       setShowEditModal(false);
-      toast.success("Minister updated successfully!");
-    } catch (error) {
-      console.error("Error updating minister!", error);
-      toast.error("Failed to update minister.");
+      toast.success("Minister updated successfully!", {
+        position: "top-right",
+        autoClose: 3000,
+      });
     }
-  };
+  } catch (error) {
+    if (
+      error.response &&
+      error.response.status === 400 &&
+      error.response.data.errors
+    ) {
+      error.response.data.errors.forEach((err) => {
+        toast.error(err.message, {
+          position: "top-right",
+          autoClose: 3000,
+        });
+      });
+    } else {
+      toast.error("Failed to update minister. Try again.", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+    }
+
+    console.error("Error updating minister:", error);
+  }
+};
+
 
   const handleCloseDeleteModal = () => setShowDeleteModal(false);
   const handleCloseEditModal = () => {

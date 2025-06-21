@@ -1,80 +1,79 @@
-// middleware/validators.js
 const { body, validationResult } = require("express-validator");
 
-// Admin Validation
-const validateInputField = [
+// ✅ Regex rules
+const nameRegex = /^[A-Za-z\u0900-\u097F\s.]+$/;
+const designationRegex = /^[A-Za-z\u0900-\u097F\s.(),-]+$/;
+const menuNameRegex = /^[A-Za-z\u0900-\u097F\u0966-\u096F0-9.&\s]+$/;
 
-    body("language_code")
+// ✅ Min/Max length constants
+const minNameLength = 3;
+const maxNameLength = 30;
+
+const minDesignationLength = 3;
+const maxDesignationLength = 80;
+
+const minMenuNameLength = 3;
+const maxMenuNameLength = 50;
+
+const minSubMenuNameLength = 3;
+const maxSubMenuNameLength = 50;
+
+// ✅ URL/Path Validation Helper
+const validateUrlOrPath = (value) => {
+    if (value === '#' || value === '/#' || value === '') {
+        return true;
+    }
+    if (value.startsWith('http://') || value.startsWith('https://')) {
+        return /^(http|https):\/\/[^ "]+$/.test(value);
+    }
+    return /^\/?[a-zA-Z0-9\-_\/#]+(\/[a-zA-Z0-9\-_\/#]+)*$/.test(value);
+};
+
+// ✅ Reusable Validators
+const alphabetOnlyValidator = (field, min, max, label, regex) =>
+    body(field)
+        .trim()
+        .notEmpty().withMessage(`${label} is required`)
+        .bail()
+        .isLength({ min, max }).withMessage(`${label} must be between ${min} and ${max} characters`)
+        .bail()
+        .matches(regex).withMessage(`${label} must contain only valid characters`);
+
+const menuNameValidator = (field, min, max, label) =>
+    body(field)
+        .trim()
+        .notEmpty().withMessage(`${label} is required`)
+        .bail()
+        .isLength({ min, max }).withMessage(`${label} must be between ${min} and ${max} characters`)
+        .bail()
+        .matches(menuNameRegex).withMessage(`${label} contains invalid characters`);
+
+const urlValidator = (field, label) =>
+    body(field)
         .optional()
+        .trim()
+        .custom(validateUrlOrPath)
+        .withMessage(`${label} must be a valid URL (https://example.com), path (/path), or hash (# or /#)`);
+
+const languageCodeValidator = (field = "language_code") =>
+    body(field)
         .trim()
         .notEmpty().withMessage("Language code is required")
-        .isLength({ max: 10 }).withMessage("Language code must be under 10 characters"),
-    body("name")
-        .optional()
-        .trim()
-        .notEmpty().withMessage("Name is required")
-        .isLength({ max: 100 }).withMessage("Name must be under 100 characters"),
+        .bail()
+        .isLength({ max: 10 }).withMessage("Language code must be under 10 characters");
 
-    body("designation")
-        .optional()
-        .trim()
-        .notEmpty().withMessage("Designation is required")
-        .isLength({ max: 100 }).withMessage("Designation must be under 100 characters"),
+const arrayValidator = (field, label) =>
+    body(field)
+        .isArray({ min: 1 }).withMessage(`${label} must be an array with at least one item`);
 
-    body("phone")
-        .optional()
-        .trim()
-        .notEmpty().withMessage("Phone number is required")
-        .isNumeric().withMessage("Phone must be a number")
-        .isLength({ min: 10, max: 15 }).withMessage("Phone number must be 10-15 digits"),
-
-    body("Department_Name")
-        .optional()
-        .trim()
-        .notEmpty().withMessage("Department Name is required")
-        .isLength({ max: 100 }),
-
-    body("Agenda_No_Date")
-        .optional()
-        .trim()
-        .notEmpty().withMessage("Agenda No/Date is required")
-        .isLength({ max: 100 }),
-
-    body("Schedule_Date_of_Meeting")
-        .optional()
-        .trim()
-        .notEmpty().withMessage("Schedule Date of Meeting is required")
-        .matches(/^\d{2}-\d{2}-\d{4}$/).withMessage("Date must be in dd-mm-yyyy format"),
-
-    body("Adjournment_Notice")
-        .optional()
-        .trim()
-        .isLength({ max: 200 }),
-
-    body("language_code")
-        .optional()
-        .trim()
-        .notEmpty().withMessage("Language code is required")
-        .isLength({ max: 10 }),
-
-    body("pdf_link")
-        .optional()
-        .isURL().withMessage("PDF Link must be a valid URL"),
-
-    validateRequest,
-];
-
-// Helper: Validate Request and Handle Errors
+// ✅ Request Validator Handler
 function validateRequest(req, res, next) {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        const formattedErrors = errors.array().map(err => {
-            console.error(`Field "${err.path}": ${err.msg}`); // Logs in console
-            return {
-                field: err.path,
-                message: err.msg
-            };
-        });
+        const formattedErrors = errors.array().map(err => ({
+            field: err.path,
+            message: err.msg
+        }));
 
         return res.status(400).json({
             success: false,
@@ -84,6 +83,137 @@ function validateRequest(req, res, next) {
     next();
 }
 
+// ✅ Minister Details Validation
+const validateMinisterDetails = [
+    alphabetOnlyValidator("name", minNameLength, maxNameLength, "Name", nameRegex),
+    alphabetOnlyValidator("designation", minDesignationLength, maxDesignationLength, "Designation", designationRegex),
+    languageCodeValidator(),
+    validateRequest,
+];
+
+// ✅ Main Menu Validation
+const validateAddMainMenu = [
+    arrayValidator("menuItems", "Menu items"),
+    body("menuItems.*.mainMenu")
+        .trim()
+        .notEmpty().withMessage("Main menu name is required")
+        .bail()
+        .isLength({ min: minMenuNameLength, max: maxMenuNameLength })
+        .withMessage(`Main menu name must be between ${minMenuNameLength} and ${maxMenuNameLength} characters`)
+        .bail()
+        .matches(menuNameRegex).withMessage("Main menu name contains invalid characters"),
+    urlValidator("menuItems.*.mainMenuLink", "Main menu link"),
+    languageCodeValidator("menuItems.*.language_code"),
+    body("menuItems.*.subMenus").optional().isArray(),
+    body("menuItems.*.subMenus.*.subMenu")
+        .if(body("menuItems.*.subMenus").exists())
+        .trim()
+        .notEmpty().withMessage("Sub menu name is required")
+        .bail()
+        .isLength({ min: minSubMenuNameLength, max: maxSubMenuNameLength })
+        .withMessage(`Sub menu name must be between ${minSubMenuNameLength} and ${maxSubMenuNameLength} characters`)
+        .bail()
+        .matches(menuNameRegex).withMessage("Sub menu name contains invalid characters"),
+    urlValidator("menuItems.*.subMenus.*.subLink", "Sub menu link"),
+    languageCodeValidator("menuItems.*.subMenus.*.language_code"),
+    validateRequest,
+];
+
+const validateUpdateMainMenu = [
+    menuNameValidator("mainMenu", minMenuNameLength, maxMenuNameLength, "Main menu name"),
+    urlValidator("mainMenuLink", "Main menu link"),
+    languageCodeValidator(),
+    body("subMenus").optional().isArray(),
+    body("subMenus.*.subMenu")
+        .if(body("subMenus").exists())
+        .trim()
+        .notEmpty().withMessage("Sub menu name is required")
+        .bail()
+        .isLength({ min: minSubMenuNameLength, max: maxSubMenuNameLength })
+        .withMessage(`Sub menu name must be between ${minSubMenuNameLength} and ${maxSubMenuNameLength} characters`)
+        .bail()
+        .matches(menuNameRegex).withMessage("Sub menu name contains invalid characters"),
+    urlValidator("subMenus.*.subLink", "Sub menu link"),
+    languageCodeValidator("subMenus.*.language_code"),
+    validateRequest,
+];
+
+// ✅ User Validation
+const validateUserDetails = [
+    body("username")
+        .trim()
+        .notEmpty().withMessage("Username is required")
+        .bail()
+        .isLength({ min: 3, max: 30 }).withMessage("Username must be between 3 and 30 characters")
+        .bail()
+        .matches(/^[A-Za-z0-9_]+$/).withMessage("Username can only contain letters, numbers, and underscores")
+        .bail()
+        .custom(value => {
+            if (/\s/.test(value)) {
+                throw new Error("Username cannot contain spaces");
+            }
+            return true;
+        }),
+
+    alphabetOnlyValidator("fullname", minNameLength, maxNameLength, "Full name", nameRegex),
+
+    body("role")
+        .trim()
+        .notEmpty().withMessage("Role is required")
+        .bail()
+        .isIn(["Superadmin", "Admin"]).withMessage("Invalid role"),
+
+    body("email")
+        .trim()
+        .notEmpty().withMessage("Email is required")
+        .bail()
+        .isEmail().withMessage("Invalid email format")
+        .normalizeEmail(),
+
+    body("password")
+        .notEmpty().withMessage("Password is required")
+        .bail()
+        .isLength({ min: 8, max: 100 }).withMessage("Password must be between 6 and 100 characters"),
+
+    body("permission")
+        .notEmpty().withMessage("Permission is required"),
+
+    validateRequest,
+];
+
+
+const validateUpdateUserDetails = [
+    alphabetOnlyValidator("fullname", minNameLength, maxNameLength, "Full name", nameRegex),
+
+    body("role")
+        .trim()
+        .notEmpty().withMessage("Role is required")
+        .bail()
+        .isIn(["Superadmin", "Admin"]).withMessage("Invalid role"),
+
+    body("email")
+        .trim()
+        .notEmpty().withMessage("Email is required")
+        .bail()
+        .isEmail().withMessage("Invalid email format")
+        .normalizeEmail(),
+
+    body("permission")
+        .notEmpty().withMessage("Permission is required"),
+
+    body("status")
+        .trim()
+        .notEmpty().withMessage("Status is required")
+        .bail()
+        .isIn(["Active", "Deactive"]).withMessage("Invalid status"),
+
+    validateRequest,
+];
+
 module.exports = {
-    validateInputField,
+    validateMinisterDetails,
+    validateAddMainMenu,
+    validateUpdateMainMenu,
+    validateUserDetails,
+    validateUpdateUserDetails,
 };

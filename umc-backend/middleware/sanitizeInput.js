@@ -90,12 +90,6 @@ const sanitizeInput = (req, res, next) => {
 
     // Custom escape function that preserves forward slashes
     return value
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#x27;");
-    // Note: intentionally not escaping forward slashes
   };
 
   if (req.body) {

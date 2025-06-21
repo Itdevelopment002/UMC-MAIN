@@ -273,8 +273,25 @@ const Users = () => {
       setShowEditModal(false);
       toast.success("User is updated successfully!");
     } catch (error) {
-      console.error("Error updating user!", error);
-      toast.error("Failed to update user.");
+      if (
+        error.response &&
+        error.response.status === 400 &&
+        error.response.data.errors
+      ) {
+        error.response.data.errors.forEach((err) => {
+          toast.error(err.message, {
+            position: "top-right",
+            autoClose: 3000,
+          });
+        });
+      } else {
+        toast.error("Failed to updating user. Try again.", {
+          position: "top-right",
+          autoClose: 3000,
+        });
+      }
+ 
+      console.error("Error updating user:", error);
     }
   };
 

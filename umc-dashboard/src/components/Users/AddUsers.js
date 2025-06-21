@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import api from "../api";
 import './AddUsers.css';
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import CustomEncryption from "../../encryption/CustomEncrypt";
 import { jwtDecode } from 'jwt-decode';
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const AddUsers = () => {
   const [departments, setDepartments] = useState([]);
@@ -22,6 +24,32 @@ const AddUsers = () => {
   const navigate = useNavigate();
   const [permissionDropdownOpen, setPermissionDropdownOpen] = useState(false);
   const [userId, setUserId] = useState(null);
+
+  // Refs for form fields and dropdown
+  const usernameRef = useRef(null);
+  const fullnameRef = useRef(null);
+  const emailRef = useRef(null);
+  const roleRef = useRef(null);
+  const passwordRef = useRef(null);
+  const cnfPasswordRef = useRef(null);
+  const dropdownRef = useRef(null);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setPermissionDropdownOpen(false);
+      }
+    };
+
+    if (permissionDropdownOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [permissionDropdownOpen]);
 
   useEffect(() => {
     const token = localStorage.getItem('authToken');
@@ -149,7 +177,6 @@ const AddUsers = () => {
     );
   };
 
-
   const checkUsernameExists = () => {
     if (!username) return false;
     const userExists = users.some((user) => user.username === username);
@@ -219,6 +246,9 @@ const AddUsers = () => {
     } else if (fullname.length < 3) {
       newErrors.fullname = "Full name must be at least 3 characters.";
       isValid = false;
+    } else if (!/^[a-zA-Z\s]*$/.test(fullname)) {
+      newErrors.fullname = "Full name should not contain numbers or special characters.";
+      isValid = false;
     }
 
     if (!role) {
@@ -257,6 +287,24 @@ const AddUsers = () => {
     }
 
     setErrors(newErrors);
+
+    // Focus on the first field with error
+    if (!isValid) {
+      if (newErrors.username) {
+        usernameRef.current.focus();
+      } else if (newErrors.fullname) {
+        fullnameRef.current.focus();
+      } else if (newErrors.email) {
+        emailRef.current.focus();
+      } else if (newErrors.role) {
+        roleRef.current.focus();
+      } else if (newErrors.password) {
+        passwordRef.current.focus();
+      } else if (newErrors.cnfpassword) {
+        cnfPasswordRef.current.focus();
+      }
+    }
+
     return isValid;
   };
 
@@ -277,7 +325,7 @@ const AddUsers = () => {
       fullname,
       role,
       email,
-      password:hashPassword,
+      password: hashPassword,
       permission: selectedPermission.join(","),
     };
 
@@ -289,32 +337,57 @@ const AddUsers = () => {
       }
     } catch (error) {
       console.error("Error adding user:", error);
-
-      if (error.response && error.response.status === 400) {
-        const data = error.response.data;
-        if (data.field && data.message) {
-          setErrors({ [data.field]: data.message });
+ 
+      if (error.response) {
+        // Handle 400 Bad Request errors
+        if (error.response.status === 400) {
+          const data = error.response.data;
+ 
+          // Handle the specific error format you shared
+          if (data.errors && Array.isArray(data.errors)) {
+            data.errors.forEach(err => {
+              toast.error(`${err.message}`, {
+                position: "top-right",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+              });
+            });
+            return;
+          }
+ 
+          // Handle other 400 error formats
+          if (data.message) {
+            toast.error(data.message, {
+              position: "top-right",
+              autoClose: 3000,
+            });
+          } else if (data.requirements) {
+            const reqs = data.requirements;
+            let passwordMessage = "Password must have:";
+            if (!reqs.minLength) passwordMessage += " at least 8 characters,";
+            if (!reqs.hasUpper) passwordMessage += " an uppercase letter,";
+            if (!reqs.hasLower) passwordMessage += " a lowercase letter,";
+            if (!reqs.hasNumber) passwordMessage += " a number,";
+            if (!reqs.hasSpecial) passwordMessage += " a special character,";
+            if (!reqs.notCommon) passwordMessage += " not be too common,";
+            if (!reqs.notContextual) passwordMessage += " not include your name or email.";
+ 
+            toast.error(passwordMessage.replace(/,$/, "."), {
+              position: "top-right",
+              autoClose: 3000,
+            });
+          }
         }
-        else if (data.requirements) {
-          const reqs = data.requirements;
-          let passwordMessage = "Password must have:";
-          if (!reqs.minLength) passwordMessage += " at least 8 characters,";
-          if (!reqs.hasUpper) passwordMessage += " an uppercase letter,";
-          if (!reqs.hasLower) passwordMessage += " a lowercase letter,";
-          if (!reqs.hasNumber) passwordMessage += " a number,";
-          if (!reqs.hasSpecial) passwordMessage += " a special character,";
-          if (!reqs.notCommon) passwordMessage += " not be too common,";
-          if (!reqs.notContextual) passwordMessage += " not include your name or email.";
-
-          setErrors({ password: passwordMessage.replace(/,$/, ".") });
-        }
-        else if (data.message) {
-          setErrors({ submit: data.message });
-        }
-
-      } else {
-        setErrors({ submit: "Something went wrong. Please try again later." });
       }
+ 
+      // Default error message
+      toast.error("Something went wrong. Please try again later.", {
+        position: "top-right",
+        autoClose: 3000,
+      });
     }
   };
 
@@ -353,6 +426,8 @@ const AddUsers = () => {
                         setErrors((prev) => ({ ...prev, username: "" }));
                       }}
                       onBlur={checkUsernameExists}
+                      ref={usernameRef}
+                      autoComplete="new-username"
                     />
                     {errors.username && (
                       <div className="invalid-feedback d-block">
@@ -374,6 +449,8 @@ const AddUsers = () => {
                         setFullname(e.target.value);
                         setErrors((prev) => ({ ...prev, fullname: "" }));
                       }}
+                      ref={fullnameRef}
+                      autoComplete="new-fullname"
                     />
                     {errors.fullname && (
                       <div className="invalid-feedback d-block">
@@ -396,6 +473,8 @@ const AddUsers = () => {
                         setErrors((prev) => ({ ...prev, email: "" }));
                       }}
                       onBlur={checkEmailExists}
+                      ref={emailRef}
+                      autoComplete="new-email"
                     />
                     {errors.email && (
                       <div className="invalid-feedback d-block">
@@ -412,6 +491,7 @@ const AddUsers = () => {
                       className={`form-control ${errors.role ? "is-invalid" : ""}`}
                       value={role}
                       onChange={handleRoleChange}
+                      ref={roleRef}
                     >
                       <option value="" disabled>Select Role</option>
                       <option value="Superadmin">Superadmin</option>
@@ -425,7 +505,7 @@ const AddUsers = () => {
                   </div>
 
                   {role === "Admin" && (
-                    <div className="dropdown custom-dropdown mb-3">
+                    <div className="dropdown custom-dropdown mb-3" ref={dropdownRef}>
                       <button
                         type="button"
                         className="btn w-100 text-start d-flex justify-content-between align-items-center"
@@ -479,6 +559,12 @@ const AddUsers = () => {
                             setPassword(e.target.value);
                             setErrors((prev) => ({ ...prev, password: "" }));
                           }}
+                          ref={passwordRef}
+                          autoComplete="off"
+                          readOnly
+                          onFocus={(e) => e.target.removeAttribute('readonly')}
+                          data-lpignore="true"
+                          data-form-type="password"
                         />
                         <span
                           className="input-group-text"
@@ -515,6 +601,12 @@ const AddUsers = () => {
                             setCnfpassword(e.target.value);
                             setErrors((prev) => ({ ...prev, cnfpassword: "" }));
                           }}
+                          ref={cnfPasswordRef}
+                          autoComplete="off"
+                          readOnly
+                          onFocus={(e) => e.target.removeAttribute('readonly')}
+                          data-lpignore="true"
+                          data-form-type="password"
                         />
                         <span
                           className="input-group-text"
@@ -545,6 +637,7 @@ const AddUsers = () => {
           </div>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };

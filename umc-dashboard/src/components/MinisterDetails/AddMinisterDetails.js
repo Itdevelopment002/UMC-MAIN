@@ -72,53 +72,67 @@ const AddMinisterDetails = () => {
     return Object.keys(newErrors).length === 0;
   };
  
-  const handleSubmit = async (e) => {
-    e.preventDefault();
- 
-    if (!validateForm()) {
-      return;
-    }
- 
-    const formDataToSend = new FormData();
-    formDataToSend.append("name", formData.name);
-    formDataToSend.append("designation", formData.designation);
-    formDataToSend.append("language_code", formData.language_code);
-    if (formData.image) {
-      formDataToSend.append("image", formData.image);
-    }
- 
-    try {
-      const response = await api.post("/minister-details", formDataToSend, {
-        headers: { "Content-Type": "multipart/form-data" },
+const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  if (!validateForm()) {
+    return;
+  }
+
+  const formDataToSend = new FormData();
+  formDataToSend.append("name", formData.name);
+  formDataToSend.append("designation", formData.designation);
+  formDataToSend.append("language_code", formData.language_code);
+  if (formData.image) {
+    formDataToSend.append("image", formData.image);
+  }
+
+  try {
+    const response = await api.post("/minister-details", formDataToSend, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+
+    if (response.status === 200) {
+      toast.success("Minister added successfully!", {
+        position: "top-right",
+        autoClose: 3000,
       });
- 
-      if (response.status === 200) {
-        toast.success("Minister added successfully!", {
+
+      setFormData({
+        name: "",
+        designation: "",
+        language_code: "",
+        image: null,
+      });
+
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+
+      navigate("/minister");
+    }
+  } catch (error) {
+    if (
+      error.response &&
+      error.response.status === 400 &&
+      error.response.data.errors
+    ) {
+      error.response.data.errors.forEach((err) => {
+        toast.error(err.message, {
           position: "top-right",
           autoClose: 3000,
         });
- 
-        setFormData({
-          name: "",
-          designation: "",
-          language_code: "",
-          image: null,
-        });
- 
-        if (fileInputRef.current) {
-          fileInputRef.current.value = "";
-        }
- 
-        navigate("/minister");
-      }
-    } catch (error) {
+      });
+    } else {
       toast.error("Failed to add minister. Try again.", {
         position: "top-right",
         autoClose: 3000,
       });
-      console.error("Error adding minister:", error);
     }
-  };
+
+    console.error("Error adding minister:", error);
+  }
+};
  
   return (
     <>

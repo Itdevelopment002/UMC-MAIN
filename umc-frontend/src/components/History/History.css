@@ -51,13 +51,29 @@
 #history-css .history-section p {
   text-align: justify;
   line-height: 1.9;
-  margin-bottom: 15px;
+  margin-bottom: 5px;
   font-weight: 500;
   font-size: 16px;
   color: #666565;
   word-spacing: 0.3rem;
 }
-
+@media (max-width: 992px) {
+  #history-css .sidebar {
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  
+   #history-css .sidebar-image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 307px;
+    height: 307px;
+  }
+}
 @media (max-width: 768px) {
   #history-css .sidebar {
     height: auto;

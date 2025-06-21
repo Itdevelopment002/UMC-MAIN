@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import api from "../api";
 import { useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { Link } from "react-router-dom";
 import { FaTrash } from "react-icons/fa";
 
@@ -52,13 +54,44 @@ const AddMainMenu = () => {
       return;
     }
     try {
-      await api.post("/add-main-menu", { menuItems });
-      navigate("/");
-      setMenuItems(initialMenuItems);
-    } catch (err) {
-      console.error(
-        err.response ? err.response.data.message : "An error occurred."
-      );
+      const response = await api.post("/add-main-menu", { menuItems });
+
+      if (response.status === 200 || response.status === 201) {
+        toast.success("Menu added successfully!", {
+          position: "top-right",
+          autoClose: 1000,
+          onClose: () => {
+            navigate("/");
+            setMenuItems(initialMenuItems);
+          }
+        });
+      }
+    } catch (error) {
+      console.error("Error adding menu:", error);
+
+      // Handle validation errors from express-validator
+      if (error.response?.status === 400 && error.response?.data?.errors) {
+        error.response.data.errors.forEach(err => {
+          toast.error(err.message, {
+            position: "top-right",
+            autoClose: 3000,
+          });
+        });
+      }
+      // Handle other API errors
+      else if (error.response?.data?.message) {
+        toast.error(error.response.data.message, {
+          position: "top-right",
+          autoClose: 3000,
+        });
+      }
+      // Generic error fallback
+      else {
+        toast.error("Failed to add menu. Please try again.", {
+          position: "top-right",
+          autoClose: 3000,
+        });
+      }
     }
   };
 
@@ -105,210 +138,212 @@ const AddMainMenu = () => {
   };
 
   return (
-    <div>
-      <div className="page-wrapper">
-        <div className="content">
-          <ol className="breadcrumb">
-            <li className="breadcrumb-item">
-              <Link to="/home">Home</Link>
-            </li>
-            <li className="breadcrumb-item">
-              <Link to="/home">Main Menu</Link>
-            </li>
-            <li className="breadcrumb-item active" aria-current="page">
-              Add Main Menu
-            </li>
-          </ol>
-          <div className="row">
-            <div className="col-lg-12">
-              <div className="card-box">
-                <div className="card-block">
-                  <div className="row">
-                    <div className="col-12">
-                      <h4 className="page-title">Add Main Menu</h4>
+      <div>
+        <div className="page-wrapper">
+          <div className="content">
+            <ol className="breadcrumb">
+              <li className="breadcrumb-item">
+                <Link to="/home">Home</Link>
+              </li>
+              <li className="breadcrumb-item">
+                <Link to="/home">Main Menu</Link>
+              </li>
+              <li className="breadcrumb-item active" aria-current="page">
+                Add Main Menu
+              </li>
+            </ol>
+            <div className="row">
+              <div className="col-lg-12">
+                <div className="card-box">
+                  <div className="card-block">
+                    <div className="row">
+                      <div className="col-12">
+                        <h4 className="page-title">Add Main Menu</h4>
+                      </div>
                     </div>
-                  </div>
-                  <form onSubmit={handleSubmit}>
-                    {menuItems.map((item, index) => (
-                      <div key={index}>
-                        <div className="form-group row">
-                          <label className="col-form-label col-md-2">
-                            Select Language <span className="text-danger">*</span>
-                          </label>
-                          <div className="col-md-4">
-                            <select
-                              className={`form-control form-control-md m-t-10${formErrors[index]?.language_code ? "is-invalid" : ""
-                                }`}
-                              value={item.language_code}
-                              onChange={(e) =>
-                                handleInputChange(
-                                  index,
-                                  "language_code",
-                                  e.target.value
-                                )
-                              }
-                            >
-                              <option value="">Select Language</option>
-                              <option value="en">English</option>
-                              <option value="mr">Marathi</option>
-                            </select>
-                            {formErrors[index]?.language_code && (
-                              <small className="text-danger">
-                                {formErrors[index].language_code}
-                              </small>
-                            )}
+                    <form onSubmit={handleSubmit}>
+                      {menuItems.map((item, index) => (
+                        <div key={index}>
+                          <div className="form-group row">
+                            <label className="col-form-label col-md-2">
+                              Select Language <span className="text-danger">*</span>
+                            </label>
+                            <div className="col-md-4">
+                              <select
+                                className={`form-control form-control-md m-t-10${formErrors[index]?.language_code ? "is-invalid" : ""
+                                  }`}
+                                value={item.language_code}
+                                onChange={(e) =>
+                                  handleInputChange(
+                                    index,
+                                    "language_code",
+                                    e.target.value
+                                  )
+                                }
+                              >
+                                <option value="">Select Language</option>
+                                <option value="en">English</option>
+                                <option value="mr">Marathi</option>
+                              </select>
+                              {formErrors[index]?.language_code && (
+                                <small className="text-danger">
+                                  {formErrors[index].language_code}
+                                </small>
+                              )}
+                            </div>
                           </div>
-                        </div>
-                        <div className="form-group row">
-                          <label className="col-form-label col-md-2 m-t-10">
-                            Main Menu <span className="text-danger">*</span>
-                          </label>
-                          <div className="col-md-3">
-                            <input
-                              type="text"
-                              placeholder="Enter Main menu name"
-                              className={`form-control form-control-md m-t-10${formErrors[index]?.mainMenu ? "is-invalid" : ""
-                                }`}
-                              value={item.mainMenu}
-                              onChange={(e) =>
-                                handleInputChange(
-                                  index,
-                                  "mainMenu",
-                                  e.target.value
-                                )
-                              }
-                            />
-                            {formErrors[index]?.mainMenu && (
-                              <small className="text-danger">
-                                {formErrors[index].mainMenu}
-                              </small>
-                            )}
-                          </div>
-                          <div className="col-md-3">
-                            <input
-                              type="text"
-                              placeholder="Enter Main menu link"
-                              className={`form-control form-control-md m-t-10${formErrors[index]?.mainMenuLink
-                                ? "is-invalid"
-                                : ""
-                                }`}
-                              value={item.mainMenuLink}
-                              onChange={(e) =>
-                                handleInputChange(
-                                  index,
-                                  "mainMenuLink",
-                                  e.target.value
-                                )
-                              }
-                              disabled={item.isDisabled}
-                            />
-                            {formErrors[index]?.mainMenuLink && (
-                              <small className="text-danger">
-                                {formErrors[index].mainMenuLink}
-                              </small>
-                            )}
-                          </div>
-                        </div>
-                        {item.subMenus.map((subMenu, subIndex) => (
-                          <div className="form-group row" key={subIndex}>
+                          <div className="form-group row">
                             <label className="col-form-label col-md-2 m-t-10">
-                              Sub Menu <span className="text-danger">*</span>
+                              Main Menu <span className="text-danger">*</span>
                             </label>
                             <div className="col-md-3">
                               <input
                                 type="text"
-                                placeholder="Enter Sub menu name"
-                                className={`form-control m-t-10 ${formErrors[index]?.subMenus[subIndex]?.subMenu
-                                  ? "is-invalid"
-                                  : ""
+                                placeholder="Enter Main menu name"
+                                className={`form-control form-control-md m-t-10${formErrors[index]?.mainMenu ? "is-invalid" : ""
                                   }`}
-                                value={subMenu.subMenu}
+                                value={item.mainMenu}
                                 onChange={(e) =>
-                                  handleSubMenuChange(
+                                  handleInputChange(
                                     index,
-                                    subIndex,
-                                    "subMenu",
+                                    "mainMenu",
                                     e.target.value
                                   )
                                 }
                               />
-                              {formErrors[index]?.subMenus?.[subIndex]
-                                ?.subMenu && (
-                                  <small className="text-danger">
-                                    {formErrors[index].subMenus[subIndex].subMenu}
-                                  </small>
-                                )}
+                              {formErrors[index]?.mainMenu && (
+                                <small className="text-danger">
+                                  {formErrors[index].mainMenu}
+                                </small>
+                              )}
                             </div>
                             <div className="col-md-3">
                               <input
                                 type="text"
-                                placeholder="Enter Sub menu link"
-                                className={`form-control m-t-10 ${formErrors[index]?.subMenus[subIndex]?.subLink
+                                placeholder="Enter Main menu link"
+                                className={`form-control form-control-md m-t-10${formErrors[index]?.mainMenuLink
                                   ? "is-invalid"
                                   : ""
                                   }`}
-                                value={subMenu.subLink}
+                                value={item.mainMenuLink}
                                 onChange={(e) =>
-                                  handleSubMenuChange(
+                                  handleInputChange(
                                     index,
-                                    subIndex,
-                                    "subLink",
+                                    "mainMenuLink",
                                     e.target.value
                                   )
                                 }
+                                disabled={item.isDisabled}
                               />
-                              {formErrors[index]?.subMenus?.[subIndex]
-                                ?.subLink && (
-                                  <small className="text-danger">
-                                    {formErrors[index].subMenus[subIndex].subLink}
-                                  </small>
-                                )}
+                              {formErrors[index]?.mainMenuLink && (
+                                <small className="text-danger">
+                                  {formErrors[index].mainMenuLink}
+                                </small>
+                              )}
                             </div>
-                            <div className="col-md-1">
+                          </div>
+                          {item.subMenus.map((subMenu, subIndex) => (
+                            <div className="form-group row" key={subIndex}>
+                              <label className="col-form-label col-md-2 m-t-10">
+                                Sub Menu <span className="text-danger">*</span>
+                              </label>
+                              <div className="col-md-3">
+                                <input
+                                  type="text"
+                                  placeholder="Enter Sub menu name"
+                                  className={`form-control m-t-10 ${formErrors[index]?.subMenus[subIndex]?.subMenu
+                                    ? "is-invalid"
+                                    : ""
+                                    }`}
+                                  value={subMenu.subMenu}
+                                  onChange={(e) =>
+                                    handleSubMenuChange(
+                                      index,
+                                      subIndex,
+                                      "subMenu",
+                                      e.target.value
+                                    )
+                                  }
+                                />
+                                {formErrors[index]?.subMenus?.[subIndex]
+                                  ?.subMenu && (
+                                    <small className="text-danger">
+                                      {formErrors[index].subMenus[subIndex].subMenu}
+                                    </small>
+                                  )}
+                              </div>
+                              <div className="col-md-3">
+                                <input
+                                  type="text"
+                                  placeholder="Enter Sub menu link"
+                                  className={`form-control m-t-10 ${formErrors[index]?.subMenus[subIndex]?.subLink
+                                    ? "is-invalid"
+                                    : ""
+                                    }`}
+                                  value={subMenu.subLink}
+                                  onChange={(e) =>
+                                    handleSubMenuChange(
+                                      index,
+                                      subIndex,
+                                      "subLink",
+                                      e.target.value
+                                    )
+                                  }
+                                />
+                                {formErrors[index]?.subMenus?.[subIndex]
+                                  ?.subLink && (
+                                    <small className="text-danger">
+                                      {formErrors[index].subMenus[subIndex].subLink}
+                                    </small>
+                                  )}
+                              </div>
+                              <div className="col-md-1">
+                                <button
+                                  type="button"
+                                  className="btn btn-danger m-t-10"
+                                  onClick={() =>
+                                    handleDeleteSubMenu(index, subIndex)
+                                  }
+                                >
+                                  <FaTrash />
+                                </button>
+                              </div>
+                            </div>
+                          ))}
+
+                          <div className="form-group row">
+                            <div className="col-md-2"></div>
+                            <div className="col-md-4">
                               <button
                                 type="button"
-                                className="btn btn-danger m-t-10"
-                                onClick={() =>
-                                  handleDeleteSubMenu(index, subIndex)
+                                className="btn btn-success btn-sm"
+                                onClick={() => handleAddMoreSubMenu(index)}
+                                disabled={
+                                  !item.mainMenu.trim() ||
+                                  item.mainMenuLink !== "#"
                                 }
                               >
-                                <FaTrash />
+                                <i className="fa fa-plus"></i> Add Sub menu
                               </button>
                             </div>
                           </div>
-                        ))}
-
-                        <div className="form-group row">
-                          <div className="col-md-2"></div>
-                          <div className="col-md-4">
-                            <button
-                              type="button"
-                              className="btn btn-success btn-sm"
-                              onClick={() => handleAddMoreSubMenu(index)}
-                              disabled={
-                                !item.mainMenu.trim() ||
-                                item.mainMenuLink !== "#"
-                              }
-                            >
-                              <i className="fa fa-plus"></i> Add Sub menu
-                            </button>
-                          </div>
                         </div>
-                      </div>
-                    ))}
-                    <input
-                      type="submit"
-                      className="btn btn-primary btn-sm"
-                      value="Submit"
-                    />
-                  </form>
+                      ))}
+                      <input
+                        type="submit"
+                        className="btn btn-primary btn-sm"
+                        value="Submit"
+                      />
+                    </form>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
+      <ToastContainer />
       </div>
-    </div>
+
   );
 };
 

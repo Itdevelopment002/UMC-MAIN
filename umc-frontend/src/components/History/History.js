@@ -31,8 +31,8 @@ const History = () => {
   const fetchDesc = async () => {
     try {
       const response = await api.get(`/history_desc?lang=${i18n.language}`);
-      setFirstTwo(response.data.slice(0, 2));
-      setRemainingDesc(response.data.slice(2));
+      setFirstTwo(response.data.slice(0, 3));
+      setRemainingDesc(response.data.slice(3));
     } catch (error) {
       console.error("Error fetching desc.");
     }
@@ -83,13 +83,13 @@ const History = () => {
 
           <div className="row mt-5">
             {gallerys.map((gallery, index) => (
-              <div className="col-lg-3 col-md-4 col-sm-12 col-12 sidebar" key={index}>
+              <div className="col-lg-3 col-md-12 col-sm-12 col-12 sidebar" key={index}>
                 <div className="sidebar-image text-center">
                   <img src={`${baseURL}${gallery.file_path}`} alt="UMC Building" className="img-fluid" />
                 </div>
               </div>
             ))}
-            <div className="col-lg-9 col-md-8 col-sm-12 col-12 content">
+            <div className="col-lg-9 col-md-12 col-sm-12 col-12 content">
               <div className="history-section">
                 <h2 className="history-title">
                   <span className="highlight">{t("history-title1")}</span>
