@@ -10,7 +10,7 @@ import instagram from '../../assets/images/header-img/instagram (2).png';
 import youtube from '../../assets/images/header-img/Youtube.png';
 import { useTranslation } from "react-i18next";
 import { searchablePages } from "./SearchPages";
- // ✅ Import your route titles
+// ✅ Import your route titles
 
 const TopHeader = () => {
     const [selectedLanguage, setSelectedLanguage] = useState("mr");
@@ -168,12 +168,12 @@ const TopHeader = () => {
                         }}
                         role="button"
                         tabIndex="0"
-                        style={{ cursor: "pointer" }}
+                        className='text-link-btn'
                     >
                         {t("header.skipContent")}
                     </span>
                     <span className="divider">|</span>
-                    <Link to="/screen-reader-access" className='text-decoration-none' style={{ color: "#333" }}>
+                    <Link to="/screen-reader-access" className='text-link-btn'>
                         <span>{t("header.screenReader")}</span>
                     </Link>
                     <span className="divider">|</span>

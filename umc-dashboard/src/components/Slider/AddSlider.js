@@ -5,6 +5,7 @@ import { getImageValidationError } from "../../validation/ImageValidation";
 
 const AddSlider = () => {
   const [sliderName, setSliderName] = useState("");
+  const [languageCode, setLanguageCode] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
@@ -30,6 +31,10 @@ const AddSlider = () => {
       newErrors.sliderName = "Slider name is required.";
     }
 
+    if (!languageCode) {
+      newErrors.languageCode = "Language selection is required.";
+    }
+
     if (!selectedFile) {
       newErrors.selectedFile = "Slider image is required.";
     }
@@ -42,6 +47,7 @@ const AddSlider = () => {
     const formData = new FormData();
     formData.append("image", selectedFile);
     formData.append("sliderName", sliderName);
+    formData.append("languageCode", languageCode);
 
     try {
       await api.post("/sliders", formData, {
@@ -50,6 +56,7 @@ const AddSlider = () => {
         },
       });
       setSliderName("");
+      setLanguageCode("");
       setSelectedFile(null);
       document.getElementById("image").value = "";
       navigate("/slider");
@@ -83,6 +90,29 @@ const AddSlider = () => {
                     </div>
                   </div>
                   <form onSubmit={handleSubmit}>
+                    <div className="form-group row">
+                      <label className="col-form-label col-md-2">
+                        Select Language <span className="text-danger">*</span>
+                      </label>
+                      <div className="col-md-4">
+                        <select
+                          className={`form-control ${errors.languageCode ? "is-invalid" : ""}`}
+                          name="languageCode"
+                          value={languageCode}
+                          onChange={(e) => {
+                            setLanguageCode(e.target.value);
+                            setErrors((prev) => ({ ...prev, languageCode: "" }));
+                          }}
+                        >
+                          <option value="">Select Language</option>
+                          <option value="en">English</option>
+                          <option value="mr">Marathi</option>
+                        </select>
+                        {errors.languageCode && (
+                          <div className="invalid-feedback">{errors.languageCode}</div>
+                        )}
+                      </div>
+                    </div>
                     <div className="form-group row">
                       <label className="col-form-label col-lg-2 col-md-3">
                         Slider Name <span className="text-danger">*</span>

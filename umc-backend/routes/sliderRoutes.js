@@ -9,25 +9,51 @@ const { verifyToken } = require('../middleware/jwtMiddleware.js');
 const { getMulterConfig, handleMulterError } = require("../utils/uploadValidation");
 const sanitizeInput = require('../middleware/sanitizeInput.js');
 
-// Create upload middleware using global config
 const upload = multer(getMulterConfig());
 
-// Routes
 router.get("/sliders", (req, res) => {
-  const sql = "SELECT * FROM slider";
-  db.query(sql, (err, results) => {
-    if (err) return res.status(500).json({ message: "Database error", error: err });
+  const language = req.query.lang;
+  let query;
+  let params = []
+  if (language) {
+    query = `SELECT * FROM slider WHERE language_code = ?`;
+    params.push(language);
+  } else {
+    query = "SELECT * FROM slider";
+  }
+  db.query(query, params, (err, results) => {
+    if (err) {
+      return res.status(500).json({ message: "Database error", error: err });
+    }
     res.status(200).json(results);
   });
 });
 
 router.get("/sliders/:id", (req, res) => {
   const { id } = req.params;
-  const sql = "SELECT * FROM slider WHERE id = ?";
-  db.query(sql, [id], (err, result) => {
-    if (err) return res.status(500).json({ message: "Database error", error: err });
-    if (result.length === 0) return res.status(404).json({ message: "Slider not found" });
-    res.status(200).json(result[0]);
+  const { lang } = req.query;
+
+  let query;
+  let params = [];
+
+  if (id) {
+    query = "SELECT * FROM slider WHERE id = ?";
+    params.push(id);
+  } else if (lang) {
+    query = "SELECT * FROM slider WHERE language_code = ?";
+    params.push(lang);
+  } else {
+    query = "SELECT * FROM slider";
+  }
+
+  db.query(query, params, (err, results) => {
+    if (err) {
+      return res.status(500).json({ message: "Database error", error: err });
+    }
+    if (id && results.length === 0) {
+      return res.status(404).json({ message: "Slider not found" });
+    }
+    res.status(200).json(id ? results[0] : results);
   });
 });
 
@@ -35,21 +61,30 @@ router.post("/sliders", verifyToken, upload.single("image"), sanitizeInput, hand
   if (req.user?.role === "Admin") {
     return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
   }
-  const { sliderName } = req.body;
+  const { sliderName, languageCode } = req.body;
 
-  if (!sliderName || !req.file) {
+  if (!sliderName || !languageCode || !req.file) {
     if (req.file) {
       fs.unlink(path.join(__dirname, "..", "uploads", req.file.filename), () => { });
     }
-    return res.status(400).json({
-      message: !sliderName ? "Slider Name is required" : "Image file is required"
-    });
+
+    let errorMessage = "";
+    if (!sliderName) {
+      errorMessage = "Slider Name is required";
+    } else if (!languageCode) {
+      errorMessage = "Language Code is required";
+    } else {
+      errorMessage = "Image file is required";
+    }
+
+    return res.status(400).json({ message: errorMessage });
   }
 
-  const imagePath = `/uploads/${req.file.filename}`;
-  const sql = "INSERT INTO slider (name, image_path) VALUES (?, ?)";
 
-  db.query(sql, [sliderName, imagePath], (err, result) => {
+  const imagePath = `/uploads/${req.file.filename}`;
+  const sql = "INSERT INTO slider (name, language_code, image_path) VALUES (?, ?, ?)";
+
+  db.query(sql, [sliderName, languageCode, imagePath], (err, result) => {
     if (err) {
       fs.unlink(path.join(__dirname, "..", "uploads", req.file.filename), () => { });
       return res.status(500).json({ message: "Database error", error: err });
@@ -61,12 +96,12 @@ router.post("/sliders", verifyToken, upload.single("image"), sanitizeInput, hand
   });
 });
 
-router.post("/edit-sliders/:id", verifyToken, upload.single("image"), sanitizeInput,  handleMulterError, (req, res) => {
+router.post("/edit-sliders/:id", verifyToken, upload.single("image"), sanitizeInput, handleMulterError, (req, res) => {
   if (req.user?.role === "Admin") {
     return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
   }
   const { id } = req.params;
-  const { name } = req.body;
+  const { name, language_code } = req.body;
 
   if (!name && !req.file) {
     if (req.file) {
@@ -81,6 +116,11 @@ router.post("/edit-sliders/:id", verifyToken, upload.single("image"), sanitizeIn
   if (name) {
     updateSql += " name = ?";
     updateParams.push(name);
+  }
+
+  if (language_code) {
+    updateSql += updateParams.length > 0 ? ", language_code = ?" : " language_code = ?";
+    updateParams.push(language_code);
   }
 
   if (req.file) {

@@ -54,7 +54,7 @@
         "highlight-text": "स्थान",
         "information": "माहिती",
         "nodata": "कोणताही डेटा उपलब्ध नाही.",
-        "emnumber": "महापालिका सेवा आणि पायाभूत सुविधा डेटा",
+        "emnumber": "महानगरपालिका सेवा आणि पायाभूत सुविधा डेटा",
         "city": "शहराची",
         "populationandarea": "लोकसंख्या आणि क्षेत्रफळ"
     },
@@ -64,7 +64,7 @@
         "highlight-text": "आयुक्त",
         "name": "आयुक्ताचे नाव",
         "designation": "पद",
-        "designationText": ", उल्हासनगर महापालिका",
+        "designationText": ", उल्हासनगर महानगरपालिका",
         "qualification": "शैक्षणिक पात्रता",
         "address": "कार्यालयाचा पत्ता",
         "phoneNumber": "दूरध्वनी क्रमांक",
@@ -249,8 +249,8 @@
         "highlight-text": "आलेले सदस्य"
     },
     "muncipal": {
-        "heading": "महापालिका सभा",
-        "highlight": "महापालिका",
+        "heading": "महानगरपालिका सभा",
+        "highlight": "महानगरपालिका",
         "highlight-text": "सभा",
         "agenda": "कार्यसूची",
         "minutes": "इतिवृत्त",

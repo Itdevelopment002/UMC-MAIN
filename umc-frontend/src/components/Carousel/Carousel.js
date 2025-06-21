@@ -23,7 +23,7 @@ const Carousel = () => {
 
   const fetchSliders = async () => {
     try {
-      const response = await api.get("/sliders");
+      const response = await api.get(`/sliders?lang=${i18n.language}`);
       setSliders(response.data);
     } catch (error) {
       console.error("Error fetching sliders:", error);
