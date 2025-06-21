@@ -52,3 +52,16 @@
     position: relative;
     width: 250px;
 }
+
+.text-link-btn {
+    background: none;
+    border: none;
+    font-size: inherit;
+    cursor: pointer;
+    text-decoration: none;
+    color: #333;
+}
+
+.text-link-btn:hover {
+    color: #0056b3;
+}

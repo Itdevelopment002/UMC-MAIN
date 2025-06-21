@@ -14,10 +14,12 @@ const Slider = () => {
   const [sliders, setSliders] = useState([]);
   const [editData, setEditData] = useState({
     name: "",
+    language_code: "",
     image: null,
   });
   const [editErrors, setEditErrors] = useState({
     name: "",
+    language_code: "",
     image: ""
   });
   const [imagePreview, setImagePreview] = useState(null);
@@ -58,6 +60,7 @@ const Slider = () => {
     setEditData({
       id: slider.id,
       name: slider.name,
+      language_code: slider.language_code,
       image: null
     });
     setImagePreview(`${baseURL}${slider.image_path}`);
@@ -90,11 +93,13 @@ const Slider = () => {
       isValid = false;
     }
 
-    // Validate image (must not be empty and must be valid)
-    if (!editData.image) {
-      newErrors.image = "Image is required.";
+    if (!editData.language_code) {
+      newErrors.language_code = "Language selection is required."; // Fixed: was setting name error
       isValid = false;
-    } else {
+    }
+
+    // Validate image only if a new one is provided
+    if (editData.image) {
       const error = getImageValidationError(editData.image);
       if (error) {
         newErrors.image = error;
@@ -138,6 +143,7 @@ const Slider = () => {
     try {
       const formData = new FormData();
       formData.append("name", editData.name);
+      formData.append("language_code", editData.language_code);
       if (editData.image) {
         formData.append("image", editData.image);
       }
@@ -383,6 +389,25 @@ const Slider = () => {
                   <form onSubmit={handleEditSubmit}>
                     <div className="modal-body">
                       <div className="form-group">
+                        <label>
+                          Select Language
+                        </label>
+                        <select
+                          className="form-control"
+                          value={editData.language_code}
+                          onChange={(e) =>
+                            setEditData({
+                              ...editData,
+                              language_code: e.target.value,
+                            })
+                          }
+                        >
+                          <option value="" disabled>Select Language</option>
+                          <option value="en">English</option>
+                          <option value="mr">Marathi</option>
+                        </select>
+                      </div>
+                      <div className="form-group">
                         <label>Slider Name <span className="text-danger">*</span></label>
                         <input
                           type="text"
@@ -417,8 +442,8 @@ const Slider = () => {
                         </small>
                       </div>
                       {imagePreview && (
-                          <img src={imagePreview} alt="preview" width="100" className="mt-2" />
-                        )}
+                        <img src={imagePreview} alt="preview" width="100" className="mt-2" />
+                      )}
                     </div>
                     <div className="modal-footer">
                       <button type="button" className="btn btn-secondary" onClick={handleCloseEditModal}>

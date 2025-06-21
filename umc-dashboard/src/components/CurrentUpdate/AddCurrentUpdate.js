@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../api";
+import { toast, ToastContainer } from "react-toastify"
 
 const AddCurrentUpdate = () => {
   const [description, setDescription] = useState("");
@@ -47,7 +48,18 @@ const AddCurrentUpdate = () => {
         console.error("Failed to add updates");
       }
     } catch (error) {
-      console.error("Error while adding updates:", error);
+      if (
+        error.response &&
+        error.response.status === 400 &&
+        error.response.data &&
+        error.response.data.errors
+      ) {
+        error.response.data.errors.forEach((errMsg) => {
+          toast.error(errMsg);
+        });
+      } else {
+        toast.error("Something went wrong while adding the update.");
+      }
     }
     setDescription("");
     setLanguage("");
@@ -139,6 +151,7 @@ const AddCurrentUpdate = () => {
             </div>
           </div>
         </div>
+        <ToastContainer />
       </div>
     </>
   );
