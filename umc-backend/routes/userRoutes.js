@@ -5,6 +5,7 @@ const bcrypt = require("bcryptjs");
 const { verifyToken } = require('../middleware/jwtMiddleware.js');
 const sanitizeInput = require('../middleware/sanitizeInput.js');
 const {CustomDecryption} = require("../utils/CustomDecryption.js");
+const { validateUserDetails, validateUpdateUserDetails } = require("../middleware/validationinputfield.js");
 
 const commonPasswords = [
   'password', '123456', '12345678', '1234', 'qwerty', '12345',
@@ -89,7 +90,7 @@ router.get("/users/:id", verifyToken, (req, res) => {
 });
 
 
-router.post("/users", verifyToken, sanitizeInput, async (req, res) => {
+router.post("/users", verifyToken, sanitizeInput, validateUserDetails, async (req, res) => {
   // Only allow if user is Superadmin
   if (req.user.role !== 'Superadmin') {
     return res.status(403).json({ message: 'Unauthorized' });
@@ -209,7 +210,7 @@ router.post("/users", verifyToken, sanitizeInput, async (req, res) => {
 });
 
 
-router.post("/edit-users/:id", verifyToken, sanitizeInput, async (req, res) => {
+router.post("/edit-users/:id", verifyToken, sanitizeInput, validateUpdateUserDetails, async (req, res) => {
   const { id } = req.params;
 
   const { fullname, email, role, permission, status } = req.body;
