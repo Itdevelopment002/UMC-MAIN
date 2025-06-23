@@ -445,7 +445,7 @@ const validateFooterUpdateContact = [
 const validateFooter = [
     alphabetOnlyValidator("heading", minHeadingLength, maxHeadingLength, "Heading", descriptionRegex),
     urlValidator("link", "Link"),
-    languageCodeValidator(),
+    languageCodeValidator("language_code"),
     validateRequest,
 ];
 
