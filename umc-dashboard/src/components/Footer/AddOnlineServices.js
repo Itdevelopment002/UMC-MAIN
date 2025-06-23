@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../api";
+import { toast, ToastContainer } from "react-toastify";
 
 const AddOnlineServices = () => {
   const [heading, setHeading] = useState("");
@@ -47,7 +48,28 @@ const AddOnlineServices = () => {
       setLanguage("");
       navigate("/footer");
     } catch (error) {
-      console.error("Error adding online services:", error);
+      if (
+        error.response &&
+        error.response.status === 400 &&
+        Array.isArray(error.response.data.errors)
+      ) {
+        error.response.data.errors.forEach((err) => {
+          const message = typeof err === "string" ? err : err.message || "Validation error";
+          toast.error(message, {
+            position: "top-right",
+            autoClose: 3000,
+          });
+        });
+      } else {
+        toast.error(
+          error.response?.data?.message || "Failed to add online services. Try again.",
+          {
+            position: "top-right",
+            autoClose: 3000,
+          }
+        );
+      }
+      console.error("Error adding online servcies:", error);
     }
   };
 
@@ -163,6 +185,7 @@ const AddOnlineServices = () => {
           </div>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };

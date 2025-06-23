@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import api from "../api";
 import { useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
 
 const AddWard = () => {
   const navigate = useNavigate();
@@ -70,7 +71,28 @@ const AddWard = () => {
         navigate("/contact-us");
       }
     } catch (error) {
-      console.error("Error submitting form:", error);
+      if (
+        error.response &&
+        error.response.status === 400 &&
+        Array.isArray(error.response.data.errors)
+      ) {
+        error.response.data.errors.forEach((err) => {
+          const message = typeof err === "string" ? err : err.message || "Validation error";
+          toast.error(message, {
+            position: "top-right",
+            autoClose: 3000,
+          });
+        });
+      } else {
+        toast.error(
+          error.response?.data?.message || "Failed to add ward info. Try again.",
+          {
+            position: "top-right",
+            autoClose: 3000,
+          }
+        );
+      }
+      console.error("Error adding ward info:", error);
     }
   };
 
@@ -214,6 +236,7 @@ const AddWard = () => {
           </div>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };

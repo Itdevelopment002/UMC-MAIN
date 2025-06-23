@@ -129,12 +129,32 @@ const ContactUs = () => {
       toast.success(
         `${modalType === "contact" ? "Contact" : "Ward"} information updated successfully!`
       );
+      closeModal();
       navigate("/contact-us");
     } catch (error) {
-      console.error(error);
-      toast.error("Failed to update the entry!");
+      if (
+        error.response &&
+        error.response.status === 400 &&
+        Array.isArray(error.response.data.errors)
+      ) {
+        error.response.data.errors.forEach((err) => {
+          const message = typeof err === "string" ? err : err.message || "Validation error";
+          toast.error(message, {
+            position: "top-right",
+            autoClose: 3000,
+          });
+        });
+      } else {
+        toast.error(
+          error.response?.data?.message || "Failed to update data. Try again.",
+          {
+            position: "top-right",
+            autoClose: 3000,
+          }
+        );
+      }
+      console.error("Error updating data:", error);
     }
-    closeModal();
   };
 
   const handleImageChange = (e) => {

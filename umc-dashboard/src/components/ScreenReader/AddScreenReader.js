@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api";
+import { toast, ToastContainer } from "react-toastify";
 import { Link } from "react-router-dom";
 
 const AddScreenReader = () => {
@@ -66,6 +67,22 @@ const AddScreenReader = () => {
         console.error("Failed to add screen reader data");
       }
     } catch (error) {
+      if (error.response && error.response.status === 400) {
+        const errorMessages = error.response.data.errors ||
+          (error.response.data.message ? [error.response.data] : []);
+
+        errorMessages.forEach((err) => {
+          toast.error(err.message || err, {
+            position: "top-right",
+            autoClose: 3000,
+          });
+        });
+      } else {
+        toast.error("Failed to add screen reader. Try again.", {
+          position: "top-right",
+          autoClose: 3000,
+        });
+      }
       console.error("Error adding screen reader data:", error);
     }
   };
@@ -204,6 +221,7 @@ const AddScreenReader = () => {
           </div>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };

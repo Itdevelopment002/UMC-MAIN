@@ -70,13 +70,28 @@ const Recruitment = () => {
         language_code: selectedRecruitment.language_code,
       });
       toast.success("Recruitment updated successfully");
-      fetchRecruitment();
-    } catch (error) {
-      console.error("Error updating recruitment:", error);
-      toast.error("Error updating recruitment");
-    } finally {
       setIsLoading(false);
       handleCloseEditModal();
+      fetchRecruitment();
+    } catch (error) {
+      if (error.response && error.response.status === 400) {
+        const errorMessages = error.response.data.errors ||
+          (error.response.data.message ? [error.response.data] : []);
+
+        errorMessages.forEach((err) => {
+          toast.error(err.message || err, {
+            position: "top-right",
+            autoClose: 3000,
+          });
+        });
+      } else {
+        toast.error("Failed to update recruitment. Try again.", {
+          position: "top-right",
+          autoClose: 3000,
+        });
+      }
+      setIsLoading(false);
+      console.error("Error updating recruitment data:", error);
     }
   };
 

@@ -7,6 +7,7 @@ const db = require("../config/db.js");
 const { verifyToken } = require('../middleware/jwtMiddleware.js');
 const { getMulterConfig, handleMulterError } = require("../utils/uploadValidation");
 const sanitizeInput = require("../middleware/sanitizeInput.js");
+const { validateBanner, validateUpdateBanner } = require("../middleware/validationinputfield.js");
 
 const upload = multer(getMulterConfig());
 
@@ -66,7 +67,7 @@ router.get("/banner/:id", (req, res) => {
 });
 
 
-router.post("/banner", verifyToken, upload.single("image"), sanitizeInput, handleMulterError, (req, res) => {
+router.post("/banner", verifyToken, upload.single("image"), sanitizeInput, validateBanner, handleMulterError, (req, res) => {
   if (req.user?.role === "Admin") {
     return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
   }
@@ -96,7 +97,7 @@ router.post("/banner", verifyToken, upload.single("image"), sanitizeInput, handl
 });
 
 
-router.post("/edit-banner/:id", verifyToken, upload.single("image"), sanitizeInput, handleMulterError, (req, res) => {
+router.post("/edit-banner/:id", verifyToken, upload.single("image"), sanitizeInput, validateUpdateBanner, handleMulterError, (req, res) => {
   if (req.user?.role === "Admin") {
     return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
   }

@@ -55,7 +55,23 @@ const ScreenReader = () => {
       setShowEditModal(false);
       toast.success("Screen Reader Access updated successfully!");
     } catch (error) {
-      toast.error("Failed to update the screen reader data!");
+      if (error.response && error.response.status === 400) {
+        const errorMessages = error.response.data.errors ||
+          (error.response.data.message ? [error.response.data] : []);
+
+        errorMessages.forEach((err) => {
+          toast.error(err.message || err, {
+            position: "top-right",
+            autoClose: 3000,
+          });
+        });
+      } else {
+        toast.error("Failed to update screen reader. Try again.", {
+          position: "top-right",
+          autoClose: 3000,
+        });
+      }
+      console.error("Error updating screen reader data:", error);
     }
   };
 
