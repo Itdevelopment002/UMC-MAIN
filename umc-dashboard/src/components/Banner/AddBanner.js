@@ -29,7 +29,7 @@ const AddBanner = () => {
 
   const validateForm = () => {
     const newErrors = {};
-    
+
     if (!bannerName.trim()) {
       newErrors.bannerName = "Banner name is required.";
     }
@@ -61,7 +61,7 @@ const AddBanner = () => {
           "Content-Type": "multipart/form-data",
         },
       });
-      
+
       toast.success("Banner added successfully!", {
         position: "top-right",
         autoClose: 3000,
@@ -71,18 +71,30 @@ const AddBanner = () => {
       setBannerName("");
       setSelectedFile(null);
       setErrors({});
-      
+
       if (fileInputRef.current) {
         fileInputRef.current.value = "";
       }
-      
+
       navigate("/banner");
     } catch (error) {
-      toast.error("Failed to add banner. Try again.", {
-        position: "top-right",
-        autoClose: 3000,
-      });
-      console.error("Error uploading file:", error);
+      if (error.response && error.response.status === 400) {
+        const errorMessages = error.response.data.errors ||
+          (error.response.data.message ? [error.response.data] : []);
+
+        errorMessages.forEach((err) => {
+          toast.error(err.message || err, {
+            position: "top-right",
+            autoClose: 3000,
+          });
+        });
+      } else {
+        toast.error("Failed to add banner. Try again.", {
+          position: "top-right",
+          autoClose: 3000,
+        });
+      }
+      console.error("Error adding banner:", error);
     }
   };
 
@@ -154,7 +166,7 @@ const AddBanner = () => {
                             </div>
                           )}
                         </div>
-                        
+
                       </div>
                     </div>
                     <div className="form-group row">

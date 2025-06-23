@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import api from "../api";
+import { toast, ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
@@ -77,9 +78,27 @@ const AddRecruitment = () => {
       setErrors({ heading: "", description: "", link: "", issueDate: "", language: "" });
       navigate("/recruitment");
     } catch (error) {
-      console.error("Failed to add recruitment data. Please try again.");
+      if (error.response && error.response.status === 400) {
+        // Handle both formats of error response
+        const errorMessages = error.response.data.errors ||
+          (error.response.data.message ? [error.response.data] : []);
+
+        errorMessages.forEach((err) => {
+          toast.error(err.message || err, {
+            position: "top-right",
+            autoClose: 3000,
+          });
+        });
+      } else {
+        toast.error("Failed to add recruitment. Try again.", {
+          position: "top-right",
+          autoClose: 3000,
+        });
+      }
+      console.error("Error adding recruitment data:", error);
     }
   };
+
   return (
     <>
       <div className="page-wrapper">
@@ -257,6 +276,7 @@ const AddRecruitment = () => {
             </div>
           </div>
         </div>
+        <ToastContainer />
       </div>
     </>
   );

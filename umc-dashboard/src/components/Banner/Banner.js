@@ -94,7 +94,7 @@ const Banner = () => {
       return;
     }
 
-    if (editErrors.image ) {
+    if (editErrors.image) {
       toast.error("Please fix errors before submitting.", {
         position: "top-right",
         autoClose: 3000,
@@ -117,8 +117,23 @@ const Banner = () => {
       setImagePreview(null);
       setShowEditModal(false);
     } catch (error) {
+      if (error.response && error.response.status === 400) {
+        const errorMessages = error.response.data.errors ||
+          (error.response.data.message ? [error.response.data] : []);
+
+        errorMessages.forEach((err) => {
+          toast.error(err.message || err, {
+            position: "top-right",
+            autoClose: 3000,
+          });
+        });
+      } else {
+        toast.error("Failed to update banner. Try again.", {
+          position: "top-right",
+          autoClose: 3000,
+        });
+      }
       console.error("Error updating banner:", error);
-      toast.error("Error updating banner!");
     }
   };
 

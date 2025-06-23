@@ -1,6 +1,5 @@
 import React from "react";
 //eslint-disable-next-line
-import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Link } from "react-router-dom";
 import QuickLinks from "./QuickLinks";
@@ -29,7 +28,6 @@ const Footer = () => {
           <OnlineServices />
         </div>
       </div>
-      <ToastContainer />
     </>
   );
 };

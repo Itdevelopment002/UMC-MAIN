@@ -52,8 +52,28 @@ const Help = () => {
             setShowEditModal(false);
             toast.success("Help Data updated successfully!");
         } catch (error) {
-            console.error("Error updating help data:", error);
-            toast.error("Failed to update the help data!");
+            if (
+                error.response &&
+                error.response.status === 400 &&
+                Array.isArray(error.response.data.errors)
+            ) {
+                error.response.data.errors.forEach((err) => {
+                    const message = typeof err === "string" ? err : err.message || "Validation error";
+                    toast.error(message, {
+                        position: "top-right",
+                        autoClose: 3000,
+                    });
+                });
+            } else {
+                toast.error(
+                    error.response?.data?.message || "Failed to update help links. Try again.",
+                    {
+                        position: "top-right",
+                        autoClose: 3000,
+                    }
+                );
+            }
+            console.error("Error updating help links:", error);
         }
     };
 
@@ -353,9 +373,7 @@ const Help = () => {
                     </div>
                 </div>
             )}
-
         </div>
-
     );
 };
 

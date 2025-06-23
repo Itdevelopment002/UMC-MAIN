@@ -52,8 +52,28 @@ const QuickLinks = () => {
             setShowEditModal(false);
             toast.success("Quick Links updated successfully!");
         } catch (error) {
+            if (
+                error.response &&
+                error.response.status === 400 &&
+                Array.isArray(error.response.data.errors)
+            ) {
+                error.response.data.errors.forEach((err) => {
+                    const message = typeof err === "string" ? err : err.message || "Validation error";
+                    toast.error(message, {
+                        position: "top-right",
+                        autoClose: 3000,
+                    });
+                });
+            } else {
+                toast.error(
+                    error.response?.data?.message || "Failed to update quick links. Try again.",
+                    {
+                        position: "top-right",
+                        autoClose: 3000,
+                    }
+                );
+            }
             console.error("Error updating quick links:", error);
-            toast.error("Failed to update the quick links!");
         }
     };
 
@@ -352,9 +372,7 @@ const QuickLinks = () => {
                     </div>
                 </div>
             )}
-
         </div>
-
     );
 };
 

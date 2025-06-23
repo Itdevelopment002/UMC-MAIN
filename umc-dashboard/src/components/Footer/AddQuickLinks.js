@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../api";
+import { toast, ToastContainer } from "react-toastify";
 
 const AddQuickLinks = () => {
   const [heading, setHeading] = useState("");
@@ -47,9 +48,31 @@ const AddQuickLinks = () => {
       setLanguage("");
       navigate("/footer");
     } catch (error) {
-      console.error("Error adding Quick Links:", error);
-    }
-  };
+          if (
+            error.response &&
+            error.response.status === 400 &&
+            Array.isArray(error.response.data.errors)
+          ) {
+            error.response.data.errors.forEach((err) => {
+              const message = typeof err === "string" ? err : err.message || "Validation error";
+              toast.error(message, {
+                position: "top-right",
+                autoClose: 3000,
+              });
+            });
+          } else {
+            toast.error(
+              error.response?.data?.message || "Failed to add quick links. Try again.",
+              {
+                position: "top-right",
+                autoClose: 3000,
+              }
+            );
+          }
+    
+          console.error("Error adding quick links:", error);
+        }
+      };
 
   return (
     <div>
@@ -163,6 +186,7 @@ const AddQuickLinks = () => {
           </div>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };

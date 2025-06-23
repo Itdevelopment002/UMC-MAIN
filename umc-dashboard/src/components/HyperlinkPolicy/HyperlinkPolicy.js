@@ -53,7 +53,28 @@ const HyperlinkPolicy = () => {
       setShowEditModal(false);
       toast.success("Hyperlink Policy updated successfully!");
     } catch (error) {
-      toast.error("Failed to update the hyperlink policy!");
+      if (
+        error.response &&
+        error.response.status === 400 &&
+        Array.isArray(error.response.data.errors)
+      ) {
+        error.response.data.errors.forEach((err) => {
+          const message = typeof err === "string" ? err : err.message || "Validation error";
+          toast.error(message, {
+            position: "top-right",
+            autoClose: 3000,
+          });
+        });
+      } else {
+        toast.error(
+          error.response?.data?.message || "Failed to update hyperlink policy. Try again.",
+          {
+            position: "top-right",
+            autoClose: 3000,
+          }
+        );
+      }
+      console.error("Error updating hyperlink policy:", error);
     }
   };
 

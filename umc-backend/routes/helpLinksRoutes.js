@@ -3,6 +3,7 @@ const router = express.Router();
 const db = require("../config/db.js");
 const { verifyToken } = require('../middleware/jwtMiddleware.js');
 const sanitizeInput = require('../middleware/sanitizeInput.js');
+const { validateFooter } = require("../middleware/validationinputfield.js");
 
 router.get("/helps", (req, res) => {
   const language = req.query.lang;
@@ -21,7 +22,7 @@ router.get("/helps", (req, res) => {
 });
 
 
-router.post("/helps", verifyToken, sanitizeInput, (req, res) => {
+router.post("/helps", verifyToken, sanitizeInput, validateFooter, (req, res) => {
   if (req.user?.role === "Admin") {
     return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
   }
@@ -34,7 +35,7 @@ router.post("/helps", verifyToken, sanitizeInput, (req, res) => {
 });
 
 
-router.post("/edit-helps/:id", verifyToken, sanitizeInput, (req, res) => {
+router.post("/edit-helps/:id", verifyToken, sanitizeInput, validateFooter, (req, res) => {
   if (req.user?.role === "Admin") {
     return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
   }
