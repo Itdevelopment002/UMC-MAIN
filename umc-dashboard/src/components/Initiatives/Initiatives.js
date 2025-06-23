@@ -52,18 +52,25 @@ const Initiatives = () => {
     setShowDeleteModal(true);
   };
 
-  const handleEditModalOpen = async (initiativeId) => {
-    try {
-      const response = await api.get(`/initiatives/${initiativeId}`);
-      setSelectedInitiative(response.data);
-      setImagePreview(`${baseURL}/${response.data.main_icon_path}`);
-      setShowEditModal(true);
-      setErrors({}); // Reset errors when opening modal
-    } catch (error) {
-      console.error("Error fetching initiative:", error);
-      toast.error("Failed to fetch initiative details");
-    }
-  };
+const handleEditModalOpen = async (initiativeId) => {
+  try {
+    const response = await api.get(`/initiatives/${initiativeId}`);
+    const data = response.data;
+
+    setSelectedInitiative({
+      ...data,
+      mainIcon: "existing", // 👈 Add this line to indicate image exists
+    });
+
+    setImagePreview(`${baseURL}/${data.main_icon_path}`);
+    setShowEditModal(true);
+    setErrors({});
+  } catch (error) {
+    console.error("Error fetching initiative:", error);
+    toast.error("Failed to fetch initiative details");
+  }
+};
+
 
   const handleDelete = async () => {
     try {
@@ -91,96 +98,109 @@ const Initiatives = () => {
     setErrors({});
   };
 
-const validateEditForm = () => {
-  const newErrors = {};
+  const validateEditForm = () => {
+    const newErrors = {};
 
-  // Validate fields
-  if (!selectedInitiative?.heading) newErrors.heading = "Initiative Heading is required";
-  if (!selectedInitiative?.link) newErrors.link = "Initiative Link is required";
-  if (!selectedInitiative?.language_code) newErrors.language_code = "Language selection is required";
+    // Validate fields
+    if (!selectedInitiative?.heading) newErrors.heading = "Initiative Heading is required";
+    if (!selectedInitiative?.link) newErrors.link = "Initiative Link is required";
+    if (!selectedInitiative?.language_code) newErrors.language_code = "Language selection is required";
 
-  // Validate image (required and valid)
-  if (!selectedInitiative?.mainIcon) {
-    newErrors.mainIcon = "Initiative Image is required";
-  } else if (selectedInitiative.mainIcon instanceof File) {
-    const imageError = getImageValidationError(selectedInitiative.mainIcon);
-    if (imageError) {
-      newErrors.mainIcon = imageError;
-    }
+    // Validate image (required and valid)
+if (!selectedInitiative?.mainIcon) {
+  newErrors.mainIcon = "Initiative Image is required";
+} else if (selectedInitiative.mainIcon instanceof File) {
+  const imageError = getImageValidationError(selectedInitiative.mainIcon);
+  if (imageError) {
+    newErrors.mainIcon = imageError;
   }
+}
 
-  setErrors(newErrors);
-  return Object.keys(newErrors).length === 0;
-};
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
-const handleSaveEdit = async () => {
-  if (!validateEditForm()) {
-    if (errors.mainIcon) {
-      toast.error("Please fix image errors before submitting", {
-        position: "top-right",
-        autoClose: 3000,
-      });
-    } else {
-      toast.error("Please fill all required fields correctly", {
-        position: "top-right",
-        autoClose: 3000,
-      });
-    }
-    return;
-  }
-
-  const formData = new FormData();
-  formData.append("heading", selectedInitiative.heading);
-  formData.append("link", selectedInitiative.link);
-  formData.append("language_code", selectedInitiative.language_code);
-
-  if (selectedInitiative.mainIcon instanceof File) {
-    formData.append("mainIcon", selectedInitiative.mainIcon);
-  }
-
-  try {
-    await api.post(`/edit-initiatives/${selectedInitiative.id}`, formData, {
-      headers: { "Content-Type": "multipart/form-data" },
-    });
-    fetchInitiatives();
-    setShowEditModal(false);
-    toast.success("Initiative updated successfully", {
-      position: "top-right",
-      autoClose: 3000,
-    });
-  } catch (error) {
-    console.error("Error updating initiative:", error);
-    toast.error("Failed to update initiative", {
-      position: "top-right",
-      autoClose: 3000,
-    });
-  }
-};
-
-// File change handler with validation
-const handleFileChange = (e) => {
-  const file = e.target.files[0];
-
-  if (file) {
-    const errorMessage = getImageValidationError(file);
-    if (errorMessage) {
-      if (fileInputRef.current) {
-        fileInputRef.current.value = "";
+  const handleSaveEdit = async () => {
+    if (!validateEditForm()) {
+      if (errors.mainIcon) {
+        toast.error("Please fix image errors before submitting", {
+          position: "top-right",
+          autoClose: 3000,
+        });
+      } else {
+        toast.error("Please fill all required fields correctly", {
+          position: "top-right",
+          autoClose: 3000,
+        });
       }
-      setErrors({ ...errors, mainIcon: errorMessage });
       return;
     }
 
-    setSelectedInitiative((prev) => ({ ...prev, mainIcon: file }));
-    setImagePreview(URL.createObjectURL(file));
-    setErrors((prev) => ({ ...prev, mainIcon: "" }));
-  } else {
-    // Clear image if no file is selected
-    setSelectedInitiative((prev) => ({ ...prev, mainIcon: "" }));
-    setImagePreview(null);
-    setErrors((prev) => ({ ...prev, mainIcon: "Initiative Image is required" }));
-  }
-};
+    const formData = new FormData();
+    formData.append("heading", selectedInitiative.heading);
+    formData.append("link", selectedInitiative.link);
+    formData.append("language_code", selectedInitiative.language_code);
+
+    if (selectedInitiative.mainIcon instanceof File) {
+      formData.append("mainIcon", selectedInitiative.mainIcon);
+    }
+
+    try {
+      await api.post(`/edit-initiatives/${selectedInitiative.id}`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      fetchInitiatives();
+      setShowEditModal(false);
+      toast.success("Initiative updated successfully", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+    } catch (error) {
+      if (
+        error.response &&
+        error.response.status === 400 &&
+        error.response.data.errors
+      ) {
+        error.response.data.errors.forEach((err) => {
+          toast.error(err.message, {
+            position: "top-right",
+            autoClose: 3000,
+          });
+        });
+      } else {
+        toast.error("Failed to update initiative", {
+          position: "top-right",
+          autoClose: 3000,
+        });
+      }
+      console.error("Error updating initiative:", error);
+    }
+  };
+
+  // File change handler with validation
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+
+    if (file) {
+      const errorMessage = getImageValidationError(file);
+      if (errorMessage) {
+        if (fileInputRef.current) {
+          fileInputRef.current.value = "";
+        }
+        setErrors({ ...errors, mainIcon: errorMessage });
+        return;
+      }
+
+      setSelectedInitiative((prev) => ({ ...prev, mainIcon: file }));
+      setImagePreview(URL.createObjectURL(file));
+      setErrors((prev) => ({ ...prev, mainIcon: "" }));
+    } else {
+      // Clear image if no file is selected
+      setSelectedInitiative((prev) => ({ ...prev, mainIcon: "" }));
+      setImagePreview(null);
+      setErrors((prev) => ({ ...prev, mainIcon: "Initiative Image is required" }));
+    }
+  };
 
 
   return (

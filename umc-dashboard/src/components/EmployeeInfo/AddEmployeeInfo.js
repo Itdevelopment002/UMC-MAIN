@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../api";
 import Flatpickr from "react-flatpickr";
+import { toast, ToastContainer } from "react-toastify";
 import "flatpickr/dist/themes/material_blue.css";
 
 const AddEmployeeInformation = () => {
@@ -60,12 +61,38 @@ const AddEmployeeInformation = () => {
         issue_date: formattedDate,
         language_code: language,
       });
-      setDescription("");
-      setLink("");
-      setLanguage("");
-      setIssueDate("");
-      navigate("/emp-info");
+      if (response.status === 200 || response.status === 201) {
+
+        setDescription("");
+        setLink("");
+        setLanguage("");
+        setIssueDate("");
+        toast.success("Employee Info added successfully!", {
+          position: "top-right",
+          autoClose: 1000,
+          onClose: () => {
+            navigate("/emp-info");
+          }
+        });
+      }
     } catch (error) {
+      if (
+        error.response &&
+        error.response.status === 400 &&
+        error.response.data.errors
+      ) {
+        error.response.data.errors.forEach((err) => {
+          toast.error(err.message, {
+            position: "top-right",
+            autoClose: 3000,
+          });
+        });
+      } else {
+        toast.error("Failed to adding emp info. Try again.", {
+          position: "top-right",
+          autoClose: 3000,
+        });
+      }
       console.error("Error adding emp info data:", error);
     }
   };
@@ -216,6 +243,7 @@ const AddEmployeeInformation = () => {
           </div>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };

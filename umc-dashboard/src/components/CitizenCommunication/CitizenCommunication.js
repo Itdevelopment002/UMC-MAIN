@@ -92,126 +92,140 @@ const CitizenCommunication = () => {
             fileInputRef.current.value = "";
         }
     };
-    
-const validateForm = () => {
-    const newErrors = {};
 
-    if (modalType === "portal") {
-        if (!editData.heading?.trim()) newErrors.heading = "Service Heading is required.";
-        if (!editData.description?.trim()) newErrors.description = "Service Description is required.";
-        if (!editData.link?.trim()) newErrors.link = "Service Link is required.";
-        if (!editData.language_code) newErrors.language_code = "Language selection is required.";
-    } else if (modalType === "emergency") {
-        if (!editData.heading?.trim()) newErrors.heading = "Service Heading is required.";
-        if (!editData.number?.trim()) newErrors.number = "Service Number is required.";
-        if (!editData.language_code) newErrors.language_code = "Language selection is required.";
-    }
+    const validateForm = () => {
+        const newErrors = {};
 
-    setErrors(newErrors);
+        if (modalType === "portal") {
+            if (!editData.heading?.trim()) newErrors.heading = "Service Heading is required.";
+            if (!editData.description?.trim()) newErrors.description = "Service Description is required.";
+            if (!editData.link?.trim()) newErrors.link = "Service Link is required.";
+            if (!editData.language_code) newErrors.language_code = "Language selection is required.";
+        } else if (modalType === "emergency") {
+            if (!editData.heading?.trim()) newErrors.heading = "Service Heading is required.";
+            if (!editData.number?.trim()) newErrors.number = "Service Number is required.";
+            if (!editData.language_code) newErrors.language_code = "Language selection is required.";
+        }
 
-    if (Object.keys(newErrors).length > 0) {
-        toast.error("Please fix errors before submitting.", {
-            position: "top-right",
-            autoClose: 3000,
-        });
-    }
+        setErrors(newErrors);
 
-    return Object.keys(newErrors).length === 0;
-};
+        if (Object.keys(newErrors).length > 0) {
+            toast.error("Please fix errors before submitting.", {
+                position: "top-right",
+                autoClose: 3000,
+            });
+        }
 
-const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-        const errorMessage = getImageValidationError(file);
-        if (errorMessage) {
-            setErrors({ ...errors, imageFile: errorMessage });
-            if (fileInputRef.current) {
-                fileInputRef.current.value = "";
+        return Object.keys(newErrors).length === 0;
+    };
+
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const errorMessage = getImageValidationError(file);
+            if (errorMessage) {
+                setErrors({ ...errors, imageFile: errorMessage });
+                if (fileInputRef.current) {
+                    fileInputRef.current.value = "";
+                }
+                return;
             }
+
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setImagePreview(reader.result);
+                setEditData({ ...editData, imageFile: file });
+                setErrors({ ...errors, imageFile: "" });
+            };
+            reader.readAsDataURL(file);
+        } else {
+            setErrors({ ...errors, imageFile: "Image is required" });
+            toast.error("Image is required", {
+                position: "top-right",
+                autoClose: 3000,
+            });
+        }
+    };
+
+    const handleSaveChanges = async () => {
+        if (!validateForm()) {
             return;
         }
 
-        const reader = new FileReader();
-        reader.onloadend = () => {
-            setImagePreview(reader.result);
-            setEditData({ ...editData, imageFile: file });
-            setErrors({ ...errors, imageFile: "" });
-        };
-        reader.readAsDataURL(file);
-    } else {
-        setErrors({ ...errors, imageFile: "Image is required" });
-        toast.error("Image is required", {
-            position: "top-right",
-            autoClose: 3000,
-        });
-    }
-};
-
-const handleSaveChanges = async () => {
-    if (!validateForm()) {
-        return;
-    }
-
-    if (errors.imageFile || errors.heading || errors.description || errors.link || errors.number || errors.language_code) {
-        toast.error("Please fix errors before submitting.", {
-            position: "top-right",
-            autoClose: 3000,
-        });
-        return;
-    }
-
-    try {
-        const formData = new FormData();
-        formData.append("heading", editData.heading);
-
-        if (modalType === "portal") {
-            formData.append("description", editData.description);
-            formData.append("link", editData.link);
-        } else if (modalType === "emergency") {
-            formData.append("number", editData.number);
-        }
-
-        formData.append("language_code", editData.language_code);
-
-        if (editData.imageFile) {
-            formData.append(
-                modalType === "portal" ? "portalImage" : "emergencyImage",
-                editData.imageFile
-            );
-        }
-
-        await api.post(
-            `/${modalType === "portal" ? "edit-portal-services" : "edit-emergency-services"}/${selectedItem.id}`,
-            formData,
-            {
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                },
-            }
-        );
-
-        if (modalType === "portal") {
-            fetchPortalData();
-        } else {
-            fetchEmergencyData();
-        }
-
-        toast.success(
-            `${modalType === "portal" ? "Portal Services" : "Emergency Services"} updated successfully!`,
-            {
+        if (errors.imageFile || errors.heading || errors.description || errors.link || errors.number || errors.language_code) {
+            toast.error("Please fix errors before submitting.", {
                 position: "top-right",
                 autoClose: 3000,
+            });
+            return;
+        }
+
+        try {
+            const formData = new FormData();
+            formData.append("heading", editData.heading);
+
+            if (modalType === "portal") {
+                formData.append("description", editData.description);
+                formData.append("link", editData.link);
+            } else if (modalType === "emergency") {
+                formData.append("number", editData.number);
             }
-        );
-        closeModal();
-    } catch (error) {
-        console.error(error);
-        toast.error("Failed to update the entry!", {
-            position: "top-right",
-            autoClose: 3000,
-        });
-    }
-};
+
+            formData.append("language_code", editData.language_code);
+
+            if (editData.imageFile) {
+                formData.append(
+                    modalType === "portal" ? "portalImage" : "emergencyImage",
+                    editData.imageFile
+                );
+            }
+
+            await api.post(
+                `/${modalType === "portal" ? "edit-portal-services" : "edit-emergency-services"}/${selectedItem.id}`,
+                formData,
+                {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
+                }
+            );
+
+            if (modalType === "portal") {
+                fetchPortalData();
+            } else {
+                fetchEmergencyData();
+            }
+
+            toast.success(
+                `${modalType === "portal" ? "Portal Services" : "Emergency Services"} updated successfully!`,
+                {
+                    position: "top-right",
+                    autoClose: 3000,
+                }
+            );
+            closeModal();
+        } catch (error) {
+            if (
+                error.response &&
+                error.response.status === 400 &&
+                error.response.data.errors
+            ) {
+                error.response.data.errors.forEach((err) => {
+                    toast.error(err.message, {
+                        position: "top-right",
+                        autoClose: 3000,
+                    });
+                });
+            } else {
+                toast.error("Failed to update entry!", {
+                    position: "top-right",
+                    autoClose: 3000,
+                });
+            }
+            console.error("Error updating entry", error);
+
+        }
+    };
 
 
     return (

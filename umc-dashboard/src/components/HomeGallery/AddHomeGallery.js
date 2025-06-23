@@ -14,10 +14,10 @@ const AddHomeGallery = () => {
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
-    
+
     if (file) {
       const errorMessage = getImageValidationError(file);
-      
+
       if (errorMessage) {
         if (fileInputRef.current) {
           fileInputRef.current.value = "";
@@ -45,7 +45,7 @@ const AddHomeGallery = () => {
         newErrors.selectedFile = imageError;
       }
     }
-    
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -68,25 +68,37 @@ const AddHomeGallery = () => {
           "Content-Type": "multipart/form-data",
         },
       });
-      
+
       toast.success("Home gallery added successfully", {
         position: "top-right",
         autoClose: 3000,
       });
-      
+
       setPhotoName("");
       setSelectedFile(null);
       if (fileInputRef.current) {
         fileInputRef.current.value = "";
       }
-
       navigate("/home-gallery");
     } catch (error) {
+      if (
+        error.response &&
+        error.response.status === 400 &&
+        error.response.data.errors
+      ) {
+        error.response.data.errors.forEach((err) => {
+          toast.error(err.message, {
+            position: "top-right",
+            autoClose: 3000,
+          });
+        });
+      } else {
+        toast.error("Failed to add home gallery. Please try again.", {
+          position: "top-right",
+          autoClose: 3000,
+        });
+      }
       console.error("Error uploading file:", error);
-      toast.error("Failed to add home gallery. Please try again.", {
-        position: "top-right",
-        autoClose: 3000,
-      });
     }
   };
 
@@ -123,9 +135,8 @@ const AddHomeGallery = () => {
                       <div className="col-md-4">
                         <input
                           type="text"
-                          className={`form-control form-control-md ${
-                            errors.photoName ? "is-invalid" : ""
-                          }`}
+                          className={`form-control form-control-md ${errors.photoName ? "is-invalid" : ""
+                            }`}
                           placeholder="Enter Photo Gallery Name"
                           value={photoName}
                           onChange={(e) => {
@@ -156,9 +167,8 @@ const AddHomeGallery = () => {
                             name="image"
                             ref={fileInputRef}
                             accept=".jpg,.jpeg,.png"
-                            className={`form-control form-control-md col-md-12 col-xs-12 userfile ${
-                              errors.selectedFile ? "is-invalid" : ""
-                            }`}
+                            className={`form-control form-control-md col-md-12 col-xs-12 userfile ${errors.selectedFile ? "is-invalid" : ""
+                              }`}
                             onChange={(e) => {
                               handleFileChange(e);
                               if (e.target.files[0]) {

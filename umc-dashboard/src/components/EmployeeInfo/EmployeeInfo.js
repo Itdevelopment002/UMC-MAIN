@@ -60,8 +60,24 @@ const EmployeeInfo = () => {
       setShowEditModal(false);
       toast.success("Employee Information updated successfully!");
     } catch (error) {
+      if (
+        error.response &&
+        error.response.status === 400 &&
+        error.response.data.errors
+      ) {
+        error.response.data.errors.forEach((err) => {
+          toast.error(err.message, {
+            position: "top-right",
+            autoClose: 3000,
+          });
+        });
+      } else {
+        toast.error("Failed to update the emp info!", {
+          position: "top-right",
+          autoClose: 3000,
+        });
+      }
       console.error("Error updating emp info:", error);
-      toast.error("Failed to update the emp info!");
     }
   };
 

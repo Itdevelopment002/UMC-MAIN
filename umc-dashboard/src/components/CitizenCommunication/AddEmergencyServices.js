@@ -20,7 +20,7 @@ const AddEmergencyServices = () => {
         if (!heading) newErrors.heading = "Service Heading is required.";
         if (!number) newErrors.number = "Service Number is required.";
         if (!language) newErrors.language = "Language selection is required.";
-        
+
         // Use our global validation function
         const imageError = getImageValidationError(emergencyImage);
         if (imageError) {
@@ -37,7 +37,7 @@ const AddEmergencyServices = () => {
         if (file) {
             // Use our global validation function
             const errorMessage = getImageValidationError(file);
-           
+
             if (errorMessage) {
                 // Clear the file input if invalid file is selected
                 if (fileInputRef.current) {
@@ -81,27 +81,44 @@ const AddEmergencyServices = () => {
                 },
             });
 
-            toast.success(response.data.message, {
-                position: "top-right",
-                autoClose: 3000,
-            });
-            
-            setHeading('');
-            setNumber('');
-            setLanguage('');
-            setEmergencyImage(null);
-            
-            if (fileInputRef.current) {
-                fileInputRef.current.value = "";
+            if (response.status === 200 || response.status === 201) {
+                setHeading('');
+                setNumber('');
+                setLanguage('');
+                setEmergencyImage(null);
+
+                if (fileInputRef.current) {
+                    fileInputRef.current.value = "";
+                }
+
+                toast.success("Portal service added successfully!", {
+                    position: "top-right",
+                    autoClose: 1000,
+                    onClose: () => {
+                        navigate('/citizen-communication');
+                    }
+                });
             }
-            
-            navigate('/citizen-communication');
+
         } catch (error) {
+            if (
+                error.response &&
+                error.response.status === 400 &&
+                error.response.data.errors
+            ) {
+                error.response.data.errors.forEach((err) => {
+                    toast.error(err.message, {
+                        position: "top-right",
+                        autoClose: 3000,
+                    });
+                });
+            } else {
+                toast.error("Failed emergency add portal service. Please try again.", {
+                    position: "top-right",
+                    autoClose: 3000,
+                });
+            }
             console.error('Error uploading file:', error);
-            toast.error('Failed to add emergency service. Please try again.', {
-                position: "top-right",
-                autoClose: 3000,
-            });
         }
     };
 

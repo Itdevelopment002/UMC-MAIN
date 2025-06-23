@@ -74,92 +74,108 @@ const HomeGallery = () => {
   };
 
   const handleEdit = (gallery) => {
-    setSelectedGallery(gallery);
+    setSelectedGallery({
+      ...gallery,
+      image: "existing",
+    });
     setShowEditModal(true);
     setImagePreview(`${baseURL}${gallery.file_path}`);
     setSelectedFile(null);
     setErrors({});
   };
 
-const validateForm = () => {
+  const validateForm = () => {
     const newErrors = {};
 
     if (!selectedGallery?.photo_name?.trim()) {
-        newErrors.photoName = "Photo gallery name is required";
+      newErrors.photoName = "Photo gallery name is required";
     }
 
     if (selectedFile) {
-        const imageError = getImageValidationError(selectedFile);
-        if (imageError) {
-            newErrors.selectedFile = imageError;
-        }
-    } else if (!selectedGallery?.image) {
-        newErrors.selectedFile = "Image is required";
+      const imageError = getImageValidationError(selectedFile);
+      if (imageError) {
+        newErrors.selectedFile = imageError;
+      }
+    } else if (!selectedGallery?.image || selectedGallery.image === "") {
+      newErrors.selectedFile = "Image is required";
     }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
-};
+  };
 
-const handleFileChange = (e) => {
+
+  const handleFileChange = (e) => {
     const file = e.target.files[0];
 
     if (file) {
-        const errorMessage = getImageValidationError(file);
+      const errorMessage = getImageValidationError(file);
 
-        if (errorMessage) {
-            if (fileInputRef.current) {
-                fileInputRef.current.value = "";
-            }
-            setErrors({ ...errors, selectedFile: errorMessage });
-            setSelectedFile(null);
-            setSelectedGallery({ ...selectedGallery, image: "" });
-            return;
+      if (errorMessage) {
+        if (fileInputRef.current) {
+          fileInputRef.current.value = "";
         }
-
-        setSelectedFile(file);
-        setErrors({ ...errors, selectedFile: "" });
-        const imageUrl = URL.createObjectURL(file);
-        setSelectedGallery({ ...selectedGallery, image: imageUrl });
-        setImagePreview(imageUrl);
-    } else {
+        setErrors({ ...errors, selectedFile: errorMessage });
         setSelectedFile(null);
         setSelectedGallery({ ...selectedGallery, image: "" });
-        setErrors({ ...errors, selectedFile: "Image is required" });
-        toast.error("Please select an image.");
-    }
-};
+        return;
+      }
 
-const handleSaveEdit = async () => {
+      setSelectedFile(file);
+      setErrors({ ...errors, selectedFile: "" });
+      const imageUrl = URL.createObjectURL(file);
+      setSelectedGallery({ ...selectedGallery, image: imageUrl });
+      setImagePreview(imageUrl);
+    } else {
+      setSelectedFile(null);
+      setSelectedGallery({ ...selectedGallery, image: "" });
+      setErrors({ ...errors, selectedFile: "Image is required" });
+      toast.error("Please select an image.");
+    }
+  };
+
+  const handleSaveEdit = async () => {
     if (!validateForm()) {
-        toast.error("Please fix errors before submitting.");
-        return;
-    }
-
-    if (errors.selectedFile || errors.photoName) {
-        toast.error("Please fix errors before submitting.");
-        return;
+      toast.error("Please fix errors before submitting.");
+      return;
     }
 
     const formData = new FormData();
     formData.append("photo_name", selectedGallery.photo_name);
 
     if (selectedFile) {
-        formData.append("image", selectedFile);
+      formData.append("image", selectedFile);
     }
 
     try {
-        await api.post(`/edit-home-gallerys/${selectedGallery.id}`, formData, {
-            headers: { "Content-Type": "multipart/form-data" }
-        });
-        fetchGallerys();
-        toast.success("Home gallery updated successfully!");
-        setShowEditModal(false);
+      await api.post(`/edit-home-gallerys/${selectedGallery.id}`, formData, {
+        headers: { "Content-Type": "multipart/form-data" }
+      });
+      fetchGallerys();
+      toast.success("Home gallery updated successfully!");
+      setShowEditModal(false);
     } catch (error) {
-        console.error("Error updating home gallery:", error);
-        toast.error("Error updating home gallery!");
+      if (
+        error.response &&
+        error.response.status === 400 &&
+        error.response.data.errors
+      ) {
+        error.response.data.errors.forEach((err) => {
+          toast.error(err.message, {
+            position: "top-right",
+            autoClose: 3000,
+          });
+        });
+      } else {
+        toast.error("Error updating home gallery!", {
+          position: "top-right",
+          autoClose: 3000,
+        });
+      }
+      console.error("Error updating home gallery:", error);
     }
-};
+  };
+
 
   return (
     <>

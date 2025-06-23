@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import api from "../api";
 
 const AddEServices = () => {
@@ -42,11 +44,38 @@ const AddEServices = () => {
         link: link,
         language_code: language,
       });
-      setHeading("");
-      setLink("");
-      setLanguage("");
-      navigate("/eservices");
+
+      if (response.status === 200 || response.status === 201) {
+        setHeading("");
+        setLink("");
+        setLanguage("");
+
+        toast.success("News added successfully!", {
+          position: "top-right",
+          autoClose: 1000,
+          onClose: () => {
+            navigate("/eservices");
+          }
+        });
+      }
     } catch (error) {
+      if (
+        error.response &&
+        error.response.status === 400 &&
+        error.response.data.errors
+      ) {
+        error.response.data.errors.forEach((err) => {
+          toast.error(err.message, {
+            position: "top-right",
+            autoClose: 3000,
+          });
+        });
+      } else {
+        toast.error("Failed to add services. Try again.", {
+          position: "top-right",
+          autoClose: 3000,
+        });
+      }
       console.error("Error adding service:", error);
     }
   };
@@ -165,6 +194,7 @@ const AddEServices = () => {
           </div>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };

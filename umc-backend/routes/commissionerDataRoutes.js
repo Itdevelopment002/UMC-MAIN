@@ -131,6 +131,7 @@ router.post(
     if (req.user?.role === "Admin") {
       return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
     }
+
     const {
       coName,
       designation,
@@ -141,48 +142,65 @@ router.post(
       language_code
     } = req.body;
 
-    const validation = validateCommissionerData(req.body);
-    if (!validation.isValid) {
-      if (req.file) {
-        await deleteFileIfExists(`/uploads/${req.file.filename}`);
-      }
-      return res.status(400).json({ message: validation.message });
-    }
-
-    const imagePath = req.file ? `/uploads/${req.file.filename}` : null;
-
-    const sql = `
-      INSERT INTO commissioner_details 
-      (coName, designation, qualification, address, number, email, language_code, image_path) 
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-    `;
-
-    db.query(sql, [
-      coName,
-      designation,
-      qualification,
-      address,
-      number,
-      email,
-      language_code,
-      imagePath
-    ], async (err, result) => {
+    // ✅ Count total commissioner entries
+    const countQuery = `SELECT COUNT(*) AS total FROM commissioner_details`;
+    db.query(countQuery, async (err, result) => {
       if (err) {
-        if (req.file) {
-          await deleteFileIfExists(imagePath);
-        }
-        return res.status(500).json({
-          message: "Database error",
-          error: err
+        if (req.file) await deleteFileIfExists(`/uploads/${req.file.filename}`);
+        return res.status(500).json({ message: "Database error", error: err });
+      }
+
+      const totalCommissioners = result[0].total;
+
+      // ✅ Reject if total entries >= 2
+      if (totalCommissioners >= 2) {
+        if (req.file) await deleteFileIfExists(`/uploads/${req.file.filename}`);
+        return res.status(400).json({
+          errors: [{ message: "You can add only 2 commissioners in total." }],
         });
       }
-      res.status(201).json({
-        message: "Commissioner added successfully",
-        id: result.insertId
+
+      // ✅ Proceed with validation
+      const validation = validateCommissionerData(req.body);
+      if (!validation.isValid) {
+        if (req.file) await deleteFileIfExists(`/uploads/${req.file.filename}`);
+        return res.status(400).json({ message: validation.message });
+      }
+
+      const imagePath = req.file ? `/uploads/${req.file.filename}` : null;
+
+      const insertQuery = `
+        INSERT INTO commissioner_details 
+        (coName, designation, qualification, address, number, email, language_code, image_path) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+      `;
+
+      db.query(insertQuery, [
+        coName,
+        designation,
+        qualification,
+        address,
+        number,
+        email,
+        language_code,
+        imagePath
+      ], async (err, result) => {
+        if (err) {
+          if (req.file) await deleteFileIfExists(imagePath);
+          return res.status(500).json({
+            message: "Database error",
+            error: err
+          });
+        }
+        res.status(201).json({
+          message: "Commissioner added successfully",
+          id: result.insertId
+        });
       });
     });
   }
 );
+
 
 
 router.post("/commissioner-desc", verifyToken, (req, res) => {

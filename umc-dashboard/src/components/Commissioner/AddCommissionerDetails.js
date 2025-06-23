@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import api from "../api";
 
 const AddCommissionerDetails = () => {
@@ -72,10 +74,27 @@ const AddCommissionerDetails = () => {
       const response = await api.post("/commissioner-data", data, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-      if (response.status === 200) {
+      if (response.status === 200 || response.status === 201) {
         navigate("/commissioner");
       }
     } catch (error) {
+      if (
+        error.response &&
+        error.response.status === 400 &&
+        error.response.data.errors
+      ) {
+        error.response.data.errors.forEach((err) => {
+          toast.error(err.message, {
+            position: "top-right",
+            autoClose: 3000,
+          });
+        });
+      } else {
+        toast.error("Failed to update minister. Try again.", {
+          position: "top-right",
+          autoClose: 3000,
+        });
+      }
       console.error(error);
     }
   };
@@ -272,6 +291,8 @@ const AddCommissionerDetails = () => {
           </div>
         </div>
       </div>
+      <ToastContainer />
+
     </div>
   );
 };

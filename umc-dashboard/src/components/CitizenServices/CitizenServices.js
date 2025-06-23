@@ -55,15 +55,19 @@ const CitizeServices = () => {
   const handleEditModalOpen = async (serviceId) => {
     try {
       const response = await api.get(`/citizen-services/${serviceId}`);
-      setSelectedService(response.data);
+      setSelectedService({
+        ...response.data,
+        mainIcon: "existing",
+      });
       setImagePreview(`${baseURL}/${response.data.main_icon_path}`);
       setShowEditModal(true);
-      setErrors({}); // Reset errors when opening modal
+      setErrors({});
     } catch (error) {
       console.error("Error fetching citizen service:", error);
       toast.error("Failed to fetch citizen service details");
     }
   };
+
 
   const handleDelete = async () => {
     try {
@@ -92,13 +96,22 @@ const CitizeServices = () => {
 
   const validateForm = () => {
     const newErrors = {};
-    if (!selectedService?.service_heading) newErrors.serviceHeading = "Service Heading is required.";
-    if (!selectedService?.service_link) newErrors.serviceLink = "Service Link is required.";
-    if (!selectedService?.language_code) newErrors.language = "Language Selection is required.";
 
-    // Only validate image if a new one was selected
+    if (!selectedService?.service_heading) {
+      newErrors.serviceHeading = "Service Heading is required.";
+    }
+
+    if (!selectedService?.service_link) {
+      newErrors.serviceLink = "Service Link is required.";
+    }
+
+    if (!selectedService?.language_code) {
+      newErrors.language = "Language Selection is required.";
+    }
+
+    // ✅ Improved image validation logic
     if (!selectedService?.mainIcon) {
-      newErrors.mainIcon = "Initiative Image is required";
+      newErrors.mainIcon = "Service Image is required";
     } else if (selectedService.mainIcon instanceof File) {
       const imageError = getImageValidationError(selectedService.mainIcon);
       if (imageError) {
@@ -109,6 +122,7 @@ const CitizeServices = () => {
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
+
 
   const handleFileChange = (e, field) => {
     const file = e.target.files[0];
@@ -139,17 +153,10 @@ const CitizeServices = () => {
 
   const handleSaveEdit = async () => {
     if (!validateForm()) {
-      if (errors.mainIcon) {
-        toast.error("Please fix image errors before submitting", {
-          position: "top-right",
-          autoClose: 3000,
-        });
-      } else {
-        toast.error("Please fill all required fields correctly", {
-          position: "top-right",
-          autoClose: 3000,
-        });
-      }
+      toast.error("Please fix form errors before submitting", {
+        position: "top-right",
+        autoClose: 3000,
+      });
       return;
     }
 
@@ -158,21 +165,39 @@ const CitizeServices = () => {
     formData.append("serviceLink", selectedService.service_link);
     formData.append("language_code", selectedService.language_code);
 
-    // Only append the icon if a new one was selected
     if (selectedService.mainIcon instanceof File) {
       formData.append("mainIcon", selectedService.mainIcon);
     }
 
     try {
-      await api.post(`/edit-citizen-services/${selectedService.id}`, formData);
-      fetchServices();
-      setShowEditModal(false);
-      toast.success("Citizen service updated successfully");
+      const response = await api.post(`/edit-citizen-services/${selectedService.id}`, formData);
+      if (response.status === 200 || response.status === 201) {
+        fetchServices();
+        setShowEditModal(false);
+        toast.success("Citizen service updated successfully", {
+          position: "top-right",
+          autoClose: 1000,
+        });
+      }
     } catch (error) {
+      if (error.response?.status === 400 && error.response.data.errors) {
+        error.response.data.errors.forEach((err) => {
+          toast.error(err.message, {
+            position: "top-right",
+            autoClose: 3000,
+          });
+        });
+      } else {
+        toast.error("Failed to update citizen service. Try again.", {
+          position: "top-right",
+          autoClose: 3000,
+        });
+      }
       console.error("Error updating citizen service:", error);
-      toast.error("Failed to update citizen service");
     }
   };
+
+
 
   return (
     <>
