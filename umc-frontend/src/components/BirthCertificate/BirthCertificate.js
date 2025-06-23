@@ -11,16 +11,15 @@ import { useTranslation } from 'react-i18next';
 const BirthCertificate = () => {
   const [activeTab, setActiveTab] = useState("#birth-certificate");
   const [bgImage, setBgImage] = useState("");
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   const { t, i18n } = useTranslation();
 
   const fetchHeaderImage = async () => {
     try {
       const response = await api.get("/banner");
-
       if (response.data.length > 0) {
-        let selectedBanner = response.data.find(banner => banner.banner_name === "Birth-Certificate");
-
+        let selectedBanner = response.data.find(
+          banner => banner.banner_name === "Birth-Certificate"
+        );
         if (selectedBanner) {
           setBgImage(`${baseURL}${selectedBanner.file_path}`);
         } else {
@@ -75,15 +74,11 @@ const BirthCertificate = () => {
 
   const [tabData, setTabData] = useState(initializeTabData());
 
-  useEffect(() => {
-    setTabData(initializeTabData());
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [i18n.language]);
-
   const fetchServices = async () => {
     try {
       const response = await api.get(`/online-services-home?lang=${i18n.language}`);
       const serviceData = response.data;
+
       const updatedTabData = tabData.map((tab) => {
         const matchingService = serviceData.find(
           (service) => service.heading === tab.name
@@ -100,9 +95,13 @@ const BirthCertificate = () => {
   };
 
   useEffect(() => {
+    setTabData(initializeTabData());
     fetchServices();
-    fetchHeaderImage();
     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [i18n.language]);
+
+  useEffect(() => {
+    fetchHeaderImage(); 
   }, []);
 
   const activeTabData = tabData.find((tab) => tab.id === activeTab);
@@ -121,10 +120,7 @@ const BirthCertificate = () => {
       ></div>
 
       <div id="main-content">
-        <div
-          className="container-fluid font-location mt-4 mb-5"
-          id="birth-css"
-        >
+        <div className="container-fluid font-location mt-4 mb-5" id="birth-css">
           <nav className="breadcrumb">
             <Link to="/" className="breadcrumb-item text-decoration-none">
               {t('home1')}
@@ -134,7 +130,12 @@ const BirthCertificate = () => {
             </Link>
             <span className="breadcrumb-item active1">{t('birthCertificate.name')}</span>
           </nav>
-          <h2 className="location-title"><span className="highlight">{t('birthCertificate.name1')}</span><span className="highlighted-text"> {t('birthCertificate.name2')}</span></h2>
+
+          <h2 className="location-title">
+            <span className="highlight">{t('birthCertificate.name1')}</span>
+            <span className="highlighted-text"> {t('birthCertificate.name2')}</span>
+          </h2>
+
           <div className="row mt-4 row-styling-3">
             <div className="col-xl-9 col-lg-12 col-md-12 col-sm-12">
               <div className="e-services-container p-2">
@@ -154,6 +155,7 @@ const BirthCertificate = () => {
                       ))}
                     </ul>
                   </div>
+
                   <div className="roboto-font p-3">
                     {activeTabData && (
                       <div className="row d-flex align-items-center mt-4">
@@ -161,14 +163,18 @@ const BirthCertificate = () => {
                           <div className="tab-description">
                             {activeTabData.description.map((desc, index) => (
                               <p key={index}>
-                                {desc} {index === 0 && <Link to={activeTabData.url} target="_blank">{t('clickHere')}</Link>}
+                                {desc}{" "}
+                                {index === 0 && activeTabData.url && (
+                                  <Link to={activeTabData.url} target="_blank">
+                                    {t('clickHere')}
+                                  </Link>
+                                )}
                               </p>
                             ))}
                           </div>
                         </div>
-                        <div
-                          className="col-md-6 col-sm-12 d-flex align-items-center justify-content-start"
-                        >
+
+                        <div className="col-md-6 col-sm-12 d-flex align-items-center justify-content-start">
                           <img
                             src={activeTabData.image}
                             alt={activeTabData.name}
@@ -179,6 +185,7 @@ const BirthCertificate = () => {
                     )}
                   </div>
                 </div>
+
                 <div className="background-img"></div>
               </div>
             </div>
