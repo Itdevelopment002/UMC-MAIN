@@ -16,10 +16,10 @@ const ETender = () => {
   const fetchHeaderImage = async () => {
     try {
       const response = await api.get("/banner");
-
       if (response.data.length > 0) {
-        let selectedBanner = response.data.find(banner => banner.banner_name === "E-Tender");
-
+        const selectedBanner = response.data.find(
+          banner => banner.banner_name === "E-Tender"
+        );
         if (selectedBanner) {
           setBgImage(`${baseURL}${selectedBanner.file_path}`);
         } else {
@@ -74,22 +74,16 @@ const ETender = () => {
 
   const [tabData, setTabData] = useState(initializeTabData());
 
-  useEffect(() => {
-    setTabData(initializeTabData());
-    //eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [i18n.language]);
-
-  const fetchServices = async () => {
+  const fetchServices = async (newTabData) => {
     try {
       const response = await api.get(`/online-services-home?lang=${i18n.language}`);
       const serviceData = response.data;
-      const updatedTabData = tabData.map((tab) => {
+
+      const updatedTabData = newTabData.map((tab) => {
         const matchingService = serviceData.find(
           (service) => service.heading === tab.name
         );
-        return matchingService
-          ? { ...tab, url: matchingService.link }
-          : tab;
+        return matchingService ? { ...tab, url: matchingService.link } : tab;
       });
 
       setTabData(updatedTabData);
@@ -99,9 +93,14 @@ const ETender = () => {
   };
 
   useEffect(() => {
-    fetchServices();
+    const updatedTabData = initializeTabData();
+    setTabData(updatedTabData);
+    fetchServices(updatedTabData);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [i18n.language]);
+
+  useEffect(() => {
     fetchHeaderImage();
-    //eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const activeTabData = tabData.find((tab) => tab.id === activeTab);
@@ -114,15 +113,11 @@ const ETender = () => {
     <>
       <div
         className="history-header-image"
-        style={{
-          backgroundImage: `url(${bgImage})`,
-        }}
+        style={{ backgroundImage: `url(${bgImage})` }}
       ></div>
+
       <div id="main-content">
-        <div
-          className="container-fluid font-location mt-4 mb-5"
-          id="tender-css"
-        >
+        <div className="container-fluid font-location mt-4 mb-5" id="tender-css">
           <nav className="breadcrumb">
             <Link to="/" className="breadcrumb-item text-decoration-none">
               {t('home1')}
@@ -132,7 +127,12 @@ const ETender = () => {
             </Link>
             <span className="breadcrumb-item active1">{t('eTender.name')}</span>
           </nav>
-          <h2 className="location-title"><span className="highlight">{t('eTender.name1')}</span><span className="highlighted-text"> {t('eTender.name2')}</span></h2>
+
+          <h2 className="location-title">
+            <span className="highlight">{t('eTender.name1')}</span>
+            <span className="highlighted-text"> {t('eTender.name2')}</span>
+          </h2>
+
           <div className="row mt-4 row-styling-3">
             <div className="col-xl-9 col-lg-12 col-md-12 col-sm-12">
               <div className="e-services-container p-2">
@@ -152,6 +152,7 @@ const ETender = () => {
                       ))}
                     </ul>
                   </div>
+
                   <div className="roboto-font p-3">
                     {activeTabData && (
                       <div className="row d-flex align-items-center mt-4">
@@ -159,14 +160,18 @@ const ETender = () => {
                           <div className="tab-description">
                             {activeTabData.description.map((desc, index) => (
                               <p key={index}>
-                                {desc} {index === 0 && <Link to={activeTabData.url} target="_blank">{t('clickHere')}</Link>}
+                                {desc}{" "}
+                                {index === 0 && activeTabData.url && (
+                                  <Link to={activeTabData.url} target="_blank">
+                                    {t('clickHere')}
+                                  </Link>
+                                )}
                               </p>
                             ))}
                           </div>
                         </div>
-                        <div
-                          className="col-md-6 col-sm-12 d-flex align-items-center justify-content-start"
-                        >
+
+                        <div className="col-md-6 col-sm-12 d-flex align-items-center justify-content-start">
                           <img
                             src={activeTabData.image}
                             alt={activeTabData.name}
@@ -177,6 +182,7 @@ const ETender = () => {
                     )}
                   </div>
                 </div>
+
                 <div className="background-img"></div>
               </div>
             </div>
