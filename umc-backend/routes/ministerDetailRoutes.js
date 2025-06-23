@@ -59,37 +59,72 @@ router.get("/minister-details/:id", (req, res) => {
 });
 
 
-router.post("/minister-details", verifyToken, upload.single("image"), sanitizeInput, handleMulterError, validateMinisterDetails, (req, res) => {
-  if (req.user?.role === "Admin") {
-    return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
-  }
-  const { name, designation, language_code } = req.body;
-
-  if (!name || !designation || !language_code) {
-    // Clean up uploaded file if validation fails
-    if (req.file) {
-      fs.unlink(path.join(__dirname, "..", "uploads", req.file.filename), () => { });
+router.post(
+  "/minister-details",
+  verifyToken,
+  upload.single("image"),
+  sanitizeInput,
+  handleMulterError,
+  validateMinisterDetails,
+  (req, res) => {
+    if (req.user?.role === "Admin") {
+      return res.status(403).json({
+        message: "Permission denied: Admins are not allowed to perform this action.",
+      });
     }
-    return res.status(400).json({ message: "Name, designation and language code are required" });
-  }
 
-  const imagePath = req.file ? `/uploads/${req.file.filename}` : null;
+    const { name, designation, language_code } = req.body;
 
-  const sql = "INSERT INTO minister (name, designation, language_code, image_path) VALUES (?, ?, ?, ?)";
-  db.query(sql, [name, designation, language_code, imagePath], (err, result) => {
-    if (err) {
-      // Clean up uploaded file if DB operation fails
+    if (!name || !designation || !language_code) {
       if (req.file) {
         fs.unlink(path.join(__dirname, "..", "uploads", req.file.filename), () => { });
       }
-      return res.status(500).json({ message: "Database error", error: err });
+      // return res.status(400).json({ message: "Name, designation and language code are required" });
+      return res.status(400).json({
+        errors: [{ message: "Name, designation and language code are required" }],
+      });
+
     }
-    res.status(200).json({
-      message: "Minister added successfully",
-      ministerId: result.insertId,
+
+    // 🔍 Check total count of ministers (not per language)
+    const countSql = "SELECT COUNT(*) AS count FROM minister";
+    db.query(countSql, (countErr, countResult) => {
+      if (countErr) {
+        if (req.file) {
+          fs.unlink(path.join(__dirname, "..", "uploads", req.file.filename), () => { });
+        }
+        return res.status(500).json({ message: "Database error while checking total minister count", error: countErr });
+      }
+
+      const totalMinisters = countResult[0].count;
+      if (totalMinisters >= 8) {
+        if (req.file) {
+          fs.unlink(path.join(__dirname, "..", "uploads", req.file.filename), () => { });
+        }
+        return res.status(400).json({
+          errors: [{ message: "You can add only 8 ministers in total" }],
+        });
+      }
+
+      const imagePath = req.file ? `/uploads/${req.file.filename}` : null;
+      const insertSql = "INSERT INTO minister (name, designation, language_code, image_path) VALUES (?, ?, ?, ?)";
+      db.query(insertSql, [name, designation, language_code, imagePath], (err, result) => {
+        if (err) {
+          if (req.file) {
+            fs.unlink(path.join(__dirname, "..", "uploads", req.file.filename), () => { });
+          }
+          return res.status(500).json({ message: "Database error", error: err });
+        }
+
+        res.status(200).json({
+          message: "Minister added successfully",
+          ministerId: result.insertId,
+        });
+      });
     });
-  });
-});
+  }
+);
+
 
 router.post("/edit-minister-details/:id", verifyToken, upload.single("image"), sanitizeInput, handleMulterError, validateMinisterDetails, (req, res) => {
   if (req.user?.role === "Admin") {

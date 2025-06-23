@@ -20,7 +20,7 @@ const AddCitizeServices = () => {
         if (!serviceHeading) newErrors.serviceHeading = "Service Heading is required.";
         if (!serviceLink) newErrors.serviceLink = "Service Link is required.";
         if (!language) newErrors.language = "Language Selection is required.";
-        
+
         // Use our global validation function
         const imageError = getImageValidationError(mainIcon);
         if (imageError) {
@@ -37,7 +37,7 @@ const AddCitizeServices = () => {
         if (file) {
             // Use our global validation function
             const errorMessage = getImageValidationError(file);
-           
+
             if (errorMessage) {
                 // Clear the file input if invalid file is selected
                 if (fileInputRef.current) {
@@ -85,23 +85,36 @@ const AddCitizeServices = () => {
                 position: "top-right",
                 autoClose: 3000,
             });
-            
+
             setServiceHeading('');
             setServiceLink('');
             setLanguage('');
             setMainIcon(null);
-            
+
             if (fileInputRef.current) {
                 fileInputRef.current.value = "";
             }
-            
+
             navigate('/citizen-services');
         } catch (error) {
+            if (
+                error.response &&
+                error.response.status === 400 &&
+                error.response.data.errors
+            ) {
+                error.response.data.errors.forEach((err) => {
+                    toast.error(err.message, {
+                        position: "top-right",
+                        autoClose: 3000,
+                    });
+                });
+            } else {
+                toast.error("Failed to add service. Please try again.", {
+                    position: "top-right",
+                    autoClose: 3000,
+                });
+            }
             console.error('Error uploading file:', error);
-            toast.error('Failed to add service. Please try again.', {
-                position: "top-right",
-                autoClose: 3000,
-            });
         }
     };
 

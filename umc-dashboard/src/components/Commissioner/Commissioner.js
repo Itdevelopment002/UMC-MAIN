@@ -199,13 +199,14 @@ const Commissioner = () => {
                                         <div className="col-sm-4 col-3">
                                             <h4 className="page-title">Commissioner Details</h4>
                                         </div>
-                                        <div className="col-sm-8 col-9 text-right m-b-20">
+                                        <div className="col-sm-8 col-9 text-right m-b-20 position-relative">
+                                            <div className="tooltip-container">
                                             <Link
-                                                to={coData.length > 0 ? "#" : "/add-commissioner-details"}
-                                                className={`btn btn-primary btn-rounded float-right ${coData.length > 0 ? "disabled" : ""
+                                                to={coData.length > 1 ? "#" : "/add-commissioner-details"}
+                                                className={`btn btn-primary btn-rounded float-right ${coData.length > 1 ? "disabled-custom-button" : ""
                                                     }`}
                                                 onClick={(e) => {
-                                                    if (coData.length > 0) {
+                                                    if (coData.length > 1) {
                                                         e.preventDefault();
                                                         toast.info("Commissioner details already exist!");
                                                     }
@@ -213,6 +214,12 @@ const Commissioner = () => {
                                             >
                                                 <i className="fa fa-plus"></i> Add Details
                                             </Link>
+                                            {coData.length >= 1 && (
+                                                <div className="custom-tooltip">
+                                                    Maximum 1 Commissioner details allowed per language
+                                                </div>
+                                            )}
+                                            </div>
                                         </div>
                                     </div>
                                     <div className="table-responsive m-t-10">

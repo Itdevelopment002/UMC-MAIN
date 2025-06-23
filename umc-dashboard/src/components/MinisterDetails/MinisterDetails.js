@@ -84,58 +84,58 @@ const MinisterDetails = () => {
       });
   };
 
-const handleEditSubmit = async () => {
-  if (imageError) {
-    toast.error("Please fix image errors before submitting", {
-      position: "top-right",
-      autoClose: 3000,
-    });
-    return;
-  }
-
-  const formData = new FormData();
-  formData.append("name", editData.name);
-  formData.append("designation", editData.designation);
-  formData.append("language_code", editData.language_code);
-  if (editData.image) {
-    formData.append("image", editData.image);
-  }
-
-  try {
-    const response = await api.post(`/edit-minister-details/${editData.id}`, formData, {
-      headers: { "Content-Type": "multipart/form-data" },
-    });
-
-    if (response.status === 200) {
-      fetchMinisters();
-      setShowEditModal(false);
-      toast.success("Minister updated successfully!", {
+  const handleEditSubmit = async () => {
+    if (imageError) {
+      toast.error("Please fix image errors before submitting", {
         position: "top-right",
         autoClose: 3000,
       });
+      return;
     }
-  } catch (error) {
-    if (
-      error.response &&
-      error.response.status === 400 &&
-      error.response.data.errors
-    ) {
-      error.response.data.errors.forEach((err) => {
-        toast.error(err.message, {
+
+    const formData = new FormData();
+    formData.append("name", editData.name);
+    formData.append("designation", editData.designation);
+    formData.append("language_code", editData.language_code);
+    if (editData.image) {
+      formData.append("image", editData.image);
+    }
+
+    try {
+      const response = await api.post(`/edit-minister-details/${editData.id}`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+
+      if (response.status === 200) {
+        fetchMinisters();
+        setShowEditModal(false);
+        toast.success("Minister updated successfully!", {
           position: "top-right",
           autoClose: 3000,
         });
-      });
-    } else {
-      toast.error("Failed to update minister. Try again.", {
-        position: "top-right",
-        autoClose: 3000,
-      });
-    }
+      }
+    } catch (error) {
+      if (
+        error.response &&
+        error.response.status === 400 &&
+        error.response.data.errors
+      ) {
+        error.response.data.errors.forEach((err) => {
+          toast.error(err.message, {
+            position: "top-right",
+            autoClose: 3000,
+          });
+        });
+      } else {
+        toast.error("Failed to update minister. Try again.", {
+          position: "top-right",
+          autoClose: 3000,
+        });
+      }
 
-    console.error("Error updating minister:", error);
-  }
-};
+      console.error("Error updating minister:", error);
+    }
+  };
 
 
   const handleCloseDeleteModal = () => setShowDeleteModal(false);
@@ -189,13 +189,25 @@ const handleEditSubmit = async () => {
                     <div className="col-sm-4 col-3">
                       <h4 className="page-title">Ministers</h4>
                     </div>
-                    <div className="col-sm-8 col-9 text-right m-b-20">
-                      <Link
-                        to="/add-minister"
-                        className="btn btn-primary btn-rounded float-right"
-                      >
-                        <i className="fa fa-plus"></i> Add Minister
-                      </Link>
+                    <div className="col-sm-8 col-9 text-right m-b-20 position-relative">
+                      <div className="tooltip-container">
+                        <Link
+                          to={ministers.length > 7 ? "#" : "/add-minister"}
+                          className={`btn btn-primary btn-rounded float-right ${ministers.length > 7 ? "disabled-custom-button" : ""}`}
+                          onClick={(e) => {
+                            if (ministers.length > 7) {
+                              e.preventDefault();
+                            }
+                          }}
+                        >
+                          <i className="fa fa-plus"></i> Add Minister
+                        </Link>
+                        {ministers.length > 7 && (
+                          <div className="custom-tooltip">
+                            Maximum 4 ministers allowed per language
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </div>
                   <div className="table-responsive m-t-10">

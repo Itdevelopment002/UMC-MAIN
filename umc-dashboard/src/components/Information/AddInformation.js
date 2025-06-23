@@ -3,6 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import api from "../api";
 import Flatpickr from "react-flatpickr";
 import "flatpickr/dist/themes/material_blue.css";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const AddInformation = () => {
   const [heading, setHeading] = useState("");
@@ -60,12 +62,40 @@ const AddInformation = () => {
         issue_date: formattedDate,
         language_code: language,
       });
-      setHeading("");
-      setLink("");
-      setLanguage("");
-      setIssueDate("");
-      navigate("/information");
+
+      if (response.status === 200 || response.status === 201) {
+        setHeading("");
+        setLink("");
+        setLanguage("");
+        setIssueDate("");
+
+        toast.success("News added successfully!", {
+          position: "top-right",
+          autoClose: 1000,
+          onClose: () => {
+            navigate("/information");
+
+          }
+        });
+      }
     } catch (error) {
+      if (
+        error.response &&
+        error.response.status === 400 &&
+        error.response.data.errors
+      ) {
+        error.response.data.errors.forEach((err) => {
+          toast.error(err.message, {
+            position: "top-right",
+            autoClose: 3000,
+          });
+        });
+      } else {
+        toast.error("Failed to add information. Try again.", {
+          position: "top-right",
+          autoClose: 3000,
+        });
+      }
       console.error("Error adding information:", error);
     }
   };
@@ -215,6 +245,7 @@ const AddInformation = () => {
           </div>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };

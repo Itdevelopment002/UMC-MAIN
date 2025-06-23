@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import api from "../api";
 import { Link, useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { getImageValidationError } from "../../validation/ImageValidation";
 
 const AddSlider = () => {
@@ -61,6 +63,23 @@ const AddSlider = () => {
       document.getElementById("image").value = "";
       navigate("/slider");
     } catch (error) {
+      if (
+        error.response &&
+        error.response.status === 400 &&
+        error.response.data.errors
+      ) {
+        error.response.data.errors.forEach((err) => {
+          toast.error(err.message, {
+            position: "top-right",
+            autoClose: 3000,
+          });
+        });
+      } else {
+        toast.error("Failed to add Slider. Try again.", {
+          position: "top-right",
+          autoClose: 3000,
+        });
+      }
       console.error("Error uploading file:", error);
     }
   };
@@ -171,6 +190,7 @@ const AddSlider = () => {
           </div>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };

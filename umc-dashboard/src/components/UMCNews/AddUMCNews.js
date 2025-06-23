@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../api";
 import Flatpickr from "react-flatpickr";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "flatpickr/dist/themes/material_blue.css";
 
 const AddUMCNews = () => {
@@ -60,12 +62,39 @@ const AddUMCNews = () => {
         issue_date: formattedDate,
         language_code: language,
       });
-      setHeading("");
-      setLink("");
-      setLanguage("");
-      setIssueDate("");
-      navigate("/umc-news");
+
+      if (response.status === 200 || response.status === 201) {
+        setHeading("");
+        setLink("");
+        setLanguage("");
+        setIssueDate("");
+
+        toast.success("News added successfully!", {
+          position: "top-right",
+          autoClose: 1000,
+          onClose: () => {
+            navigate("/umc-news");
+          }
+        });
+      }
     } catch (error) {
+      if (
+        error.response &&
+        error.response.status === 400 &&
+        error.response.data.errors
+      ) {
+        error.response.data.errors.forEach((err) => {
+          toast.error(err.message, {
+            position: "top-right",
+            autoClose: 3000,
+          });
+        });
+      } else {
+        toast.error("Failed to add news. Try again.", {
+          position: "top-right",
+          autoClose: 3000,
+        });
+      }
       console.error("Error adding news:", error);
     }
   };
@@ -215,6 +244,7 @@ const AddUMCNews = () => {
           </div>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };

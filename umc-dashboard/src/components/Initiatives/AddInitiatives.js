@@ -20,7 +20,7 @@ const AddServices = () => {
         if (!heading) newErrors.heading = "Initiative Heading is required.";
         if (!link) newErrors.link = "Initiative Link is required.";
         if (!language) newErrors.language = "Language selection is required.";
-        
+
         // Use our global validation function
         const imageError = getImageValidationError(mainIcon);
         if (imageError) {
@@ -37,7 +37,7 @@ const AddServices = () => {
         if (file) {
             // Use our global validation function
             const errorMessage = getImageValidationError(file);
-           
+
             if (errorMessage) {
                 // Clear the file input if invalid file is selected
                 if (fileInputRef.current) {
@@ -85,23 +85,36 @@ const AddServices = () => {
                 position: "top-right",
                 autoClose: 3000,
             });
-            
+
             setHeading('');
             setLink('');
             setLanguage('');
             setMainIcon(null);
-            
+
             if (fileInputRef.current) {
                 fileInputRef.current.value = "";
             }
-            
+
             navigate('/initiatives');
         } catch (error) {
+            if (
+                error.response &&
+                error.response.status === 400 &&
+                error.response.data.errors
+            ) {
+                error.response.data.errors.forEach((err) => {
+                    toast.error(err.message, {
+                        position: "top-right",
+                        autoClose: 3000,
+                    });
+                });
+            } else {
+                toast.error("Failed to add initiative. Please try again.", {
+                    position: "top-right",
+                    autoClose: 3000,
+                });
+            }
             console.error('Error uploading file:', error);
-            toast.error('Failed to add initiative. Please try again.', {
-                position: "top-right",
-                autoClose: 3000,
-            });
         }
     };
 

@@ -7,6 +7,7 @@ const db = require('../config/db.js');
 const { verifyToken } = require('../middleware/jwtMiddleware.js');
 const { getMulterConfig, handleMulterError } = require('../utils/uploadValidation');
 const sanitizeInput = require('../middleware/sanitizeInput.js');
+const { validateHomeGalleryAdd, validateHomeGalleryupdate } = require('../middleware/validationinputfield.js');
 
 
 // Create upload middleware using global config
@@ -81,6 +82,7 @@ router.post('/home-gallerys',
     upload.single('image'),
     sanitizeInput,
     handleMulterError,
+    validateHomeGalleryAdd,
     async (req, res) => {
         if (req.user?.role === "Admin") {
             return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
@@ -116,6 +118,7 @@ router.post('/edit-home-gallerys/:id',
     upload.single('image'),
     sanitizeInput,
     handleMulterError,
+    validateHomeGalleryupdate,
     async (req, res) => {
         if (req.user?.role === "Admin") {
             return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });

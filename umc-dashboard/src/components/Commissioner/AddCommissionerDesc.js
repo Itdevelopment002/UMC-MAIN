@@ -38,7 +38,7 @@ const AddCommissionerDesc = () => {
         headers: { "Content-Type": "application/json" },
       });
 
-      if (response.status === 201) {
+      if (response.status === 200 || response.status === 201) {
         navigate("/commissioner");
       }
     } catch (error) {

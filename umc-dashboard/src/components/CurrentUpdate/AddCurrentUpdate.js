@@ -51,18 +51,24 @@ const AddCurrentUpdate = () => {
       if (
         error.response &&
         error.response.status === 400 &&
-        error.response.data &&
         error.response.data.errors
       ) {
-        error.response.data.errors.forEach((errMsg) => {
-          toast.error(errMsg);
+        error.response.data.errors.forEach((err) => {
+          toast.error(err.message, {
+            position: "top-right",
+            autoClose: 3000,
+          });
         });
       } else {
-        toast.error("Something went wrong while adding the update.");
+        toast.error("Failed to add current update:. Try again.", {
+          position: "top-right",
+          autoClose: 3000,
+        });
       }
+      console.error("Error adding current update:", error);
     }
-    setDescription("");
-    setLanguage("");
+    // setDescription("");
+    // setLanguage("");
   };
   return (
     <>
