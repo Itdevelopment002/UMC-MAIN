@@ -403,7 +403,7 @@ const validateContactUsInfo = [
 const validateContactUsWard = [
     alphabetOnlyValidator("office", 1, maxHeadingLength, "Ward Office No.", phoneRegex),
     alphabetOnlyValidator("address", minHeadingLength, maxHeadingLength, "Office Address", descriptionRegex),
-    alphabetOnlyValidator("phone", minPhoneNumberLength, maxPhoneNumberLength, "Phone Number", phoneRegex),
+    phoneNumberValidator("phone", minPhoneNumberLength, maxPhoneNumberLength, "Phone Number", phoneRegex),
     alphabetOnlyValidator("email", minHeadingLength, maxHeadingLength, "Email Id", descriptionRegex),
     languageCodeValidator("language_code"),
     validateRequest,
