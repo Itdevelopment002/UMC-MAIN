@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import api from "../api";
 import Flatpickr from "react-flatpickr";
 import "flatpickr/dist/themes/material_blue.css";
+import { toast, ToastContainer } from "react-toastify";
 
 const AddSubRti = () => {
   const [description, setDescription] = useState("");
@@ -66,7 +67,29 @@ const AddSubRti = () => {
       setLanguage("");
       navigate("/sub-rti");
     } catch (error) {
-      console.error("Error adding sub rti data:", error);
+      if (
+        error.response &&
+        error.response.status === 400 &&
+        Array.isArray(error.response.data.errors)
+      ) {
+        error.response.data.errors.forEach((err) => {
+          const message = typeof err === "string" ? err : err.message || "Validation error";
+          toast.error(message, {
+            position: "top-right",
+            autoClose: 3000,
+          });
+        });
+      } else {
+        toast.error(
+          error.response?.data?.message || "Failed to add Sub RTI data. Try again.",
+          {
+            position: "top-right",
+            autoClose: 3000,
+          }
+        );
+      }
+
+      console.error("Error adding Sub RTI data:", error);
     }
   };
 
@@ -213,6 +236,7 @@ const AddSubRti = () => {
           </div>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };

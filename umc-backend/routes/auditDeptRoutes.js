@@ -3,6 +3,7 @@ const router = express.Router();
 const db = require("../config/db.js");
 const { verifyToken } = require('../middleware/jwtMiddleware.js');
 const sanitizeInput = require('../middleware/sanitizeInput.js');
+const { validateAuditReport } = require("../middleware/validationinputfield.js");
 
 const convertToMySQLDate = (dateString) => {
   const [day, month, year] = dateString.split("-");
@@ -28,7 +29,7 @@ router.get("/audit-report", (req, res) => {
 });
 
 
-router.post("/audit-report", verifyToken, sanitizeInput, (req, res) => {
+router.post("/audit-report", verifyToken, sanitizeInput, validateAuditReport, (req, res) => {
   if (req.user?.role !== "Superadmin") {
     const allowedPermissions = ["Audit Department", "ऑडिट विभाग"];
 
@@ -59,7 +60,7 @@ router.post("/audit-report", verifyToken, sanitizeInput, (req, res) => {
 });
 
 
-router.post("/edit-audit-report/:id", verifyToken, sanitizeInput, (req, res) => {
+router.post("/edit-audit-report/:id", verifyToken, sanitizeInput, validateAuditReport, (req, res) => {
   if (req.user?.role !== "Superadmin") {
     const allowedPermissions = ["Audit Department", "ऑडिट विभाग"];
 

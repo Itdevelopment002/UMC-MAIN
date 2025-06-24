@@ -65,8 +65,29 @@ const Resolutions = () => {
             setShowEditModal(false);
             toast.success("Resolution updated successfully!");
         } catch (error) {
-            console.error("Error updating resolution:", error);
-            toast.error("Failed to update the resolution!");
+            if (
+                error.response &&
+                error.response.status === 400 &&
+                Array.isArray(error.response.data.errors)
+            ) {
+                error.response.data.errors.forEach((err) => {
+                    const message = typeof err === "string" ? err : err.message || "Validation error";
+                    toast.error(message, {
+                        position: "top-right",
+                        autoClose: 3000,
+                    });
+                });
+            } else {
+                toast.error(
+                    error.response?.data?.message || "Failed to update resolution data. Try again.",
+                    {
+                        position: "top-right",
+                        autoClose: 3000,
+                    }
+                );
+            }
+
+            console.error("Error updating resolution data:", error);
         }
     };
 

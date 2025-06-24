@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Flatpickr from "react-flatpickr";
 import "flatpickr/dist/themes/material_blue.css";
 import api from "../api";
+import { toast, ToastContainer } from "react-toastify";
 
 const AddAnnualFinance = () => {
   const [heading, setHeading] = useState("");
@@ -59,13 +60,43 @@ const AddAnnualFinance = () => {
         issue_date: formattedDate,
         language_code: language,
       });
-      setLanguage("");
-      setIssueDate("");
-      setHeading("");
-      setLink("");
-      navigate("/annual-financial-statement");
+      if (response.status === 200 || response.status === 201) {
+        setLanguage("");
+        setIssueDate("");
+        setHeading("");
+        setLink("");
+        toast.success("Annual financial statement added successfully!", {
+          position: "top-right",
+          autoClose: 1000,
+          onClose: () => {
+            navigate("/annual-financial-statement");
+          }
+        });
+      }
     } catch (error) {
-      console.error("Error adding ward:", error);
+      if (
+        error.response &&
+        error.response.status === 400 &&
+        Array.isArray(error.response.data.errors)
+      ) {
+        error.response.data.errors.forEach((err) => {
+          const message = typeof err === "string" ? err : err.message || "Validation error";
+          toast.error(message, {
+            position: "top-right",
+            autoClose: 3000,
+          });
+        });
+      } else {
+        toast.error(
+          error.response?.data?.message || "Failed to add annual finance statement. Try again.",
+          {
+            position: "top-right",
+            autoClose: 3000,
+          }
+        );
+      }
+
+      console.error("Error adding annual finance statement:", error);
     }
   };
 
@@ -215,6 +246,7 @@ const AddAnnualFinance = () => {
           </div>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };

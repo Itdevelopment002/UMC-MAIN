@@ -4,6 +4,7 @@ import Flatpickr from "react-flatpickr";
 import "flatpickr/dist/themes/material_blue.css";
 import api from "../api";
 import { jwtDecode } from "jwt-decode";
+import { toast, ToastContainer} from "react-toastify";
 
 const AddDeptPdfs = () => {
   const [heading, setHeading] = useState("");
@@ -99,6 +100,28 @@ const AddDeptPdfs = () => {
       setLanguage("");
       navigate("/department-information");
     } catch (error) {
+      if (
+        error.response &&
+        error.response.status === 400 &&
+        Array.isArray(error.response.data.errors)
+      ) {
+        error.response.data.errors.forEach((err) => {
+          const message = typeof err === "string" ? err : err.message || "Validation error";
+          toast.error(message, {
+            position: "top-right",
+            autoClose: 3000,
+          });
+        });
+      } else {
+        toast.error(
+          error.response?.data?.message || "Failed to add pdf. Try again.",
+          {
+            position: "top-right",
+            autoClose: 3000,
+          }
+        );
+      }
+
       console.error("Error adding pdf:", error);
     }
   };
@@ -277,6 +300,7 @@ const AddDeptPdfs = () => {
           </div>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };

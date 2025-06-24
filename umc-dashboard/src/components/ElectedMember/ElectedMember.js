@@ -60,8 +60,28 @@ const ElectedMember = () => {
             setShowEditModal(false);
             toast.success("Elected member data updated successfully!");
         } catch (error) {
-            console.error("Error updating elected member data:", error);
-            toast.error("Failed to update the elected member data!");
+            if (
+                error.response &&
+                error.response.status === 400 &&
+                Array.isArray(error.response.data.errors)
+            ) {
+                error.response.data.errors.forEach((err) => {
+                    const message = typeof err === "string" ? err : err.message || "Validation error";
+                    toast.error(message, {
+                        position: "top-right",
+                        autoClose: 3000,
+                    });
+                });
+            } else {
+                toast.error(
+                    error.response?.data?.message || "Failed to update elected member. Try again.",
+                    {
+                        position: "top-right",
+                        autoClose: 3000,
+                    }
+                );
+            }
+            console.error("Error updating elected member:", error);
         }
     };
 

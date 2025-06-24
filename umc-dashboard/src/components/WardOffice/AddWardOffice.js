@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../api";
+import { toast, ToastContainer } from "react-toastify";
 
 const AddWardOffice = () => {
   const [formData, setFormData] = useState({
@@ -46,21 +47,51 @@ const AddWardOffice = () => {
     if (!validateForm()) return;
 
     try {
-      await api.post("/ward-offices", formData);
-      setFormData({
-        ward_name: "",
-        officer_name: "",
-        address: "",
-        email: "",
-        mobile: "",
-        landline: "",
-        ward_no: "",
-        areas: "",
-        map_url: "",
-        language_code: "",
-      });
-      navigate("/ward-office");
+      const response = await api.post("/ward-offices", formData);
+      if (response.status === 200 || response.status === 201) {
+        setFormData({
+          ward_name: "",
+          officer_name: "",
+          address: "",
+          email: "",
+          mobile: "",
+          landline: "",
+          ward_no: "",
+          areas: "",
+          map_url: "",
+          language_code: "",
+        });
+        toast.success("Ward office added successfully!", {
+          position: "top-right",
+          autoClose: 1000,
+          onClose: () => {
+            navigate("/ward-office");
+          }
+        });
+      }
     } catch (error) {
+      if (
+        error.response &&
+        error.response.status === 400 &&
+        Array.isArray(error.response.data.errors)
+      ) {
+        error.response.data.errors.forEach((err) => {
+          const message = typeof err === "string" ? err : err.message || "Validation error";
+          toast.error(message, {
+            position: "top-right",
+            autoClose: 3000,
+          });
+        });
+      } else {
+        toast.error(
+          error.response?.data?.message || "Failed to add ward office. Try again.",
+          {
+            position: "top-right",
+            autoClose: 3000,
+          }
+        );
+      }
+
       console.error("Error adding ward office:", error);
     }
   };
@@ -160,6 +191,7 @@ const AddWardOffice = () => {
           </div>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };

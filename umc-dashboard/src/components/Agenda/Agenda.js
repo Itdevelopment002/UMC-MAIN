@@ -25,7 +25,7 @@ const Agenda = () => {
                 const dateA = a.Schedule_Date_of_Meeting ? new Date(a.Schedule_Date_of_Meeting) : new Date(0);
                 const dateB = b.Schedule_Date_of_Meeting ? new Date(b.Schedule_Date_of_Meeting) : new Date(0);
                 return dateB - dateA;
-              });
+            });
             setResolutions(sortedData);
         } catch (error) {
             console.error("Error fetching agenda:", error);
@@ -65,8 +65,28 @@ const Agenda = () => {
             setShowEditModal(false);
             toast.success("Agenda updated successfully!");
         } catch (error) {
+            if (
+                error.response &&
+                error.response.status === 400 &&
+                Array.isArray(error.response.data.errors)
+            ) {
+                error.response.data.errors.forEach((err) => {
+                    const message = typeof err === "string" ? err : err.message || "Validation error";
+                    toast.error(message, {
+                        position: "top-right",
+                        autoClose: 3000,
+                    });
+                });
+            } else {
+                toast.error(
+                    error.response?.data?.message || "Failed to update agenda. Try again.",
+                    {
+                        position: "top-right",
+                        autoClose: 3000,
+                    }
+                );
+            }
             console.error("Error updating agenda:", error);
-            toast.error("Failed to update the agenda!");
         }
     };
 

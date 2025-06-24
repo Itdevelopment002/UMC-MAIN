@@ -20,7 +20,7 @@ const AddDepartmentPage = () => {
         if (!heading.trim()) newErrors.heading = "Department Name is required.";
         if (!link.trim()) newErrors.link = "Department Link is required.";
         if (!language) newErrors.language = "Language selection is required";
-        
+
         // Use our global validation function for image
         const imageError = getImageValidationError(mainIcon);
         if (imageError) {
@@ -33,11 +33,11 @@ const AddDepartmentPage = () => {
 
     const handleFileChange = (e) => {
         const file = e.target.files[0];
-        
+
         if (file) {
             // Validate the image file
             const errorMessage = getImageValidationError(file);
-            
+
             if (errorMessage) {
                 // Clear the file input if invalid file is selected
                 if (fileInputRef.current) {
@@ -56,7 +56,7 @@ const AddDepartmentPage = () => {
     const handleChange = (e) => {
         const { name, value } = e.target;
         setErrors((prev) => ({ ...prev, [name]: null }));
-        
+
         if (name === "heading") setHeading(value);
         if (name === "link") setLink(value);
         if (name === "language") setLanguage(value);
@@ -95,17 +95,32 @@ const AddDepartmentPage = () => {
             if (fileInputRef.current) {
                 fileInputRef.current.value = '';
             }
-            
+
             navigate('/departments');
         } catch (error) {
-            console.error('Error adding department:', error);
-            toast.error(
-                error.response?.data?.message || 'Failed to add department. Please try again.',
-                {
-                    position: "top-right",
-                    autoClose: 3000,
-                }
-            );
+            if (
+                error.response &&
+                error.response.status === 400 &&
+                Array.isArray(error.response.data.errors)
+            ) {
+                error.response.data.errors.forEach((err) => {
+                    const message = typeof err === "string" ? err : err.message || "Validation error";
+                    toast.error(message, {
+                        position: "top-right",
+                        autoClose: 3000,
+                    });
+                });
+            } else {
+                toast.error(
+                    error.response?.data?.message || "Failed to add department. Try again.",
+                    {
+                        position: "top-right",
+                        autoClose: 3000,
+                    }
+                );
+            }
+
+            console.error("Error adding department:", error);
         }
     };
 

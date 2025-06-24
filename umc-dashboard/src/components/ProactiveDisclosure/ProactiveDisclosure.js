@@ -60,8 +60,29 @@ const ProactiveDisclosure = () => {
       setShowEditModal(false);
       toast.success("Proactive disclosure updated successfully!");
     } catch (error) {
-      console.error("Error updating proactive disclosure:", error);
-      toast.error("Failed to update the proactive disclosure!");
+      if (
+        error.response &&
+        error.response.status === 400 &&
+        Array.isArray(error.response.data.errors)
+      ) {
+        error.response.data.errors.forEach((err) => {
+          const message = typeof err === "string" ? err : err.message || "Validation error";
+          toast.error(message, {
+            position: "top-right",
+            autoClose: 3000,
+          });
+        });
+      } else {
+        toast.error(
+          error.response?.data?.message || "Failed to update proactive disclosure data. Try again.",
+          {
+            position: "top-right",
+            autoClose: 3000,
+          }
+        );
+      }
+
+      console.error("Error updating proactive disclosure data:", error);
     }
   };
 

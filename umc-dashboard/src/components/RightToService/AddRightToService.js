@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import api from "../api";
 import Flatpickr from "react-flatpickr";
 import "flatpickr/dist/themes/material_blue.css";
+import { toast, ToastContainer } from "react-toastify";
 
 const AddRightToService = () => {
   const [heading, setHeading] = useState("");
@@ -66,7 +67,29 @@ const AddRightToService = () => {
       setIssueDate("");
       navigate("/rts");
     } catch (error) {
-      console.error("Error adding rts:", error);
+      if (
+        error.response &&
+        error.response.status === 400 &&
+        Array.isArray(error.response.data.errors)
+      ) {
+        error.response.data.errors.forEach((err) => {
+          const message = typeof err === "string" ? err : err.message || "Validation error";
+          toast.error(message, {
+            position: "top-right",
+            autoClose: 3000,
+          });
+        });
+      } else {
+        toast.error(
+          error.response?.data?.message || "Failed to add rts data. Try again.",
+          {
+            position: "top-right",
+            autoClose: 3000,
+          }
+        );
+      }
+
+      console.error("Error adding rts data:", error);
     }
   };
 
@@ -216,6 +239,7 @@ const AddRightToService = () => {
           </div>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };

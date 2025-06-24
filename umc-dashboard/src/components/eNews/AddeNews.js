@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import api from "../api";
 import Flatpickr from "react-flatpickr";
 import "flatpickr/dist/themes/material_blue.css";
+import { toast, ToastContainer } from "react-toastify";
 
 const AddeNews = () => {
   const [info, setInfo] = useState("");
@@ -59,12 +60,42 @@ const AddeNews = () => {
         language_code: language,
 
       });
-      setLanguage("");
-      setInfo("");
-      setIssueDate("");
-      setPdfLink("");
-      navigate("/enews-letter");
+      if (response.status === 200 || response.status === 201) {
+        setLanguage("");
+        setInfo("");
+        setIssueDate("");
+        setPdfLink("");
+        toast.success("E-News data added successfully!", {
+          position: "top-right",
+          autoClose: 1000,
+          onClose: () => {
+            navigate("/enews-letter");
+          }
+        });
+      }
     } catch (error) {
+      if (
+        error.response &&
+        error.response.status === 400 &&
+        Array.isArray(error.response.data.errors)
+      ) {
+        error.response.data.errors.forEach((err) => {
+          const message = typeof err === "string" ? err : err.message || "Validation error";
+          toast.error(message, {
+            position: "top-right",
+            autoClose: 3000,
+          });
+        });
+      } else {
+        toast.error(
+          error.response?.data?.message || "Failed to add e-news. Try again.",
+          {
+            position: "top-right",
+            autoClose: 3000,
+          }
+        );
+      }
+
       console.error("Error adding e-news:", error);
     }
   };
@@ -211,6 +242,7 @@ const AddeNews = () => {
           </div>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };
