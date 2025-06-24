@@ -249,7 +249,7 @@ const PhotosGallery = () => {
                 <div className="card-block">
                   <div className="row">
                     <div className="col-sm-4 col-3">
-                      <h4 className="page-title">Category Images</h4>
+                      <h4 className="page-title"> Category-wise Images</h4>
                     </div>
                     <div className="col-sm-8 col-9 text-right m-b-20">
                       <Link
