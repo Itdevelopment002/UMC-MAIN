@@ -6,7 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 import GLightbox from "glightbox";
 import "glightbox/dist/css/glightbox.min.css";
 
-const DeptCommissioner = () => {
+const AddtCommissioner = () => {
     const [coData, setCoData] = useState([]);
     const [descData, setDescData] = useState([]);
     const [showEditModal, setShowEditModal] = useState(false);
@@ -178,12 +178,33 @@ const DeptCommissioner = () => {
                     },
                 });
                 fetchCoData();
-                toast.success("Commissioner details updated successfully!");
+                toast.success('Additional Commissioner details updated successfully!'
+                );
             }
             closeModal();
         } catch (error) {
+            if (
+                error.response &&
+                error.response.status === 400 &&
+                Array.isArray(error.response.data.errors)
+            ) {
+                error.response.data.errors.forEach((err) => {
+                    const message = typeof err === "string" ? err : err.message || "Validation error";
+                    toast.error(message, {
+                        position: "top-right",
+                        autoClose: 3000,
+                    });
+                });
+            } else {
+                toast.error(
+                    error.response?.data?.message || "Failed to update the entry!",
+                    {
+                        position: "top-right",
+                        autoClose: 3000,
+                    }
+                );
+            }
             console.error(error);
-            toast.error("Failed to update the entry!");
         }
     };
 
@@ -227,7 +248,7 @@ const DeptCommissioner = () => {
                                         </div>
                                         <div className="col-sm-8 col-9 text-right m-b-20">
                                             <Link
-                                                to="/add-dept-commissioner-details"
+                                                to="/add-addt-commissioner-details"
                                                 className="btn btn-primary btn-rounded float-right"
                                             >
                                                 <i className="fa fa-plus"></i> Add Details
@@ -318,7 +339,7 @@ const DeptCommissioner = () => {
                                         </div>
                                         <div className="col-sm-8 col-9 text-right m-b-20">
                                             <Link
-                                                to="/add-dept-commissioner-desc"
+                                                to="/add-addt-commissioner-desc"
                                                 className="btn btn-primary btn-rounded float-right"
                                             >
                                                 <i className="fa fa-plus"></i> Add Desc
@@ -652,4 +673,4 @@ const DeptCommissioner = () => {
     );
 };
 
-export default DeptCommissioner;
+export default AddtCommissioner;

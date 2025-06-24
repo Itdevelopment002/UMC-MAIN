@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../api";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import Flatpickr from "react-flatpickr";
 import "flatpickr/dist/themes/material_blue.css";
 
@@ -59,12 +61,40 @@ const AddPropertyTaxDept = () => {
         issue_date: formattedDate,
         language_code: language,
       });
-      setDescription("");
-      setLink("");
-      setLanguage("");
-      setIssueDate("");
-      navigate("/property-tax-department");
+
+      if (response.status === 200 || response.status === 201) {
+        setDescription("");
+        setLink("");
+        setLanguage("");
+        setIssueDate("");
+
+        toast.success("Property Tax Department added successfully!", {
+          position: "top-right",
+          autoClose: 1000,
+          onClose: () => {
+            navigate("/property-tax-department");
+
+          }
+        });
+      }
     } catch (error) {
+      if (
+        error.response &&
+        error.response.status === 400 &&
+        error.response.data.errors
+      ) {
+        error.response.data.errors.forEach((err) => {
+          toast.error(err.message, {
+            position: "top-right",
+            autoClose: 3000,
+          });
+        });
+      } else {
+        toast.error("Failed to add property tax department data", {
+          position: "top-right",
+          autoClose: 3000,
+        });
+      }
       console.error("Error adding property tax department data:", error);
     }
   };
@@ -214,6 +244,7 @@ const AddPropertyTaxDept = () => {
           </div>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };

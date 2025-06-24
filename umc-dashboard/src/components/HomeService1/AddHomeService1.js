@@ -20,7 +20,7 @@ const AddHomeService1 = () => {
         if (!heading) newErrors.heading = "Service Heading is required.";
         if (!link) newErrors.link = "Service Link is required.";
         if (!language) newErrors.language = "Language selection is required.";
-        
+
         // Use our global validation function
         const imageError = getImageValidationError(mainIcon);
         if (imageError) {
@@ -37,7 +37,7 @@ const AddHomeService1 = () => {
         if (file) {
             // Use our global validation function
             const errorMessage = getImageValidationError(file);
-           
+
             if (errorMessage) {
                 // Clear the file input if invalid file is selected
                 if (fileInputRef.current) {
@@ -81,27 +81,43 @@ const AddHomeService1 = () => {
                 },
             });
 
-            toast.success(response.data.message, {
-                position: "top-right",
-                autoClose: 3000,
-            });
-            
-            setHeading('');
-            setLink('');
-            setLanguage('');
-            setMainIcon(null);
-            
-            if (fileInputRef.current) {
-                fileInputRef.current.value = "";
+            if (response.status === 200 || response.status === 201) {
+                setHeading('');
+                setLink('');
+                setLanguage('');
+                setMainIcon(null);
+
+                if (fileInputRef.current) {
+                    fileInputRef.current.value = "";
+                }
+
+                toast.success("Home Services added successfully!", {
+                    position: "top-right",
+                    autoClose: 1000,
+                    onClose: () => {
+                        navigate('/home-services1');
+                    }
+                });
             }
-            
-            navigate('/home-services1');
         } catch (error) {
-            console.error('Error uploading file:', error);
-            toast.error('Failed to add home service. Please try again.', {
-                position: "top-right",
-                autoClose: 3000,
-            });
+            if (
+                error.response &&
+                error.response.status === 400 &&
+                error.response.data.errors
+            ) {
+                error.response.data.errors.forEach((err) => {
+                    toast.error(err.message, {
+                        position: "top-right",
+                        autoClose: 3000,
+                    });
+                });
+            } else {
+                toast.error("Failed to add home service. Please try again.", {
+                    position: "top-right",
+                    autoClose: 3000,
+                });
+            }
+            console.error('Error Error adding services:', error);
         }
     };
 

@@ -6,6 +6,8 @@ const router = express.Router();
 const db = require("../config/db.js");
 const { verifyToken } = require('../middleware/jwtMiddleware.js');
 const { getMulterConfig, handleMulterError } = require('../utils/uploadValidation');
+const sanitizeInput = require("../middleware/sanitizeInput.js");
+const { validateCommissionerData, validateaddCommissionerDesc } = require("../middleware/validationinputfield.js");
 
 const upload = multer(getMulterConfig());
 
@@ -22,39 +24,6 @@ const deleteFileIfExists = async (filePath) => {
   }
 };
 
-const validateAssistantCommissionerData = (data) => {
-  const requiredFields = [
-    'coName', 'designation', 'qualification',
-    'address', 'number', 'email', 'language_code'
-  ];
-
-  const missingFields = requiredFields.filter(field => !data[field]);
-  if (missingFields.length > 0) {
-    return {
-      isValid: false,
-      message: `Missing required fields: ${missingFields.join(', ')}`
-    };
-  }
-
-  // Validate email format
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(data.email)) {
-    return {
-      isValid: false,
-      message: 'Invalid email format'
-    };
-  }
-
-  const phoneRegex = /^[0-9]{10,15}$/;
-  if (!phoneRegex.test(data.number)) {
-    return {
-      isValid: false,
-      message: 'Invalid phone number format (10-15 digits required)'
-    };
-  }
-
-  return { isValid: true };
-};
 
 
 router.get("/asst-commissioner-details", (req, res) => {
@@ -134,7 +103,9 @@ router.post(
   "/asst-commissioner-details",
   verifyToken,
   upload.single("coImage"),
+  sanitizeInput,
   handleMulterError,
+  validateCommissionerData,
   async (req, res) => {
     if (req.user?.role === "Admin") {
       return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
@@ -148,15 +119,6 @@ router.post(
       email,
       language_code
     } = req.body;
-
-    // Validate input data
-    const validation = validateAssistantCommissionerData(req.body);
-    if (!validation.isValid) {
-      if (req.file) {
-        await deleteFileIfExists(`/uploads/${req.file.filename}`);
-      }
-      return res.status(400).json({ message: validation.message });
-    }
 
     const imagePath = req.file ? `/uploads/${req.file.filename}` : null;
 
@@ -194,7 +156,7 @@ router.post(
 );
 
 
-router.post("/asst-commissioner-desc", verifyToken, (req, res) => {
+router.post("/asst-commissioner-desc", verifyToken, sanitizeInput, validateaddCommissionerDesc, (req, res) => {
   if (req.user?.role === "Admin") {
     return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
   }
@@ -226,7 +188,9 @@ router.post(
   "/edit-asst-commissioner-details/:id",
   verifyToken,
   upload.single("coImage"),
+  sanitizeInput,
   handleMulterError,
+  validateCommissionerData,
   async (req, res) => {
     if (req.user?.role === "Admin") {
       return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
@@ -328,7 +292,7 @@ router.post(
 );
 
 
-router.post("/edit-asst-commissioner-desc/:id", verifyToken, (req, res) => {
+router.post("/edit-asst-commissioner-desc/:id", verifyToken, sanitizeInput, validateaddCommissionerDesc, (req, res) => {
   if (req.user?.role === "Admin") {
     return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
   }

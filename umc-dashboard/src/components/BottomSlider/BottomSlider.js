@@ -136,14 +136,24 @@ const BottomSlider = () => {
         fetchLinks();
       })
       .catch((error) => {
-        console.error("Error updating slider link:", error);
-        toast.error(
-          error.response?.data?.message || "Failed to update slider",
-          {
+        if (
+          error.response &&
+          error.response.status === 400 &&
+          error.response.data.errors
+        ) {
+          error.response.data.errors.forEach((err) => {
+            toast.error(err.message, {
+              position: "top-right",
+              autoClose: 3000,
+            });
+          });
+        } else {
+          toast.error("Failed to add bottom slider. Please try again.", {
             position: "top-right",
             autoClose: 3000,
-          }
-        );
+          });
+        }
+        console.error("Error updating slider:", error);
       });
   };
 

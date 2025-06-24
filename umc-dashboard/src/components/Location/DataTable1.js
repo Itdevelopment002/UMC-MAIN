@@ -54,8 +54,29 @@ const DataTable1 = () => {
       setPolicyData(updatedPolicy);
       setShowEditModal(false);
       toast.success("Table 1 data updated successfully!");
-    } catch (error) {
-      toast.error("Failed to update the table 1 data!");
+    }catch (error) {
+       if (
+        error.response &&
+        error.response.status === 400 &&
+        Array.isArray(error.response.data.errors)
+      ) {
+        error.response.data.errors.forEach((err) => {
+          const message = typeof err === "string" ? err : err.message || "Validation error";
+          toast.error(message, {
+            position: "top-right",
+            autoClose: 3000,
+          });
+        });
+      } else {
+        toast.error(
+          error.response?.data?.message || "Failed to update the table 1 data!",
+          {
+            position: "top-right",
+            autoClose: 3000,
+          }
+        );
+      }
+      console.error("Failed to update the table 1 data!", error);
     }
   };
 

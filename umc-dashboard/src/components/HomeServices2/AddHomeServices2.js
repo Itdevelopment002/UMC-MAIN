@@ -43,13 +43,39 @@ const AddHomeServices2 = () => {
         link: link,
         language_code: language,
       });
-      setHeading("");
-      setLink("");
-      setLanguage("");
-      navigate("/home-services2");
+
+      if (response.status === 200 || response.status === 201) {
+        setHeading("");
+        setLink("");
+        setLanguage("");
+
+        toast.success("Home Services added successfully!", {
+          position: "top-right",
+          autoClose: 1000,
+          onClose: () => {
+            navigate("/home-services2");
+          }
+        });
+      }
     } catch (error) {
-      console.error('Error uploading file:', error);
-      toast.error('Failed to add home service. Please try again.');
+      if (
+        error.response &&
+        error.response.status === 400 &&
+        error.response.data.errors
+      ) {
+        error.response.data.errors.forEach((err) => {
+          toast.error(err.message, {
+            position: "top-right",
+            autoClose: 3000,
+          });
+        });
+      } else {
+        toast.error("Failed to add home service. Please try again.", {
+          position: "top-right",
+          autoClose: 3000,
+        });
+      }
+      console.error('Error adding Home services:', error);
     }
   };
 

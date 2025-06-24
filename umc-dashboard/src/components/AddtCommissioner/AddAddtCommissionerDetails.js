@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import api from "../api";
 
 const AddAddtCommissionerDetails = () => {
@@ -40,10 +42,6 @@ const AddAddtCommissionerDetails = () => {
     if (!formData.language_code.trim()) newErrors.language_code = "Language Selection is required.";
     if (!formData.email.trim()) {
       newErrors.email = "Email Id is required.";
-    } else if (
-      !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(formData.email)
-    ) {
-      newErrors.email = "Invalid email format.";
     }
     if (!formData.coImage) newErrors.coImage = "Commissioner Image is required.";
     return newErrors;
@@ -72,10 +70,38 @@ const AddAddtCommissionerDetails = () => {
       const response = await api.post("/addt-commissioner-details", data, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-      if (response.status === 201) {
-        navigate("/additional-commissioner");
+
+      if (response.status === 200 || response.status === 201) {
+        toast.success("Additional Commissioner data added successfully!", {
+          position: "top-right",
+          autoClose: 1000,
+          onClose: () => {
+            navigate("/additional-commissioner");
+          }
+        });
       }
     } catch (error) {
+      if (
+        error.response &&
+        error.response.status === 400 &&
+        Array.isArray(error.response.data.errors)
+      ) {
+        error.response.data.errors.forEach((err) => {
+          const message = typeof err === "string" ? err : err.message || "Validation error";
+          toast.error(message, {
+            position: "top-right",
+            autoClose: 3000,
+          });
+        });
+      } else {
+        toast.error(
+          error.response?.data?.message || "Failed to Add Additional commissioner data. Try again.",
+          {
+            position: "top-right",
+            autoClose: 3000,
+          }
+        );
+      }
       console.error(error);
     }
   };
@@ -227,7 +253,7 @@ const AddAddtCommissionerDetails = () => {
                     </label>
                     <div className="col-md-4">
                       <input
-                        type="email"
+                        type="text"
                         className={`form-control ${errors.email ? "is-invalid" : ""
                           }`}
                         name="email"
@@ -274,6 +300,7 @@ const AddAddtCommissionerDetails = () => {
           </div>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };

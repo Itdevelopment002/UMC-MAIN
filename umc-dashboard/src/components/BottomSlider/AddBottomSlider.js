@@ -18,7 +18,7 @@ const AddBottomSlider = () => {
     if (file) {
       // Use our global validation function
       const errorMessage = getImageValidationError(file);
-     
+
       if (errorMessage) {
         // Clear the file input if invalid file is selected
         if (fileInputRef.current) {
@@ -39,7 +39,7 @@ const AddBottomSlider = () => {
     if (!websitelink.trim()) {
       newErrors.websitelink = "Slider Link is required.";
     }
-    
+
     // Use our global validation function
     const imageError = getImageValidationError(websitelogo);
     if (imageError) {
@@ -67,35 +67,42 @@ const AddBottomSlider = () => {
         },
       });
 
-      if (response.status === 201) {
-        toast.success("Bottom slider added successfully!", {
-          position: "top-right",
-          autoClose: 3000,
-        });
+      if (response.status === 200 || response.status === 201) {
 
         setLink("");
         setLogo(null);
-        
+
         if (fileInputRef.current) {
           fileInputRef.current.value = "";
         }
 
-        navigate("/bottom-slider", { replace: true });
+        toast.success("Bottom slider added successfully!", {
+          position: "top-right",
+          autoClose: 1000,
+          onClose: () => {
+            navigate("/bottom-slider", { replace: true });
+          }
+        });
+      }
+    } catch (error) {
+      if (
+        error.response &&
+        error.response.status === 400 &&
+        error.response.data.errors
+      ) {
+        error.response.data.errors.forEach((err) => {
+          toast.error(err.message, {
+            position: "top-right",
+            autoClose: 3000,
+          });
+        });
       } else {
-        toast.error("Failed to add slider. Please try again.", {
+        toast.error("Failed to upload the slider.", {
           position: "top-right",
           autoClose: 3000,
         });
       }
-    } catch (error) {
-      console.error("Error uploading Slider link:", error);
-      toast.error(
-        error.response?.data?.message || "Failed to upload the slider.",
-        {
-          position: "top-right",
-          autoClose: 3000,
-        }
-      );
+      console.error("Error adding slider:", error);
     }
   };
 

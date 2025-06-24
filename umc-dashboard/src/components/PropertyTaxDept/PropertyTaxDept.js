@@ -60,8 +60,24 @@ const PropertyTaxDept = () => {
       setShowEditModal(false);
       toast.success("Tax updated successfully!");
     } catch (error) {
+      if (
+        error.response &&
+        error.response.status === 400 &&
+        error.response.data.errors
+      ) {
+        error.response.data.errors.forEach((err) => {
+          toast.error(err.message, {
+            position: "top-right",
+            autoClose: 3000,
+          });
+        });
+      } else {
+        toast.error("Failed to update the property tax data!", {
+          position: "top-right",
+          autoClose: 3000,
+        });
+      }
       console.error("Error updating property tax data:", error);
-      toast.error("Failed to update the property tax data!");
     }
   };
 
