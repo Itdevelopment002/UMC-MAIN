@@ -206,7 +206,7 @@ const VideoGallery = () => {
                 <div className="card-block">
                   <div className="row">
                     <div className="col-sm-4 col-3">
-                      <h4 className="page-title">Category Videos</h4>
+                      <h4 className="page-title">Category-wise Videos</h4>
                     </div>
                     <div className="col-sm-8 col-9 text-right m-b-20">
                       <Link
