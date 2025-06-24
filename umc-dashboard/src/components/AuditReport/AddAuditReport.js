@@ -142,13 +142,13 @@ const AddAuditReport = () => {
                           }}
                         >
                           <option style={{ backgroundColor: '#FBE9ED', color: '#E3435A' }} value="" disabled>Select Report Name</option>
-                          <option value="Internal audit report">Internal Audit Report</option>
-                          <option value="Local Fund Audit Report">Local Fund Audit Report</option>
                           <option value="AG Audit Report">AG Audit Report</option>
+                          <option value="Local Fund Audit Report">Local Fund Audit Report</option>
+                          <option value="Internal Audit Report">Internal Audit Report</option>
                           <option value="Monthly Accumulated Expense Report">Monthly Accumulated Expense Report</option>
-                          <option value="अंतर्गत लेखापरीक्षण अहवाल">अंतर्गत लेखापरीक्षण अहवाल</option>
-                          <option value="स्थानिक विधी लेखा परीक्षा अहवाल">स्थानिक विधी लेखा परीक्षा अहवाल</option>
                           <option value="महालेखापाल अहवाल">महालेखापाल अहवाल</option>
+                          <option value="स्थानिक विधी लेखा परीक्षा अहवाल">स्थानिक विधी लेखा परीक्षा अहवाल</option>
+                          <option value="अंतर्गत लेखापरीक्षण अहवाल">अंतर्गत लेखापरीक्षण अहवाल</option>
                           <option value="मासिक जमा-खर्च अहवाल">मासिक जमा-खर्च अहवाल</option>
                         </select>
                         {errors.name && (
