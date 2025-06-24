@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import api from "../api";
 
 const AddCommissionerDesc = () => {
@@ -39,9 +41,36 @@ const AddCommissionerDesc = () => {
       });
 
       if (response.status === 200 || response.status === 201) {
-        navigate("/commissioner");
+        toast.success("Commissioner Description added successfully!", {
+          position: "top-right",
+          autoClose: 1000,
+          onClose: () => {
+            navigate("/commissioner");
+          }
+        });
       }
     } catch (error) {
+      if (
+        error.response &&
+        error.response.status === 400 &&
+        Array.isArray(error.response.data.errors)
+      ) {
+        error.response.data.errors.forEach((err) => {
+          const message = typeof err === "string" ? err : err.message || "Validation error";
+          toast.error(message, {
+            position: "top-right",
+            autoClose: 3000,
+          });
+        });
+      } else {
+        toast.error(
+          error.response?.data?.message || "Error submitting description:",
+          {
+            position: "top-right",
+            autoClose: 3000,
+          }
+        );
+      }
       console.error("Error submitting description:", error);
     }
   };
@@ -115,6 +144,7 @@ const AddCommissionerDesc = () => {
           </div>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };

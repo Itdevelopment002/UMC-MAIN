@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../api";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import Flatpickr from "react-flatpickr";
 import "flatpickr/dist/themes/material_blue.css";
 
@@ -60,13 +62,41 @@ const AddPressNote = () => {
         language_code: language,
         issue_date: formattedDate,
       });
-      setDescription("");
-      setLink("");
-      setLanguage("");
-      setIssueDate("");
-      navigate("/press-note");
+
+      if (response.status === 200 || response.status === 201) {
+        setDescription("");
+        setLink("");
+        setLanguage("");
+        setIssueDate("");
+
+        toast.success("Press Notes added successfully!", {
+          position: "top-right",
+          autoClose: 1000,
+          onClose: () => {
+            navigate("/press-note");
+
+          }
+        });
+      }
     } catch (error) {
-      console.error("Error adding note data:", error);
+      if (
+        error.response &&
+        error.response.status === 400 &&
+        error.response.data.errors
+      ) {
+        error.response.data.errors.forEach((err) => {
+          toast.error(err.message, {
+            position: "top-right",
+            autoClose: 3000,
+          });
+        });
+      } else {
+        toast.error("Failed to add press note data:", {
+          position: "top-right",
+          autoClose: 3000,
+        });
+      }
+      console.error("Error adding press note data:", error);
     }
   };
 
@@ -214,6 +244,7 @@ const AddPressNote = () => {
           </div>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };

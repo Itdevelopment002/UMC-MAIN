@@ -3,6 +3,7 @@ const router = express.Router();
 const db = require("../config/db.js");
 const {verifyToken} = require('../middleware/jwtMiddleware.js');
 const sanitizeInput = require('../middleware/sanitizeInput.js');
+const { validateLocationInfo } = require("../middleware/validationinputfield.js");
 
 
 router.get("/location-info", (req, res) => {
@@ -23,7 +24,7 @@ router.get("/location-info", (req, res) => {
 });
 
 
-router.post("/location-info", verifyToken, sanitizeInput, (req, res) => {
+router.post("/location-info", verifyToken, sanitizeInput, validateLocationInfo, (req, res) => {
   if (req.user?.role === "Admin") {
     return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
   }
@@ -44,7 +45,7 @@ router.post("/location-info", verifyToken, sanitizeInput, (req, res) => {
 });
 
 
-router.post("/edit-location-info/:id", verifyToken, sanitizeInput, (req, res) => {
+router.post("/edit-location-info/:id", verifyToken, sanitizeInput, validateLocationInfo, (req, res) => {
   if (req.user?.role === "Admin") {
     return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
   }

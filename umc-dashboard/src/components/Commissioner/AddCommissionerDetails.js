@@ -42,10 +42,6 @@ const AddCommissionerDetails = () => {
     if (!formData.language_code.trim()) newErrors.language_code = "Language Selection is required.";
     if (!formData.email.trim()) {
       newErrors.email = "Email Id is required.";
-    } else if (
-      !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(formData.email)
-    ) {
-      newErrors.email = "Invalid email format.";
     }
     if (!formData.coImage) newErrors.coImage = "Commissioner Image is required.";
     return newErrors;
@@ -75,25 +71,35 @@ const AddCommissionerDetails = () => {
         headers: { "Content-Type": "multipart/form-data" },
       });
       if (response.status === 200 || response.status === 201) {
-        navigate("/commissioner");
+        toast.success("Commissioner data added successfully!", {
+          position: "top-right",
+          autoClose: 1000,
+          onClose: () => {
+            navigate("/commissioner");
+          }
+        });
       }
     } catch (error) {
       if (
         error.response &&
         error.response.status === 400 &&
-        error.response.data.errors
+        Array.isArray(error.response.data.errors)
       ) {
         error.response.data.errors.forEach((err) => {
-          toast.error(err.message, {
+          const message = typeof err === "string" ? err : err.message || "Validation error";
+          toast.error(message, {
             position: "top-right",
             autoClose: 3000,
           });
         });
       } else {
-        toast.error("Failed to update minister. Try again.", {
-          position: "top-right",
-          autoClose: 3000,
-        });
+        toast.error(
+          error.response?.data?.message || "Failed to Add commissioner. Try again.",
+          {
+            position: "top-right",
+            autoClose: 3000,
+          }
+        );
       }
       console.error(error);
     }
@@ -246,7 +252,7 @@ const AddCommissionerDetails = () => {
                     </label>
                     <div className="col-md-4">
                       <input
-                        type="email"
+                        type="text"
                         className={`form-control ${errors.email ? "is-invalid" : ""
                           }`}
                         name="email"
@@ -292,7 +298,6 @@ const AddCommissionerDetails = () => {
         </div>
       </div>
       <ToastContainer />
-
     </div>
   );
 };

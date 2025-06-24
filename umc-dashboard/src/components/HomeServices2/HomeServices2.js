@@ -52,8 +52,24 @@ const HomeServices2 = () => {
       setShowEditModal(false);
       toast.success("Home services updated successfully!");
     } catch (error) {
+      if (
+        error.response &&
+        error.response.status === 400 &&
+        error.response.data.errors
+      ) {
+        error.response.data.errors.forEach((err) => {
+          toast.error(err.message, {
+            position: "top-right",
+            autoClose: 3000,
+          });
+        });
+      } else {
+        toast.error("Failed to update the home services!", {
+          position: "top-right",
+          autoClose: 3000,
+        });
+      }
       console.error("Error updating home services:", error);
-      toast.error("Failed to update the home services!");
     }
   };
 

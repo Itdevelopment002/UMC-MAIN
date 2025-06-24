@@ -60,8 +60,24 @@ const SolidWasteSystem = () => {
       setShowEditModal(false);
       toast.success("Swms updated successfully!");
     } catch (error) {
+      if (
+        error.response &&
+        error.response.status === 400 &&
+        error.response.data.errors
+      ) {
+        error.response.data.errors.forEach((err) => {
+          toast.error(err.message, {
+            position: "top-right",
+            autoClose: 3000,
+          });
+        });
+      } else {
+        toast.error("Failed to add Solid waste management system.", {
+          position: "top-right",
+          autoClose: 3000,
+        });
+      }
       console.error("Error updating swms:", error);
-      toast.error("Failed to update the swms!");
     }
   };
 

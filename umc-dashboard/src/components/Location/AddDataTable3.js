@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import api from "../api";
 import { Link } from "react-router-dom";
 
@@ -54,14 +56,39 @@ const AddDataTable3 = () => {
         },
       });
 
-      if (response.status === 201) {
+     if (response.status === 200 || response.status === 201) {
         setFormData({ heading: "", description: "", language_code: "" });
         setErrors({ heading: "", description: "", language_code: "" });
-        navigate("/location");
-      } else {
-        console.error("Failed to add table 3 data");
+        toast.success("Table 3 data added successfully!", {
+          position: "top-right",
+          autoClose: 1000,
+          onClose: () => {
+            navigate("/location");
+          }
+        });
       }
-    } catch (error) {
+    }catch (error) {
+       if (
+        error.response &&
+        error.response.status === 400 &&
+        Array.isArray(error.response.data.errors)
+      ) {
+        error.response.data.errors.forEach((err) => {
+          const message = typeof err === "string" ? err : err.message || "Validation error";
+          toast.error(message, {
+            position: "top-right",
+            autoClose: 3000,
+          });
+        });
+      } else {
+        toast.error(
+          error.response?.data?.message || "Error adding table 3 data:",
+          {
+            position: "top-right",
+            autoClose: 3000,
+          }
+        );
+      }
       console.error("Error adding table 3 data:", error);
     }
   };
@@ -160,6 +187,7 @@ const AddDataTable3 = () => {
           </div>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };

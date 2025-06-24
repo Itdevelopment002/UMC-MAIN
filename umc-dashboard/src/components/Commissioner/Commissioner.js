@@ -136,19 +136,37 @@ const Commissioner = () => {
                 fetchCoData();
             }
 
+            
+
             // Display success message
             toast.success('Commissioner Information update successfully'
             );
-
-            // Redirect to the appropriate page if needed
-            navigate('/commissioner');
+            closeModal();
 
         } catch (error) {
+            if (
+                error.response &&
+                error.response.status === 400 &&
+                Array.isArray(error.response.data.errors)
+            ) {
+                error.response.data.errors.forEach((err) => {
+                    const message = typeof err === "string" ? err : err.message || "Validation error";
+                    toast.error(message, {
+                        position: "top-right",
+                        autoClose: 3000,
+                    });
+                });
+            } else {
+                toast.error(
+                    error.response?.data?.message || "Failed to update the entry!",
+                    {
+                        position: "top-right",
+                        autoClose: 3000,
+                    }
+                );
+            }
             console.error(error);
-            toast.error("Failed to update the entry!");
-        } finally {
-            closeModal();
-        }
+        } 
     };
 
 
@@ -201,24 +219,24 @@ const Commissioner = () => {
                                         </div>
                                         <div className="col-sm-8 col-9 text-right m-b-20 position-relative">
                                             <div className="tooltip-container">
-                                            <Link
-                                                to={coData.length > 1 ? "#" : "/add-commissioner-details"}
-                                                className={`btn btn-primary btn-rounded float-right ${coData.length > 1 ? "disabled-custom-button" : ""
-                                                    }`}
-                                                onClick={(e) => {
-                                                    if (coData.length > 1) {
-                                                        e.preventDefault();
-                                                        toast.info("Commissioner details already exist!");
-                                                    }
-                                                }}
-                                            >
-                                                <i className="fa fa-plus"></i> Add Details
-                                            </Link>
-                                            {coData.length >= 1 && (
-                                                <div className="custom-tooltip">
-                                                    Maximum 1 Commissioner details allowed per language
-                                                </div>
-                                            )}
+                                                <Link
+                                                    to={coData.length > 1 ? "#" : "/add-commissioner-details"}
+                                                    className={`btn btn-primary btn-rounded float-right ${coData.length > 1 ? "disabled-custom-button" : ""
+                                                        }`}
+                                                    onClick={(e) => {
+                                                        if (coData.length > 1) {
+                                                            e.preventDefault();
+                                                            toast.info("Commissioner details already exist!");
+                                                        }
+                                                    }}
+                                                >
+                                                    <i className="fa fa-plus"></i> Add Details
+                                                </Link>
+                                                {coData.length >= 1 && (
+                                                    <div className="custom-tooltip">
+                                                        Maximum 1 Commissioner details allowed per language
+                                                    </div>
+                                                )}
                                             </div>
                                         </div>
                                     </div>
@@ -528,7 +546,7 @@ const Commissioner = () => {
                                                 <div className="form-group">
                                                     <label htmlFor="email">Mail ID</label>
                                                     <input
-                                                        type="email"
+                                                        type="text"
                                                         className="form-control"
                                                         id="email"
                                                         value={editData.email}

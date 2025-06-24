@@ -85,12 +85,12 @@ const HomeService1 = () => {
 
   const handleSaveEdit = async () => {
     if (!validateForm()) {
-              toast.error("Please fix errors before submitting.");
+      toast.error("Please fix errors before submitting.");
       return;
     }
     if (errors.heading || errors.link || errors.mainIcon || errors.language_code) {
-        toast.error("Please fix errors before submitting.");
-        return;
+      toast.error("Please fix errors before submitting.");
+      return;
     }
 
     const formData = new FormData();
@@ -107,8 +107,24 @@ const HomeService1 = () => {
       setShowEditModal(false);
       toast.success("Home Service updated successfully");
     } catch (error) {
-      console.error("Error updating home service 1:", error);
-      toast.error("Failed to update home service 1");
+      if (
+        error.response &&
+        error.response.status === 400 &&
+        error.response.data.errors
+      ) {
+        error.response.data.errors.forEach((err) => {
+          toast.error(err.message, {
+            position: "top-right",
+            autoClose: 3000,
+          });
+        });
+      } else {
+        toast.error("Failed to update home services!", {
+          position: "top-right",
+          autoClose: 3000,
+        });
+      }
+      console.error("Error updating home service:", error);
     }
   };
 
@@ -120,7 +136,7 @@ const HomeService1 = () => {
         setErrors({ ...errors, [field]: errorMessage });
         return;
       }
-      
+
       setSelectedInitiative((prevInitiative) => ({ ...prevInitiative, [field]: file }));
       setImagePreview(URL.createObjectURL(file));
       setErrors({ ...errors, [field]: "" });
