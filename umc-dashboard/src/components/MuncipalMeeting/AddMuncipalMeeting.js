@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import api from "../api";
 import Flatpickr from "react-flatpickr";
 import "flatpickr/dist/themes/material_blue.css";
+import { toast, ToastContainer } from "react-toastify";
 
 const AddMuncipalMeeting = () => {
   const [name, setName] = useState("");
@@ -78,15 +79,45 @@ const AddMuncipalMeeting = () => {
         language_code: language,
 
       });
-      setLanguage("");
-      setName("");
-      setYear("");
-      setIssueDate("");
-      setPdfLink1("");
-      setPdfLink2("");
-      setPdfLink3("");
-      navigate("/muncipal-meeting");
+      if (response.status === 200 || response.status === 201) {
+        setLanguage("");
+        setName("");
+        setYear("");
+        setIssueDate("");
+        setPdfLink1("");
+        setPdfLink2("");
+        setPdfLink3("");
+        toast.success("Municipal meeting data added successfully!", {
+          position: "top-right",
+          autoClose: 1000,
+          onClose: () => {
+            navigate("/muncipal-meeting");
+          }
+        });
+      }
     } catch (error) {
+      if (
+        error.response &&
+        error.response.status === 400 &&
+        Array.isArray(error.response.data.errors)
+      ) {
+        error.response.data.errors.forEach((err) => {
+          const message = typeof err === "string" ? err : err.message || "Validation error";
+          toast.error(message, {
+            position: "top-right",
+            autoClose: 3000,
+          });
+        });
+      } else {
+        toast.error(
+          error.response?.data?.message || "Failed to add municipal meeting data. Try again.",
+          {
+            position: "top-right",
+            autoClose: 3000,
+          }
+        );
+      }
+
       console.error("Error adding municipal meeting data:", error);
     }
   };
@@ -279,6 +310,7 @@ const AddMuncipalMeeting = () => {
           </div>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };

@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import api from "../api";
 import Flatpickr from "react-flatpickr";
 import "flatpickr/dist/themes/material_blue.css";
+import { toast, ToastContainer } from "react-toastify";
 
 const AddAgenda = () => {
   const [Department_Name, setDepartmentName] = useState("");
@@ -72,14 +73,43 @@ const AddAgenda = () => {
         language_code: language,
 
       });
-      setLanguage("");
-      setDepartmentName("");
-      setResolutionsNoDate("");
-      setScheduleDateOfMeeting("");
-      setAdjournmentNotice("");
-      setPdfLink("");
-      navigate("/agenda");
+      if (response.status === 200 || response.status === 201) {
+        setLanguage("");
+        setDepartmentName("");
+        setResolutionsNoDate("");
+        setScheduleDateOfMeeting("");
+        setAdjournmentNotice("");
+        setPdfLink("");
+        toast.success("UMC Agenda added successfully!", {
+          position: "top-right",
+          autoClose: 1000,
+          onClose: () => {
+            navigate("/agenda");
+          }
+        });
+      }
     } catch (error) {
+      if (
+        error.response &&
+        error.response.status === 400 &&
+        Array.isArray(error.response.data.errors)
+      ) {
+        error.response.data.errors.forEach((err) => {
+          const message = typeof err === "string" ? err : err.message || "Validation error";
+          toast.error(message, {
+            position: "top-right",
+            autoClose: 3000,
+          });
+        });
+      } else {
+        toast.error(
+          error.response?.data?.message || "Failed to add umc agenda. Try again.",
+          {
+            position: "top-right",
+            autoClose: 3000,
+          }
+        );
+      }
       console.error("Error adding umc agenda:", error);
     }
   };
@@ -281,6 +311,7 @@ const AddAgenda = () => {
           </div>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };

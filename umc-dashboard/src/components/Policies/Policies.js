@@ -65,8 +65,29 @@ const Policies = () => {
             setShowEditModal(false);
             toast.success("Policies updated successfully!");
         } catch (error) {
-            console.error("Error updating quick links:", error);
-            toast.error("Failed to update the quick links!");
+            if (
+                error.response &&
+                error.response.status === 400 &&
+                Array.isArray(error.response.data.errors)
+            ) {
+                error.response.data.errors.forEach((err) => {
+                    const message = typeof err === "string" ? err : err.message || "Validation error";
+                    toast.error(message, {
+                        position: "top-right",
+                        autoClose: 3000,
+                    });
+                });
+            } else {
+                toast.error(
+                    error.response?.data?.message || "Failed to update policies data. Try again.",
+                    {
+                        position: "top-right",
+                        autoClose: 3000,
+                    }
+                );
+            }
+
+            console.error("Error updating policies data:", error);
         }
     };
 
@@ -136,7 +157,7 @@ const Policies = () => {
                                                     <th width="10%" className="text-center">Sr. No.</th>
                                                     <th width="35%">Heading</th>
                                                     <th>PDF Link</th>
-                                                    <th width="15%" className="text-center" style={{textWrap: "pretty"}}>Issue Date</th>
+                                                    <th width="15%" className="text-center" style={{ textWrap: "pretty" }}>Issue Date</th>
                                                     <th width="15%" className="text-center">Action</th>
                                                 </tr>
                                             </thead>
@@ -147,7 +168,7 @@ const Policies = () => {
                                                             {index + 1 + (currentPage - 1) * servicesPerPage}
                                                         </td>
                                                         <td>{service.heading}</td>
-                                                        <td style={{textWrap: "pretty"}}>
+                                                        <td style={{ textWrap: "pretty" }}>
                                                             <Link
                                                                 to={service.link !== "#" ? `${service.link}` : "#"}
                                                                 target={service.link !== "#" ? "_blank" : ""}

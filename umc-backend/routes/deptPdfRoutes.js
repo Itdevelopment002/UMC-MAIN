@@ -3,6 +3,7 @@ const router = express.Router();
 const db = require("../config/db.js");
 const { verifyToken } = require('../middleware/jwtMiddleware.js');
 const sanitizeInput = require('../middleware/sanitizeInput.js');
+const { validateDeptPdf } = require("../middleware/validationinputfield.js");
 
 const convertToMySQLDate = (dateString) => {
   const [day, month, year] = dateString.split("-");
@@ -28,7 +29,7 @@ router.get("/department-pdfs", (req, res) => {
 });
 
 
-router.post("/department-pdfs", verifyToken, sanitizeInput, (req, res) => {
+router.post("/department-pdfs", verifyToken, sanitizeInput, validateDeptPdf, (req, res) => {
   const { department, heading, link, issue_date, language_code } = req.body;
   const formattedDate = convertToMySQLDate(issue_date);
 
@@ -51,7 +52,7 @@ router.post("/department-pdfs", verifyToken, sanitizeInput, (req, res) => {
 });
 
 
-router.post("/edit-department-pdfs/:id", verifyToken, sanitizeInput, (req, res) => {
+router.post("/edit-department-pdfs/:id", verifyToken, sanitizeInput, validateDeptPdf, (req, res) => {
   const { department, heading, link, issue_date, language_code } = req.body;
 
   // Check permission

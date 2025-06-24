@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import api from "../api";
 import { useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
 
 const AddStandingCommittee = () => {
   const [heading, setHeading] = useState("");
@@ -37,13 +38,44 @@ const AddStandingCommittee = () => {
         heading: heading,
         language_code: language,
       });
-      setHeading("");
-      setLanguage("");
-      navigate("/umc-committee");
+      if (response.status === 200 || response.status === 201) {
+        setHeading("");
+        setLanguage("");
+        toast.success("Standing committee data added successfully!", {
+          position: "top-right",
+          autoClose: 1000,
+          onClose: () => {
+            navigate("/umc-committee");
+          }
+        });
+      }
     } catch (error) {
-      console.error("Error submitting standing committee data:", error);
+      if (
+        error.response &&
+        error.response.status === 400 &&
+        Array.isArray(error.response.data.errors)
+      ) {
+        error.response.data.errors.forEach((err) => {
+          const message = typeof err === "string" ? err : err.message || "Validation error";
+          toast.error(message, {
+            position: "top-right",
+            autoClose: 3000,
+          });
+        });
+      } else {
+        toast.error(
+          error.response?.data?.message || "Failed to add standing committee. Try again.",
+          {
+            position: "top-right",
+            autoClose: 3000,
+          }
+        );
+      }
+
+      console.error("Error adding standing committee:", error);
     }
   };
+
   return (
     <div>
       <div className="page-wrapper">
@@ -123,6 +155,7 @@ const AddStandingCommittee = () => {
           </div>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };

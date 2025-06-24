@@ -33,7 +33,7 @@ const AuditReport = () => {
                 const dateA = a.issue_date ? new Date(a.issue_date) : new Date(0);
                 const dateB = b.issue_date ? new Date(b.issue_date) : new Date(0);
                 return dateB - dateA;
-              });
+            });
             setMunicipalMeetingsData(sortedData);
             if (response.data.length > 0) {
                 setSelectedMeetingName(response.data[0].name);
@@ -68,8 +68,8 @@ const AuditReport = () => {
 
     const handleEditSave = async () => {
         const formattedIssueDate = selectedMeeting.issue_date
-      ? formatDate(selectedMeeting.issue_date)
-      : "";
+            ? formatDate(selectedMeeting.issue_date)
+            : "";
         try {
             await api.post(`/edit-audit-report/${selectedMeeting.id}`, {
                 name: selectedMeeting.name,
@@ -90,8 +90,29 @@ const AuditReport = () => {
             setShowEditModal(false);
             toast.success("Audit Report updated successfully!");
         } catch (error) {
+            if (
+                error.response &&
+                error.response.status === 400 &&
+                Array.isArray(error.response.data.errors)
+            ) {
+                error.response.data.errors.forEach((err) => {
+                    const message = typeof err === "string" ? err : err.message || "Validation error";
+                    toast.error(message, {
+                        position: "top-right",
+                        autoClose: 3000,
+                    });
+                });
+            } else {
+                toast.error(
+                    error.response?.data?.message || "Failed to update audit report. Try again.",
+                    {
+                        position: "top-right",
+                        autoClose: 3000,
+                    }
+                );
+            }
+
             console.error("Error updating audit report:", error);
-            toast.error("Failed to update the audit report!");
         }
     };
 
@@ -126,7 +147,7 @@ const AuditReport = () => {
         const month = String(d.getMonth() + 1).padStart(2, "0");
         const year = d.getFullYear();
         return `${day}-${month}-${year}`;
-      };
+    };
 
     return (
         <>

@@ -3,6 +3,7 @@ const router = express.Router();
 const db = require("../config/db.js");
 const { verifyToken } = require('../middleware/jwtMiddleware.js');
 const sanitizeInput = require('../middleware/sanitizeInput.js');
+const { validateWardOffice } = require("../middleware/validationinputfield.js");
 
 router.get("/ward-offices", (req, res) => {
   const language = req.query.lang;
@@ -22,7 +23,7 @@ router.get("/ward-offices", (req, res) => {
 });
 
 
-router.post("/ward-offices", verifyToken, sanitizeInput, (req, res) => {
+router.post("/ward-offices", verifyToken, sanitizeInput, validateWardOffice, (req, res) => {
   if (req.user?.role === "Admin") {
     return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
   }
@@ -35,7 +36,7 @@ router.post("/ward-offices", verifyToken, sanitizeInput, (req, res) => {
 
   db.query(
     sql,
-    [ward_no, ward_name, officer_name, address, email, mobile, landline, areas, language_code, map_url],
+    [ward_no, ward_name, officer_name, address, email, mobile, landline, areas, map_url, language_code],
     (err, result) => {
       if (err) {
         console.error(err);
@@ -60,7 +61,7 @@ router.post("/ward-offices", verifyToken, sanitizeInput, (req, res) => {
 });
 
 
-router.post("/edit-ward-offices/:id", verifyToken, sanitizeInput, (req, res) => {
+router.post("/edit-ward-offices/:id", verifyToken, sanitizeInput, validateWardOffice, (req, res) => {
   if (req.user?.role === "Admin") {
     return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
   }

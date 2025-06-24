@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import api from "../api";
 import Flatpickr from "react-flatpickr";
 import "flatpickr/dist/themes/material_blue.css";
+import { toast, ToastContainer } from "react-toastify";
 
 const AddPolicies = () => {
   const [heading, setHeading] = useState("");
@@ -58,13 +59,43 @@ const AddPolicies = () => {
         issue_date: formattedDate,
         language_code: language,
       });
-      setLanguage("");
-      setHeading("");
-      setIssueDate("");
-      setLink("");
-      navigate("/policies");
+      if (response.status === 200 || response.status === 201) {
+        setLanguage("");
+        setHeading("");
+        setIssueDate("");
+        setLink("");
+        toast.success("Policies data added successfully!", {
+          position: "top-right",
+          autoClose: 1000,
+          onClose: () => {
+            navigate("/policies");
+          }
+        });
+      }
     } catch (error) {
-      console.error("Error adding Policies data:", error);
+      if (
+        error.response &&
+        error.response.status === 400 &&
+        Array.isArray(error.response.data.errors)
+      ) {
+        error.response.data.errors.forEach((err) => {
+          const message = typeof err === "string" ? err : err.message || "Validation error";
+          toast.error(message, {
+            position: "top-right",
+            autoClose: 3000,
+          });
+        });
+      } else {
+        toast.error(
+          error.response?.data?.message || "Failed to add policies data. Try again.",
+          {
+            position: "top-right",
+            autoClose: 3000,
+          }
+        );
+      }
+
+      console.error("Error adding policies data:", error);
     }
   };
 
@@ -213,6 +244,7 @@ const AddPolicies = () => {
           </div>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };

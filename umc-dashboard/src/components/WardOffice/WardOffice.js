@@ -60,8 +60,29 @@ const WardOffice = () => {
       setShowEditModal(false);
       toast.success("Ward office updated successfully!");
     } catch (error) {
+      if (
+        error.response &&
+        error.response.status === 400 &&
+        Array.isArray(error.response.data.errors)
+      ) {
+        error.response.data.errors.forEach((err) => {
+          const message = typeof err === "string" ? err : err.message || "Validation error";
+          toast.error(message, {
+            position: "top-right",
+            autoClose: 3000,
+          });
+        });
+      } else {
+        toast.error(
+          error.response?.data?.message || "Failed to update ward office. Try again.",
+          {
+            position: "top-right",
+            autoClose: 3000,
+          }
+        );
+      }
+
       console.error("Error updating ward office:", error);
-      toast.error("Failed to update the ward office!");
     }
   };
 

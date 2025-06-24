@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../api";
+import { toast, ToastContainer } from "react-toastify";
 
 const AddAdministration = () => {
   const [name, setName] = useState("");
@@ -46,13 +47,43 @@ const AddAdministration = () => {
         phone: phone,
         language_code: language,
       });
-      setLanguage("");
-      setName("");
-      setDesignation("");
-      setPhone("");
-      navigate("/adminstration");
+      if (response.status === 200 || response.status === 201) {
+        setLanguage("");
+        setName("");
+        setDesignation("");
+        setPhone("");
+        toast.success("Administration data added successfully!", {
+          position: "top-right",
+          autoClose: 1000,
+          onClose: () => {
+            navigate('/adminstration');
+          }
+        });
+      }
     } catch (error) {
-      console.error("Error adding ward:", error);
+      if (
+        error.response &&
+        error.response.status === 400 &&
+        Array.isArray(error.response.data.errors)
+      ) {
+        error.response.data.errors.forEach((err) => {
+          const message = typeof err === "string" ? err : err.message || "Validation error";
+          toast.error(message, {
+            position: "top-right",
+            autoClose: 3000,
+          });
+        });
+      } else {
+        toast.error(
+          error.response?.data?.message || "Failed to add administration. Try again.",
+          {
+            position: "top-right",
+            autoClose: 3000,
+          }
+        );
+      }
+
+      console.error("Error adding administration:", error);
     }
   };
 
@@ -191,6 +222,7 @@ const AddAdministration = () => {
           </div>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };

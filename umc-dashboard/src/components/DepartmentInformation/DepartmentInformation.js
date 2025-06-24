@@ -262,12 +262,33 @@ const DepartmentInformation = () => {
             toast.success(
                 `${modalType.charAt(0).toUpperCase() + modalType.slice(1).toLowerCase()} data updated successfully!`
             );
+            closeModal();
             navigate("/department-information");
         } catch (error) {
-            console.error(error);
-            toast.error("Failed to update the entry!");
+            if (
+                error.response &&
+                error.response.status === 400 &&
+                Array.isArray(error.response.data.errors)
+            ) {
+                error.response.data.errors.forEach((err) => {
+                    const message = typeof err === "string" ? err : err.message || "Validation error";
+                    toast.error(message, {
+                        position: "top-right",
+                        autoClose: 3000,
+                    });
+                });
+            } else {
+                toast.error(
+                    error.response?.data?.message || "Failed to update department data. Try again.",
+                    {
+                        position: "top-right",
+                        autoClose: 3000,
+                    }
+                );
+            }
+
+            console.error("Error updating department data:", error);
         }
-        closeModal();
     };
 
     const departmentDescriptionOptions = [...new Set(descriptionData.map((item) => item.department))];
