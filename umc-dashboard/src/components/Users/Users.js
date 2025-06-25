@@ -271,7 +271,7 @@ const Users = () => {
       await api.post(`/edit-users/${editData.id}`, payload);
       fetchUsers();
       setShowEditModal(false);
-      toast.success("User is updated successfully!");
+      toast.success("User updated successfully!");
     } catch (error) {
       if (
         error.response &&

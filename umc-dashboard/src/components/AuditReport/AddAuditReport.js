@@ -64,14 +64,21 @@ const AddAuditReport = () => {
         pdf_link: pdfLink,
         issue_date: formattedDate,
         language_code: language,
-
       });
-      setLanguage("");
-      setName("");
-      setYear("");
-      setPdfLink("");
-      setIssueDate("");
-      navigate("/audit-report");
+      if (response.status === 200 || response.status === 201) {
+        setLanguage("");
+        setName("");
+        setYear("");
+        setPdfLink("");
+        setIssueDate("");
+        toast.success("Audit report data added successfully!", {
+          position: "top-right",
+          autoClose: 1000,
+          onClose: () => {
+            navigate("/audit-report");
+          }
+        });
+      }
     } catch (error) {
       if (
         error.response &&

@@ -82,12 +82,20 @@ const AddTenders = () => {
         link: link,
         language_code: language,
       });
-      setHeading("");
-      setDepartment("");
-      setIssueDate("");
-      setLink("");
-      setLanguage("");
-      navigate("/tenders-quotations");
+      if (response.status === 200 || response.status === 201) {
+        setHeading("");
+        setDepartment("");
+        setIssueDate("");
+        setLink("");
+        setLanguage("");
+        toast.success("Tender added successfully!", {
+          position: "top-right",
+          autoClose: 1000,
+          onClose: () => {
+            navigate("/tenders-quotations");
+          }
+        });
+      }
     } catch (error) {
       if (
         error.response &&

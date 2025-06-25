@@ -43,10 +43,18 @@ const AddOnlineHomeServices = () => {
         link: link,
         language_code: language,
       });
-      setHeading("");
-      setLink("");
-      setLanguage("");
-      navigate("/online-home-services");
+      if (response.status === 200 || response.status === 201) {
+        setHeading("");
+        setLink("");
+        setLanguage("");
+        toast.success("Online service added successfully!", {
+          position: "top-right",
+          autoClose: 1000,
+          onClose: () => {
+            navigate("/online-home-services");
+          }
+        });
+      }
     } catch (error) {
       if (
         error.response &&

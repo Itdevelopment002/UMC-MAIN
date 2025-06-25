@@ -3,6 +3,7 @@ import api from '../api';
 import { useNavigate } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';
 import { Link } from "react-router-dom";
+import { toast, ToastContainer } from 'react-toastify';
 
 const AddHomeProjects = () => {
     const [heading, setHeading] = useState('');
@@ -64,15 +65,44 @@ const AddHomeProjects = () => {
                     'Content-Type': 'multipart/form-data',
                 },
             });
-            setHeading('');
-            setDescription('');
-            setLink('');
-            setLanguage('');
-            setMainIcon(null);
-            document.getElementById('mainIconInput').value = '';
-            navigate('/home-projects');
+            if (response.status === 200 || response.status === 201) {
+                setHeading('');
+                setDescription('');
+                setLink('');
+                setLanguage('');
+                setMainIcon(null);
+                document.getElementById('mainIconInput').value = '';
+                toast.success("Project data added successfully!", {
+                    position: "top-right",
+                    autoClose: 1000,
+                    onClose: () => {
+                        navigate('/home-projects');
+                    }
+                });
+            }
         } catch (error) {
-            console.error('Error uploading file:', error);
+            if (
+                error.response &&
+                error.response.status === 400 &&
+                Array.isArray(error.response.data.errors)
+            ) {
+                error.response.data.errors.forEach((err) => {
+                    const message = typeof err === "string" ? err : err.message || "Validation error";
+                    toast.error(message, {
+                        position: "top-right",
+                        autoClose: 3000,
+                    });
+                });
+            } else {
+                toast.error(
+                    error.response?.data?.message || "Failed to add project data. Try again.",
+                    {
+                        position: "top-right",
+                        autoClose: 3000,
+                    }
+                );
+            }
+            console.error("Error adding project data:", error);
         }
     };
 
@@ -178,6 +208,7 @@ const AddHomeProjects = () => {
                         </div>
                     </div>
                 </div>
+                <ToastContainer />
             </div>
         </>
     );

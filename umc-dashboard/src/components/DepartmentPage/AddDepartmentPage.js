@@ -81,22 +81,22 @@ const AddDepartmentPage = () => {
                     'Content-Type': 'multipart/form-data',
                 },
             });
-
-            toast.success(response.data.message || "Department added successfully!", {
-                position: "top-right",
-                autoClose: 3000,
-            });
-
-            // Reset form
-            setHeading('');
-            setLink('');
-            setLanguage('');
-            setMainIcon(null);
-            if (fileInputRef.current) {
-                fileInputRef.current.value = '';
+            if (response.status === 200 || response.status === 201) {
+                setHeading('');
+                setLink('');
+                setLanguage('');
+                setMainIcon(null);
+                if (fileInputRef.current) {
+                    fileInputRef.current.value = '';
+                }
+                toast.success("Department added successfully!", {
+                    position: "top-right",
+                    autoClose: 1000,
+                    onClose: () => {
+                        navigate('/departments');
+                    }
+                });
             }
-
-            navigate('/departments');
         } catch (error) {
             if (
                 error.response &&

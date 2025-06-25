@@ -61,11 +61,19 @@ const AddRightToService = () => {
         issue_date: formattedDate,
         language_code: language,
       });
-      setHeading("");
-      setLanguage("");
-      setLink("");
-      setIssueDate("");
-      navigate("/rts");
+      if (response.status === 200 || response.status === 201) {
+        setHeading("");
+        setLanguage("");
+        setLink("");
+        setIssueDate("");
+        toast.success("RTS data added successfully!", {
+          position: "top-right",
+          autoClose: 1000,
+          onClose: () => {
+            navigate("/rts");
+          }
+        });
+      }
     } catch (error) {
       if (
         error.response &&
