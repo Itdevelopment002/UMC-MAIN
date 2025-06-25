@@ -75,41 +75,41 @@ router.get('/history-img/:id', (req, res) => {
     });
 });
 
-router.post(
-    '/history-img',
-    verifyToken,
-    upload.single('image'),
-    sanitizeInput,
-    handleMulterError,
-    async (req, res) => {
-        if (req.user?.role === "Admin") {
-            return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
-        }
-        if (!req.file) {
-            return res.status(400).json({ message: 'No file uploaded' });
-        }
+// router.post(
+//     '/history-img',
+//     verifyToken,
+//     upload.single('image'),
+//     sanitizeInput,
+//     handleMulterError,
+//     async (req, res) => {
+//         if (req.user?.role === "Admin") {
+//             return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+//         }
+//         if (!req.file) {
+//             return res.status(400).json({ message: 'No file uploaded' });
+//         }
 
-        const photoName = req.body.photoName;
-        if (!photoName) {
-            await deleteFileIfExists(`/uploads/${req.file.filename}`);
-            return res.status(400).json({ message: 'Photo name is required' });
-        }
+//         const photoName = req.body.photoName;
+//         if (!photoName) {
+//             await deleteFileIfExists(`/uploads/${req.file.filename}`);
+//             return res.status(400).json({ message: 'Photo name is required' });
+//         }
 
-        const filePath = `/uploads/${req.file.filename}`;
-        const sql = 'INSERT INTO history_img (photo_name, file_path) VALUES (?, ?)';
+//         const filePath = `/uploads/${req.file.filename}`;
+//         const sql = 'INSERT INTO history_img (photo_name, file_path) VALUES (?, ?)';
 
-        db.query(sql, [photoName, filePath], async (err) => {
-            if (err) {
-                await deleteFileIfExists(filePath);
-                return res.status(500).json({ message: 'Database error', error: err });
-            }
-            res.status(201).json({
-                message: 'Image and photo name uploaded successfully',
-                imageUrl: filePath,
-            });
-        });
-    }
-);
+//         db.query(sql, [photoName, filePath], async (err) => {
+//             if (err) {
+//                 await deleteFileIfExists(filePath);
+//                 return res.status(500).json({ message: 'Database error', error: err });
+//             }
+//             res.status(201).json({
+//                 message: 'Image and photo name uploaded successfully',
+//                 imageUrl: filePath,
+//             });
+//         });
+//     }
+// );
 
 router.post(
     '/edit-history-img/:id',
@@ -180,38 +180,38 @@ router.post(
     }
 );
 
-router.post(
-    '/delete-history-img/:id',
-    verifyToken,
-    async (req, res) => {
-        if (req.user?.role === "Admin") {
-            return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
-        }
-        const { id } = req.params;
+// router.post(
+//     '/delete-history-img/:id',
+//     verifyToken,
+//     async (req, res) => {
+//         if (req.user?.role === "Admin") {
+//             return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
+//         }
+//         const { id } = req.params;
 
-        const selectSql = 'SELECT file_path FROM history_img WHERE id = ?';
-        db.query(selectSql, [id], async (err, result) => {
-            if (err) {
-                return res.status(500).json({ message: "Database error", error: err });
-            }
-            if (result.length === 0) {
-                return res.status(404).json({ message: "Gallery not found" });
-            }
+//         const selectSql = 'SELECT file_path FROM history_img WHERE id = ?';
+//         db.query(selectSql, [id], async (err, result) => {
+//             if (err) {
+//                 return res.status(500).json({ message: "Database error", error: err });
+//             }
+//             if (result.length === 0) {
+//                 return res.status(404).json({ message: "Gallery not found" });
+//             }
 
-            const filePath = result[0].file_path;
-            const deleteSql = 'DELETE FROM history_img WHERE id = ?';
+//             const filePath = result[0].file_path;
+//             const deleteSql = 'DELETE FROM history_img WHERE id = ?';
 
-            db.query(deleteSql, [id], async (err) => {
-                if (err) {
-                    return res.status(500).json({ message: "Database error", error: err });
-                }
+//             db.query(deleteSql, [id], async (err) => {
+//                 if (err) {
+//                     return res.status(500).json({ message: "Database error", error: err });
+//                 }
 
-                await deleteFileIfExists(filePath);
+//                 await deleteFileIfExists(filePath);
 
-                res.status(200).json({ message: "Home gallery deleted successfully" });
-            });
-        });
-    }
-);
+//                 res.status(200).json({ message: "Home gallery deleted successfully" });
+//             });
+//         });
+//     }
+// );
 
 module.exports = router;
