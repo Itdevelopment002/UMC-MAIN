@@ -42,7 +42,7 @@ const createEmailTemplate = (data) => {
 };
 
 
-router.post("/email", verifyToken, async (req, res) => {
+router.post("/email", async (req, res) => {
   const { rating, opinion, comment } = req.body;
 
   if (!rating || !opinion || !comment) {

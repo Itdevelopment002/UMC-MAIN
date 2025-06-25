@@ -58,58 +58,73 @@ const SocialMedia = () => {
         </div>
 
         {/* Twitter Section */}
-        <div className=" col-lg-4 col-md-6 col-sm-6 media-plugin">
-          <div className="card-header text-white tw text-center">
-            {t("home.twitter")}
+        <div className="col-lg-4 col-md-6 col-sm-6 media-plugin">
+          <div className="card-header text-white in text-center">
+            {t("home.instagram")}
           </div>
           <div align="center" style={{ fontSize: 14 }}>
             <div
-              className="twitter-timeline twitter-timeline-rendered"
+              className="instagram-embed-wrapper"
               style={{
                 display: "flex",
                 width: 600,
                 maxWidth: "100%",
                 marginTop: 0,
-                marginBottom: 0
+                marginBottom: 0,
               }}
             >
               <iframe
-                id="twitter-widget-0"
+                id="instagram-widget-0"
                 scrolling="no"
                 frameBorder={0}
                 allowFullScreen={true}
                 className=""
-                title="Twitter Timeline"
-                src="https://syndication.twitter.com/srv/timeline-profile/screen-name/_DigitalIndia?dnt=true&embedId=twitter-widget-0&features=eyJ0ZndfdGltZWxpbmVfbGlzdCI6eyJidWNrZXQiOltdLCJ2ZXJzaW9uIjpudWxsfSwidGZ3X2ZvbGxvd2VyX2NvdW50X3N1bnNldCI6eyJidWNrZXQiOnRydWUsInZlcnNpb24iOm51bGx9LCJ0ZndfdHdlZXRfZWRpdF9iYWNrZW5kIjp7ImJ1Y2tldCI6Im9uIiwidmVyc2lvbiI6bnVsbH0sInRmd19yZWZzcmNfc2Vzc2lvbiI6eyJidWNrZXQiOiJvbiIsInZlcnNpb24iOm51bGx9LCJ0ZndfZm9zbnJfc29mdF9pbnRlcnZlbnRpb25zX2VuYWJsZWQiOnsiYnVja2V0Ijoib24iLCJ2ZXJzaW9uIjpudWxsfSwidGZ3X21peGVkX21lZGlhXzE1ODk3Ijp7ImJ1Y2tldCI6InRyZWF0bWVudCIsInZlcnNpb24iOm51bGx9LCJ0ZndfZXhwZXJpbWVudHNfY29va2llX2V4cGlyYXRpb24iOnsiYnVja2V0IjoxMjA5NjAwLCJ2ZXJzaW9uIjpudWxsfSwidGZ3X3Nob3dfYmlyZHdhdGNoX3Bpdm90c19lbmFibGVkIjp7ImJ1Y2tldCI6Im9uIiwidmVyc2lvbiI6bnVsbH0sInRmd19kdXBsaWNhdGVfc2NyaWJlc190b19zZXR0aW5ncyI6eyJidWNrZXQiOiJvbiIsInZlcnNpb24iOm51bGx9LCJ0ZndfdXNlX3Byb2ZpbGVfaW1hZ2Vfc2hhcGVfZW5hYmxlZCI6eyJidWNrZXQiOiJvbiIsInZlcnNpb24iOm51bGx9LCJ0ZndfdmlkZW9faGxzX2R5bmFtaWNfbWFuaWZlc3RzXzE1MDgyIjp7ImJ1Y2tldCI6InRydWVfYml0cmF0ZSIsInZlcnNpb24iOm51bGx9LCJ0ZndfbGVnYWN5X3RpbWVsaW5lX3N1bnNldCI6eyJidWNrZXQiOnRydWUsInZlcnNpb24iOm51bGx9LCJ0ZndfdHdlZXRfZWRpdF9mcm9udGVuZCI6eyJidWNrZXQiOiJvbiIsInZlcnNpb24iOm51bGx9fQ%3D%3D&frame=false&hideBorder=false&hideFooter=false&hideHeader=false&hideScrollBar=false&lang=en&limit=1&maxHeight=500px&origin=https%3A%2F%2Fwww.digitalindia.gov.in%2F&sessionId=d7ab10a26bf42ac8367ba8c9e66d758ab89de7e6&showHeader=true&showReplies=false&transparent=false&widgetsVersion=2615f7e52b7e0%3A1702314776716"
-
+                title="Instagram Timeline"
+                src="https://www.instagram.com/officialdigitalindia/embed"
                 style={{
                   position: "static",
                   visibility: "visible",
                   width: 290,
                   height: 400,
                   display: "block",
-                  flexGrow: 1
+                  flexGrow: 1,
                 }}
               />
             </div>
           </div>
-
         </div>
+
 
         {/* YouTube Section */}
         <div className="col-lg-4 col-md-6 col-sm-6 media-plugin">
           <div className="card-header text-white you text-center">
             {t("home.youTube")}
           </div>
-          <div>
+          <div style={{ position: "relative", width: "100%", height: "400px" }}>
             <iframe
               src="https://www.youtube.com/embed/pvH3s3qI8uE?si=dzKrrPwqZBhzM6Xu"
               width="100%"
               height="400"
               title="YouTube video player"
+              style={{ pointerEvents: "none" }} // Prevents iframe interaction so link works
             ></iframe>
+            <a
+              href="https://www.youtube.com/@itdeptulhasnagarmunicipalc9647"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                width: "100%",
+                height: "100%",
+                zIndex: 10,
+                cursor: "pointer"
+              }}
+            ></a>
           </div>
         </div>
+
       </div>
     </div>
   );
