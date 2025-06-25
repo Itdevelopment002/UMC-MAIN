@@ -61,11 +61,19 @@ const AddRTI = () => {
         issue_date: formattedDate,
         language_code: language,
       });
-      setDescription("");
-      setLink("");
-      setLanguage("");
-      setIssueDate("");
-      navigate("/rti");
+      if (response.status === 200 || response.status === 201) {
+        setDescription("");
+        setLink("");
+        setLanguage("");
+        setIssueDate("");
+        toast.success("RTI data added successfully!", {
+          position: "top-right",
+          autoClose: 1000,
+          onClose: () => {
+            navigate("/rti");
+          }
+        });
+      }
     } catch (error) {
       if (
         error.response &&

@@ -438,8 +438,8 @@ const validateAdministration = [
     languageCodeValidator("language_code"),
     validateRequest,
 ];
- 
- 
+
+
 const validateAnnual = [
     alphabetOnlyValidator("heading", minHeadingLength, maxHeadingLength, "Heading", descriptionRegex),
     urlValidator("link", "Link"),
@@ -447,7 +447,7 @@ const validateAnnual = [
     languageCodeValidator("language_code"),
     validateRequest,
 ];
- 
+
 const validateElected = [
     alphabetOnlyValidator("heading", minHeadingLength, maxHeadingLength, "Heading", descriptionRegex),
     urlValidator("link", "Pdf link"),
@@ -455,7 +455,7 @@ const validateElected = [
     languageCodeValidator("language_code"),
     validateRequest,
 ];
- 
+
 const validateEnews = [
     alphabetOnlyValidator("info", minHeadingLength, maxHeadingLength, "Heading", descriptionRegex),
     urlValidator("pdf_link", "Pdf link"),
@@ -463,8 +463,8 @@ const validateEnews = [
     languageCodeValidator("language_code"),
     validateRequest,
 ];
- 
- 
+
+
 const validateMunicipal = [
     alphabetOnlyValidator("year", minDescriptionLength, maxDescriptionLength, "Year", descriptionRegex),
     alphabetOnlyValidator("name", minDepartmentLength, maxDepartmentLength, "Meeting Name", departmentRegex),
@@ -475,8 +475,8 @@ const validateMunicipal = [
     languageCodeValidator("language_code"),
     validateRequest,
 ];
- 
- 
+
+
 const validateAgenda = [
     alphabetOnlyValidator("Agenda_No_Date", minHeadingLength, maxHeadingLength, "Agenda No/Date", descriptionRegex),
     alphabetOnlyValidator("Adjournment_Notice", minHeadingLength, maxHeadingLength, "Adjournment Notice", descriptionRegex),
@@ -486,8 +486,8 @@ const validateAgenda = [
     languageCodeValidator("language_code"),
     validateRequest,
 ];
- 
- 
+
+
 const validateBudget = [
     alphabetOnlyValidator("year", minHeadingLength, maxHeadingLength, "Year", descriptionRegex),
     alphabetOnlyValidator("heading", minHeadingLength, maxHeadingLength, "Heading", descriptionRegex),
@@ -496,23 +496,23 @@ const validateBudget = [
     languageCodeValidator("language_code"),
     validateRequest,
 ];
- 
- 
+
+
 const validateCommittee = [
     alphabetOnlyValidator("heading", minNameLength, maxNameLength, "Member Name", nameRegex),
     languageCodeValidator("language_code"),
     validateRequest,
 ];
- 
- 
+
+
 const validateWardCommittee = [
     alphabetOnlyValidator("ward", minHeadingLength, maxHeadingLength, "Ward Name", descriptionRegex),
     alphabetOnlyValidator("heading", minNameLength, maxNameLength, "Member Name", nameRegex),
     languageCodeValidator("language_code"),
     validateRequest,
 ];
- 
- 
+
+
 const validatePolicies = [
     alphabetOnlyValidator("heading", minHeadingLength, maxHeadingLength, "Heading", descriptionRegex),
     urlValidator("link", "Pdf link"),
@@ -520,8 +520,8 @@ const validatePolicies = [
     languageCodeValidator("language_code"),
     validateRequest,
 ];
- 
- 
+
+
 const validateResolution = [
     alphabetOnlyValidator("Resolutions_No_Date", minHeadingLength, maxHeadingLength, "Resolution No/Date", descriptionRegex),
     alphabetOnlyValidator("Adjournment_Notice", minHeadingLength, maxHeadingLength, "Adjournment Notice", descriptionRegex),
@@ -531,8 +531,8 @@ const validateResolution = [
     languageCodeValidator("language_code"),
     validateRequest,
 ];
- 
- 
+
+
 const validateWardOffice = [
     alphabetOnlyValidator("ward_no", minHeadingLength, maxHeadingLength, "Ward no.", descriptionRegex),
     alphabetOnlyValidator("ward_name", minHeadingLength, maxHeadingLength, "Ward Name", descriptionRegex),
@@ -546,28 +546,28 @@ const validateWardOffice = [
     languageCodeValidator("language_code"),
     validateRequest,
 ];
- 
- 
+
+
 const validateDepartment = [
     alphabetOnlyValidator("heading", minDepartmentLength, maxDepartmentLength, "Department name", departmentRegex),
     urlValidator("link", "Department link"),
     languageCodeValidator("language_code"),
     validateRequest,
 ];
- 
- 
+
+
 const validateDeptBanner = [
     alphabetOnlyValidator("departmentName", minDepartmentLength, maxDepartmentLength, "Department name", departmentRegex),
     validateRequest,
 ];
- 
- 
+
+
 const validateUpdateDeptBanner = [
     alphabetOnlyValidator("name", minDepartmentLength, maxDepartmentLength, "Department name", departmentRegex),
     validateRequest,
 ];
- 
- 
+
+
 const validateDeptPdf = [
     alphabetOnlyValidator("department", minDepartmentLength, maxDepartmentLength, "Department name", departmentRegex),
     alphabetOnlyValidator("heading", minDescriptionLength, maxDescriptionLength, "Pdf heading", descriptionRegex),
@@ -576,8 +576,8 @@ const validateDeptPdf = [
     languageCodeValidator("language_code"),
     validateRequest,
 ];
- 
- 
+
+
 const validateAuditReport = [
     alphabetOnlyValidator("name", minHeadingLength, maxHeadingLength, "Report name", menuNameRegex),
     alphabetOnlyValidator("year", minHeadingLength, maxHeadingLength, "Year", descriptionRegex),
@@ -586,8 +586,8 @@ const validateAuditReport = [
     languageCodeValidator("language_code"),
     validateRequest,
 ];
- 
- 
+
+
 const validateTender = [
     alphabetOnlyValidator("heading", minDescriptionLength, maxDescriptionLength, "Tender heading", descriptionRegex),
     alphabetOnlyValidator("department", minDepartmentLength, maxDepartmentLength, "Department name", departmentRegex),
@@ -596,7 +596,7 @@ const validateTender = [
     languageCodeValidator("language_code"),
     validateRequest,
 ];
- 
+
 const validateRts = [
     alphabetOnlyValidator("heading", minHeadingLength, maxHeadingLength, "Heading", descriptionRegex),
     urlValidator("link", "Link"),
@@ -604,16 +604,42 @@ const validateRts = [
     languageCodeValidator("language_code"),
     validateRequest,
 ];
- 
- 
+
+
 const validateOnlineServices = [
     alphabetOnlyValidator("heading", minHeadingLength, maxHeadingLength, "Service name", descriptionRegex),
     urlValidator("link", "Service link"),
     languageCodeValidator("language_code"),
     validateRequest,
 ];
- 
- 
+
+
+const validatePhotoGallery = [
+    alphabetOnlyValidator("categoryName", minHeadingLength, maxHeadingLength, "Category Name", descriptionRegex),
+    languageCodeValidator("language_code"),
+    validateRequest,
+];
+
+
+const validateUpdatePhotoGallery = [
+    alphabetOnlyValidator("name", minHeadingLength, maxHeadingLength, "Category Name", descriptionRegex),
+    languageCodeValidator("language_code"),
+    validateRequest,
+];
+
+
+const validateVideoGallery = [
+    urlValidator("link", "Video link"),
+    validateRequest,
+];
+
+
+const validateUpdateVideoGallery = [
+    urlValidator("video_url", "Video link"),
+    validateRequest,
+];
+
+
 const validateRti = [
     alphabetOnlyValidator("description", minHeadingLength, maxHeadingLength, "Description", descriptionRegex),
     urlValidator("link", "Link"),
@@ -621,23 +647,23 @@ const validateRti = [
     languageCodeValidator("language_code"),
     validateRequest,
 ];
- 
- 
+
+
 const validateRecruitment = [
     body("heading")
         .trim()
         .notEmpty().withMessage("Heading is required")
         .bail()
         .isIn(["Contract Basis Recruitment", "Old Recruitment"]).withMessage("Invalid heading"),
- 
+
     alphabetOnlyValidator("description", minDescriptionLength, maxDescriptionLength, "Job Description", descriptionRegex),
     urlValidator("link", "Job Link"),
     issueDateValidator("issue_date"),
     languageCodeValidator("language_code"),
     validateRequest,
 ];
- 
- 
+
+
 const validateBanner = [
     body("bannerName")
         .trim()
@@ -646,11 +672,11 @@ const validateBanner = [
         .isLength({ min: 3, max: 50 }).withMessage("Banner Name must be between 3 and 50 characters")
         .bail()
         .matches(/^[A-Za-z\s\-]+$/).withMessage("Banner Name can only contain letters, spaces, and hyphens"),
- 
+
     validateRequest,
 ];
- 
- 
+
+
 const validateUpdateBanner = [
     body("banner_name")
         .trim()
@@ -659,17 +685,17 @@ const validateUpdateBanner = [
         .isLength({ min: 3, max: 50 }).withMessage("Banner Name must be between 3 and 50 characters")
         .bail()
         .matches(/^[A-Za-z\s\-]+$/).withMessage("Banner Name can only contain letters, spaces, and hyphens"),
- 
- 
+
+
     validateRequest,
 ];
- 
- 
+
+
 const validateScreenReader = [
     body("available")
         .trim()
         .notEmpty().withMessage("Availablitiy status is required"),
- 
+
     body("name")
         .trim()
         .notEmpty().withMessage("Reader name is required")
@@ -678,22 +704,22 @@ const validateScreenReader = [
         .bail()
         .matches(/^[A-Za-z\u0900-\u097F\s\-()]+$/)
         .withMessage("Reader Name can only contain letters, spaces, hyphens, and parentheses"),
- 
+
     urlValidator("website", "Reader website"),
     languageCodeValidator("language_code"),
- 
+
     validateRequest,
 ];
- 
- 
+
+
 const validateContactUsInfo = [
     alphabetOnlyValidator("heading", minHeadingLength, maxHeadingLength, "Heading", nameRegex),
     alphabetOnlyValidator("description", minHeadingLength, maxHeadingLength, "Description", descriptionRegex),
     languageCodeValidator("language_code"),
- 
+
     validateRequest,
 ];
- 
+
 const validateContactUsWard = [
     alphabetOnlyValidator("office", 1, maxHeadingLength, "Ward Office No.", phoneRegex),
     alphabetOnlyValidator("address", minHeadingLength, maxHeadingLength, "Office Address", descriptionRegex),
@@ -702,40 +728,40 @@ const validateContactUsWard = [
     languageCodeValidator("language_code"),
     validateRequest,
 ];
- 
- 
+
+
 const validatePrivacyPolicy = [
     alphabetOnlyValidator("heading", minHeadingLength, maxHeadingLength, "Policy Heading", nameRegex),
     alphabetOnlyValidator("description", minDescriptionLength, maxDescriptionLength, "Policy Description", descriptionRegex),
     languageCodeValidator("language_code"),
- 
+
     validateRequest,
 ];
- 
+
 const validateHyperlinkPolicy = [
     alphabetOnlyValidator("description", minDescriptionLength, maxDescriptionLength, "Policy Description", descriptionRegex),
     languageCodeValidator("language_code"),
- 
+
     validateRequest,
 ];
- 
+
 const validateFooterContact = [
     alphabetOnlyValidator("name", minNameLength, maxNameLength, "Contact Title", nameRegex),
     alphabetOnlyValidator("designation", minHeadingLength, maxHeadingLength, "Contact Description", descriptionRegex),
     languageCodeValidator("language_code"),
- 
+
     validateRequest,
 ];
- 
+
 const validateFooterUpdateContact = [
     alphabetOnlyValidator("heading", minHeadingLength, maxHeadingLength, "Contact Title", nameRegex),
     alphabetOnlyValidator("description", minHeadingLength, maxHeadingLength, "Contact Description", descriptionRegex),
     languageCodeValidator("language_code"),
- 
+
     validateRequest,
 ];
- 
- 
+
+
 const validateFooter = [
     alphabetOnlyValidator("heading", minHeadingLength, maxHeadingLength, "Heading", descriptionRegex),
     urlValidator("link", "Link"),
@@ -793,6 +819,10 @@ module.exports = {
     validateTender,
     validateRts,
     validateOnlineServices,
+    validatePhotoGallery,
+    validateUpdatePhotoGallery,
+    validateVideoGallery,
+    validateUpdateVideoGallery,
     validateRti,
     validateRecruitment,
     validateBanner,
@@ -805,5 +835,4 @@ module.exports = {
     validateFooterContact,
     validateFooterUpdateContact,
     validateFooter,
-
 };

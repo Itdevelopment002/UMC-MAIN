@@ -61,11 +61,19 @@ const AddProactiveDisclosure = () => {
         issue_date: formattedDate,
         language_code: language,
       });
-      setDescription("");
-      setLink("");
-      setIssueDate("");
-      setLanguage("");
-      navigate("/proactive-disclosure");
+      if (response.status === 200 || response.status === 201) {
+        setDescription("");
+        setLink("");
+        setIssueDate("");
+        setLanguage("");
+        toast.success("Proactive disclosure data added successfully!", {
+          position: "top-right",
+          autoClose: 1000,
+          onClose: () => {
+            navigate("/proactive-disclosure");
+          }
+        });
+      }
     } catch (error) {
       if (
         error.response &&

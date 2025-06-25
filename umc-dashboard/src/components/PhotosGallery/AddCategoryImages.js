@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api";
 import { Link } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
 
 const AddCategoryImage = () => {
   const [formData, setFormData] = useState({
@@ -65,12 +66,43 @@ const AddCategoryImage = () => {
       const response = await api.post("/category-images", data, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-
-      if (response.status === 200) {
-        navigate("/photo-gallery");
+      if (response.status === 200 || response.status === 201) {
+        setFormData({
+          category_id: "",
+          image: null,
+        })
+        toast.success("Category Image added successfully!", {
+          position: "top-right",
+          autoClose: 1000,
+          onClose: () => {
+            navigate("/photo-gallery");
+          }
+        });
       }
     } catch (error) {
-      console.error("Error uploading image:", error.response?.data || error.message);
+      if (
+        error.response &&
+        error.response.status === 400 &&
+        Array.isArray(error.response.data.errors)
+      ) {
+        error.response.data.errors.forEach((err) => {
+          const message = typeof err === "string" ? err : err.message || "Validation error";
+          toast.error(message, {
+            position: "top-right",
+            autoClose: 3000,
+          });
+        });
+      } else {
+        toast.error(
+          error.response?.data?.message || "Failed to add category image. Try again.",
+          {
+            position: "top-right",
+            autoClose: 3000,
+          }
+        );
+      }
+
+      console.error("Error adding category image:", error);
     }
   };
 
@@ -155,6 +187,7 @@ const AddCategoryImage = () => {
           </div>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };

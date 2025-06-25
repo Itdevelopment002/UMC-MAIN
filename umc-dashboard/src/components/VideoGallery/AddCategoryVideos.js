@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api";
 import { Link } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
 
 const AddCategoryVideos = () => {
   const [formData, setFormData] = useState({
@@ -65,12 +66,43 @@ const AddCategoryVideos = () => {
 
     try {
       const response = await api.post("/category-videos", formData);
-
-      if (response.status === 200) {
-        navigate(`/video-gallery`);
+      if (response.status === 200 || response.status === 201) {
+        setFormData({
+          category_id: "",
+          link: "",
+        })
+        toast.success("Category data added successfully!", {
+          position: "top-right",
+          autoClose: 1000,
+          onClose: () => {
+            navigate(`/video-gallery`);
+          }
+        });
       }
     } catch (error) {
-      console.error("Error uploading video link:", error);
+      if (
+        error.response &&
+        error.response.status === 400 &&
+        Array.isArray(error.response.data.errors)
+      ) {
+        error.response.data.errors.forEach((err) => {
+          const message = typeof err === "string" ? err : err.message || "Validation error";
+          toast.error(message, {
+            position: "top-right",
+            autoClose: 3000,
+          });
+        });
+      } else {
+        toast.error(
+          error.response?.data?.message || "Failed to add category video. Try again.",
+          {
+            position: "top-right",
+            autoClose: 3000,
+          }
+        );
+      }
+
+      console.error("Error adding category video:", error);
     }
   };
 
@@ -158,6 +190,7 @@ const AddCategoryVideos = () => {
           </div>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };

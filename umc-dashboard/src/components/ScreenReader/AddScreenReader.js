@@ -55,16 +55,19 @@ const AddScreenReader = () => {
           "Content-Type": "application/json",
         },
       });
-
-      if (response.status === 201) {
+      if (response.status === 200 || response.status === 201) {
         setName("");
         setWebsite("");
         setAvailable("");
         setLanguage("");
         setErrors({ name: "", website: "", available: "", language: "" });
-        navigate("/screen-reader-access");
-      } else {
-        console.error("Failed to add screen reader data");
+        toast.success("Screen Reader added successfully!", {
+          position: "top-right",
+          autoClose: 1000,
+          onClose: () => {
+            navigate("/screen-reader-access");
+          }
+        });
       }
     } catch (error) {
       if (error.response && error.response.status === 400) {

@@ -52,35 +52,48 @@ const AddSlider = () => {
     formData.append("languageCode", languageCode);
 
     try {
-      await api.post("/sliders", formData, {
+      const response = await api.post("/sliders", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
-      setSliderName("");
-      setLanguageCode("");
-      setSelectedFile(null);
-      document.getElementById("image").value = "";
-      navigate("/slider");
+      if (response.status === 200 || response.status === 201) {
+        setSliderName("");
+        setLanguageCode("");
+        setSelectedFile(null);
+        document.getElementById("image").value = "";
+        toast.success("Slider added successfully!", {
+          position: "top-right",
+          autoClose: 1000,
+          onClose: () => {
+            navigate("/slider");
+          }
+        });
+      }
     } catch (error) {
       if (
         error.response &&
         error.response.status === 400 &&
-        error.response.data.errors
+        Array.isArray(error.response.data.errors)
       ) {
         error.response.data.errors.forEach((err) => {
-          toast.error(err.message, {
+          const message = typeof err === "string" ? err : err.message || "Validation error";
+          toast.error(message, {
             position: "top-right",
             autoClose: 3000,
           });
         });
       } else {
-        toast.error("Failed to add Slider. Try again.", {
-          position: "top-right",
-          autoClose: 3000,
-        });
+        toast.error(
+          error.response?.data?.message || "Failed to add slider. Try again.",
+          {
+            position: "top-right",
+            autoClose: 3000,
+          }
+        );
       }
-      console.error("Error uploading file:", error);
+
+      console.error("Error adding slider:", error);
     }
   };
 

@@ -3,6 +3,7 @@ const router = express.Router();
 const db = require("../config/db.js");
 const { verifyToken } = require('../middleware/jwtMiddleware.js');
 const sanitizeInput = require("../middleware/sanitizeInput.js");
+const { validatePhotoGallery, validateUpdatePhotoGallery, validateVideoGallery, validateUpdateVideoGallery } = require("../middleware/validationinputfield.js");
 
 
 router.get("/video-categories", (req, res) => {
@@ -22,7 +23,7 @@ router.get("/video-categories", (req, res) => {
 });
 
 
-router.post("/video-categories", verifyToken, sanitizeInput, (req, res) => {
+router.post("/video-categories", verifyToken, sanitizeInput, validatePhotoGallery, (req, res) => {
     if (req.user?.role === "Admin") {
         return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
     }
@@ -36,7 +37,7 @@ router.post("/video-categories", verifyToken, sanitizeInput, (req, res) => {
 });
 
 
-router.post("/edit-video-categories/:id", verifyToken, sanitizeInput, (req, res) => {
+router.post("/edit-video-categories/:id", verifyToken, sanitizeInput, validateUpdatePhotoGallery, (req, res) => {
     if (req.user?.role === "Admin") {
         return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
     }
@@ -77,7 +78,7 @@ router.get("/category-videos/:category_id", (req, res) => {
 });
 
 
-router.post("/category-videos", verifyToken, sanitizeInput, (req, res) => {
+router.post("/category-videos", verifyToken, sanitizeInput, validateVideoGallery, (req, res) => {
     if (req.user?.role === "Admin") {
         return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
     }
@@ -94,7 +95,7 @@ router.post("/category-videos", verifyToken, sanitizeInput, (req, res) => {
 });
 
 
-router.post("/edit-category-videos/:id", verifyToken, sanitizeInput, (req, res) => {
+router.post("/edit-category-videos/:id", verifyToken, sanitizeInput, validateUpdateVideoGallery, (req, res) => {
     if (req.user?.role === "Admin") {
         return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
     }

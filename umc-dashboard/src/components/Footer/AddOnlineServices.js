@@ -43,10 +43,18 @@ const AddOnlineServices = () => {
         link: link,
         language_code: language,
       });
-      setHeading("");
-      setLink("");
-      setLanguage("");
-      navigate("/footer");
+      if (response.status === 200 || response.status === 201) {
+        setHeading("");
+        setLink("");
+        setLanguage("");
+        toast.success("Online Service added successfully!", {
+          position: "top-right",
+          autoClose: 1000,
+          onClose: () => {
+            navigate("/footer");
+          }
+        });
+      }
     } catch (error) {
       if (
         error.response &&

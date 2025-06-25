@@ -60,7 +60,7 @@ const AddRecruitment = () => {
 
     const formattedDate = formatDate(issueDate);
 
-    const videoData = {
+    const recruitmentData = {
       heading,
       description,
       link,
@@ -69,17 +69,24 @@ const AddRecruitment = () => {
     };
 
     try {
-      await api.post("/recruitment", videoData);
-      setDescription("");
-      setHeading("");
-      setLink("");
-      setIssueDate("");
-      setLanguage("");
-      setErrors({ heading: "", description: "", link: "", issueDate: "", language: "" });
-      navigate("/recruitment");
+      const response = await api.post("/recruitment", recruitmentData);
+      if (response.status === 200 || response.status === 201) {
+        setDescription("");
+        setHeading("");
+        setLink("");
+        setIssueDate("");
+        setLanguage("");
+        setErrors({ heading: "", description: "", link: "", issueDate: "", language: "" });
+        toast.success("Recruitment data added successfully!", {
+          position: "top-right",
+          autoClose: 1000,
+          onClose: () => {
+            navigate("/recruitment");
+          }
+        });
+      }
     } catch (error) {
       if (error.response && error.response.status === 400) {
-        // Handle both formats of error response
         const errorMessages = error.response.data.errors ||
           (error.response.data.message ? [error.response.data] : []);
 

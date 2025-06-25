@@ -61,22 +61,22 @@ const AddBanner = () => {
           "Content-Type": "multipart/form-data",
         },
       });
+      if (response.status === 200 || response.status === 201) {
+        setBannerName("");
+        setSelectedFile(null);
+        setErrors({});
 
-      toast.success("Banner added successfully!", {
-        position: "top-right",
-        autoClose: 3000,
-      });
-
-      // Reset form
-      setBannerName("");
-      setSelectedFile(null);
-      setErrors({});
-
-      if (fileInputRef.current) {
-        fileInputRef.current.value = "";
+        if (fileInputRef.current) {
+          fileInputRef.current.value = "";
+        }
+        toast.success("Banner added successfully!", {
+          position: "top-right",
+          autoClose: 1000,
+          onClose: () => {
+            navigate("/banner");
+          }
+        });
       }
-
-      navigate("/banner");
     } catch (error) {
       if (error.response && error.response.status === 400) {
         const errorMessages = error.response.data.errors ||
