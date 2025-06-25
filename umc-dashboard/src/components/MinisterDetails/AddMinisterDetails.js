@@ -3,10 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import api from "../api";
-// import { validateImageFile, getImageValidationError } from "../../validation/ImageValidation";
 import { getImageValidationError } from "../../validation/ImageValidation";
- 
- 
+
 const AddMinisterDetails = () => {
   const navigate = useNavigate();
   const fileInputRef = useRef(null);
@@ -16,124 +14,123 @@ const AddMinisterDetails = () => {
     language_code: "",
     image: null,
   });
- 
+
   const [errors, setErrors] = useState({
     name: "",
     designation: "",
     language_code: "",
     image: "",
   });
- 
+
   const handleChange = (e) => {
     const { name, value, files } = e.target;
- 
+
     if (name === "image") {
       const file = files[0];
- 
+
       if (file) {
-        // Use our global validation function
         const errorMessage = getImageValidationError(file);
-       
+
         if (errorMessage) {
-          // Clear the file input if invalid file is selected
           if (fileInputRef.current) {
             fileInputRef.current.value = "";
           }
-          // Set error message
           setErrors({ ...errors, image: errorMessage });
           return;
         }
- 
+
         setFormData({ ...formData, image: file });
         setErrors({ ...errors, image: "" });
       }
     } else {
       setFormData({ ...formData, [name]: value });
- 
+
       if (value) {
         setErrors({ ...errors, [name]: "" });
       }
     }
   };
- 
+
   const validateForm = () => {
     const newErrors = {};
     if (!formData.name) newErrors.name = "Minister Name is required";
     if (!formData.designation) newErrors.designation = "Designation is required";
     if (!formData.language_code) newErrors.language_code = "Language selection is required";
-   
-    // Use our global validation function
+
     const imageError = getImageValidationError(formData.image);
     if (imageError) {
       newErrors.image = imageError;
     }
- 
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
- 
-const handleSubmit = async (e) => {
-  e.preventDefault();
 
-  if (!validateForm()) {
-    return;
-  }
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  const formDataToSend = new FormData();
-  formDataToSend.append("name", formData.name);
-  formDataToSend.append("designation", formData.designation);
-  formDataToSend.append("language_code", formData.language_code);
-  if (formData.image) {
-    formDataToSend.append("image", formData.image);
-  }
+    if (!validateForm()) {
+      return;
+    }
 
-  try {
-    const response = await api.post("/minister-details", formDataToSend, {
-      headers: { "Content-Type": "multipart/form-data" },
-    });
+    const formDataToSend = new FormData();
+    formDataToSend.append("name", formData.name);
+    formDataToSend.append("designation", formData.designation);
+    formDataToSend.append("language_code", formData.language_code);
+    if (formData.image) {
+      formDataToSend.append("image", formData.image);
+    }
 
-    if (response.status === 200) {
-      toast.success("Minister added successfully!", {
-        position: "top-right",
-        autoClose: 3000,
+    try {
+      const response = await api.post("/minister-details", formDataToSend, {
+        headers: { "Content-Type": "multipart/form-data" },
       });
+      if (response.status === 200 || response.status === 201) {
+        setFormData({
+          name: "",
+          designation: "",
+          language_code: "",
+          image: null,
+        });
 
-      setFormData({
-        name: "",
-        designation: "",
-        language_code: "",
-        image: null,
-      });
-
-      if (fileInputRef.current) {
-        fileInputRef.current.value = "";
+        if (fileInputRef.current) {
+          fileInputRef.current.value = "";
+        }
+        toast.success("Minister added successfully!", {
+          position: "top-right",
+          autoClose: 1000,
+          onClose: () => {
+            navigate("/minister");
+          }
+        });
+      }
+    } catch (error) {
+      if (
+        error.response &&
+        error.response.status === 400 &&
+        Array.isArray(error.response.data.errors)
+      ) {
+        error.response.data.errors.forEach((err) => {
+          const message = typeof err === "string" ? err : err.message || "Validation error";
+          toast.error(message, {
+            position: "top-right",
+            autoClose: 3000,
+          });
+        });
+      } else {
+        toast.error(
+          error.response?.data?.message || "Failed to add minister. Try again.",
+          {
+            position: "top-right",
+            autoClose: 3000,
+          }
+        );
       }
 
-      navigate("/minister");
+      console.error("Error adding minister:", error);
     }
-  } catch (error) {
-    if (
-      error.response &&
-      error.response.status === 400 &&
-      error.response.data.errors
-    ) {
-      error.response.data.errors.forEach((err) => {
-        toast.error(err.message, {
-          position: "top-right",
-          autoClose: 3000,
-        });
-      });
-    } else {
-      toast.error("Failed to add minister. Try again.", {
-        position: "top-right",
-        autoClose: 3000,
-      });
-    }
+  };
 
-    console.error("Error adding minister:", error);
-  }
-};
- 
   return (
     <>
       <div className="page-wrapper">
@@ -247,5 +244,5 @@ const handleSubmit = async (e) => {
     </>
   );
 };
- 
+
 export default AddMinisterDetails;

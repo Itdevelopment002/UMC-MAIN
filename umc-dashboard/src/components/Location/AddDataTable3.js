@@ -56,7 +56,7 @@ const AddDataTable3 = () => {
         },
       });
 
-     if (response.status === 200 || response.status === 201) {
+      if (response.status === 200 || response.status === 201) {
         setFormData({ heading: "", description: "", language_code: "" });
         setErrors({ heading: "", description: "", language_code: "" });
         toast.success("Table 3 data added successfully!", {
@@ -67,8 +67,8 @@ const AddDataTable3 = () => {
           }
         });
       }
-    }catch (error) {
-       if (
+    } catch (error) {
+      if (
         error.response &&
         error.response.status === 400 &&
         Array.isArray(error.response.data.errors)

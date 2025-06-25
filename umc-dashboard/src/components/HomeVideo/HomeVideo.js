@@ -56,14 +56,33 @@ const HomeVideo = () => {
       await api.post(`/edit-home-video/${selectedVideo.id}`, {
         video_url
       });
+      setIsLoading(false);
+      handleCloseEditModal();
       toast.success("Video updated successfully");
       fetchVideos();
     } catch (error) {
+      if (
+        error.response &&
+        error.response.status === 400 &&
+        Array.isArray(error.response.data.errors)
+      ) {
+        error.response.data.errors.forEach((err) => {
+          const message = typeof err === "string" ? err : err.message || "Validation error";
+          toast.error(message, {
+            position: "top-right",
+            autoClose: 3000,
+          });
+        });
+      } else {
+        toast.error(
+          error.response?.data?.message || "Failed to update video. Try again.",
+          {
+            position: "top-right",
+            autoClose: 3000,
+          }
+        );
+      }
       console.error("Error updating video:", error);
-      toast.error("Error updating video");
-    } finally {
-      setIsLoading(false);
-      handleCloseEditModal();
     }
   };
 
@@ -305,7 +324,6 @@ const HomeVideo = () => {
             </div>
           </div>
 
-          {/* Delete Modal */}
           <div
             className={`modal fade ${showDeleteModal ? "show" : ""}`}
             tabIndex="-1"
@@ -433,7 +451,6 @@ const HomeVideo = () => {
               </div>
             </div>
           )}
-
           <ToastContainer />
         </div>
       </div>

@@ -30,7 +30,6 @@ const Initiatives = () => {
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  //eslint-disable-next-line
   const currentInitiatives = initiatives.slice(indexOfFirstItem, indexOfLastItem);
 
   useEffect(() => {
@@ -52,24 +51,22 @@ const Initiatives = () => {
     setShowDeleteModal(true);
   };
 
-const handleEditModalOpen = async (initiativeId) => {
-  try {
-    const response = await api.get(`/initiatives/${initiativeId}`);
-    const data = response.data;
-
-    setSelectedInitiative({
-      ...data,
-      mainIcon: "existing", // 👈 Add this line to indicate image exists
-    });
-
-    setImagePreview(`${baseURL}/${data.main_icon_path}`);
-    setShowEditModal(true);
-    setErrors({});
-  } catch (error) {
-    console.error("Error fetching initiative:", error);
-    toast.error("Failed to fetch initiative details");
-  }
-};
+  const handleEditModalOpen = async (initiativeId) => {
+    try {
+      const response = await api.get(`/initiatives/${initiativeId}`);
+      const data = response.data;
+      setSelectedInitiative({
+        ...data,
+        mainIcon: "existing",
+      });
+      setImagePreview(`${baseURL}/${data.main_icon_path}`);
+      setShowEditModal(true);
+      setErrors({});
+    } catch (error) {
+      console.error("Error fetching initiative:", error);
+      toast.error("Failed to fetch initiative details");
+    }
+  };
 
 
   const handleDelete = async () => {
@@ -100,21 +97,17 @@ const handleEditModalOpen = async (initiativeId) => {
 
   const validateEditForm = () => {
     const newErrors = {};
-
-    // Validate fields
     if (!selectedInitiative?.heading) newErrors.heading = "Initiative Heading is required";
     if (!selectedInitiative?.link) newErrors.link = "Initiative Link is required";
     if (!selectedInitiative?.language_code) newErrors.language_code = "Language selection is required";
-
-    // Validate image (required and valid)
-if (!selectedInitiative?.mainIcon) {
-  newErrors.mainIcon = "Initiative Image is required";
-} else if (selectedInitiative.mainIcon instanceof File) {
-  const imageError = getImageValidationError(selectedInitiative.mainIcon);
-  if (imageError) {
-    newErrors.mainIcon = imageError;
-  }
-}
+    if (!selectedInitiative?.mainIcon) {
+      newErrors.mainIcon = "Initiative Image is required";
+    } else if (selectedInitiative.mainIcon instanceof File) {
+      const imageError = getImageValidationError(selectedInitiative.mainIcon);
+      if (imageError) {
+        newErrors.mainIcon = imageError;
+      }
+    }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -159,25 +152,28 @@ if (!selectedInitiative?.mainIcon) {
       if (
         error.response &&
         error.response.status === 400 &&
-        error.response.data.errors
+        Array.isArray(error.response.data.errors)
       ) {
         error.response.data.errors.forEach((err) => {
-          toast.error(err.message, {
+          const message = typeof err === "string" ? err : err.message || "Validation error";
+          toast.error(message, {
             position: "top-right",
             autoClose: 3000,
           });
         });
       } else {
-        toast.error("Failed to update initiative", {
-          position: "top-right",
-          autoClose: 3000,
-        });
+        toast.error(
+          error.response?.data?.message || "Failed to add initiative. Try again.",
+          {
+            position: "top-right",
+            autoClose: 3000,
+          }
+        );
       }
-      console.error("Error updating initiative:", error);
+      console.error("Error adding initiative:", error);
     }
   };
 
-  // File change handler with validation
   const handleFileChange = (e) => {
     const file = e.target.files[0];
 
@@ -195,7 +191,6 @@ if (!selectedInitiative?.mainIcon) {
       setImagePreview(URL.createObjectURL(file));
       setErrors((prev) => ({ ...prev, mainIcon: "" }));
     } else {
-      // Clear image if no file is selected
       setSelectedInitiative((prev) => ({ ...prev, mainIcon: "" }));
       setImagePreview(null);
       setErrors((prev) => ({ ...prev, mainIcon: "Initiative Image is required" }));

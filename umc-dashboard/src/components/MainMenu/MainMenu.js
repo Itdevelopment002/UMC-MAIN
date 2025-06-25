@@ -43,7 +43,6 @@ const MainMenu = () => {
   };
 
   const handleSaveChanges = async () => {
-    // Client-side validation
     if (!selectedMenu.mainMenu || !selectedMenu.mainMenuLink || !selectedMenu.language_code) {
       toast.error("Please fill in the Main Menu and Main Menu Link fields.", {
         position: "top-right",
@@ -75,26 +74,29 @@ const MainMenu = () => {
         });
       }
     } catch (error) {
-      console.error("Error updating menu:", error);
-
-      if (error.response && error.response.status === 400 && error.response.data.errors) {
-        // Handle validation errors from server
+      if (
+        error.response &&
+        error.response.status === 400 &&
+        Array.isArray(error.response.data.errors)
+      ) {
         error.response.data.errors.forEach((err) => {
-          toast.error(err.message, {
+          const message = typeof err === "string" ? err : err.message || "Validation error";
+          toast.error(message, {
             position: "top-right",
             autoClose: 3000,
           });
         });
       } else {
-        // Handle other errors
         toast.error(
-          error.response?.data?.message || "Failed to update menu. Please try again.",
+          error.response?.data?.message || "Failed to update menu. Try again.",
           {
             position: "top-right",
             autoClose: 3000,
           }
         );
       }
+
+      console.error("Error updating menu:", error);
     }
   };
 

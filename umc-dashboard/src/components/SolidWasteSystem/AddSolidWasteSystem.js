@@ -55,20 +55,17 @@ const AddSolidWasteSystem = () => {
     const formattedDate = formatDate(issueDate);
 
     try {
-      //eslint-disable-next-line
       const response = await api.post("/swms", {
         description: description,
         link: link,
         issue_date: formattedDate,
         language_code: language,
       });
-
       if (response.status === 200 || response.status === 201) {
         setDescription("");
         setLink("");
         setLanguage("");
         setIssueDate("");
-
         toast.success("Solid Waste management System added successfully!", {
           position: "top-right",
           autoClose: 1000,
@@ -81,19 +78,23 @@ const AddSolidWasteSystem = () => {
       if (
         error.response &&
         error.response.status === 400 &&
-        error.response.data.errors
+        Array.isArray(error.response.data.errors)
       ) {
         error.response.data.errors.forEach((err) => {
-          toast.error(err.message, {
+          const message = typeof err === "string" ? err : err.message || "Validation error";
+          toast.error(message, {
             position: "top-right",
             autoClose: 3000,
           });
         });
       } else {
-        toast.error("Failed to add Solid waste management system.", {
-          position: "top-right",
-          autoClose: 3000,
-        });
+        toast.error(
+          error.response?.data?.message || "Failed to add swms data. Try again.",
+          {
+            position: "top-right",
+            autoClose: 3000,
+          }
+        );
       }
       console.error("Error adding swms data:", error);
     }

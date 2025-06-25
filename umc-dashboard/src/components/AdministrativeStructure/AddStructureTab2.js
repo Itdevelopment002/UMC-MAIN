@@ -48,7 +48,6 @@ const AddStructureTab2 = () => {
                 heading4: heading4.trim(),
                 language_code: language
             });
-
             if (response.status === 200 || response.status === 201) {
                 setHeading1('');
                 setHeading2('');
@@ -60,7 +59,6 @@ const AddStructureTab2 = () => {
                     autoClose: 1000,
                     onClose: () => {
                         navigate('/administrative-structure');
-
                     }
                 });
             }

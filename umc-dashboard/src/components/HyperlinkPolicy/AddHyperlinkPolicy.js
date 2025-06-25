@@ -74,7 +74,6 @@ const AddHyperlinkPolicy = () => {
           }
         );
       }
-
       console.error("Error adding hyperlink policy:", error);
     }
   };

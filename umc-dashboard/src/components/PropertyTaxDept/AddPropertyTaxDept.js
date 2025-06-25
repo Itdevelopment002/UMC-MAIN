@@ -54,26 +54,22 @@ const AddPropertyTaxDept = () => {
     const formattedDate = formatDate(issueDate);
 
     try {
-      //eslint-disable-next-line
       const response = await api.post("/property-dept", {
         description: description,
         link: link,
         issue_date: formattedDate,
         language_code: language,
       });
-
       if (response.status === 200 || response.status === 201) {
         setDescription("");
         setLink("");
         setLanguage("");
         setIssueDate("");
-
         toast.success("Property Tax Department added successfully!", {
           position: "top-right",
           autoClose: 1000,
           onClose: () => {
             navigate("/property-tax-department");
-
           }
         });
       }
@@ -81,21 +77,25 @@ const AddPropertyTaxDept = () => {
       if (
         error.response &&
         error.response.status === 400 &&
-        error.response.data.errors
+        Array.isArray(error.response.data.errors)
       ) {
         error.response.data.errors.forEach((err) => {
-          toast.error(err.message, {
+          const message = typeof err === "string" ? err : err.message || "Validation error";
+          toast.error(message, {
             position: "top-right",
             autoClose: 3000,
           });
         });
       } else {
-        toast.error("Failed to add property tax department data", {
-          position: "top-right",
-          autoClose: 3000,
-        });
+        toast.error(
+          error.response?.data?.message || "Failed to add property tax dept data. Try again.",
+          {
+            position: "top-right",
+            autoClose: 3000,
+          }
+        );
       }
-      console.error("Error adding property tax department data:", error);
+      console.error("Error adding property tax dept data:", error);
     }
   };
 
@@ -231,7 +231,6 @@ const AddPropertyTaxDept = () => {
                         )}
                       </div>
                     </div>
-
                     <input
                       type="submit"
                       className="btn btn-primary btn-sm mt-3"

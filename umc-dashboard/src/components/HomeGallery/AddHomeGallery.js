@@ -39,7 +39,6 @@ const AddHomeGallery = () => {
     if (!selectedFile) {
       newErrors.selectedFile = "Photo gallery image is required";
     } else {
-      // Validate the image if one is selected
       const imageError = getImageValidationError(selectedFile);
       if (imageError) {
         newErrors.selectedFile = imageError;
@@ -62,43 +61,48 @@ const AddHomeGallery = () => {
     formData.append("photoName", photoName);
 
     try {
-      //eslint-disable-next-line
       const response = await api.post("/home-gallerys", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
-
-      toast.success("Home gallery added successfully", {
-        position: "top-right",
-        autoClose: 3000,
-      });
-
-      setPhotoName("");
-      setSelectedFile(null);
-      if (fileInputRef.current) {
-        fileInputRef.current.value = "";
+      if (response.status === 200 || response.status === 201) {
+        setPhotoName("");
+        setSelectedFile(null);
+        if (fileInputRef.current) {
+          fileInputRef.current.value = "";
+        }
+        toast.success("Home gallery added successfully!", {
+          position: "top-right",
+          autoClose: 1000,
+          onClose: () => {
+            navigate("/home-gallery");
+          }
+        });
       }
-      navigate("/home-gallery");
     } catch (error) {
       if (
         error.response &&
         error.response.status === 400 &&
-        error.response.data.errors
+        Array.isArray(error.response.data.errors)
       ) {
         error.response.data.errors.forEach((err) => {
-          toast.error(err.message, {
+          const message = typeof err === "string" ? err : err.message || "Validation error";
+          toast.error(message, {
             position: "top-right",
             autoClose: 3000,
           });
         });
       } else {
-        toast.error("Failed to add home gallery. Please try again.", {
-          position: "top-right",
-          autoClose: 3000,
-        });
+        toast.error(
+          error.response?.data?.message || "Failed to add home gallery data. Try again.",
+          {
+            position: "top-right",
+            autoClose: 3000,
+          }
+        );
       }
-      console.error("Error uploading file:", error);
+      console.error("Error adding home gallery data:", error);
     }
   };
 

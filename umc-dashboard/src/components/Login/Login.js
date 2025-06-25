@@ -153,7 +153,6 @@ const Login = ({ onLogin }) => {
       setIsClicked(false);
       refreshCaptcha();
       updateFailedAttempts(userData.username);
-      console.log(err);
       if (err.response) {
         if (err.response.status === 400 && err.response.data.message === "Invalid CAPTCHA") {
           setServerError("Invalid CAPTCHA code. Please try again.");

@@ -31,7 +31,6 @@ const DeptCommissioner = () => {
 
       setCommissioners(detailsResponse.data);
       setDescriptions(descResponse.data);
-      console.log(descResponse.data)
     } catch (error) {
       console.error("Failed to fetch Commissioner data!", error);
     }

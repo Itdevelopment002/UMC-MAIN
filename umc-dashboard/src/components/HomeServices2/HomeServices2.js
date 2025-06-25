@@ -50,26 +50,30 @@ const HomeServices2 = () => {
       );
       setInfo(updatedServices);
       setShowEditModal(false);
-      toast.success("Home services updated successfully!");
+      toast.success("Home service updated successfully!");
     } catch (error) {
       if (
         error.response &&
         error.response.status === 400 &&
-        error.response.data.errors
+        Array.isArray(error.response.data.errors)
       ) {
         error.response.data.errors.forEach((err) => {
-          toast.error(err.message, {
+          const message = typeof err === "string" ? err : err.message || "Validation error";
+          toast.error(message, {
             position: "top-right",
             autoClose: 3000,
           });
         });
       } else {
-        toast.error("Failed to update the home services!", {
-          position: "top-right",
-          autoClose: 3000,
-        });
+        toast.error(
+          error.response?.data?.message || "Failed to update home service. Try again.",
+          {
+            position: "top-right",
+            autoClose: 3000,
+          }
+        );
       }
-      console.error("Error updating home services:", error);
+      console.error("Error updating home service:", error);
     }
   };
 

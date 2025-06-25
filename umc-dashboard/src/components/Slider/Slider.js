@@ -87,18 +87,16 @@ const Slider = () => {
     const newErrors = {};
     let isValid = true;
 
-    // Validate name
     if (!editData.name.trim()) {
       newErrors.name = "Slider name is required.";
       isValid = false;
     }
 
     if (!editData.language_code) {
-      newErrors.language_code = "Language selection is required."; // Fixed: was setting name error
+      newErrors.language_code = "Language selection is required.";
       isValid = false;
     }
 
-    // Validate image only if a new one is provided
     if (editData.image) {
       const error = getImageValidationError(editData.image);
       if (error) {
@@ -133,13 +131,11 @@ const Slider = () => {
   const handleEditSubmit = async (e) => {
     e.preventDefault();
 
-    // Validate form
     if (!validateForm()) {
       toast.error("Please fix form errors before submitting.");
       return;
     }
 
-    // Only proceed if no errors
     try {
       const formData = new FormData();
       formData.append("name", editData.name);
@@ -159,25 +155,27 @@ const Slider = () => {
       if (
         error.response &&
         error.response.status === 400 &&
-        error.response.data.errors
+        Array.isArray(error.response.data.errors)
       ) {
         error.response.data.errors.forEach((err) => {
-          toast.error(err.message, {
+          const message = typeof err === "string" ? err : err.message || "Validation error";
+          toast.error(message, {
             position: "top-right",
             autoClose: 3000,
           });
         });
       } else {
-        toast.error("Failed to update slider. Try again.", {
-          position: "top-right",
-          autoClose: 3000,
-        });
+        toast.error(
+          error.response?.data?.message || "Failed to update slider. Try again.",
+          {
+            position: "top-right",
+            autoClose: 3000,
+          }
+        );
       }
-      console.error("Failed to update slider. Please try again.", error);
+      console.error("Error updating slider:", error);
     }
   };
-
-
 
   const handleCloseDeleteModal = () => setShowDeleteModal(false);
 
@@ -253,13 +251,13 @@ const Slider = () => {
                             </td>
                             <td className="text-center">
                               <button
-                                className="btn btn-success btn-sm"
+                                className="btn btn-success btn-sm m-t-10"
                                 onClick={() => handleEditModalOpen(slider)}
                               >
                                 Edit
                               </button>
                               <button
-                                className="btn btn-danger btn-sm"
+                                className="btn btn-danger btn-sm m-t-10"
                                 onClick={() => handleDeleteModalOpen(slider)}
                               >
                                 Delete
@@ -462,10 +460,10 @@ const Slider = () => {
                       )}
                     </div>
                     <div className="modal-footer">
-                      <button type="button" className="btn btn-secondary" onClick={handleCloseEditModal}>
+                      <button type="button" className="btn btn-sm btn-secondary" onClick={handleCloseEditModal}>
                         Cancel
                       </button>
-                      <button type="submit" className="btn btn-primary">
+                      <button type="submit" className="btn btn-sm btn-primary">
                         Save Changes
                       </button>
                     </div>

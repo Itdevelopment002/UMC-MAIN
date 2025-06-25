@@ -3,12 +3,7 @@ const router = express.Router();
 const db = require("../config/db");
 const { verifyToken } = require('../middleware/jwtMiddleware.js');
 const sanitizeInput = require('../middleware/sanitizeInput.js');
-
-const convertToMySQLDate = (dateString) => {
-  const [day, month, year] = dateString.split("-");
-  return `${year}-${month}-${day}`;
-};
-
+const { validateHomeVideo, validateUpdateHomeVideo } = require("../middleware/validationinputfield.js");
 
 router.get("/home-video", (req, res) => {
   const sql = "SELECT * FROM home_video";
@@ -36,7 +31,32 @@ router.get("/home-video/:id", (req, res) => {
 });
 
 
-router.post("/edit-home-video/:id", verifyToken, sanitizeInput, (req, res) => {
+router.post("/home-video", verifyToken, sanitizeInput, validateHomeVideo, (req, res) => {
+  if (req.user?.role === "Admin") {
+    return res.status(403).json({
+      message: "Permission denied: Admins are not allowed to perform this action.",
+    });
+  }
+
+  const { videoUrl } = req.body;
+
+  if (!videoUrl) {
+    return res.status(400).json({ message: "Video url is required." });
+  }
+
+  const updateSql = "INSERT INTO home_video (video_url) VALUES (?)";
+  const updateParams = [videoUrl];
+
+  db.query(updateSql, updateParams, (err) => {
+    if (err) {
+      return res.status(500).json({ message: "Database error", error: err });
+    }
+    res.status(200).json({ message: "Video added successfully" });
+  });
+});
+
+
+router.post("/edit-home-video/:id", verifyToken, sanitizeInput, validateUpdateHomeVideo, (req, res) => {
   if (req.user?.role === "Admin") {
     return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
   }

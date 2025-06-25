@@ -31,7 +31,7 @@ const EServices = () => {
       await api.post(`/delete-eservices/${selectedServices.id}`);
       setServices(services.filter((w) => w.id !== selectedServices.id));
       setShowDeleteModal(false);
-      toast.success("Services deleted successfully!");
+      toast.success("E-service deleted successfully!");
     } catch (error) {
       console.error("Error deleting services:", error);
       toast.error("Failed to delete the services!");
@@ -50,26 +50,30 @@ const EServices = () => {
       );
       setServices(updatedServices);
       setShowEditModal(false);
-      toast.success("Services updated successfully!");
+      toast.success("E-service updated successfully!");
     } catch (error) {
       if (
         error.response &&
         error.response.status === 400 &&
-        error.response.data.errors
+        Array.isArray(error.response.data.errors)
       ) {
         error.response.data.errors.forEach((err) => {
-          toast.error(err.message, {
+          const message = typeof err === "string" ? err : err.message || "Validation error";
+          toast.error(message, {
             position: "top-right",
             autoClose: 3000,
           });
         });
       } else {
-        toast.error("Failed to update the services!", {
-          position: "top-right",
-          autoClose: 3000,
-        });
+        toast.error(
+          error.response?.data?.message || "Failed to update service. Try again.",
+          {
+            position: "top-right",
+            autoClose: 3000,
+          }
+        );
       }
-      console.error("Error updating services:", error);
+      console.error("Error updating service:", error);
     }
   };
 

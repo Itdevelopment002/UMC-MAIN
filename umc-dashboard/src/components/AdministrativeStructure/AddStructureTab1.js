@@ -40,7 +40,6 @@ const AddStructureTab1 = () => {
                 heading2: heading2.trim(),
                 language_code: language
             });
-
             if (response.status === 200 || response.status === 201) {
                 setHeading1('');
                 setHeading2('');

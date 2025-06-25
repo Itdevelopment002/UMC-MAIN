@@ -28,48 +28,51 @@ const AddCurrentUpdate = () => {
     }
 
     try {
-      const response = await api.post(
-        "/current-update",
-        {
-          description: description,
-          language_code: language,
-        },
+      const response = await api.post("/current-update", { description: description, language_code: language, },
         {
           headers: {
             "Content-Type": "application/json",
           },
         }
       );
-      setErrors({ description: "", language: "" });
-
-      if (response.status === 200) {
-        navigate("/current-update");
-      } else {
-        console.error("Failed to add updates");
+      if (response.status === 200 || response.status === 201) {
+        setDescription("");
+        setLanguage("");
+        setErrors({ description: "", language: "" });
+        toast.success("Current update added successfully!", {
+          position: "top-right",
+          autoClose: 1000,
+          onClose: () => {
+            navigate("/current-update");
+          }
+        });
       }
     } catch (error) {
       if (
         error.response &&
         error.response.status === 400 &&
-        error.response.data.errors
+        Array.isArray(error.response.data.errors)
       ) {
         error.response.data.errors.forEach((err) => {
-          toast.error(err.message, {
+          const message = typeof err === "string" ? err : err.message || "Validation error";
+          toast.error(message, {
             position: "top-right",
             autoClose: 3000,
           });
         });
       } else {
-        toast.error("Failed to add current update:. Try again.", {
-          position: "top-right",
-          autoClose: 3000,
-        });
+        toast.error(
+          error.response?.data?.message || "Failed to add current update. Try again.",
+          {
+            position: "top-right",
+            autoClose: 3000,
+          }
+        );
       }
       console.error("Error adding current update:", error);
     }
-    // setDescription("");
-    // setLanguage("");
   };
+
   return (
     <>
       <div className="page-wrapper">

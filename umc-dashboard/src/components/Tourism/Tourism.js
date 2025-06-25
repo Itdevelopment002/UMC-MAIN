@@ -147,8 +147,8 @@ const Tourism = () => {
             await api.post(`/edit-tourism/${selectedGarden.id}`, formData);
             const response = await api.get("/tourism");
             setGardensData(response.data);
-            toast.success("Tourism data added successfully!")
             setShowEditModal(false);
+            toast.success("Tourism data added successfully!")
         } catch (error) {
             if (
                 error.response &&
@@ -164,14 +164,14 @@ const Tourism = () => {
                 });
             } else {
                 toast.error(
-                    error.response?.data?.message || "Failed to add tourism data. Please try again.",
+                    error.response?.data?.message || "Failed to update tourism data. Please try again.",
                     {
                         position: "top-right",
                         autoClose: 3000,
                     }
                 );
             }
-            console.error("Failed to add tourism data:", error);
+            console.error("Failed to updating tourism data:", error);
         }
     };
 
