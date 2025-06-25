@@ -15,7 +15,7 @@ router.get('/visitor-count', (req, res) => {
 });
 
 
-router.post('/increment-visitor-count', verifyToken, (req, res) => {
+router.post('/increment-visitor-count', (req, res) => {
     db.query('UPDATE visitor_count SET count = count + 1', (err) => {
         if (err) {
             res.status(500).json({ error: 'Error incrementing visitor count' });

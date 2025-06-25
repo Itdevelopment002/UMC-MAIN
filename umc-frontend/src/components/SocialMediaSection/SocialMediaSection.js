@@ -5,24 +5,36 @@ import { useTranslation } from "react-i18next";
 const SocialMedia = () => {
   const { t } = useTranslation();
 
+  // Facebook embed logic
   useEffect(() => {
-    const adjustFacebookWidth = () => {
+    const loadFacebook = () => {
       const fbPage = document.querySelector(".fb-page");
-      if (fbPage) {
+      if (fbPage && fbPage.parentElement) {
         fbPage.setAttribute("data-width", fbPage.parentElement.offsetWidth);
-        if (window.FB) {
+      }
+
+      try {
+        if (window.FB && typeof window.FB.XFBML.parse === "function") {
           window.FB.XFBML.parse();
         }
+      } catch (err) {
+        console.warn("Facebook SDK error suppressed:", err.message);
       }
     };
 
-    adjustFacebookWidth();
-    window.addEventListener("resize", adjustFacebookWidth);
-    return () => window.removeEventListener("resize", adjustFacebookWidth);
+    // Run it with slight delay after mount
+    const timeout = setTimeout(loadFacebook, 1000);
+    window.addEventListener("resize", loadFacebook);
+
+    return () => {
+      clearTimeout(timeout);
+      window.removeEventListener("resize", loadFacebook);
+    };
   }, []);
 
+  // Scroll to top on mount
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
 
   return (
@@ -31,14 +43,16 @@ const SocialMedia = () => {
         <div className="vertical-line"></div>
         <div className="d-flex">
           <h2 className="section-title">
-            {t("home.connect")} <span className="subtitle">{t("home.withUs")}</span>
+            {t("home.connect")}{" "}
+            <span className="subtitle">{t("home.withUs")}</span>
           </h2>
         </div>
       </div>
-      <div className="row d-flex justify-content-around social-media-border">
-        <div className=" col-lg-4 col-md-6 col-sm-6 media-plugin">
 
-          {/* Facebook Section */}
+      <div className="row d-flex justify-content-around social-media-border">
+
+        {/* Facebook Section */}
+        <div className="col-lg-4 col-md-6 col-sm-6 media-plugin">
           <div className="card-header fb text-white text-center">
             {t("home.facebook")}
           </div>
@@ -57,7 +71,7 @@ const SocialMedia = () => {
           </div>
         </div>
 
-        {/* Twitter Section */}
+        {/* Instagram Section (as embed iframe) */}
         <div className="col-lg-4 col-md-6 col-sm-6 media-plugin">
           <div className="card-header text-white in text-center">
             {t("home.instagram")}
@@ -74,11 +88,9 @@ const SocialMedia = () => {
               }}
             >
               <iframe
-                id="instagram-widget-0"
                 scrolling="no"
-                frameBorder={0}
-                allowFullScreen={true}
-                className=""
+                frameBorder="0"
+                allowFullScreen
                 title="Instagram Timeline"
                 src="https://www.instagram.com/officialdigitalindia/embed"
                 style={{
@@ -94,7 +106,6 @@ const SocialMedia = () => {
           </div>
         </div>
 
-
         {/* YouTube Section */}
         <div className="col-lg-4 col-md-6 col-sm-6 media-plugin">
           <div className="card-header text-white you text-center">
@@ -106,7 +117,7 @@ const SocialMedia = () => {
               width="100%"
               height="400"
               title="YouTube video player"
-              style={{ pointerEvents: "none" }} // Prevents iframe interaction so link works
+              style={{ pointerEvents: "none" }}
             ></iframe>
             <a
               href="https://www.youtube.com/@itdeptulhasnagarmunicipalc9647"
@@ -120,12 +131,11 @@ const SocialMedia = () => {
                 width: "100%",
                 height: "100%",
                 zIndex: 10,
-                cursor: "pointer"
+                cursor: "pointer",
               }}
             ></a>
           </div>
         </div>
-
       </div>
     </div>
   );
