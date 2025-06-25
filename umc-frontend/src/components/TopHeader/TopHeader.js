@@ -112,10 +112,10 @@ const TopHeader = () => {
         <>
             <div className="top-bar">
                 <div className="helpline">
-                    <Link to="tel:02512720150" className="helpline-link">
+                    <div className="helpline-link">
                         <img src={phoneicon} alt="Phone Icon" className="helpline-icon" />
                         {t("header.helpline")}
-                    </Link>
+                    </div>
                 </div>
 
                 {/* 🌟 Search */}
@@ -177,9 +177,9 @@ const TopHeader = () => {
                         <span>{t("header.screenReader")}</span>
                     </Link>
                     <span className="divider">|</span>
-                    <button onClick={handleDecreaseFontSize} className="text-size-btn">{t("header.aMinus")}</button>
+                    <button onClick={handleDecreaseFontSize} className="text-link-btn">{t("header.aMinus")}</button>
                     <span className="divider">|</span>
-                    <button onClick={handleIncreaseFontSize} className="text-size-btn">{t("header.aPlus")}</button>
+                    <button onClick={handleIncreaseFontSize} className="text-link-btn">{t("header.aPlus")}</button>
                     <span className="divider">|</span>
 
                     <div className="custom-dropdown" role="button" tabIndex="0">
