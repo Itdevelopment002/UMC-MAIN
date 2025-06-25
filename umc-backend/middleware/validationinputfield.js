@@ -888,7 +888,7 @@ const validateUserDetails = [
         .isLength({ min: 8, max: 100 }).withMessage("Password must be between 6 and 100 characters"),
 
     body("permission")
-        .notEmpty().withMessage("Permission is required"),
+        .optional(),
 
     validateRequest,
 ];
