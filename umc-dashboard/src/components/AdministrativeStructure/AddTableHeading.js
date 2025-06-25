@@ -41,15 +41,42 @@ const AddTableHeading = () => {
                 language_code: language
             });
 
-            toast.success(response.data.message || 'Data added successfully');
+            if (response.status === 200 || response.status === 201) {
+                setTable('');
+                setHeading('');
+                setLanguage('');
+                toast.success(response.data.message || 'Data added successfully', {
+                    position: "top-right",
+                    autoClose: 1000,
+                    onClose: () => {
+                        navigate('/administrative-structure');
+                    }
+                });
+            }
 
-            setTable('');
-            setHeading('');
-            setLanguage('');
-            navigate('/administrative-structure');
         } catch (error) {
-            console.error('Error uploading data:', error);
-            toast.error(error?.response?.data?.message || 'Failed to add data. Please try again.');
+            if (
+                error.response &&
+                error.response.status === 400 &&
+                Array.isArray(error.response.data.errors)
+            ) {
+                error.response.data.errors.forEach((err) => {
+                    const message = typeof err === "string" ? err : err.message || "Validation error";
+                    toast.error(message, {
+                        position: "top-right",
+                        autoClose: 3000,
+                    });
+                });
+            } else {
+                toast.error(
+                    error.response?.data?.message || "Failed to add data. Please try again.",
+                    {
+                        position: "top-right",
+                        autoClose: 3000,
+                    }
+                );
+            }
+            console.error('Error adding data:', error);
         }
     };
 

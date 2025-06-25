@@ -54,7 +54,28 @@ const HistoryContent = () => {
             setShowAddNewModal(false);
             toast.success("History Description added successfully!");
         } catch (error) {
-            toast.error("Error adding Description.");
+            if (
+                    error.response &&
+                    error.response.status === 400 &&
+                    Array.isArray(error.response.data.errors)
+                  ) {
+                    error.response.data.errors.forEach((err) => {
+                      const message = typeof err === "string" ? err : err.message || "Validation error";
+                      toast.error(message, {
+                        position: "top-right",
+                        autoClose: 3000,
+                      });
+                    });
+                  } else {
+                    toast.error(
+                      error.response?.data?.message || "Error adding Description.",
+                      {
+                        position: "top-right",
+                        autoClose: 3000,
+                      }
+                    );
+                  }
+            console.error("Error adding Description:", error);
         }
     };
 
@@ -87,20 +108,42 @@ const HistoryContent = () => {
                 language_code: editData.language_code,
             });
 
-            if (response.status === 200) {
+            if (response.status === 200 || response.status === 201) {
                 setDesc(
                     desc.map((work) => (work.id === editData.id ? response.data : work))
                 );
                 fetchDesc();
-                toast.success("History Description updated successfully!");
-            } else {
-                toast.error("Failed to update Description.");
+                toast.success("History Description updated successfully!", {
+                    position: "top-right",
+                    autoClose: 1000,
+                    onClose: () => {
+                        setShowEditModal(false);
+                    }
+                });
             }
         } catch (error) {
+            if (
+                error.response &&
+                error.response.status === 400 &&
+                Array.isArray(error.response.data.errors)
+            ) {
+                error.response.data.errors.forEach((err) => {
+                    const message = typeof err === "string" ? err : err.message || "Validation error";
+                    toast.error(message, {
+                        position: "top-right",
+                        autoClose: 3000,
+                    });
+                });
+            } else {
+                toast.error(
+                    error.response?.data?.message || "Error updating Description:",
+                    {
+                        position: "top-right",
+                        autoClose: 3000,
+                    }
+                );
+            }
             console.error("Error updating Description:", error);
-            toast.error("Error updating Description.");
-        } finally {
-            setShowEditModal(false);
         }
     };
 
@@ -346,7 +389,7 @@ const HistoryContent = () => {
                             </div>
                             <div className="modal-body">
                                 <form>
-                                <div className="form-group">
+                                    <div className="form-group">
                                         <label>
                                             Select Language
                                         </label>
