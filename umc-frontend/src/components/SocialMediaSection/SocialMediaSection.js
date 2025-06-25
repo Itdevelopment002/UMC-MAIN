@@ -112,6 +112,7 @@ const SocialMedia = () => {
               href="https://www.youtube.com/@itdeptulhasnagarmunicipalc9647"
               target="_blank"
               rel="noopener noreferrer"
+              aria-label="Visit our YouTube channel"
               style={{
                 position: "absolute",
                 top: 0,
