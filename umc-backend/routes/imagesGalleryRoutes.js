@@ -7,6 +7,7 @@ const db = require("../config/db.js");
 const { verifyToken } = require('../middleware/jwtMiddleware.js');
 const { getMulterConfig, handleMulterError } = require("../utils/uploadValidation");
 const sanitizeInput = require("../middleware/sanitizeInput.js");
+const { validateUpdatePhotoGallery, validatePhotoGallery } = require("../middleware/validationinputfield.js");
 
 const upload = multer(getMulterConfig());
 
@@ -28,7 +29,7 @@ router.get("/categories", (req, res) => {
 });
 
 
-router.post("/categories", verifyToken, sanitizeInput, (req, res) => {
+router.post("/categories", verifyToken, sanitizeInput, validatePhotoGallery, (req, res) => {
   if (req.user?.role === "Admin") {
     return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
   }
@@ -45,7 +46,7 @@ router.post("/categories", verifyToken, sanitizeInput, (req, res) => {
 });
 
 
-router.post("/edit-categories/:id", verifyToken, sanitizeInput, (req, res) => {
+router.post("/edit-categories/:id", verifyToken, sanitizeInput, validateUpdatePhotoGallery, (req, res) => {
   if (req.user?.role === "Admin") {
     return res.status(403).json({ message: "Permission denied: Admins are not allowed to perform this action." });
   }

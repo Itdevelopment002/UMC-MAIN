@@ -74,22 +74,23 @@ const AddContactInfo = () => {
           "Content-Type": "multipart/form-data",
         },
       });
-
-      if (response.status === 200) {
-        toast.success("Contact Info added successfully!");
-
+      if (response.status === 200 || response.status === 201) {
         setFormData({
           name: "",
           designation: "",
           language: "",
           image: null,
         });
-
         if (fileInputRef.current) {
           fileInputRef.current.value = "";
         }
-
-        navigate("/footer");
+        toast.success("Contact Info added successfully!", {
+          position: "top-right",
+          autoClose: 1000,
+          onClose: () => {
+            navigate("/footer");
+          }
+        });
       }
     } catch (error) {
       if (

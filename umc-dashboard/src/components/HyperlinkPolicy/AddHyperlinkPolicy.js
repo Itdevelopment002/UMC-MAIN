@@ -40,12 +40,17 @@ const AddHyperlinkPolicy = () => {
           "Content-Type": "application/json",
         },
       });
-
-      if (response.status === 201) {
+      if (response.status === 200 || response.status === 201) {
         setDescription("");
         setLanguage("");
         setErrors({ description: "", language: "" });
-        navigate("/hyperlink-policy");
+        toast.success("Hyperlink policy added successfully!", {
+          position: "top-right",
+          autoClose: 1000,
+          onClose: () => {
+            navigate("/hyperlink-policy");
+          }
+        });
       }
     } catch (error) {
       if (

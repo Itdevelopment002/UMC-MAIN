@@ -66,9 +66,21 @@ const AddWard = () => {
         email: formData.email,
         language_code: formData.language
       });
-
-      if (response.status === 201) {
-        navigate("/contact-us");
+      if (response.status === 200 || response.status === 201) {
+        setFormData({
+          office: "",
+          address: "",
+          phone: "",
+          email: "",
+          language: "",
+        })
+        toast.success("Ward Info added successfully!", {
+          position: "top-right",
+          autoClose: 1000,
+          onClose: () => {
+            navigate("/contact-us");
+          }
+        });
       }
     } catch (error) {
       if (

@@ -331,33 +331,33 @@ const AddUsers = () => {
 
     try {
       const response = await api.post("/users", payload);
-
-      if (response.status === 201) {
-        navigate("/users");
+      if (response.status === 200 || response.status === 201) {
+        toast.success("User added successfully!", {
+          position: "top-right",
+          autoClose: 1000,
+          onClose: () => {
+            navigate("/users");
+          }
+        });
       }
     } catch (error) {
       console.error("Error adding user:", error);
- 
+
       if (error.response) {
-        // Handle 400 Bad Request errors
         if (error.response.status === 400) {
           const data = error.response.data;
- 
-          // Handle the specific error format you shared
+
           if (data.errors && Array.isArray(data.errors)) {
-            data.errors.forEach(err => {
-              toast.error(`${err.message}`, {
+            error.response.data.errors.forEach((err) => {
+              const message = typeof err === "string" ? err : err.message || "Validation error";
+              toast.error(message, {
                 position: "top-right",
                 autoClose: 3000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
               });
             });
             return;
           }
- 
+
           // Handle other 400 error formats
           if (data.message) {
             toast.error(data.message, {
@@ -374,7 +374,7 @@ const AddUsers = () => {
             if (!reqs.hasSpecial) passwordMessage += " a special character,";
             if (!reqs.notCommon) passwordMessage += " not be too common,";
             if (!reqs.notContextual) passwordMessage += " not include your name or email.";
- 
+
             toast.error(passwordMessage.replace(/,$/, "."), {
               position: "top-right",
               autoClose: 3000,
@@ -382,7 +382,7 @@ const AddUsers = () => {
           }
         }
       }
- 
+
       // Default error message
       toast.error("Something went wrong. Please try again later.", {
         position: "top-right",

@@ -68,9 +68,20 @@ const AddContact = () => {
       const response = await api.post("/contact-info", data, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-
-      if (response.status === 200) {
-        navigate("/contact-us");
+      if (response.status === 200 || response.status === 201) {
+        setFormData({
+          heading: "",
+          description: "",
+          language: "",
+          contactIcon: null,
+        })
+        toast.success("Contact Info added successfully!", {
+          position: "top-right",
+          autoClose: 1000,
+          onClose: () => {
+            navigate("/contact-us");
+          }
+        });
       }
     } catch (error) {
       if (

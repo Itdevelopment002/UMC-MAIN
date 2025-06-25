@@ -46,15 +46,18 @@ const AddPrivacyPolicy = () => {
           "Content-Type": "application/json",
         },
       });
-
-      if (response.status === 201) {
+      if (response.status === 200 || response.status === 201) {
         setHeading("");
         setDescription("");
         setLanguage("");
         setErrors({ heading: "", description: "", language: "" });
-        navigate("/privacy-policy");
-      } else {
-        console.error("Failed to add privacy policy");
+        toast.success("Privacy policy added successfully!", {
+          position: "top-right",
+          autoClose: 1000,
+          onClose: () => {
+            navigate("/privacy-policy");
+          }
+        });
       }
     } catch (error) {
       if (

@@ -279,7 +279,8 @@ const Users = () => {
         error.response.data.errors
       ) {
         error.response.data.errors.forEach((err) => {
-          toast.error(err.message, {
+          const message = typeof err === "string" ? err : err.message || "Validation error";
+          toast.error(message, {
             position: "top-right",
             autoClose: 3000,
           });
@@ -290,7 +291,7 @@ const Users = () => {
           autoClose: 3000,
         });
       }
- 
+
       console.error("Error updating user:", error);
     }
   };

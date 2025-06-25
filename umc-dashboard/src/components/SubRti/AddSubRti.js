@@ -61,11 +61,19 @@ const AddSubRti = () => {
         issue_date: formattedDate,
         language_code: language,
       });
-      setDescription("");
-      setLink("");
-      setIssueDate("");
-      setLanguage("");
-      navigate("/sub-rti");
+      if (response.status === 200 || response.status === 201) {
+        setDescription("");
+        setLink("");
+        setIssueDate("");
+        setLanguage("");
+        toast.success("Sub Rti data added successfully!", {
+          position: "top-right",
+          autoClose: 1000,
+          onClose: () => {
+            navigate("/sub-rti");
+          }
+        });
+      }
     } catch (error) {
       if (
         error.response &&
