@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import api from "../api";
 
 const AddTourism = () => {
@@ -67,10 +69,39 @@ const AddTourism = () => {
           "Content-Type": "multipart/form-data",
         },
       });
-      navigate("/tourism");
+      if (response.status === 200 || response.status === 201) {
+        toast.success("Tourism data added successfully!", {
+          position: "top-right",
+          autoClose: 1000,
+          onClose: () => {
+            navigate("/tourism")
+          }
+        });
+      }
+      ;
     } catch (error) {
-      console.error("Error adding tourism site:", error);
-      alert("Failed to add tourism site. Please try again.");
+      if (
+        error.response &&
+        error.response.status === 400 &&
+        Array.isArray(error.response.data.errors)
+      ) {
+        error.response.data.errors.forEach((err) => {
+          const message = typeof err === "string" ? err : err.message || "Validation error";
+          toast.error(message, {
+            position: "top-right",
+            autoClose: 3000,
+          });
+        });
+      } else {
+        toast.error(
+          error.response?.data?.message || "Failed to add tourism data. Please try again.",
+          {
+            position: "top-right",
+            autoClose: 3000,
+          }
+        );
+      }
+      console.error("Error adding tourism data:", error);
     }
   };
 
@@ -254,7 +285,7 @@ const AddTourism = () => {
                       </label>
                       <div className="col-md-5">
                         <input
-                          type="url"
+                          type="text"
                           className={`form-control form-control-md ${errors.locationLink ? "is-invalid" : ""}`}
                           value={locationLink}
                           onChange={handleLocationLinkChange}
@@ -301,6 +332,7 @@ const AddTourism = () => {
             </div>
           </div>
         </div>
+        <ToastContainer/>
       </div>
     </>
   );

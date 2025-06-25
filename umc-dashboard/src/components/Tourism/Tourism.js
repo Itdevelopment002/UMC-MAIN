@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import GLightbox from "glightbox";
 import "glightbox/dist/css/glightbox.min.css";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import api, { baseURL } from "../api";
 
 const Tourism = () => {
@@ -145,9 +147,31 @@ const Tourism = () => {
             await api.post(`/edit-tourism/${selectedGarden.id}`, formData);
             const response = await api.get("/tourism");
             setGardensData(response.data);
+            toast.success("Tourism data added successfully!")
             setShowEditModal(false);
         } catch (error) {
-            console.error("Error saving garden changes:", error);
+            if (
+                error.response &&
+                error.response.status === 400 &&
+                Array.isArray(error.response.data.errors)
+            ) {
+                error.response.data.errors.forEach((err) => {
+                    const message = typeof err === "string" ? err : err.message || "Validation error";
+                    toast.error(message, {
+                        position: "top-right",
+                        autoClose: 3000,
+                    });
+                });
+            } else {
+                toast.error(
+                    error.response?.data?.message || "Failed to add tourism data. Please try again.",
+                    {
+                        position: "top-right",
+                        autoClose: 3000,
+                    }
+                );
+            }
+            console.error("Failed to add tourism data:", error);
         }
     };
 
@@ -535,6 +559,7 @@ const Tourism = () => {
                         </div>
                     </div>
                 </div>
+                <ToastContainer />
             </div>
         </>
     );

@@ -431,6 +431,68 @@ const validateaddCommissionerDesc = [
     validateRequest,
 ];
 
+const validateHistoryImage = [
+    alphabetOnlyValidator("photo_name", minNameLength, maxNameLength, "Photo Name", nameRegex),
+    validateRequest,
+];
+
+const validateHistoryDescription = [
+    alphabetOnlyValidator("description", minDescriptionLength, maxDescriptionLength, "History Description", descriptionRegex),
+    languageCodeValidator("language_code"),
+
+    validateRequest,
+];
+
+const validateTourism = [
+    alphabetOnlyValidator("name", minHeadingLength, maxHeadingLength, "Site Name", descriptionRegex),
+    alphabetOnlyValidator("address", minHeadingLength, maxHeadingLength, "Site Address", descriptionRegex),
+    alphabetOnlyValidator("hours", minHeadingLength, maxHeadingLength, "Open Hour", descriptionRegex),
+    alphabetOnlyValidator("description", minDescriptionLength, maxDescriptionLength, "Site Description", descriptionRegex),
+    urlValidator("locationLink", "Location Link"),
+    languageCodeValidator("language_code"),
+
+    validateRequest,
+];
+
+const validateTableHeading = [
+    alphabetOnlyValidator("tablename", minHeadingLength, maxHeadingLength, "Table Name", descriptionRegex),
+    alphabetOnlyValidator("heading", minHeadingLength, maxHeadingLength, "Heading Name", descriptionRegex),
+    languageCodeValidator("language_code"),
+
+    validateRequest,
+];
+
+const validatestructuretab1 = [
+    alphabetOnlyValidator("heading1", minHeadingLength, maxHeadingLength, "Heading 1", descriptionRegex),
+    alphabetOnlyValidator("heading2", minHeadingLength, maxHeadingLength, "Heading 2", descriptionRegex),
+    languageCodeValidator("language_code"),
+
+    validateRequest,
+];
+
+const validatestructuretab2 = [
+    alphabetOnlyValidator("heading1", minHeadingLength, maxHeadingLength, "Heading 1", descriptionRegex),
+    alphabetOnlyValidator("heading2", minHeadingLength, maxHeadingLength, "Heading 2", descriptionRegex),
+    alphabetOnlyValidator("heading3", minHeadingLength, maxHeadingLength, "Heading 3", descriptionRegex),
+    alphabetOnlyValidator("heading4", minHeadingLength, maxHeadingLength, "Heading 4", descriptionRegex),
+    languageCodeValidator("language_code"),
+
+    validateRequest,
+];
+
+const validatestructuretab4 = [
+    alphabetOnlyValidator("officer", minHeadingLength, maxHeadingLength, "Officer Name", descriptionRegex),
+    languageCodeValidator("language_code"),
+
+    validateRequest,
+];
+
+
+
+
+
+
+
 const validateAdministration = [
     alphabetOnlyValidator("name", minNameLength, maxNameLength, "Name", nameRegex),
     alphabetOnlyValidator("designation", minDesignationLength, maxDesignationLength, "Designation", designationRegex),
@@ -770,6 +832,8 @@ const validateFooter = [
 ];
 
 
+
+
 module.exports = {
     validateMinisterDetails,
     validateAddMainMenu,
@@ -799,6 +863,15 @@ module.exports = {
     validateCommissionerData,
     validateCommissionerDesc,
     validateaddCommissionerDesc,
+    validateHistoryImage,
+    validateHistoryDescription,
+    validateTourism,
+    validateTableHeading,
+    validatestructuretab1,
+    validatestructuretab2,
+    validatestructuretab4,
+
+
     validateAdministration,
     validateAnnual,
     validateElected,

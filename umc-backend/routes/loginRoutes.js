@@ -130,10 +130,10 @@ const captchaStore = new Map();
 
 router.get("/generate-captcha", (req, res) => {
   const captcha = svgCaptcha.create({
-    noise: 4,
+    noise: 0,
     color: false,
     size: 6,
-    ignoreChars: '0o1ilI'
+    ignoreChars: '0o1ilI',
   });
 
   const captchaId = uuidv4();
