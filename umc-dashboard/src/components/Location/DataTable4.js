@@ -55,30 +55,30 @@ const DataTable4 = () => {
       setShowEditModal(false);
       toast.success("Table 4 data updated successfully!");
     } catch (error) {
-           if (
-            error.response &&
-            error.response.status === 400 &&
-            Array.isArray(error.response.data.errors)
-          ) {
-            error.response.data.errors.forEach((err) => {
-              const message = typeof err === "string" ? err : err.message || "Validation error";
-              toast.error(message, {
-                position: "top-right",
-                autoClose: 3000,
-              });
-            });
-          } else {
-            toast.error(
-              error.response?.data?.message || "Failed to update the table 4 data!",
-              {
-                position: "top-right",
-                autoClose: 3000,
-              }
-            );
+      if (
+        error.response &&
+        error.response.status === 400 &&
+        Array.isArray(error.response.data.errors)
+      ) {
+        error.response.data.errors.forEach((err) => {
+          const message = typeof err === "string" ? err : err.message || "Validation error";
+          toast.error(message, {
+            position: "top-right",
+            autoClose: 3000,
+          });
+        });
+      } else {
+        toast.error(
+          error.response?.data?.message || "Failed to update the table 4 data!",
+          {
+            position: "top-right",
+            autoClose: 3000,
           }
-          console.error("Failed to update the table 4 data!", error);
-        }
-      };
+        );
+      }
+      console.error("Failed to update the table 4 data!", error);
+    }
+  };
 
   const handleEditClick = (policy) => {
     setSelectedPolicy({ ...policy });
@@ -105,7 +105,6 @@ const DataTable4 = () => {
   const handleLinkClick = (type) => {
     setSelectedType(type);
   };
-
 
   return (
     <div>

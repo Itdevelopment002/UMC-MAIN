@@ -54,8 +54,8 @@ const DataTable1 = () => {
       setPolicyData(updatedPolicy);
       setShowEditModal(false);
       toast.success("Table 1 data updated successfully!");
-    }catch (error) {
-       if (
+    } catch (error) {
+      if (
         error.response &&
         error.response.status === 400 &&
         Array.isArray(error.response.data.errors)

@@ -101,26 +101,26 @@ const HistoryImage = () => {
       setShowEditModal(false);
     } catch (error) {
       if (
-              error.response &&
-              error.response.status === 400 &&
-              Array.isArray(error.response.data.errors)
-            ) {
-              error.response.data.errors.forEach((err) => {
-                const message = typeof err === "string" ? err : err.message || "Validation error";
-                toast.error(message, {
-                  position: "top-right",
-                  autoClose: 3000,
-                });
-              });
-            } else {
-              toast.error(
-                error.response?.data?.message || "Error updating history image:",
-                {
-                  position: "top-right",
-                  autoClose: 3000,
-                }
-              );
-            }
+        error.response &&
+        error.response.status === 400 &&
+        Array.isArray(error.response.data.errors)
+      ) {
+        error.response.data.errors.forEach((err) => {
+          const message = typeof err === "string" ? err : err.message || "Validation error";
+          toast.error(message, {
+            position: "top-right",
+            autoClose: 3000,
+          });
+        });
+      } else {
+        toast.error(
+          error.response?.data?.message || "Error updating history image:",
+          {
+            position: "top-right",
+            autoClose: 3000,
+          }
+        );
+      }
       console.error("Error updating history image:", error);
     }
   };
@@ -143,6 +143,9 @@ const HistoryImage = () => {
               <div className="row">
                 <div className="col-12">
                   <h4 className="page-title">History Image</h4>
+                  <small className="text-muted mb-3">
+                    📌 Note: You can only edit the image.
+                  </small>
                 </div>
                 {/* <div className="col-sm-8 col-12 text-right">
                   <Link
@@ -153,7 +156,7 @@ const HistoryImage = () => {
                   </Link>
                 </div> */}
               </div>
-              <div className="table-responsive">
+              <div className="table-responsive m-t-10">
                 <table className="table table-bordered m-b-0">
                   <thead>
                     <tr>

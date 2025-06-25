@@ -129,7 +129,7 @@ const BottomSlider = () => {
           websitelink.id === editLinkData.id ? response.data : websitelink
         ));
         setShowEditModal(false);
-        toast.success("Slider updated successfully!", {
+        toast.success("Bottom slider updated successfully!", {
           position: "top-right",
           autoClose: 3000,
         });
@@ -139,21 +139,25 @@ const BottomSlider = () => {
         if (
           error.response &&
           error.response.status === 400 &&
-          error.response.data.errors
+          Array.isArray(error.response.data.errors)
         ) {
           error.response.data.errors.forEach((err) => {
-            toast.error(err.message, {
+            const message = typeof err === "string" ? err : err.message || "Validation error";
+            toast.error(message, {
               position: "top-right",
               autoClose: 3000,
             });
           });
         } else {
-          toast.error("Failed to add bottom slider. Please try again.", {
-            position: "top-right",
-            autoClose: 3000,
-          });
+          toast.error(
+            error.response?.data?.message || "Failed to update bottom slider. Try again.",
+            {
+              position: "top-right",
+              autoClose: 3000,
+            }
+          );
         }
-        console.error("Error updating slider:", error);
+        console.error("Error updating bottom slider:", error);
       });
   };
 
@@ -175,15 +179,12 @@ const BottomSlider = () => {
     const file = e.target.files[0];
 
     if (file) {
-      // Validate the image file
       const errorMessage = getImageValidationError(file);
 
       if (errorMessage) {
-        // Clear the file input if invalid file is selected
         if (fileInputRef.current) {
           fileInputRef.current.value = "";
         }
-        // Set error message
         setErrors({ ...errors, websitelogo: errorMessage });
         return;
       }
@@ -202,7 +203,7 @@ const BottomSlider = () => {
       setEditLinkData({
         ...editLinkData,
         websitelogo: null,
-        websitelogoPreview: `${baseURL}${editLinkData.websitelogo}`, // Fallback to the existing image
+        websitelogoPreview: `${baseURL}${editLinkData.websitelogo}`,
       });
     }
   };
@@ -348,7 +349,6 @@ const BottomSlider = () => {
             </div>
           </div>
 
-          {/* Delete Confirmation Modal */}
           <div
             className={`modal fade ${showDeleteModal ? "show" : ""}`}
             style={{ display: showDeleteModal ? "block" : "none" }}
@@ -383,7 +383,6 @@ const BottomSlider = () => {
             </div>
           </div>
 
-          {/* Edit Modal */}
           {showEditModal && (
             <div className="modal fade show d-block"
               style={{
@@ -460,7 +459,6 @@ const BottomSlider = () => {
                             />
                           </div>
                         )}
-
                       </div>
                     </form>
                   </div>

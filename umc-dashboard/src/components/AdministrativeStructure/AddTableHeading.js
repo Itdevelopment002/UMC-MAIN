@@ -40,12 +40,11 @@ const AddTableHeading = () => {
                 heading: heading.trim(),
                 language_code: language
             });
-
             if (response.status === 200 || response.status === 201) {
                 setTable('');
                 setHeading('');
                 setLanguage('');
-                toast.success(response.data.message || 'Data added successfully', {
+                toast.success(response.data.message || 'Table heading added successfully', {
                     position: "top-right",
                     autoClose: 1000,
                     onClose: () => {
@@ -53,7 +52,6 @@ const AddTableHeading = () => {
                     }
                 });
             }
-
         } catch (error) {
             if (
                 error.response &&

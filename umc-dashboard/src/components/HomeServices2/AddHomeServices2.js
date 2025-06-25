@@ -37,19 +37,16 @@ const AddHomeServices2 = () => {
     }
 
     try {
-      //eslint-disable-next-line
       const response = await api.post("/home-services2", {
         heading: heading,
         link: link,
         language_code: language,
       });
-
       if (response.status === 200 || response.status === 201) {
         setHeading("");
         setLink("");
         setLanguage("");
-
-        toast.success("Home Services added successfully!", {
+        toast.success("Home Service added successfully!", {
           position: "top-right",
           autoClose: 1000,
           onClose: () => {
@@ -61,21 +58,25 @@ const AddHomeServices2 = () => {
       if (
         error.response &&
         error.response.status === 400 &&
-        error.response.data.errors
+        Array.isArray(error.response.data.errors)
       ) {
         error.response.data.errors.forEach((err) => {
-          toast.error(err.message, {
+          const message = typeof err === "string" ? err : err.message || "Validation error";
+          toast.error(message, {
             position: "top-right",
             autoClose: 3000,
           });
         });
       } else {
-        toast.error("Failed to add home service. Please try again.", {
-          position: "top-right",
-          autoClose: 3000,
-        });
+        toast.error(
+          error.response?.data?.message || "Failed to add home service. Try again.",
+          {
+            position: "top-right",
+            autoClose: 3000,
+          }
+        );
       }
-      console.error('Error adding Home services:', error);
+      console.error("Error adding home service:", error);
     }
   };
 

@@ -68,7 +68,7 @@ const AddDataTable2 = () => {
         });
       }
     } catch (error) {
-       if (
+      if (
         error.response &&
         error.response.status === 400 &&
         Array.isArray(error.response.data.errors)

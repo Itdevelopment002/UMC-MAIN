@@ -151,7 +151,6 @@ const CitizenCommunication = () => {
         if (!validateForm()) {
             return;
         }
-
         if (errors.imageFile || errors.heading || errors.description || errors.link || errors.number || errors.language_code) {
             toast.error("Please fix errors before submitting.", {
                 position: "top-right",
@@ -159,7 +158,6 @@ const CitizenCommunication = () => {
             });
             return;
         }
-
         try {
             const formData = new FormData();
             formData.append("heading", editData.heading);
@@ -170,16 +168,13 @@ const CitizenCommunication = () => {
             } else if (modalType === "emergency") {
                 formData.append("number", editData.number);
             }
-
             formData.append("language_code", editData.language_code);
-
             if (editData.imageFile) {
                 formData.append(
                     modalType === "portal" ? "portalImage" : "emergencyImage",
                     editData.imageFile
                 );
             }
-
             await api.post(
                 `/${modalType === "portal" ? "edit-portal-services" : "edit-emergency-services"}/${selectedItem.id}`,
                 formData,
@@ -208,22 +203,25 @@ const CitizenCommunication = () => {
             if (
                 error.response &&
                 error.response.status === 400 &&
-                error.response.data.errors
+                Array.isArray(error.response.data.errors)
             ) {
                 error.response.data.errors.forEach((err) => {
-                    toast.error(err.message, {
+                    const message = typeof err === "string" ? err : err.message || "Validation error";
+                    toast.error(message, {
                         position: "top-right",
                         autoClose: 3000,
                     });
                 });
             } else {
-                toast.error("Failed to update entry!", {
-                    position: "top-right",
-                    autoClose: 3000,
-                });
+                toast.error(
+                    error.response?.data?.message || "Failed to update data. Try again.",
+                    {
+                        position: "top-right",
+                        autoClose: 3000,
+                    }
+                );
             }
-            console.error("Error updating entry", error);
-
+            console.error("Error updating data:", error);
         }
     };
 

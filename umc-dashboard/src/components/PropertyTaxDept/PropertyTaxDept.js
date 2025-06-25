@@ -58,26 +58,30 @@ const PropertyTaxDept = () => {
       });
       fetchTax();
       setShowEditModal(false);
-      toast.success("Tax updated successfully!");
+      toast.success("Property tax data updated successfully!");
     } catch (error) {
       if (
         error.response &&
         error.response.status === 400 &&
-        error.response.data.errors
+        Array.isArray(error.response.data.errors)
       ) {
         error.response.data.errors.forEach((err) => {
-          toast.error(err.message, {
+          const message = typeof err === "string" ? err : err.message || "Validation error";
+          toast.error(message, {
             position: "top-right",
             autoClose: 3000,
           });
         });
       } else {
-        toast.error("Failed to update the property tax data!", {
-          position: "top-right",
-          autoClose: 3000,
-        });
+        toast.error(
+          error.response?.data?.message || "Failed to update property tax dept data. Try again.",
+          {
+            position: "top-right",
+            autoClose: 3000,
+          }
+        );
       }
-      console.error("Error updating property tax data:", error);
+      console.error("Error updating property tax dept data:", error);
     }
   };
 

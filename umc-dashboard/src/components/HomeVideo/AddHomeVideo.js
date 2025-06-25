@@ -3,6 +3,7 @@ import api from "../api";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
 
 const AddHomeVideo = () => {
   const [videoUrl, setVideoUrl] = useState("");
@@ -30,15 +31,44 @@ const AddHomeVideo = () => {
     };
 
     try {
-      await api.post("/home-video", videoData);
-      setErrors({ videoUrl: "" });
-      setVideoUrl("");
-
-      navigate("/home-video");
+      const response = await api.post("/home-video", videoData);
+      if (response.status === 200 || response.status === 201) {
+        setErrors({ videoUrl: "" });
+        setVideoUrl("");
+        toast.success("Home video added successfully!", {
+          position: "top-right",
+          autoClose: 1000,
+          onClose: () => {
+            navigate("/home-video");
+          }
+        });
+      }
     } catch (error) {
-      console.error("Failed to add video. Please try again.");
+      if (
+        error.response &&
+        error.response.status === 400 &&
+        Array.isArray(error.response.data.errors)
+      ) {
+        error.response.data.errors.forEach((err) => {
+          const message = typeof err === "string" ? err : err.message || "Validation error";
+          toast.error(message, {
+            position: "top-right",
+            autoClose: 3000,
+          });
+        });
+      } else {
+        toast.error(
+          error.response?.data?.message || "Failed to add video. Try again.",
+          {
+            position: "top-right",
+            autoClose: 3000,
+          }
+        );
+      }
+      console.error("Error adding video:", error);
     }
   };
+
   return (
     <>
       <div className="page-wrapper">
@@ -102,6 +132,7 @@ const AddHomeVideo = () => {
             </div>
           </div>
         </div>
+        <ToastContainer />
       </div>
     </>
   );

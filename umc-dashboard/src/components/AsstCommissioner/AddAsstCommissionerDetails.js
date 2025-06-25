@@ -72,36 +72,36 @@ const AddAsstCommissionerDetails = () => {
       });
 
       if (response.status === 200 || response.status === 201) {
-              toast.success("Deputy Commissioner data added successfully!", {
-                position: "top-right",
-                autoClose: 1000,
-                onClose: () => {
-                  navigate("/assistant-commissioner");
-                }
-              });
-            }
+        toast.success("Deputy Commissioner data added successfully!", {
+          position: "top-right",
+          autoClose: 1000,
+          onClose: () => {
+            navigate("/assistant-commissioner");
+          }
+        });
+      }
     } catch (error) {
       if (
-              error.response &&
-              error.response.status === 400 &&
-              Array.isArray(error.response.data.errors)
-            ) {
-              error.response.data.errors.forEach((err) => {
-                const message = typeof err === "string" ? err : err.message || "Validation error";
-                toast.error(message, {
-                  position: "top-right",
-                  autoClose: 3000,
-                });
-              });
-            } else {
-              toast.error(
-                error.response?.data?.message || "Failed to Add Assistant commissioner data. Try again.",
-                {
-                  position: "top-right",
-                  autoClose: 3000,
-                }
-              );
-            }
+        error.response &&
+        error.response.status === 400 &&
+        Array.isArray(error.response.data.errors)
+      ) {
+        error.response.data.errors.forEach((err) => {
+          const message = typeof err === "string" ? err : err.message || "Validation error";
+          toast.error(message, {
+            position: "top-right",
+            autoClose: 3000,
+          });
+        });
+      } else {
+        toast.error(
+          error.response?.data?.message || "Failed to Add Assistant commissioner data. Try again.",
+          {
+            position: "top-right",
+            autoClose: 3000,
+          }
+        );
+      }
       console.error(error);
     }
   };

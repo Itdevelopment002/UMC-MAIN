@@ -21,7 +21,7 @@ const MinisterDetails = () => {
   });
   const [imagePreview, setImagePreview] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [imageError, setImageError] = useState(""); // Only for image validation
+  const [imageError, setImageError] = useState("");
 
   const itemsPerPage = 5;
   const totalItems = ministers.length;
@@ -63,7 +63,7 @@ const MinisterDetails = () => {
       image: null,
     });
     setImagePreview(`${baseURL}${minister.image_path}`);
-    setImageError(""); // Reset image error when opening modal
+    setImageError("");
     setShowEditModal(true);
   };
 
@@ -118,25 +118,28 @@ const MinisterDetails = () => {
       if (
         error.response &&
         error.response.status === 400 &&
-        error.response.data.errors
+        Array.isArray(error.response.data.errors)
       ) {
         error.response.data.errors.forEach((err) => {
-          toast.error(err.message, {
+          const message = typeof err === "string" ? err : err.message || "Validation error";
+          toast.error(message, {
             position: "top-right",
             autoClose: 3000,
           });
         });
       } else {
-        toast.error("Failed to update minister. Try again.", {
-          position: "top-right",
-          autoClose: 3000,
-        });
+        toast.error(
+          error.response?.data?.message || "Failed to update minister. Try again.",
+          {
+            position: "top-right",
+            autoClose: 3000,
+          }
+        );
       }
 
       console.error("Error updating minister:", error);
     }
   };
-
 
   const handleCloseDeleteModal = () => setShowDeleteModal(false);
   const handleCloseEditModal = () => {
@@ -149,17 +152,14 @@ const MinisterDetails = () => {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      // Use our global validation function
       const errorMessage = getImageValidationError(file);
-
       if (errorMessage) {
         setImageError(errorMessage);
         return;
       }
-
       setEditData({ ...editData, image: file });
       setImagePreview(URL.createObjectURL(file));
-      setImageError(""); // Clear error if validation passes
+      setImageError("");
     }
   };
 
@@ -242,13 +242,13 @@ const MinisterDetails = () => {
                             </td>
                             <td className="text-center">
                               <button
-                                className="btn btn-success btn-sm"
+                                className="btn btn-success btn-sm m-t-10"
                                 onClick={() => handleEditModalOpen(minister)}
                               >
                                 Edit
                               </button>
                               <button
-                                className="btn btn-danger btn-sm"
+                                className="btn btn-danger btn-sm m-t-10"
                                 onClick={() => handleDeleteModalOpen(minister)}
                               >
                                 Delete
@@ -486,7 +486,6 @@ const MinisterDetails = () => {
           )}
         </div>
       </div>
-
       <ToastContainer />
     </>
   );

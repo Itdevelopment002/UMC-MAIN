@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import api, { baseURL } from "../api";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -15,7 +15,6 @@ const Commissioner = () => {
     const [selectedItem, setSelectedItem] = useState(null);
     const [editData, setEditData] = useState({});
     const [imagePreview, setImagePreview] = useState("");
-    const navigate = useNavigate();
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 5;
 
@@ -50,8 +49,6 @@ const Commissioner = () => {
             toast.error("Failed to fetch Commissioner Details data!");
         }
     };
-
-    console.log(descData);
 
     const handleDelete = async (id, type) => {
         try {
@@ -93,7 +90,6 @@ const Commissioner = () => {
     const handleSaveChanges = async () => {
         try {
             if (modalType === "history") {
-                // Update history data
                 await api.post(`/update-commissioner-desc/${selectedItem.id}`, {
                     description: editData.description,
                     language_code: editData.language_code,
@@ -107,7 +103,6 @@ const Commissioner = () => {
                 );
                 fetchDescData();
             } else if (modalType === "co") {
-                // Prepare form data for CO
                 const formData = new FormData();
                 formData.append("coName", editData.coName);
                 formData.append("designation", editData.designation);
@@ -126,8 +121,6 @@ const Commissioner = () => {
                         "Content-Type": "multipart/form-data",
                     },
                 });
-
-                // Update local CO data
                 setCoData(
                     coData.map((item) =>
                         item.id === selectedItem.id ? { ...item, ...editData } : item
@@ -135,14 +128,9 @@ const Commissioner = () => {
                 );
                 fetchCoData();
             }
-
-            
-
-            // Display success message
-            toast.success('Commissioner Information update successfully'
+            toast.success('Commissioner data update successfully'
             );
             closeModal();
-
         } catch (error) {
             if (
                 error.response &&
@@ -166,7 +154,7 @@ const Commissioner = () => {
                 );
             }
             console.error(error);
-        } 
+        }
     };
 
 

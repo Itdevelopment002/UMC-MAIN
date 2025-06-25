@@ -16,15 +16,12 @@ const AddBottomSlider = () => {
     const file = e.target.files[0];
 
     if (file) {
-      // Use our global validation function
       const errorMessage = getImageValidationError(file);
 
       if (errorMessage) {
-        // Clear the file input if invalid file is selected
         if (fileInputRef.current) {
           fileInputRef.current.value = "";
         }
-        // Set error message
         setErrors({ ...errors, websitelogo: errorMessage });
         return;
       }
@@ -39,8 +36,6 @@ const AddBottomSlider = () => {
     if (!websitelink.trim()) {
       newErrors.websitelink = "Slider Link is required.";
     }
-
-    // Use our global validation function
     const imageError = getImageValidationError(websitelogo);
     if (imageError) {
       newErrors.websitelogo = imageError;
@@ -55,27 +50,21 @@ const AddBottomSlider = () => {
     if (!validateForm()) {
       return;
     }
-
     const formData = new FormData();
     formData.append("websitelink", websitelink);
     formData.append("websitelogo", websitelogo);
-
     try {
       const response = await api.post("/bottom-sliders", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
-
       if (response.status === 200 || response.status === 201) {
-
         setLink("");
         setLogo(null);
-
         if (fileInputRef.current) {
           fileInputRef.current.value = "";
         }
-
         toast.success("Bottom slider added successfully!", {
           position: "top-right",
           autoClose: 1000,
@@ -88,21 +77,25 @@ const AddBottomSlider = () => {
       if (
         error.response &&
         error.response.status === 400 &&
-        error.response.data.errors
+        Array.isArray(error.response.data.errors)
       ) {
         error.response.data.errors.forEach((err) => {
-          toast.error(err.message, {
+          const message = typeof err === "string" ? err : err.message || "Validation error";
+          toast.error(message, {
             position: "top-right",
             autoClose: 3000,
           });
         });
       } else {
-        toast.error("Failed to upload the slider.", {
-          position: "top-right",
-          autoClose: 3000,
-        });
+        toast.error(
+          error.response?.data?.message || "Failed to add bottom slider. Try again.",
+          {
+            position: "top-right",
+            autoClose: 3000,
+          }
+        );
       }
-      console.error("Error adding slider:", error);
+      console.error("Error adding bottom slider:", error);
     }
   };
 

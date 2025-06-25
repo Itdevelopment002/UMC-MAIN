@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import api from "../api";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -21,7 +21,6 @@ const AdministrativeStructure = () => {
     const [structure4CurrentPage, setStructure4CurrentPage] = useState(1);
     const [tableCurrentPage, setTableCurrentPage] = useState(1);
     const itemsPerPage = 5;
-    const navigate = useNavigate();
 
     useEffect(() => {
         fetchStructureData1();
@@ -248,16 +247,15 @@ const AdministrativeStructure = () => {
                 });
             } else {
                 toast.error(
-                    error.response?.data?.message || "Failed to update the entry!",
+                    error.response?.data?.message || "Failed to update the data!",
                     {
                         position: "top-right",
                         autoClose: 3000,
                     }
                 );
             }
-            console.error(error);
+            console.error("Error updating the data:", error);
         }
-        
     };
 
     const tableCurrentPageData = tableData.slice((tableCurrentPage - 1) * itemsPerPage, tableCurrentPage * itemsPerPage);

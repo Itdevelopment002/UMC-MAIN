@@ -16,7 +16,6 @@ const AddAddtCommissionerDesc = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Fetch commissioners list when component mounts
     const fetchCommissioners = async () => {
       try {
         const response = await api.get("/addt-commissioner-details");

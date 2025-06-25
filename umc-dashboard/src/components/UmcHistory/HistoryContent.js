@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import api from "../api";
-//eslint-disable-next-line
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const HistoryContent = () => {
@@ -55,26 +54,26 @@ const HistoryContent = () => {
             toast.success("History Description added successfully!");
         } catch (error) {
             if (
-                    error.response &&
-                    error.response.status === 400 &&
-                    Array.isArray(error.response.data.errors)
-                  ) {
-                    error.response.data.errors.forEach((err) => {
-                      const message = typeof err === "string" ? err : err.message || "Validation error";
-                      toast.error(message, {
+                error.response &&
+                error.response.status === 400 &&
+                Array.isArray(error.response.data.errors)
+            ) {
+                error.response.data.errors.forEach((err) => {
+                    const message = typeof err === "string" ? err : err.message || "Validation error";
+                    toast.error(message, {
                         position: "top-right",
                         autoClose: 3000,
-                      });
                     });
-                  } else {
-                    toast.error(
-                      error.response?.data?.message || "Error adding Description.",
-                      {
+                });
+            } else {
+                toast.error(
+                    error.response?.data?.message || "Error adding Description.",
+                    {
                         position: "top-right",
                         autoClose: 3000,
-                      }
-                    );
-                  }
+                    }
+                );
+            }
             console.error("Error adding Description:", error);
         }
     };
@@ -113,12 +112,10 @@ const HistoryContent = () => {
                     desc.map((work) => (work.id === editData.id ? response.data : work))
                 );
                 fetchDesc();
+                setShowEditModal(false);
                 toast.success("History Description updated successfully!", {
                     position: "top-right",
                     autoClose: 1000,
-                    onClose: () => {
-                        setShowEditModal(false);
-                    }
                 });
             }
         } catch (error) {

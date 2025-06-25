@@ -22,34 +22,25 @@ const AddPortalServices = () => {
         if (!description) newErrors.description = "Service Description is required.";
         if (!link) newErrors.link = "Service Link is required.";
         if (!language) newErrors.language = "Language selection is required.";
-
-        // Use our global validation function
         const imageError = getImageValidationError(portalImage);
         if (imageError) {
             newErrors.portalImage = imageError;
         }
-
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
 
     const handleFileChange = (e) => {
         const file = e.target.files[0];
-
         if (file) {
-            // Use our global validation function
             const errorMessage = getImageValidationError(file);
-
             if (errorMessage) {
-                // Clear the file input if invalid file is selected
                 if (fileInputRef.current) {
                     fileInputRef.current.value = "";
                 }
-                // Set error message
                 setErrors({ ...errors, portalImage: errorMessage });
                 return;
             }
-
             setPortalImage(file);
             setErrors({ ...errors, portalImage: "" });
         }
@@ -104,26 +95,29 @@ const AddPortalServices = () => {
                     }
                 });
             }
-
         } catch (error) {
             if (
                 error.response &&
                 error.response.status === 400 &&
-                error.response.data.errors
+                Array.isArray(error.response.data.errors)
             ) {
                 error.response.data.errors.forEach((err) => {
-                    toast.error(err.message, {
+                    const message = typeof err === "string" ? err : err.message || "Validation error";
+                    toast.error(message, {
                         position: "top-right",
                         autoClose: 3000,
                     });
                 });
             } else {
-                toast.error("Failed to add portal service. Please try again.", {
-                    position: "top-right",
-                    autoClose: 3000,
-                });
+                toast.error(
+                    error.response?.data?.message || "Failed to add portal service. Try again.",
+                    {
+                        position: "top-right",
+                        autoClose: 3000,
+                    }
+                );
             }
-            console.error('Error uploading file:', error);
+            console.error("Error adding portal service:", error);
         }
     };
 

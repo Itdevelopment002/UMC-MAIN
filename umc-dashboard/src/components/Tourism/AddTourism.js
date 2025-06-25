@@ -63,7 +63,6 @@ const AddTourism = () => {
     });
 
     try {
-      // eslint-disable-next-line
       const response = await api.post("/tourism", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -332,7 +331,7 @@ const AddTourism = () => {
             </div>
           </div>
         </div>
-        <ToastContainer/>
+        <ToastContainer />
       </div>
     </>
   );

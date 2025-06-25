@@ -31,17 +31,13 @@ const AddStructureTab4 = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
         if (!validateForm()) return;
-
         try {
             const response = await api.post('/structure-tab4', {
                 ward: ward.trim(),
                 officer: officer.trim(),
                 language_code: language
             });
-
-            navigate('/administrative-structure');
             if (response.status === 200 || response.status === 201) {
                 setWard('');
                 setOfficer('');
@@ -51,7 +47,6 @@ const AddStructureTab4 = () => {
                     autoClose: 1000,
                     onClose: () => {
                         navigate('/administrative-structure');
-
                     }
                 });
             }
