@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import api from "../api";
 import { FaTrash } from "react-icons/fa";
 import { jwtDecode } from "jwt-decode";
+import { toast, ToastContainer } from "react-toastify";
 
 const AddDeptDescription = () => {
     const [description, setDescription] = useState("");
@@ -70,19 +71,47 @@ const AddDeptDescription = () => {
         }
 
         try {
-            await api.post("/department-description", {
+            const response = await api.post("/department-description", {
                 department,
                 description,
                 language_code: language,
                 subDescriptions,
             });
-
-            setDepartment("");
-            setDescription("");
-            setLanguage("");
-            setSubDescriptions([]);
-            navigate("/department-information");
+            if (response.status === 200 || response.status === 201) {
+                setDepartment("");
+                setDescription("");
+                setLanguage("");
+                setSubDescriptions([]);
+                toast.success("Department description added successfully!", {
+                    position: "top-right",
+                    autoClose: 1000,
+                    onClose: () => {
+                        navigate("/department-information");
+                    }
+                });
+            }
         } catch (error) {
+            if (
+                error.response &&
+                error.response.status === 400 &&
+                Array.isArray(error.response.data.errors)
+            ) {
+                error.response.data.errors.forEach((err) => {
+                    const message = typeof err === "string" ? err : err.message || "Validation error";
+                    toast.error(message, {
+                        position: "top-right",
+                        autoClose: 3000,
+                    });
+                });
+            } else {
+                toast.error(
+                    error.response?.data?.message || "Failed to add department description. Try again.",
+                    {
+                        position: "top-right",
+                        autoClose: 3000,
+                    }
+                );
+            }
             console.error("Error adding department description:", error);
         }
     };
@@ -249,6 +278,7 @@ const AddDeptDescription = () => {
                     </div>
                 </div>
             </div>
+            <ToastContainer />
         </div>
     );
 };

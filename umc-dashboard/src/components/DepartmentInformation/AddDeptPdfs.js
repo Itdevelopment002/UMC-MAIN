@@ -4,7 +4,7 @@ import Flatpickr from "react-flatpickr";
 import "flatpickr/dist/themes/material_blue.css";
 import api from "../api";
 import { jwtDecode } from "jwt-decode";
-import { toast, ToastContainer} from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 
 const AddDeptPdfs = () => {
   const [heading, setHeading] = useState("");
@@ -93,12 +93,20 @@ const AddDeptPdfs = () => {
         issue_date: formattedDate,
         language_code: language,
       });
-      setDepartment("");
-      setHeading("");
-      setLink("");
-      setIssueDate("");
-      setLanguage("");
-      navigate("/department-information");
+      if (response.status === 200 || response.status === 201) {
+        setDepartment("");
+        setHeading("");
+        setLink("");
+        setIssueDate("");
+        setLanguage("");
+        toast.success("Department pdf added successfully!", {
+          position: "top-right",
+          autoClose: 1000,
+          onClose: () => {
+            navigate("/department-information");
+          }
+        });
+      }
     } catch (error) {
       if (
         error.response &&

@@ -233,27 +233,31 @@ const validateUserDetails = [
 
 
 const validateUpdateUserDetails = [
-    alphabetOnlyValidator("fullname", minNameLength, maxNameLength, "Full name", nameRegex),
+    body("fullname")
+        .optional()
+        .trim()
+        .isLength({ min: 3, max: 50 }).withMessage("Full name must be between 3 and 50 characters")
+        .matches(nameRegex).withMessage("Full name can only contain letters, spaces, parentheses, and dots"),
 
     body("role")
         .trim()
-        .notEmpty().withMessage("Role is required")
+        .optional()
         .bail()
         .isIn(["Superadmin", "Admin"]).withMessage("Invalid role"),
 
     body("email")
         .trim()
-        .notEmpty().withMessage("Email is required")
+        .optional()
         .bail()
         .isEmail().withMessage("Invalid email format")
         .normalizeEmail(),
 
     body("permission")
-        .notEmpty().withMessage("Permission is required"),
+        .optional(),
 
     body("status")
         .trim()
-        .notEmpty().withMessage("Status is required")
+        .optional()
         .bail()
         .isIn(["Active", "Deactive"]).withMessage("Invalid status"),
 
@@ -568,6 +572,52 @@ const validateUpdateDeptBanner = [
 ];
 
 
+const validateDeptDescription = [
+    alphabetOnlyValidator("department", minDepartmentLength, maxDepartmentLength, "Department name", departmentRegex),
+    alphabetOnlyValidator("description", minDescriptionLength, maxDescriptionLength, "Department description", descriptionRegex),
+    languageCodeValidator("language_code"),
+    body("subDescriptions")
+        .optional()
+        .isArray().withMessage("SubDescriptions must be an array")
+        .bail()
+        .custom((arr) =>
+            arr.every(desc =>
+                typeof desc === "string" &&
+                desc.length > 0 &&
+                descriptionRegex.test(desc)
+            )
+        )
+        .withMessage("Each subDescription must be a non-empty valid string"),
+    validateRequest,
+];
+
+
+const validateDeptHod = [
+    alphabetOnlyValidator("department", minNameLength, maxNameLength, "Department name", nameRegex),
+    alphabetOnlyValidator("hodName", minHeadingLength, maxHeadingLength, "Hod name", descriptionRegex),
+    alphabetOnlyValidator("designation", minDesignationLength, maxDesignationLength, "Designation", designationRegex),
+    alphabetOnlyValidator("education", minHeadingLength, maxHeadingLength, "Education qualification", descriptionRegex),
+    alphabetOnlyValidator("address", minHeadingLength, maxHeadingLength, "Office Address", descriptionRegex),
+    phoneNumberValidator("number", minPhoneNumberLength, maxPhoneNumberLength, "Phone Number", phoneRegex),
+    alphabetOnlyValidator("email", minHeadingLength, maxHeadingLength, "Email Address", descriptionRegex),
+    languageCodeValidator("language_code"),
+    validateRequest,
+];
+
+
+const validateUpdateDeptHod = [
+    alphabetOnlyValidator("department", minNameLength, maxNameLength, "Department name", nameRegex),
+    alphabetOnlyValidator("name", minHeadingLength, maxHeadingLength, "Hod name", descriptionRegex),
+    alphabetOnlyValidator("designation", minDesignationLength, maxDesignationLength, "Designation", designationRegex),
+    alphabetOnlyValidator("education", minHeadingLength, maxHeadingLength, "Education qualification", descriptionRegex),
+    alphabetOnlyValidator("address", minHeadingLength, maxHeadingLength, "Office Address", descriptionRegex),
+    phoneNumberValidator("number", minPhoneNumberLength, maxPhoneNumberLength, "Phone Number", phoneRegex),
+    alphabetOnlyValidator("email", minHeadingLength, maxHeadingLength, "Email Address", descriptionRegex),
+    languageCodeValidator("language_code"),
+    validateRequest,
+];
+
+
 const validateDeptPdf = [
     alphabetOnlyValidator("department", minDepartmentLength, maxDepartmentLength, "Department name", departmentRegex),
     alphabetOnlyValidator("heading", minDescriptionLength, maxDescriptionLength, "Pdf heading", descriptionRegex),
@@ -636,6 +686,62 @@ const validateVideoGallery = [
 
 const validateUpdateVideoGallery = [
     urlValidator("video_url", "Video link"),
+    validateRequest,
+];
+
+
+const validateHomeProject = [
+    alphabetOnlyValidator("heading", minHeadingLength, maxHeadingLength, "Project Heading", descriptionRegex),
+    alphabetOnlyValidator("description", minDescriptionLength, maxDescriptionLength, "Project Description", descriptionRegex),
+    urlValidator("link", "Project Link"),
+    languageCodeValidator("language_code"),
+    validateRequest,
+];
+
+
+const validateProjectCategory = [
+    alphabetOnlyValidator("heading", minHeadingLength, maxHeadingLength, "Project Heading", descriptionRegex),
+    languageCodeValidator("language_code"),
+    validateRequest,
+];
+
+
+const validateProjectDescription = [
+    alphabetOnlyValidator("department", minHeadingLength, maxHeadingLength, "Project Heading", descriptionRegex),
+    alphabetOnlyValidator("description", minDescriptionLength, maxDescriptionLength, "Project Description", descriptionRegex),
+    languageCodeValidator("language_code"),
+    body("subDescriptions")
+        .optional()
+        .isArray().withMessage("SubDescriptions must be an array")
+        .bail()
+        .custom((arr) =>
+            arr.every(desc =>
+                typeof desc === "string" &&
+                desc.length > 0 &&
+                descriptionRegex.test(desc)
+            )
+        )
+        .withMessage("Each subDescription must be a non-empty valid string matching the required format"),
+    validateRequest,
+];
+
+
+const validateUpdateProjectDescription = [
+    alphabetOnlyValidator("heading", minHeadingLength, maxHeadingLength, "Project Heading", descriptionRegex),
+    alphabetOnlyValidator("description", minDescriptionLength, maxDescriptionLength, "Project Description", descriptionRegex),
+    languageCodeValidator("language_code"),
+    body("subDescriptions")
+        .optional()
+        .isArray().withMessage("SubDescriptions must be an array")
+        .bail()
+        .custom((arr) =>
+            arr.every(desc =>
+                typeof desc === "string" &&
+                desc.length > 0 &&
+                descriptionRegex.test(desc)
+            )
+        )
+        .withMessage("Each subDescription must be a non-empty valid string matching the required format"),
     validateRequest,
 ];
 
@@ -814,6 +920,9 @@ module.exports = {
     validateDepartment,
     validateDeptBanner,
     validateUpdateDeptBanner,
+    validateDeptHod,
+    validateUpdateDeptHod,
+    validateDeptDescription,
     validateDeptPdf,
     validateAuditReport,
     validateTender,
@@ -823,6 +932,10 @@ module.exports = {
     validateUpdatePhotoGallery,
     validateVideoGallery,
     validateUpdateVideoGallery,
+    validateHomeProject,
+    validateProjectCategory,
+    validateProjectDescription,
+    validateUpdateProjectDescription,
     validateRti,
     validateRecruitment,
     validateBanner,

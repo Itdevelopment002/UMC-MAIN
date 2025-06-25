@@ -110,14 +110,7 @@ const AddHodDetails = () => {
             const response = await api.post("/hod-details", formDataToSend, {
                 headers: { "Content-Type": "multipart/form-data" },
             });
-
-            if (response.status === 201) {
-                toast.success("HOD details added successfully!", {
-                    position: "top-right",
-                    autoClose: 3000,
-                });
-
-                // Reset form fields
+            if (response.status === 200 || response.status === 201) {
                 setHodName("");
                 setDepartment("");
                 setDesignation("");
@@ -127,19 +120,40 @@ const AddHodDetails = () => {
                 setEmail("");
                 setLanguage("");
                 setSelectedFile(null);
-
                 if (fileInputRef.current) {
                     fileInputRef.current.value = "";
                 }
-
-                navigate("/department-information");
+                toast.success("Hod detail added successfully!", {
+                    position: "top-right",
+                    autoClose: 1000,
+                    onClose: () => {
+                        navigate("/department-information");
+                    }
+                });
             }
         } catch (error) {
-            toast.error("Failed to add HOD details. Try again.", {
-                position: "top-right",
-                autoClose: 3000,
-            });
-            console.error("Error adding HOD details:", error);
+            if (
+                error.response &&
+                error.response.status === 400 &&
+                Array.isArray(error.response.data.errors)
+            ) {
+                error.response.data.errors.forEach((err) => {
+                    const message = typeof err === "string" ? err : err.message || "Validation error";
+                    toast.error(message, {
+                        position: "top-right",
+                        autoClose: 3000,
+                    });
+                });
+            } else {
+                toast.error(
+                    error.response?.data?.message || "Failed to add hod detail. Try again.",
+                    {
+                        position: "top-right",
+                        autoClose: 3000,
+                    }
+                );
+            }
+            console.error("Error adding hod detail:", error);
         }
     };
 

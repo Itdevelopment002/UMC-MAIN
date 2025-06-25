@@ -86,20 +86,23 @@ const AddDepartmentBanner = () => {
         formDataToSend.append("departmentName", departmentName);
 
         try {
-            //eslint-disable-next-line
             const response = await api.post("/department-banner", formDataToSend, {
                 headers: { "Content-Type": "multipart/form-data" },
             });
-
-
-            setDepartmentName("");
-            setSelectedFile(null);
-            if (fileInputRef.current) {
-                fileInputRef.current.value = "";
+            if (response.status === 200 || response.status === 201) {
+                setDepartmentName("");
+                setSelectedFile(null);
+                if (fileInputRef.current) {
+                    fileInputRef.current.value = "";
+                }
+                toast.success("Department banner added successfully!", {
+                    position: "top-right",
+                    autoClose: 1000,
+                    onClose: () => {
+                        navigate("/department-information");
+                    }
+                });
             }
-
-            navigate("/department-information");
-
         } catch (error) {
             if (
                 error.response &&
