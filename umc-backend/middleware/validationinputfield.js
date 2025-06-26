@@ -29,7 +29,7 @@ const minHeadingLength = 3;
 const maxHeadingLength = 300;
 
 const minPhoneNumberLength = 5;
-const maxPhoneNumberLength = 20;
+const maxPhoneNumberLength = 30;
 
 const minDepartmentLength = 5;
 const maxDepartmentLength = 100;
