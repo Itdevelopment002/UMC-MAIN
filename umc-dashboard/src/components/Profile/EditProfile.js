@@ -9,7 +9,7 @@ import { jwtDecode } from "jwt-decode";
 import image from "../../assets/img/profile-image.jpg"
 import CustomEncryption from "../../encryption/CustomEncrypt";
 
-const EditProfile = () => {
+const EditProfile = ({ onLogout }) => {
     const navigate = useNavigate();
     const [fullname, setFullname] = useState("");
     const [email, setEmail] = useState("");
@@ -191,14 +191,15 @@ const EditProfile = () => {
             const { message, requirements } = response.data;
 
             if (response.data.success || message === "Password updated successfully") {
-                toast.success("Password updated successfully!");
                 setPassword("");
                 setConfirmPassword("");
                 setOldPassword("");
-                setTimeout(() => {
-                    localStorage.clear();
-                    window.location.href = "/admin";
-                }, 2000);
+                toast.success("Password updated successfully!", {
+                    autoClose: 1000,
+                    onClose: () => {
+                        onLogout();
+                    },
+                });
             } else if (message === "Weak password - doesn't meet all requirements" && requirements) {
                 toast.error("Password must meet all requirements");
             } else {

@@ -404,13 +404,16 @@ const AddUsers = () => {
             <div className="card-box">
               <div className="card-block">
                 <h4 className="page-title">Add User</h4>
-
+                <small className="text-muted d-block mb-2">
+                  📌 <b className="text-danger">Note:</b><br />
+                  1. Email format should be like this – <b><i>example@gmail.com</i></b><br />
+                  2. If <b>Admin</b> role is selected, you must select a department name in both <b>English</b> and <b>Marathi</b> under the permission field.<br />
+                </small>
                 {errors.submit && (
                   <div className="alert alert-danger">
                     {errors.submit}
                   </div>
                 )}
-
                 <form onSubmit={handleSubmit}>
                   <div className="form-group">
                     <label>

@@ -525,7 +525,7 @@ function App() {
                         <Route path="/users" element={<Users />} />
                         <Route path="/add-users" element={<AddUsers />} />
                         <Route path="/view-profile" element={<ViewProfile onLogout={handleLogout} />} />
-                        <Route path="/edit-profile" element={<EditProfile />} />
+                        <Route path="/edit-profile" element={<EditProfile onLogout={handleLogout} />} />
 
                         {/* Last Visited */}
                         <Route path="*" element={<Navigate to="/home" replace />} />
@@ -540,7 +540,7 @@ function App() {
                         <Route path="/add-hod-details" element={<AddHodDetails />} />
                         <Route path="/add-department-pdfs" element={<AddDeptPdfs />} />
                         <Route path="/view-profile" element={<ViewProfile onLogout={handleLogout} />} />
-                        <Route path="/edit-profile" element={<EditProfile />} />
+                        <Route path="/edit-profile" element={<EditProfile onLogout={handleLogout} />} />
 
                         {userData?.permission?.includes("Audit Department") && (
                           <>
