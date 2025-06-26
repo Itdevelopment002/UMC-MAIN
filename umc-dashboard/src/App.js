@@ -287,7 +287,7 @@ function App() {
       localStorage.removeItem("loginTime");
       setUserData({});
       setIsAuthenticated(false);
-      navigate("/");
+      navigate("/admin");
     }
   };
 

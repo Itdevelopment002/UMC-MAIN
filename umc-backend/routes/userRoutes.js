@@ -4,7 +4,7 @@ const db = require("../config/db.js");
 const bcrypt = require("bcryptjs");
 const { verifyToken } = require('../middleware/jwtMiddleware.js');
 const sanitizeInput = require('../middleware/sanitizeInput.js');
-const {CustomDecryption} = require("../utils/CustomDecryption.js");
+const { CustomDecryption } = require("../utils/CustomDecryption.js");
 const { validateUserDetails, validateUpdateUserDetails } = require("../middleware/validationinputfield.js");
 
 const commonPasswords = [
@@ -214,9 +214,9 @@ router.post("/edit-users/:id", verifyToken, sanitizeInput, validateUpdateUserDet
   const { id } = req.params;
 
   const { fullname, email, role, permission, status } = req.body;
-  // Only allow if user is Superadmin
-  if (req.user.role !== 'Superadmin') {
-    return res.status(403).json({ message: 'Unauthorized' });
+  
+  if (req.user.role === "Admin" && parseInt(id) !== req.user.userId) {
+    return res.status(403).json({ message: 'Unauthorized: Admins can only edit their own profile' });
   }
 
   try {
@@ -278,7 +278,7 @@ router.post("/edit-users/:id/update-password", verifyToken, sanitizeInput, async
     return res.status(403).json({ message: 'Unauthorized' });
   }
   const newPassword = await nonceDecodedPassword(finalNewPassword, id);
- 
+
   const hasMinLength = newPassword.length >= 8;
   const hasUpper = /[A-Z]/.test(newPassword);
   const hasLower = /[a-z]/.test(newPassword);
@@ -332,13 +332,13 @@ router.post('/users/:id/verify-update-password', verifyToken, async (req, res) =
   try {
     const { id } = req.params;
     const { finalOldPassword, finalNewPassword } = req.body;
-  // Only allow if user is self
-  if (parseInt(id) !== req.user.userId) {
-    return res.status(403).json({ message: 'Unauthorized' });
-  }
-  //password decode
-  const oldPassword = await nonceDecodedPassword(finalOldPassword, id);
-  const newPassword = await nonceDecodedPassword(finalNewPassword, id);
+    // Only allow if user is self
+    if (parseInt(id) !== req.user.userId) {
+      return res.status(403).json({ message: 'Unauthorized' });
+    }
+    //password decode
+    const oldPassword = await nonceDecodedPassword(finalOldPassword, id);
+    const newPassword = await nonceDecodedPassword(finalNewPassword, id);
 
     const selectQuery = "SELECT password FROM users WHERE id = ?";
     db.query(selectQuery, [id], async (err, results) => {
