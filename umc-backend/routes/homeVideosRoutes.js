@@ -44,14 +44,29 @@ router.post("/home-video", verifyToken, sanitizeInput, validateHomeVideo, (req, 
     return res.status(400).json({ message: "Video url is required." });
   }
 
-  const updateSql = "INSERT INTO home_video (video_url) VALUES (?)";
-  const updateParams = [videoUrl];
+  const countSql = "SELECT COUNT(*) AS count FROM home_video";
 
-  db.query(updateSql, updateParams, (err) => {
-    if (err) {
-      return res.status(500).json({ message: "Database error", error: err });
+  db.query(countSql, (countErr, countResult) => {
+    if (countErr) {
+      return res.status(500).json({ message: "Database error while checking total videos count", error: countErr });
     }
-    res.status(200).json({ message: "Video added successfully" });
+
+    const totalVideos = countResult[0].count;
+    if (totalVideos >= 2) {
+      return res.status(400).json({
+        errors: [{ message: "You can add only 2 videos in total" }],
+      });
+    }
+
+    const updateSql = "INSERT INTO home_video (video_url) VALUES (?)";
+    const updateParams = [videoUrl];
+
+    db.query(updateSql, updateParams, (err) => {
+      if (err) {
+        return res.status(500).json({ message: "Database error", error: err });
+      }
+      res.status(200).json({ message: "Video added successfully" });
+    });
   });
 });
 

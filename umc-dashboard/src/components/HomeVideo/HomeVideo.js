@@ -145,13 +145,25 @@ const HomeVideo = () => {
                     <div className="col-sm-4 col-3">
                       <h4 className="page-title">Home Video</h4>
                     </div>
-                    <div className="col-sm-8 col-9 text-right m-b-20">
-                      <Link
-                        to="/add-home-video"
-                        className="btn btn-primary btn-rounded float-right"
-                      >
-                        <i className="fa fa-plus"></i> Add Video
-                      </Link>
+                    <div className="col-sm-8 col-9 text-right m-b-20 position-relative">
+                      <div className="tooltip-container">
+                        <Link
+                          to={videos.length > 1 ? "#" : "/add-home-video"}
+                          className={`btn btn-primary btn-rounded float-right ${videos.length > 1 ? "disabled-custom-button" : ""}`}
+                          onClick={(e) => {
+                            if (videos.length > 1) {
+                              e.preventDefault();
+                            }
+                          }}
+                        >
+                          <i className="fa fa-plus"></i> Add Video
+                        </Link>
+                        {videos.length > 1 && (
+                          <div className="custom-tooltip">
+                            Maximum 2 videos allowed
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </div>
                   <div className="table-responsive">
