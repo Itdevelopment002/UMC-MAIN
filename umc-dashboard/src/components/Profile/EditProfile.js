@@ -197,7 +197,7 @@ const EditProfile = () => {
                 setOldPassword("");
                 setTimeout(() => {
                     localStorage.clear();
-                    window.location.href = "/";
+                    window.location.href = "/admin";
                 }, 2000);
             } else if (message === "Weak password - doesn't meet all requirements" && requirements) {
                 toast.error("Password must meet all requirements");
