@@ -160,7 +160,7 @@ const HomeVideo = () => {
                         </Link>
                         {videos.length > 1 && (
                           <div className="custom-tooltip">
-                            Maximum 2 videos allowed
+                            You can add a maximum of 2 Videos only
                           </div>
                         )}
                       </div>

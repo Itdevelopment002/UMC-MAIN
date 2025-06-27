@@ -2,7 +2,7 @@ const { body, validationResult } = require("express-validator");
 
 // Regex rules
 const nameRegex = /^[A-Za-z\u0900-\u097F\s().]+$/;
-const designationRegex = /^[A-Za-z\u0900-\u097F\s.(),-]+$/;
+const designationRegex = /^[A-Za-z\u0900-\u097F\s.&(),-]+$/;
 const menuNameRegex = /^[A-Za-z\u0900-\u097F\u0966-\u096F0-9.&\s]+$/;
 const descriptionRegex = /^[A-Za-z\u0900-\u097F\u0966-\u096F0-9\s.,()'"‘’“”—–_+%\-:\/।\[\]&]+$/;
 const phoneRegex = /^[0-9\u0966-\u096F+\-()/\s]+$/;
@@ -581,7 +581,7 @@ const validateDeptDescription = [
 
 // HOD Details Validation
 const validateDeptHod = [
-    alphabetOnlyValidator("department", minNameLength, maxNameLength, "Department name", nameRegex),
+    alphabetOnlyValidator("department", minNameLength, maxNameLength, "Department name", departmentRegex),
     alphabetOnlyValidator("hodName", minHeadingLength, maxHeadingLength, "Hod name", descriptionRegex),
     alphabetOnlyValidator("designation", minDesignationLength, maxDesignationLength, "Designation", designationRegex),
     alphabetOnlyValidator("education", minHeadingLength, maxHeadingLength, "Education qualification", descriptionRegex),
