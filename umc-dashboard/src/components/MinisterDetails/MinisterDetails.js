@@ -204,7 +204,7 @@ const MinisterDetails = () => {
                         </Link>
                         {ministers.length > 7 && (
                           <div className="custom-tooltip">
-                            Maximum 4 ministers allowed per language
+                            You can add a maximum of 4 Minister profiles per language
                           </div>
                         )}
                       </div>
