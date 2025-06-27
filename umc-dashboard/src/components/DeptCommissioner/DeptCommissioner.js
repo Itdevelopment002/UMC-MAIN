@@ -178,8 +178,8 @@ const DeptCommissioner = () => {
                     },
                 });
                 fetchCoData();
+                toast.success("Commissioner details updated successfully!");
             }
-            toast.success("Commissioner details updated successfully!");
             closeModal();
             navigate("/deputy-commissioner");
         } catch (error) {

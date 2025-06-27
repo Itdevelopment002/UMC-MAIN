@@ -4,7 +4,7 @@ const { body, validationResult } = require("express-validator");
 const nameRegex = /^[A-Za-z\u0900-\u097F\s().]+$/;
 const designationRegex = /^[A-Za-z\u0900-\u097F\s.&(),-]+$/;
 const menuNameRegex = /^[A-Za-z\u0900-\u097F\u0966-\u096F0-9.&\s]+$/;
-const descriptionRegex = /^[A-Za-z\u0900-\u097F\u0966-\u096F0-9\s.,()'"‘’“”—–_+%\-:\/।\[\]&]+$/;
+const descriptionRegex = /^[A-Za-z\u0900-\u097F\u0966-\u096F0-9\s.,()'"‘’“”—–_+%\-:\/।\[\]&\u200d]+$/;
 const phoneRegex = /^[0-9\u0966-\u096F+\-()/\s]+$/;
 const departmentRegex = /^[A-Za-z\u0900-\u097F\s.&]+$/;
 
@@ -581,7 +581,7 @@ const validateDeptDescription = [
 
 // HOD Details Validation
 const validateDeptHod = [
-    alphabetOnlyValidator("department", minNameLength, maxNameLength, "Department name", departmentRegex),
+    alphabetOnlyValidator("department", minDepartmentLength, maxDepartmentLength, "Department name", departmentRegex),
     alphabetOnlyValidator("hodName", minHeadingLength, maxHeadingLength, "Hod name", descriptionRegex),
     alphabetOnlyValidator("designation", minDesignationLength, maxDesignationLength, "Designation", designationRegex),
     alphabetOnlyValidator("education", minHeadingLength, maxHeadingLength, "Education qualification", descriptionRegex),
@@ -592,7 +592,7 @@ const validateDeptHod = [
     validateRequest,
 ];
 const validateUpdateDeptHod = [
-    alphabetOnlyValidator("department", minNameLength, maxNameLength, "Department name", nameRegex),
+    alphabetOnlyValidator("department", minDepartmentLength, maxDepartmentLength, "Department name", departmentRegex),
     alphabetOnlyValidator("name", minHeadingLength, maxHeadingLength, "Hod name", descriptionRegex),
     alphabetOnlyValidator("designation", minDesignationLength, maxDesignationLength, "Designation", designationRegex),
     alphabetOnlyValidator("education", minHeadingLength, maxHeadingLength, "Education qualification", descriptionRegex),
