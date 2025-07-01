@@ -1,5 +1,6 @@
 :root {
   --global-font-family: 'Roboto', sans-serif;
+  --base-font-size: 16px;
 }
 
 body {
@@ -64,4 +65,12 @@ body::before {
 [data-aos].aos-animate {
   transform: translateY(0);
   opacity: 1;
+}
+
+.custom-commissioner-data{
+  font-size: calc(var(--base-font-size));
+}
+
+.custom-property-text{
+  font-size: calc(var(--base-font-size));
 }

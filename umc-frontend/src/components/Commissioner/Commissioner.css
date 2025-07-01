@@ -28,7 +28,7 @@
   line-height: 1.8;
   margin-bottom: 15px;
   font-weight: 500;
-  font-size: 16px;
+  font-size: calc(var(--base-font-size));
   color: #666565;
   word-spacing: 0.1rem;
 }
@@ -67,7 +67,7 @@
 
 #commissioner-css .text-box {
   flex-direction: column;
-  font-size: 16px;
+  font-size: calc(var(--base-font-size));
   word-break: break-word;
 }
 
@@ -91,6 +91,7 @@
 #commissioner-css .commisioner-overview h4 {
   color: #000000;
   margin-left: 15px;
+  font-size: calc(var(--base-font-size) + 8px);
 }
 
 @media (max-width: 768px) {

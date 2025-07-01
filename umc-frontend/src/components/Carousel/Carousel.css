@@ -18,7 +18,7 @@
   border-radius: 9px;
 }
 
-.custom-flex{
+.custom-flex {
   display: flex;
 }
 
@@ -33,6 +33,7 @@
   font-family: 'Roboto';
   color: #1A2B3B !important;
   font-weight: 700;
+  font-size: calc(var(--base-font-size)) !important;
 }
 
 .custom-profile-card .position-custom {
@@ -40,6 +41,7 @@
   margin-top: 2px;
   color: #1A2B3B !important;
   font-weight: 600;
+  font-size: calc(var(--base-font-size) - 2px) !important;
 }
 
 .swiper-pagination {
@@ -60,7 +62,8 @@
   border: 1px solid #fff !important;
   background-color: #7B202A !important;
 }
-.swiper-pagination-bullet:not(:first-child){
+
+.swiper-pagination-bullet:not(:first-child) {
   margin-left: 15px !important;
 
 }
@@ -107,7 +110,7 @@
   .custom-profile-card {
     margin-bottom: 20px;
     margin-top: 10px;
-    padding: 12px 10px ;
+    padding: 12px 10px;
     box-shadow: 0 10px 10px rgba(142, 140, 140, 0.4);
     border-radius: 12px;
   }
@@ -124,6 +127,7 @@
   .home-carousel-section {
     flex-direction: column-reverse;
   }
+
   .custom-profile-card {
     margin-bottom: 10px;
     margin-top: 20px;
@@ -141,11 +145,12 @@
 }
 
 @media (max-width: 992px) {
-  
+
   .custom-profile-card {
     margin-bottom: 10px;
     margin-top: 10px !important;
   }
+
   .home-carousel-section {
     flex-direction: column-reverse;
     margin-bottom: 0px !important;
@@ -231,6 +236,7 @@
     height: 200px !important;
     width: 100% !important;
   }
+
   .custom-profile-card1 {
     margin-bottom: -10px !important;
   }

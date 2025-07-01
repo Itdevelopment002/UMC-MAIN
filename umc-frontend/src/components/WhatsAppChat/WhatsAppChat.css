@@ -1,5 +1,5 @@
 .whatsapp-name {
-  font-size: 16px;
+  font-size: calc(var(--base-font-size));
   font-weight: 600;
   padding-bottom: 0;
   margin-bottom: 0;
@@ -30,7 +30,7 @@ a.blantershow-chat {
   z-index: 98;
   bottom: 6px;
   right: 30px;
-  font-size: 15px;
+  font-size: calc(var(--base-font-size) - 1px);
   padding: 9px 25px;
   border-radius: 30px;
   box-shadow: 0 1px 15px rgba(32, 33, 36, 0.28);
@@ -53,7 +53,7 @@ a.blantershow-chat svg {
 }
 
 .header-chat p {
-  font-size: 14px;
+  font-size: calc(var(--base-font-size) - 2px);
   line-height: 1.7;
   margin: 0;
   color: #fff;
@@ -87,14 +87,14 @@ a.informasi:hover {
 
 #get-label,
 span.chat-label {
-  font-size: 12px;
+  font-size: calc(var(--base-font-size) - 4px);
   color: #888;
 }
 
 #get-nama,
 span.chat-nama {
   margin: 5px 0 0;
-  font-size: 15px;
+  font-size: calc(var(--base-font-size) - 1px);
   font-weight: 700;
   color: #222;
 }
@@ -115,7 +115,7 @@ textarea#chat-input {
   outline: none;
   resize: none;
   padding: 5px 10px 5px;
-  font-size: 14px;
+  font-size: calc(var(--base-font-size) - 2px);
   background: #fff;
   overflow: hidden;
 }
@@ -142,7 +142,7 @@ a#send-it svg {
 .first-msg span {
   background: #e2e2e2;
   color: #333;
-  font-size: 14.2px;
+  font-size: calc(var(--base-font-size) - 1.8px);
   line-height: 1.7;
   border-radius: 10px;
   padding: 15px 20px;
@@ -163,7 +163,7 @@ a.close-chat {
   top: 5px;
   right: 15px;
   color: #fff;
-  font-size: 30px;
+  font-size: calc(var(--base-font-size) + 14px);
 }
 
 @keyframes ZpjSY {
@@ -358,21 +358,21 @@ a.close-chat {
 }
 
 .bMIBDo {
-  font-size: 13px;
+  font-size: calc(var(--base-font-size) - 3px);
   font-weight: 700;
   line-height: 18px;
   color: rgba(0, 0, 0, 0.4);
 }
 
 .iSpIQi {
-  font-size: 14px;
+  font-size: calc(var(--base-font-size) - 2px);
   line-height: 19px;
   margin-top: 4px;
   color: #111111;
 }
 
 .iSpIQi {
-  font-size: 14px;
+  font-size: calc(var(--base-font-size) - 2px);
   line-height: 19px;
   margin-top: 4px;
   color: #111111;
@@ -381,7 +381,7 @@ a.close-chat {
 .cqCDVm {
   text-align: right;
   margin-top: 4px;
-  font-size: 12px;
+  font-size: calc(var(--base-font-size) - 4px);
   line-height: 16px;
   color: rgba(17, 17, 17, 0.5);
   margin-right: -8px;

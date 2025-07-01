@@ -22,7 +22,7 @@
 }
 
 #history-css .history-title {
-  font-size: 28px;
+  font-size: calc(var(--base-font-size) + 12px);
   font-weight: bold;
   margin-top: 10px;
   margin-bottom: 25px;
@@ -42,7 +42,7 @@
 }
 
 #history-css .history-section .section-title {
-  font-size: 2rem;
+  font-size: calc(var(--base-font-size) * 2);
   border-left: 5px solid #ffa500;
   padding-left: 15px;
   margin-bottom: 20px;
@@ -53,7 +53,7 @@
   line-height: 1.9;
   margin-bottom: 5px;
   font-weight: 500;
-  font-size: 16px;
+  font-size: calc(var(--base-font-size));
   color: #666565;
   word-spacing: 0.3rem;
 }

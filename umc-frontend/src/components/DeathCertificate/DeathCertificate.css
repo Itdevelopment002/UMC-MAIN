@@ -77,7 +77,7 @@
 }
 
 #death-css .left-content .tab-description {
-  font-size: 14px;
+  font-size: calc(var(--base-font-size) - 2px);
   color: #666;
 }
 
@@ -104,7 +104,7 @@
   }
 
   .location-title {
-    font-size: 26px;
+    font-size: calc(var(--base-font-size) + 10px);
   }
 }
 

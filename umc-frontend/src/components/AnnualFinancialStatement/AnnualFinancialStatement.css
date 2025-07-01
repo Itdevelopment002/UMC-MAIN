@@ -29,6 +29,6 @@
 
 @media (max-width: 575.98px) {
   #annual-css .location-title {
-    font-size: 22px;
+    font-size: calc(var(--base-font-size) + 6px);
   }
 }

@@ -3,7 +3,7 @@
   line-height: 1.8;
   margin-bottom: 16px;
   font-weight: 400;
-  font-size: 16px;
+  font-size: calc(var(--base-font-size));
   color: #666565;
   word-spacing: 0.1rem;
   font-family: 'Roboto';
@@ -22,7 +22,7 @@
 #rts-css .table-heading-styling {
   background: #EDEDED !important;
   color: #000000 !important;
-  font-size: 15px !important;
+  font-size: calc(var(--base-font-size) - 1px) !important;
   font-weight: 700 !important;
   line-height: 16.41px !important;
   padding: 10px 10px !important;
@@ -30,6 +30,6 @@
 
 #rts-css td {
   font-weight: 500 !important;
-  font-size: 14px !important;
+  font-size: calc(var(--base-font-size) - 2px) !important;
   line-height: 17.41px !important;
 }

@@ -46,7 +46,7 @@
 .custom-arrow {
   background: none;
   border: none;
-  font-size: 30px;
+  font-size: calc(var(--base-font-size) - 14px);
   color: #333;
   cursor: pointer;
   position: absolute;

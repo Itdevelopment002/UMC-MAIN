@@ -12,7 +12,7 @@
 
 .last-updated-text {
   margin: 0;
-  font-size: 13px !important;
+  font-size: calc(var(--base-font-size) - 3px) !important;
   font-family: 'Roboto' !important;
 }
 

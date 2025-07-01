@@ -64,7 +64,7 @@ const Tourism = () => {
                 <div className="container-fluid font-location mt-4 mb-5" id="tourism-css">
                     <nav className="breadcrumb">
                         <Link to="/" className="breadcrumb-item text-decoration-none">{t('location.home')}</Link>
-                        <Link to="#" className="breadcrumb-item text-decoration-none">{t('location.aboutumc')}</Link>
+                        <span className="breadcrumb-item text-decoration-none">{t('location.aboutumc')}</span>
                         <span className="breadcrumb-item active1">{t('tourism.tourismText')}</span>
                     </nav>
                     <h2 className="location-title">

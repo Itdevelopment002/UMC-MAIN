@@ -105,7 +105,7 @@ const PropertyTax = () => {
         <div className="container-fluid font-location mt-4 mb-5" id="property-css">
           <nav className="breadcrumb">
             <Link to="/" className="breadcrumb-item text-decoration-none">{t('home1')}</Link>
-            <Link to="#" className="breadcrumb-item text-decoration-none">{t('onlineServices')}</Link>
+            <span className="breadcrumb-item text-decoration-none">{t('onlineServices')}</span>
             <span className="breadcrumb-item active1">{t('propertyTaxPayment.name')}</span>
           </nav>
 
@@ -140,7 +140,7 @@ const PropertyTax = () => {
                         <div className="col-md-6 col-sm-12 d-flex align-items-center justify-content-start">
                           <div className="tab-description">
                             {activeTabData.description.map((desc, index) => (
-                              <p key={index}>
+                              <p key={index} className="custom-property-text">
                                 {desc}{" "}
                                 {index === 0 && activeTabData.url && (
                                   <Link to={activeTabData.url} target="_blank">{t('clickHere')}</Link>

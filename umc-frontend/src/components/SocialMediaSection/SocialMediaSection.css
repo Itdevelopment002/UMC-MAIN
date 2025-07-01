@@ -8,7 +8,7 @@
 }
 
 #social-media-section .title-inner h2 {
-  font-size: 1.5rem;
+  font-size: calc(var(--base-font-size) * 1.5);
   font-weight: 600;
 }
 
@@ -18,7 +18,7 @@
 }
 
 #social-media-section .card-header {
-  font-size: 20px;
+  font-size: calc(var(--base-font-size) + 4px);
   padding: 10px;
   font-weight: 400;
   border-top-left-radius: 10px;
@@ -29,19 +29,19 @@
 #social-media-section .you {
   background-color: #cc0808;
   font-family: "Poppins", serif;
-  font-size: 18px;
+  font-size: calc(var(--base-font-size) + 2px);
 }
 
 #social-media-section .fb {
   background-color: #306ca9;
   font-family: "Poppins", serif;
-  font-size: 18px;
+  font-size: calc(var(--base-font-size) + 2px);
 }
 
 #social-media-section .in {
   background-color:#F77737;
   font-family: "Poppins", serif;
-  font-size: 18px;
+  font-size: calc(var(--base-font-size) + 2px);
 }
 
 .h4-styling-new {
@@ -49,7 +49,7 @@
   display: inline-block;
   background-color: #FFAF50;
   color: #fff;
-  font-size: 1.2rem;
+  font-size: calc(var(--base-font-size) * 1.2);
   font-weight: 600;
   padding: 7px 50px;
   border-top-left-radius: 7px;
@@ -87,7 +87,7 @@
   }
 
   #social-media-section.card-header {
-    font-size: 1rem;
+    font-size: calc(var(--base-font-size) * 1);
     padding: 8px;
   }
 }
@@ -108,7 +108,7 @@
   }
 
   #social-media-section.card-header {
-    font-size: 1rem;
+    font-size: calc(var(--base-font-size) * 1);
     padding: 8px;
   }
 }

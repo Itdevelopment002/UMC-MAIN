@@ -36,7 +36,7 @@
     border: 0;
     font-weight: 500;
     padding: 4px 12px;
-    font-size: 18px;
+    font-size: calc(var(--base-font-size) + 2px);
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
@@ -59,7 +59,7 @@
 #tourism-css .h2-styling-tourism {
 
     font-weight: 500;
-    font-size: 26px;
+    font-size: calc(var(--base-font-size) + 10px);
     letter-spacing: -0.02em;
     text-align: justify;
     color: #E3435A;
@@ -68,7 +68,7 @@
 #tourism-css strong {
 
     font-weight: 600;
-    font-size: 18px;
+    font-size: calc(var(--base-font-size) + 2px);
     line-height: 35px;
     letter-spacing: -0.02em;
     text-align: justify;
@@ -77,7 +77,7 @@
 #tourism-css .span-tourism {
 
     font-weight: 400;
-    font-size: 18px;
+    font-size: calc(var(--base-font-size) + 2px);
     line-height: 35px;
     letter-spacing: -0.02em;
     text-align: justify;
@@ -104,7 +104,7 @@
     #tourism-css .h2-styling-tourism {
 
         font-weight: 500;
-        font-size: 21px;
+        font-size: calc(var(--base-font-size) + 5px);
         letter-spacing: -0.02em;
         text-align: justify;
         color: #1F94C6;
@@ -113,7 +113,7 @@
     #tourism-css strong {
 
         font-weight: 600;
-        font-size: 17px;
+        font-size: calc(var(--base-font-size) + 1px);
         line-height: 21px;
         letter-spacing: -0.02em;
         text-align: justify;
@@ -122,7 +122,7 @@
     #tourism-css .span-tourism {
 
         font-weight: 400;
-        font-size: 17px;
+        font-size: calc(var(--base-font-size) + 1px);
         line-height: 21px;
         letter-spacing: -0.02em;
         text-align: justify;
@@ -147,7 +147,7 @@
         border: 0;
         font-weight: 500;
         padding: 4px 12px;
-        font-size: 14px;
+        font-size: calc(var(--base-font-size) - 2px);
         transition: background-color 0.3s ease, color 0.3s ease;
     }
 }
@@ -160,7 +160,7 @@
     #tourism-css .h2-styling-tourism {
 
         font-weight: 500;
-        font-size: 22px;
+        font-size: calc(var(--base-font-size) + 6px);
         letter-spacing: -0.02em;
         text-align: justify;
         color: #1F94C6;
@@ -169,7 +169,7 @@
     #tourism-css strong {
 
         font-weight: 600;
-        font-size: 18px;
+        font-size: calc(var(--base-font-size) + 2px);
         line-height: 22px;
         letter-spacing: -0.02em;
         text-align: justify;
@@ -178,7 +178,7 @@
     #tourism-css .span-tourism {
 
         font-weight: 400;
-        font-size: 18px;
+        font-size: calc(var(--base-font-size) + 2px);
         line-height: 22px;
         letter-spacing: -0.02em;
         text-align: justify;
@@ -203,7 +203,7 @@
         border: 0;
         font-weight: 500;
         padding: 4px 12px;
-        font-size: 15px;
+        font-size: calc(var(--base-font-size) - 1px);
         transition: background-color 0.3s ease, color 0.3s ease;
     }
 
@@ -225,7 +225,7 @@
         margin-top: 20px;
 
         font-weight: 500;
-        font-size: 21px;
+        font-size: calc(var(--base-font-size) + 5px);
         letter-spacing: -0.02em;
         text-align: justify;
         color: #1F94C6;
@@ -234,7 +234,7 @@
     #tourism-css strong {
 
         font-weight: 600;
-        font-size: 17px;
+        font-size: calc(var(--base-font-size) + 1px);
         line-height: 21px;
         letter-spacing: -0.02em;
         text-align: justify;
@@ -243,7 +243,7 @@
     #tourism-css .span-tourism {
 
         font-weight: 400;
-        font-size: 17px;
+        font-size: calc(var(--base-font-size) + 1px);
         line-height: 21px;
         letter-spacing: -0.02em;
         text-align: justify;
@@ -268,7 +268,7 @@
         border: 0;
         font-weight: 500;
         padding: 4px 12px;
-        font-size: 14px;
+        font-size: calc(var(--base-font-size) - 2px);
         transition: background-color 0.3s ease, color 0.3s ease;
     }
 
@@ -289,7 +289,7 @@
     #tourism-css .h2-styling-tourism {
         margin-top: 15px;
         font-weight: 500;
-        font-size: 20px;
+        font-size: calc(var(--base-font-size) + 4px);
         letter-spacing: -0.02em;
         text-align: justify;
         color: #1F94C6;
@@ -298,7 +298,7 @@
     #tourism-css strong {
 
         font-weight: 600;
-        font-size: 16px;
+        font-size: calc(var(--base-font-size));
         line-height: 20px;
         letter-spacing: -0.02em;
         text-align: justify;
@@ -307,7 +307,7 @@
     #tourism-css .span-tourism {
 
         font-weight: 400;
-        font-size: 16px;
+        font-size: calc(var(--base-font-size));
         line-height: 20px;
         letter-spacing: -0.02em;
         text-align: justify;
@@ -332,7 +332,7 @@
         border: 0;
         font-weight: 500;
         padding: 4px 12px;
-        font-size: 13px;
+        font-size: calc(var(--base-font-size) - 3px);
         transition: background-color 0.3s ease, color 0.3s ease;
     }
 

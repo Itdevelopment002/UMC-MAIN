@@ -110,9 +110,9 @@ const PhotoGallery = () => {
             <Link to="/" className="breadcrumb-item text-decoration-none">
             {t("breadcrumbHome")}
             </Link>
-            <Link to="#" className="breadcrumb-item text-decoration-none">
+            <span className="breadcrumb-item text-decoration-none">
             {t("gallery.breadcrumb")}
-            </Link>
+            </span>
             <span className="breadcrumb-item active1">{t("gallery.photoGallery")}</span>
           </nav>
           <h2 className="location-title">

@@ -72,9 +72,9 @@ const DeptCommissioner = () => {
             <Link to="/" className="breadcrumb-item text-decoration-none">
               {t('location.home')}
             </Link>
-            <Link to="#" className="breadcrumb-item text-decoration-none">
+            <span className="breadcrumb-item text-decoration-none">
               {t('location.aboutumc')}
-            </Link>
+            </span>
             <span className="breadcrumb-item active1">{t('dept-commissioner.commissionerText')}</span>
           </nav>
           <h2 className="location-title">
@@ -180,7 +180,7 @@ const DeptCommissioner = () => {
                       </div>
 
                       {descriptionsForThisCommissioner.map((item, idx) => (
-                        <p key={idx} style={{ color: "#666565" }}>
+                        <p key={idx} className="custom-commissioner-data" style={{ color: "#666565" }}>
                           {item.description}
                         </p>
                       ))}

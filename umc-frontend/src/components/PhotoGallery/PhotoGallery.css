@@ -6,7 +6,7 @@
 
 #photo-gallery-css .text-orange {
   color: #f57c00;
-  font-size: 24px;
+  font-size: calc(var(--base-font-size) + 8px);
   font-weight: 500;
 }
 
@@ -34,7 +34,7 @@
   color: #df7791;
   border: 0px solid #6e6e6e;
   padding: 5px 15px;
-  font-size: 14px;
+  font-size: calc(var(--base-font-size) - 2px);
   border-radius: 5px;
   font-weight: bold;
   cursor: pointer;
@@ -42,7 +42,7 @@
 }
 
 #photo-gallery-css .gallery-custom-btn i {
-  font-size: 15px;
+  font-size: calc(var(--base-font-size) - 1px);
 }
 
 #photo-gallery-css .gallery-custom-btn:hover {
@@ -58,11 +58,11 @@
 @media (max-width: 400px) {
   #photo-gallery-css .gallery-custom-btn {
     padding: 5px 8px;
-    font-size: 12px;
+    font-size: calc(var(--base-font-size) - 4px);
   }
 
   #photo-gallery-css .gallery-custom-btn i {
-    font-size: 12px;
+    font-size: calc(var(--base-font-size) - 4px);
   }
 
   #photo-gallery-css .slider-controls {
@@ -84,7 +84,7 @@
   }
 
   #photo-gallery-css .text-orange {
-    font-size: 18px;
+    font-size: calc(var(--base-font-size) + 2px);
   }
 
   #photo-gallery-css .divider {
@@ -105,7 +105,7 @@
   }
 
   #photo-gallery-css .text-orange {
-    font-size: 20px;
+    font-size: calc(var(--base-font-size) + 4px);
   }
 
   #photo-gallery-css .divider {
@@ -126,7 +126,7 @@
   }
 
   #photo-gallery-css .text-orange {
-    font-size: 22px;
+    font-size: calc(var(--base-font-size) + 6px);
   }
 
   #photo-gallery-css .divider {
@@ -142,7 +142,7 @@
   }
 
   #photo-gallery-css .text-orange {
-    font-size: 24px;
+    font-size: calc(var(--base-font-size) + 8px);
   }
 
   #photo-gallery-css .divider {

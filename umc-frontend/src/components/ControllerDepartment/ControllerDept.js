@@ -57,6 +57,7 @@ const ControllerDept = () => {
       .map((d) => digits[parseInt(d)] || d)
       .join('');
   };
+
   const renderPageNumbers = () => {
     const pageNumbers = [];
     let leftEllipsisAdded = false;
@@ -89,7 +90,6 @@ const ControllerDept = () => {
         );
         rightEllipsisAdded = true;
       }
-      // Skip further rendering for this iteration
     }
 
     return pageNumbers;

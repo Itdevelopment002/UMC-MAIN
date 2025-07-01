@@ -26,7 +26,7 @@
 }
 
 .coming-soon-message {
-    font-size: 1.1rem;
+    font-size: calc(var(--base-font-size) * 1.1);
     color: #7a6752;
     line-height: 1.6;
     font-family: 'Roboto', sans-serif;

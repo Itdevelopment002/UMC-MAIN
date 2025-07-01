@@ -1,5 +1,5 @@
 .new-location-title {
-  font-size: 24px;
+  font-size: calc(var(--base-font-size));
   font-weight: bold;
   margin-top: 25px;
   margin-bottom: -5px;
@@ -29,12 +29,12 @@
   background-color: #F3F3F3;
   align-items: center;
   font-weight: 700;
-  font-size: 16px;
+  font-size: calc(var(--base-font-size));
   padding: 10px 20px;
 }
 
 #rec-css .span-system1 {
   font-family: 'Roboto';
   font-weight: 500;
-  font-size: 16px;
+  font-size: calc(var(--base-font-size));
 }

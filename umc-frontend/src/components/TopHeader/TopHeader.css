@@ -17,7 +17,7 @@
     display: flex;
     align-items: center;
     padding: 10px 14px;
-    font-size: 14px;
+    font-size: calc(var(--base-font-size) - 2px);
     color: #333;
     cursor: pointer;
     transition: background-color 0.2s ease;
@@ -37,14 +37,14 @@
 .search-suggestion-item::before {
     content: "⌕";
     margin-right: 8px;
-    font-size: 18px;
+    font-size: calc(var(--base-font-size) + 2px);
 }
 
 .search-no-results {
     padding: 12px;
     text-align: center;
     color: #999;
-    font-size: 14px;
+    font-size: calc(var(--base-font-size) - 2px);
     font-style: italic;
 }
 

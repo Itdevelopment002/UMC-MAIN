@@ -150,7 +150,7 @@
 
 .popup-message {
     position: absolute;
-    font-size: 2.5rem;
+    font-size: calc(var(--base-font-size) * 2.5);
     font-weight: bold;
     color: white;
     background: linear-gradient(45deg, #ff4b2b, #ff416c);

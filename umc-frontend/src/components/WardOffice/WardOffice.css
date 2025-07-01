@@ -32,6 +32,7 @@
     cursor: pointer;
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
     position: relative;
+    font-size: calc(var(--base-font-size));
 }
 
 #ward-css .sidebar .btn:hover::after,
@@ -74,17 +75,18 @@
     border-bottom: 2px solid #c1c0c0;
     padding-bottom: 5px;
     margin-bottom: 15px;
-    font-size: 1.25rem;
+    font-size: calc(var(--base-font-size) * 1.25);
 }
 
 #ward-css .ward-text {
     margin-bottom: 5px;
+    font-size: calc(var(--base-font-size));
 }
 
 #ward-css .table-heading-styling {
     background: #FFF7E2 !important;
     color: #000000;
-    font-size: 15px;
+    font-size: calc(var(--base-font-size) - 1px);
     font-weight: 500;
     line-height: 16.41px;
     padding: 10px 10px;
@@ -103,7 +105,7 @@
 
 #ward-css .ward-location-title {
     color: #FAB02F;
-    font-size: 1.25rem;
+    font-size: calc(var(--base-font-size) * 1.25);
     margin-bottom: 15px;
     padding-left: 10px;
     text-align: left;

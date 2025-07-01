@@ -8,11 +8,11 @@
 #solid-system-css .span-system1 {
     font-family: 'Roboto';
     font-weight: 600;
-    font-size: 16px;
+    font-size: calc(var(--base-font-size));
 }
 
 #solid-system-css .span-system2 {
     font-family: 'Roboto';
     font-weight: 400;
-    font-size: 16px;
+    font-size: calc(var(--base-font-size));
 }

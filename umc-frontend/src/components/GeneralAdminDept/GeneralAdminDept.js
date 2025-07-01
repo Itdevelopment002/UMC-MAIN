@@ -169,7 +169,7 @@ const GeneralAdminDepartment = () => {
             <Link to="/" className="breadcrumb-item text-decoration-none">
               {t('departments.home')}
             </Link>
-            <Link to="#" className="breadcrumb-item text-decoration-none">
+            <Link to="/departments" className="breadcrumb-item text-decoration-none">
               {t('departments.department')}
             </Link>
             <span className="breadcrumb-item active1">{t('generalAdDept.title')}</span>

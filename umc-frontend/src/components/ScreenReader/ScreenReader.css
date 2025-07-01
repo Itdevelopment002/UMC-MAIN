@@ -3,7 +3,7 @@
     background-color: #F3F3F3;
     align-items: center;
     font-weight: 700;
-    font-size: 16px;
+    font-size: calc(var(--base-font-size));
     padding: 10px 20px;
 }
 
@@ -11,12 +11,12 @@
     display: flex;
     align-items: center;
     font-weight: 600;
-    font-size: 16px;
+    font-size: calc(var(--base-font-size));
 }
 
 #reader-css .span-system1 {
     font-family: 'Roboto';
-    font-size: 16px;
+    font-size: calc(var(--base-font-size));
 }
 
 #reader-css .custom-list-effect {

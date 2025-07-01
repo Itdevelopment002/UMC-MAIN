@@ -58,43 +58,20 @@ const TopHeader = () => {
         return "English";
     };
 
-    const [defaultfontSize, setDefaultFontSize] = useState(16);
-    const [fontSize, setFontSize] = useState({
-        helpline: 14,
-        rtsActButton: 13,
-        accessibility: 14,
-        navItems: 16,
-    });
+    let zoomLevel = 0;
 
-    useEffect(() => {
-        document.body.style.fontSize = `${defaultfontSize}px`;
-        document.documentElement.style.setProperty("--helpline-font-size", `${fontSize.helpline}px`);
-        document.documentElement.style.setProperty("--rts-act-button-font-size", `${fontSize.rtsActButton}px`);
-        document.documentElement.style.setProperty("--accessibility-font-size", `${fontSize.accessibility}px`);
-        document.documentElement.style.setProperty("--nav-link-font-size", `${fontSize.navItems}px`);
-    }, [defaultfontSize, fontSize]);
-
-    const handleIncreaseFontSize = () => {
-        setDefaultFontSize((prevSize) => Math.min(prevSize + 2, 50));
-        setFontSize((prevSizes) => ({
-            helpline: Math.min(prevSizes.helpline + 2, 50),
-            rtsActButton: Math.min(prevSizes.rtsActButton + 2, 50),
-            accessibility: Math.min(prevSizes.accessibility + 2, 50),
-            navItems: Math.min(prevSizes.navItems + 2, 50),
-        }));
+    const adjustFontSize = (change) => {
+        const root = document.documentElement;
+        const currentSize = parseFloat(getComputedStyle(root).getPropertyValue('--base-font-size'));
+        if ((change > 0 && zoomLevel < 3) || (change < 0 && zoomLevel > -3)) {
+            zoomLevel += change > 0 ? 1 : -1;
+            const newSize = currentSize + change;
+            root.style.setProperty('--base-font-size', `${newSize}px`);
+        }
     };
 
-    const handleDecreaseFontSize = () => {
-        setDefaultFontSize((prevSize) => Math.max(prevSize - 2, 10));
-        setFontSize((prevSizes) => ({
-            helpline: Math.max(prevSizes.helpline - 2, 10),
-            rtsActButton: Math.max(prevSizes.rtsActButton - 2, 10),
-            accessibility: Math.max(prevSizes.accessibility - 2, 10),
-            navItems: Math.max(prevSizes.navItems - 2, 10),
-        }));
-    };
 
-    // ✅ New search effect based on route titles
+
     useEffect(() => {
         if (!searchText.trim()) {
             setSearchResults([]);
@@ -118,7 +95,6 @@ const TopHeader = () => {
                     </div>
                 </div>
 
-                {/* 🌟 Search */}
                 <div className="search-container">
                     <div className="search-bar mt-2">
                         <input
@@ -134,7 +110,6 @@ const TopHeader = () => {
                         </button>
                     </div>
 
-                    {/* ✅ Route-based results */}
                     {searchText && (
                         <div className="search-suggestions">
                             {searchResults.length > 0 ? (
@@ -177,9 +152,13 @@ const TopHeader = () => {
                         <span>{t("header.screenReader")}</span>
                     </Link>
                     <span className="divider">|</span>
-                    <button onClick={handleDecreaseFontSize} className="text-link-btn">{t("header.aMinus")}</button>
+                    <button className="text-link-btn" onClick={() => adjustFontSize(-1)}>
+                        {t("header.aMinus")}
+                    </button>
                     <span className="divider">|</span>
-                    <button onClick={handleIncreaseFontSize} className="text-link-btn">{t("header.aPlus")}</button>
+                    <button className="text-link-btn" onClick={() => adjustFontSize(1)}>
+                        {t("header.aPlus")}
+                    </button>
                     <span className="divider">|</span>
 
                     <div className="custom-dropdown" role="button" tabIndex="0">

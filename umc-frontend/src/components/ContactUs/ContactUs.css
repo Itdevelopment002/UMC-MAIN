@@ -6,7 +6,7 @@
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    font-size: 20px;
+    font-size: calc(var(--base-font-size) + 4px);
     flex-shrink: 0 !important;
 }
 
@@ -49,6 +49,7 @@
     font-weight: bold;
     width: 50%;
     border-radius: 7px;
+    font-size: calc(var(--base-font-size));
 }
 
 #contact-css .bg-gradient {
@@ -84,13 +85,13 @@
 
 #contact-css h5 {
     font-weight: 600;
-    font-size: 18px;
+    font-size: calc(var(--base-font-size) + 2px);
     margin-bottom: 0px !important;
 }
 
 #contact-css p {
     font-weight: 400;
-    font-size: 16px;
+    font-size: calc(var(--base-font-size));
     color: #67748E;
     margin-bottom: 5px;
 }

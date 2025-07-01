@@ -155,9 +155,9 @@ const TendersQuotations = () => {
                         <Link to="/" className="breadcrumb-item text-decoration-none">
                             {t('departments.home')}
                         </Link>
-                        <Link to="#" className="breadcrumb-item text-decoration-none">
+                        <span className="breadcrumb-item text-decoration-none">
                             {t('tender.name')}
-                        </Link>
+                        </span>
                         <span className="breadcrumb-item active1">{t('tender.title')}</span>
                     </nav>
                     <h2 className="location-title">
