@@ -21,7 +21,7 @@
 
 .footer-title {
   font-family: "Rowdies", sans-serif !important;
-  font-size: 24px;
+  font-size: calc(var(--base-font-size) + 8px);
   font-weight: 700;
   color: #ffffff;
   margin: 0;
@@ -29,7 +29,7 @@
 
 .footer-subtitle {
   font-family: "Ramabhadra", sans-serif;
-  font-size: 16px;
+  font-size: calc(var(--base-font-size));
   color: #ffffff;
   margin: 0;
 }
@@ -55,14 +55,14 @@
 }
 
 .contact-title {
-  font-size: 14px;
+  font-size: calc(var(--base-font-size) - 2px);
   font-weight: bold;
   margin: 0;
   color: #ffffff;
 }
 
 .contact-detail {
-  font-size: 14px;
+  font-size: calc(var(--base-font-size) - 2px);
   margin: 0;
   color: #a3a4a7;
 }
@@ -79,13 +79,13 @@
 
   .contact-title,
   .contact-detail {
-    font-size: 12px;
+    font-size: calc(var(--base-font-size) - 4px);
   }
 }
 
 .footer-heading {
   font-family: "Poppins", serif;
-  font-size: 20px;
+  font-size: calc(var(--base-font-size) + 4px);
   font-weight: 600;
   color: #FFBC13;
   margin-bottom: 15px;
@@ -106,7 +106,7 @@
   color: #ffffff;
   text-decoration: none;
   font-weight: 500;
-  font-size: 13px;
+  font-size: calc(var(--base-font-size) - 3px);
   transition: color 0.3s;
 }
 
@@ -124,7 +124,7 @@
   justify-content: space-between;
   flex-direction: row;
   flex-wrap: wrap;
-  font-size: 14px;
+  font-size: calc(var(--base-font-size) - 2px);
   color: #dcdcdc;
   gap: 10px;
   text-align: center;

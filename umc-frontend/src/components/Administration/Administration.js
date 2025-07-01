@@ -126,9 +126,9 @@ const Administration = () => {
                         <Link to="/" className="breadcrumb-item text-decoration-none">
                             {t('corporation.home')}
                         </Link>
-                        <Link to="#" className="breadcrumb-item text-decoration-none">
+                        <span className="breadcrumb-item text-decoration-none">
                             {t('corporation.corporation')}
-                        </Link>
+                        </span>
                         <span className="breadcrumb-item active1">{t('administration.heading')}</span>
                     </nav>
                     <h2 className="location-title">

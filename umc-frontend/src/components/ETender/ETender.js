@@ -122,9 +122,9 @@ const ETender = () => {
             <Link to="/" className="breadcrumb-item text-decoration-none">
               {t('home1')}
             </Link>
-            <Link to="#" className="breadcrumb-item text-decoration-none">
+            <span className="breadcrumb-item text-decoration-none">
               {t('onlineServices')}
-            </Link>
+            </span>
             <span className="breadcrumb-item active1">{t('eTender.name')}</span>
           </nav>
 
@@ -159,7 +159,7 @@ const ETender = () => {
                         <div className="col-md-6 col-sm-12 d-flex align-items-center justify-content-start">
                           <div className="tab-description">
                             {activeTabData.description.map((desc, index) => (
-                              <p key={index}>
+                              <p key={index} className="custom-property-text">
                                 {desc}{" "}
                                 {index === 0 && activeTabData.url && (
                                   <Link to={activeTabData.url} target="_blank">

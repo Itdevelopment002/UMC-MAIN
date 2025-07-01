@@ -2,10 +2,6 @@
   font-family: "Inter" !important;
 }
 
-/* .initiative-hover {
-  transition: transform 0.3s ease-in-out;
-} */
-
 .initiative-hover:hover {
   transform: scale(1.01);
 }
@@ -36,7 +32,7 @@
 
 .tabs-container .nav-tabs .nav-item .nav-link {
   padding: 5px 20px 5px 20px !important;
-  font-size: 16px !important;
+  font-size: calc(var(--base-font-size)) !important;
 }
 
 .tabs-container .nav-tabs .nav-link.active {
@@ -54,7 +50,7 @@
 }
 
 .news-list ul li {
-  font-size: 15px !important;
+  font-size: calc(var(--base-font-size) - 1px) !important;
   font-weight: 500;
   line-height: 30px;
   margin-bottom: 5px;
@@ -85,7 +81,7 @@
 @media (max-width: 1355px) {
   .tabs-container .nav-tabs .nav-item .nav-link {
     padding: 5px 10px 5px 10px !important;
-    font-size: 16px !important;
+    font-size: calc(var(--base-font-size)) !important;
   }
 }
 
@@ -106,7 +102,7 @@
   }
 
   .news-list ul li {
-    font-size: 14px !important;
+    font-size: calc(var(--base-font-size) - 2px) !important;
     line-height: 24px;
   }
 
@@ -126,7 +122,7 @@
 
   .tabs-container .nav-tabs .nav-item .nav-link {
     padding: 6px 10px 6px 10px !important;
-    font-size: 14px !important;
+    font-size: calc(var(--base-font-size) - 2px) !important;
   }
 }
 
@@ -141,12 +137,12 @@
   }
 
   .news-list ul li {
-    font-size: 15px;
+    font-size: calc(var(--base-font-size) - 1px);
     line-height: 28px;
   }
 
   .custom-icons {
-    font-size: 19px;
+    font-size: calc(var(--base-font-size) + 3px);
   }
 
   .news-list {
@@ -165,11 +161,11 @@
   }
 
   .news-list ul li {
-    font-size: 16px;
+    font-size: calc(var(--base-font-size));
   }
 
   .custom-icons {
-    font-size: 20px;
+    font-size: calc(var(--base-font-size) + 4px);
   }
 
   .news-list {
@@ -181,7 +177,7 @@
   }
 
   .service-title {
-    font-size: 14px;
+    font-size: calc(var(--base-font-size) - 2px);
     font-weight: 500;
   }
 }
@@ -193,11 +189,11 @@
   }
 
   .news-list ul li {
-    font-size: 16px;
+    font-size: calc(var(--base-font-size));
   }
 
   .custom-icons {
-    font-size: 20px;
+    font-size: calc(var(--base-font-size) + 4px);
   }
 
 
@@ -221,7 +217,7 @@
 .initiative-text {
   font-family: 'Roboto';
   font-weight: 500;
-  font-size: 15px;
+  font-size: calc(var(--base-font-size) - 1px);
 }
 
 .initiatives-layout {
@@ -262,7 +258,7 @@
 }
 
 .e-services-layout .service-text {
-  font-size: 15px;
+  font-size: calc(var(--base-font-size) - 1px);
   font-weight: 500;
   color: #333;
   word-wrap: break-word;
@@ -278,7 +274,7 @@
   .initiative-text {
     font-family: 'Roboto';
     font-weight: 500;
-    font-size: 14px;
+    font-size: calc(var(--base-font-size) - 2px);
   }
 
   .initiatives-layout {
@@ -295,7 +291,7 @@
   }
 
   .e-services-layout .service-text {
-    font-size: 14px;
+    font-size: calc(var(--base-font-size) - 2px);
   }
 
   .e-services-layout .tick-icon {
@@ -368,7 +364,7 @@
 }
 
 .h5-styling-5 {
-  font-size: 18px;
+  font-size: calc(var(--base-font-size) + 2px);
   font-weight: 600;
   background: #C0EFF3;
   color: #2891AE;
@@ -439,7 +435,7 @@
 }
 
 .para-style {
-  font-size: 14px;
+  font-size: calc(var(--base-font-size) - 2px);
   font-weight: 400;
   line-height: 17px;
 }
@@ -455,7 +451,7 @@
 }
 
 .h5-styling-div {
-  font-size: 18px;
+  font-size: calc(var(--base-font-size) + 2px);
   font-weight: 600;
   background: #EDE3FE;
   line-height: 30px;
@@ -475,7 +471,7 @@
 
 .para-style1 {
   margin-top: 8px;
-  font-size: 14px;
+  font-size: calc(var(--base-font-size) - 2px);
   font-weight: 400;
   line-height: 24px;
 }
@@ -511,7 +507,7 @@
 }
 
 .service-title {
-  font-size: 14px;
+  font-size: calc(var(--base-font-size) - 2px);
   color: #333333;
   font-weight: 500;
   text-align: center;
@@ -529,7 +525,7 @@
 @media (min-width:992px) and (max-width: 1255px) {
   .tabs-container .nav-tabs .nav-item .nav-link {
     padding: 3px 5px 3px 5px !important;
-    font-size: 15px !important;
+    font-size: calc(var(--base-font-size) - 1px) !important;
   }
 
   .gap-3 {

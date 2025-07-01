@@ -32,7 +32,7 @@
 
  #citizen-section .section-title {
    color: #000000;
-   font-size: 24px;
+   font-size: calc(var(--base-font-size) + 8px);
    font-weight: 700;
    font-family: "Roboto";
    margin: 0;
@@ -40,7 +40,7 @@
 
  #citizen-section .subtitle {
    color: #000000;
-   font-size: 20px;
+   font-size: calc(var(--base-font-size) + 4px);
    font-family: "Roboto";
    font-weight: 400;
  }
@@ -129,7 +129,7 @@
  }
 
  #citizen-section .service-title {
-   font-size: 14px;
+   font-size: calc(var(--base-font-size) - 2px);
    color: #333333;
    font-weight: 500;
    text-align: center;
@@ -164,7 +164,7 @@
  #citizen-section .menu-text {
    font-weight: 500;
    color: #333;
-   font-size: 16px;
+   font-size: calc(var(--base-font-size));
    font-family: 'Roboto';
  }
 
@@ -181,16 +181,16 @@
    }
 
    #citizen-section .menu-item {
-     font-size: 14px;
+     font-size: calc(var(--base-font-size) - 2px);
    }
 
    #citizen-section .service-title {
-     font-size: 14px;
+     font-size: calc(var(--base-font-size) - 2px);
      font-weight: 500;
    }
 
    #citizen-section .menu-text {
-     font-size: 14px;
+     font-size: calc(var(--base-font-size) - 2px);
      font-weight: 500;
    }
  }

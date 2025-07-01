@@ -1,7 +1,7 @@
 #project-css .project-title-p {
     font-family: 'Roboto';
     font-weight: 500;
-    font-size: 22px;
+    font-size: calc(var(--base-font-size) + 6px);
     line-height: 25px;
     letter-spacing: -0.02em;
     text-align: justify;
@@ -11,7 +11,7 @@
 #project-css .project-work-style {
     font-family: 'Roboto';
     font-weight: 400;
-    font-size: 18px;
+    font-size: calc(var(--base-font-size) + 2px);
     line-height: 45px;
     letter-spacing: -0.02em;
     text-align: justify;
@@ -21,7 +21,7 @@
 #project-css .project-work-style-h5 {
     font-family: 'Roboto';
     font-weight: 500;
-    font-size: 20px;
+    font-size: calc(var(--base-font-size) + 4px);
     line-height: 45px;
     letter-spacing: -0.02em;
     text-align: justify;
@@ -44,7 +44,7 @@
     #project-css .project-title-p {
         font-family: 'Roboto';
         font-weight: 500;
-        font-size: 20px;
+        font-size: calc(var(--base-font-size) + 4px);
         line-height: 25px;
         letter-spacing: -0.02em;
         text-align: justify;
@@ -54,7 +54,7 @@
     #project-css .project-work-style {
         font-family: 'Roboto';
         font-weight: 400;
-        font-size: 18px;
+        font-size: calc(var(--base-font-size) + 2px);
         line-height: 40px;
         letter-spacing: -0.02em;
         text-align: justify;
@@ -64,7 +64,7 @@
     #project-css .project-work-style-h5 {
         font-family: 'Roboto';
         font-weight: 500;
-        font-size: 20px;
+        font-size: calc(var(--base-font-size) + 4px);
         line-height: 45px;
         letter-spacing: -0.02em;
         text-align: justify;
@@ -76,7 +76,7 @@
     #project-css .project-title-p {
         font-family: 'Roboto';
         font-weight: 500;
-        font-size: 20px;
+        font-size: calc(var(--base-font-size) + 4px);
         line-height: 25px;
         letter-spacing: -0.02em;
         text-align: justify;
@@ -86,7 +86,7 @@
     #project-css .project-work-style {
         font-family: 'Roboto';
         font-weight: 400;
-        font-size: 18px;
+        font-size: calc(var(--base-font-size) + 2px);
         line-height: 35px;
         letter-spacing: -0.02em;
         text-align: justify;
@@ -96,7 +96,7 @@
     #project-css .project-work-style-h5 {
         font-family: 'Roboto';
         font-weight: 500;
-        font-size: 20px;
+        font-size: calc(var(--base-font-size) + 4px);
         line-height: 45px;
         letter-spacing: -0.02em;
         text-align: justify;
@@ -112,7 +112,7 @@
     #project-css .project-title-p {
         font-family: 'Roboto';
         font-weight: 500;
-        font-size: 19px;
+        font-size: calc(var(--base-font-size) + 3px);
         line-height: 25px;
         letter-spacing: -0.02em;
         text-align: justify;
@@ -122,7 +122,7 @@
     #project-css .project-work-style {
         font-family: 'Roboto';
         font-weight: 400;
-        font-size: 17px;
+        font-size: calc(var(--base-font-size) + 1px);
         line-height: 30px;
         letter-spacing: -0.02em;
         text-align: justify;
@@ -132,7 +132,7 @@
     #project-css .project-work-style-h5 {
         font-family: 'Roboto';
         font-weight: 500;
-        font-size: 19px;
+        font-size: calc(var(--base-font-size) + 3px);
         line-height: 45px;
         letter-spacing: -0.02em;
         text-align: justify;
@@ -149,7 +149,7 @@
     #project-css .project-title-p {
         font-family: 'Roboto';
         font-weight: 500;
-        font-size: 18px;
+        font-size: calc(var(--base-font-size) + 2px);
         line-height: 25px;
         letter-spacing: -0.02em;
         text-align: justify;
@@ -159,7 +159,7 @@
     #project-css .project-work-style {
         font-family: 'Roboto';
         font-weight: 400;
-        font-size: 16px;
+        font-size: calc(var(--base-font-size));
         line-height: 25px;
         letter-spacing: -0.02em;
         text-align: justify;
@@ -170,7 +170,7 @@
     #project-css .project-work-style-h5 {
         font-family: 'Roboto';
         font-weight: 500;
-        font-size: 18px;
+        font-size: calc(var(--base-font-size) + 2px);
         line-height: 45px;
         letter-spacing: -0.02em;
         text-align: justify;

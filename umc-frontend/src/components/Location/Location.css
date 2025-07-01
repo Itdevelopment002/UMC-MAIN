@@ -11,7 +11,7 @@
 
 .breadcrumb-item {
   color: #5b5b5b !important;
-  font-size: 16px !important;
+  font-size: calc(var(--base-font-size)) !important;
   font-weight: 500 !important;
   line-height: 16.41px !important;
 }
@@ -21,7 +21,7 @@
 }
 
 .location-title {
-  font-size: 28px;
+  font-size: calc(var(--base-font-size) + 12px);
   font-weight: 700;
   margin-top: 25px;
   margin-bottom: 25px;
@@ -51,7 +51,7 @@
   font-weight: 700 !important;
   border-radius: 0 !important;
   color: #000000 !important;
-  font-size: 17px !important;
+  font-size: calc(var(--base-font-size) + 1px) !important;
   letter-spacing: -2% !important;
   position: relative;
   padding-left: 25px !important;
@@ -89,19 +89,19 @@
   background-color: #F3F3F3;
   align-items: center;
   font-weight: 700;
-  font-size: 16px;
+  font-size: calc(var(--base-font-size));
   padding: 10px 20px;
 }
 
 #location-css .span-system1 {
   font-family: 'Roboto';
   font-weight: 500;
-  font-size: 16px;
+  font-size: calc(var(--base-font-size));
 }
 
 @media (max-width: 1470px) {
   .list-group-item {
-    font-size: 15px !important;
+    font-size: calc(var(--base-font-size) - 1px) !important;
   }
 }
 
@@ -119,7 +119,7 @@
     font-weight: 500 !important;
     border-radius: 0 !important;
     color: #000000 !important;
-    font-size: 14px !important;
+    font-size: calc(var(--base-font-size) - 2px) !important;
     letter-spacing: -2% !important;
     position: relative;
     padding-left: 25px !important;
@@ -140,7 +140,7 @@
     font-weight: 500 !important;
     border-radius: 0 !important;
     color: #000000 !important;
-    font-size: 16px !important;
+    font-size: calc(var(--base-font-size)) !important;
     letter-spacing: -2% !important;
     position: relative;
     padding-left: 25px !important;
@@ -165,7 +165,7 @@
 
 #location-css .text-orange {
   color: #f57c00;
-  font-size: 24px;
+  font-size: calc(var(--base-font-size) + 8px);
   font-weight: 500;
 }
 
@@ -194,13 +194,13 @@
 #location-css .table-heading-styling {
   background: #EDEDED !important;
   color: #000000 !important;
-  font-size: 14px !important;
+  font-size: calc(var(--base-font-size) - 2px) !important;
   line-height: 16.41px !important;
   padding: 10px 10px !important;
 }
 
 #location-css td {
   font-weight: 500 !important;
-  font-size: 14px !important;
+  font-size: calc(var(--base-font-size) - 2px) !important;
   line-height: 16.41px !important;
 }

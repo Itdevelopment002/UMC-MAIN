@@ -71,9 +71,9 @@ const Sitemap = () => {
           <Link to="/" className="breadcrumb-item text-decoration-none">
             {t('sitemap.home')}
           </Link>
-          <Link to="#" className="breadcrumb-item text-decoration-none">
+          <span className="breadcrumb-item text-decoration-none">
             {t('privacy.subTitle')}
-          </Link>
+          </span>
           <span className="breadcrumb-item active1"> {t('sitemap.title')}</span>
         </nav>
         {/* Page Header */}
